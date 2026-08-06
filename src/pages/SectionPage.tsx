@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { Link } from '@/router';
-import { ArrowLeft, SlidersHorizontal, ShieldCheck, Stethoscope, Package } from 'lucide-react';
+import { ArrowLeft, SlidersHorizontal, ShieldCheck, Package } from 'lucide-react';
 import { getProductsBySection, getSectionMeta, type Category, type DosageForm } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
+import { ProviderCareSection } from '@/components/ProviderCareSection';
 
 export function SectionPage({ sectionId, subFilter }: { sectionId: string; subFilter?: string }) {
   const section = getSectionMeta(sectionId as Category);
@@ -35,6 +36,11 @@ export function SectionPage({ sectionId, subFilter }: { sectionId: string; subFi
     return sorted;
   }, [allProducts, sortBy, formFilter, subFilter]);
 
+  // Dedicated luxury concierge layout — Provider Care only.
+  if (section?.id === 'provider-care') {
+    return <ProviderCareSection products={allProducts} />;
+  }
+
   if (!section) {
     return (
       <div className="pt-32 pb-20 text-center">
@@ -56,9 +62,9 @@ export function SectionPage({ sectionId, subFilter }: { sectionId: string; subFi
           </Link>
           <div className="flex items-start gap-5 mb-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-cream-200">
-              {section.id === 'provider-care' ? <Stethoscope size={28} className="text-gold-600" /> :
-               section.id === 'accessories' ? <Package size={28} className="text-gold-500" /> :
-               <ShieldCheck size={28} className="text-gold-500" />}
+              {section.id === 'accessories'
+                ? <Package size={28} className="text-gold-500" />
+                : <ShieldCheck size={28} className="text-gold-500" />}
             </div>
             <div>
               <p className="eyebrow mb-2 text-sm">{section.tagline}</p>

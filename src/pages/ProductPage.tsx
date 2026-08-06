@@ -62,15 +62,28 @@ export function ProductPage({ slug }: { slug: string }) {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
             {/* Image */}
             <div className="lg:sticky lg:top-24 lg:self-start">
-              <div className="relative aspect-square overflow-hidden rounded-3xl bg-cream-100">
-                <img src={product.image} alt={product.imageAlt} className="h-full w-full object-cover" />
-                <div className="absolute left-4 top-4 flex flex-col gap-2">
-                  {product.bestSeller && (
-                    <span className="rounded-full bg-ink-900 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-50">Best Seller</span>
-                  )}
-                  <span className="rounded-full bg-gold-400 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-ink-900">Provider review required</span>
-                </div>
-              </div>
+              {(() => {
+                const containFit =
+                  product.slug === 'discreet-travel-bag' ||
+                  product.slug === 'temperature-controlled-travel-case';
+                return (
+                  <div className={`relative aspect-square overflow-hidden rounded-3xl bg-cream-100 ${containFit ? 'p-8 md:p-10' : ''}`}>
+                    <img
+                      src={product.image}
+                      alt={product.imageAlt}
+                      className={containFit ? 'h-full w-full object-contain object-center' : 'h-full w-full object-cover'}
+                    />
+                    <div className="absolute left-4 top-4 flex flex-col gap-2">
+                      {product.bestSeller && (
+                        <span className="rounded-full bg-ink-900 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-50">Best Seller</span>
+                      )}
+                      {product.requiresProviderReview && (
+                        <span className="rounded-full bg-gold-400 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-ink-900">Provider review required</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Details */}

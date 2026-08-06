@@ -3,18 +3,29 @@ import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import type { Product } from '@/data/products';
 import { sections } from '@/data/products';
 
+/** Accessory bag photos that should show the full product (no crop). */
+const CONTAIN_FIT_SLUGS = new Set([
+  'discreet-travel-bag',
+  'temperature-controlled-travel-case',
+]);
+
 export function ProductCard({ product }: { product: Product }) {
   const section = sections.find(s => s.id === product.category);
   const primaryForm = product.dosageForms[0];
+  const containFit = CONTAIN_FIT_SLUGS.has(product.slug);
 
   return (
     <Link to={`/product/${product.slug}`} className="group block">
       <div className="card-lux overflow-hidden hover:shadow-xl hover:-translate-y-1">
-        <div className="relative aspect-square overflow-hidden bg-cream-100">
+        <div className={`relative aspect-square overflow-hidden bg-cream-100 ${containFit ? 'p-5 md:p-6' : ''}`}>
           <img
             src={product.image}
             alt={product.imageAlt}
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className={
+              containFit
+                ? 'h-full w-full object-contain object-center transition-transform duration-700 group-hover:scale-[1.02]'
+                : 'h-full w-full object-cover transition-transform duration-700 group-hover:scale-105'
+            }
             loading="lazy"
           />
           <div className="absolute left-3 top-3 flex flex-col gap-1.5">

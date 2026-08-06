@@ -1,0 +1,3 @@
+# Prerendered HTML files are served directly for each route
+# Fallback to index.html for any unmatched routes (SPA)
+/*    /index.html   200

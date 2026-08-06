@@ -16,14 +16,17 @@ type ProductSeed = {
 };
 
 const products: ProductSeed[] = [
-  { id: "p1", name: "GLP-1", price: 186, shortDescription: "GLP-1 receptor agonist injection to support appetite regulation and metabolic balance." },
-  { id: "p2", name: "GLP-1 + B12 Injection", price: 186, shortDescription: "GLP-1 receptor agonist combined with B12 for metabolic support and energy." },
-  { id: "p3", name: "GLP-1 + L-Carnitine Injection", price: 186, shortDescription: "GLP-1 combined with L-Carnitine to support fat metabolism and energy production." },
-  { id: "p4", name: "GLP-1 + Glycine Injection", price: 186, shortDescription: "GLP-1 combined with glycine for metabolic support and improved sleep quality." },
-  { id: "p5", name: "GLP-1/GIP", price: 211, shortDescription: "Dual GIP/GLP-1 receptor agonist injection for enhanced metabolic support." },
-  { id: "p6", name: "GLP-1/GIP + B12 Injection", price: 211, shortDescription: "Dual GIP/GLP-1 combined with B12 for comprehensive metabolic and energy support." },
-  { id: "p7", name: "GLP-1/GIP + L-Carnitine Injection", price: 211, shortDescription: "Dual GIP/GLP-1 combined with L-Carnitine for enhanced fat metabolism." },
-  { id: "p8", name: "GLP-1/GIP + Glycine Injection", price: 211, shortDescription: "Dual GIP/GLP-1 combined with glycine for metabolic support and sleep." },
+  // Renamed for the 2026 relaunch (customer-facing display names). Prices/IDs unchanged
+  // to preserve the existing Stripe price mapping. NOTE: relaunch variant prices differ
+  // from these synced base prices and new products (p68-p71) still require a Stripe sync.
+  { id: "p1", name: "Semaglutide + B6 Injection", price: 186, shortDescription: "Provider-directed weight-management injection pairing semaglutide with vitamin B6." },
+  { id: "p2", name: "Semaglutide + B12 Injection", price: 186, shortDescription: "Provider-directed semaglutide injection combined with B12." },
+  { id: "p3", name: "Semaglutide + L-Carnitine Injection", price: 186, shortDescription: "Provider-directed semaglutide injection combined with L-Carnitine." },
+  { id: "p4", name: "Semaglutide + Glycine Injection", price: 186, shortDescription: "Provider-directed semaglutide injection combined with glycine." },
+  { id: "p5", name: "Tirzepatide + B6 Injection", price: 211, shortDescription: "Provider-directed weight-management injection pairing tirzepatide with vitamin B6." },
+  { id: "p6", name: "Tirzepatide + B12 Injection", price: 211, shortDescription: "Provider-directed tirzepatide injection combined with B12." },
+  { id: "p7", name: "Tirzepatide + L-Carnitine Injection", price: 211, shortDescription: "Provider-directed tirzepatide injection combined with L-Carnitine." },
+  { id: "p8", name: "Tirzepatide + Glycine Injection", price: 211, shortDescription: "Provider-directed tirzepatide injection combined with glycine." },
   { id: "p9", name: "NAD+ Injection", price: 186, shortDescription: "NAD+ injection to support cellular energy, DNA repair, and healthy aging." },
   { id: "p10", name: "NAD+ Nasal Spray", price: 186, shortDescription: "NAD+ nasal spray for convenient daily cellular energy support." },
   { id: "p11", name: "Glutathione Injection", price: 186, shortDescription: "Glutathione injection for powerful antioxidant support, detoxification, and skin health." },
@@ -83,8 +86,9 @@ const products: ProductSeed[] = [
   { id: "p65", name: "Premium Insulin Syringes (50 Pack)", price: 39, shortDescription: "Sterile insulin syringes for subcutaneous injections. 50-pack with better value per syringe. 30G, 0.5mL, 1/2 inch needle." },
   { id: "p66", name: "Premium Insulin Syringes (100 Pack)", price: 69, shortDescription: "Sterile insulin syringes for subcutaneous injections. 100-pack with the best value for long-term therapy. 30G, 0.5mL, 1/2 inch needle." },
   { id: "p67", name: "Complete Injection Starter Kit", price: 119, shortDescription: "The ultimate starter kit: 3D printed peptide case, temperature-controlled travel case, discreet travel bag, reusable ice pack, wellness planner, sharps container, alcohol prep wipes, and insulin syringes. Save $71 versus buying separately." },
-  { id: "m1", name: "GLP-1 Membership", price: 150, shortDescription: "Locked-in monthly GLP-1 therapy with provider support and member-only discounts.", type: "recurring", interval: "month" },
-  { id: "m2", name: "GLP-1/GIP Membership", price: 200, shortDescription: "Locked-in monthly dual GIP/GLP-1 therapy with provider support and member-only discounts.", type: "recurring", interval: "month" },
+  // 2026 weight-membership relaunch: locked monthly rates. Recurring; used by membership checkout.
+  { id: "m1", name: "Semaglutide Membership", price: 199, shortDescription: "Locked-price provider-guided Semaglutide membership. Provider determines formulation and strength.", type: "recurring", interval: "month" },
+  { id: "m2", name: "Tirzepatide Membership", price: 249, shortDescription: "Locked-price provider-guided Tirzepatide membership through the included program maximum (25mg/2mg per mL, 2mL).", type: "recurring", interval: "month" },
 ];
 
 function abbreviate(name: string): string {

@@ -10,6 +10,16 @@ export interface CartItem {
   subscription: boolean;
   section: string;
   requiresIntake?: boolean;
+  variantId?: string;
+  variantLabel?: string;
+  isMembership?: boolean;
+  billingFrequency?: 'monthly';
+  /** Stable line identity: product + variant + purchase type. */
+  key: string;
+}
+
+export function lineKey(productId: string, variantId: string | undefined, subscription: boolean) {
+  return `${productId}|${variantId ?? ''}|${subscription ? 'sub' : 'one'}`;
 }
 
 interface CartContextValue {
@@ -17,9 +27,9 @@ interface CartContextValue {
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
-  addItem: (item: Omit<CartItem, 'quantity'>, quantity?: number) => void;
-  removeItem: (productId: string, subscription: boolean) => void;
-  updateQuantity: (productId: string, subscription: boolean, quantity: number) => void;
+  addItem: (item: Omit<CartItem, 'quantity' | 'key'>, quantity?: number) => void;
+  removeItem: (key: string) => void;
+  updateQuantity: (key: string, quantity: number) => void;
   clearCart: () => void;
   subtotal: number;
   itemCount: number;
@@ -36,7 +46,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) setItems(JSON.parse(stored));
+      if (stored) {
+        const parsed: CartItem[] = JSON.parse(stored);
+        // Backfill `key` for any items persisted before variants existed.
+        setItems(parsed.map(i => ({ ...i, key: i.key ?? lineKey(i.productId, i.variantId, i.subscription) })));
+      }
     } catch {
       /* ignore */
     }
@@ -51,30 +65,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const addItem: CartContextValue['addItem'] = (item, quantity = 1) => {
+    const key = lineKey(item.productId, item.variantId, item.subscription);
     setItems(prev => {
-      const existing = prev.find(i => i.productId === item.productId && i.subscription === item.subscription);
+      const existing = prev.find(i => i.key === key);
       if (existing) {
-        return prev.map(i =>
-          i.productId === item.productId && i.subscription === item.subscription
-            ? { ...i, quantity: i.quantity + quantity }
-            : i
-        );
+        return prev.map(i => (i.key === key ? { ...i, quantity: i.quantity + quantity } : i));
       }
-      return [...prev, { ...item, quantity }];
+      return [...prev, { ...item, key, quantity }];
     });
     setIsOpen(true);
   };
 
-  const removeItem: CartContextValue['removeItem'] = (productId, subscription) =>
-    setItems(prev => prev.filter(i => !(i.productId === productId && i.subscription === subscription)));
+  const removeItem: CartContextValue['removeItem'] = key =>
+    setItems(prev => prev.filter(i => i.key !== key));
 
-  const updateQuantity: CartContextValue['updateQuantity'] = (productId, subscription, quantity) => {
+  const updateQuantity: CartContextValue['updateQuantity'] = (key, quantity) => {
     if (quantity < 1) return;
-    setItems(prev =>
-      prev.map(i =>
-        i.productId === productId && i.subscription === subscription ? { ...i, quantity } : i
-      )
-    );
+    setItems(prev => prev.map(i => (i.key === key ? { ...i, quantity } : i)));
   };
 
   const clearCart = () => setItems([]);

@@ -28,7 +28,7 @@ import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { TermsPage } from '@/pages/TermsPage';
-import { products, sections, concerns, goals, type Product } from '@/data/products';
+import { visibleProducts as products, sections, concerns, goals, type Product } from '@/data/products';
 
 const BASE_URL = 'https://mybaremethod.com';
 
@@ -49,25 +49,18 @@ function buildProductJsonLd(product: Product) {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: product.name,
+    name: product.displayName,
     description: product.shortDescription,
     image: `${BASE_URL}${product.image}`,
     sku: product.id,
     brand: { '@type': 'Brand', name: 'My Bare Method' },
     offers: {
       '@type': 'Offer',
-      price: product.price,
+      price: product.startingPrice,
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
       url: `${BASE_URL}/product/${product.slug}`,
     },
-    ...(product.reviewCount > 0 ? {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: product.rating,
-        reviewCount: product.reviewCount,
-      }
-    } : {}),
   };
   return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
 }
@@ -96,7 +89,7 @@ function buildRoutes() {
       path: '/memberships',
       component: createElement(MembershipsPage),
       title: 'Memberships — My Bare Method',
-      description: 'Lock in your pricing with GLP-1 and GLP-1/GIP memberships. Member-only discounts and benefits.',
+      description: 'Locked-price, provider-guided Semaglutide ($199/mo) and Tirzepatide ($249/mo) memberships. One membership, one predictable monthly price. Provider review required.',
     },
     {
       path: '/alacarte',
@@ -215,7 +208,7 @@ function buildRoutes() {
     routes.push({
       path: `/product/${p.slug}`,
       component: createElement(ProductPage, { slug: p.slug }),
-      title: `${p.name} — My Bare Method`,
+      title: `${p.displayName} — My Bare Method`,
       description: p.shortDescription,
       jsonLd: buildProductJsonLd(p),
     });

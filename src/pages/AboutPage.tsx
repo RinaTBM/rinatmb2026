@@ -1,5 +1,5 @@
 import { Link } from '@/router';
-import { ShieldCheck, FlaskConical, Stethoscope, Sparkles, Heart, ArrowRight, Quote, Users, HandHeart, Scale, Activity, HeartPulse } from 'lucide-react';
+import { ShieldCheck, FlaskConical, Stethoscope, Sparkles, Heart, ArrowRight, Quote, Users, Scale, Activity, HeartPulse } from 'lucide-react';
 
 export function AboutPage() {
   return (

@@ -29,6 +29,7 @@ import { ShippingPolicyPage } from '@/pages/ShippingPolicyPage';
 import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { MembershipTermsPage } from '@/pages/MembershipTermsPage';
+import { AdminApp } from '@/admin/AdminApp';
 
 function App() {
   const route = useRouter();
@@ -42,6 +43,11 @@ function App() {
       window.dispatchEvent(new PopStateEvent('popstate'));
     }
   }, []);
+
+  // Admin area renders with its own chrome (no storefront header/footer/cart).
+  if (path === '/admin' || path.startsWith('/admin/')) {
+    return <AdminApp route={route} />;
+  }
 
   const renderPage = () => {
     if (path === '/' || path === '') return <HomePage />;

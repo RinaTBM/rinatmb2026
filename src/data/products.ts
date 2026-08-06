@@ -1,4 +1,32 @@
-export type ProductSection = 'weight-management' | 'longevity' | 'hrt-women' | 'provider-care' | 'research' | 'accessories';
+// =============================================================================
+// My Bare Method — Central Product Catalog (single source of truth)
+// -----------------------------------------------------------------------------
+// Relaunch 2026: 13 active base products with selectable variants, grouped into
+// 5 public categories. Retired products are preserved (not deleted) as hidden
+// "future" products so they can be re-released later through campaigns.
+//
+// Compliance: no benefit/outcome/dosing claims, no branded drug names, no
+// "FDA-approved compounded" or "generic <brand>" language. All active products
+// are provider-directed and require licensed-provider review before fulfillment.
+// `internalNotes` is NEVER rendered to customers.
+// =============================================================================
+
+// ---------------------------------------------------------------------------
+// Public categories (5)
+// ---------------------------------------------------------------------------
+export type Category =
+  | 'weight-management'
+  | 'womens-hormone-therapy'
+  | 'longevity-cognitive'
+  | 'recovery-performance'
+  | 'prescription-skin-hair'
+  | 'provider-care'
+  | 'accessories';
+
+// Legacy alias retained so existing components that reference `product.section`
+// and `ProductSection` keep working. Section === Category in the relaunch.
+// Also accept legacy website section ids via getSectionMeta aliases.
+export type ProductSection = Category;
 
 export type Goal =
   | 'weight-management'
@@ -10,27 +38,85 @@ export type Goal =
   | 'beauty'
   | 'daily-wellness';
 
+export type ProductStatus = 'active' | 'future';
+
+export type DosageForm =
+  | 'Injection'
+  | 'Nasal Spray'
+  | 'Capsule'
+  | 'Patch'
+  | 'Cream'
+  | 'Topical Solution'
+  | 'Solution'
+  | 'Service'
+  | 'Accessory';
+
+export interface ProductVariant {
+  id: string;
+  dosageForm: DosageForm;
+  strength: string;
+  size: string;
+  price: number;
+  /** Full customer-facing label, e.g. "Injection, 5mg/mL, 2mL" or "1mg/1mg per mL, 2mL". */
+  label: string;
+}
+
 export interface Product {
+  // --- Identity ---
   id: string;
   slug: string;
-  name: string;
-  tagline: string;
-  section: ProductSection;
-  subcategory: string;
-  goals: Goal[];
-  price: number;
-  subscriptionPrice?: number;
-  startingAt?: boolean;
-  variablePricing?: boolean;
-  priceLabel?: string;
-  image: string;
+  displayName: string;
+  shortName: string;
+  subtitle: string;
+  category: Category;
+  dosageForms: DosageForm[];
+
+  // --- Copy ---
   shortDescription: string;
+  longDescription: string;
+
+  // --- Media ---
+  image: string;
+  imageAlt: string;
+
+  // --- Commerce ---
+  variants: ProductVariant[];
+  startingPrice: number;
+
+  // --- Lifecycle / campaign system ---
+  status: ProductStatus;
+  isVisible: boolean;
+  launchPhase?: number;
+  campaignTheme?: string;
+  plannedLaunchDate?: string;
+
+  // --- Compliance / fulfillment ---
+  requiresProviderReview: boolean;
+  requiresPrescription: boolean;
+  requiresComplianceReview: boolean;
+  requiresPharmacyVerification: boolean;
+  providerDisclaimer: string;
+  /** Internal only — must never be rendered to customers. */
+  internalNotes?: string;
+  needsDedicatedImage?: boolean;
+
+  // --- Backward-compatible fields consumed by existing pages/components ---
+  name: string;               // === displayName
+  tagline: string;            // === subtitle
+  section: ProductSection;    // === category
+  subcategory: string;        // primary dosage form (kebab)
+  goals: Goal[];
+  price: number;              // === startingPrice
+  subscriptionPrice?: number;
+  startingAt?: boolean;       // true when >1 variant
+  variablePricing?: boolean;  // always false in the relaunch (fixed variant prices)
+  priceLabel?: string;
   benefits: string[];
   ingredients: string;
   directions: string;
   bestSeller?: boolean;
-  requiresIntake?: boolean;
-  providerReviewed?: boolean;
+  requiresIntake?: boolean;   // === requiresProviderReview
+  providerReviewed?: boolean; // === requiresProviderReview
   alaCarte?: boolean;
   featured?: boolean;
   bundleItems?: string[];
@@ -39,89 +125,57 @@ export interface Product {
   disclosures?: string;
 }
 
-export interface Membership {
-  id: string;
-  name: string;
-  price: number;
-  priceLabel: string;
-  tagline: string;
-  description: string;
-  features: string[];
-  highlighted?: boolean;
-}
+// ---------------------------------------------------------------------------
+// Shared compliance copy
+// ---------------------------------------------------------------------------
+export const PROVIDER_ELIGIBILITY_NOTICE: string[] = [
+  'Provider review is required before any product is dispensed.',
+  'Purchasing does not guarantee a prescription.',
+  'Eligibility is determined by a licensed provider.',
+  'Exact formulation, strength, and treatment plan are determined by the provider and dispensing pharmacy.',
+  'Labs or a consultation may be requested.',
+  'Final availability depends on the dispensing pharmacy.',
+  'Individual experiences and results vary.',
+];
 
-export const memberships: Membership[] = [
+const RX_DISCLAIMER =
+  'Prescription option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.';
+
+const COMPOUNDED_DISCLAIMER =
+  'Provider-directed compounded formulation available only following eligibility review. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.';
+
+const WEIGHT_DISCLAIMER =
+  'Prescription weight-management option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.';
+
+const providerFaqs = [
   {
-    id: 'glp1-membership',
-    name: 'Bare GLP-1 Membership',
-    price: 175,
-    priceLabel: '/month',
-    tagline: 'Semaglutide program',
-    description: 'Your complete semaglutide weight management program. One locked-in price no matter the dose — provider-guided care included.',
-    features: [
-      'Semaglutide program',
-      'Locked-in pricing at every dose',
-      'Monthly refills',
-      'Provider-guided care',
-      '3-month minimum',
-    ],
+    q: 'What happens after I place my order?',
+    a: 'You will complete a secure medical intake. A licensed provider reviews your information and determines eligibility. Fulfillment occurs only after provider approval.',
   },
   {
-    id: 'glp1-gip-membership',
-    name: 'Bare GLP-1/GIP Membership',
-    price: 225,
-    priceLabel: '/month',
-    tagline: 'Tirzepatide program',
-    description: 'Our premium dual incretin tirzepatide program. One locked-in price no matter the dose — with priority fulfillment and provider-guided care.',
-    features: [
-      'Tirzepatide program',
-      'Locked-in pricing at every dose',
-      'Monthly refills',
-      'Provider-guided care',
-      'Priority fulfillment',
-      '3-month minimum',
-    ],
-    highlighted: true,
+    q: 'Is a prescription guaranteed?',
+    a: 'No. Purchasing does not guarantee a prescription. Eligibility is determined by a licensed provider, and a consultation or labs may be requested.',
   },
   {
-    id: 'elite-wellness-membership',
-    name: 'Bare Elite Wellness',
-    price: 49,
-    priceLabel: '/month',
-    tagline: 'All non-GLP-1 wellness products',
-    description: 'Unlock exclusive member pricing on all non-GLP-1 wellness products, priority processing, and early access to new therapies.',
-    features: [
-      'Exclusive member pricing',
-      'Priority processing',
-      'Member-only promotions',
-      'Early access to new therapies',
-      'Discount on accessories',
-    ],
+    q: 'Who decides the exact formulation and strength?',
+    a: 'The exact formulation, strength, and treatment plan are determined by the prescribing provider and the dispensing pharmacy. Final availability depends on the pharmacy.',
+  },
+  {
+    q: 'What if I am not approved?',
+    a: 'If the provider determines a product is not appropriate for you, you receive a full refund.',
   },
 ];
 
-export interface Subcategory {
-  id: string;
-  label: string;
-  description?: string;
-}
-
-export interface SectionMeta {
-  id: ProductSection;
-  label: string;
-  tagline: string;
-  description: string;
-  disclosure: string;
-  subcategories: Subcategory[];
-}
-
-export const IMG_CAPSULE  = '/images/products/file_00000000e110822fb1dd36d19b3c9896 copy.png';
+// ---------------------------------------------------------------------------
+// Product images (existing assets preserved — no generated replacements)
+// ---------------------------------------------------------------------------
+export const IMG_CAPSULE   = '/images/products/file_00000000e110822fb1dd36d19b3c9896 copy.png';
 export const IMG_INJECTION = '/images/products/file_0000000081dc822f831112a2c1e5d3d9 copy.png';
-export const IMG_NASAL    = '/images/products/nasal-spray.png';
-export const IMG_SPRAY    = '/images/products/ChatGPT_Image_Aug_3,_2026,_04_16_27_PM.png';
-export const IMG_PATCH    = '/images/products/patches.png';
-export const IMG_CREAM    = '/images/products/ChatGPT_Image_Jul_31,_2026,_04_22_43_PM.png';
-export const IMG_GEL      = '/images/products/ChatGPT_Image_Aug_3,_2026,_04_14_54_PM.png';
+export const IMG_NASAL     = '/images/products/nasal-spray.png';
+export const IMG_SPRAY     = '/images/products/ChatGPT_Image_Aug_3,_2026,_04_16_27_PM.png';
+export const IMG_PATCH     = '/images/products/patches.png';
+export const IMG_CREAM     = '/images/products/ChatGPT_Image_Jul_31,_2026,_04_22_43_PM.png';
+export const IMG_GEL       = '/images/products/ChatGPT_Image_Aug_3,_2026,_04_14_54_PM.png';
 export const IMG_PELLET   = '/images/products/ChatGPT_Image_Jul_31,_2026,_04_23_30_PM.png';
 export const IMG_TROCHE   = '/images/products/ChatGPT_Image_Jul_31,_2026,_04_24_15_PM.png';
 export const IMG_HARD_CASE     = '/images/products/file_00000000546481f5898eb9ada42950af.png';
@@ -135,84 +189,72 @@ export const IMG_TEMP_CASE     = '/images/accessories/file_000000005a08820c8885c
 export const IMG_ICE_PACK      = '/images/accessories/file_000000000ab481f5b59b55279823b203.png';
 export const IMG_SHARPS        = '/images/accessories/file_000000000ab481f5b59b55279823b203(1).png';
 
-/**
- * Returns the canonical product image for a given product name / subcategory.
- * Rules (in priority order):
- *  1. "nasal-spray" subcategory or name contains "nasal spray"  → nasal spray bottle
- *  2. "capsules" subcategory or name contains capsule/tablet/troche/oral → capsule bottle
- *  3. Everything else (injections, pellets, creams, gels, patches, services) → injection vial
- */
-export function getFormImage(name: string, subcategory: string): string {
-  const n = name.toLowerCase();
-  const s = subcategory.toLowerCase();
-  if (n.includes('injection starter kit') || n.includes('complete injection')) return IMG_INJECTION_KIT;
-  if (n.includes('3d printed') || n.includes('peptide case')) return IMG_3D_CASE;
-  if (n.includes('temperature') || n.includes('travel case')) return IMG_TEMP_CASE;
-  if (n.includes('travel bag')) return IMG_TRAVEL_BAG;
-  if (n.includes('ice pack')) return IMG_ICE_PACK;
-  if (n.includes('planner')) return IMG_PLANNER;
-  if (n.includes('sharps')) return IMG_SHARPS;
-  if (n.includes('alcohol') || n.includes('wipe') || n.includes('prep pad')) return IMG_ALCOHOL_WIPES;
-  if (n.includes('syringe') || s === 'supplies') return IMG_SYRINGE;
-  if (n.includes('hard case') || s === 'cases') return IMG_HARD_CASE;
-  if (s === 'nasal-spray' || n.includes('nasal spray')) return IMG_NASAL;
-  if (n.includes('patch') || n.includes('transdermal')) return IMG_PATCH;
-  if (n.includes('gel') || n.includes('topical gel')) return IMG_GEL;
-  if (n.includes('topical spray')) return IMG_SPRAY;
-  if (n.includes('cream')) return IMG_CREAM;
-  if (n.includes('pellet')) return IMG_PELLET;
-  if (n.includes('troche') || n.includes('lozenge')) return IMG_TROCHE;
-  if (
-    s === 'capsules' ||
-    n.includes('capsule') ||
-    n.includes('tablet') ||
-    n.includes('methylene blue') ||
-    n.includes('dihexa')
-  ) return IMG_CAPSULE;
-  return IMG_INJECTION;
+// ---------------------------------------------------------------------------
+// Categories (public taxonomy)
+// ---------------------------------------------------------------------------
+export interface Subcategory {
+  id: string;
+  label: string;
+  description?: string;
 }
+
+export interface SectionMeta {
+  id: Category;
+  label: string;
+  tagline: string;
+  description: string;
+  disclosure: string;
+  subcategories: Subcategory[];
+}
+
+const RX_CATEGORY_DISCLOSURE =
+  'These products require completion of a medical intake and review by a licensed provider. Fulfillment occurs only after provider approval. Purchasing does not guarantee a prescription. Exact formulation, strength, and treatment plan are determined by the provider and dispensing pharmacy.';
 
 export const sections: SectionMeta[] = [
   {
     id: 'weight-management',
     label: 'Weight Management',
-    tagline: 'Metabolic support, refined',
-    description: 'GLP-1 and dual incretin therapies to support sustainable, feel-good progress — provider-guided and personalized to you.',
-    disclosure: 'Weight Management products require completion of a medical intake and review by a licensed provider. Fulfillment occurs only after provider approval. This is not a guarantee of prescription. If not approved, a full refund is issued.',
-    subcategories: [
-      { id: 'glp-1', label: 'GLP-1', description: 'Single incretin receptor agonist therapies' },
-      { id: 'glp-1-gip', label: 'GLP-1/GIP', description: 'Dual incretin receptor agonist therapies' },
-    ],
+    tagline: 'Metabolic support, provider-guided',
+    description: 'Provider-directed weight-management options, personalized following a licensed-provider evaluation.',
+    disclosure: RX_CATEGORY_DISCLOSURE,
+    subcategories: [],
   },
   {
-    id: 'longevity',
-    label: 'Longevity',
-    tagline: 'Cellular health, gracefully',
-    description: 'NAD+, B12, glutathione, and growth hormone support for cellular energy and healthy aging at every stage of life.',
-    disclosure: 'Longevity products may require a medical intake and provider review. Fulfillment occurs only after provider approval when applicable.',
-    subcategories: [
-      { id: 'injections', label: 'Injections' },
-      { id: 'nasal-spray', label: 'Nasal Spray' },
-      { id: 'capsules', label: 'Capsules' },
-    ],
-  },
-  {
-    id: 'hrt-women',
-    label: 'HRT for Women',
+    id: 'womens-hormone-therapy',
+    label: "Women's Hormone Therapy",
     tagline: 'Hormone balance, personal',
-    description: 'Estrogen, progesterone, testosterone, and combination hormone therapies — in multiple delivery formats to fit your life.',
-    disclosure: 'HRT for Women products require completion of a medical intake and review by a licensed provider. Fulfillment occurs only after provider approval. This is not a guarantee of prescription. If not approved, a full refund is issued. Pricing varies by medication, dosage, formulation, and treatment plan determined after intake.',
-    subcategories: [
-      { id: 'estrogen', label: 'Estrogen Therapy' },
-      { id: 'progesterone', label: 'Progesterone Therapy' },
-      { id: 'testosterone', label: 'Testosterone Therapy' },
-      { id: 'combination', label: 'Combination Hormone Therapy' },
-    ],
+    description: 'Provider-directed hormone therapy in multiple delivery formats, personalized after intake and review.',
+    disclosure: RX_CATEGORY_DISCLOSURE,
+    subcategories: [],
+  },
+  {
+    id: 'longevity-cognitive',
+    label: 'Longevity & Cognitive Health',
+    tagline: 'Cellular and cognitive support',
+    description: 'Provider-directed compounded formulations for longevity and cognitive-health support, available only after eligibility review.',
+    disclosure: RX_CATEGORY_DISCLOSURE,
+    subcategories: [],
+  },
+  {
+    id: 'recovery-performance',
+    label: 'Recovery & Performance',
+    tagline: 'Recovery and performance support',
+    description: 'Provider-directed compounded formulations for recovery and performance support, available only after eligibility review.',
+    disclosure: RX_CATEGORY_DISCLOSURE,
+    subcategories: [],
+  },
+  {
+    id: 'prescription-skin-hair',
+    label: 'Prescription Skin & Hair',
+    tagline: 'Prescription skin & hair care',
+    description: 'Prescription skin and hair treatments available following licensed-provider review.',
+    disclosure: RX_CATEGORY_DISCLOSURE,
+    subcategories: [],
   },
   {
     id: 'provider-care',
     label: 'Provider Care',
-    tagline: 'Care, guided by licensed providers',
+    tagline: 'Consultations & laboratory review',
     description: 'Consultations and laboratory reviews — personal, compassionate, and judgment-free.',
     disclosure: 'Provider Care services require scheduling and may involve a medical intake. Fulfillment occurs only after provider approval when applicable.',
     subcategories: [
@@ -221,24 +263,11 @@ export const sections: SectionMeta[] = [
     ],
   },
   {
-    id: 'research',
-    label: 'Research Catalog',
-    tagline: 'For the scientifically curious',
-    description: 'High-purity research peptides and reagents for laboratory and research purposes only. Not for human consumption.',
-    disclosure: 'Research products are sold for laboratory use only. Not for human consumption. Not intended to diagnose, treat, cure, or prevent any disease.',
-    subcategories: [
-      { id: 'injections', label: 'Injections' },
-      { id: 'capsules', label: 'Capsules' },
-      { id: 'nasal-spray', label: 'Nasal Sprays' },
-      { id: 'other', label: 'Other' },
-    ],
-  },
-  {
     id: 'accessories',
     label: 'Accessories',
-    tagline: 'Thoughtful essentials for your routine',
-    description: 'Premium accessories to support your therapy and wellness routine — from storage cases to injection supplies.',
-    disclosure: 'Accessories are non-refundable. All sales are final.',
+    tagline: 'Essentials for your ritual',
+    description: 'Travel cases, supplies, and thoughtfully designed accessories to support your wellness routine.',
+    disclosure: 'Accessories are wellness tools and supplies. They are not medications and do not require a prescription.',
     subcategories: [
       { id: 'cases', label: 'Cases' },
       { id: 'supplies', label: 'Supplies' },
@@ -247,442 +276,985 @@ export const sections: SectionMeta[] = [
   },
 ];
 
-const baseFaqs = (isProvider: boolean, isResearch: boolean) => {
-  if (isResearch) return [
-    { q: 'What does "research use only" mean?', a: 'This product is sold for laboratory and research purposes only. It is not a dietary supplement or medication and is not intended for human consumption.' },
-    { q: 'How are research products shipped?', a: 'Research products are shipped with appropriate handling, including cold-chain options for temperature-sensitive reagents.' },
-  ];
-  if (isProvider) return [
-    { q: 'What happens after I order?', a: 'You will receive a link to complete a secure medical intake. A licensed provider reviews your history and, if appropriate, approves and prescribes your personalized plan.' },
-    { q: 'What if I am not approved?', a: 'If the provider determines this is not appropriate for you, you receive a full refund within 3 business days.' },
-    { q: 'Which states do you serve?', a: 'We currently serve most US states. You will be notified during intake if your state is not yet supported.' },
-  ];
-  return [
-    { q: 'Can I take this with my current medications?', a: 'Always consult your healthcare provider before adding any new therapy, especially if you take prescription medications.' },
-  ];
+/** Alias — the relaunch taxonomy is categories. */
+export const categories = sections;
+
+export const CATEGORY_ORDER: Category[] = [
+  'weight-management',
+  'womens-hormone-therapy',
+  'longevity-cognitive',
+  'recovery-performance',
+  'prescription-skin-hair',
+  'provider-care',
+  'accessories',
+];
+
+/** Legacy website section ids → current category ids (preserve old links). */
+export const SECTION_ALIASES: Record<string, Category> = {
+  longevity: 'longevity-cognitive',
+  'hrt-women': 'womens-hormone-therapy',
+  research: 'recovery-performance',
 };
 
-let pid = 0;
-const mk = (
-  name: string, section: ProductSection, subcategory: string, goals: Goal[],
-  price: number, opts: Partial<Product> = {}
-): Product => {
-  pid++;
-  const isResearch = section === 'research';
-  const isProvider = Boolean(section === 'provider-care' || opts.requiresIntake || opts.providerReviewed);
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + `-${pid}`;
-  const image = opts.image || getFormImage(name, subcategory);
+// ---------------------------------------------------------------------------
+// Variant + product builders
+// ---------------------------------------------------------------------------
+const kebab = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+interface VariantSeed {
+  dosageForm: DosageForm;
+  strength: string;
+  size: string;
+  price: number;
+}
+
+function buildVariants(slug: string, seeds: VariantSeed[]): ProductVariant[] {
+  const distinctForms = new Set(seeds.map(s => s.dosageForm));
+  const multiForm = distinctForms.size > 1;
+  return seeds.map((s, i) => ({
+    id: `${slug}-v${i + 1}`,
+    dosageForm: s.dosageForm,
+    strength: s.strength,
+    size: s.size,
+    price: s.price,
+    label: multiForm ? `${s.dosageForm}, ${s.strength}, ${s.size}` : `${s.strength}, ${s.size}`,
+  }));
+}
+
+interface ProductSeed {
+  id: string;
+  slug: string;
+  displayName: string;
+  shortName: string;
+  subtitle: string;
+  category: Category;
+  goals: Goal[];
+  shortDescription: string;
+  longDescription: string;
+  image: string;
+  imageAlt: string;
+  variants: VariantSeed[];
+  providerDisclaimer: string;
+  bestSeller?: boolean;
+  subscriptionPrice?: number;
+  status?: ProductStatus;
+  isVisible?: boolean;
+  launchPhase?: number;
+  campaignTheme?: string;
+  plannedLaunchDate?: string;
+  internalNotes?: string;
+  needsDedicatedImage?: boolean;
+}
+
+function mk(seed: ProductSeed): Product {
+  const variants = buildVariants(seed.slug, seed.variants);
+  const startingPrice = variants.reduce((min, v) => Math.min(min, v.price), Infinity);
+  const forms = Array.from(new Set(variants.map(v => v.dosageForm))) as DosageForm[];
+  const status = seed.status ?? 'active';
+  const isVisible = seed.isVisible ?? (status === 'active');
   return {
-    id: `p${pid}`,
-    slug,
-    name,
-    tagline: opts.tagline || subcategory,
-    section,
-    subcategory,
-    goals,
-    price,
-    subscriptionPrice: opts.subscriptionPrice,
-    startingAt: opts.startingAt,
-    variablePricing: opts.variablePricing,
-    priceLabel: opts.priceLabel,
-    image,
-    shortDescription: opts.shortDescription || `${name} for ${section.replace(/-/g, ' ')}.`,
-    benefits: opts.benefits || ['Supports your wellness goals', 'Premium quality', 'Provider-reviewed when applicable'],
-    ingredients: opts.ingredients || 'Specific formulation determined after provider review.',
-    directions: opts.directions || 'Use as directed by your provider.',
-    bestSeller: opts.bestSeller,
-    requiresIntake: opts.requiresIntake,
-    providerReviewed: opts.providerReviewed,
-    alaCarte: opts.alaCarte,
-    featured: opts.featured,
-    bundleItems: opts.bundleItems,
-    bundleRegularPrice: opts.bundleRegularPrice,
-    faqs: opts.faqs || baseFaqs(isProvider, isResearch),
-    disclosures: opts.disclosures,
+    id: seed.id,
+    slug: seed.slug,
+    displayName: seed.displayName,
+    shortName: seed.shortName,
+    subtitle: seed.subtitle,
+    category: seed.category,
+    dosageForms: forms,
+    shortDescription: seed.shortDescription,
+    longDescription: seed.longDescription,
+    image: seed.image,
+    imageAlt: seed.imageAlt,
+    variants,
+    startingPrice: Number.isFinite(startingPrice) ? startingPrice : 0,
+    status,
+    isVisible,
+    launchPhase: seed.launchPhase,
+    campaignTheme: seed.campaignTheme,
+    plannedLaunchDate: seed.plannedLaunchDate,
+    requiresProviderReview: seed.category === 'accessories' ? false : seed.category === 'provider-care' ? true : true,
+    requiresPrescription: seed.category === 'accessories' || seed.category === 'provider-care' ? false : true,
+    requiresComplianceReview: seed.category === 'accessories' ? false : true,
+    requiresPharmacyVerification: seed.category === 'accessories' || seed.category === 'provider-care' ? false : true,
+    providerDisclaimer: seed.providerDisclaimer,
+    internalNotes: seed.internalNotes,
+    needsDedicatedImage: seed.needsDedicatedImage,
+
+    // Backward-compatible / derived
+    name: seed.displayName,
+    tagline: seed.subtitle,
+    section: seed.category,
+    subcategory:
+      seed.category === 'provider-care'
+        ? (seed.slug.includes('laboratory') ? 'lab-review' : 'consultation')
+        : seed.category === 'accessories'
+          ? (
+              seed.slug.includes('kit') ? 'bundles'
+              : (seed.slug.includes('case') || seed.slug.includes('bag')) ? 'cases'
+              : 'supplies'
+            )
+          : (forms.length ? kebab(forms[0]) : 'other'),
+    goals: seed.goals,
+    price: Number.isFinite(startingPrice) ? startingPrice : 0,
+    subscriptionPrice: seed.subscriptionPrice,
+    startingAt: variants.length > 1,
+    variablePricing: false,
+    benefits: [],
+    ingredients: 'Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
+    directions: 'Use only as directed by your prescribing provider.',
+    bestSeller: seed.bestSeller,
+    requiresIntake: seed.category !== 'accessories',
+    providerReviewed: seed.category !== 'accessories',
+    alaCarte: true,
+    featured: seed.category === 'accessories' && seed.slug === 'complete-injection-starter-kit',
+    faqs: seed.category === 'accessories' ? [] : providerFaqs,
   };
-};
+}
 
+// ---------------------------------------------------------------------------
+// Active catalog — 13 base products
+// ---------------------------------------------------------------------------
 export const products: Product[] = [
-  // ===== WEIGHT MANAGEMENT: GLP-1 =====
-  mk('GLP-1', 'weight-management', 'glp-1', ['weight-management'], 150, {
-    tagline: 'Single incretin receptor agonist', shortDescription: 'GLP-1 receptor agonist injection to support appetite regulation and metabolic balance.',
-    benefits: ['Supports appetite regulation', 'Promotes metabolic balance', 'Provider-personalized dosing', 'Weekly injection'],
-    ingredients: 'Compounded GLP-1 receptor agonist. Specific formulation and dosage determined after provider review.',
-    directions: 'Subcutaneous injection as directed by your provider. Typically once weekly.', bestSeller: true, requiresIntake: true, providerReviewed: true, startingAt: true, subscriptionPrice: 175,
+  // ===== WEIGHT MANAGEMENT =====
+  mk({
+    id: 'p1', // preserves the previous GLP-1 app_product_id for Stripe mapping
+    slug: 'semaglutide',
+    displayName: 'Semaglutide + B6 Injection',
+    shortName: 'Semaglutide',
+    subtitle: 'Provider-directed weight management',
+    category: 'weight-management',
+    goals: ['weight-management'],
+    shortDescription: 'A provider-directed weight-management injection pairing semaglutide with vitamin B6.',
+    longDescription: WEIGHT_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'Amber injection vial for Semaglutide + B6, a provider-directed weight-management option',
+    providerDisclaimer: WEIGHT_DISCLAIMER,
+    bestSeller: true,
+    subscriptionPrice: 175,
+    variants: [
+      { dosageForm: 'Injection', strength: '1mg/1mg per mL', size: '2mL', price: 149 },
+      { dosageForm: 'Injection', strength: '2mg/2mg per mL', size: '2mL', price: 169 },
+      { dosageForm: 'Injection', strength: '5mg/2mg per mL', size: '2mL', price: 199 },
+    ],
   }),
-  mk('GLP-1 + B12 Injection', 'weight-management', 'glp-1', ['weight-management'], 150, {
-    tagline: 'GLP-1 with B12 energy support', shortDescription: 'GLP-1 receptor agonist combined with B12 for metabolic support and energy.',
-    benefits: ['Appetite regulation', 'B12 energy support', 'Weekly injection', 'Provider-personalized'], requiresIntake: true, providerReviewed: true, startingAt: true, subscriptionPrice: 175,
-  }),
-  mk('GLP-1 + L-Carnitine Injection', 'weight-management', 'glp-1', ['weight-management'], 150, {
-    tagline: 'GLP-1 with L-Carnitine', shortDescription: 'GLP-1 combined with L-Carnitine to support fat metabolism and energy production.',
-    benefits: ['Appetite regulation', 'Supports fat metabolism', 'Energy production', 'Weekly injection'], requiresIntake: true, providerReviewed: true, startingAt: true, subscriptionPrice: 175,
-  }),
-  mk('GLP-1 + Glycine Injection', 'weight-management', 'glp-1', ['weight-management'], 150, {
-    tagline: 'GLP-1 with Glycine', shortDescription: 'GLP-1 combined with glycine for metabolic support and improved sleep quality.',
-    benefits: ['Appetite regulation', 'Supports restful sleep', 'Metabolic support', 'Weekly injection'], requiresIntake: true, providerReviewed: true, startingAt: true, subscriptionPrice: 175,
-  }),
-
-  // ===== WEIGHT MANAGEMENT: GLP-1/GIP =====
-  mk('GLP-1/GIP', 'weight-management', 'glp-1-gip', ['weight-management'], 200, {
-    tagline: 'Dual incretin receptor agonist', shortDescription: 'Dual GIP/GLP-1 receptor agonist injection for enhanced metabolic support.',
-    benefits: ['Dual incretin pathway support', 'Enhanced appetite regulation', 'Provider-personalized dosing', 'Weekly injection'], bestSeller: true, requiresIntake: true, providerReviewed: true, startingAt: true, subscriptionPrice: 225,
-  }),
-  mk('GLP-1/GIP + B12 Injection', 'weight-management', 'glp-1-gip', ['weight-management'], 200, {
-    tagline: 'Dual incretin with B12', shortDescription: 'Dual GIP/GLP-1 combined with B12 for comprehensive metabolic and energy support.',
-    benefits: ['Dual incretin support', 'B12 energy boost', 'Weekly injection', 'Provider-personalized'], requiresIntake: true, providerReviewed: true, startingAt: true, subscriptionPrice: 225,
-  }),
-  mk('GLP-1/GIP + L-Carnitine Injection', 'weight-management', 'glp-1-gip', ['weight-management'], 200, {
-    tagline: 'Dual incretin with L-Carnitine', shortDescription: 'Dual GIP/GLP-1 combined with L-Carnitine for enhanced fat metabolism.',
-    benefits: ['Dual incretin support', 'Fat metabolism', 'Energy production', 'Weekly injection'], requiresIntake: true, providerReviewed: true, startingAt: true, subscriptionPrice: 225,
-  }),
-  mk('GLP-1/GIP + Glycine Injection', 'weight-management', 'glp-1-gip', ['weight-management'], 200, {
-    tagline: 'Dual incretin with Glycine', shortDescription: 'Dual GIP/GLP-1 combined with glycine for metabolic support and sleep.',
-    benefits: ['Dual incretin support', 'Sleep quality', 'Metabolic support', 'Weekly injection'], requiresIntake: true, providerReviewed: true, startingAt: true, subscriptionPrice: 225,
-  }),
-
-  // ===== LONGEVITY =====
-  mk('NAD+ Injection', 'longevity', 'injections', ['longevity'], 149.99, {
-    tagline: 'Cellular energy coenzyme', shortDescription: 'NAD+ injection to support cellular energy, DNA repair, and healthy aging.',
-    benefits: ['Supports NAD+ levels', 'Cellular energy', 'DNA repair pathways', 'Subcutaneous injection'], bestSeller: true, startingAt: true,
-  }),
-  mk('NAD+ Nasal Spray', 'longevity', 'nasal-spray', ['longevity'], 186, {
-    tagline: 'NAD+ via nasal delivery', shortDescription: 'NAD+ nasal spray for convenient daily cellular energy support.',
-    benefits: ['Convenient daily use', 'Supports NAD+ levels', 'No injection needed', 'Cellular energy'], startingAt: true,
-  }),
-  mk('Glutathione Injection', 'longevity', 'injections', ['longevity', 'beauty'], 59.99, {
-    tagline: 'Master antioxidant', shortDescription: 'Glutathione injection for powerful antioxidant support, detoxification, and skin health.',
-    benefits: ['Master antioxidant', 'Detoxification support', 'Skin brightening', 'Immune support'], startingAt: true,
-  }),
-  mk('Sermorelin Injection', 'longevity', 'injections', ['longevity', 'recovery'], 119.99, {
-    tagline: 'Growth hormone support', shortDescription: 'Sermorelin injection to support natural growth hormone production and recovery.',
-    benefits: ['Supports natural GH production', 'Recovery support', 'Sleep quality', 'Body composition'], requiresIntake: true, providerReviewed: true, startingAt: true,
-  }),
-  mk('Sermorelin Capsules', 'longevity', 'capsules', ['longevity', 'recovery'], 211, {
-    tagline: 'Oral growth hormone support', shortDescription: 'Sermorelin capsules for convenient daily growth hormone support.',
-    benefits: ['Convenient oral format', 'Supports natural GH', 'Recovery support', 'Daily use'], requiresIntake: true, providerReviewed: true, startingAt: true,
-  }),
-  mk('B12 Injection', 'longevity', 'injections', ['longevity', 'daily-wellness'], 49, {
-    tagline: 'Energy & metabolism support', shortDescription: 'B12 injection for energy production, metabolism, and nervous system health.',
-    benefits: ['Energy production', 'Metabolism support', 'Nervous system health', 'Weekly injection'], bestSeller: true,
+  mk({
+    id: 'p5', // preserves the previous GLP-1/GIP app_product_id for Stripe mapping
+    slug: 'tirzepatide',
+    displayName: 'Tirzepatide + B6 Injection',
+    shortName: 'Tirzepatide',
+    subtitle: 'Provider-directed weight management',
+    category: 'weight-management',
+    goals: ['weight-management'],
+    shortDescription: 'A provider-directed weight-management injection pairing tirzepatide with vitamin B6.',
+    longDescription: WEIGHT_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'Amber injection vial for Tirzepatide + B6, a provider-directed weight-management option',
+    providerDisclaimer: WEIGHT_DISCLAIMER,
+    bestSeller: true,
+    subscriptionPrice: 225,
+    variants: [
+      { dosageForm: 'Injection', strength: '5mg/2mg per mL', size: '2mL', price: 199 },
+      { dosageForm: 'Injection', strength: '15mg/2mg per mL', size: '2mL', price: 269 },
+      { dosageForm: 'Injection', strength: '25mg/2mg per mL', size: '2mL', price: 379 },
+      { dosageForm: 'Injection', strength: '30mg/2mg per mL', size: '2mL', price: 449 },
+    ],
+    needsDedicatedImage: true,
   }),
 
-  // ===== HRT FOR WOMEN: ESTROGEN =====
-  mk('Estrogen Tablets/Capsules', 'hrt-women', 'estrogen', ['hrt-women'], 0, {
-    tagline: 'Oral estrogen therapy', shortDescription: 'Oral estrogen therapy for symptom relief and hormone balance.',
-    benefits: ['Symptom relief', 'Hormone balance', 'Convenient oral format', 'Provider-personalized dosing'], requiresIntake: true, providerReviewed: true, variablePricing: true,
+  // ===== WOMEN'S HORMONE THERAPY =====
+  mk({
+    id: 'p16', // preserves previous Estrogen Transdermal Patch app_product_id
+    slug: 'estradiol-patch',
+    displayName: 'Estradiol Patch',
+    shortName: 'Estradiol Patch',
+    subtitle: 'Provider-directed hormone therapy',
+    category: 'womens-hormone-therapy',
+    goals: ['hrt-women'],
+    shortDescription: 'A transdermal estradiol patch prescribed as part of provider-directed hormone therapy.',
+    longDescription: RX_DISCLAIMER,
+    image: IMG_PATCH,
+    imageAlt: 'Estradiol transdermal patch, a provider-directed hormone therapy option',
+    providerDisclaimer: RX_DISCLAIMER,
+    variants: [
+      { dosageForm: 'Patch', strength: '0.025mg twice weekly', size: '8 patches', price: 119 },
+      { dosageForm: 'Patch', strength: '0.05mg twice weekly', size: '8 patches', price: 119 },
+      { dosageForm: 'Patch', strength: '0.1mg twice weekly', size: '8 patches', price: 135 },
+    ],
   }),
-  mk('Estrogen Transdermal Patch', 'hrt-women', 'estrogen', ['hrt-women'], 0, {
-    tagline: 'Steady delivery patch', shortDescription: 'Estrogen transdermal patch for steady, consistent hormone delivery through the skin.',
-    benefits: ['Steady delivery', 'Twice-weekly application', 'Avoids first-pass metabolism', 'Discreet'], requiresIntake: true, providerReviewed: true, variablePricing: true,
+  mk({
+    id: 'p23', // preserves previous Progesterone Capsules app_product_id
+    slug: 'progesterone-capsules',
+    displayName: 'Progesterone Capsules',
+    shortName: 'Progesterone',
+    subtitle: 'Provider-directed hormone therapy',
+    category: 'womens-hormone-therapy',
+    goals: ['hrt-women'],
+    shortDescription: 'Oral progesterone capsules prescribed as part of provider-directed hormone therapy.',
+    longDescription: RX_DISCLAIMER,
+    image: IMG_CAPSULE,
+    imageAlt: 'Progesterone capsules bottle, a provider-directed hormone therapy option',
+    providerDisclaimer: RX_DISCLAIMER,
+    variants: [
+      { dosageForm: 'Capsule', strength: '100mg', size: '30 capsules', price: 49 },
+      { dosageForm: 'Capsule', strength: '200mg', size: '30 capsules', price: 69 },
+    ],
   }),
-  mk('Estrogen Topical Gel', 'hrt-women', 'estrogen', ['hrt-women'], 0, {
-    tagline: 'Daily topical gel', shortDescription: 'Estrogen topical gel for daily hormone delivery with adjustable dosing.',
-    benefits: ['Daily application', 'Adjustable dosing', 'Absorbs quickly', 'Flexible delivery'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Estrogen Topical Spray', 'hrt-women', 'estrogen', ['hrt-women'], 0, {
-    tagline: 'Quick-drying spray', shortDescription: 'Estrogen topical spray for convenient, quick-drying daily hormone delivery.',
-    benefits: ['Quick-drying', 'Convenient application', 'Daily use', 'Portable'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Estrogen Vaginal Cream', 'hrt-women', 'estrogen', ['hrt-women'], 0, {
-    tagline: 'Localized vaginal therapy', shortDescription: 'Estrogen vaginal cream for localized symptom relief and vaginal health.',
-    benefits: ['Localized relief', 'Vaginal health', 'Low systemic absorption', 'Targeted delivery'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Estrogen Vaginal Tablets', 'hrt-women', 'estrogen', ['hrt-women'], 0, {
-    tagline: 'Vaginal estrogen tablets', shortDescription: 'Estrogen vaginal tablets for localized delivery and vaginal health support.',
-    benefits: ['Localized delivery', 'Vaginal health', 'Convenient format', 'Low systemic absorption'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Estrogen Vaginal Ring', 'hrt-women', 'estrogen', ['hrt-women'], 0, {
-    tagline: '3-month continuous delivery', shortDescription: 'Estrogen vaginal ring for continuous, low-dose hormone delivery over 3 months.',
-    benefits: ['Continuous delivery', 'Lasts 3 months', 'Low maintenance', 'Steady dosing'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Estrogen Pellets', 'hrt-women', 'estrogen', ['hrt-women'], 0, {
-    tagline: 'Long-acting pellet therapy', shortDescription: 'Estrogen pellets for continuous, long-acting hormone delivery over several months.',
-    benefits: ['Continuous delivery', 'Lasts 3–6 months', 'No daily maintenance', 'Steady hormone levels'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-
-  // ===== HRT FOR WOMEN: PROGESTERONE =====
-  mk('Progesterone Capsules', 'hrt-women', 'progesterone', ['hrt-women'], 0, {
-    tagline: 'Oral progesterone therapy', shortDescription: 'Oral progesterone capsules for hormone balance and sleep support.',
-    benefits: ['Hormone balance', 'Sleep support', 'Convenient oral format', 'Provider-personalized'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Sustained-Release Progesterone', 'hrt-women', 'progesterone', ['hrt-women'], 0, {
-    tagline: 'Extended-release formula', shortDescription: 'Sustained-release progesterone for steady hormone delivery throughout the day and night.',
-    benefits: ['Steady delivery', 'Extended release', 'Sleep support', 'Once daily'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Progesterone Cream', 'hrt-women', 'progesterone', ['hrt-women'], 0, {
-    tagline: 'Topical progesterone', shortDescription: 'Topical progesterone cream for convenient daily hormone delivery.',
-    benefits: ['Topical delivery', 'Daily use', 'Adjustable dosing', 'Non-oral option'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Progesterone Troches', 'hrt-women', 'progesterone', ['hrt-women'], 0, {
-    tagline: 'Sublingual troches', shortDescription: 'Progesterone troches for sublingual absorption and convenient delivery.',
-    benefits: ['Sublingual absorption', 'Bypasses digestion', 'Fast delivery', 'Convenient format'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-
-  // ===== HRT FOR WOMEN: TESTOSTERONE =====
-  mk('Testosterone Cream', 'hrt-women', 'testosterone', ['hrt-women'], 0, {
-    tagline: 'Topical testosterone', shortDescription: 'Testosterone cream for women to support libido, energy, and vitality.',
-    benefits: ['Libido support', 'Energy & vitality', 'Topical delivery', 'Adjustable dosing'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Testosterone Gel', 'hrt-women', 'testosterone', ['hrt-women'], 0, {
-    tagline: 'Daily testosterone gel', shortDescription: 'Testosterone gel for daily hormone delivery and vitality support.',
-    benefits: ['Daily application', 'Quick absorption', 'Vitality support', 'Flexible dosing'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Testosterone Injections', 'hrt-women', 'testosterone', ['hrt-women'], 79.99, {
-    tagline: 'Injectable testosterone', shortDescription: 'Testosterone injections for women seeking steady hormone delivery.',
-    benefits: ['Steady delivery', 'Weekly injection', 'Vitality support', 'Provider-monitored'], requiresIntake: true, providerReviewed: true, startingAt: true,
-  }),
-  mk('Testosterone Pellets', 'hrt-women', 'testosterone', ['hrt-women'], 0, {
-    tagline: 'Long-acting pellet therapy', shortDescription: 'Testosterone pellets for continuous, long-acting hormone delivery.',
-    benefits: ['Continuous delivery', 'Lasts 3–6 months', 'No daily maintenance', 'Steady levels'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-  mk('Testosterone Troches', 'hrt-women', 'testosterone', ['hrt-women'], 0, {
-    tagline: 'Sublingual testosterone', shortDescription: 'Testosterone troches for sublingual absorption and convenient delivery.',
-    benefits: ['Sublingual absorption', 'Convenient format', 'Bypasses digestion', 'Daily use'], requiresIntake: true, providerReviewed: true, variablePricing: true,
+  mk({
+    id: 'p27', // preserves previous Testosterone Cream app_product_id
+    slug: 'testosterone-cream',
+    displayName: 'Testosterone Cream',
+    shortName: 'Testosterone Cream',
+    subtitle: 'Provider-directed hormone therapy',
+    category: 'womens-hormone-therapy',
+    goals: ['hrt-women'],
+    shortDescription: 'A topical testosterone cream prescribed as part of provider-directed hormone therapy.',
+    longDescription: RX_DISCLAIMER,
+    image: IMG_CREAM,
+    imageAlt: 'Testosterone cream, a provider-directed hormone therapy option',
+    providerDisclaimer: RX_DISCLAIMER,
+    variants: [
+      { dosageForm: 'Cream', strength: '5mg/g', size: '30g', price: 79 },
+    ],
   }),
 
-  // ===== HRT FOR WOMEN: COMBINATION =====
-  mk('Bi-Est', 'hrt-women', 'combination', ['hrt-women'], 0, {
-    tagline: 'Estriol + Estradiol blend', shortDescription: 'Bi-Est combination therapy blending estriol and estradiol for balanced estrogen support.',
-    benefits: ['Balanced estrogen support', 'Two estrogen forms', 'Personalized ratios', 'Comprehensive therapy'], requiresIntake: true, providerReviewed: true, variablePricing: true,
+  // ===== LONGEVITY & COGNITIVE HEALTH =====
+  mk({
+    id: 'p9', // preserves previous NAD+ Injection app_product_id
+    slug: 'nad-plus',
+    displayName: 'NAD+',
+    shortName: 'NAD+',
+    subtitle: 'Provider-directed compounded formulation',
+    category: 'longevity-cognitive',
+    goals: ['longevity'],
+    shortDescription: 'A provider-directed compounded NAD+ formulation, available in nasal spray and injection.',
+    longDescription: COMPOUNDED_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'NAD+ compounded formulation, provider-directed, available as nasal spray or injection',
+    providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    bestSeller: true,
+    variants: [
+      { dosageForm: 'Nasal Spray', strength: '50mcg/50mcg per spray', size: '10mL', price: 149 },
+      { dosageForm: 'Injection', strength: '100mg/mL', size: '5mL', price: 199 },
+      { dosageForm: 'Injection', strength: '100mg/mL', size: '10mL', price: 219 },
+    ],
   }),
-  mk('Tri-Est', 'hrt-women', 'combination', ['hrt-women'], 0, {
-    tagline: 'Three-estrogen blend', shortDescription: 'Tri-Est combination therapy blending estriol, estradiol, and estrone for comprehensive support.',
-    benefits: ['Three estrogen forms', 'Comprehensive support', 'Personalized ratios', 'Mimics natural balance'], requiresIntake: true, providerReviewed: true, variablePricing: true,
+  mk({
+    id: 'p48', // preserves the previous Selank app_product_id
+    slug: 'selank',
+    displayName: 'Selank Injection',
+    shortName: 'Selank',
+    subtitle: 'Provider-directed compounded formulation',
+    category: 'longevity-cognitive',
+    goals: ['longevity', 'focus'],
+    shortDescription: 'A provider-directed compounded Selank injection, available only after eligibility review.',
+    longDescription: COMPOUNDED_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'Selank injection, a provider-directed compounded formulation',
+    providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    variants: [
+      { dosageForm: 'Injection', strength: '5mg/mL', size: '2mL', price: 129 },
+    ],
   }),
-  mk('Estrogen + Progesterone', 'hrt-women', 'combination', ['hrt-women'], 0, {
-    tagline: 'Combined hormone therapy', shortDescription: 'Estrogen and progesterone combined for balanced hormone replacement therapy.',
-    benefits: ['Balanced hormone support', 'Convenient combination', 'Uterine protection', 'Provider-personalized'], bestSeller: true, requiresIntake: true, providerReviewed: true, variablePricing: true,
+  mk({
+    id: 'p47', // preserves the previous Semax app_product_id
+    slug: 'semax',
+    displayName: 'Semax Injection',
+    shortName: 'Semax',
+    subtitle: 'Provider-directed compounded formulation',
+    category: 'longevity-cognitive',
+    goals: ['longevity', 'focus'],
+    shortDescription: 'A provider-directed compounded Semax injection, available only after eligibility review.',
+    longDescription: COMPOUNDED_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'Semax injection, a provider-directed compounded formulation',
+    providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    variants: [
+      { dosageForm: 'Injection', strength: '5mg/mL', size: '2mL', price: 129 },
+    ],
   }),
-  mk('Estrogen + Progesterone + Testosterone', 'hrt-women', 'combination', ['hrt-women'], 0, {
-    tagline: 'Triple hormone therapy', shortDescription: 'Comprehensive triple hormone therapy combining estrogen, progesterone, and testosterone.',
-    benefits: ['Comprehensive hormone support', 'All three key hormones', 'Personalized dosing', 'Single formulation'], requiresIntake: true, providerReviewed: true, variablePricing: true,
-  }),
-
-  // ===== PROVIDER CARE =====
-  mk('Initial Provider Consultation', 'provider-care', 'consultation', ['hrt-women', 'weight-management', 'longevity'], 75, {
-    image: 'https://images.pexels.com/photos/5214958/pexels-photo-5214958.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    tagline: 'Your first step to personalized care', shortDescription: 'A comprehensive consultation with a licensed provider to review your history and build your personalized plan.',
-    benefits: ['Comprehensive consultation', 'Personalized care plan', 'Licensed provider', 'Compassionate, judgment-free'], bestSeller: true, requiresIntake: true, providerReviewed: true,
-  }),
-  mk('Follow-Up Appointment', 'provider-care', 'consultation', ['hrt-women', 'weight-management', 'longevity'], 55, {
-    image: 'https://images.pexels.com/photos/29995629/pexels-photo-29995629.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    tagline: 'Ongoing care and adjustments', shortDescription: 'A follow-up consultation to review your progress and adjust your plan as needed.',
-    benefits: ['Progress review', 'Plan adjustments', 'Ongoing provider access', 'Continued support'], requiresIntake: true, providerReviewed: true,
-  }),
-  mk('Laboratory Review', 'provider-care', 'lab-review', ['hrt-women', 'longevity', 'weight-management'], 55, {
-    image: 'https://images.pexels.com/photos/5234519/pexels-photo-5234519.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    tagline: 'Comprehensive lab analysis', shortDescription: 'A provider-reviewed analysis of your lab results with personalized recommendations.',
-    benefits: ['Comprehensive lab review', 'Personalized recommendations', 'Provider-reviewed', 'Actionable insights'], requiresIntake: true, providerReviewed: true,
-  }),
-  // ===== RESEARCH CATALOG: INJECTIONS =====
-  mk('GHK-Cu Injection', 'research', 'injections', ['longevity', 'beauty', 'recovery'], 109.99, {
-    tagline: 'Copper peptide research reagent', shortDescription: 'Research-grade GHK-Cu copper peptide injection for tissue repair and longevity studies.',
-    benefits: ['Tissue repair research', 'Collagen expression studies', 'High-purity peptide', 'For research use only'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption. Not intended to diagnose, treat, cure, or prevent any disease.',
-  }),
-  mk('BPC-157 / TB-500 Injection', 'research', 'injections', ['recovery', 'longevity'], 169.99, {
-    tagline: 'Recovery peptide blend', shortDescription: 'Research-grade BPC-157 and TB-500 blend injection for tissue repair and recovery studies.',
-    benefits: ['Tissue repair research', 'Recovery studies', 'Dual peptide blend', 'For research use only'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-  mk('BPC-157 / TB-500 Capsules', 'research', 'capsules', ['recovery', 'longevity'], 99.99, {
-    tagline: 'Oral recovery peptide blend', shortDescription: 'Research-grade BPC-157 and TB-500 in capsule form for laboratory research.',
-    benefits: ['Oral delivery research', 'Recovery studies', 'Dual peptide blend', 'For research use only'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-  mk('Tesamorelin / Ipamorelin Injection', 'research', 'injections', ['longevity', 'performance'], 159.99, {
-    tagline: 'GHRH/GHRP blend', shortDescription: 'Research-grade tesamorelin and ipamorelin blend for growth hormone studies.',
-    benefits: ['GH pathway research', 'Dual peptide blend', 'For research use only', 'High purity'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-  mk('Tesamorelin / KPV Injection', 'research', 'injections', ['longevity', 'recovery'], 211, {
-    tagline: 'GHRH + KPV blend', shortDescription: 'Research-grade tesamorelin and KPV blend for growth hormone and inflammation studies.',
-    benefits: ['GH pathway research', 'Inflammation studies', 'Dual peptide blend', 'For research use only'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-  mk('MOTS-c Injection', 'research', 'injections', ['longevity', 'weight-management'], 119.99, {
-    tagline: 'Mitochondrial peptide', shortDescription: 'Research-grade MOTS-c injection for mitochondrial function and metabolic research.',
-    benefits: ['Mitochondrial research', 'Metabolic studies', 'For research use only', 'High purity'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-  mk('Thymosin Alpha-1 Injection', 'research', 'injections', ['longevity', 'daily-wellness'], 269.99, {
-    tagline: 'Immune peptide research', shortDescription: 'Research-grade thymosin alpha-1 injection for immune function research.',
-    benefits: ['Immune research', 'For research use only', 'High purity', 'Reagent-grade'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-
-  // ===== RESEARCH CATALOG: NASAL SPRAYS =====
-  mk('Semax Nasal Spray', 'research', 'nasal-spray', ['focus', 'longevity'], 219.99, {
-    tagline: 'Cognitive peptide research', shortDescription: 'Research-grade semax nasal spray for cognitive function and neuroprotection studies.',
-    benefits: ['Cognitive research', 'Neuroprotection studies', 'Nasal delivery', 'For research use only'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-  mk('Selank Nasal Spray', 'research', 'nasal-spray', ['focus'], 219.99, {
-    tagline: 'Anxiolytic peptide research', shortDescription: 'Research-grade selank nasal spray for anxiety and cognitive studies.',
-    benefits: ['Anxiety research', 'Cognitive studies', 'Nasal delivery', 'For research use only'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-  mk('PT-141 Nasal Spray', 'research', 'nasal-spray', ['daily-wellness'], 254, {
-    tagline: 'Nasal peptide research', shortDescription: 'Research-grade PT-141 nasal spray for reproductive wellness studies.',
-    benefits: ['Reproductive wellness research', 'Nasal delivery', 'For research use only', 'High purity'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
+  mk({
+    id: 'p68',
+    slug: 'selank-semax-nasal-spray',
+    displayName: 'Selank + Semax Blend Nasal Spray',
+    shortName: 'Selank + Semax Blend',
+    subtitle: 'Provider-directed compounded formulation',
+    category: 'longevity-cognitive',
+    goals: ['longevity', 'focus'],
+    shortDescription: 'A provider-directed compounded Selank and Semax blend nasal spray, available only after eligibility review.',
+    longDescription: COMPOUNDED_DISCLAIMER,
+    image: IMG_NASAL,
+    imageAlt: 'Selank and Semax blend nasal spray, a provider-directed compounded formulation',
+    providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    variants: [
+      { dosageForm: 'Nasal Spray', strength: '50mcg/50mcg per spray', size: '10mL', price: 149 },
+    ],
   }),
 
-  // ===== RESEARCH CATALOG: CAPSULES =====
-  mk('Dihexa Capsules', 'research', 'capsules', ['focus', 'longevity'], 289.99, {
-    tagline: 'Cognitive peptide research', shortDescription: 'Research-grade dihexa capsules for cognitive enhancement and neurogenesis studies.',
-    benefits: ['Cognitive research', 'Neurogenesis studies', 'Oral delivery', 'For research use only'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
+  // ===== RECOVERY & PERFORMANCE =====
+  mk({
+    id: 'p41', // preserves the previous BPC-157/TB-500 Injection app_product_id
+    slug: 'bpc-157-tb-500',
+    displayName: 'BPC-157/TB-500 Blend',
+    shortName: 'BPC-157/TB-500',
+    subtitle: 'Wolverine Blend',
+    category: 'recovery-performance',
+    goals: ['recovery', 'performance'],
+    shortDescription: 'A provider-directed compounded BPC-157/TB-500 blend, available in capsules and injection.',
+    longDescription: COMPOUNDED_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'BPC-157/TB-500 blend, a provider-directed compounded formulation in capsule and injection forms',
+    providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    variants: [
+      { dosageForm: 'Capsule', strength: '500mcg/500mcg per capsule', size: '30 capsules', price: 99 },
+      { dosageForm: 'Injection', strength: '1.66mg/3.33mg per mL', size: '3mL', price: 199 },
+    ],
   }),
 
-  // ===== RESEARCH CATALOG: OTHER =====
-  mk('Methylene Blue', 'research', 'other', ['longevity', 'focus'], 186, {
-    tagline: 'Mitochondrial research reagent', shortDescription: 'Research-grade methylene blue for mitochondrial function and cellular energy studies.',
-    benefits: ['Mitochondrial research', 'Cellular energy studies', 'For research use only', 'Reagent-grade'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
+  // ===== PRESCRIPTION SKIN & HAIR =====
+  mk({
+    id: 'p69',
+    slug: 'tretinoin-cream',
+    displayName: 'Tretinoin Cream',
+    shortName: 'Tretinoin',
+    subtitle: 'Prescription skin care',
+    category: 'prescription-skin-hair',
+    goals: ['beauty'],
+    shortDescription: 'A prescription topical tretinoin cream available following licensed-provider review.',
+    longDescription: RX_DISCLAIMER,
+    image: IMG_CREAM,
+    imageAlt: 'Tretinoin cream, a prescription topical skin-care treatment',
+    providerDisclaimer: RX_DISCLAIMER,
+    bestSeller: true,
+    variants: [
+      { dosageForm: 'Cream', strength: '0.025%', size: '20g', price: 79 },
+      { dosageForm: 'Cream', strength: '0.05%', size: '20g', price: 89 },
+      { dosageForm: 'Cream', strength: '0.1%', size: '20g', price: 109 },
+    ],
   }),
-  mk('KLOW/GLOW Injection', 'research', 'injections', ['beauty', 'longevity'], 149.99, {
-    tagline: 'Beauty peptide research', shortDescription: 'Research-grade KLOW/GLOW injection for skin and beauty peptide studies.',
-    benefits: ['Skin research', 'Beauty peptide studies', 'For research use only', 'High purity'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
+  mk({
+    id: 'p70',
+    slug: 'minoxidil-topical',
+    displayName: 'Minoxidil Combination Topical Formula',
+    shortName: 'Minoxidil Topical',
+    subtitle: 'Prescription hair care',
+    category: 'prescription-skin-hair',
+    goals: ['beauty'],
+    shortDescription: 'A compounded topical formula featuring minoxidil, personalized by the prescribing provider and dispensing pharmacy.',
+    longDescription:
+      'Prescription hair-care option available following licensed-provider review. Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
+    image: IMG_GEL,
+    imageAlt: 'Minoxidil combination topical formula, a prescription hair-care treatment',
+    providerDisclaimer:
+      'Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
+    needsDedicatedImage: true,
+    variants: [
+      { dosageForm: 'Topical Solution', strength: '1% plus pharmacy-selected actives', size: '60mL', price: 119 },
+    ],
   }),
-  mk('PT-141 Injection', 'research', 'injections', ['daily-wellness'], 139.99, {
-    tagline: 'Reproductive peptide research', shortDescription: 'Research-grade PT-141 injection for reproductive wellness studies.',
-    benefits: ['Reproductive wellness research', 'For research use only', 'High purity', 'Reagent-grade'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-  mk('Oxytocin', 'research', 'other', ['daily-wellness'], 254, {
-    tagline: 'Bonding peptide research', shortDescription: 'Research-grade oxytocin for social bonding and wellness studies.',
-    benefits: ['Bonding research', 'Wellness studies', 'For research use only', 'Reagent-grade'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
-  }),
-  mk('Tadalafil', 'research', 'other', ['performance', 'daily-wellness'], 39.99, {
-    tagline: 'Circulation research reagent', shortDescription: 'Research-grade tadalafil for circulatory and vascular function studies.',
-    benefits: ['Circulation research', 'Vascular studies', 'For research use only', 'Reagent-grade'], startingAt: true,
-    disclosures: 'Sold for research/laboratory use only. Not for human consumption.',
+  mk({
+    id: 'p71',
+    slug: 'bimatoprost-solution',
+    displayName: 'Bimatoprost Solution',
+    shortName: 'Bimatoprost',
+    subtitle: 'Prescription eyelash care',
+    category: 'prescription-skin-hair',
+    goals: ['beauty'],
+    shortDescription: 'A prescription bimatoprost solution available following licensed-provider review.',
+    longDescription: RX_DISCLAIMER,
+    image: IMG_SPRAY,
+    imageAlt: 'Bimatoprost solution, a prescription treatment',
+    providerDisclaimer: RX_DISCLAIMER,
+    needsDedicatedImage: true,
+    variants: [
+      { dosageForm: 'Solution', strength: '0.03%', size: '2.5mL', price: 89 },
+    ],
   }),
 
-  // ===== ACCESSORIES =====
-  mk('Complete Injection Starter Kit', 'accessories', 'bundles', ['daily-wellness'], 119, {
-    tagline: 'Everything you need, beautifully bundled',
+  // =========================================================================
+  // FUTURE PRODUCTS — hidden, preserved for later campaign release (not deleted)
+  // =========================================================================
+
+  // ===== PROVIDER CARE (preserved from website-improvements) =====
+  mk({
+    id: 'pc1',
+    slug: 'initial-provider-consultation',
+    displayName: 'Initial Provider Consultation',
+    shortName: 'Initial Consultation',
+    subtitle: 'Your first step to personalized care',
+    category: 'provider-care',
+    goals: ['hrt-women', 'weight-management', 'longevity'],
+    shortDescription: 'A comprehensive consultation with a licensed provider to review your history and build your personalized plan.',
+    longDescription: 'A comprehensive consultation with a licensed provider to review your history and build your personalized plan.',
+    image: IMG_INJECTION,
+    imageAlt: 'Initial provider consultation',
+    variants: [{ dosageForm: 'Service', strength: '1 session', size: 'Visit', price: 75 }],
+    providerDisclaimer: 'Provider Care services require scheduling and may involve a medical intake.',
+    bestSeller: true,
+  }),
+  mk({
+    id: 'pc2',
+    slug: 'follow-up-appointment',
+    displayName: 'Follow-Up Appointment',
+    shortName: 'Follow-Up',
+    subtitle: 'Ongoing care and adjustments',
+    category: 'provider-care',
+    goals: ['hrt-women', 'weight-management', 'longevity'],
+    shortDescription: 'A follow-up consultation to review your progress and adjust your plan as needed.',
+    longDescription: 'A follow-up consultation to review your progress and adjust your plan as needed.',
+    image: IMG_INJECTION,
+    imageAlt: 'Follow-up provider appointment',
+    variants: [{ dosageForm: 'Service', strength: '1 session', size: 'Visit', price: 55 }],
+    providerDisclaimer: 'Provider Care services require scheduling and may involve a medical intake.',
+  }),
+  mk({
+    id: 'pc3',
+    slug: 'laboratory-review',
+    displayName: 'Laboratory Review',
+    shortName: 'Lab Review',
+    subtitle: 'Understand your results',
+    category: 'provider-care',
+    goals: ['hrt-women', 'longevity', 'weight-management'],
+    shortDescription: 'A focused review of your laboratory results with a licensed provider to inform your care plan.',
+    longDescription: 'A focused review of your laboratory results with a licensed provider to inform your care plan.',
+    image: IMG_INJECTION,
+    imageAlt: 'Laboratory review with a licensed provider',
+    variants: [{ dosageForm: 'Service', strength: '1 session', size: 'Visit', price: 55 }],
+    providerDisclaimer: 'Provider Care services require scheduling and may involve a medical intake.',
+  }),
+
+  // ===== ACCESSORIES (preserved from website-improvements) =====
+  mk({
+    id: 'a1',
+    slug: 'complete-injection-starter-kit',
+    displayName: 'Complete Injection Starter Kit',
+    shortName: 'Starter Kit',
+    subtitle: 'Everything you need, beautifully bundled',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'The ultimate starter kit: 3D printed peptide case, temperature-controlled travel case, discreet travel bag, reusable ice pack, wellness planner, sharps container, alcohol prep wipes, and insulin syringes — all in one. Save $71 versus buying each item separately.',
-    benefits: [
-      'Premium 3D Printed Peptide Case included',
-      'Temperature-Controlled Travel Case included',
-      'Discreet Travel Bag included',
-      'Reusable Ice Pack included',
-      'Daily & Weekly Wellness Planner included',
-      'Sharps Container included',
-      'Alcohol Prep Wipes (100 Count) included',
-      'Premium Insulin Syringes (10 Pack) included',
-    ],
-    ingredients: 'Bundle includes: 1× Premium 3D Printed Peptide Case, 1× Temperature-Controlled Travel Case, 1× Discreet Travel Bag, 1× Reusable Ice Pack, 1× Daily & Weekly Wellness Planner, 1× Sharps Container, 1× Alcohol Prep Wipes (100 Count), 1× Premium Insulin Syringes (10 Pack).',
-    directions: 'Use all items as directed. Single-use supplies should be disposed of in the included sharps container after use.', bestSeller: true, alaCarte: true, featured: true,
-    bundleItems: [
-      'Premium 3D Printed Peptide Case',
-      'Temperature-Controlled Travel Case',
-      'Discreet Travel Bag',
-      'Reusable Ice Pack',
-      'Daily & Weekly Wellness Planner',
-      'Sharps Container',
-      'Alcohol Prep Wipes (100 Count)',
-      'Premium Insulin Syringes (10 Pack)',
-    ],
-    bundleRegularPrice: 190,
+    longDescription: 'The ultimate starter kit: 3D printed peptide case, temperature-controlled travel case, discreet travel bag, reusable ice pack, wellness planner, sharps container, alcohol prep wipes, and insulin syringes — all in one.',
+    image: IMG_INJECTION_KIT,
+    imageAlt: 'Complete injection starter kit',
+    variants: [{ dosageForm: 'Accessory', strength: 'Bundle', size: '1 kit', price: 119 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
+    bestSeller: true,
   }),
-  mk('Premium 3D Printed Peptide Case', 'accessories', 'cases', ['daily-wellness'], 34, {
-    tagline: 'Precision protection, custom-printed',
+  mk({
+    id: 'a2',
+    slug: 'premium-3d-printed-peptide-case',
+    displayName: 'Premium 3D Printed Peptide Case',
+    shortName: 'Peptide Case',
+    subtitle: 'Precision protection, custom-printed',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'A custom 3D-printed case with precision-cut compartments designed to hold your peptide vials, syringes, and supplies securely.',
-    benefits: ['Custom 3D-printed precision fit', 'Lightweight and durable', 'Modular compartments', 'Compact and travel-friendly'],
-    ingredients: '3D-printed PLA shell with modular internal compartments.',
-    directions: 'Store vials and supplies in designated compartments. Keep away from extreme heat.', bestSeller: true, alaCarte: true,
+    longDescription: 'A custom 3D-printed case with precision-cut compartments designed to hold your peptide vials, syringes, and supplies securely.',
+    image: IMG_3D_CASE,
+    imageAlt: 'Premium 3D printed peptide case',
+    variants: [{ dosageForm: 'Accessory', strength: 'Standard', size: '1 case', price: 34 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
+    bestSeller: true,
   }),
-  mk('Temperature-Controlled Travel Case', 'accessories', 'cases', ['daily-wellness'], 59, {
-    tagline: 'Keep your therapy cold, anywhere',
+  mk({
+    id: 'a3',
+    slug: 'temperature-controlled-travel-case',
+    displayName: 'Temperature-Controlled Travel Case',
+    shortName: 'Travel Case',
+    subtitle: 'Keep your therapy cold, anywhere',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'An insulated travel case with a built-in thermal lining that maintains temperature for up to 48 hours — perfect for transporting peptide vials.',
-    benefits: ['Maintains temperature up to 48 hours', 'Insulated thermal lining', 'Compact and portable', 'Fits vials + ice pack'],
-    ingredients: 'Insulated thermal-lined case with reinforced exterior.',
-    directions: 'Place ice pack inside before travel. Store vials in the insulated compartment. Replace ice pack as needed.', bestSeller: true, alaCarte: true,
+    longDescription: 'An insulated travel case with a built-in thermal lining that maintains temperature for up to 48 hours.',
+    image: IMG_TEMP_CASE,
+    imageAlt: 'Temperature-controlled travel case',
+    variants: [{ dosageForm: 'Accessory', strength: 'Standard', size: '1 case', price: 59 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
+    bestSeller: true,
   }),
-  mk('Discreet Travel Bag', 'accessories', 'cases', ['daily-wellness'], 39, {
-    tagline: 'Carry your routine anywhere',
+  mk({
+    id: 'a4',
+    slug: 'discreet-travel-bag',
+    displayName: 'Discreet Travel Bag',
+    shortName: 'Travel Bag',
+    subtitle: 'Carry your routine anywhere',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'A sleek, vegan-leather travel bag with water-resistant lining — designed to hold your entire therapy kit discreetly.',
-    benefits: ['Water-resistant interior', 'Discreet design', 'Gold-tone hardware', 'Spacious main compartment'],
-    ingredients: 'Vegan leather exterior, water-resistant lined interior.',
-    directions: 'Store syringes, vials, and supplies securely. Wipe clean with a damp cloth.', bestSeller: true, alaCarte: true,
+    longDescription: 'A sleek, vegan-leather travel bag with water-resistant lining.',
+    image: IMG_TRAVEL_BAG,
+    imageAlt: 'Discreet travel bag',
+    variants: [{ dosageForm: 'Accessory', strength: 'Standard', size: '1 bag', price: 39 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
+    bestSeller: true,
   }),
-  mk('Reusable Ice Pack', 'accessories', 'supplies', ['daily-wellness'], 12, {
-    tagline: 'Stay cool on the go',
+  mk({
+    id: 'a5',
+    slug: 'reusable-ice-pack',
+    displayName: 'Reusable Ice Pack',
+    shortName: 'Ice Pack',
+    subtitle: 'Stay cool on the go',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'A reusable gel ice pack designed to keep your peptide vials cold during transport. Non-toxic and long-lasting.',
-    benefits: ['Non-toxic gel formula', 'Stays cold up to 8 hours', 'Reusable and durable', 'Fits all travel cases'],
-    ingredients: 'Non-toxic gel ice pack, BPA-free exterior.',
-    directions: 'Freeze for at least 4 hours before use. Place inside travel case alongside vials. Reusable — refreeze after each use.', alaCarte: true,
+    longDescription: 'A reusable gel ice pack designed to keep your peptide vials cold during transport.',
+    image: IMG_ICE_PACK,
+    imageAlt: 'Reusable ice pack',
+    variants: [{ dosageForm: 'Accessory', strength: 'Standard', size: '1 pack', price: 12 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
   }),
-  mk('Daily & Weekly Wellness Planner', 'accessories', 'supplies', ['daily-wellness'], 29, {
-    tagline: 'Track your consistency',
+  mk({
+    id: 'a6',
+    slug: 'daily-weekly-wellness-planner',
+    displayName: 'Daily & Weekly Wellness Planner',
+    shortName: 'Planner',
+    subtitle: 'Track your consistency',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'A daily/weekly planner with habit trackers, wellness goals, and progress reflection sections — designed around your therapy routine.',
-    benefits: ['Daily + weekly planning pages', 'Habit trackers', 'Wellness goal setting', 'Progress reflection'],
-    ingredients: 'Premium wire-bound notebook, 120 pages.',
-    directions: 'Use daily to log injections, symptoms, energy levels, and goals.', alaCarte: true,
+    longDescription: 'A daily/weekly planner with habit trackers, wellness goals, and progress reflection sections.',
+    image: IMG_PLANNER,
+    imageAlt: 'Daily and weekly wellness planner',
+    variants: [{ dosageForm: 'Accessory', strength: 'Standard', size: '1 planner', price: 29 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
   }),
-  mk('Sharps Container', 'accessories', 'supplies', ['daily-wellness'], 10, {
-    tagline: 'Safe disposal, done right',
+  mk({
+    id: 'a7',
+    slug: 'sharps-container',
+    displayName: 'Sharps Container',
+    shortName: 'Sharps',
+    subtitle: 'Safe disposal, done right',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'A FDA-cleared sharps container for the safe disposal of used syringes and needles. Secure, puncture-resistant, and easy to use.',
-    benefits: ['FDA-cleared design', 'Puncture-resistant', 'Secure locking lid', 'Compact countertop size'],
-    ingredients: 'Puncture-resistant polypropylene container with locking lid.',
-    directions: 'Dispose of used syringes and needles through the opening. Do not overfill. Seal and dispose of according to local regulations when full.', alaCarte: true,
+    longDescription: 'A FDA-cleared sharps container for the safe disposal of used syringes and needles.',
+    image: IMG_SHARPS,
+    imageAlt: 'Sharps container',
+    variants: [{ dosageForm: 'Accessory', strength: 'Standard', size: '1 container', price: 10 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
   }),
-  mk('Alcohol Prep Wipes (100 Count)', 'accessories', 'supplies', ['daily-wellness'], 9, {
-    tagline: 'Sterile prep made simple',
+  mk({
+    id: 'a8',
+    slug: 'alcohol-prep-wipes-100',
+    displayName: 'Alcohol Prep Wipes (100 Count)',
+    shortName: 'Wipes 100',
+    subtitle: 'Sterile prep made simple',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'Individually wrapped 70% isopropyl alcohol prep pads for safe injection site preparation. 100-count box.',
-    benefits: ['70% isopropyl alcohol', 'Individually wrapped', 'Sterile and single-use', 'For external use only'],
-    ingredients: 'Box of 100 individually wrapped alcohol prep pads, 70% isopropyl alcohol.',
-    directions: 'Swab injection site and allow to dry before injecting. For external use only.', alaCarte: true,
+    longDescription: 'Individually wrapped 70% isopropyl alcohol prep pads for safe injection site preparation. 100-count box.',
+    image: IMG_ALCOHOL_WIPES,
+    imageAlt: 'Alcohol prep wipes 100 count',
+    variants: [{ dosageForm: 'Accessory', strength: '100 count', size: '1 box', price: 9 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
   }),
-  mk('Alcohol Prep Wipes (200 Count)', 'accessories', 'supplies', ['daily-wellness'], 15, {
-    tagline: 'Stock up and save',
+  mk({
+    id: 'a9',
+    slug: 'alcohol-prep-wipes-200',
+    displayName: 'Alcohol Prep Wipes (200 Count)',
+    shortName: 'Wipes 200',
+    subtitle: 'Stock up and save',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'Individually wrapped 70% isopropyl alcohol prep pads for safe injection site preparation. 200-count box — better value.',
-    benefits: ['70% isopropyl alcohol', 'Individually wrapped', 'Sterile and single-use', 'Best value per wipe'],
-    ingredients: 'Box of 200 individually wrapped alcohol prep pads, 70% isopropyl alcohol.',
-    directions: 'Swab injection site and allow to dry before injecting. For external use only.', alaCarte: true,
+    longDescription: 'Individually wrapped 70% isopropyl alcohol prep pads for safe injection site preparation. 200-count box.',
+    image: IMG_ALCOHOL_WIPES,
+    imageAlt: 'Alcohol prep wipes 200 count',
+    variants: [{ dosageForm: 'Accessory', strength: '200 count', size: '1 box', price: 15 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
   }),
-  mk('Premium Insulin Syringes (10 Pack)', 'accessories', 'supplies', ['daily-wellness'], 12, {
-    tagline: 'Precision injection supplies',
+  mk({
+    id: 'a10',
+    slug: 'premium-insulin-syringes-10',
+    displayName: 'Premium Insulin Syringes (10 Pack)',
+    shortName: 'Syringes 10',
+    subtitle: 'Precision injection supplies',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'Sterile insulin syringes for subcutaneous injections. 10-pack — perfect for getting started.',
-    benefits: ['Sterile and single-use', 'Fine-gauge 30G comfort', 'Clear unit markings', 'Convenient starter pack'],
-    ingredients: 'Pack of 10 sterile insulin syringes (30G, 0.5mL, 1/2" needle).',
-    directions: 'Use as directed by your provider for subcutaneous injection. Dispose of properly after single use.', alaCarte: true,
+    longDescription: 'Sterile insulin syringes for subcutaneous injections. 10-pack.',
+    image: IMG_SYRINGE,
+    imageAlt: 'Premium insulin syringes 10 pack',
+    variants: [{ dosageForm: 'Accessory', strength: '10 pack', size: '1 pack', price: 12 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
   }),
-  mk('Premium Insulin Syringes (50 Pack)', 'accessories', 'supplies', ['daily-wellness'], 39, {
-    tagline: 'Better value, same quality',
+  mk({
+    id: 'a11',
+    slug: 'premium-insulin-syringes-50',
+    displayName: 'Premium Insulin Syringes (50 Pack)',
+    shortName: 'Syringes 50',
+    subtitle: 'Better value, same quality',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'Sterile insulin syringes for subcutaneous injections. 50-pack — save more per syringe.',
-    benefits: ['Sterile and single-use', 'Fine-gauge 30G comfort', 'Clear unit markings', 'Best value per syringe'],
-    ingredients: 'Pack of 50 sterile insulin syringes (30G, 0.5mL, 1/2" needle).',
-    directions: 'Use as directed by your provider for subcutaneous injection. Dispose of properly after single use.', alaCarte: true,
+    longDescription: 'Sterile insulin syringes for subcutaneous injections. 50-pack.',
+    image: IMG_SYRINGE,
+    imageAlt: 'Premium insulin syringes 50 pack',
+    variants: [{ dosageForm: 'Accessory', strength: '50 pack', size: '1 pack', price: 39 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
   }),
-  mk('Premium Insulin Syringes (100 Pack)', 'accessories', 'supplies', ['daily-wellness'], 69, {
-    tagline: 'Maximum savings, maximum convenience',
+  mk({
+    id: 'a12',
+    slug: 'premium-insulin-syringes-100',
+    displayName: 'Premium Insulin Syringes (100 Pack)',
+    shortName: 'Syringes 100',
+    subtitle: 'Maximum savings, maximum convenience',
+    category: 'accessories',
+    goals: ['daily-wellness'],
     shortDescription: 'Sterile insulin syringes for subcutaneous injections. 100-pack — the best value for long-term therapy.',
-    benefits: ['Sterile and single-use', 'Fine-gauge 30G comfort', 'Clear unit markings', 'Lowest price per syringe'],
-    ingredients: 'Pack of 100 sterile insulin syringes (30G, 0.5mL, 1/2" needle).',
-    directions: 'Use as directed by your provider for subcutaneous injection. Dispose of properly after single use.', alaCarte: true,
+    longDescription: 'Sterile insulin syringes for subcutaneous injections. 100-pack.',
+    image: IMG_SYRINGE,
+    imageAlt: 'Premium insulin syringes 100 pack',
+    variants: [{ dosageForm: 'Accessory', strength: '100 pack', size: '1 pack', price: 69 }],
+    providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
+  }),
+  mk({
+    id: 'p12', // preserves the previous Sermorelin Injection app_product_id
+    slug: 'sermorelin',
+    displayName: 'Sermorelin',
+    shortName: 'Sermorelin',
+    subtitle: 'Provider-directed compounded formulation',
+    category: 'longevity-cognitive',
+    goals: ['longevity'],
+    shortDescription: 'A provider-directed compounded Sermorelin formulation.',
+    longDescription: COMPOUNDED_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'Sermorelin, a provider-directed compounded formulation',
+    providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    status: 'future',
+    isVisible: false,
+    launchPhase: 2,
+    campaignTheme: 'future longevity release',
+    variants: [
+      { dosageForm: 'Injection', strength: '9mg/mL', size: '3mL', price: 119 },
+    ],
+  }),
+  mk({
+    id: 'p72',
+    slug: 'minoxidil-tablets',
+    displayName: 'Minoxidil Tablets',
+    shortName: 'Minoxidil Tablets',
+    subtitle: 'Prescription hair care',
+    category: 'prescription-skin-hair',
+    goals: ['beauty'],
+    shortDescription: 'Provider-directed oral minoxidil tablets.',
+    longDescription: RX_DISCLAIMER,
+    image: IMG_CAPSULE,
+    imageAlt: 'Minoxidil tablets, a prescription hair-care treatment',
+    providerDisclaimer: RX_DISCLAIMER,
+    status: 'future',
+    isVisible: false,
+    launchPhase: 2,
+    campaignTheme: 'future hair restoration release',
+    variants: [
+      { dosageForm: 'Capsule', strength: '2.5mg', size: '30 tablets', price: 79 },
+    ],
   }),
 ];
 
-// ===== WELLNESS CONCERNS (Shop by Concern) =====
+// ---------------------------------------------------------------------------
+// Visibility helpers — catalog surfaces must only show visible/active products
+// ---------------------------------------------------------------------------
+export const visibleProducts = products.filter(p => p.isVisible && p.status === 'active');
+export const futureProducts = products.filter(p => p.status === 'future');
+export const getVisibleProducts = () => visibleProducts;
+
+// ---------------------------------------------------------------------------
+// Old-slug → new-slug redirect aliases (preserve bookmarked/marketing links)
+// ---------------------------------------------------------------------------
+export const SLUG_ALIASES: Record<string, string> = {
+  // Weight management (old GLP-1 / GLP-1/GIP auto-slugs → new names)
+  'glp-1-1': 'semaglutide',
+  'glp-1': 'semaglutide',
+  'glp-1-b12-injection-2': 'semaglutide',
+  'glp-1-l-carnitine-injection-3': 'semaglutide',
+  'glp-1-glycine-injection-4': 'semaglutide',
+  'glp-1-gip-5': 'tirzepatide',
+  'glp-1-gip': 'tirzepatide',
+  'glp-1-gip-b12-injection-6': 'tirzepatide',
+  'glp-1-gip-l-carnitine-injection-7': 'tirzepatide',
+  'glp-1-gip-glycine-injection-8': 'tirzepatide',
+  // NAD+
+  'nad-injection-9': 'nad-plus',
+  'nad-nasal-spray-10': 'nad-plus',
+  // HRT
+  'estrogen-transdermal-patch-16': 'estradiol-patch',
+  'progesterone-capsules-23': 'progesterone-capsules',
+  'testosterone-cream-27': 'testosterone-cream',
+  // Recovery
+  'bpc-157-tb-500-injection-40': 'bpc-157-tb-500',
+  'bpc-157-tb-500-injection': 'bpc-157-tb-500',
+  'bpc-157-tb-500-capsules-41': 'bpc-157-tb-500',
+  // Cognitive
+  'semax-nasal-spray-46': 'semax',
+  'selank-nasal-spray-47': 'selank',
+};
+
+function resolveSlug(slug: string): string {
+  if (SLUG_ALIASES[slug]) return SLUG_ALIASES[slug];
+  const base = slug.replace(/-\d+$/, '');
+  if (SLUG_ALIASES[base]) return SLUG_ALIASES[base];
+  return slug;
+}
+
+// ---------------------------------------------------------------------------
+// Memberships
+// ---------------------------------------------------------------------------
+export type MembershipStatus = 'active' | 'inactive';
+
+export interface Membership {
+  // --- Identity ---
+  id: string;
+  slug: string;
+  displayName: string;
+  brandName: string;
+  // --- Pricing / billing ---
+  monthlyPrice: number;
+  billingFrequency: 'monthly';
+  initialTermMonths: number;
+  lockedRate: boolean;
+  // --- Program contents ---
+  includedProducts: string[];
+  includedFormulations: string[];
+  maximumIncludedFormulation: string;
+  excludedFormulations: string[];
+  // --- Compliance / fulfillment ---
+  providerReviewRequired: boolean;
+  prescriptionGuaranteed: boolean;
+  shippingIncluded: boolean;
+  // --- Lifecycle ---
+  status: MembershipStatus;
+  isVisible: boolean;
+  // --- Commerce / integration ---
+  checkoutProductId: string; // Stripe app_product_id (must be a recurring, synced product)
+  supabaseId: string;
+  // --- Copy ---
+  shortDescription: string;
+  longDescription: string;
+  valueStatement: string;
+  secondaryValueStatement: string;
+  benefits: string[];
+  exclusions: string[];
+  termsSummary: string[];
+  faq: { q: string; a: string }[];
+  cta: string;
+  // --- SEO / media ---
+  seoTitle: string;
+  seoDescription: string;
+  image: string;
+  imageAlt: string;
+  /** Internal only — never rendered, never shipped in customer copy. */
+  internalNotes?: string;
+
+  // --- Backward-compatible fields consumed by existing components ---
+  name: string;        // === displayName
+  price: number;       // === monthlyPrice
+  priceLabel: string;  // '/month'
+  tagline: string;     // === brandName
+  description: string; // === longDescription
+  features: string[];  // === benefits
+  highlighted?: boolean;
+}
+
+const SHARED_MEMBERSHIP_BENEFITS = [
+  'Monthly recurring fulfillment when prescribed',
+  'Locked membership rate while continuously enrolled',
+  'Licensed-provider eligibility review',
+  'Routine renewal questionnaire or progress check-in',
+  'Refill coordination',
+  'Pharmacy coordination',
+  'Access to member pricing',
+  'Early access to future wellness launches',
+];
+
+const sharedTerms = (initialTermMonths: number) => [
+  `Your initial membership term is ${initialTermMonths} months. After the initial term, your membership continues month to month until canceled.`,
+  'Your monthly membership rate remains locked while your membership stays continuously active and in good standing.',
+  'If your membership is canceled or lapses beyond the permitted payment grace period, future enrollment will be subject to the membership pricing available at that time.',
+  'Membership enrollment and payment do not guarantee that a prescription will be issued. Continued treatment, formulation, strength, and fulfillment remain subject to provider approval, pharmacy availability, applicable law, and completion of required follow-up information.',
+  'If a licensed provider determines that continued treatment is not appropriate, future membership charges will be discontinued according to the membership terms.',
+  'Switching between Semaglutide and Tirzepatide requires enrollment in the current rate for the new membership program.',
+];
+
+export const memberships: Membership[] = [
+  {
+    id: 'semaglutide-membership',
+    slug: 'semaglutide-membership',
+    displayName: 'Semaglutide Membership',
+    brandName: 'Bare Balance',
+    monthlyPrice: 199,
+    billingFrequency: 'monthly',
+    initialTermMonths: 3,
+    lockedRate: true,
+    includedProducts: ['Semaglutide + B6 Injection'],
+    includedFormulations: ['1mg/1mg per mL, 2mL', '2mg/2mg per mL, 2mL', '5mg/2mg per mL, 2mL'],
+    maximumIncludedFormulation: '5mg/2mg per mL, 2mL',
+    excludedFormulations: [],
+    providerReviewRequired: true,
+    prescriptionGuaranteed: false,
+    shippingIncluded: false,
+    status: 'active',
+    isVisible: true,
+    checkoutProductId: 'm1',
+    supabaseId: 'm1',
+    shortDescription: 'One membership. One predictable monthly price. Provider-directed Semaglutide + B6 treatment.',
+    longDescription:
+      'A provider-guided Semaglutide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program while you remain continuously enrolled.',
+    valueStatement: 'One membership. One predictable monthly price.',
+    secondaryValueStatement:
+      'Your membership price stays the same as your provider adjusts your eligible treatment within the included program.',
+    benefits: [
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
+      'Provider-directed formulation or strength adjustments within the included program',
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
+    ],
+    exclusions: [],
+    termsSummary: sharedTerms(3),
+    faq: [
+      {
+        q: 'Will my price increase if my treatment changes?',
+        a: 'Your Semaglutide membership remains $199 per month while your membership stays continuously active and your provider-selected treatment remains within the included program.',
+      },
+    ],
+    cta: 'Join Semaglutide Membership',
+    seoTitle: 'Semaglutide Membership — My Bare Method',
+    seoDescription: 'Locked-price provider-guided Semaglutide membership from My Bare Method.',
+    image: IMG_INJECTION,
+    imageAlt: 'Semaglutide Membership — provider-directed Semaglutide + B6 injection program',
+
+    name: 'Semaglutide Membership',
+    price: 199,
+    priceLabel: '/month',
+    tagline: 'Bare Balance',
+    description:
+      'A provider-guided Semaglutide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program while you remain continuously enrolled.',
+    features: [
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
+      'Provider-directed formulation or strength adjustments within the included program',
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
+    ],
+  },
+  {
+    id: 'tirzepatide-membership',
+    slug: 'tirzepatide-membership',
+    displayName: 'Tirzepatide Membership',
+    brandName: 'Bare Momentum',
+    monthlyPrice: 249,
+    billingFrequency: 'monthly',
+    initialTermMonths: 3,
+    lockedRate: true,
+    includedProducts: ['Tirzepatide + B6 Injection'],
+    includedFormulations: ['5mg/2mg per mL, 2mL', '15mg/2mg per mL, 2mL', '25mg/2mg per mL, 2mL'],
+    maximumIncludedFormulation: '25mg/2mg per mL, 2mL',
+    excludedFormulations: ['30mg/2mg per mL, 2mL'],
+    providerReviewRequired: true,
+    prescriptionGuaranteed: false,
+    shippingIncluded: false,
+    status: 'active',
+    isVisible: true,
+    checkoutProductId: 'm2',
+    supabaseId: 'm2',
+    shortDescription: 'One predictable monthly rate through the included program maximum. Provider-directed Tirzepatide + B6 treatment.',
+    longDescription:
+      'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 25mg/2mg per mL, 2mL while you remain continuously enrolled.',
+    valueStatement: 'One predictable monthly rate through the included program maximum.',
+    secondaryValueStatement:
+      'Your membership price stays the same as your provider adjusts your eligible treatment within the included program maximum.',
+    benefits: [
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
+      'Provider-directed formulation or strength adjustments within the included program maximum',
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
+    ],
+    exclusions: ['Formulations above 25mg/2mg per mL, 2mL (including 30mg/2mg per mL, 2mL) are not part of this membership.'],
+    termsSummary: [
+      ...sharedTerms(3),
+      'The $249 locked rate includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above the included maximum are not part of this membership.',
+    ],
+    faq: [
+      {
+        q: 'Will my price increase if my treatment changes?',
+        a: 'Your Tirzepatide membership remains $249 per month while your membership stays continuously active and your provider-selected treatment remains within the included program through 25mg/2mg per mL, 2mL.',
+      },
+      {
+        q: 'Is the highest Tirzepatide formulation included?',
+        a: 'The $249 membership includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above that program maximum are not included.',
+      },
+    ],
+    cta: 'Join Tirzepatide Membership',
+    seoTitle: 'Tirzepatide Membership — My Bare Method',
+    seoDescription: 'Locked-price provider-guided Tirzepatide membership through the included program maximum.',
+    image: IMG_INJECTION,
+    imageAlt: 'Tirzepatide Membership — provider-directed Tirzepatide + B6 injection program',
+    highlighted: true,
+
+    name: 'Tirzepatide Membership',
+    price: 249,
+    priceLabel: '/month',
+    tagline: 'Bare Momentum',
+    description:
+      'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 25mg/2mg per mL, 2mL while you remain continuously enrolled.',
+    features: [
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
+      'Provider-directed formulation or strength adjustments within the included program maximum',
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
+    ],
+  },
+  // Retained but hidden (preserved, not deleted): non-weight wellness membership.
+  {
+    id: 'elite-wellness-membership',
+    slug: 'elite-wellness-membership',
+    displayName: 'Bare Elite Wellness',
+    brandName: 'Bare Elite Wellness',
+    monthlyPrice: 49,
+    billingFrequency: 'monthly',
+    initialTermMonths: 3,
+    lockedRate: true,
+    includedProducts: [],
+    includedFormulations: [],
+    maximumIncludedFormulation: '',
+    excludedFormulations: [],
+    providerReviewRequired: true,
+    prescriptionGuaranteed: false,
+    shippingIncluded: false,
+    status: 'inactive',
+    isVisible: false,
+    checkoutProductId: '',
+    supabaseId: '',
+    shortDescription: 'Member pricing on other wellness products.',
+    longDescription: 'Member pricing on other wellness products, priority processing, and early access to new therapies.',
+    valueStatement: '',
+    secondaryValueStatement: '',
+    benefits: ['Exclusive member pricing', 'Priority processing', 'Early access to new therapies'],
+    exclusions: [],
+    termsSummary: sharedTerms(3),
+    faq: [],
+    cta: 'Learn More',
+    seoTitle: 'Bare Elite Wellness — My Bare Method',
+    seoDescription: 'Member pricing on wellness products from My Bare Method.',
+    image: IMG_INJECTION,
+    imageAlt: 'Bare Elite Wellness membership',
+
+    name: 'Bare Elite Wellness',
+    price: 49,
+    priceLabel: '/month',
+    tagline: 'All other wellness products',
+    description: 'Member pricing on other wellness products, priority processing, and early access to new therapies.',
+    features: ['Exclusive member pricing', 'Priority processing', 'Early access to new therapies'],
+  },
+];
+
+/** Public, visible memberships (weight-management program). */
+export const visibleMemberships = memberships.filter(m => m.isVisible && m.status === 'active');
+export const getMembership = (slug: string) => visibleMemberships.find(m => m.slug === slug);
+
+// ---------------------------------------------------------------------------
+// Wellness concerns (Shop by Concern) — surfaces visible products only
+// ---------------------------------------------------------------------------
 export type ConcernId =
   | 'weight-management'
-  | 'longevity-aging'
   | 'hormone-balance'
-  | 'energy-vitality'
+  | 'longevity-aging'
   | 'cognitive-support'
   | 'recovery-performance'
-  | 'immune-support'
-  | 'metabolic-health'
-  | 'sexual-wellness'
-  | 'hair-skin-beauty'
-  | 'sleep-stress';
+  | 'hair-skin-beauty';
 
 export interface Concern {
   id: ConcernId;
@@ -693,101 +1265,89 @@ export interface Concern {
 }
 
 export const concerns: Concern[] = [
-  { id: 'weight-management', label: 'Weight Management', tagline: 'Sustainable, feel-good progress', description: 'GLP-1 and dual incretin therapies to support appetite regulation and metabolic balance.', image: 'https://images.pexels.com/photos/8846593/pexels-photo-8846593.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'longevity-aging', label: 'Longevity & Healthy Aging', tagline: 'Cellular health, gracefully', description: 'NAD+, glutathione, and growth hormone support for cellular energy and healthy aging.', image: 'https://images.pexels.com/photos/8939921/pexels-photo-8939921.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'hormone-balance', label: 'Hormone Balance (HRT for Women)', tagline: 'Hormone balance, personal', description: 'Estrogen, progesterone, testosterone, and combination hormone therapies.', image: 'https://images.pexels.com/photos/8551982/pexels-photo-8551982.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'energy-vitality', label: 'Energy & Vitality', tagline: 'Feel vibrant every day', description: 'B12, NAD+, and metabolic support to fuel your daily energy and vitality.', image: 'https://images.pexels.com/photos/1435822/pexels-photo-1435822.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'cognitive-support', label: 'Cognitive Support', tagline: 'Clarity for a busy mind', description: 'Research peptides and cognitive support products for focus and neuroprotection.', image: 'https://images.pexels.com/photos/4968357/pexels-photo-4968357.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'recovery-performance', label: 'Recovery & Performance', tagline: 'Repair, rebuild, perform', description: 'Peptides and growth hormone support for tissue repair, recovery, and performance.', image: 'https://images.pexels.com/photos/4970983/pexels-photo-4970983.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'immune-support', label: 'Immune Support', tagline: 'Foundational resilience', description: 'Glutathione, thymosin, and wellness products to support immune function.', image: 'https://images.pexels.com/photos/9263511/pexels-photo-9263511.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'metabolic-health', label: 'Metabolic Health', tagline: 'Balance from within', description: 'GLP-1, MOTS-c, and metabolic support products for healthy metabolic function.', image: 'https://images.pexels.com/photos/8846593/pexels-photo-8846593.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'sexual-wellness', label: 'Sexual Wellness', tagline: 'Intimacy, restored', description: 'Testosterone therapy, PT-141, and oxytocin for sexual health and wellness.', image: 'https://images.pexels.com/photos/10792946/pexels-photo-10792946.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'hair-skin-beauty', label: 'Hair, Skin & Beauty', tagline: 'Glow from within', description: 'Glutathione, GHK-Cu, and beauty peptides for skin, hair, and radiance.', image: 'https://images.pexels.com/photos/6417964/pexels-photo-6417964.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'sleep-stress', label: 'Sleep & Stress Support', tagline: 'Rest, restore, rebalance', description: 'Glycine, sermorelin, and progesterone for restful sleep and stress support.', image: 'https://images.pexels.com/photos/3795277/pexels-photo-3795277.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'weight-management', label: 'Weight Management', tagline: 'Provider-guided progress', description: 'Provider-directed weight-management options personalized after a licensed-provider evaluation.', image: 'https://images.pexels.com/photos/8846593/pexels-photo-8846593.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'hormone-balance', label: "Women's Hormone Therapy", tagline: 'Hormone balance, personal', description: 'Provider-directed estradiol, progesterone, and testosterone therapy in multiple formats.', image: 'https://images.pexels.com/photos/8551982/pexels-photo-8551982.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'longevity-aging', label: 'Longevity & Cognitive Health', tagline: 'Cellular and cognitive support', description: 'Provider-directed compounded formulations for longevity and cognitive-health support.', image: 'https://images.pexels.com/photos/8939921/pexels-photo-8939921.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'cognitive-support', label: 'Cognitive Support', tagline: 'Clarity, provider-directed', description: 'Provider-directed compounded formulations for cognitive-health support.', image: 'https://images.pexels.com/photos/4968357/pexels-photo-4968357.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'recovery-performance', label: 'Recovery & Performance', tagline: 'Recovery and performance support', description: 'Provider-directed compounded formulations for recovery and performance support.', image: 'https://images.pexels.com/photos/4970983/pexels-photo-4970983.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'hair-skin-beauty', label: 'Prescription Skin & Hair', tagline: 'Prescription skin & hair', description: 'Prescription skin and hair treatments available following licensed-provider review.', image: 'https://images.pexels.com/photos/6417964/pexels-photo-6417964.jpeg?auto=compress&cs=tinysrgb&w=900' },
 ];
 
-const concernToGoalsMap: Record<ConcernId, Goal[]> = {
-  'weight-management': ['weight-management'],
-  'longevity-aging': ['longevity'],
-  'hormone-balance': ['hrt-women'],
-  'energy-vitality': ['longevity', 'daily-wellness'],
-  'cognitive-support': ['focus'],
-  'recovery-performance': ['recovery', 'performance'],
-  'immune-support': ['daily-wellness', 'longevity'],
-  'metabolic-health': ['weight-management', 'longevity'],
-  'sexual-wellness': ['daily-wellness', 'hrt-women'],
-  'hair-skin-beauty': ['beauty', 'longevity'],
-  'sleep-stress': ['recovery', 'hrt-women'],
-};
-
-const concernToSectionsMap: Record<ConcernId, ProductSection[]> = {
-  'weight-management': ['weight-management', 'provider-care'],
-  'longevity-aging': ['longevity', 'research', 'provider-care'],
-  'hormone-balance': ['hrt-women', 'provider-care'],
-  'energy-vitality': ['longevity', 'provider-care'],
-  'cognitive-support': ['research', 'longevity'],
-  'recovery-performance': ['research', 'longevity'],
-  'immune-support': ['research', 'longevity'],
-  'metabolic-health': ['weight-management', 'research', 'longevity'],
-  'sexual-wellness': ['hrt-women', 'research'],
-  'hair-skin-beauty': ['research', 'longevity'],
-  'sleep-stress': ['hrt-women', 'longevity', 'research'],
+const concernToCategoryMap: Record<ConcernId, Category> = {
+  'weight-management': 'weight-management',
+  'hormone-balance': 'womens-hormone-therapy',
+  'longevity-aging': 'longevity-cognitive',
+  'cognitive-support': 'longevity-cognitive',
+  'recovery-performance': 'recovery-performance',
+  'hair-skin-beauty': 'prescription-skin-hair',
 };
 
 export const getProductsByConcern = (concernId: ConcernId): Product[] => {
-  const goals = concernToGoalsMap[concernId] || [];
-  const sectionIds = concernToSectionsMap[concernId] || [];
-  const seen = new Set<string>();
-  const result: Product[] = [];
-  for (const p of products) {
-    if (seen.has(p.id)) continue;
-    if (p.goals.some(g => goals.includes(g)) || sectionIds.includes(p.section)) {
-      seen.add(p.id);
-      result.push(p);
-    }
-  }
-  return result;
+  const cat = concernToCategoryMap[concernId];
+  return visibleProducts.filter(p => p.category === cat);
 };
 
 export const getMembershipsForConcern = (concernId: ConcernId): Membership[] => {
-  if (concernId === 'weight-management' || concernId === 'metabolic-health') return memberships;
+  if (concernId === 'weight-management') return visibleMemberships;
   return [];
 };
 
-export const getAccessoriesForConcern = (): Product[] =>
-  products.filter(p => p.section === 'accessories' && !p.featured).slice(0, 4);
+export const getAccessoriesForConcern = (): Product[] => [];
 
 export const getConcern = (id: string) => concerns.find(c => c.id === id as ConcernId);
 
-// Goals for "Shop by Goal" navigation
+// ---------------------------------------------------------------------------
+// Goals ("Shop by Goal")
+// ---------------------------------------------------------------------------
 export const goals: { id: Goal; label: string; description: string; image: string }[] = [
-  { id: 'weight-management', label: 'Weight Management', description: 'GLP-1 and dual incretin therapies for sustainable, feel-good progress.', image: 'https://images.pexels.com/photos/8846593/pexels-photo-8846593.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'longevity', label: 'Longevity', description: 'NAD+, B12, glutathione, and growth hormone support for cellular health.', image: 'https://images.pexels.com/photos/8939921/pexels-photo-8939921.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'hrt-women', label: 'HRT for Women', description: 'Estrogen, progesterone, testosterone, and combination hormone therapies.', image: 'https://images.pexels.com/photos/8551982/pexels-photo-8551982.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'performance', label: 'Performance', description: 'Strength, stamina, and recovery optimization for every level.', image: 'https://images.pexels.com/photos/2787846/pexels-photo-2787846.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'recovery', label: 'Recovery', description: 'Muscle repair, restorative rest, and inflammation support.', image: 'https://images.pexels.com/photos/4970983/pexels-photo-4970983.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'focus', label: 'Focus', description: 'Cognitive clarity and calm for a busy mind.', image: 'https://images.pexels.com/photos/4968357/pexels-photo-4968357.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'beauty', label: 'Beauty', description: 'Skin, hair, and glow from within — at every age.', image: 'https://images.pexels.com/photos/6417964/pexels-photo-6417964.jpeg?auto=compress&cs=tinysrgb&w=900' },
-  { id: 'daily-wellness', label: 'Daily Wellness', description: 'Foundational nutrition and hydration for everyday living.', image: 'https://images.pexels.com/photos/3795277/pexels-photo-3795277.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'weight-management', label: 'Weight Management', description: 'Provider-directed weight-management options, personalized after evaluation.', image: 'https://images.pexels.com/photos/8846593/pexels-photo-8846593.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'hrt-women', label: "Women's Hormone Therapy", description: 'Estradiol, progesterone, and testosterone therapy in multiple formats.', image: 'https://images.pexels.com/photos/8551982/pexels-photo-8551982.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'longevity', label: 'Longevity & Cognitive Health', description: 'Provider-directed compounded formulations for longevity and cognitive-health support.', image: 'https://images.pexels.com/photos/8939921/pexels-photo-8939921.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'focus', label: 'Cognitive Support', description: 'Provider-directed compounded formulations for cognitive support.', image: 'https://images.pexels.com/photos/4968357/pexels-photo-4968357.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'recovery', label: 'Recovery', description: 'Provider-directed compounded formulations for recovery support.', image: 'https://images.pexels.com/photos/4970983/pexels-photo-4970983.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'performance', label: 'Performance', description: 'Provider-directed compounded formulations for performance support.', image: 'https://images.pexels.com/photos/2787846/pexels-photo-2787846.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'beauty', label: 'Prescription Skin & Hair', description: 'Prescription skin and hair treatments following provider review.', image: 'https://images.pexels.com/photos/6417964/pexels-photo-6417964.jpeg?auto=compress&cs=tinysrgb&w=900' },
+  { id: 'daily-wellness', label: 'Daily Wellness', description: 'Provider-directed wellness options.', image: 'https://images.pexels.com/photos/3795277/pexels-photo-3795277.jpeg?auto=compress&cs=tinysrgb&w=900' },
 ];
 
-export const getProduct = (slug: string) => products.find(p => p.slug === slug);
-export const getSectionMeta = (id: ProductSection) => sections.find(s => s.id === id);
-export const getProductsBySection = (section: ProductSection) => products.filter(p => p.section === section);
-export const getProductsBySubcategory = (section: ProductSection, subcategory: string) =>
-  products.filter(p => p.section === section && p.subcategory === subcategory);
-export const getProductsByGoal = (goal: Goal) => products.filter(p => p.goals.includes(goal));
-export const getBestSellers = () => products.filter(p => p.bestSeller);
-export const getFeaturedBundle = () => products.find(p => p.featured);
-export const getBundleItems = (product: Product) =>
-  product.bundleItems ? product.bundleItems.map(name => products.find(p => p.name === name)).filter(Boolean) as Product[] : [];
-export const getFrequentlyBoughtTogether = (product: Product, limit = 3) => {
-  const bundle = getFeaturedBundle();
-  if (product.featured) {
-    return products.filter(p => p.section === 'accessories' && p.id !== product.id && !p.featured).slice(0, limit);
-  }
-  const fbt = products.filter(p => p.section === 'accessories' && p.id !== product.id && p.id !== bundle?.id);
-  return fbt.slice(0, limit);
+// ---------------------------------------------------------------------------
+// Query helpers (all catalog-facing helpers operate on visible products)
+// ---------------------------------------------------------------------------
+export const getProduct = (slug: string): Product | undefined => {
+  const target = resolveSlug(slug);
+  return visibleProducts.find(p => p.slug === target);
 };
-export const getRelatedProducts = (product: Product, limit = 4) =>
-  products.filter(p => p.id !== product.id && (p.goals.some(g => product.goals.includes(g)) || p.section === product.section)).slice(0, limit);
+
+export const getSectionMeta = (id: string) => {
+  const resolved = (SECTION_ALIASES[id] ?? id) as Category;
+  return sections.find(s => s.id === resolved);
+};
+export const getProductsBySection = (section: Category) => visibleProducts.filter(p => p.category === section);
+export const getProductsBySubcategory = (section: Category, subcategory: string) =>
+  visibleProducts.filter(p => p.category === section && p.subcategory === subcategory);
+export const getProductsByGoal = (goal: Goal) => visibleProducts.filter(p => p.goals.includes(goal));
+export const getBestSellers = () => visibleProducts.filter(p => p.bestSeller);
+export const getFeaturedBundle = (): Product | undefined =>
+  visibleProducts.find(p => p.category === 'accessories' && p.featured);
+export const getBundleItems = (): Product[] => [];
+
+/** Distinct dosage forms present in the active catalog (for filters). */
+export const activeDosageForms = (): DosageForm[] => {
+  const forms = new Set<DosageForm>();
+  visibleProducts.forEach(p => p.dosageForms.forEach(f => forms.add(f)));
+  return Array.from(forms);
+};
+
+export const getFrequentlyBoughtTogether = (product: Product, limit = 3): Product[] =>
+  visibleProducts
+    .filter(p => p.id !== product.id && p.category === product.category)
+    .slice(0, limit);
+
+export const getRelatedProducts = (product: Product, limit = 4): Product[] => {
+  const sameCategory = visibleProducts.filter(p => p.id !== product.id && p.category === product.category);
+  if (sameCategory.length >= limit) return sameCategory.slice(0, limit);
+  const others = visibleProducts.filter(
+    p => p.id !== product.id && p.category !== product.category
+  );
+  return [...sameCategory, ...others].slice(0, limit);
+};

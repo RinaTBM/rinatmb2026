@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, navigate } from '@/router';
+import { Link } from '@/router';
 import { ArrowLeft, Lock, Check, ShieldCheck, Truck, Ban, RefreshCw, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
@@ -293,17 +293,29 @@ export function CheckoutPage() {
               <h3 className="font-serif text-xl text-ink-900 mb-4">Order Summary</h3>
               <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
                 {items.map(item => (
-                  <div key={`${item.productId}-${item.subscription}`} className="flex gap-3">
+                  <div key={item.key} className="flex gap-3">
                     <div className="relative flex-shrink-0">
                       <img src={item.image} alt={item.name} className="h-14 w-14 rounded-lg object-cover" />
                       <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-ink-900 text-[10px] font-medium text-cream-50">{item.quantity}</span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-ink-900 truncate">{item.name}</p>
-                      {item.subscription && <p className="text-xs text-gold-600">Subscription</p>}
-                      {item.requiresIntake && <p className="text-xs text-ink-400">Requires intake</p>}
+                      {item.isMembership ? (
+                        <>
+                          <p className="text-xs text-gold-600">Billed monthly · 3-month initial term</p>
+                          <p className="text-xs text-ink-400">Provider review required · Shipping calculated separately</p>
+                        </>
+                      ) : (
+                        <>
+                          {item.variantLabel && <p className="text-xs text-ink-500 truncate">{item.variantLabel}</p>}
+                          {item.subscription && <p className="text-xs text-gold-600">Subscription</p>}
+                          {item.requiresIntake && <p className="text-xs text-ink-400">Provider review required</p>}
+                        </>
+                      )}
                     </div>
-                    {item.price === 0 ? (
+                    {item.isMembership ? (
+                      <span className="text-sm font-medium text-ink-900">${item.price}/mo</span>
+                    ) : item.price === 0 ? (
                       <span className="text-xs text-ink-500">TBD</span>
                     ) : (
                       <span className="text-sm font-medium text-ink-900">${(item.price * item.quantity).toFixed(2)}</span>

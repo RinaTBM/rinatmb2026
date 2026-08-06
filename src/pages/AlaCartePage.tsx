@@ -1,12 +1,10 @@
 import { ShieldCheck, Stethoscope, ArrowRight, Tag } from 'lucide-react';
 import { Link } from '@/router';
-import { products } from '@/data/products';
+import { visibleProducts } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
 
 export function AlaCartePage() {
-  const alaCarteProducts = products.filter(
-    p => p.alaCarte || (p.startingAt && !p.variablePricing && p.price > 0)
-  );
+  const alaCarteProducts = visibleProducts;
 
   return (
     <div className="bg-cream-50 pt-16 md:pt-20">

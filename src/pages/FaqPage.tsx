@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from '@/router';
 import { ArrowRight, Search } from 'lucide-react';
 
 const faqCategories = [

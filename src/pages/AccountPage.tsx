@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from '@/router';
-import { Package, Heart, RefreshCw, Settings, LogOut, Truck, Clock, CheckCircle, MapPin } from 'lucide-react';
+import { Package, Heart, RefreshCw, Settings, LogOut, Truck, Clock, CheckCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 const mockOrders = [

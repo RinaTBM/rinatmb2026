@@ -1,5 +1,5 @@
 import { Link } from '@/router';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { goals, getProductsByGoal, type Goal } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
 

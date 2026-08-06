@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/router';
 import {
   ArrowRight,
-  ShieldCheck,
   Truck,
   Stethoscope,
   Sparkles,
@@ -17,7 +16,7 @@ import {
   concerns,
   sections,
   getBestSellers,
-  memberships,
+  visibleMemberships,
   getProductsBySection,
 } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
@@ -336,10 +335,10 @@ export function HomePage() {
                 ))}
               </ul>
               <div className="space-y-3 mb-6">
-                {memberships.map(m => (
+                {visibleMemberships.map(m => (
                   <div key={m.id} className="flex items-baseline justify-between rounded-lg bg-ink-700/50 px-4 py-3">
                     <span className="text-sm text-cream-100/80">{m.name}</span>
-                    <span className="font-serif text-lg text-gold-300">{m.price > 0 ? `${m.price}${m.priceLabel}` : 'Starting at $—/month'}</span>
+                    <span className="font-serif text-lg text-gold-300">{m.price > 0 ? `$${m.price}${m.priceLabel}` : 'Starting at $—/month'}</span>
                   </div>
                 ))}
               </div>

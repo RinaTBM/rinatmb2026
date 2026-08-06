@@ -1,33 +1,62 @@
-import { Check, Lock, Sparkles, ArrowRight, TrendingDown, Calendar, Stethoscope, Tag, X } from 'lucide-react';
+import { Check, X, Lock, ArrowRight, ShieldCheck, ClipboardList, Stethoscope, PackageCheck } from 'lucide-react';
 import { Link } from '@/router';
-import { memberships } from '@/data/products';
+import { visibleMemberships, type Membership } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 
-const comparisonRows = [
-  { feature: 'Monthly Subscription', membership: true, onetime: false },
-  { feature: 'One-Time Purchase', membership: false, onetime: true },
-  { feature: '3-Month Commitment', membership: 'Required', onetime: 'None' },
-  { feature: 'Locked Pricing', membership: true, onetime: false },
-  { feature: 'Discount on Accessories', membership: true, onetime: false },
-  { feature: 'Exclusive Member Pricing', membership: true, onetime: false },
-  { feature: 'Priority Processing', membership: true, onetime: false },
-  { feature: 'Order Anytime', membership: true, onetime: true },
-  { feature: 'Provider Approval When Required', membership: true, onetime: 'When applicable' },
+const howItWorks = [
+  { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide or Tirzepatide membership. No dose selection — one simple monthly price.' },
+  { icon: PackageCheck, title: 'Complete intake', description: 'Complete a secure medical intake after checkout so a licensed provider can review your information.' },
+  { icon: Stethoscope, title: 'Provider review', description: 'A licensed provider reviews your eligibility and determines the appropriate formulation, strength, and treatment plan.' },
+  { icon: ShieldCheck, title: 'Fulfillment when approved', description: 'When approved, your prescription is sent to the dispensing pharmacy and fulfilled according to the existing workflow.' },
 ];
+
+const faqs = [
+  { q: 'Will my price increase if my treatment changes?', a: 'Your Semaglutide membership remains $199 per month while your membership stays continuously active and your provider-selected treatment remains within the included program. Your Tirzepatide membership remains $249 per month while your provider-selected treatment remains within the included program through 25mg/2mg per mL, 2mL.' },
+  { q: 'Can I choose my dose?', a: 'No. Your licensed provider determines the appropriate formulation, strength, and treatment plan based on your eligibility and clinical information.' },
+  { q: 'Does joining guarantee a prescription?', a: 'No. Membership enrollment and payment do not guarantee prescribing. A licensed provider must review your information and determine whether treatment is appropriate.' },
+  { q: 'What happens if I cancel?', a: 'Canceling ends your locked membership rate. Future enrollment is subject to the membership price available at that time.' },
+  { q: 'Can I switch programs?', a: 'Yes, when clinically appropriate. Switching programs requires enrollment at the current price for the new membership.' },
+  { q: 'Is the highest Tirzepatide formulation included?', a: 'The $249 membership includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above that program maximum are not included.' },
+  { q: 'Are labs included?', a: 'Laboratory testing is not included unless the current workflow specifically states otherwise. A provider may request labs before or during treatment.' },
+  { q: 'Is shipping included?', a: 'Shipping is not included in the membership. Standard shipping options and any applicable fees are shown at checkout and follow our Shipping Policy. Certain medications may require temperature-controlled packaging.' },
+];
+
+const comparisonRows: { feature: string; sema: string | boolean; tirz: string | boolean; onetime: string | boolean }[] = [
+  { feature: 'Monthly price', sema: '$199', tirz: '$249', onetime: 'Varies by selected product' },
+  { feature: 'Included program', sema: 'Eligible included Semaglutide formulations', tirz: 'Eligible formulations through 25mg/2mg per mL, 2mL', onetime: 'Selected purchased formulation' },
+  { feature: 'Locked continuous-member rate', sema: true, tirz: true, onetime: false },
+  { feature: 'Provider review required', sema: true, tirz: true, onetime: 'Provider-directed when applicable' },
+  { feature: 'Provider-directed treatment adjustments', sema: 'Yes, within included program', tirz: 'Yes, within included program maximum', onetime: 'Provider-directed when applicable' },
+  { feature: 'Initial commitment', sema: '3 months', tirz: '3 months', onetime: 'None' },
+  { feature: 'Recurring fulfillment', sema: 'Yes, when prescribed', tirz: 'Yes, when prescribed', onetime: false },
+  { feature: 'One-time purchase option', sema: false, tirz: false, onetime: true },
+  { feature: 'Prescription guaranteed', sema: false, tirz: false, onetime: false },
+];
+
+function Cell({ value }: { value: string | boolean }) {
+  if (typeof value === 'boolean') {
+    return value
+      ? <Check size={16} className="mx-auto text-gold-600" aria-label="Yes" />
+      : <X size={16} className="mx-auto text-ink-300" aria-label="No" />;
+  }
+  return <span className="text-ink-700">{value}</span>;
+}
 
 export function MembershipsPage() {
   const { addItem } = useCart();
 
-  const handleJoin = (m: typeof memberships[0]) => {
+  const handleJoin = (m: Membership) => {
     addItem({
-      productId: m.id,
-      slug: m.id,
-      name: m.name,
-      price: m.price,
-      image: '',
+      productId: m.checkoutProductId || m.id,
+      slug: m.slug,
+      name: m.displayName,
+      price: m.monthlyPrice,
+      image: m.image,
       subscription: true,
       section: 'membership',
       requiresIntake: true,
+      isMembership: true,
+      billingFrequency: 'monthly',
     });
   };
 
@@ -35,60 +64,87 @@ export function MembershipsPage() {
     <div className="bg-cream-50 pt-16 md:pt-20">
       {/* Hero */}
       <section className="py-16 md:py-24 text-center">
-        <div className="container-lux max-w-2xl">
-          <p className="eyebrow mb-3">Memberships</p>
-          <h1 className="font-serif text-5xl md:text-6xl text-ink-900 mb-4">Locked-In Pricing, Lasting Care</h1>
-          <p className="text-ink-500 mb-8">
-            Choose a membership and secure your pricing for as long as you remain active. Monthly fulfillment,
-            provider support, and member-only benefits — all included.
+        <div className="container-lux max-w-3xl">
+          <p className="eyebrow mb-3">Weight-management memberships</p>
+          <h1 className="font-serif text-5xl md:text-6xl text-ink-900 mb-5">One Membership. One Price.</h1>
+          <p className="text-lg text-ink-500 leading-relaxed">
+            Unlike programs that increase monthly pricing as treatment changes, your membership rate stays the same
+            while you remain continuously enrolled and your provider adjusts your eligible treatment within the
+            included program.
           </p>
         </div>
       </section>
 
       {/* Membership cards */}
-      <section className="pb-16 md:pb-20">
+      <section className="pb-8 md:pb-12">
         <div className="container-lux">
-          <div className="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
-            {memberships.map(m => (
+          <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
+            {visibleMemberships.map(m => (
               <div
                 key={m.id}
-                className={`relative card-lux p-8 flex flex-col ${
-                  m.highlighted ? 'ring-2 ring-gold-400 shadow-lg' : ''
-                }`}
+                className={`relative card-lux p-8 flex flex-col ${m.highlighted ? 'ring-2 ring-gold-400 shadow-lg' : ''}`}
               >
                 {m.highlighted && (
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold-400 px-4 py-1 text-xs font-semibold text-ink-900 whitespace-nowrap">
                     Most Popular
                   </span>
                 )}
+                <p className="eyebrow text-gold-600 mb-1">{m.brandName}</p>
+                <h2 className="font-serif text-3xl text-ink-900 mb-2">{m.displayName}</h2>
+                <div className="mb-3">
+                  <span className="font-serif text-4xl text-ink-900">${m.monthlyPrice}</span>
+                  <span className="text-ink-500 ml-1">/month</span>
+                </div>
+                <p className="text-sm text-ink-600 mb-4">{m.valueStatement}</p>
+
+                <div className="mb-4 flex items-start gap-2 rounded-xl bg-gold-50 border border-gold-200/70 p-3 text-sm text-gold-800">
+                  <Lock size={16} className="flex-shrink-0 mt-0.5" />
+                  <span>Locked monthly rate while your membership stays continuously active and in good standing.</span>
+                </div>
+
+                {/* Included program */}
                 <div className="mb-4">
-                  <h2 className="font-serif text-2xl text-ink-900 mb-1">{m.name}</h2>
-                  <p className="text-sm text-ink-500">{m.tagline}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-400 mb-2">Included program</p>
+                  <p className="text-sm font-medium text-ink-900">{m.includedProducts.join(', ')}</p>
+                  <ul className="mt-2 space-y-1">
+                    {m.includedFormulations.map(f => (
+                      <li key={f} className="flex items-center gap-2 text-sm text-ink-600">
+                        <Check size={14} className="text-gold-500 flex-shrink-0" /> {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-2 text-xs text-ink-500">
+                    Your provider determines the appropriate formulation, strength, and treatment plan. Strengths are not
+                    selectable at checkout.
+                  </p>
                 </div>
-                <div className="mb-6">
-                  {m.price > 0 ? (
-                    <>
-                      <span className="font-serif text-4xl text-ink-900">${m.price}</span>
-                      <span className="text-ink-500 ml-1">{m.priceLabel}</span>
-                    </>
-                  ) : (
-                    <span className="font-serif text-2xl text-ink-900">Starting at $—/month</span>
-                  )}
-                </div>
-                <p className="text-sm text-ink-500 mb-6">{m.description}</p>
-                <ul className="space-y-3 mb-8 flex-1">
-                  {m.features.map(f => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm text-ink-700">
+
+                {/* Tirzepatide program-cap callout (not minimized) */}
+                {m.excludedFormulations.length > 0 && (
+                  <div className="mb-4 rounded-xl border border-ink-200 bg-cream-100 p-3 text-sm text-ink-700">
+                    <p className="font-semibold text-ink-900">Included program maximum: {m.maximumIncludedFormulation}</p>
+                    <p className="mt-1">
+                      One predictable monthly rate through the included program maximum. {m.excludedFormulations[0]}
+                    </p>
+                  </div>
+                )}
+
+                <ul className="space-y-2.5 mb-6 flex-1">
+                  {m.benefits.map(b => (
+                    <li key={b} className="flex items-start gap-2.5 text-sm text-ink-700">
                       <Check size={16} className="flex-shrink-0 mt-0.5 text-gold-500" />
-                      <span>{f}</span>
+                      <span>{b}</span>
                     </li>
                   ))}
                 </ul>
-                <button
-                  onClick={() => handleJoin(m)}
-                  className={`btn-primary w-full ${m.highlighted ? '' : 'btn-outline'}`}
-                >
-                  {m.price > 0 ? `Join for $${m.price}/mo` : 'Learn More'} <ArrowRight size={16} />
+
+                <p className="mb-2 flex items-center gap-1.5 text-xs text-gold-700">
+                  <ShieldCheck size={14} /> Licensed-provider review required · enrollment does not guarantee a prescription
+                </p>
+                <p className="mb-4 text-xs text-ink-500">Shipping calculated separately. Initial term: 3 months, then month to month.</p>
+
+                <button onClick={() => handleJoin(m)} className={`btn-primary w-full ${m.highlighted ? '' : 'btn-outline'}`}>
+                  {m.cta} <ArrowRight size={16} />
                 </button>
               </div>
             ))}
@@ -96,150 +152,156 @@ export function MembershipsPage() {
         </div>
       </section>
 
-      {/* Accessory discount highlight */}
-      <section className="pb-12">
-        <div className="container-lux max-w-4xl">
-          <div className="rounded-2xl bg-gradient-to-r from-gold-50 to-cream-100 border border-gold-200 p-8 text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Tag size={24} className="text-gold-600" />
-              <h3 className="font-serif text-2xl text-ink-900">Members Save on All Accessories</h3>
+      {/* How it works */}
+      <section className="py-16 md:py-20 bg-cream-100/50">
+        <div className="container-lux">
+          <div className="text-center mb-12">
+            <p className="eyebrow mb-3">Simple and guided</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink-900">How It Works</h2>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {howItWorks.map(({ icon: Icon, title, description }, i) => (
+              <div key={title} className="text-center">
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-cream-200 text-gold-600">
+                  <Icon size={28} strokeWidth={1.5} />
+                </div>
+                <p className="text-xs text-gold-600 font-medium mb-2">STEP {i + 1}</p>
+                <h3 className="font-serif text-xl text-ink-900 mb-2">{title}</h3>
+                <p className="text-sm text-ink-500 leading-relaxed">{description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Locked-price explanation */}
+      <section className="py-16 md:py-20">
+        <div className="container-lux max-w-3xl">
+          <div className="text-center mb-8">
+            <p className="eyebrow mb-3">Predictable pricing</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink-900">Your Rate Stays Locked</h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="card-lux p-6 flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gold-100">
+                <Lock size={22} className="text-gold-600" />
+              </div>
+              <div>
+                <h3 className="font-serif text-lg text-ink-900 mb-1">Continuous enrollment</h3>
+                <p className="text-sm text-ink-500">
+                  Your monthly membership rate remains locked while your membership stays continuously active and in
+                  good standing, even as your provider adjusts your eligible treatment within the included program.
+                </p>
+              </div>
             </div>
-            <p className="text-ink-500 max-w-lg mx-auto">
-              Active members automatically receive a discount on every accessory in our catalog — from travel cases to injection kits. The discount is applied automatically at checkout.
-            </p>
+            <div className="card-lux p-6 flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gold-100">
+                <ShieldCheck size={22} className="text-gold-600" />
+              </div>
+              <div>
+                <h3 className="font-serif text-lg text-ink-900 mb-1">Tirzepatide program maximum</h3>
+                <p className="text-sm text-ink-500">
+                  The $249 Tirzepatide rate includes eligible provider-selected formulations through 25mg/2mg per mL,
+                  2mL. Formulations above that maximum (including 30mg/2mg per mL, 2mL) are not part of this membership.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Comparison table */}
       <section className="py-16 md:py-20 bg-cream-100/50">
-        <div className="container-lux max-w-4xl">
+        <div className="container-lux max-w-5xl">
           <div className="text-center mb-10">
             <p className="eyebrow mb-3">Compare your options</p>
-            <h2 className="font-serif text-3xl md:text-4xl text-ink-900 mb-3">Membership vs. One-Time Purchase</h2>
-            <p className="text-ink-500 max-w-xl mx-auto">
-              Two ways to get your wellness products. Memberships lock in your price long-term with exclusive
-              benefits — one-time purchases offer flexibility with no commitment.
-            </p>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink-900">Membership Comparison</h2>
           </div>
+          <div className="card-lux overflow-x-auto">
+            <table className="w-full min-w-[640px] text-sm">
+              <thead>
+                <tr className="bg-ink-900 text-cream-50 text-left">
+                  <th scope="col" className="p-4 font-medium">Feature</th>
+                  <th scope="col" className="p-4 font-medium text-center bg-gold-400/20">Semaglutide Membership</th>
+                  <th scope="col" className="p-4 font-medium text-center">Tirzepatide Membership</th>
+                  <th scope="col" className="p-4 font-medium text-center">Shop Without a Membership</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonRows.map((row, i) => (
+                  <tr key={row.feature} className={`${i % 2 === 0 ? 'bg-white' : 'bg-cream-50'} border-t border-cream-200`}>
+                    <th scope="row" className="p-4 text-left font-medium text-ink-700">{row.feature}</th>
+                    <td className="p-4 text-center bg-gold-50/30"><Cell value={row.sema} /></td>
+                    <td className="p-4 text-center"><Cell value={row.tirz} /></td>
+                    <td className="p-4 text-center"><Cell value={row.onetime} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
-          <div className="card-lux overflow-hidden">
-            {/* Header row */}
-            <div className="grid grid-cols-3 bg-ink-900 text-cream-50">
-              <div className="p-4 text-sm font-medium">Feature</div>
-              <div className="p-4 text-sm font-medium text-center bg-gold-400/20">
-                <Sparkles size={14} className="inline mr-1 text-gold-400" /> Membership
-              </div>
-              <div className="p-4 text-sm font-medium text-center">One-Time Purchase</div>
-            </div>
-            {/* Body rows */}
-            {comparisonRows.map((row, i) => (
-              <div
-                key={row.feature}
-                className={`grid grid-cols-3 ${i % 2 === 0 ? 'bg-white' : 'bg-cream-50'} border-t border-cream-200`}
-              >
-                <div className="p-4 text-sm text-ink-700 font-medium">{row.feature}</div>
-                <div className="p-4 text-sm text-center bg-gold-50/30">
-                  {typeof row.membership === 'boolean' ? (
-                    row.membership ? (
-                      <Check size={16} className="mx-auto text-gold-600" />
-                    ) : (
-                      <X size={16} className="mx-auto text-ink-300" />
-                    )
-                  ) : (
-                    <span className="text-ink-800 font-medium">{row.membership}</span>
-                  )}
-                </div>
-                <div className="p-4 text-sm text-center">
-                  {typeof row.onetime === 'boolean' ? (
-                    row.onetime ? (
-                      <Check size={16} className="mx-auto text-ink-600" />
-                    ) : (
-                      <X size={16} className="mx-auto text-ink-300" />
-                    )
-                  ) : (
-                    <span className="text-ink-600">{row.onetime}</span>
-                  )}
-                </div>
-              </div>
+      {/* FAQ */}
+      <section className="py-16 md:py-20">
+        <div className="container-lux max-w-3xl">
+          <div className="text-center mb-10">
+            <p className="eyebrow mb-3">Questions & answers</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink-900">Membership FAQs</h2>
+          </div>
+          <div className="space-y-3">
+            {faqs.map((faq, i) => (
+              <details key={i} className="card-lux group p-5">
+                <summary className="flex cursor-pointer items-center justify-between font-medium text-ink-900 list-none">
+                  {faq.q}
+                  <span className="ml-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-cream-200 text-ink-600 transition-transform group-open:rotate-45">
+                    <span className="text-lg leading-none">+</span>
+                  </span>
+                </summary>
+                <p className="mt-3 text-sm text-ink-500 leading-relaxed">{faq.a}</p>
+              </details>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Locked pricing highlight */}
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
-            <div className="card-lux p-6 flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gold-100">
-                <Lock size={22} className="text-gold-600" />
-              </div>
-              <div>
-                <h3 className="font-serif text-lg text-ink-900 mb-1">Locked Pricing</h3>
-                <p className="text-sm text-ink-500">
-                  Membership prices never increase while your membership remains active. What you pay today is what you
-                  pay tomorrow — guaranteed.
-                </p>
-              </div>
-            </div>
-            <div className="card-lux p-6 flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gold-100">
-                <TrendingDown size={22} className="text-gold-600" />
-              </div>
-              <div>
-                <h3 className="font-serif text-lg text-ink-900 mb-1">Membership Savings</h3>
-                <p className="text-sm text-ink-500">
-                  Members save on accessories and wellness products with exclusive pricing — plus the peace of
-                  mind that comes with predictable monthly pricing.
-                </p>
-              </div>
-            </div>
+      {/* Terms summary */}
+      <section className="py-16 md:py-20 bg-cream-100/50">
+        <div className="container-lux max-w-3xl">
+          <div className="text-center mb-8">
+            <p className="eyebrow mb-3">Membership terms</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink-900">The Essentials</h2>
           </div>
-
+          <ul className="space-y-3">
+            {visibleMemberships[0]?.termsSummary.map((t, i) => (
+              <li key={i} className="flex items-start gap-3 text-sm text-ink-600">
+                <Check size={16} className="flex-shrink-0 mt-0.5 text-gold-500" />
+                <span>{t}</span>
+              </li>
+            ))}
+            <li className="flex items-start gap-3 text-sm text-ink-600">
+              <Check size={16} className="flex-shrink-0 mt-0.5 text-gold-500" />
+              <span>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above the included maximum are not part of this membership.</span>
+            </li>
+          </ul>
           <div className="mt-8 text-center">
-            <Link to="/shop" className="btn-outline">
-              Shop Without a Membership <ArrowRight size={16} />
+            <Link to="/membership-terms" className="text-sm text-gold-600 hover:text-gold-700 link-underline">
+              Read full Membership &amp; Cancellation Terms
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Membership terms detail */}
+      {/* Shop Without a Membership */}
       <section className="py-16 md:py-20">
-        <div className="container-lux max-w-3xl">
-          <p className="eyebrow mb-3 text-center">Membership details</p>
-          <h2 className="font-serif text-3xl text-ink-900 mb-8 text-center">What's Included</h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="card-lux p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <Calendar size={20} className="text-gold-500" />
-                <h3 className="font-serif text-lg text-ink-900">Recurring Billing</h3>
-              </div>
-              <p className="text-sm text-ink-500">Monthly automatic billing on your enrollment date. Your card is charged each month until you cancel after the 3-month commitment.</p>
-            </div>
-            <div className="card-lux p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <Stethoscope size={20} className="text-gold-500" />
-                <h3 className="font-serif text-lg text-ink-900">Provider Review</h3>
-              </div>
-              <p className="text-sm text-ink-500">Provider approval is required when applicable. If not approved, a full refund is issued. Purchase does not guarantee approval.</p>
-            </div>
-            <div className="card-lux p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <Lock size={20} className="text-gold-500" />
-                <h3 className="font-serif text-lg text-ink-900">Renewal & Cancellation</h3>
-              </div>
-              <p className="text-sm text-ink-500">Memberships auto-renew monthly. Cancel anytime after the 3-month minimum. Submit cancellation at least 7 days before your next billing date.</p>
-            </div>
-            <div className="card-lux p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <Tag size={20} className="text-gold-500" />
-                <h3 className="font-serif text-lg text-ink-900">Shipping & Storage</h3>
-              </div>
-              <p className="text-sm text-ink-500">Monthly fulfillment includes temperature-controlled shipping. Storage instructions are provided with each order.</p>
-            </div>
-          </div>
-          <div className="mt-8 text-center">
-            <Link to="/membership-terms" className="text-sm text-gold-600 hover:text-gold-700 link-underline">
-              Read full Membership & Cancellation Terms
-            </Link>
+        <div className="container-lux max-w-lg text-center">
+          <h2 className="font-serif text-3xl text-ink-900 mb-3">Shop Without a Membership</h2>
+          <p className="text-ink-500 mb-6">
+            Prefer flexibility? Choose an eligible product as a one-time purchase without monthly enrollment.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link to="/shop-all" className="btn-primary">Shop Without a Membership <ArrowRight size={16} /></Link>
+            <Link to="/section/weight-management" className="btn-outline">Browse Weight Management</Link>
           </div>
         </div>
       </section>

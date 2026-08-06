@@ -20,9 +20,10 @@ const concernItems = [
 
 const categoryItems = [
   { label: 'Weight Management', to: '/section/weight-management' },
-  { label: 'Longevity', to: '/section/longevity' },
-  { label: 'HRT for Women', to: '/section/hrt-women' },
-  { label: 'Research Products', to: '/section/research' },
+  { label: "Women's Hormone Therapy", to: '/section/womens-hormone-therapy' },
+  { label: 'Longevity & Cognitive Health', to: '/section/longevity-cognitive' },
+  { label: 'Recovery & Performance', to: '/section/recovery-performance' },
+  { label: 'Prescription Skin & Hair', to: '/section/prescription-skin-hair' },
 ];
 
 export function Header() {

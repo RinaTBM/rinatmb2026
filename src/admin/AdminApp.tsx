@@ -21,6 +21,7 @@ import {
   updateCancellationStatus,
   type CancellationRequest,
 } from '@/lib/account/subscriptions';
+import { AdminOrderDetail, AdminOrdersList } from '@/admin/AdminOrders';
 
 const LOGO = BRAND_LOGO_SRC;
 
@@ -134,6 +135,7 @@ const SECTIONS = [
   { id: 'products', label: 'Products' },
   { id: 'memberships', label: 'Memberships' },
   { id: 'categories', label: 'Categories' },
+  { id: 'orders', label: 'Orders' },
   { id: 'future', label: 'Future Releases' },
   { id: 'pricing', label: 'Purchase Pricing' },
   { id: 'cancellations', label: 'Cancellation Requests' },
@@ -578,6 +580,7 @@ export function AdminApp({ route }: { route: Route }) {
   const raw = parts[0] || 'catalog';
   const section = (raw === 'catalog' ? 'dashboard' : raw) as SectionId;
   const productSlug = section === 'products' ? parts[1] : undefined;
+  const orderId = section === 'orders' ? parts[1] : undefined;
   const canWrite = session.configured && session.isAdmin;
 
   // Route guard (enforced when Supabase is connected). Anonymous/expired → login;
@@ -620,6 +623,15 @@ export function AdminApp({ route }: { route: Route }) {
         {section === 'categories' && <Categories />}
         {section === 'future' && <FutureReleases />}
         {section === 'pricing' && <PurchasePricingSettings />}
+        {section === 'orders' && !orderId && <AdminOrdersList canWrite={canWrite} />}
+        {section === 'orders' && orderId && (
+          <AdminOrderDetail
+            orderId={orderId}
+            canWrite={canWrite}
+            adminUserId={null}
+            adminEmail={session.email}
+          />
+        )}
         {section === 'cancellations' && <CancellationQueue />}
         {section === 'sync' && <StripeSync canWrite={canWrite} accessToken={session.accessToken} />}
         {section === 'sync-history' && <div><h1 className="font-serif text-3xl text-ink-900 mb-6">Sync History</h1><LogTable table="stripe_sync_log" columns={['created_at', 'environment', 'entity_type', 'entity_id', 'operation', 'stripe_object_id', 'status']} canWrite={canWrite} /></div>}

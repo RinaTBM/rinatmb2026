@@ -50,3 +50,10 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 6. Configure the production Site URL.
 7. Configure the password-reset email template.
 8. Test customer signup/login in the actual Bolt/Supabase environment.
+
+### Customer account Phase 2 — Bolt notes
+
+- Pending migration: `supabase/migrations/20260807220000_customer_orders.sql` (orders, items, fulfillment, status events, admin notes). Apply only via Bolt/Supabase after approval.
+- After migration: redeploy `stripe-webhook` and `create-checkout-session` edge functions (TEST only).
+- Customer UI: `/account/orders`, `/account/orders/:orderId`. Admin UI: `/admin/orders`.
+- See `docs/customer-account-phase2.md` and `docs/customer-account-phase2-verification.sql`.

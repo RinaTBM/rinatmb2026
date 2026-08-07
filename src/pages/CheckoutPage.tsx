@@ -3,11 +3,14 @@ import { Link } from '@/router';
 import { ArrowLeft, Lock, Check, ShieldCheck, Truck, Ban, RefreshCw, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
+import { useCustomerAuth } from '@/context/CustomerAuthContext';
 import { upsertManagedSubscription } from '@/lib/account/subscriptions';
+import { isFreeShippingEligible } from '@/lib/orders/shipping';
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
   const { isActiveMember, activateMembership } = useMember();
+  const { user } = useCustomerAuth();
   const [step, setStep] = useState<'info' | 'payment' | 'complete'>('info');
   const [acknowledged, setAcknowledged] = useState<{ terms: boolean; privacy: boolean; refund: boolean; address: boolean }>({ terms: false, privacy: false, refund: false, address: false });
   const allAccepted = acknowledged.terms && acknowledged.privacy && acknowledged.refund && acknowledged.address;
@@ -88,6 +91,17 @@ export function CheckoutPage() {
         },
         body: JSON.stringify({
           isActiveMember,
+          customerUserId: user?.id,
+          customerEmail: form.email || user?.email || undefined,
+          customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || undefined,
+          // Snapshot amounts as displayed at checkout (shipping UI unchanged here).
+          subtotalCents: Math.round(subtotal * 100),
+          discountCents: Math.round(totalSavings * 100),
+          shippingCents: Math.round(shipping * 100),
+          taxCents: Math.round(tax * 100),
+          shippingMethod: 'standard',
+          freeShippingEligible: isFreeShippingEligible(Math.round(subtotal * 100)),
+          requiresProviderReview: hasProviderCare,
           items: items.map(i => ({
             productId: i.productId,
             quantity: i.quantity,

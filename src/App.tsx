@@ -39,6 +39,8 @@ import { AccountResetPasswordPage } from '@/pages/account/AccountResetPasswordPa
 import { AccountOverviewPage } from '@/pages/account/AccountOverviewPage';
 import { AccountProfilePage } from '@/pages/account/AccountProfilePage';
 import { AccountComingSoonPage } from '@/pages/account/AccountComingSoonPage';
+import { AccountOrdersPage } from '@/pages/account/AccountOrdersPage';
+import { AccountOrderDetailPage } from '@/pages/account/AccountOrderDetailPage';
 
 function App() {
   const route = useRouter();
@@ -115,11 +117,15 @@ function App() {
     if (path === '/account/orders') {
       return (
         <AccountGate>
-          <AccountComingSoonPage
-            active="orders"
-            title="Orders"
-            description="Order history and tracking will appear here in a future update."
-          />
+          <AccountOrdersPage />
+        </AccountGate>
+      );
+    }
+    if (path.startsWith('/account/orders/')) {
+      const orderId = path.replace('/account/orders/', '').split('/')[0];
+      return (
+        <AccountGate>
+          <AccountOrderDetailPage orderId={orderId} />
         </AccountGate>
       );
     }

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Link, navigate } from '@/router';
 import { useCustomerAuth } from '@/context/CustomerAuthContext';
 import { useAccountNoIndex } from './useAccountNoIndex';
@@ -24,8 +24,11 @@ export function AccountLoginPage() {
   const [busy, setBusy] = useState(false);
   const [resetBusy, setResetBusy] = useState(false);
 
+  useEffect(() => {
+    if (!loading && authenticated) navigate('/account');
+  }, [loading, authenticated]);
+
   if (!loading && authenticated) {
-    navigate('/account');
     return null;
   }
 
@@ -85,12 +88,12 @@ export function AccountLoginPage() {
         </>
       }
     >
-      {!configured ? (
-        <p className="text-sm text-ink-500" role="alert">
-          Customer sign-in is unavailable until Supabase is configured for this environment.
-        </p>
-      ) : (
-        <div className="space-y-5">
+      <div className="space-y-5">
+        {!configured ? (
+          <p className="text-sm text-ink-700 bg-cream-50 border border-cream-300 rounded-xl px-3 py-2" role="alert">
+            Customer sign-in is unavailable until Supabase is configured for this environment.
+          </p>
+        ) : null}
           <form onSubmit={onSubmit} className="space-y-4" noValidate>
             <div>
               <label htmlFor="account-login-email" className="block text-sm font-medium text-ink-800 mb-1.5">
@@ -147,7 +150,7 @@ export function AccountLoginPage() {
 
             <button
               type="submit"
-              disabled={busy || loading}
+              disabled={busy || loading || !configured}
               className="w-full rounded-full bg-ink-900 text-cream-50 py-3 text-sm font-medium tracking-wide hover:bg-ink-800 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
             >
               {busy ? 'Signing in…' : 'Sign In'}
@@ -166,13 +169,12 @@ export function AccountLoginPage() {
           <button
             type="button"
             onClick={() => void onGoogle()}
-            disabled={busy}
+            disabled={busy || !configured}
             className="w-full rounded-full border border-cream-300 bg-white py-3 text-sm font-medium text-ink-900 hover:border-gold-300 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
           >
             Continue with Google
           </button>
         </div>
-      )}
     </AccountAuthLayout>
   );
 }

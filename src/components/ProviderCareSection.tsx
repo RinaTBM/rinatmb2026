@@ -106,7 +106,7 @@ export function ProviderCareSection({ products }: { products: Product[] }) {
               to="/medical-director"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-gold-700 hover:text-gold-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded-sm"
             >
-              Meet Dr. Jerry Cattelane, DO <ArrowRight size={14} aria-hidden />
+              Meet Dr. Jerry J. Cattelane Jr., D.O. <ArrowRight size={14} aria-hidden />
             </Link>
           </div>
         </div>

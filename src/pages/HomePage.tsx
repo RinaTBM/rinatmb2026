@@ -35,7 +35,7 @@ const featureCards = [
   {
     icon: PackageCheck,
     title: 'Discreet Shipping',
-    description: 'Plain, unmarked packaging delivered to your door within 3–5 business days. Always private, always secure.',
+    description: 'Plain, unmarked packaging delivered with care. Most orders process within 1–3 business days after provider approval when applicable. Always private, always secure.',
   },
   {
     icon: HeartPulse,

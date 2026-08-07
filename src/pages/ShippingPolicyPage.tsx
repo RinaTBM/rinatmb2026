@@ -31,7 +31,7 @@ export function ShippingPolicyPage() {
           title: 'Processing Time',
           body: (
             <>
-              <p>Once the required intake, provider review, approval, and payment have been completed, most eligible orders are processed within approximately 3–5 business days.</p>
+              <p>Once the required intake, provider review, approval, and payment have been completed, most eligible orders are processed within approximately 1–3 business days.</p>
               <p>Processing times may be longer because of:</p>
               <LegalBulletList items={[
                 'Provider requests for additional information',
@@ -51,10 +51,10 @@ export function ShippingPolicyPage() {
           title: 'Shipping Options',
           body: (
             <>
-              <p>When available, clients may select:</p>
+              <p>Orders of $500 or more are eligible for free shipping. When available, clients may select:</p>
               <LegalBulletList items={[
-                'Two-Day Shipping — $20',
-                'Next-Day Shipping — $30',
+                'Two-Day Shipping — $30',
+                'Next-Day Shipping — $50',
               ]} />
               <p>Shipping speeds are estimates provided by the carrier and begin after the order has been processed and released for shipment. Delivery dates are not guaranteed.</p>
               <p>Certain medications may require temperature-controlled packaging or specific delivery methods. Available shipping options may vary by product, pharmacy, destination, and weather conditions.</p>

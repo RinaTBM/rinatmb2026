@@ -9,7 +9,7 @@ export function Footer() {
         {/* Official logo — centered above footer content */}
         <div className="flex justify-center mb-12 md:mb-16">
           <Link to="/" className="inline-flex" aria-label="My Bare Method home">
-            <BrandLogo className="w-auto max-h-20 md:max-h-[100px] object-contain" />
+            <BrandLogo className="w-auto max-h-40 md:max-h-[200px] object-contain" />
           </Link>
         </div>
 

@@ -100,7 +100,7 @@ export function HomePage() {
       {/* ===== HERO ===== */}
       <section
         ref={heroRef}
-        className="relative min-h-[100vh] md:min-h-[100vh] min-h-[80vh] flex items-center overflow-hidden pt-24 pb-16 md:pt-28"
+        className="relative min-h-[100vh] md:min-h-[100vh] min-h-[80vh] flex items-center overflow-hidden pt-32 pb-16 md:pt-36"
         style={{ background: 'linear-gradient(135deg, #FBF9F5 0%, #F7F4EF 40%, #F0EBE2 100%)' }}
       >
         {/* Subtle organic texture overlays */}

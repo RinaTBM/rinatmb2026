@@ -59,7 +59,7 @@ function AdminLogin({ session }: { session: Session }) {
   return (
     <div className="min-h-screen bg-cream-50 grid place-items-center px-4">
       <div className="w-full max-w-sm card-lux p-8 text-center">
-        <img src={LOGO} alt="My Bare Method Logo" className="mx-auto w-auto max-h-24 object-contain mb-4" />
+        <img src={LOGO} alt="My Bare Method Logo" className="mx-auto w-auto max-h-48 object-contain mb-4" />
         <h1 className="font-serif text-2xl text-ink-900 mb-1">Administrator Sign In</h1>
         <p className="text-sm text-ink-500 mb-6">Access is restricted to authorized administrators.</p>
         {!session.configured && (

@@ -53,7 +53,7 @@ export function SectionPage({ sectionId, subFilter }: { sectionId: string; subFi
   const activeForm = subFilter || formFilter;
 
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20">
+    <div className="bg-cream-50 pt-28 md:pt-32">
       {/* Header */}
       <section className="py-16 md:py-24">
         <div className="container-lux">

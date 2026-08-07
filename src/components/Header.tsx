@@ -81,7 +81,7 @@ export function Header() {
         }`}
       >
         <div className="container-lux">
-          <div className="flex h-16 items-center justify-between md:h-20">
+          <div className="flex h-28 items-center justify-between md:h-32">
             {/* Mobile menu button */}
             <button
               className="lg:hidden text-ink-900 p-2 -ml-2"
@@ -95,7 +95,7 @@ export function Header() {
             <Link to="/" className="flex items-center group shrink-0" aria-label="My Bare Method home">
               <BrandLogo
                 priority
-                className="w-auto max-h-12 md:max-h-[60px] object-contain"
+                className="w-auto max-h-24 md:max-h-[120px] object-contain"
               />
             </Link>
 

@@ -18,7 +18,8 @@ export function ProductPage({ slug }: { slug: string }) {
   const [variantIndex, setVariantIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'overview' | 'eligibility' | 'formulation'>('overview');
-  const [selectedKind, setSelectedKind] = useState<PurchaseOptionKind>('one_time');
+  /** null = use preferred default (Active Wellness Membership when available). */
+  const [selectedKind, setSelectedKind] = useState<PurchaseOptionKind | null>(null);
   const settings = useMemo(() => loadPurchaseDiscountSettings(), []);
 
   const variant = product
@@ -34,8 +35,16 @@ export function ProductPage({ slug }: { slug: string }) {
     });
   }, [product, variant, isActiveMember, settings]);
 
+  const preferredDefault: PurchaseOptionKind = options.some(o => o.kind === 'active_membership')
+    ? 'active_membership'
+    : options.some(o => o.kind === 'one_time')
+      ? 'one_time'
+      : (options[0]?.kind ?? 'one_time');
+
+  const resolvedKind = selectedKind ?? preferredDefault;
+
   const selected =
-    options.find(o => o.kind === selectedKind) ??
+    options.find(o => o.kind === resolvedKind) ??
     options.find(o => o.kind === 'one_time') ??
     options[0];
 
@@ -203,34 +212,53 @@ export function ProductPage({ slug }: { slug: string }) {
 
                 {options.map(option => {
                   const isSelected = selected?.kind === option.kind;
-                  const hideMemberCta = option.kind === 'active_membership' && isActiveMember;
+                  const isMembershipOption = option.kind === 'active_membership';
+                  const showBestValueRibbon = isMembershipOption && !isActiveMember;
+                  const hideMemberCta = isMembershipOption && isActiveMember;
                   return (
                     <button
                       key={option.kind}
                       type="button"
                       onClick={() => setSelectedKind(option.kind)}
-                      className={`w-full rounded-xl border-2 p-4 text-left transition-all ${
-                        isSelected ? 'border-gold-400 bg-gold-50/50' : 'border-cream-200 hover:border-gold-200'
+                      aria-pressed={isSelected}
+                      className={`relative w-full overflow-hidden rounded-xl border-2 p-4 text-left transition-all ${
+                        isMembershipOption
+                          ? isSelected
+                            ? 'border-gold-400 bg-gradient-to-br from-gold-50 via-cream-50 to-white shadow-sm ring-1 ring-gold-300/60'
+                            : 'border-gold-300/70 bg-gradient-to-br from-gold-50/80 via-white to-white hover:border-gold-400'
+                          : isSelected
+                            ? 'border-gold-400 bg-gold-50/40'
+                            : 'border-cream-200 hover:border-gold-200'
                       }`}
                     >
-                      <div className="flex items-start justify-between gap-3">
+                      {showBestValueRibbon && (
+                        <span
+                          className="pointer-events-none absolute -right-9 top-3 w-32 rotate-45 bg-gold-400/95 py-1 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-ink-900 shadow-sm"
+                          aria-hidden="true"
+                        >
+                          Best Value
+                        </span>
+                      )}
+                      <div className="flex items-start justify-between gap-3 pr-6">
                         <div>
                           <div className="flex flex-wrap items-center gap-2 mb-1">
-                            <span className="text-sm font-semibold text-ink-900">
-                              {option.kind === 'active_membership' && !isActiveMember ? '🥇 ' : ''}
-                              {option.kind === 'auto_refill' ? '⭐ ' : ''}
-                              {option.kind === 'one_time' ? '🛒 ' : ''}
+                            <span className={`text-sm font-semibold ${isMembershipOption ? 'text-ink-900' : 'text-ink-900'}`}>
                               {option.label}
                             </span>
-                            {option.badge && (
-                              <span className="rounded-full bg-gold-400 px-2 py-0.5 text-[10px] font-bold uppercase text-ink-900">
+                            {option.badge && !showBestValueRibbon && (
+                              <span className="rounded-full bg-gold-400/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink-900">
                                 {option.badge}
+                              </span>
+                            )}
+                            {isMembershipOption && isSelected && !isActiveMember && (
+                              <span className="text-[10px] font-medium uppercase tracking-wider text-gold-700">
+                                Recommended
                               </span>
                             )}
                           </div>
                           <p className="text-xs text-ink-500 leading-relaxed mb-2">{option.description}</p>
-                          {option.kind === 'active_membership' && !isActiveMember && (
-                            <p className="text-xs text-gold-700">Exclusive Member Pricing · Preferred Member Pricing · Priority Wellness Benefits</p>
+                          {isMembershipOption && !isActiveMember && (
+                            <p className="text-xs text-gold-700">Members Save {settings.memberDiscountPercent}% · Preferred member pricing</p>
                           )}
                           {hideMemberCta && (
                             <p className="text-xs text-gold-700 font-medium">Save {option.discountPercent}% · best available pricing</p>

@@ -19,7 +19,17 @@ interface CartItemRequest {
   appliedDiscount?: string;
   productName?: string;
   variantLabel?: string;
+  /** Storefront section/category — used to authorize accessory member pricing. */
+  section?: string;
+  /** Per-SKU eligibility flag from catalog (bundles default false). */
+  memberPricingEligible?: boolean;
 }
+
+/** Default accessory member discount — mirrors storefront settings default. */
+const ACCESSORY_MEMBER_DISCOUNT_PERCENT = 15;
+
+/** Bundle/kit accessories never receive the member accessory discount by default. */
+const ACCESSORY_BUNDLE_PRODUCT_IDS = new Set(["a1"]);
 
 function assertTestKey(secretKey: string) {
   if (secretKey.startsWith("sk_live_") || secretKey.startsWith("rk_live_")) {
@@ -28,6 +38,55 @@ function assertTestKey(secretKey: string) {
   if (!secretKey.startsWith("sk_test_") && !secretKey.startsWith("rk_test_")) {
     throw new Error("Checkout requires a Stripe TEST key (sk_test_… or rk_test_…).");
   }
+}
+
+function expectedAccessoryMemberUnitCents(standardPriceCents: number, percent: number): number {
+  if (!Number.isFinite(standardPriceCents) || standardPriceCents < 0) return 0;
+  const p = Math.min(100, Math.max(0, percent));
+  return Math.round(standardPriceCents * (1 - p / 100));
+}
+
+function isAccessoryLine(item: CartItemRequest): boolean {
+  if (item.section === "accessories") return true;
+  return /^a\d+$/i.test(item.productId);
+}
+
+function isAccessoryEligibleForMemberDiscount(item: CartItemRequest): boolean {
+  if (!isAccessoryLine(item)) return false;
+  if (ACCESSORY_BUNDLE_PRODUCT_IDS.has(item.productId)) return false;
+  if (item.memberPricingEligible === false) return false;
+  // Default individual accessories are eligible.
+  return true;
+}
+
+/**
+ * Authorize accessory unit cents server-side.
+ * Does not trust localStorage / frontend-only membership for a deeper discount than configured.
+ * Full Stripe subscription verification remains a documented dependency when auth is wired.
+ */
+function authorizeAccessoryUnitCents(
+  item: CartItemRequest,
+  isActiveMember: boolean,
+): number | null {
+  if (!isAccessoryLine(item)) return null;
+  const standard = Math.max(0, Math.round(item.standardPriceCents ?? item.unitAmountCents ?? 0));
+  if (!standard) return null;
+
+  const wantsMember =
+    isActiveMember === true &&
+    isAccessoryEligibleForMemberDiscount(item) &&
+    (item.appliedDiscount === "member" || (item.discountPercent ?? 0) > 0 || isActiveMember);
+
+  if (!wantsMember || !isActiveMember || !isAccessoryEligibleForMemberDiscount(item)) {
+    // Non-members and ineligible accessories always pay standard retail.
+    return standard;
+  }
+
+  const authorized = expectedAccessoryMemberUnitCents(standard, ACCESSORY_MEMBER_DISCOUNT_PERCENT);
+  const requested = typeof item.unitAmountCents === "number" ? Math.round(item.unitAmountCents) : authorized;
+  // Never accept a client amount below the authorized member price (no stacking / deeper cut).
+  if (requested < authorized) return authorized;
+  return authorized;
 }
 
 Deno.serve(async (req: Request) => {
@@ -90,6 +149,9 @@ Deno.serve(async (req: Request) => {
       freeShippingEligible,
       requiresProviderReview,
     } = body;
+    // Client-claimed membership is accepted only after unit amounts are recomputed server-side.
+    // Full Stripe subscription / auth verification is not performed in this function yet.
+    const memberClaim = isActiveMember === true;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return new Response(JSON.stringify({ error: "No items provided" }), {
@@ -135,9 +197,15 @@ Deno.serve(async (req: Request) => {
       const purchaseType: PurchaseType = item.purchaseType
         ?? (item.subscription ? "auto_refill" : "one_time");
       const isProgramMembership = purchaseType === "membership_program" || item.productId === "m1" || item.productId === "m2";
+
+      // Accessories: always authorize unit amount server-side when a custom/member price is involved.
+      const accessoryAuthorized = authorizeAccessoryUnitCents(item, memberClaim);
+      const isAccessory = isAccessoryLine(item);
+
       const needsCustomAmount =
         !isProgramMembership &&
         (
+          isAccessory ||
           purchaseType === "auto_refill" ||
           (typeof item.discountPercent === "number" && item.discountPercent > 0) ||
           (typeof item.unitAmountCents === "number" &&
@@ -147,17 +215,40 @@ Deno.serve(async (req: Request) => {
 
       if (needsCustomAmount) {
         usesCustomPriceData = true;
-        const unitAmount = item.unitAmountCents;
+        let unitAmount = item.unitAmountCents;
+        if (accessoryAuthorized != null) {
+          unitAmount = accessoryAuthorized;
+        }
         if (!unitAmount || unitAmount < 0) {
           return new Response(JSON.stringify({ error: `Missing unit amount for ${item.productId}` }), {
             status: 400,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
+        // Reject attempted stacking / deeper cuts on accessories.
+        if (
+          isAccessory &&
+          typeof item.standardPriceCents === "number" &&
+          memberClaim &&
+          isAccessoryEligibleForMemberDiscount(item)
+        ) {
+          const floor = expectedAccessoryMemberUnitCents(
+            item.standardPriceCents,
+            ACCESSORY_MEMBER_DISCOUNT_PERCENT,
+          );
+          if (unitAmount < floor) unitAmount = floor;
+        }
         const name = item.variantLabel
           ? `${item.productName ?? item.productId} (${item.variantLabel})`
           : (item.productName ?? item.productId);
         const recurring = purchaseType === "auto_refill" || !!item.subscription;
+        // Accessories never use Auto-Refill.
+        if (isAccessory && recurring) {
+          return new Response(JSON.stringify({ error: "Auto-Refill is not available on accessories." }), {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
         if (recurring) hasRecurring = true;
 
         lineItems.push({
@@ -213,8 +304,9 @@ Deno.serve(async (req: Request) => {
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/cancel`,
       "metadata[order_source]": "web",
-      "metadata[is_active_member]": isActiveMember ? "true" : "false",
+      "metadata[is_active_member]": memberClaim ? "true" : "false",
       "metadata[stripe_mode]": usesCustomPriceData ? "test_custom_pricing" : "mapped_prices",
+      "metadata[accessory_member_discount_percent]": String(ACCESSORY_MEMBER_DISCOUNT_PERCENT),
     };
 
     if (customerUserId) {

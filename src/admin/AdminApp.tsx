@@ -393,10 +393,10 @@ function PurchasePricingSettings() {
         updated_at: new Date().toISOString(),
       });
       setMsg(error
-        ? `Saved locally. Supabase note: ${error.message} (apply pending migration if missing table).`
-        : 'Saved locally and to store_purchase_settings.');
+        ? `Saved locally (including accessory member discount). Supabase note: ${error.message} (apply pending migration if missing table).`
+        : 'Saved locally (including accessory member discount) and wellness/auto-refill % to store_purchase_settings.');
     } else {
-      setMsg('Saved locally (Supabase not connected).');
+      setMsg('Saved locally (Supabase not connected). Accessory member discount is stored in browser settings.');
     }
   };
 
@@ -405,11 +405,12 @@ function PurchasePricingSettings() {
       <h1 className="font-serif text-3xl text-ink-900 mb-2">Purchase Pricing</h1>
       <p className="text-sm text-ink-500 mb-6">
         Configure automatic savings. Discounts never stack. Maximum automatic savings is the member rate.
-        Membership base prices ($199 / $249), provider care, accessories, shipping, and taxes are not edited here.
+        Membership base prices ($199 / $249), provider care, shipping, and taxes are not edited here.
+        Accessory member savings are separate from wellness-product member savings.
       </p>
       <div className="card-lux p-5 space-y-4">
         <label className="block">
-          <span className="text-xs uppercase tracking-wider text-ink-400">Member Discount %</span>
+          <span className="text-xs uppercase tracking-wider text-ink-400">Member Discount % (eligible wellness products)</span>
           <input
             className="input-lux"
             type="number"
@@ -420,7 +421,7 @@ function PurchasePricingSettings() {
           />
         </label>
         <label className="block">
-          <span className="text-xs uppercase tracking-wider text-ink-400">Auto-Refill Discount %</span>
+          <span className="text-xs uppercase tracking-wider text-ink-400">Auto-Refill Discount % (eligible wellness products only)</span>
           <input
             className="input-lux"
             type="number"
@@ -430,6 +431,32 @@ function PurchasePricingSettings() {
             onChange={e => setSettings(s => ({ ...s, autoRefillDiscountPercent: Number(e.target.value) }))}
           />
         </label>
+        <div className="border-t border-cream-300 pt-4 space-y-4">
+          <p className="text-xs uppercase tracking-wider text-ink-400">Active Wellness Member — Accessory Discount</p>
+          <label className="flex items-center gap-2 text-sm text-ink-700">
+            <input
+              type="checkbox"
+              checked={settings.accessoryMemberDiscountEnabled}
+              onChange={e => setSettings(s => ({ ...s, accessoryMemberDiscountEnabled: e.target.checked }))}
+            />
+            Enable accessory member discount globally
+          </label>
+          <label className="block">
+            <span className="text-xs uppercase tracking-wider text-ink-400">Accessory Member Discount %</span>
+            <input
+              className="input-lux"
+              type="number"
+              min={0}
+              max={100}
+              value={settings.accessoryMemberDiscountPercent}
+              onChange={e => setSettings(s => ({ ...s, accessoryMemberDiscountPercent: Number(e.target.value) }))}
+            />
+          </label>
+          <p className="text-xs text-ink-500">
+            Default 15%. Does not stack. Individual accessories default eligible; bundles/kits default OFF
+            (toggle per product via Member-pricing eligible). Provider appointments, shipping, and taxes remain excluded.
+          </p>
+        </div>
         <button className="btn-primary" onClick={save}>Save configuration</button>
         {msg && <p className="text-sm text-ink-600">{msg}</p>}
       </div>

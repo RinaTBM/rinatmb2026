@@ -73,7 +73,18 @@ export function CartDrawer() {
                                 <span className="inline-block mt-1 text-xs text-gold-600 font-medium">Auto-Refill & Save · monthly</span>
                               )}
                               {item.appliedDiscount === 'member' && (
-                                <span className="inline-block mt-1 text-xs text-gold-600 font-medium">Active Member Price · Save {item.discountPercent}%</span>
+                                <span className="inline-block mt-1 text-xs text-gold-600 font-medium">
+                                  {item.section === 'accessories'
+                                    ? `Active Member Price — Save ${item.discountPercent}%`
+                                    : `Active Member Price · Save ${item.discountPercent}%`}
+                                </span>
+                              )}
+                              {item.section === 'accessories' && item.appliedDiscount === 'member' && (
+                                <div className="mt-1 space-y-0.5 text-[11px] text-ink-500">
+                                  <p>Standard: ${((item.standardPrice ?? item.price) * item.quantity).toFixed(2)}</p>
+                                  <p className="text-gold-700">Member Savings: −{item.discountPercent}%</p>
+                                  <p className="text-ink-700">Member Price: ${(item.price * item.quantity).toFixed(2)}</p>
+                                </div>
                               )}
                               {item.appliedDiscount === 'auto_refill' && (
                                 <span className="inline-block mt-1 text-xs text-gold-700">Save {item.discountPercent}%</span>

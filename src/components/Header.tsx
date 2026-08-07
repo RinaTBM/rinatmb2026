@@ -202,7 +202,13 @@ export function Header() {
                       onClick={() => { setSearchOpen(false); setSearchQuery(''); navigate(`/product/${p.slug}`); }}
                       className="flex w-full items-center gap-4 rounded-xl p-2 text-left hover:bg-cream-200 transition-colors"
                     >
-                      <img src={p.image} alt={p.name} className="h-14 w-14 rounded-lg object-cover" />
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        className={`h-14 w-14 rounded-lg bg-cream-100 ${
+                          p.category === 'accessories' ? 'object-contain p-1' : 'object-cover'
+                        }`}
+                      />
                       <div>
                         <p className="font-medium text-ink-900">{p.name}</p>
                         <p className="text-sm text-ink-500">{p.tagline}</p>

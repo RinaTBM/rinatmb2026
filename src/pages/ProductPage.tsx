@@ -64,12 +64,8 @@ export function ProductPage({ slug }: { slug: string }) {
   const related = getRelatedProducts(product);
   const isProgramMembership = selected?.kind === 'membership_program';
 
-  const containFit =
-    product.slug === 'discreet-travel-bag' ||
-    product.slug === 'temperature-controlled-travel-case' ||
-    product.slug === 'reusable-ice-pack' ||
-    product.slug === 'complete-injection-starter-kit' ||
-    product.slug === 'premium-3d-printed-peptide-case';
+  /** All Accessories use contain-fit so product photos are never cropped. */
+  const containFit = product.category === 'accessories';
 
   const handlePrimaryAction = () => {
     if (!selected) return;

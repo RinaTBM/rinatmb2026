@@ -352,7 +352,13 @@ export function CheckoutPage() {
                   return (
                     <div key={item.key} className="flex gap-3">
                       <div className="relative flex-shrink-0">
-                        <img src={item.image} alt={item.name} className="h-14 w-14 rounded-lg object-cover" />
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className={`h-14 w-14 rounded-lg bg-cream-100 ${
+                            item.section === 'accessories' ? 'object-contain p-1' : 'object-cover'
+                          }`}
+                        />
                         <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-ink-900 text-[10px] font-medium text-cream-50">{item.quantity}</span>
                       </div>
                       <div className="flex-1 min-w-0">

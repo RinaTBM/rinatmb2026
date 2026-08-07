@@ -9,19 +9,11 @@ import {
   isMemberPricingEligible,
 } from '@/lib/pricing/purchaseOptions';
 
-/** Accessory photos that should show the full product (no crop). */
-const CONTAIN_FIT_SLUGS = new Set([
-  'discreet-travel-bag',
-  'temperature-controlled-travel-case',
-  'reusable-ice-pack',
-  'complete-injection-starter-kit',
-  'premium-3d-printed-peptide-case',
-]);
-
 export function ProductCard({ product }: { product: Product }) {
   const section = sections.find(s => s.id === product.category);
   const primaryForm = product.dosageForms[0];
-  const containFit = CONTAIN_FIT_SLUGS.has(product.slug);
+  /** All Accessories use contain-fit so product photos are never cropped. */
+  const containFit = product.category === 'accessories';
   const memberEligible = isMemberPricingEligible(product);
   const autoEligible = isAutoRefillEligible(product);
 

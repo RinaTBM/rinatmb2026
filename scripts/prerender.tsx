@@ -5,7 +5,6 @@ import { join, dirname } from 'node:path';
 
 import { CartProvider } from '@/context/CartContext';
 import { MemberProvider } from '@/context/MemberContext';
-import { CustomerAuthProvider } from '@/context/CustomerAuthContext';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CartDrawer } from '@/components/CartDrawer';
@@ -36,15 +35,13 @@ const BASE_URL = 'https://mybaremethod.com';
 
 function renderPage(component: React.ReactElement) {
   return renderToString(
-    createElement(CustomerAuthProvider, null,
-      createElement(MemberProvider, null,
-        createElement(CartProvider, null,
-          createElement('div', { className: 'min-h-screen bg-cream-50' },
-            createElement(Header),
-            createElement('main', null, component),
-            createElement(Footer),
-            createElement(CartDrawer),
-          ),
+    createElement(MemberProvider, null,
+      createElement(CartProvider, null,
+        createElement('div', { className: 'min-h-screen bg-cream-50' },
+          createElement(Header),
+          createElement('main', null, component),
+          createElement(Footer),
+          createElement(CartDrawer),
         ),
       ),
     ),
@@ -264,11 +261,10 @@ function main() {
     }
   }
 
-  // Generate sitemap.xml (never include private /account/* portal routes)
+  // Generate sitemap.xml
   let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
   sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   for (const route of routes) {
-    if (route.path === '/account' || route.path.startsWith('/account/')) continue;
     const priority = route.path === '/' ? '1.0'
       : route.path.startsWith('/product/') ? '0.8'
       : (route.path.startsWith('/section/') || route.path.startsWith('/concern/') || route.path.startsWith('/goal/')) ? '0.7'

@@ -27,7 +27,7 @@ export function useRouter() {
   useEffect(() => {
     const onChange = () => {
       setRoute(parseLocation());
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
     };
     window.addEventListener('popstate', onChange);
     window.addEventListener('hashchange', onChange);
@@ -47,9 +47,6 @@ export function navigate(path: string) {
     window.history.pushState({}, '', path);
     window.dispatchEvent(new PopStateEvent('popstate'));
   }
-  // Ensure new account/storefront views start at the top (some browsers ignore
-  // scroll on synthetic popstate when navigate is called during render).
-  window.scrollTo(0, 0);
 }
 
 export function Link({

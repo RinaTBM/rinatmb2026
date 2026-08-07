@@ -450,8 +450,6 @@ export const products: Product[] = [
     imageAlt: 'Amber injection vial for Semaglutide + B6, a provider-directed weight-management option',
     providerDisclaimer: WEIGHT_DISCLAIMER,
     bestSeller: true,
-    // Membership savings do not apply — Semaglutide Membership ($199/mo) is the member offer.
-    memberPricingEligible: false,
     subscriptionPrice: 175,
     variants: [
       { dosageForm: 'Injection', strength: '1mg/1mg per mL', size: '2mL', price: 149 },
@@ -473,8 +471,6 @@ export const products: Product[] = [
     imageAlt: 'Amber injection vial for Tirzepatide + B6, a provider-directed weight-management option',
     providerDisclaimer: WEIGHT_DISCLAIMER,
     bestSeller: true,
-    // Membership savings do not apply — Tirzepatide Membership ($249/mo) is the member offer.
-    memberPricingEligible: false,
     subscriptionPrice: 225,
     variants: [
       { dosageForm: 'Injection', strength: '5mg/2mg per mL', size: '2mL', price: 199 },

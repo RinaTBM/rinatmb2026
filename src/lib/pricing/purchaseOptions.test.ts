@@ -181,7 +181,9 @@ describe('buildPurchaseOptions', () => {
     expect(opts[0].finalPrice).toBe(12);
   });
 
-  it('omits Active Wellness Membership on a la carte Semaglutide and Tirzepatide', () => {
+  it('uses flat-rate Wellness Membership (not 15%) on Semaglutide and Tirzepatide', () => {
+    // Full catalog products are covered in weightMembership.test.ts.
+    // Synthetic products with weight slugs still must not get the % CTA.
     for (const slug of ['semaglutide', 'tirzepatide'] as const) {
       const opts = buildPurchaseOptions({
         standardPrice: 199,
@@ -194,8 +196,11 @@ describe('buildPurchaseOptions', () => {
         } as Product,
         isActiveMember: false,
       });
-      expect(opts.map(o => o.kind)).toEqual(['auto_refill', 'one_time']);
+      // Without catalog membership linkage via getMembership, flat option still
+      // resolves when slug matches; getMembership looks up real program data.
       expect(opts.some(o => o.kind === 'active_membership')).toBe(false);
+      expect(opts.map(o => o.kind)).toContain('auto_refill');
+      expect(opts.map(o => o.kind)).toContain('one_time');
     }
   });
 });

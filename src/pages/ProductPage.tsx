@@ -65,7 +65,8 @@ export function ProductPage({ slug }: { slug: string }) {
               {(() => {
                 const containFit =
                   product.slug === 'discreet-travel-bag' ||
-                  product.slug === 'temperature-controlled-travel-case';
+                  product.slug === 'temperature-controlled-travel-case' ||
+                  product.slug === 'reusable-ice-pack';
                 return (
                   <div className={`relative aspect-square overflow-hidden rounded-3xl bg-cream-100 ${containFit ? 'p-8 md:p-10' : ''}`}>
                     <img

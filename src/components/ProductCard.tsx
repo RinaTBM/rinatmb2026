@@ -3,10 +3,11 @@ import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import type { Product } from '@/data/products';
 import { sections } from '@/data/products';
 
-/** Accessory bag photos that should show the full product (no crop). */
+/** Accessory photos that should show the full product (no crop). */
 const CONTAIN_FIT_SLUGS = new Set([
   'discreet-travel-bag',
   'temperature-controlled-travel-case',
+  'reusable-ice-pack',
 ]);
 
 export function ProductCard({ product }: { product: Product }) {

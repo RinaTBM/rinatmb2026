@@ -9,6 +9,7 @@ Active Semaglutide and Tirzepatide Wellness Members now receive **15% off eligib
 | Item | Value |
 |------|--------|
 | Starting commit | `b5e08e093fdd68736924884069ec3e02f499d22a` |
+| Completed commit | `a55f89ca3a4f6919136e40eb47d0ef921de68c41` |
 | Work branch | `source-of-truth/membership-accessory-benefit-2026` |
 | Local backup branch | `backup/membership-accessory-benefit-before-edit-2026` (not pushed) |
 | Annotated tag | `membership-accessory-benefit-v1` |

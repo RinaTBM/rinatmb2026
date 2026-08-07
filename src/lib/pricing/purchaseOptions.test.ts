@@ -116,6 +116,27 @@ describe('resolveUnitPrice — hierarchy & no stacking', () => {
     }
   });
 
+  it('does not apply member savings when memberPricingEligible is false', () => {
+    const ineligible = { ...wellness, memberPricingEligible: false };
+    const one = resolveUnitPrice({
+      standardPrice: 199,
+      product: ineligible,
+      isActiveMember: true,
+      option: 'one_time',
+    });
+    const auto = resolveUnitPrice({
+      standardPrice: 199,
+      product: ineligible,
+      isActiveMember: true,
+      option: 'auto_refill',
+    });
+    expect(one.finalPrice).toBe(199);
+    expect(one.appliedDiscount).toBe('none');
+    // Auto-refill still available at 10% — membership 15% does not apply.
+    expect(auto.finalPrice).toBe(179.1);
+    expect(auto.appliedDiscount).toBe('auto_refill');
+  });
+
   it('applyDiscount rounds to cents', () => {
     expect(applyDiscount(149, 15)).toBe(126.65);
     expect(applyDiscount(169, 10)).toBe(152.1);
@@ -125,9 +146,9 @@ describe('resolveUnitPrice — hierarchy & no stacking', () => {
 describe('buildPurchaseOptions', () => {
   const product = {
     ...wellness,
-    id: 'p1',
-    slug: 'semaglutide',
-    displayName: 'Semaglutide',
+    id: 'p-nad',
+    slug: 'nad-plus',
+    displayName: 'NAD+',
   } as Product;
 
   it('orders membership → auto-refill → one-time and hides become-member CTA when active', () => {
@@ -158,5 +179,28 @@ describe('buildPurchaseOptions', () => {
     });
     expect(opts.map(o => o.kind)).toEqual(['one_time']);
     expect(opts[0].finalPrice).toBe(12);
+  });
+
+  it('uses flat-rate Wellness Membership (not 15%) on Semaglutide and Tirzepatide', () => {
+    // Full catalog products are covered in weightMembership.test.ts.
+    // Synthetic products with weight slugs still must not get the % CTA.
+    for (const slug of ['semaglutide', 'tirzepatide'] as const) {
+      const opts = buildPurchaseOptions({
+        standardPrice: 199,
+        product: {
+          ...product,
+          slug,
+          displayName: slug,
+          memberPricingEligible: false,
+          autoRefillEligible: true,
+        } as Product,
+        isActiveMember: false,
+      });
+      // Without catalog membership linkage via getMembership, flat option still
+      // resolves when slug matches; getMembership looks up real program data.
+      expect(opts.some(o => o.kind === 'active_membership')).toBe(false);
+      expect(opts.map(o => o.kind)).toContain('auto_refill');
+      expect(opts.map(o => o.kind)).toContain('one_time');
+    }
   });
 });

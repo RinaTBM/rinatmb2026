@@ -1,16 +1,28 @@
 /**
  * Active Wellness Membership + Auto-Refill & Save + One-Time Purchase pricing.
  * Discounts never stack. Maximum automatic savings = member discount (default 15%).
+ *
+ * Semaglutide / Tirzepatide product pages use a separate flat-rate
+ * `membership_program` option ($199 / $249) — never a 15% dose discount.
  */
-import type { Category, Product } from '../../data/products';
+import type { Category, Product, ProductVariant } from '../../data/products';
 import {
   DEFAULT_AUTO_REFILL_DISCOUNT_PERCENT,
   DEFAULT_MEMBER_DISCOUNT_PERCENT,
   type PurchaseDiscountSettings,
   getDefaultPurchaseDiscountSettings,
 } from './settings';
+import {
+  getWeightMembershipProgram,
+  isWeightMedicationSlug,
+  type WeightMembershipProgramMeta,
+} from './weightMembership';
 
-export type PurchaseOptionKind = 'active_membership' | 'auto_refill' | 'one_time';
+export type PurchaseOptionKind =
+  | 'membership_program'
+  | 'active_membership'
+  | 'auto_refill'
+  | 'one_time';
 export type AppliedDiscount = 'member' | 'auto_refill' | 'none';
 
 export const EXCLUDED_DISCOUNT_CATEGORIES: ReadonlySet<Category> = new Set([
@@ -31,6 +43,8 @@ export interface PricedPurchaseOption {
   recurring: boolean;
   billingFrequency: 'monthly' | null;
   savingsAmount: number;
+  /** Flat-rate Semaglutide / Tirzepatide Wellness Membership metadata. */
+  program?: WeightMembershipProgramMeta;
 }
 
 export interface ResolvePriceInput {
@@ -42,7 +56,7 @@ export interface ResolvePriceInput {
   /** Customer already has an Active Wellness Membership (Semaglutide or Tirzepatide). */
   isActiveMember: boolean;
   /** Selected storefront option (membership CTA is navigational; pricing uses member/auto/one-time). */
-  option: PurchaseOptionKind;
+  option: Exclude<PurchaseOptionKind, 'membership_program'>;
   settings?: PurchaseDiscountSettings;
 }
 
@@ -78,6 +92,8 @@ export function applyDiscount(standardPrice: number, percent: number): number {
 /**
  * Resolve the final unit price for a purchase option.
  * Priority when customer is an active member: member discount wins over auto-refill.
+ * Never applies 15% member pricing to Semaglutide / Tirzepatide medication
+ * (`memberPricingEligible: false` on those products).
  */
 export function resolveUnitPrice(input: ResolvePriceInput): {
   finalPrice: number;
@@ -138,17 +154,52 @@ export function resolveUnitPrice(input: ResolvePriceInput): {
   };
 }
 
+function buildWeightMembershipOption(
+  product: Product,
+  selectedVariant?: Pick<ProductVariant, 'strength' | 'size'> | null,
+): PricedPurchaseOption | null {
+  const program = getWeightMembershipProgram(product, selectedVariant);
+  if (!program) return null;
+
+  return {
+    kind: 'membership_program',
+    label: 'Wellness Membership',
+    badge: 'BEST VALUE',
+    description: program.supportingCopy,
+    cta: program.cta,
+    standardPrice: program.monthlyPrice,
+    finalPrice: program.monthlyPrice,
+    discountPercent: 0,
+    appliedDiscount: 'none',
+    recurring: true,
+    billingFrequency: 'monthly',
+    savingsAmount: 0,
+    program,
+  };
+}
+
 export function buildPurchaseOptions(input: {
   standardPrice: number;
   product: Product;
   isActiveMember: boolean;
   settings?: PurchaseDiscountSettings;
+  /** Selected dose — used only for Tirzepatide 30mg member-only notice; never prices membership. */
+  selectedVariant?: Pick<ProductVariant, 'strength' | 'size'> | null;
 }): PricedPurchaseOption[] {
   const settings = input.settings ?? getDefaultPurchaseDiscountSettings();
-  const { standardPrice, product, isActiveMember } = input;
+  const { standardPrice, product, isActiveMember, selectedVariant } = input;
   const options: PricedPurchaseOption[] = [];
 
-  const memberEligible = isMemberPricingEligible(product);
+  const weightProgram = isWeightMedicationSlug(product.slug)
+    ? buildWeightMembershipOption(product, selectedVariant)
+    : null;
+  if (weightProgram) {
+    options.push(weightProgram);
+  }
+
+  // Percentage member pricing CTA for other eligible wellness products only.
+  // Semaglutide / Tirzepatide keep memberPricingEligible: false so this stays off.
+  const memberEligible = !weightProgram && isMemberPricingEligible(product);
   const autoEligible = isAutoRefillEligible(product);
 
   if (memberEligible) {
@@ -185,14 +236,15 @@ export function buildPurchaseOptions(input: {
       option: 'auto_refill',
       settings,
     });
-    const shownPercent = isActiveMember
-      ? settings.memberDiscountPercent
-      : settings.autoRefillDiscountPercent;
+    const shownPercent =
+      priced.appliedDiscount === 'none'
+        ? settings.autoRefillDiscountPercent
+        : priced.discountPercent;
     options.push({
       kind: 'auto_refill',
       label: 'Auto-Refill & Save',
       badge: `Save ${shownPercent}%`,
-      description: isActiveMember
+      description: isActiveMember && isMemberPricingEligible(product)
         ? 'Convenient monthly deliveries at your Active Member price. Discounts do not stack.'
         : 'Receive convenient monthly deliveries while saving on every eligible refill.',
       cta: 'Subscribe & Save',
@@ -243,3 +295,11 @@ export function discountLabel(applied: AppliedDiscount, percent: number): string
 }
 
 export { DEFAULT_MEMBER_DISCOUNT_PERCENT, DEFAULT_AUTO_REFILL_DISCOUNT_PERCENT };
+export {
+  SEMAGLUTIDE_MEMBERSHIP_CENTS,
+  TIRZEPATIDE_MEMBERSHIP_CENTS,
+  TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS,
+  getWeightMembershipProgram,
+  isTirzepatide30mgVariant,
+  isWeightMedicationSlug,
+} from './weightMembership';

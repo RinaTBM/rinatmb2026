@@ -18,4 +18,35 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 
 - Stripe checkout (the final "Place Order" button on `/checkout`) calls a Supabase Edge Function using `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (read from `import.meta.env`). Without a `.env` providing these, browsing/adding to cart/filling the checkout form all still work; only the final redirect-to-Stripe step will fail. Set those vars in a `.env` file only if you need to exercise real Stripe checkout.
 - Node 22 is used here and works with Vite 5.
-- Customer account portal (`/account/*`) uses the same browser Supabase anon client as checkout. Without Supabase env vars, auth screens render an “unavailable until configured” state; admin Google auth remains separate (`/admin/*`, `admins` / `is_admin()`). Do not apply `supabase/migrations/20260807210000_customer_profiles.sql` from Cursor — see `docs/customer-account-phase1.md`.
+- Customer account portal (`/account/*`) uses the same browser Supabase anon client as checkout. Auth screens may show an “unavailable until configured” state when local env vars are missing; that does **not** mean Bolt/Supabase is unconfigured. Admin Google auth remains separate (`/admin/*`, `admins` / `is_admin()`). See `docs/customer-account-phase1.md`.
+
+### Bolt Database / migration safety (permanent)
+
+This project uses **Bolt Database backed by Supabase**.
+
+- Cursor/local VM may not have `VITE_SUPABASE_*` or production database credentials.
+- Do **not** assume missing local credentials mean Bolt/Supabase is unconfigured.
+- Do **not** apply production database migrations from Cursor by default.
+- Do **not** request or store production database secrets in source files.
+- Prepare migration plans and verification SQL in Cursor.
+- Apply approved migrations through Bolt/Supabase only after **explicit user approval**.
+- Never run database reset, destructive migration, truncate, or drop commands against production.
+- Never run live Stripe sync from Cursor unless the production execution path, credentials, dry-run, and explicit approval are all confirmed.
+- Bolt-managed Supabase environment variables and secrets should remain server-side.
+- Preserve existing customer, product, membership, Stripe, and admin data.
+
+### Customer account Phase 1 — Bolt deployment checklist
+
+Before the customer account portal can be fully tested in Bolt, manually verify:
+
+1. Apply the approved customer-account migration.
+2. Enable Email authentication.
+3. Enable Google authentication.
+4. Preserve the existing Google admin callback.
+5. Add these allowed redirect paths:
+   - `/account/auth/callback`
+   - `/account/reset-password`
+   - `/admin/auth/callback`
+6. Configure the production Site URL.
+7. Configure the password-reset email template.
+8. Test customer signup/login in the actual Bolt/Supabase environment.

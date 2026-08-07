@@ -4,28 +4,12 @@ import { Link, navigate } from '@/router';
 import { useCart } from '@/context/CartContext';
 import { products } from '@/data/products';
 import { BrandLogo } from '@/components/BrandLogo';
+import { SHOP_CATEGORIES } from '@/lib/browse/productBrowse';
 
-const concernItems = [
-  { label: 'Weight Management', to: '/concern/weight-management' },
-  { label: 'Longevity & Healthy Aging', to: '/concern/longevity-aging' },
-  { label: 'Hormone Balance (HRT for Women)', to: '/concern/hormone-balance' },
-  { label: 'Energy & Vitality', to: '/concern/energy-vitality' },
-  { label: 'Cognitive Support', to: '/concern/cognitive-support' },
-  { label: 'Recovery & Performance', to: '/concern/recovery-performance' },
-  { label: 'Immune Support', to: '/concern/immune-support' },
-  { label: 'Metabolic Health', to: '/concern/metabolic-health' },
-  { label: 'Sexual Wellness', to: '/concern/sexual-wellness' },
-  { label: 'Hair, Skin & Beauty', to: '/concern/hair-skin-beauty' },
-  { label: 'Sleep & Stress Support', to: '/concern/sleep-stress' },
-];
-
-const categoryItems = [
-  { label: 'Weight Management', to: '/section/weight-management' },
-  { label: "Women's Hormone Therapy", to: '/section/womens-hormone-therapy' },
-  { label: 'Longevity & Cognitive Health', to: '/section/longevity-cognitive' },
-  { label: 'Recovery & Performance', to: '/section/recovery-performance' },
-  { label: 'Prescription Skin & Hair', to: '/section/prescription-skin-hair' },
-];
+const categoryItems = SHOP_CATEGORIES.map(c => ({
+  label: c.label,
+  to: `/section/${c.id}`,
+}));
 
 export function Header() {
   const { itemCount, openCart } = useCart();
@@ -33,11 +17,10 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [shopByOpen, setShopByOpen] = useState(false);
-  const [shopBySubmenu, setShopBySubmenu] = useState<'concern' | 'category' | null>(null);
-  const [mobileShopByOpen, setMobileShopByOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
+  const [shopSubmenu, setShopSubmenu] = useState<'category' | null>(null);
+  const [mobileShopOpen, setMobileShopOpen] = useState(false);
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
-  const [mobileConcernOpen, setMobileConcernOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -66,11 +49,10 @@ export function Header() {
 
   const closeAll = () => {
     setMobileOpen(false);
-    setShopByOpen(false);
-    setShopBySubmenu(null);
-    setMobileShopByOpen(false);
+    setShopOpen(false);
+    setShopSubmenu(null);
+    setMobileShopOpen(false);
     setMobileCategoryOpen(false);
-    setMobileConcernOpen(false);
   };
 
   return (
@@ -82,7 +64,6 @@ export function Header() {
       >
         <div className="container-lux">
           <div className="flex h-28 items-center justify-between md:h-32">
-            {/* Mobile menu button */}
             <button
               className="lg:hidden text-ink-900 p-2 -ml-2"
               onClick={() => setMobileOpen(true)}
@@ -91,7 +72,6 @@ export function Header() {
               <Menu size={22} />
             </button>
 
-            {/* Logo */}
             <Link to="/" className="flex items-center group shrink-0" aria-label="My Bare Method home">
               <BrandLogo
                 priority
@@ -99,75 +79,47 @@ export function Header() {
               />
             </Link>
 
-            {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-7">
-              {/* Shop By dropdown */}
               <div
                 className="relative"
-                onMouseEnter={() => setShopByOpen(true)}
-                onMouseLeave={() => { setShopByOpen(false); setShopBySubmenu(null); }}
+                onMouseEnter={() => setShopOpen(true)}
+                onMouseLeave={() => { setShopOpen(false); setShopSubmenu(null); }}
               >
                 <button
                   className="flex items-center gap-1 text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors py-2"
-                  onClick={() => setShopByOpen(o => !o)}
-                  aria-expanded={shopByOpen}
+                  onClick={() => setShopOpen(o => !o)}
+                  aria-expanded={shopOpen}
                 >
-                  Shop By
-                  <ChevronDown size={14} className={`transition-transform ${shopByOpen ? 'rotate-180' : ''}`} />
+                  Shop
+                  <ChevronDown size={14} className={`transition-transform ${shopOpen ? 'rotate-180' : ''}`} />
                 </button>
-                {shopByOpen && (
+                {shopOpen && (
                   <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
                     <div className="w-56 rounded-2xl border border-cream-300 bg-white p-2 shadow-xl animate-scale-in">
                       <Link
                         to="/shop-all"
-                        onClick={() => { setShopByOpen(false); setShopBySubmenu(null); }}
+                        onClick={() => { setShopOpen(false); setShopSubmenu(null); }}
                         className="block rounded-lg px-4 py-2.5 text-sm font-medium text-ink-800 hover:bg-gold-50 hover:text-gold-700 transition-colors"
                       >
                         Shop All
                       </Link>
                       <div
                         className="relative"
-                        onMouseEnter={() => setShopBySubmenu('concern')}
-                        onMouseLeave={() => setShopBySubmenu(null)}
-                      >
-                        <button className="flex w-full items-center justify-between rounded-lg px-4 py-2.5 text-sm font-medium text-ink-800 hover:bg-gold-50 hover:text-gold-700 transition-colors">
-                          Shop by Concern
-                          <ChevronRight size={14} />
-                        </button>
-                        {shopBySubmenu === 'concern' && (
-                          <div className="absolute left-full top-0 ml-1">
-                            <div className="w-64 rounded-2xl border border-cream-300 bg-white p-2 shadow-xl animate-scale-in max-h-[70vh] overflow-y-auto no-scrollbar">
-                              {concernItems.map(item => (
-                                <Link
-                                  key={item.to}
-                                  to={item.to}
-                                  onClick={() => { setShopByOpen(false); setShopBySubmenu(null); }}
-                                  className="block rounded-lg px-4 py-2.5 text-sm font-medium text-ink-800 hover:bg-gold-50 hover:text-gold-700 transition-colors"
-                                >
-                                  {item.label}
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div
-                        className="relative"
-                        onMouseEnter={() => setShopBySubmenu('category')}
-                        onMouseLeave={() => setShopBySubmenu(null)}
+                        onMouseEnter={() => setShopSubmenu('category')}
+                        onMouseLeave={() => setShopSubmenu(null)}
                       >
                         <button className="flex w-full items-center justify-between rounded-lg px-4 py-2.5 text-sm font-medium text-ink-800 hover:bg-gold-50 hover:text-gold-700 transition-colors">
                           Shop by Category
                           <ChevronRight size={14} />
                         </button>
-                        {shopBySubmenu === 'category' && (
+                        {shopSubmenu === 'category' && (
                           <div className="absolute left-full top-0 ml-1">
-                            <div className="w-56 rounded-2xl border border-cream-300 bg-white p-2 shadow-xl animate-scale-in">
+                            <div className="w-64 rounded-2xl border border-cream-300 bg-white p-2 shadow-xl animate-scale-in">
                               {categoryItems.map(item => (
                                 <Link
                                   key={item.to}
                                   to={item.to}
-                                  onClick={() => { setShopByOpen(false); setShopBySubmenu(null); }}
+                                  onClick={() => { setShopOpen(false); setShopSubmenu(null); }}
                                   className="block rounded-lg px-4 py-2.5 text-sm font-medium text-ink-800 hover:bg-gold-50 hover:text-gold-700 transition-colors"
                                 >
                                   {item.label}
@@ -199,7 +151,6 @@ export function Header() {
               </Link>
             </nav>
 
-            {/* Right actions */}
             <div className="flex items-center gap-3 md:gap-4">
               <button
                 onClick={() => setSearchOpen(true)}
@@ -225,7 +176,6 @@ export function Header() {
         </div>
       </header>
 
-      {/* Search overlay */}
       {searchOpen && (
         <div className="fixed inset-0 z-[60] bg-ink-950/40 backdrop-blur-sm animate-fade-in" onClick={() => setSearchOpen(false)}>
           <div className="bg-cream-50 px-5 py-6 md:py-8" onClick={e => e.stopPropagation()}>
@@ -235,7 +185,7 @@ export function Header() {
                 <input
                   autoFocus
                   type="text"
-                  placeholder="Search products, categories, goals..."
+                  placeholder="Search products..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className="flex-1 bg-transparent text-lg text-ink-900 placeholder-ink-400 focus:outline-none"
@@ -270,7 +220,6 @@ export function Header() {
         </div>
       )}
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div className="fixed inset-0 z-[60] lg:hidden">
           <div className="absolute inset-0 bg-ink-950/40 backdrop-blur-sm" onClick={closeAll} />
@@ -282,17 +231,16 @@ export function Header() {
               </button>
             </div>
             <nav className="p-5 space-y-1">
-              {/* Shop By expandable */}
               <div>
                 <button
-                  onClick={() => setMobileShopByOpen(o => !o)}
+                  onClick={() => setMobileShopOpen(o => !o)}
                   className="flex w-full items-center justify-between rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
-                  aria-expanded={mobileShopByOpen}
+                  aria-expanded={mobileShopOpen}
                 >
-                  Shop By
-                  <ChevronDown size={18} className={`transition-transform ${mobileShopByOpen ? 'rotate-180' : ''}`} />
+                  Shop
+                  <ChevronDown size={18} className={`transition-transform ${mobileShopOpen ? 'rotate-180' : ''}`} />
                 </button>
-                {mobileShopByOpen && (
+                {mobileShopOpen && (
                   <div className="ml-2 mt-1 space-y-0.5 border-l border-cream-300 pl-3">
                     <Link
                       to="/shop-all"
@@ -301,34 +249,6 @@ export function Header() {
                     >
                       Shop All
                     </Link>
-
-                    {/* Concern sub-section */}
-                    <div>
-                      <button
-                        onClick={() => setMobileConcernOpen(o => !o)}
-                        className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-ink-800 hover:bg-cream-200 transition-colors"
-                        aria-expanded={mobileConcernOpen}
-                      >
-                        Shop by Concern
-                        <ChevronDown size={16} className={`transition-transform ${mobileConcernOpen ? 'rotate-180' : ''}`} />
-                      </button>
-                      {mobileConcernOpen && (
-                        <div className="ml-2 mt-1 space-y-0.5 border-l border-cream-200 pl-3">
-                          {concernItems.map(item => (
-                            <Link
-                              key={item.to}
-                              to={item.to}
-                              onClick={closeAll}
-                              className="block rounded-lg px-4 py-2.5 text-sm text-ink-700 hover:bg-cream-200 hover:text-gold-700 transition-colors"
-                            >
-                              {item.label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Category sub-section */}
                     <div>
                       <button
                         onClick={() => setMobileCategoryOpen(o => !o)}
@@ -393,7 +313,6 @@ export function Header() {
                 FAQs
               </Link>
 
-              {/* Secondary links */}
               <div className="space-y-1 border-t border-cream-300 pt-4 mt-4">
                 <Link to="/best-sellers" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
                   Best Sellers

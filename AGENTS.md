@@ -57,3 +57,15 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - After migration: redeploy `stripe-webhook` and `create-checkout-session` edge functions (TEST only).
 - Customer UI: `/account/orders`, `/account/orders/:orderId`. Admin UI: `/admin/orders`.
 - See `docs/customer-account-phase2.md` and `docs/customer-account-phase2-verification.sql`.
+
+### GitHub source of truth vs Bolt (permanent)
+
+**Authoritative GitHub source branch:** `production-source/my-bare-method-2026`  
+**Immutable pre-launch tag:** `my-bare-method-integrated-prelaunch-v1`
+
+- Bolt-controlled branches (for example `deploy/my-bare-method-integrated-2026`, `release/my-bare-method-final-2026`, and similar Bolt sync targets) are **disposable mirrors only**.
+- Never reconcile a source-of-truth / production-source branch by pulling a Bolt “Start repository” commit into it.
+- Never force-update `production-source/my-bare-method-2026` from Bolt.
+- All code changes originate from Cursor / GitHub source branches (`production-source/*`, `source-of-truth/*`, feature branches).
+- Bolt must never be treated as authoritative Git history.
+- Existing release tags (`my-bare-method-integrated-prelaunch-v1`, `customer-account-phase*-v1`, `deploy-pre-account-*`) are **immutable rollback points** — do not move or recreate them.

@@ -54,9 +54,9 @@ const howItWorksSteps = [
 
 
 const faqs = [
-  { q: 'Do I need a membership to purchase?', a: 'No. You can make a one-time purchase with no commitment. Memberships offer locked-in pricing, discounts on accessories, and exclusive member benefits.' },
+  { q: 'Do I need a membership to purchase?', a: 'No. You can make a one-time purchase or choose Auto-Refill & Save (10% off eligible wellness products). Active Wellness Members receive our best pricing — 15% off eligible wellness products. Provider care, accessories, shipping, and taxes are never discounted.' },
   { q: 'Is provider approval guaranteed?', a: 'No. Provider review and approval are required for certain products. Purchase does not guarantee approval. If not approved, a full refund is issued.' },
-  { q: 'What is the 3-month commitment?', a: 'Memberships require a 3-month minimum commitment. After that period, you may cancel at any time with 7 days notice before your next billing date.' },
+  { q: 'What is the 3-month commitment?', a: 'Active Wellness Memberships require a 3-month minimum commitment. After that period, you may submit a cancellation request. For Auto-Refill, please submit cancellation requests at least 7 calendar days before your renewal date so we can process them before the next cycle.' },
   { q: 'How is shipping handled?', a: 'Orders ship in plain, discreet packaging. Temperature-controlled shipping is used for products requiring cold chain maintenance.' },
 ];
 
@@ -301,31 +301,29 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ===== MEMBERSHIPS VS ONE-TIME PURCHASE ===== */}
+      {/* ===== PURCHASING OPTIONS ===== */}
       <section className="py-20 md:py-28 bg-ink-900 text-cream-50">
         <div className="container-lux">
           <div className="text-center mb-12">
-            <p className="eyebrow text-gold-300 mb-3">Two ways to shop</p>
+            <p className="eyebrow text-gold-300 mb-3">Three ways to shop</p>
             <h2 className="font-serif text-4xl md:text-5xl text-cream-50 mb-4">Members Save More</h2>
-            <p className="text-lg text-cream-100/70 max-w-xl mx-auto">
-              Lock in your pricing with a membership, or purchase flexibly with no commitment.
+            <p className="text-lg text-cream-100/70 max-w-2xl mx-auto">
+              Active Wellness Members receive our best pricing, exclusive savings, and convenient ongoing wellness support.
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
-            {/* Memberships */}
+          <div className="grid gap-6 lg:grid-cols-3 max-w-5xl mx-auto">
             <div className="relative rounded-2xl border border-gold-400/40 bg-ink-800/50 p-8">
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold-400 px-4 py-1 text-xs font-semibold text-ink-900 whitespace-nowrap">
-                Recommended • Best Value
+                BEST VALUE
               </span>
-              <h3 className="font-serif text-2xl text-cream-50 mb-2">Become a Member</h3>
-              <p className="text-sm text-cream-100/60 mb-6">Locked-in monthly pricing with exclusive benefits.</p>
+              <h3 className="font-serif text-2xl text-cream-50 mb-2">Active Wellness Membership</h3>
+              <p className="text-sm text-gold-300 mb-4 font-medium">Members Save 15%</p>
               <ul className="space-y-3 mb-8">
                 {[
-                  'Monthly recurring fulfillment',
-                  '3-month minimum commitment',
-                  'Locked pricing while active',
-                  'Discount on accessories',
-                  'Exclusive member pricing',
+                  'Lowest pricing on eligible wellness products',
+                  'Locked membership pricing',
+                  'Priority access to new products',
+                  'Convenient monthly wellness',
                   'Provider-guided care',
                 ].map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-cream-100/80">
@@ -342,17 +340,36 @@ export function HomePage() {
                   </div>
                 ))}
               </div>
-              <Link to="/memberships" className="btn-primary w-full">Explore Memberships <ArrowRight size={16} /></Link>
+              <Link to="/memberships" className="btn-primary w-full">Become a Member <ArrowRight size={16} /></Link>
             </div>
 
-            {/* One-Time Purchase */}
-            <div className="rounded-2xl border border-cream-100/20 bg-ink-800/30 p-8">
-              <h3 className="font-serif text-2xl text-cream-50 mb-2">Shop Without a Membership</h3>
-              <p className="text-sm text-cream-100/60 mb-6">No membership required. Purchase on your terms.</p>
+            <div className="rounded-2xl border border-cream-100/20 bg-ink-800/40 p-8">
+              <h3 className="font-serif text-2xl text-cream-50 mb-2">Auto-Refill & Save</h3>
+              <p className="text-sm text-cream-100/70 mb-4 font-medium">Save 10%</p>
               <ul className="space-y-3 mb-8">
                 {[
-                  'One-time purchases',
-                  'No commitment',
+                  '10% off eligible wellness products',
+                  'Monthly automatic deliveries',
+                  'Easy subscription management',
+                  'No membership required',
+                ].map(f => (
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-cream-100/80">
+                    <Check size={16} className="flex-shrink-0 mt-0.5 text-gold-400" />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link to="/shop-all" className="btn-outline w-full border-cream-100/30 text-cream-50 hover:bg-cream-50 hover:text-ink-900">
+                Shop Auto-Refill <ArrowRight size={16} />
+              </Link>
+            </div>
+
+            <div className="rounded-2xl border border-cream-100/20 bg-ink-800/30 p-8">
+              <h3 className="font-serif text-2xl text-cream-50 mb-2">One-Time Purchase</h3>
+              <p className="text-sm text-cream-100/60 mb-4">Buy once · standard pricing</p>
+              <ul className="space-y-3 mb-8">
+                {[
+                  'No recurring commitment',
                   'Order or reorder anytime',
                   'Standard pricing',
                   'Provider approval when applicable',
@@ -363,8 +380,8 @@ export function HomePage() {
                   </li>
                 ))}
               </ul>
-              <Link to="/shop" className="btn-outline w-full border-cream-100/30 text-cream-50 hover:bg-cream-50 hover:text-ink-900">
-                Shop Without a Membership <ArrowRight size={16} />
+              <Link to="/shop-all" className="btn-outline w-full border-cream-100/30 text-cream-50 hover:bg-cream-50 hover:text-ink-900">
+                Buy Once <ArrowRight size={16} />
               </Link>
             </div>
           </div>

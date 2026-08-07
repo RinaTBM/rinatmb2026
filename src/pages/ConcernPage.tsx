@@ -87,7 +87,7 @@ export function ConcernPage({ concernId }: { concernId: string }) {
                     ))}
                   </ul>
                   <button
-                    onClick={() => addItem({ productId: m.checkoutProductId || m.id, slug: m.slug, name: m.displayName, price: m.monthlyPrice, image: m.image, subscription: true, section: 'membership', requiresIntake: true, isMembership: true, billingFrequency: 'monthly' })}
+                    onClick={() => addItem({ productId: m.checkoutProductId || m.id, slug: m.slug, name: m.displayName, price: m.monthlyPrice, standardPrice: m.monthlyPrice, image: m.image, subscription: true, section: 'membership', requiresIntake: true, isMembership: true, billingFrequency: 'monthly', purchaseType: 'membership_program', discountPercent: 0, appliedDiscount: 'none' })}
                     className={`btn-primary w-full ${m.highlighted ? '' : 'btn-outline'}`}
                   >
                     Join {m.displayName.split(' ')[0]} <ArrowRight size={16} />

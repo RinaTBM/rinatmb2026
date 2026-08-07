@@ -99,6 +99,7 @@ export function CheckoutPage() {
             appliedDiscount: i.appliedDiscount ?? 'none',
             productName: i.name,
             variantLabel: i.variantLabel,
+            section: i.section,
           })),
         }),
       });

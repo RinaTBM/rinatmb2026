@@ -24,6 +24,7 @@ const faqs = [
 const comparisonRows: { feature: string; sema: string | boolean; tirz: string | boolean; onetime: string | boolean }[] = [
   { feature: 'Monthly price', sema: '$199', tirz: '$249', onetime: 'Varies by selected product' },
   { feature: '15% off eligible wellness products', sema: true, tirz: true, onetime: false },
+  { feature: '15% off accessories', sema: true, tirz: true, onetime: false },
   { feature: 'Included program', sema: 'Eligible included Semaglutide formulations', tirz: 'Eligible formulations through 25mg/2mg per mL, 2mL', onetime: 'Selected purchased formulation' },
   { feature: 'Locked continuous-member rate', sema: true, tirz: true, onetime: false },
   { feature: 'Provider review required', sema: true, tirz: true, onetime: 'Provider-directed when applicable' },
@@ -78,7 +79,7 @@ export function MembershipsPage() {
             included program.
           </p>
           <p className="text-base text-gold-700 font-medium">
-            Members receive our best available pricing — save 15% on eligible wellness products.
+            Active Wellness Members save 15% on eligible wellness products and accessories.
           </p>
         </div>
       </section>
@@ -88,12 +89,12 @@ export function MembershipsPage() {
         <div className="container-lux max-w-4xl">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              'Lowest Pricing',
-              'Save 15% on Eligible Wellness Products',
-              'Locked Membership Pricing',
-              'Priority Access to New Products',
-              'Convenient Monthly Wellness',
-              'Provider-Guided Care',
+              'Flat-rate membership pricing',
+              'Save 15% on eligible wellness products',
+              'Save 15% on accessories',
+              'Priority access to new wellness products',
+              'Convenient ongoing wellness support',
+              'Provider-guided care',
             ].map(benefit => (
               <div key={benefit} className="flex items-center gap-2 rounded-xl border border-gold-200 bg-gold-50/60 px-4 py-3 text-sm text-ink-800">
                 <Check size={16} className="text-gold-600 shrink-0" />

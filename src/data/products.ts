@@ -368,8 +368,13 @@ function mk(seed: ProductSeed): Product {
   // Future products default Auto-Refill OFF until manually approved.
   const autoRefillEligible =
     seed.autoRefillEligible ?? (!excludedFromDiscounts && status === 'active');
+  // Accessories: eligible for Active Wellness Member 15% by default (except kits/bundles).
+  // Wellness products: eligible unless excluded. Semaglutide/Tirzepatide set false explicitly.
   const memberPricingEligible =
-    seed.memberPricingEligible ?? (!excludedFromDiscounts && status === 'active');
+    seed.memberPricingEligible ??
+    (seed.category === 'accessories'
+      ? !(seed.slug.includes('kit') || seed.slug.includes('bundle') || !!seed.slug.match(/starter/))
+      : (!excludedFromDiscounts && status === 'active'));
   return {
     id: seed.id,
     slug: seed.slug,
@@ -762,6 +767,8 @@ export const products: Product[] = [
     variants: [{ dosageForm: 'Accessory', strength: 'Bundle', size: '1 kit', price: 119 }],
     providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
     bestSeller: true,
+    // Already-discounted bundle — member accessory 15% stays OFF by default.
+    memberPricingEligible: false,
   }),
   mk({
     id: 'a2',
@@ -1059,14 +1066,15 @@ export interface Membership {
 }
 
 const SHARED_MEMBERSHIP_BENEFITS = [
-  'Lowest pricing — members save 15% on eligible wellness products',
+  'Flat-rate membership pricing for your weight-management program',
   'Locked membership pricing while continuously enrolled',
-  'Priority access to new products',
-  'Convenient monthly wellness when prescribed',
+  'Save 15% on other eligible wellness products',
+  'Save 15% on accessories',
+  'Priority access to new wellness products',
+  'Convenient ongoing wellness support',
   'Provider-guided care with licensed-provider eligibility review',
   'Routine renewal questionnaire or progress check-in',
   'Refill and pharmacy coordination',
-  'Members receive our best available pricing',
 ];
 
 const sharedTerms = (initialTermMonths: number) => [
@@ -1106,9 +1114,9 @@ export const memberships: Membership[] = [
     secondaryValueStatement:
       'Your membership price stays the same as your provider adjusts your eligible treatment within the included program.',
     benefits: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
       'Provider-directed formulation or strength adjustments within the included program',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
     ],
     exclusions: [],
     termsSummary: sharedTerms(3),
@@ -1131,9 +1139,9 @@ export const memberships: Membership[] = [
     description:
       'A provider-guided Semaglutide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program while you remain continuously enrolled.',
     features: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
       'Provider-directed formulation or strength adjustments within the included program',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
     ],
   },
   {
@@ -1163,9 +1171,9 @@ export const memberships: Membership[] = [
     secondaryValueStatement:
       'Your membership price stays the same as your provider adjusts your eligible treatment within the included program maximum.',
     benefits: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
       'Provider-directed formulation or strength adjustments within the included program maximum',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
     ],
     exclusions: ['Formulations above 25mg/2mg per mL, 2mL (including 30mg/2mg per mL, 2mL) are not part of this membership.'],
     termsSummary: [
@@ -1196,9 +1204,9 @@ export const memberships: Membership[] = [
     description:
       'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 25mg/2mg per mL, 2mL while you remain continuously enrolled.',
     features: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
       'Provider-directed formulation or strength adjustments within the included program maximum',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
     ],
   },
   // Retained but hidden (preserved, not deleted): non-weight wellness membership.

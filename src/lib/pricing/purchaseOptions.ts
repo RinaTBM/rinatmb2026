@@ -70,6 +70,10 @@ export function isExcludedFromDiscounts(
 export function isMemberPricingEligible(
   product: Pick<Product, 'category' | 'memberPricingEligible' | 'excludedFromDiscounts'>,
 ): boolean {
+  // Provider care never receives automatic member % discounts.
+  if (product.category === 'provider-care') return false;
+  // Accessories use the dedicated accessory member-discount path (not wellness catalog %).
+  if (product.category === 'accessories') return false;
   if (isExcludedFromDiscounts(product)) return false;
   return product.memberPricingEligible !== false;
 }

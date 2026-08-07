@@ -54,7 +54,7 @@ const howItWorksSteps = [
 
 
 const faqs = [
-  { q: 'Do I need a membership to purchase?', a: 'No. You can make a one-time purchase or choose Auto-Refill & Save (10% off eligible wellness products). Active Wellness Members receive our best pricing — 15% off eligible wellness products. Provider care, accessories, shipping, and taxes are never discounted.' },
+  { q: 'Do I need a membership to purchase?', a: 'No. You can make a one-time purchase or choose Auto-Refill & Save (10% off eligible wellness products). Active Wellness Members save 15% on eligible wellness products and accessories. Provider care, shipping, and taxes are never discounted. Already-discounted accessory bundles do not automatically receive an additional member discount.' },
   { q: 'Is provider approval guaranteed?', a: 'No. Provider review and approval are required for certain products. Purchase does not guarantee approval. If not approved, a full refund is issued.' },
   { q: 'What is the 3-month commitment?', a: 'Active Wellness Memberships require a 3-month minimum commitment. After that period, you may submit a cancellation request. For Auto-Refill, please submit cancellation requests at least 7 calendar days before your renewal date so we can process them before the next cycle.' },
   { q: 'How is shipping handled?', a: 'Orders ship in plain, discreet packaging. Temperature-controlled shipping is used for products requiring cold chain maintenance.' },
@@ -320,7 +320,7 @@ export function HomePage() {
               <p className="text-sm text-gold-300 mb-4 font-medium">Members Save 15%</p>
               <ul className="space-y-3 mb-8">
                 {[
-                  'Lowest pricing on eligible wellness products',
+                  'Save 15% on eligible wellness products and accessories',
                   'Locked membership pricing',
                   'Priority access to new products',
                   'Convenient monthly wellness',

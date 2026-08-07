@@ -18,3 +18,4 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 
 - Stripe checkout (the final "Place Order" button on `/checkout`) calls a Supabase Edge Function using `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (read from `import.meta.env`). Without a `.env` providing these, browsing/adding to cart/filling the checkout form all still work; only the final redirect-to-Stripe step will fail. Set those vars in a `.env` file only if you need to exercise real Stripe checkout.
 - Node 22 is used here and works with Vite 5.
+- Customer account portal (`/account/*`) uses the same browser Supabase anon client as checkout. Without Supabase env vars, auth screens render an “unavailable until configured” state; admin Google auth remains separate (`/admin/*`, `admins` / `is_admin()`). Do not apply `supabase/migrations/20260807210000_customer_profiles.sql` from Cursor — see `docs/customer-account-phase1.md`.

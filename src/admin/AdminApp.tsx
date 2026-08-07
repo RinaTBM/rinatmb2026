@@ -4,23 +4,6 @@ import { useAdminSession, readOAuthError } from '@/admin/useAdminSession';
 import { resolveAdminAccess, shouldRedirectToLogin, canRenderAdmin } from '@/lib/auth/adminAccess';
 import { supabase } from '@/lib/supabaseClient';
 import { BRAND_LOGO_SRC } from '@/components/BrandLogo';
-import {
-  catalogProducts, catalogMemberships, catalogCategories, formatCents,
-  type CatalogProduct, type CatalogMembership,
-} from '@/lib/catalog/catalog';
-import { validateCatalog } from '@/lib/catalog/validate';
-import { buildSyncPlan, summarizePlan, emptyState } from '@/lib/catalog/syncPlan';
-import {
-  loadPurchaseDiscountSettings,
-  savePurchaseDiscountSettings,
-  type PurchaseDiscountSettings,
-} from '@/lib/pricing/settings';
-import {
-  listCancellationRequests,
-  listManagedSubscriptions,
-  updateCancellationStatus,
-  type CancellationRequest,
-} from '@/lib/account/subscriptions';
 
 const LOGO = BRAND_LOGO_SRC;
 
@@ -128,6 +111,12 @@ function AdminAuthCallback({ session }: { session: Session }) {
   // loading / unconfigured
   return <div className="min-h-screen grid place-items-center text-ink-500">Completing sign-in…</div>;
 }
+import {
+  catalogProducts, catalogMemberships, catalogCategories, formatCents,
+  type CatalogProduct, type CatalogMembership,
+} from '@/lib/catalog/catalog';
+import { validateCatalog } from '@/lib/catalog/validate';
+import { buildSyncPlan, summarizePlan, emptyState } from '@/lib/catalog/syncPlan';
 
 const SECTIONS = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -135,8 +124,6 @@ const SECTIONS = [
   { id: 'memberships', label: 'Memberships' },
   { id: 'categories', label: 'Categories' },
   { id: 'future', label: 'Future Releases' },
-  { id: 'pricing', label: 'Purchase Pricing' },
-  { id: 'cancellations', label: 'Cancellation Requests' },
   { id: 'sync', label: 'Stripe Sync' },
   { id: 'sync-history', label: 'Sync History' },
   { id: 'audit', label: 'Audit History' },
@@ -158,24 +145,17 @@ function Dashboard() {
   const visible = catalogProducts.filter(p => p.isVisible && p.status === 'active');
   const future = catalogProducts.filter(p => p.status === 'future');
   const mems = catalogMemberships.filter(m => m.status === 'active' && m.isVisible);
-  const localSubs = listManagedSubscriptions();
-  const pendingCancels = listCancellationRequests().filter(c => c.status === 'submitted' || c.status === 'under_review');
-  const activeMembers = localSubs.filter(s => s.kind === 'active_wellness_membership' && s.status === 'active').length;
-  const autoRefills = localSubs.filter(s => s.kind === 'auto_refill' && s.status === 'active').length;
   const stats = [
     { label: 'Active products', value: visible.length },
     { label: 'Future releases', value: future.length },
-    { label: 'Catalog memberships', value: mems.length },
-    { label: 'Active Wellness Members', value: activeMembers },
-    { label: 'Auto-Refill subscriptions', value: autoRefills },
-    { label: 'Pending cancellations', value: pendingCancels.length },
-    { label: 'Member-pricing eligible', value: visible.filter(p => p.memberPricingEligible).length },
-    { label: 'Auto-refill eligible', value: visible.filter(p => p.autoRefillEligible).length },
+    { label: 'Active memberships', value: mems.length },
+    { label: 'Categories', value: catalogCategories().length },
+    { label: 'Total variants', value: visible.reduce((n, p) => n + p.variants.length, 0) },
   ];
   return (
     <div>
       <h1 className="font-serif text-3xl text-ink-900 mb-6">Dashboard</h1>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {stats.map(s => (
           <div key={s.label} className="card-lux p-5">
             <p className="text-3xl font-serif text-ink-900">{s.value}</p>
@@ -183,10 +163,6 @@ function Dashboard() {
           </div>
         ))}
       </div>
-      <p className="mt-4 text-xs text-ink-400">
-        Membership / Auto-Refill counts reflect local portal activity until Stripe webhooks write authoritative rows.
-        Discounts Applied tracking is available once checkout metadata is persisted.
-      </p>
     </div>
   );
 }
@@ -250,9 +226,6 @@ function ProductEditor({ slug, canWrite }: { slug: string; canWrite: boolean }) 
       display_name: draft.displayName, category: draft.category, short_description: draft.shortDescription,
       long_description: draft.longDescription, image_url: draft.imageUrl, image_alt: draft.imageAlt,
       is_visible: draft.isVisible, status: draft.status,
-      auto_refill_eligible: draft.autoRefillEligible,
-      member_pricing_eligible: draft.memberPricingEligible,
-      excluded_from_discounts: draft.excludedFromDiscounts,
     }).eq('slug', draft.slug);
     setSaveMsg(error ? `Error: ${error.message}` : 'Saved to catalog. Preview Stripe Sync to propagate pricing.');
   };
@@ -278,23 +251,6 @@ function ProductEditor({ slug, canWrite }: { slug: string; canWrite: boolean }) 
             <select className="input-lux !py-1 !w-auto" value={draft.status} onChange={e => set({ status: e.target.value as 'active' | 'future' })}>
               <option value="active">active</option><option value="future">future</option>
             </select></label>
-        </div>
-
-        <div className="rounded-xl border border-cream-300 p-4 space-y-2">
-          <p className="text-xs uppercase tracking-wider text-ink-400">Purchase eligibility (configuration only)</p>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={draft.autoRefillEligible} onChange={e => set({ autoRefillEligible: e.target.checked })} />
-            Auto-Refill Eligible
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={draft.memberPricingEligible} onChange={e => set({ memberPricingEligible: e.target.checked })} />
-            Member Pricing Eligible
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={draft.excludedFromDiscounts} onChange={e => set({ excludedFromDiscounts: e.target.checked })} />
-            Excluded From Discounts
-          </label>
-          <p className="text-xs text-ink-400">Future products default Auto-Refill OFF until manually approved. Provider care &amp; accessories stay excluded.</p>
         </div>
 
         <div>
@@ -373,113 +329,6 @@ function Categories() {
           </div>
         ))}
       </div>
-    </div>
-  );
-}
-
-function PurchasePricingSettings() {
-  const [settings, setSettings] = useState<PurchaseDiscountSettings>(() => loadPurchaseDiscountSettings());
-  const [msg, setMsg] = useState<string | null>(null);
-
-  const save = async () => {
-    savePurchaseDiscountSettings(settings);
-    if (supabase) {
-      const { error } = await supabase.from('store_purchase_settings').upsert({
-        id: 'default',
-        member_discount_percent: settings.memberDiscountPercent,
-        auto_refill_discount_percent: settings.autoRefillDiscountPercent,
-        updated_at: new Date().toISOString(),
-      });
-      setMsg(error
-        ? `Saved locally. Supabase note: ${error.message} (apply pending migration if missing table).`
-        : 'Saved locally and to store_purchase_settings.');
-    } else {
-      setMsg('Saved locally (Supabase not connected).');
-    }
-  };
-
-  return (
-    <div className="max-w-xl">
-      <h1 className="font-serif text-3xl text-ink-900 mb-2">Purchase Pricing</h1>
-      <p className="text-sm text-ink-500 mb-6">
-        Configure automatic savings. Discounts never stack. Maximum automatic savings is the member rate.
-        Membership base prices ($199 / $249), provider care, accessories, shipping, and taxes are not edited here.
-      </p>
-      <div className="card-lux p-5 space-y-4">
-        <label className="block">
-          <span className="text-xs uppercase tracking-wider text-ink-400">Member Discount %</span>
-          <input
-            className="input-lux"
-            type="number"
-            min={0}
-            max={100}
-            value={settings.memberDiscountPercent}
-            onChange={e => setSettings(s => ({ ...s, memberDiscountPercent: Number(e.target.value) }))}
-          />
-        </label>
-        <label className="block">
-          <span className="text-xs uppercase tracking-wider text-ink-400">Auto-Refill Discount %</span>
-          <input
-            className="input-lux"
-            type="number"
-            min={0}
-            max={100}
-            value={settings.autoRefillDiscountPercent}
-            onChange={e => setSettings(s => ({ ...s, autoRefillDiscountPercent: Number(e.target.value) }))}
-          />
-        </label>
-        <button className="btn-primary" onClick={save}>Save configuration</button>
-        {msg && <p className="text-sm text-ink-600">{msg}</p>}
-      </div>
-    </div>
-  );
-}
-
-function CancellationQueue() {
-  const [rows, setRows] = useState<CancellationRequest[]>(() => listCancellationRequests());
-  const refresh = () => setRows(listCancellationRequests());
-
-  return (
-    <div>
-      <h1 className="font-serif text-3xl text-ink-900 mb-2">Cancellation Requests</h1>
-      <p className="text-sm text-ink-500 mb-6">
-        Customers submit requests only. Admins review and process Stripe cancellations manually in Test Mode.
-        Do not auto-reject for &lt;7 day notice — the 7-day window is a communication policy, not a Stripe rule.
-      </p>
-      <button className="btn-outline mb-4" onClick={refresh}>Refresh</button>
-      {rows.length === 0 ? (
-        <p className="text-ink-500">No cancellation requests yet.</p>
-      ) : (
-        <div className="space-y-3">
-          {rows.map(r => (
-            <div key={r.id} className="card-lux p-4">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <p className="font-medium text-ink-900">{r.subscriptionName}</p>
-                  <p className="text-xs text-ink-500">{r.kind} · {r.customerEmail}</p>
-                  <p className="text-xs text-ink-400">Submitted {new Date(r.submittedAt).toLocaleString()}</p>
-                  {r.customerNote && <p className="text-sm text-ink-600 mt-2">{r.customerNote}</p>}
-                </div>
-                <div className="flex flex-col gap-2">
-                  <select
-                    className="input-lux !py-1 !w-auto text-sm"
-                    value={r.status}
-                    onChange={e => {
-                      updateCancellationStatus(r.id, e.target.value as CancellationRequest['status']);
-                      refresh();
-                    }}
-                  >
-                    <option value="submitted">Submitted</option>
-                    <option value="under_review">Under Review</option>
-                    <option value="processed">Processed</option>
-                    <option value="cancellation_confirmed">Cancellation Confirmed</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
@@ -619,8 +468,6 @@ export function AdminApp({ route }: { route: Route }) {
         {section === 'memberships' && <Memberships />}
         {section === 'categories' && <Categories />}
         {section === 'future' && <FutureReleases />}
-        {section === 'pricing' && <PurchasePricingSettings />}
-        {section === 'cancellations' && <CancellationQueue />}
         {section === 'sync' && <StripeSync canWrite={canWrite} accessToken={session.accessToken} />}
         {section === 'sync-history' && <div><h1 className="font-serif text-3xl text-ink-900 mb-6">Sync History</h1><LogTable table="stripe_sync_log" columns={['created_at', 'environment', 'entity_type', 'entity_id', 'operation', 'stripe_object_id', 'status']} canWrite={canWrite} /></div>}
         {section === 'audit' && <div><h1 className="font-serif text-3xl text-ink-900 mb-6">Audit History</h1><LogTable table="admin_audit_log" columns={['created_at', 'admin_user_id', 'action', 'entity_type', 'entity_id']} canWrite={canWrite} /></div>}

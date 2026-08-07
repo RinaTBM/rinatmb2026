@@ -82,12 +82,6 @@ export interface Product {
   // --- Commerce ---
   variants: ProductVariant[];
   startingPrice: number;
-  /** Eligible for Auto-Refill & Save (10%). Future products default OFF until approved. */
-  autoRefillEligible: boolean;
-  /** Eligible for Active Wellness Member pricing (15%). */
-  memberPricingEligible: boolean;
-  /** Hard exclusion from all automatic discounts (provider care, accessories, etc.). */
-  excludedFromDiscounts: boolean;
 
   // --- Lifecycle / campaign system ---
   status: ProductStatus;
@@ -350,12 +344,7 @@ interface ProductSeed {
   plannedLaunchDate?: string;
   internalNotes?: string;
   needsDedicatedImage?: boolean;
-  autoRefillEligible?: boolean;
-  memberPricingEligible?: boolean;
-  excludedFromDiscounts?: boolean;
 }
-
-const DISCOUNT_EXCLUDED_CATEGORIES: ReadonlySet<Category> = new Set(['provider-care', 'accessories']);
 
 function mk(seed: ProductSeed): Product {
   const variants = buildVariants(seed.slug, seed.variants);
@@ -363,13 +352,6 @@ function mk(seed: ProductSeed): Product {
   const forms = Array.from(new Set(variants.map(v => v.dosageForm))) as DosageForm[];
   const status = seed.status ?? 'active';
   const isVisible = seed.isVisible ?? (status === 'active');
-  const excludedFromDiscounts =
-    seed.excludedFromDiscounts ?? DISCOUNT_EXCLUDED_CATEGORIES.has(seed.category);
-  // Future products default Auto-Refill OFF until manually approved.
-  const autoRefillEligible =
-    seed.autoRefillEligible ?? (!excludedFromDiscounts && status === 'active');
-  const memberPricingEligible =
-    seed.memberPricingEligible ?? (!excludedFromDiscounts && status === 'active');
   return {
     id: seed.id,
     slug: seed.slug,
@@ -384,9 +366,6 @@ function mk(seed: ProductSeed): Product {
     imageAlt: seed.imageAlt,
     variants,
     startingPrice: Number.isFinite(startingPrice) ? startingPrice : 0,
-    autoRefillEligible,
-    memberPricingEligible,
-    excludedFromDiscounts,
     status,
     isVisible,
     launchPhase: seed.launchPhase,
@@ -1076,14 +1055,14 @@ export interface Membership {
 }
 
 const SHARED_MEMBERSHIP_BENEFITS = [
-  'Lowest pricing — members save 15% on eligible wellness products',
-  'Locked membership pricing while continuously enrolled',
-  'Priority access to new products',
-  'Convenient monthly wellness when prescribed',
-  'Provider-guided care with licensed-provider eligibility review',
+  'Monthly recurring fulfillment when prescribed',
+  'Locked membership rate while continuously enrolled',
+  'Licensed-provider eligibility review',
   'Routine renewal questionnaire or progress check-in',
-  'Refill and pharmacy coordination',
-  'Members receive our best available pricing',
+  'Refill coordination',
+  'Pharmacy coordination',
+  'Access to member pricing',
+  'Early access to future wellness launches',
 ];
 
 const sharedTerms = (initialTermMonths: number) => [

@@ -2,12 +2,9 @@ import { useState } from 'react';
 import { Link } from '@/router';
 import { ArrowLeft, Lock, Check, ShieldCheck, Truck, Ban, RefreshCw, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-import { useMember } from '@/context/MemberContext';
-import { upsertManagedSubscription } from '@/lib/account/subscriptions';
 
 export function CheckoutPage() {
-  const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
-  const { isActiveMember, activateMembership } = useMember();
+  const { items, subtotal, clearCart } = useCart();
   const [step, setStep] = useState<'info' | 'payment' | 'complete'>('info');
   const [acknowledged, setAcknowledged] = useState<{ terms: boolean; privacy: boolean; refund: boolean; address: boolean }>({ terms: false, privacy: false, refund: false, address: false });
   const allAccepted = acknowledged.terms && acknowledged.privacy && acknowledged.refund && acknowledged.address;
@@ -25,53 +22,6 @@ export function CheckoutPage() {
 
   const update = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
 
-  const recordLocalSubscriptions = () => {
-    const renewal = new Date();
-    renewal.setMonth(renewal.getMonth() + 1);
-    const renewalDate = renewal.toISOString();
-
-    for (const item of items) {
-      if (item.isMembership || item.purchaseType === 'membership_program') {
-        const program = item.slug.includes('tirzepatide') ? 'tirzepatide' : 'semaglutide';
-        activateMembership({
-          program,
-          checkoutProductId: (item.productId === 'm2' ? 'm2' : 'm1'),
-          displayName: item.name,
-          renewalDate,
-        });
-        upsertManagedSubscription({
-          id: `mem_${item.productId}`,
-          kind: 'active_wellness_membership',
-          name: item.name,
-          productId: item.productId,
-          slug: item.slug,
-          unitPrice: item.price,
-          standardPrice: item.standardPrice ?? item.price,
-          discountPercent: 0,
-          billingFrequency: 'monthly',
-          renewalDate,
-          status: 'active',
-          createdAt: new Date().toISOString(),
-        });
-      } else if (item.purchaseType === 'auto_refill' || item.subscription) {
-        upsertManagedSubscription({
-          id: `refill_${item.key}`,
-          kind: 'auto_refill',
-          name: item.name,
-          productId: item.productId,
-          slug: item.slug,
-          unitPrice: item.price,
-          standardPrice: item.standardPrice ?? item.price,
-          discountPercent: item.discountPercent ?? 0,
-          billingFrequency: 'monthly',
-          renewalDate,
-          status: 'active',
-          createdAt: new Date().toISOString(),
-        });
-      }
-    }
-  };
-
   const handleStripeCheckout = async () => {
     setLoading(true);
     setError(null);
@@ -87,18 +37,10 @@ export function CheckoutPage() {
           Authorization: `Bearer ${anonKey}`,
         },
         body: JSON.stringify({
-          isActiveMember,
           items: items.map(i => ({
             productId: i.productId,
             quantity: i.quantity,
             subscription: i.subscription,
-            purchaseType: i.purchaseType ?? (i.isMembership ? 'membership_program' : i.subscription ? 'auto_refill' : 'one_time'),
-            unitAmountCents: Math.round(i.price * 100),
-            standardPriceCents: Math.round((i.standardPrice ?? i.price) * 100),
-            discountPercent: i.discountPercent ?? 0,
-            appliedDiscount: i.appliedDiscount ?? 'none',
-            productName: i.name,
-            variantLabel: i.variantLabel,
           })),
         }),
       });
@@ -110,7 +52,6 @@ export function CheckoutPage() {
 
       const data = await res.json();
       if (data.url) {
-        recordLocalSubscriptions();
         clearCart();
         window.location.href = data.url;
       } else {
@@ -172,6 +113,7 @@ export function CheckoutPage() {
           <ArrowLeft size={14} /> Continue Shopping
         </Link>
 
+        {/* Steps */}
         <div className="mb-8 flex items-center gap-4 text-sm">
           <span className={`flex items-center gap-2 ${step === 'info' ? 'text-ink-900 font-medium' : 'text-ink-400'}`}>
             <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs ${step === 'info' ? 'bg-ink-900 text-cream-50' : 'bg-cream-200'}`}>1</span>
@@ -184,13 +126,8 @@ export function CheckoutPage() {
           </span>
         </div>
 
-        {isActiveMember && (
-          <div className="mb-6 rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-            Active Wellness Member pricing applied automatically on eligible products. Discounts never stack.
-          </div>
-        )}
-
         <div className="grid gap-8 lg:grid-cols-[1fr_400px]">
+          {/* Form */}
           <div>
             {step === 'info' && (
               <div className="space-y-6">
@@ -216,6 +153,7 @@ export function CheckoutPage() {
 
             {step === 'payment' && (
               <div className="space-y-6">
+                {/* Shipping address confirmation */}
                 <div>
                   <h2 className="font-serif text-2xl text-ink-900 mb-4">Confirm Shipping Address</h2>
                   <div className="rounded-xl border border-cream-300 bg-white p-5">
@@ -226,7 +164,11 @@ export function CheckoutPage() {
                         <p className="text-sm text-ink-600">{form.address}</p>
                         <p className="text-sm text-ink-600">{form.city}, {form.state} {form.zip}</p>
                         {form.phone && <p className="text-sm text-ink-600">{form.phone}</p>}
-                        <button type="button" onClick={() => setStep('info')} className="mt-2 text-xs text-gold-600 hover:text-gold-700">
+                        <button
+                          type="button"
+                          onClick={() => setStep('info')}
+                          className="mt-2 text-xs text-gold-600 hover:text-gold-700"
+                        >
                           Edit address
                         </button>
                       </div>
@@ -249,12 +191,13 @@ export function CheckoutPage() {
                   </div>
                 </div>
 
+                {/* Payment via Stripe */}
                 <div>
                   <h2 className="font-serif text-2xl text-ink-900 mb-4">Payment</h2>
                   <div className="rounded-xl border border-cream-300 bg-white p-5">
                     <div className="flex items-center gap-3 mb-4">
                       <Lock size={18} className="text-gold-500" />
-                      <p className="text-sm text-ink-600">Secure payment powered by Stripe (Test Mode for discounted / Auto-Refill custom prices)</p>
+                      <p className="text-sm text-ink-600">Secure payment powered by Stripe</p>
                     </div>
                     <p className="text-sm text-ink-500 mb-4">
                       Click "Place Order" to be redirected to Stripe's secure checkout page where you can enter your payment details. Your card information is never stored on our servers.
@@ -272,6 +215,7 @@ export function CheckoutPage() {
                   </div>
                 </div>
 
+                {/* Refund policy summary */}
                 <div className="rounded-xl border border-cream-300 bg-cream-100/50 p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Ban size={16} className="text-ink-600" />
@@ -293,6 +237,7 @@ export function CheckoutPage() {
                   </Link>
                 </div>
 
+                {/* Acknowledgment checkboxes */}
                 <div className="space-y-3">
                   {([
                     { key: 'terms', label: 'Terms & Conditions', href: '/terms' },
@@ -342,76 +287,46 @@ export function CheckoutPage() {
             )}
           </div>
 
+          {/* Order summary */}
           <div className="lg:sticky lg:top-24 lg:self-start">
             <div className="card-lux p-5">
               <h3 className="font-serif text-xl text-ink-900 mb-4">Order Summary</h3>
-              <div className="space-y-3 mb-4 max-h-80 overflow-y-auto">
-                {items.map(item => {
-                  const standard = item.standardPrice ?? item.price;
-                  const savings = Math.max(0, (standard - item.price) * item.quantity);
-                  return (
-                    <div key={item.key} className="flex gap-3">
-                      <div className="relative flex-shrink-0">
-                        <img src={item.image} alt={item.name} className="h-14 w-14 rounded-lg object-cover" />
-                        <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-ink-900 text-[10px] font-medium text-cream-50">{item.quantity}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-ink-900 truncate">{item.name}</p>
-                        {item.isMembership ? (
-                          <>
-                            <p className="text-xs text-gold-600">Active Wellness Membership · billed monthly</p>
-                            <p className="text-xs text-ink-400">3-month initial term · Provider review required</p>
-                          </>
-                        ) : (
-                          <>
-                            {item.variantLabel && <p className="text-xs text-ink-500 truncate">{item.variantLabel}</p>}
-                            <p className="text-xs text-ink-500">
-                              {item.purchaseType === 'auto_refill' ? '○ Auto-Refill & Save' : '○ One-Time Purchase'}
-                              {item.purchaseType === 'auto_refill' ? ' · Monthly' : ''}
-                            </p>
-                            {standard > item.price && (
-                              <p className="text-xs text-ink-400">
-                                Standard ${standard.toFixed(2)}
-                                {savings > 0 ? ` · Savings $${savings.toFixed(2)}` : ''}
-                              </p>
-                            )}
-                            {item.purchaseType === 'auto_refill' && (
-                              <p className="text-xs text-gold-600">Recurring price ${item.price.toFixed(2)}/mo</p>
-                            )}
-                            {item.requiresIntake && <p className="text-xs text-ink-400">Provider review required</p>}
-                          </>
-                        )}
-                      </div>
+              <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
+                {items.map(item => (
+                  <div key={item.key} className="flex gap-3">
+                    <div className="relative flex-shrink-0">
+                      <img src={item.image} alt={item.name} className="h-14 w-14 rounded-lg object-cover" />
+                      <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-ink-900 text-[10px] font-medium text-cream-50">{item.quantity}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-ink-900 truncate">{item.name}</p>
                       {item.isMembership ? (
-                        <span className="text-sm font-medium text-ink-900">${item.price}/mo</span>
-                      ) : item.price === 0 ? (
-                        <span className="text-xs text-ink-500">TBD</span>
+                        <>
+                          <p className="text-xs text-gold-600">Billed monthly · 3-month initial term</p>
+                          <p className="text-xs text-ink-400">Provider review required · Shipping calculated separately</p>
+                        </>
                       ) : (
-                        <span className="text-sm font-medium text-ink-900">
-                          ${(item.price * item.quantity).toFixed(2)}
-                          {item.purchaseType === 'auto_refill' ? '/mo' : ''}
-                        </span>
+                        <>
+                          {item.variantLabel && <p className="text-xs text-ink-500 truncate">{item.variantLabel}</p>}
+                          {item.subscription && <p className="text-xs text-gold-600">Subscription</p>}
+                          {item.requiresIntake && <p className="text-xs text-ink-400">Provider review required</p>}
+                        </>
                       )}
                     </div>
-                  );
-                })}
+                    {item.isMembership ? (
+                      <span className="text-sm font-medium text-ink-900">${item.price}/mo</span>
+                    ) : item.price === 0 ? (
+                      <span className="text-xs text-ink-500">TBD</span>
+                    ) : (
+                      <span className="text-sm font-medium text-ink-900">${(item.price * item.quantity).toFixed(2)}</span>
+                    )}
+                  </div>
+                ))}
               </div>
               <div className="space-y-2 border-t border-cream-300 pt-4 text-sm">
-                {!hasVariablePricing && standardSubtotal > subtotal && (
-                  <div className="flex justify-between text-ink-500">
-                    <span>Standard price</span>
-                    <span>${standardSubtotal.toFixed(2)}</span>
-                  </div>
-                )}
-                {totalSavings > 0 && (
-                  <div className="flex justify-between text-gold-700">
-                    <span>{isActiveMember ? 'Member savings' : 'Savings'}</span>
-                    <span>−${totalSavings.toFixed(2)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `$${subtotal.toFixed(2)}`}</span></div>
+                <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `${subtotal.toFixed(2)}`}</span></div>
                 {!hasVariablePricing && <>
-                  <div className="flex justify-between text-ink-600"><span>Shipping</span><span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span></div>
+                  <div className="flex justify-between text-ink-600"><span>Shipping</span><span>{shipping === 0 ? 'Free' : `${shipping.toFixed(2)}`}</span></div>
                   <div className="flex justify-between text-ink-600"><span>Tax</span><span>${tax.toFixed(2)}</span></div>
                   <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base"><span>Total</span><span>${total.toFixed(2)}</span></div>
                 </>}

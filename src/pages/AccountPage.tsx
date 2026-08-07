@@ -1,17 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from '@/router';
-import {
-  Package, Heart, RefreshCw, Settings, LogOut, Truck, Clock, CheckCircle, Crown, CreditCard,
-} from 'lucide-react';
-import { useMember } from '@/context/MemberContext';
-import {
-  CANCELLATION_POLICY_COPY,
-  listCancellationRequests,
-  listManagedSubscriptions,
-  submitCancellationRequest,
-  type CancellationRequest,
-  type ManagedSubscription,
-} from '@/lib/account/subscriptions';
+import { Package, Heart, RefreshCw, Settings, LogOut, Truck, Clock, CheckCircle } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 const mockOrders = [
   { id: 'MBM-A8K3F2', date: '2026-07-15', status: 'delivered', total: 122.00, items: 2, tracking: '1Z999AA10123456784' },
@@ -25,59 +15,21 @@ const statusConfig = {
   delivered: { label: 'Delivered', icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' },
 };
 
-const cancelStatusLabel: Record<CancellationRequest['status'], string> = {
-  submitted: 'Submitted',
-  under_review: 'Under Review',
-  processed: 'Processed',
-  cancellation_confirmed: 'Cancellation Confirmed',
-};
-
 export function AccountPage() {
-  const member = useMember();
-  const [activeTab, setActiveTab] = useState<'orders' | 'subscriptions' | 'rewards' | 'settings'>('subscriptions');
-  const [subs, setSubs] = useState<ManagedSubscription[]>([]);
-  const [cancels, setCancels] = useState<CancellationRequest[]>([]);
-  const [email, setEmail] = useState('member@mybaremethod.com');
-  const [note, setNote] = useState('');
-  const [message, setMessage] = useState<string | null>(null);
-
-  const refresh = () => {
-    setSubs(listManagedSubscriptions());
-    setCancels(listCancellationRequests());
-  };
-
-  useEffect(() => { refresh(); }, [member.isActiveMember]);
-
-  const memberships = subs.filter(s => s.kind === 'active_wellness_membership');
-  const autoRefills = subs.filter(s => s.kind === 'auto_refill');
-
-  const handleCancel = (subscription: ManagedSubscription) => {
-    submitCancellationRequest({
-      subscription,
-      customerEmail: email,
-      customerNote: note || undefined,
-    });
-    setNote('');
-    setMessage('Cancellation request submitted. An admin will review and process it in Stripe. This does not automatically cancel billing.');
-    refresh();
-  };
+  const { items } = useCart();
+  const [activeTab, setActiveTab] = useState<'orders' | 'subscriptions' | 'rewards' | 'settings'>('orders');
 
   return (
     <div className="bg-cream-50 pt-28 md:pt-32 min-h-screen">
       <div className="container-lux py-8 md:py-12">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="eyebrow mb-2">Welcome back</p>
-            <h1 className="font-serif text-4xl text-ink-900">My Account</h1>
-          </div>
-          {member.isActiveMember && (
-            <div className="rounded-full bg-gold-100 px-4 py-2 text-sm text-gold-800 flex items-center gap-2">
-              <Crown size={16} /> Active Wellness Member · Save 15%
-            </div>
-          )}
+        {/* Header */}
+        <div className="mb-8">
+          <p className="eyebrow mb-2">Welcome back</p>
+          <h1 className="font-serif text-4xl text-ink-900">My Account</h1>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
+          {/* Sidebar */}
           <aside>
             <nav className="space-y-1">
               {([
@@ -102,6 +54,7 @@ export function AccountPage() {
             </nav>
           </aside>
 
+          {/* Content */}
           <div>
             {activeTab === 'orders' && (
               <div>
@@ -137,144 +90,16 @@ export function AccountPage() {
             )}
 
             {activeTab === 'subscriptions' && (
-              <div className="space-y-8">
-                <div>
-                  <h2 className="font-serif text-2xl text-ink-900 mb-2">Active Wellness Membership</h2>
-                  <p className="text-sm text-ink-500 mb-4">Members receive our best available pricing on eligible wellness products.</p>
-                  {memberships.length === 0 && !member.isActiveMember ? (
-                    <div className="card-lux p-6 text-center">
-                      <Crown size={28} className="mx-auto text-ink-300 mb-3" />
-                      <p className="text-ink-500 mb-4">You do not have an Active Wellness Membership.</p>
-                      <Link to="/memberships" className="btn-primary">Become a Member</Link>
-                      <div className="mt-4 pt-4 border-t border-cream-200">
-                        <button
-                          type="button"
-                          className="text-xs text-gold-700 underline"
-                          onClick={() => member.setDemoActiveMember(true, 'tirzepatide')}
-                        >
-                          Demo: simulate active Tirzepatide membership (for pricing tests)
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="card-lux p-5 space-y-3">
-                      <div className="flex flex-wrap items-start justify-between gap-3">
-                        <div>
-                          <p className="font-medium text-ink-900">{member.displayName ?? memberships[0]?.name}</p>
-                          <p className="text-sm text-gold-700">Status: Active · Preferred Member Pricing (15%)</p>
-                          <p className="text-sm text-ink-500">
-                            Renewal date:{' '}
-                            {new Date(member.renewalDate ?? memberships[0]?.renewalDate ?? Date.now()).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">Active</span>
-                      </div>
-                      <p className="text-xs text-ink-500">Customers cannot modify medication strength or provider-directed treatment from this portal.</p>
-                      <div className="flex flex-wrap gap-2">
-                        <button type="button" className="btn-outline text-xs inline-flex items-center gap-1">
-                          <CreditCard size={14} /> Update Payment Method
-                        </button>
-                        {(memberships[0] || member.isActiveMember) && (
-                          <button
-                            type="button"
-                            className="btn-ghost text-xs"
-                            onClick={() => {
-                              const sub = memberships[0] ?? {
-                                id: `mem_${member.checkoutProductId ?? 'm2'}`,
-                                kind: 'active_wellness_membership' as const,
-                                name: member.displayName ?? 'Active Wellness Membership',
-                                productId: member.checkoutProductId ?? 'm2',
-                                slug: member.program === 'semaglutide' ? 'semaglutide-membership' : 'tirzepatide-membership',
-                                unitPrice: member.program === 'semaglutide' ? 199 : 249,
-                                standardPrice: member.program === 'semaglutide' ? 199 : 249,
-                                discountPercent: 0,
-                                billingFrequency: 'monthly' as const,
-                                renewalDate: member.renewalDate ?? new Date().toISOString(),
-                                status: 'active' as const,
-                                createdAt: new Date().toISOString(),
-                              };
-                              handleCancel(sub);
-                            }}
-                          >
-                            Submit Cancellation Request
-                          </button>
-                        )}
-                        <button type="button" className="btn-ghost text-xs" onClick={() => member.setDemoActiveMember(false)}>
-                          Clear demo membership
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <h2 className="font-serif text-2xl text-ink-900 mb-2">Auto-Refill Subscriptions</h2>
-                  {autoRefills.length === 0 ? (
-                    <div className="card-lux p-6 text-center">
-                      <RefreshCw size={28} className="mx-auto text-ink-300 mb-3" />
-                      <p className="text-ink-500 mb-4">You have no Auto-Refill subscriptions.</p>
-                      <Link to="/shop-all" className="btn-primary">Shop Auto-Refill & Save</Link>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {autoRefills.map(sub => (
-                        <div key={sub.id} className="card-lux p-5">
-                          <div className="flex flex-wrap items-start justify-between gap-3">
-                            <div>
-                              <p className="font-medium text-ink-900">{sub.name}</p>
-                              <p className="text-sm text-ink-500">
-                                ${sub.unitPrice.toFixed(2)}/mo
-                                {sub.discountPercent > 0 ? ` · Save ${sub.discountPercent}%` : ''}
-                              </p>
-                              <p className="text-sm text-ink-500">Renewal: {new Date(sub.renewalDate).toLocaleDateString()}</p>
-                              <p className="text-xs text-ink-400 mt-1">Status: {sub.status.replace('_', ' ')}</p>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                              <button type="button" className="btn-outline text-xs inline-flex items-center gap-1">
-                                <CreditCard size={14} /> Update Payment Method
-                              </button>
-                              {sub.status === 'active' && (
-                                <button type="button" className="btn-ghost text-xs" onClick={() => handleCancel(sub)}>
-                                  Submit Cancellation Request
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="rounded-xl border border-cream-300 bg-white p-5">
-                  <h3 className="font-medium text-ink-900 mb-2">Cancellation Request Policy</h3>
-                  <p className="text-sm text-ink-600 leading-relaxed mb-4">{CANCELLATION_POLICY_COPY}</p>
-                  <p className="text-xs text-ink-500 mb-3">
-                    The 7-day notice is a customer communication policy. It is not an automatic Stripe billing rule.
-                    Admins process cancellations manually in Stripe Test Mode.
-                  </p>
-                  <label className="block text-xs text-ink-500 mb-1">Email for confirmation</label>
-                  <input className="input-lux mb-3" value={email} onChange={e => setEmail(e.target.value)} />
-                  <label className="block text-xs text-ink-500 mb-1">Optional note</label>
-                  <textarea className="input-lux" rows={2} value={note} onChange={e => setNote(e.target.value)} placeholder="Optional message for our team" />
-                  {message && <p className="mt-3 text-sm text-gold-700">{message}</p>}
-                </div>
-
-                {cancels.length > 0 && (
-                  <div>
-                    <h3 className="font-serif text-xl text-ink-900 mb-3">Cancellation Requests</h3>
-                    <div className="space-y-2">
-                      {cancels.map(c => (
-                        <div key={c.id} className="rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm flex flex-wrap justify-between gap-2">
-                          <div>
-                            <p className="font-medium text-ink-900">{c.subscriptionName}</p>
-                            <p className="text-xs text-ink-500">Submitted {new Date(c.submittedAt).toLocaleString()}</p>
-                          </div>
-                          <span className="rounded-full bg-cream-200 px-3 py-1 text-xs text-ink-700">{cancelStatusLabel[c.status]}</span>
-                        </div>
-                      ))}
-                    </div>
+              <div>
+                <h2 className="font-serif text-2xl text-ink-900 mb-6">Subscriptions</h2>
+                {items.filter(i => i.subscription).length === 0 ? (
+                  <div className="card-lux p-8 text-center">
+                    <RefreshCw size={32} className="mx-auto text-ink-300 mb-3" />
+                    <p className="text-ink-500 mb-4">You have no active subscriptions.</p>
+                    <Link to="/section/longevity" className="btn-primary">Start a Subscription</Link>
                   </div>
+                ) : (
+                  <p className="text-ink-500">Your subscriptions will appear here.</p>
                 )}
               </div>
             )}
@@ -301,7 +126,7 @@ export function AccountPage() {
                 <div className="card-lux p-6 space-y-4">
                   <div>
                     <label className="text-sm text-ink-500 block mb-1">Email</label>
-                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="input-lux" />
+                    <input type="email" defaultValue="member@mybaremethod.com" className="input-lux" />
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>

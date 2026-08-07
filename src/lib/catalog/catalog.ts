@@ -54,9 +54,6 @@ export interface CatalogProduct {
   requiresPrescription: boolean;
   requiresComplianceReview: boolean;
   requiresPharmacyVerification: boolean;
-  autoRefillEligible: boolean;
-  memberPricingEligible: boolean;
-  excludedFromDiscounts: boolean;
   variants: CatalogVariant[];
 }
 
@@ -131,9 +128,6 @@ function mapProduct(p: SourceProduct): CatalogProduct {
     requiresPrescription: p.requiresPrescription,
     requiresComplianceReview: p.requiresComplianceReview,
     requiresPharmacyVerification: p.requiresPharmacyVerification,
-    autoRefillEligible: p.autoRefillEligible,
-    memberPricingEligible: p.memberPricingEligible,
-    excludedFromDiscounts: p.excludedFromDiscounts,
     variants: mapVariants(p),
   };
 }

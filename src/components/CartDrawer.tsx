@@ -3,7 +3,7 @@ import { useCart } from '@/context/CartContext';
 import { Link, navigate } from '@/router';
 
 export function CartDrawer() {
-  const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal, totalSavings, itemCount } = useCart();
+  const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal, itemCount } = useCart();
 
   return (
     <>
@@ -63,14 +63,8 @@ export function CartDrawer() {
                             </div>
                           ) : (
                             <>
-                              {item.purchaseType === 'auto_refill' && (
-                                <span className="inline-block mt-1 text-xs text-gold-600 font-medium">Auto-Refill & Save · monthly</span>
-                              )}
-                              {item.appliedDiscount === 'member' && (
-                                <span className="inline-block mt-1 text-xs text-gold-600 font-medium">Active Member Price · Save {item.discountPercent}%</span>
-                              )}
-                              {item.appliedDiscount === 'auto_refill' && (
-                                <span className="inline-block mt-1 text-xs text-gold-700">Save {item.discountPercent}%</span>
+                              {item.subscription && (
+                                <span className="inline-block mt-1 text-xs text-gold-600 font-medium">Subscription</span>
                               )}
                               {item.requiresIntake && (
                                 <span className="inline-block mt-1 text-xs text-ink-500">Provider review required</span>
@@ -93,15 +87,7 @@ export function CartDrawer() {
                                     <Plus size={14} />
                                   </button>
                                 </div>
-                                <span className="text-right">
-                                  {(item.standardPrice ?? item.price) > item.price && (
-                                    <span className="block text-xs text-ink-400 line-through">${((item.standardPrice ?? item.price) * item.quantity).toFixed(2)}</span>
-                                  )}
-                                  <span className="font-medium text-ink-900">
-                                    ${(item.price * item.quantity).toFixed(2)}
-                                    {item.purchaseType === 'auto_refill' ? '/mo' : ''}
-                                  </span>
-                                </span>
+                                <span className="font-medium text-ink-900">${(item.price * item.quantity).toFixed(2)}</span>
                               </>
                             )}
                           </div>
@@ -113,17 +99,11 @@ export function CartDrawer() {
 
                 {/* Footer */}
                 <div className="border-t border-cream-300 px-5 py-4 space-y-3">
-                  {totalSavings > 0 && (
-                    <div className="flex justify-between text-sm text-gold-700">
-                      <span>Savings</span>
-                      <span>−${totalSavings.toFixed(2)}</span>
-                    </div>
-                  )}
                   <div className="flex justify-between text-sm">
                     <span className="text-ink-600">Subtotal</span>
                     <span className="font-medium text-ink-900">${subtotal.toFixed(2)}</span>
                   </div>
-                  <p className="text-xs text-ink-400">Shipping and taxes calculated at checkout. Discounts never stack.</p>
+                  <p className="text-xs text-ink-400">Shipping and taxes calculated at checkout.</p>
                   <button onClick={() => { closeCart(); navigate('/checkout'); }} className="btn-primary w-full">
                     Checkout <ArrowRight size={16} />
                   </button>

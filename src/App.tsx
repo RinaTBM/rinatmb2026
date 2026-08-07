@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { CartProvider } from '@/context/CartContext';
-import { MemberProvider } from '@/context/MemberContext';
 import { useRouter } from '@/router';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -87,16 +86,14 @@ function App() {
   };
 
   return (
-    <MemberProvider>
-      <CartProvider>
-        <div className="min-h-screen bg-cream-50">
-          <Header />
-          <main>{renderPage()}</main>
-          <Footer />
-          <CartDrawer />
-        </div>
-      </CartProvider>
-    </MemberProvider>
+    <CartProvider>
+      <div className="min-h-screen bg-cream-50">
+        <Header />
+        <main>{renderPage()}</main>
+        <Footer />
+        <CartDrawer />
+      </div>
+    </CartProvider>
   );
 }
 

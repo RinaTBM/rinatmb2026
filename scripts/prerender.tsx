@@ -4,7 +4,6 @@ import { writeFileSync, readFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 
 import { CartProvider } from '@/context/CartContext';
-import { MemberProvider } from '@/context/MemberContext';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CartDrawer } from '@/components/CartDrawer';
@@ -35,16 +34,14 @@ const BASE_URL = 'https://mybaremethod.com';
 
 function renderPage(component: React.ReactElement) {
   return renderToString(
-    createElement(MemberProvider, null,
-      createElement(CartProvider, null,
-        createElement('div', { className: 'min-h-screen bg-cream-50' },
-          createElement(Header),
-          createElement('main', null, component),
-          createElement(Footer),
-          createElement(CartDrawer),
-        ),
-      ),
-    ),
+    createElement(CartProvider, null,
+      createElement('div', { className: 'min-h-screen bg-cream-50' },
+        createElement(Header),
+        createElement('main', null, component),
+        createElement(Footer),
+        createElement(CartDrawer),
+      )
+    )
   );
 }
 

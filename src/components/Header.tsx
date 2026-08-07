@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Search, ShoppingBag, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { Link, navigate } from '@/router';
 import { useCart } from '@/context/CartContext';
-import { products } from '@/data/products';
+import { visibleProducts } from '@/data/products';
 import { BrandLogo } from '@/components/BrandLogo';
 import { SHOP_CATEGORIES } from '@/lib/browse/productBrowse';
 
@@ -39,7 +39,7 @@ export function Header() {
   }, [mobileOpen]);
 
   const searchResults = searchQuery.length > 1
-    ? products.filter(p =>
+    ? visibleProducts.filter(p =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.shortDescription.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.goals.some(g => g.includes(searchQuery.toLowerCase())) ||

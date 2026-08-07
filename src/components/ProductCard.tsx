@@ -60,8 +60,16 @@ export function ProductCard({ product }: { product: Product }) {
           <p className="text-xs text-ink-500 mb-2 line-clamp-1">{product.subtitle}</p>
 
           <div className="flex items-baseline gap-1">
-            {product.startingAt && <span className="text-xs text-ink-400">Starting at</span>}
-            <span className="font-medium text-ink-900">${product.startingPrice}</span>
+            {product.startingAt && (
+              <span className="text-xs text-ink-400">
+                {product.category === 'accessories' ? 'From' : 'Starting at'}
+              </span>
+            )}
+            <span className="font-medium text-ink-900">
+              {product.category === 'accessories' && product.startingAt
+                ? `$${product.startingPrice.toFixed(2)}`
+                : `$${product.startingPrice}`}
+            </span>
           </div>
           {product.requiresProviderReview && (
             <p className="mt-1.5 flex items-center gap-1 text-[10px] text-gold-600">

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, navigate } from '@/router';
+import { Link } from '@/router';
 import { Minus, Plus, Truck, Package } from 'lucide-react';
 import {
   getRelatedProducts,
@@ -13,10 +13,9 @@ import {
   ACCESSORY_UNIT_QUANTITY_MIN,
   accessoryCartName,
   accessoryCartVariantLabel,
-  accessoryStorefrontTitle,
+  accessoryVariantOptionLabel,
   clampAccessoryQuantity,
-  getAccessoryCountFamily,
-  getPricedCountOptions,
+  isAccessoryCountProduct,
 } from '@/lib/accessories/accessoryPurchase';
 
 const ACCESSORY_NOTE = 'Accessories are wellness tools and supplies. They are not medications.';
@@ -24,16 +23,15 @@ const ACCESSORY_NOTE = 'Accessories are wellness tools and supplies. They are no
 export function AccessoryProductPage({ product }: { product: Product }) {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
-  const family = useMemo(() => getAccessoryCountFamily(product.slug), [product.slug]);
-  const countOptions = useMemo(
-    () => (family ? getPricedCountOptions(family) : []),
-    [family],
-  );
+  const [variantIndex, setVariantIndex] = useState(0);
+  const hasCountOptions = isAccessoryCountProduct(product);
 
-  const variant = product.variants[0];
+  const variant = product.variants[Math.min(variantIndex, product.variants.length - 1)];
   const section = sections.find(s => s.id === product.category);
-  const related = getRelatedProducts(product).filter(p => p.category === 'accessories');
-  const title = accessoryStorefrontTitle(product);
+  const related = useMemo(
+    () => getRelatedProducts(product).filter(p => p.category === 'accessories'),
+    [product],
+  );
   const unitPrice = variant?.price ?? product.startingPrice;
 
   const handleAddToCart = () => {
@@ -42,7 +40,7 @@ export function AccessoryProductPage({ product }: { product: Product }) {
     addItem({
       productId: product.id,
       slug: product.slug,
-      name: accessoryCartName(product),
+      name: accessoryCartName(product, variant),
       price: unitPrice,
       standardPrice: unitPrice,
       image: product.image,
@@ -50,7 +48,7 @@ export function AccessoryProductPage({ product }: { product: Product }) {
       section: product.category,
       requiresIntake: false,
       variantId: variant.id,
-      variantLabel: accessoryCartVariantLabel(product),
+      variantLabel: accessoryCartVariantLabel(product, variant),
       purchaseType: 'one_time',
       discountPercent: 0,
       appliedDiscount: 'none',
@@ -67,7 +65,7 @@ export function AccessoryProductPage({ product }: { product: Product }) {
           <span>/</span>
           <Link to={`/section/${product.category}`} className="hover:text-ink-900">{section?.label}</Link>
           <span>/</span>
-          <span className="text-ink-700">{title}</span>
+          <span className="text-ink-700">{product.displayName}</span>
         </div>
       </div>
 
@@ -97,23 +95,23 @@ export function AccessoryProductPage({ product }: { product: Product }) {
                   <Package size={16} /> {section?.label}
                 </span>
               </div>
-              <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-2 leading-tight">{title}</h1>
+              <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-2 leading-tight">
+                {product.displayName}
+              </h1>
               <p className="text-lg text-ink-500 mb-4">{product.subtitle}</p>
               <p className="text-ink-600 leading-relaxed mb-6">{product.shortDescription}</p>
 
-              {family && countOptions.length > 0 && (
+              {hasCountOptions && product.variants.length > 1 && (
                 <div className="mb-6">
                   <p className="text-sm font-medium text-ink-900 mb-2">Select Count</p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {countOptions.map(option => {
-                      const selected = option.slug === product.slug;
+                    {product.variants.map((v, i) => {
+                      const selected = i === variantIndex;
                       return (
                         <button
-                          key={option.slug}
+                          key={v.id}
                           type="button"
-                          onClick={() => {
-                            if (option.slug !== product.slug) navigate(`/product/${option.slug}`);
-                          }}
+                          onClick={() => setVariantIndex(i)}
                           aria-pressed={selected}
                           className={`rounded-xl border-2 px-4 py-3 text-left transition-all ${
                             selected
@@ -121,8 +119,10 @@ export function AccessoryProductPage({ product }: { product: Product }) {
                               : 'border-ink-200 bg-white hover:border-gold-200'
                           }`}
                         >
-                          <span className="block text-sm font-medium text-ink-900">{option.label}</span>
-                          <span className="block text-sm text-ink-600">${option.price}</span>
+                          <span className="block text-sm font-medium text-ink-900">
+                            {accessoryVariantOptionLabel(v)}
+                          </span>
+                          <span className="block text-sm text-ink-600">${v.price.toFixed(2)}</span>
                         </button>
                       );
                     })}
@@ -133,9 +133,9 @@ export function AccessoryProductPage({ product }: { product: Product }) {
               <div className="rounded-2xl border border-cream-300 bg-white p-5 space-y-5">
                 <div>
                   <p className="font-serif text-3xl text-ink-900">${unitPrice.toFixed(2)}</p>
-                  {family && (
+                  {hasCountOptions && variant && (
                     <p className="mt-1 text-sm text-ink-500">
-                      {accessoryCartVariantLabel(product) ?? 'Selected count'}
+                      Selected: {accessoryVariantOptionLabel(variant)}
                     </p>
                   )}
                 </div>
@@ -166,6 +166,11 @@ export function AccessoryProductPage({ product }: { product: Product }) {
                     </div>
                     <span className="text-xs text-ink-400">Up to {ACCESSORY_UNIT_QUANTITY_MAX}</span>
                   </div>
+                  {hasCountOptions && (
+                    <p className="mt-2 text-xs text-ink-400">
+                      Quantity is the number of packs/boxes — separate from the count selected above.
+                    </p>
+                  )}
                 </div>
 
                 <button

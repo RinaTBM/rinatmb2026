@@ -74,7 +74,7 @@ export function CheckoutPage() {
 
   if (step === 'complete') {
     return (
-      <div className="bg-cream-50 pt-28 md:pt-32 min-h-screen flex items-center">
+      <div className="bg-cream-50 pt-16 md:pt-20 min-h-screen flex items-center">
         <div className="container-lux max-w-lg text-center">
           <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-gold-100">
             <Check size={40} className="text-gold-600" />
@@ -107,7 +107,7 @@ export function CheckoutPage() {
   }
 
   return (
-    <div className="bg-cream-50 pt-28 md:pt-32">
+    <div className="bg-cream-50 pt-16 md:pt-20">
       <div className="container-lux py-8">
         <Link to="/" className="inline-flex items-center gap-1 text-sm text-ink-500 hover:text-ink-900 mb-6 transition-colors">
           <ArrowLeft size={14} /> Continue Shopping

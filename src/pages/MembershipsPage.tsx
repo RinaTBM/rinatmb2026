@@ -61,7 +61,7 @@ export function MembershipsPage() {
   };
 
   return (
-    <div className="bg-cream-50 pt-28 md:pt-32">
+    <div className="bg-cream-50 pt-16 md:pt-20">
       {/* Hero */}
       <section className="py-16 md:py-24 text-center">
         <div className="container-lux max-w-3xl">

@@ -25,7 +25,7 @@ export function ConcernPage({ concernId }: { concernId: string }) {
   const hasResearch = false;
 
   return (
-    <div className="bg-cream-50 pt-28 md:pt-32">
+    <div className="bg-cream-50 pt-16 md:pt-20">
       {/* Hero */}
       <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0">

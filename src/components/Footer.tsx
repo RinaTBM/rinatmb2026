@@ -1,21 +1,20 @@
 import { Link } from '@/router';
 import { Instagram, Mail } from 'lucide-react';
-import { BrandLogo } from '@/components/BrandLogo';
 
 export function Footer() {
   return (
     <footer className="bg-ink-900 text-cream-100">
       <div className="container-lux py-16">
-        {/* Official logo — centered above footer content */}
-        <div className="flex justify-center mb-12 md:mb-16">
-          <Link to="/" className="inline-flex" aria-label="My Bare Method home">
-            <BrandLogo className="w-auto max-h-40 md:max-h-[200px] object-contain" />
-          </Link>
-        </div>
-
         <div className="grid gap-12 md:grid-cols-4">
           {/* Brand */}
           <div className="md:col-span-1">
+            <h3 className="font-serif text-2xl text-cream-50 mb-4">
+              <img
+                src="/images/logo/ChatGPT_Image_Jul_31,_2026,_01_50_31_PM.png"
+                alt="My Bare Method"
+                className="h-44 w-auto brightness-0 invert"
+              />
+            </h3>
             <p className="text-sm text-cream-100/70 leading-relaxed mb-6">
               Luxury wellness, refined. Premium wellness products and provider-guided care — thoughtfully curated for your journey.
             </p>

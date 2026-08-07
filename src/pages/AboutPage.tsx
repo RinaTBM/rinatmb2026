@@ -3,7 +3,7 @@ import { ShieldCheck, FlaskConical, Stethoscope, Sparkles, Heart, ArrowRight, Qu
 
 export function AboutPage() {
   return (
-    <div className="bg-cream-50 pt-28 md:pt-32">
+    <div className="bg-cream-50 pt-16 md:pt-20">
       {/* Hero */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0">

@@ -2,6 +2,12 @@ import { Link } from '@/router';
 import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import type { Product } from '@/data/products';
 import { sections } from '@/data/products';
+import {
+  DEFAULT_AUTO_REFILL_DISCOUNT_PERCENT,
+  DEFAULT_MEMBER_DISCOUNT_PERCENT,
+  isAutoRefillEligible,
+  isMemberPricingEligible,
+} from '@/lib/pricing/purchaseOptions';
 
 /** Accessory photos that should show the full product (no crop). */
 const CONTAIN_FIT_SLUGS = new Set([
@@ -14,6 +20,8 @@ export function ProductCard({ product }: { product: Product }) {
   const section = sections.find(s => s.id === product.category);
   const primaryForm = product.dosageForms[0];
   const containFit = CONTAIN_FIT_SLUGS.has(product.slug);
+  const memberEligible = isMemberPricingEligible(product);
+  const autoEligible = isAutoRefillEligible(product);
 
   return (
     <Link to={`/product/${product.slug}`} className="group block">
@@ -30,16 +38,23 @@ export function ProductCard({ product }: { product: Product }) {
             loading="lazy"
           />
           <div className="absolute left-3 top-3 flex flex-col gap-1.5">
-            {product.bestSeller && (
+            {memberEligible ? (
+              <span className="rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-900">
+                Members Save {DEFAULT_MEMBER_DISCOUNT_PERCENT}%
+              </span>
+            ) : autoEligible ? (
+              <span className="rounded-full bg-ink-900/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-50">
+                Auto-Refill {DEFAULT_AUTO_REFILL_DISCOUNT_PERCENT}%
+              </span>
+            ) : product.bestSeller ? (
               <span className="rounded-full bg-ink-900 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-50">
                 Best Seller
               </span>
-            )}
-            {primaryForm && (
+            ) : primaryForm ? (
               <span className="rounded-full bg-cream-50/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-ink-700 backdrop-blur-sm">
                 {product.dosageForms.length > 1 ? 'Multiple forms' : primaryForm}
               </span>
-            )}
+            ) : null}
           </div>
           <div className="absolute right-3 top-3 rounded-full bg-white/80 p-1.5 opacity-0 transition-opacity group-hover:opacity-100 backdrop-blur-sm">
             <ArrowUpRight size={16} className="text-ink-900" />

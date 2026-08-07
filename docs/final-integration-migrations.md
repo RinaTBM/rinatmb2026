@@ -17,6 +17,7 @@ New migrations introduced by admin/Google-auth work (apply in this order after t
 | 4 | `20260806090000_catalog_admin_schema.sql` | `admins` table; `is_admin()`; `catalog_products`, `catalog_variants`, `catalog_memberships`; sync/audit log tables; `set_updated_at` trigger helper; RLS policies | **Yes** (`CREATE TABLE IF NOT EXISTS`, `CREATE OR REPLACE` function) | **No** — does not ALTER or DELETE from `stripe_products` | **No** row deletes. `CREATE OR REPLACE is_admin()` replaces function body only. |
 | 5 | `20260806090100_seed_catalog.sql` | Idempotent `INSERT … ON CONFLICT DO UPDATE` into `catalog_*` tables from normalized catalog | **Yes** (upsert by slug / variant key) | **No** — seeds `catalog_*` only, not `stripe_products` | Updates matching `catalog_*` rows by conflict key; does not delete. Does not touch customers/subscriptions. |
 | 6 | `20260806100000_admin_auth.sql` | `admins.is_active`, `admins.updated_at`; `is_admin()` requires `is_active = true`; `trg_admins_updated` | **Yes** (`ADD COLUMN IF NOT EXISTS`, replace function, trigger) | **No** | **No** deletes. Existing `admins` rows preserved; new columns default `is_active=true`, `updated_at=now()`. |
+| 7 | `20260807020000_purchase_savings_strategy.sql` | `store_purchase_settings`; eligibility columns on `catalog_products`; `cancellation_requests`; `purchase_reporting_snapshots`; RLS | **Yes** (`CREATE TABLE IF NOT EXISTS`, `ADD COLUMN IF NOT EXISTS`) | **No** | Updates eligibility flags on `catalog_*` only from category rules. No Stripe / customer deletes. Live Stripe untouched. |
 
 ### Explicit non-targets
 
@@ -33,4 +34,5 @@ These migrations must **not** alter:
 2. Apply `20260806090000_catalog_admin_schema.sql`.
 3. Apply `20260806090100_seed_catalog.sql`.
 4. Apply `20260806100000_admin_auth.sql`.
-5. Verify: `admins.is_active`, `admins.updated_at`, `is_admin()` contains `is_active = true`, admin row count unchanged.
+5. Apply `20260807020000_purchase_savings_strategy.sql` when ready for purchase-savings persistence.
+6. Verify: `admins.is_active`, `admins.updated_at`, `is_admin()` contains `is_active = true`, admin row count unchanged; `store_purchase_settings` defaults 15/10.

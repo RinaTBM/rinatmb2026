@@ -6,10 +6,28 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
+type PurchaseType = "one_time" | "auto_refill" | "membership_program" | "active_membership";
+
 interface CartItemRequest {
   productId: string;
   quantity: number;
   subscription?: boolean;
+  purchaseType?: PurchaseType;
+  unitAmountCents?: number;
+  standardPriceCents?: number;
+  discountPercent?: number;
+  appliedDiscount?: string;
+  productName?: string;
+  variantLabel?: string;
+}
+
+function assertTestKey(secretKey: string) {
+  if (secretKey.startsWith("sk_live_") || secretKey.startsWith("rk_live_")) {
+    throw new Error("Checkout is TEST MODE only. Live Stripe keys are not allowed.");
+  }
+  if (!secretKey.startsWith("sk_test_") && !secretKey.startsWith("rk_test_")) {
+    throw new Error("Checkout requires a Stripe TEST key (sk_test_… or rk_test_…).");
+  }
 }
 
 Deno.serve(async (req: Request) => {
@@ -17,9 +35,18 @@ Deno.serve(async (req: Request) => {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
 
-  const secretKey = Deno.env.get("STRIPE_SECRET_KEY");
+  const secretKey = Deno.env.get("STRIPE_SECRET_KEY_TEST") || Deno.env.get("STRIPE_SECRET_KEY");
   if (!secretKey) {
     return new Response(JSON.stringify({ error: "Stripe not configured" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  try {
+    assertTestKey(secretKey);
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -35,7 +62,8 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { items } = await req.json() as { items: CartItemRequest[] };
+    const body = await req.json() as { items: CartItemRequest[]; isActiveMember?: boolean };
+    const { items, isActiveMember } = body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return new Response(JSON.stringify({ error: "No items provided" }), {
@@ -44,7 +72,6 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    // Look up Stripe price IDs from the database
     const productIds = items.map((i) => i.productId);
     const lookupRes = await fetch(
       `${supabaseUrl}/rest/v1/stripe_products?app_product_id=in.(${productIds.join(",")})`,
@@ -53,7 +80,7 @@ Deno.serve(async (req: Request) => {
           apikey: serviceKey,
           Authorization: `Bearer ${serviceKey}`,
         },
-      }
+      },
     );
 
     if (!lookupRes.ok) {
@@ -73,11 +100,54 @@ Deno.serve(async (req: Request) => {
     }>;
 
     const productMap = new Map(dbProducts.map((p) => [p.app_product_id, p]));
-
     const lineItems: Array<Record<string, string>> = [];
     let hasVariablePricing = false;
+    let usesCustomPriceData = false;
+    let hasRecurring = false;
 
-    for (const item of items) {
+    for (const [idx, item] of items.entries()) {
+      const purchaseType: PurchaseType = item.purchaseType
+        ?? (item.subscription ? "auto_refill" : "one_time");
+      const isProgramMembership = purchaseType === "membership_program" || item.productId === "m1" || item.productId === "m2";
+      const needsCustomAmount =
+        !isProgramMembership &&
+        (
+          purchaseType === "auto_refill" ||
+          (typeof item.discountPercent === "number" && item.discountPercent > 0) ||
+          (typeof item.unitAmountCents === "number" &&
+            typeof item.standardPriceCents === "number" &&
+            item.unitAmountCents !== item.standardPriceCents)
+        );
+
+      if (needsCustomAmount) {
+        usesCustomPriceData = true;
+        const unitAmount = item.unitAmountCents;
+        if (!unitAmount || unitAmount < 0) {
+          return new Response(JSON.stringify({ error: `Missing unit amount for ${item.productId}` }), {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const name = item.variantLabel
+          ? `${item.productName ?? item.productId} (${item.variantLabel})`
+          : (item.productName ?? item.productId);
+        const recurring = purchaseType === "auto_refill" || !!item.subscription;
+        if (recurring) hasRecurring = true;
+
+        lineItems.push({
+          [`line_items[${idx}][price_data][currency]`]: "usd",
+          [`line_items[${idx}][price_data][unit_amount]`]: String(unitAmount),
+          [`line_items[${idx}][price_data][product_data][name]`]: name,
+          [`line_items[${idx}][quantity]`]: String(item.quantity),
+          ...(recurring
+            ? {
+              [`line_items[${idx}][price_data][recurring][interval]`]: "month",
+            }
+            : {}),
+        });
+        continue;
+      }
+
       const dbProduct = productMap.get(item.productId);
       if (!dbProduct) {
         return new Response(JSON.stringify({ error: `Product ${item.productId} not synced to Stripe` }), {
@@ -91,9 +161,13 @@ Deno.serve(async (req: Request) => {
         continue;
       }
 
+      if (dbProduct.is_recurring && (item.subscription || isProgramMembership)) {
+        hasRecurring = true;
+      }
+
       lineItems.push({
-        price: dbProduct.stripe_price_id,
-        quantity: String(item.quantity),
+        [`line_items[${idx}][price]`]: dbProduct.stripe_price_id,
+        [`line_items[${idx}][quantity]`]: String(item.quantity),
       });
     }
 
@@ -109,28 +183,20 @@ Deno.serve(async (req: Request) => {
     const origin = req.headers.get("origin") || "https://mybaremethod.com";
 
     const sessionBody: Record<string, string> = {
-      mode: "payment",
+      mode: hasRecurring ? "subscription" : "payment",
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/cancel`,
       "metadata[order_source]": "web",
+      "metadata[is_active_member]": isActiveMember ? "true" : "false",
+      "metadata[stripe_mode]": usesCustomPriceData ? "test_custom_pricing" : "mapped_prices",
     };
 
-    // If any line item is recurring, use subscription mode
-    const hasRecurring = dbProducts.some(
-      (p) => p.is_recurring && items.some((i) => i.productId === p.app_product_id && i.subscription)
-    );
-
-    if (hasRecurring) {
-      sessionBody.mode = "subscription";
-      sessionBody.success_url = `${origin}/success?session_id={CHECKOUT_SESSION_ID}`;
-    }
-
-    // Add line items as form params
     const params = new URLSearchParams(sessionBody);
-    lineItems.forEach((li, idx) => {
-      params.append(`line_items[${idx}][price]`, li.price);
-      params.append(`line_items[${idx}][quantity]`, li.quantity);
-    });
+    for (const li of lineItems) {
+      for (const [k, v] of Object.entries(li)) {
+        params.append(k, v);
+      }
+    }
 
     const sessionRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",

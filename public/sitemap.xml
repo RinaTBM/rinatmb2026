@@ -2,93 +2,69 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://mybaremethod.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://mybaremethod.com/shop-all</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mybaremethod.com/best-sellers</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://mybaremethod.com/memberships</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://mybaremethod.com/alacarte</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mybaremethod.com/best-sellers</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://mybaremethod.com/about</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mybaremethod.com/contact</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://mybaremethod.com/faq</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mybaremethod.com/contact</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mybaremethod.com/success</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mybaremethod.com/cancel</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mybaremethod.com/goals</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mybaremethod.com/refund-policy</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://mybaremethod.com/shipping-policy</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://mybaremethod.com/membership-terms</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://mybaremethod.com/accessibility</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://mybaremethod.com/consumer-data</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://mybaremethod.com/privacy-policy</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://mybaremethod.com/terms</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>
   <url><loc>https://mybaremethod.com/section/weight-management</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/section/longevity</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/section/hrt-women</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/section/womens-hormone-therapy</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/section/longevity-cognitive</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/section/recovery-performance</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/section/prescription-skin-hair</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mybaremethod.com/section/provider-care</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/section/research</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mybaremethod.com/section/accessories</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mybaremethod.com/concern/weight-management</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/concern/longevity-aging</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mybaremethod.com/concern/hormone-balance</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/concern/energy-vitality</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/concern/longevity-aging</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mybaremethod.com/concern/cognitive-support</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mybaremethod.com/concern/recovery-performance</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/concern/immune-support</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/concern/metabolic-health</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/concern/sexual-wellness</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mybaremethod.com/concern/hair-skin-beauty</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/concern/sleep-stress</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mybaremethod.com/product/glp-1-1</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/glp-1-b12-injection-2</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/glp-1-l-carnitine-injection-3</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/glp-1-glycine-injection-4</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/glp-1-gip-5</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/glp-1-gip-b12-injection-6</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/glp-1-gip-l-carnitine-injection-7</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/glp-1-gip-glycine-injection-8</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/nad-injection-9</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/nad-nasal-spray-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/glutathione-injection-11</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/sermorelin-injection-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/sermorelin-capsules-13</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/b12-injection-14</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-tablets-capsules-15</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-transdermal-patch-16</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-topical-gel-17</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-topical-spray-18</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-vaginal-cream-19</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-vaginal-tablets-20</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-vaginal-ring-21</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-pellets-22</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/progesterone-capsules-23</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/sustained-release-progesterone-24</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/progesterone-cream-25</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/progesterone-troches-26</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/testosterone-cream-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/testosterone-gel-28</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/testosterone-injections-29</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/testosterone-pellets-30</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/testosterone-troches-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/bi-est-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/tri-est-33</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-progesterone-34</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/estrogen-progesterone-testosterone-35</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/initial-provider-consultation-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/follow-up-appointment-37</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/laboratory-review-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/ghk-cu-injection-39</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/bpc-157-tb-500-injection-40</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/bpc-157-tb-500-capsules-41</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/tesamorelin-ipamorelin-injection-42</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/tesamorelin-kpv-injection-43</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/mots-c-injection-44</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/thymosin-alpha-1-injection-45</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/semax-nasal-spray-46</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/selank-nasal-spray-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/pt-141-nasal-spray-48</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/dihexa-capsules-49</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/methylene-blue-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/klow-glow-injection-51</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/pt-141-injection-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/oxytocin-53</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/tadalafil-54</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/complete-injection-starter-kit-55</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/premium-3d-printed-peptide-case-56</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/temperature-controlled-travel-case-57</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/discreet-travel-bag-58</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/reusable-ice-pack-59</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/daily-weekly-wellness-planner-60</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/sharps-container-61</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/alcohol-prep-wipes-100-count-62</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/alcohol-prep-wipes-200-count-63</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/premium-insulin-syringes-10-pack-64</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/premium-insulin-syringes-50-pack-65</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mybaremethod.com/product/premium-insulin-syringes-100-pack-66</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/goal/weight-management</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/goal/hrt-women</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/goal/longevity</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/goal/focus</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/goal/recovery</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/goal/performance</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/goal/beauty</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/goal/daily-wellness</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mybaremethod.com/product/semaglutide</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/tirzepatide</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/estradiol-patch</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/progesterone-capsules</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/testosterone-cream</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/nad-plus</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/selank</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/semax</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/selank-semax-nasal-spray</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/bpc-157-tb-500</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/tretinoin-cream</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/minoxidil-topical</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/bimatoprost-solution</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/initial-provider-consultation</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/follow-up-appointment</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/laboratory-review</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/complete-injection-starter-kit</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/premium-3d-printed-peptide-case</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/temperature-controlled-travel-case</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/discreet-travel-bag</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/reusable-ice-pack</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/daily-weekly-wellness-planner</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/sharps-container</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/alcohol-prep-wipes-100</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/alcohol-prep-wipes-200</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/premium-insulin-syringes-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/premium-insulin-syringes-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mybaremethod.com/product/premium-insulin-syringes-100</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>

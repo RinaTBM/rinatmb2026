@@ -164,10 +164,23 @@ Deno.serve(async (req: Request) => {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
 
-  const secretKey = Deno.env.get("STRIPE_SECRET_KEY");
+  // Legacy function — TEST MODE ONLY. Prefer stripe-sync for authenticated admin sync.
+  const secretKey = Deno.env.get("STRIPE_SECRET_KEY_TEST") || Deno.env.get("STRIPE_SECRET_KEY");
   if (!secretKey) {
-    return new Response(JSON.stringify({ error: "STRIPE_SECRET_KEY not configured" }), {
+    return new Response(JSON.stringify({ error: "STRIPE_SECRET_KEY_TEST not configured" }), {
       status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  if (secretKey.startsWith("sk_live_") || secretKey.startsWith("rk_live_")) {
+    return new Response(JSON.stringify({ error: "Refusing LIVE Stripe key. sync-stripe-products is TEST-only." }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  if (!secretKey.startsWith("sk_test_") && !secretKey.startsWith("rk_test_")) {
+    return new Response(JSON.stringify({ error: "Provided key is not a Stripe TEST key." }), {
+      status: 403,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

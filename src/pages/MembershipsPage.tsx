@@ -23,6 +23,7 @@ const faqs = [
 
 const comparisonRows: { feature: string; sema: string | boolean; tirz: string | boolean; onetime: string | boolean }[] = [
   { feature: 'Monthly price', sema: '$199', tirz: '$249', onetime: 'Varies by selected product' },
+  { feature: '15% off eligible wellness products', sema: true, tirz: true, onetime: false },
   { feature: 'Included program', sema: 'Eligible included Semaglutide formulations', tirz: 'Eligible formulations through 25mg/2mg per mL, 2mL', onetime: 'Selected purchased formulation' },
   { feature: 'Locked continuous-member rate', sema: true, tirz: true, onetime: false },
   { feature: 'Provider review required', sema: true, tirz: true, onetime: 'Provider-directed when applicable' },
@@ -51,12 +52,16 @@ export function MembershipsPage() {
       slug: m.slug,
       name: m.displayName,
       price: m.monthlyPrice,
+      standardPrice: m.monthlyPrice,
       image: m.image,
       subscription: true,
       section: 'membership',
       requiresIntake: true,
       isMembership: true,
       billingFrequency: 'monthly',
+      purchaseType: 'membership_program',
+      discountPercent: 0,
+      appliedDiscount: 'none',
     });
   };
 
@@ -65,13 +70,37 @@ export function MembershipsPage() {
       {/* Hero */}
       <section className="py-16 md:py-24 text-center">
         <div className="container-lux max-w-3xl">
-          <p className="eyebrow mb-3">Weight-management memberships</p>
+          <p className="eyebrow mb-3">Active Wellness Membership · Best Value</p>
           <h1 className="font-serif text-5xl md:text-6xl text-ink-900 mb-5">One Membership. One Price.</h1>
-          <p className="text-lg text-ink-500 leading-relaxed">
+          <p className="text-lg text-ink-500 leading-relaxed mb-4">
             Unlike programs that increase monthly pricing as treatment changes, your membership rate stays the same
             while you remain continuously enrolled and your provider adjusts your eligible treatment within the
             included program.
           </p>
+          <p className="text-base text-gold-700 font-medium">
+            Members receive our best available pricing — save 15% on eligible wellness products.
+          </p>
+        </div>
+      </section>
+
+      {/* Value emphasis */}
+      <section className="pb-8">
+        <div className="container-lux max-w-4xl">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              'Lowest Pricing',
+              'Save 15% on Eligible Wellness Products',
+              'Locked Membership Pricing',
+              'Priority Access to New Products',
+              'Convenient Monthly Wellness',
+              'Provider-Guided Care',
+            ].map(benefit => (
+              <div key={benefit} className="flex items-center gap-2 rounded-xl border border-gold-200 bg-gold-50/60 px-4 py-3 text-sm text-ink-800">
+                <Check size={16} className="text-gold-600 shrink-0" />
+                <span>{benefit}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -168,7 +168,7 @@ export function CheckoutPage() {
             )}
             <div className="flex items-center gap-2 text-sm text-ink-600">
               <Truck size={18} className="text-gold-500" />
-              <span>Estimated delivery: 3–5 business days</span>
+              <span>Most orders process within 1–3 business days after provider approval when applicable</span>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

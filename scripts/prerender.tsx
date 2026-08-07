@@ -115,7 +115,7 @@ function buildRoutes() {
       component: createElement(MedicalDirectorPage),
       title: 'Meet Our Medical Director | My Bare Method',
       description:
-        'Learn about the experienced medical leadership behind My Bare Method and our commitment to safe, provider-directed wellness care.',
+        'Meet Dr. Jerry J. Cattelane Jr., D.O., Medical Director for My Bare Method, and learn about the clinical leadership supporting our provider-directed wellness programs.',
     },
     {
       path: '/faq',

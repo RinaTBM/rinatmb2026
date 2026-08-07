@@ -82,7 +82,7 @@ export function Footer() {
             These statements have not been evaluated by the Food and Drug Administration. Products are not intended to diagnose, treat, cure, or prevent any disease. Research products are sold for laboratory use only and are not for human consumption. Provider Care and other therapy products require a medical intake and review by a licensed provider; fulfillment occurs only after provider approval and is not a guarantee of prescription. If not approved, a full refund is issued.
           </p>
           <p className="text-xs text-cream-100/50 leading-relaxed mb-4">
-            Telemedicine services available in all 50 states. Appointments conducted via Zoom and booked on our website. Medical Director: Dr. Jerry Cattelane, DO. Pharmacy: ScriptfulRx.
+            Telemedicine services available in all 50 states. Appointments conducted via Zoom and booked on our website. Medical Director: Dr. Jerry J. Cattelane Jr., D.O. Pharmacy: Ageless Pharma Rx.
           </p>
           <div className="flex flex-col md:flex-row justify-between gap-4 text-xs text-cream-100/50">
             <p>© {new Date().getFullYear()} My Bare Method. All rights reserved. A brand of The Bare Method.</p>

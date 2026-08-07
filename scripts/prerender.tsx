@@ -15,6 +15,7 @@ import { BestSellersPage } from '@/pages/BestSellersPage';
 import { MembershipsPage } from '@/pages/MembershipsPage';
 import { AlaCartePage } from '@/pages/AlaCartePage';
 import { AboutPage } from '@/pages/AboutPage';
+import { MedicalDirectorPage } from '@/pages/MedicalDirectorPage';
 import { FaqPage } from '@/pages/FaqPage';
 import { ContactPage } from '@/pages/ContactPage';
 import { SuccessPage } from '@/pages/SuccessPage';
@@ -105,6 +106,13 @@ function buildRoutes() {
       component: createElement(AboutPage),
       title: 'About — My Bare Method',
       description: 'Learn about My Bare Method — premium wellness products and provider-guided care.',
+    },
+    {
+      path: '/medical-director',
+      component: createElement(MedicalDirectorPage),
+      title: 'Meet Our Medical Director | My Bare Method',
+      description:
+        'Learn about the experienced medical leadership behind My Bare Method and our commitment to safe, provider-directed wellness care.',
     },
     {
       path: '/faq',

@@ -30,6 +30,7 @@ import { ShippingPolicyPage } from '@/pages/ShippingPolicyPage';
 import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { MembershipTermsPage } from '@/pages/MembershipTermsPage';
+import { MedicalDirectorPage } from '@/pages/MedicalDirectorPage';
 import { AdminApp } from '@/admin/AdminApp';
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
     if (path === '/account') return <AccountPage />;
     if (path === '/track') return <TrackPage />;
     if (path === '/about') return <AboutPage />;
+    if (path === '/medical-director') return <MedicalDirectorPage />;
     if (path === '/faq') return <FaqPage />;
   if (path === '/memberships') return <MembershipsPage />;
   if (path === '/alacarte') return <AlaCartePage />;

@@ -158,6 +158,9 @@ export function AboutPage() {
               <div>
                 <p className="text-sm font-medium text-ink-400 uppercase tracking-wider mb-1">Medical Director</p>
                 <p className="text-ink-800">Dr. Jerry Cattelane, DO</p>
+                <Link to="/medical-director" className="mt-2 inline-block text-sm text-gold-600 hover:text-gold-700 link-underline">
+                  Meet Our Medical Director
+                </Link>
               </div>
               <div>
                 <p className="text-sm font-medium text-ink-400 uppercase tracking-wider mb-1">Pharmacy Partner</p>

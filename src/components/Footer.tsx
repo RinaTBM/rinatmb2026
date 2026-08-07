@@ -69,6 +69,7 @@ export function Footer() {
               <li><Link to="/membership-terms" className="hover:text-gold-300 transition-colors">Membership & Cancellation Terms</Link></li>
               <li><Link to="/accessibility" className="hover:text-gold-300 transition-colors">Accessibility Statement</Link></li>
               <li><Link to="/consumer-data" className="hover:text-gold-300 transition-colors">Consumer Health Data Notice</Link></li>
+              <li><Link to="/medical-director" className="hover:text-gold-300 transition-colors">Meet Our Medical Director</Link></li>
               <li><Link to="/contact" className="hover:text-gold-300 transition-colors">Contact Us</Link></li>
               <li><Link to="/faq" className="hover:text-gold-300 transition-colors">FAQs</Link></li>
             </ul>

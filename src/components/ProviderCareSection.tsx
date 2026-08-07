@@ -95,6 +95,20 @@ export function ProviderCareSection({ products }: { products: Product[] }) {
             Provider Care services require scheduling and may involve a medical intake. Fulfillment
             occurs only after provider approval when applicable.
           </p>
+
+          <div className="mt-10 max-w-xl mx-auto text-center rounded-2xl border border-cream-300 bg-white px-6 py-7">
+            <p className="eyebrow mb-2">Clinical leadership</p>
+            <p className="font-serif text-xl text-ink-900 mb-2">Meet Our Medical Director</p>
+            <p className="text-sm text-ink-500 mb-5 leading-relaxed">
+              Learn about the medical leadership supporting safe, personalized, provider-directed wellness.
+            </p>
+            <Link
+              to="/medical-director"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-gold-700 hover:text-gold-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded-sm"
+            >
+              Meet Dr. Jerry Cattelane, DO <ArrowRight size={14} aria-hidden />
+            </Link>
+          </div>
         </div>
       </section>
     </div>

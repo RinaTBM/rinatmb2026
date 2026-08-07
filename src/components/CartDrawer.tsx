@@ -40,34 +40,50 @@ export function CartDrawer() {
                 <div className="flex-1 overflow-y-auto px-5 py-4">
                   <div className="space-y-4">
                     {items.map(item => (
-                      <div key={`${item.productId}-${item.subscription}`} className="flex gap-4">
+                      <div key={item.key} className="flex gap-4">
                         <img src={item.image} alt={item.name} className="h-20 w-20 rounded-xl object-cover flex-shrink-0" />
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between gap-2">
                             <Link to={`/product/${item.slug}`} onClick={closeCart} className="font-medium text-ink-900 hover:text-gold-600 text-sm">
                               {item.name}
                             </Link>
-                            <button onClick={() => removeItem(item.productId, item.subscription)} className="text-ink-400 hover:text-ink-900 flex-shrink-0">
+                            <button onClick={() => removeItem(item.key)} className="text-ink-400 hover:text-ink-900 flex-shrink-0">
                               <X size={16} />
                             </button>
                           </div>
-                          {item.subscription && (
-                            <span className="inline-block mt-1 text-xs text-gold-600 font-medium">Subscription</span>
+                          {item.variantLabel && !item.isMembership && (
+                            <span className="block mt-0.5 text-xs text-ink-500">{item.variantLabel}</span>
                           )}
-                          {item.requiresIntake && (
-                            <span className="inline-block mt-1 text-xs text-ink-500">Requires intake</span>
+                          {item.isMembership ? (
+                            <div className="mt-1 space-y-0.5 text-xs text-ink-500">
+                              <p className="text-gold-600 font-medium">Billed monthly · 3-month initial term</p>
+                              <p>Provider review required</p>
+                              <p>Shipping calculated separately</p>
+                              <p>Cancel anytime after the initial term (canceling ends the locked rate)</p>
+                            </div>
+                          ) : (
+                            <>
+                              {item.subscription && (
+                                <span className="inline-block mt-1 text-xs text-gold-600 font-medium">Subscription</span>
+                              )}
+                              {item.requiresIntake && (
+                                <span className="inline-block mt-1 text-xs text-ink-500">Provider review required</span>
+                              )}
+                            </>
                           )}
                           <div className="mt-2 flex items-center justify-between">
-                            {item.price === 0 ? (
-                              <span className="text-xs text-ink-500">Price determined after intake</span>
+                            {item.isMembership ? (
+                              <span className="font-medium text-ink-900">${item.price}/month</span>
+                            ) : item.price === 0 ? (
+                              <span className="text-xs text-ink-500">Price determined after review</span>
                             ) : (
                               <>
                                 <div className="flex items-center gap-2 rounded-full border border-ink-200 px-2 py-1">
-                                  <button onClick={() => updateQuantity(item.productId, item.subscription, item.quantity - 1)} className="text-ink-500 hover:text-ink-900">
+                                  <button onClick={() => updateQuantity(item.key, item.quantity - 1)} className="text-ink-500 hover:text-ink-900">
                                     <Minus size={14} />
                                   </button>
                                   <span className="text-sm w-5 text-center">{item.quantity}</span>
-                                  <button onClick={() => updateQuantity(item.productId, item.subscription, item.quantity + 1)} className="text-ink-500 hover:text-ink-900">
+                                  <button onClick={() => updateQuantity(item.key, item.quantity + 1)} className="text-ink-500 hover:text-ink-900">
                                     <Plus size={14} />
                                   </button>
                                 </div>

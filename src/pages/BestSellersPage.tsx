@@ -7,7 +7,7 @@ export function BestSellersPage() {
   const bestSellers = getBestSellers();
 
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20">
+    <div className="bg-cream-50 pt-28 md:pt-32">
       <section className="py-16 md:py-24 text-center">
         <div className="container-lux">
           <p className="eyebrow mb-3 text-sm">Loved by thousands</p>

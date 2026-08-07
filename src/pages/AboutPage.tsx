@@ -1,9 +1,9 @@
 import { Link } from '@/router';
-import { ShieldCheck, FlaskConical, Stethoscope, Sparkles, Heart, ArrowRight, Quote, Users, HandHeart, Scale, Activity, HeartPulse } from 'lucide-react';
+import { ShieldCheck, FlaskConical, Stethoscope, Sparkles, Heart, ArrowRight, Quote, Users, Scale, Activity, HeartPulse } from 'lucide-react';
 
 export function AboutPage() {
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20">
+    <div className="bg-cream-50 pt-28 md:pt-32">
       {/* Hero */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0">

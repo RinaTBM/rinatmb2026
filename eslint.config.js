@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'docs/backup', 'supabase/functions/**'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -24,5 +24,12 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
     },
-  }
+  },
+  {
+    // Node CLI scripts + config files run under Node, not the browser.
+    files: ['scripts/**/*.ts', '*.config.ts', 'vitest.config.ts'],
+    languageOptions: {
+      globals: { ...globals.node },
+    },
+  },
 );

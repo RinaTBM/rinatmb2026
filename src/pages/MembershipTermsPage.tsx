@@ -13,12 +13,27 @@ export function MembershipTermsPage() {
           title: 'Available Memberships',
           body: (
             <>
-              <p>Current membership options may include:</p>
+              <p>Current weight-management membership options:</p>
               <LegalBulletList items={[
-                'GLP-1 Membership — $150 per month',
-                'GLP-1/GIP Membership — $200 per month',
+                'Semaglutide Membership — $199 per month',
+                'Tirzepatide Membership — $249 per month',
               ]} />
               <p>Membership availability, pricing, inclusions, and treatment eligibility may change. Membership does not guarantee that a particular medication or prescription will be approved.</p>
+            </>
+          ),
+        },
+        {
+          id: 'locked-pricing-program-terms',
+          title: 'Locked Pricing & Program Terms',
+          body: (
+            <>
+              <p>Your initial membership term is three months. After the initial term, your membership continues month to month until canceled.</p>
+              <p>Your monthly membership rate remains locked while your membership stays continuously active and in good standing.</p>
+              <p>If your membership is canceled or lapses beyond the permitted payment grace period, future enrollment will be subject to the membership pricing available at that time.</p>
+              <p>Membership enrollment and payment do not guarantee that a prescription will be issued. Continued treatment, formulation, strength, and fulfillment remain subject to provider approval, pharmacy availability, applicable law, and completion of required follow-up information.</p>
+              <p>If a licensed provider determines that continued treatment is not appropriate, future membership charges will be discontinued according to the membership terms.</p>
+              <p>Switching between Semaglutide and Tirzepatide requires enrollment in the current rate for the new membership program.</p>
+              <p>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above the included maximum are not part of this membership.</p>
             </>
           ),
         },
@@ -42,7 +57,7 @@ export function MembershipTermsPage() {
                 'Member pricing',
                 'Locked membership pricing while continuously active',
                 'Monthly recurring fulfillment when approved',
-                '25% off eligible accessories',
+                'Provider-directed treatment adjustments within the included program',
                 'Access to designated member benefits',
               ]} />
               <p>Medication eligibility, dosage, treatment continuation, and refill approval remain subject to provider review.</p>

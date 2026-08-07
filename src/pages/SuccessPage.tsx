@@ -3,7 +3,7 @@ import { Check, Truck, Mail, ShieldCheck } from 'lucide-react';
 
 export function SuccessPage() {
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20 min-h-screen flex items-center">
+    <div className="bg-cream-50 pt-28 md:pt-32 min-h-screen flex items-center">
       <div className="container-lux max-w-lg text-center">
         <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-gold-100">
           <Check size={40} className="text-gold-600" />

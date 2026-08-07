@@ -1,6 +1,6 @@
 import { Link } from '@/router';
-import { ArrowLeft, ArrowRight, Stethoscope, ShieldCheck, Sparkles, Package } from 'lucide-react';
-import { getConcern, getProductsByConcern, getMembershipsForConcern, getAccessoriesForConcern, concerns, type ConcernId } from '@/data/products';
+import { ArrowLeft, ArrowRight, Stethoscope, ShieldCheck, Sparkles } from 'lucide-react';
+import { getConcern, getProductsByConcern, getMembershipsForConcern, concerns, type ConcernId } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
 import { useCart } from '@/context/CartContext';
 
@@ -19,18 +19,13 @@ export function ConcernPage({ concernId }: { concernId: string }) {
 
   const concernProducts = getProductsByConcern(concern.id as ConcernId);
   const concernMemberships = getMembershipsForConcern(concern.id as ConcernId);
-  const accessories = getAccessoriesForConcern();
 
-  const providerGuided = concernProducts.filter(p => p.requiresIntake);
-  const generalWellness = concernProducts.filter(p => !p.requiresIntake && p.section !== 'research' && p.section !== 'accessories');
-  const researchProducts = concernProducts.filter(p => p.section === 'research');
-  const accessoryProducts = concernProducts.filter(p => p.section === 'accessories');
-
+  const providerGuided = concernProducts;
   const hasProvider = providerGuided.length > 0;
-  const hasResearch = researchProducts.length > 0;
+  const hasResearch = false;
 
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20">
+    <div className="bg-cream-50 pt-28 md:pt-32">
       {/* Hero */}
       <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0">
@@ -92,10 +87,10 @@ export function ConcernPage({ concernId }: { concernId: string }) {
                     ))}
                   </ul>
                   <button
-                    onClick={() => addItem({ productId: m.id, slug: m.id, name: m.name, price: m.price, image: '', subscription: true, section: 'membership', requiresIntake: true })}
+                    onClick={() => addItem({ productId: m.checkoutProductId || m.id, slug: m.slug, name: m.displayName, price: m.monthlyPrice, image: m.image, subscription: true, section: 'membership', requiresIntake: true, isMembership: true, billingFrequency: 'monthly' })}
                     className={`btn-primary w-full ${m.highlighted ? '' : 'btn-outline'}`}
                   >
-                    Join {m.name.split(' ')[0]} <ArrowRight size={16} />
+                    Join {m.displayName.split(' ')[0]} <ArrowRight size={16} />
                   </button>
                 </div>
               ))}
@@ -114,51 +109,6 @@ export function ConcernPage({ concernId }: { concernId: string }) {
             </div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
               {providerGuided.map(p => <ProductCard key={p.id} product={p} />)}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* General wellness */}
-      {generalWellness.length > 0 && (
-        <section className="pb-12">
-          <div className="container-lux">
-            <h2 className="font-serif text-2xl text-ink-900 mb-6">General Wellness Products</h2>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-              {generalWellness.map(p => <ProductCard key={p.id} product={p} />)}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Research products */}
-      {researchProducts.length > 0 && (
-        <section className="pb-12">
-          <div className="container-lux">
-            <div className="flex items-center gap-2 mb-6">
-              <ShieldCheck size={20} className="text-nude-700" />
-              <h2 className="font-serif text-2xl text-ink-900">Research Products</h2>
-            </div>
-            <div className="rounded-xl px-5 py-4 mb-6 text-sm bg-nude-100 text-nude-800">
-              <p>Research products are sold for laboratory and research use only. Not for human consumption.</p>
-            </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-              {researchProducts.map(p => <ProductCard key={p.id} product={p} />)}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Accessories */}
-      {(accessoryProducts.length > 0 || accessories.length > 0) && (
-        <section className="pb-12">
-          <div className="container-lux">
-            <div className="flex items-center gap-2 mb-6">
-              <Package size={20} className="text-gold-500" />
-              <h2 className="font-serif text-2xl text-ink-900">Accessories</h2>
-            </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-              {(accessoryProducts.length > 0 ? accessoryProducts : accessories).map(p => <ProductCard key={p.id} product={p} />)}
             </div>
           </div>
         </section>

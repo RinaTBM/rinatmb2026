@@ -3,6 +3,7 @@ import { Search, ShoppingBag, Menu, X, ChevronDown, ChevronRight } from 'lucide-
 import { Link, navigate } from '@/router';
 import { useCart } from '@/context/CartContext';
 import { products } from '@/data/products';
+import { BrandLogo } from '@/components/BrandLogo';
 
 const concernItems = [
   { label: 'Weight Management', to: '/concern/weight-management' },
@@ -20,9 +21,10 @@ const concernItems = [
 
 const categoryItems = [
   { label: 'Weight Management', to: '/section/weight-management' },
-  { label: 'Longevity', to: '/section/longevity' },
-  { label: 'HRT for Women', to: '/section/hrt-women' },
-  { label: 'Research Products', to: '/section/research' },
+  { label: "Women's Hormone Therapy", to: '/section/womens-hormone-therapy' },
+  { label: 'Longevity & Cognitive Health', to: '/section/longevity-cognitive' },
+  { label: 'Recovery & Performance', to: '/section/recovery-performance' },
+  { label: 'Prescription Skin & Hair', to: '/section/prescription-skin-hair' },
 ];
 
 export function Header() {
@@ -79,7 +81,7 @@ export function Header() {
         }`}
       >
         <div className="container-lux">
-          <div className="flex h-16 items-center justify-between md:h-20">
+          <div className="flex h-28 items-center justify-between md:h-32">
             {/* Mobile menu button */}
             <button
               className="lg:hidden text-ink-900 p-2 -ml-2"
@@ -90,11 +92,10 @@ export function Header() {
             </button>
 
             {/* Logo */}
-            <Link to="/" className="flex items-center group">
-              <img
-                src="/images/logo/ChatGPT_Image_Jul_31,_2026,_01_50_31_PM.png"
-                alt="My Bare Method"
-                className="h-32 md:h-44 w-auto"
+            <Link to="/" className="flex items-center group shrink-0" aria-label="My Bare Method home">
+              <BrandLogo
+                priority
+                className="w-auto max-h-24 md:max-h-[120px] object-contain"
               />
             </Link>
 

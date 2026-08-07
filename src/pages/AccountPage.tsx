@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from '@/router';
-import { Package, Heart, RefreshCw, Settings, LogOut, Truck, Clock, CheckCircle, MapPin } from 'lucide-react';
+import { Package, Heart, RefreshCw, Settings, LogOut, Truck, Clock, CheckCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 const mockOrders = [
@@ -20,7 +20,7 @@ export function AccountPage() {
   const [activeTab, setActiveTab] = useState<'orders' | 'subscriptions' | 'rewards' | 'settings'>('orders');
 
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20 min-h-screen">
+    <div className="bg-cream-50 pt-28 md:pt-32 min-h-screen">
       <div className="container-lux py-8 md:py-12">
         {/* Header */}
         <div className="mb-8">

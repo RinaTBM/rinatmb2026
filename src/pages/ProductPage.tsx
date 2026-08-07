@@ -44,7 +44,7 @@ export function ProductPage({ slug }: { slug: string }) {
   };
 
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20">
+    <div className="bg-cream-50 pt-28 md:pt-32">
       {/* Breadcrumb */}
       <div className="container-lux py-4">
         <div className="flex items-center gap-2 text-sm text-ink-400 flex-wrap">

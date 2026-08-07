@@ -17,7 +17,7 @@ export function ProviderCareSection({ products }: { products: Product[] }) {
     .filter((p): p is Product => Boolean(p));
 
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20">
+    <div className="bg-cream-50 pt-28 md:pt-32">
       <section className="py-16 md:py-24">
         <div className="container-lux">
           <Link

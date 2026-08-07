@@ -3,7 +3,7 @@ import { XCircle } from 'lucide-react';
 
 export function CancelPage() {
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20 min-h-screen flex items-center">
+    <div className="bg-cream-50 pt-28 md:pt-32 min-h-screen flex items-center">
       <div className="container-lux max-w-lg text-center">
         <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-red-50">
           <XCircle size={40} className="text-red-500" />

@@ -17,7 +17,7 @@ export function GoalPage({ goalId }: { goalId: string }) {
   const products = getProductsByGoal(goal.id);
 
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20">
+    <div className="bg-cream-50 pt-28 md:pt-32">
       {/* Hero */}
       <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0">

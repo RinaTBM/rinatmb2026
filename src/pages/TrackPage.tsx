@@ -27,7 +27,7 @@ export function TrackPage() {
   };
 
   return (
-    <div className="bg-cream-50 pt-16 md:pt-20 min-h-screen">
+    <div className="bg-cream-50 pt-28 md:pt-32 min-h-screen">
       <div className="container-lux py-8 md:py-12">
         <div className="mb-8 text-center">
           <p className="eyebrow mb-2">Order Status</p>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Search, ShoppingBag, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
+import { Search, ShoppingBag, Menu, X, ChevronDown, ChevronRight, UserRound } from 'lucide-react';
 import { Link, navigate } from '@/router';
 import { useCart } from '@/context/CartContext';
+import { useCustomerAuth } from '@/context/CustomerAuthContext';
 import { visibleProducts } from '@/data/products';
 import { BrandLogo } from '@/components/BrandLogo';
 import { SHOP_CATEGORIES } from '@/lib/browse/productBrowse';
@@ -13,6 +14,8 @@ const categoryItems = SHOP_CATEGORIES.map(c => ({
 
 export function Header() {
   const { itemCount, openCart } = useCart();
+  const { authenticated } = useCustomerAuth();
+  const accountHref = authenticated ? '/account' : '/account/login';
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -159,6 +162,13 @@ export function Header() {
               >
                 <Search size={20} />
               </button>
+              <Link
+                to={accountHref}
+                className="text-ink-800 hover:text-gold-600 transition-colors p-1"
+                aria-label={authenticated ? 'My account' : 'Sign in'}
+              >
+                <UserRound size={20} />
+              </Link>
               <button
                 onClick={openCart}
                 className="relative text-ink-800 hover:text-gold-600 transition-colors p-1"
@@ -335,7 +345,7 @@ export function Header() {
                 <Link to="/track" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
                   Track Order
                 </Link>
-                <Link to="/account" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
+                <Link to={accountHref} onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
                   Account
                 </Link>
               </div>

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { CartProvider } from '@/context/CartContext';
 import { MemberProvider } from '@/context/MemberContext';
+import { CustomerAuthProvider } from '@/context/CustomerAuthContext';
 import { useRouter } from '@/router';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -14,7 +15,6 @@ import { ProductPage } from '@/pages/ProductPage';
 import { CheckoutPage } from '@/pages/CheckoutPage';
 import { SuccessPage } from '@/pages/SuccessPage';
 import { CancelPage } from '@/pages/CancelPage';
-import { AccountPage } from '@/pages/AccountPage';
 import { TrackPage } from '@/pages/TrackPage';
 import { AboutPage } from '@/pages/AboutPage';
 import { FaqPage } from '@/pages/FaqPage';
@@ -31,6 +31,16 @@ import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { MembershipTermsPage } from '@/pages/MembershipTermsPage';
 import { AdminApp } from '@/admin/AdminApp';
+import { AccountGate } from '@/pages/account/AccountGate';
+import { AccountLoginPage } from '@/pages/account/AccountLoginPage';
+import { AccountSignupPage } from '@/pages/account/AccountSignupPage';
+import { AccountAuthCallbackPage } from '@/pages/account/AccountAuthCallbackPage';
+import { AccountResetPasswordPage } from '@/pages/account/AccountResetPasswordPage';
+import { AccountOverviewPage } from '@/pages/account/AccountOverviewPage';
+import { AccountProfilePage } from '@/pages/account/AccountProfilePage';
+import { AccountComingSoonPage } from '@/pages/account/AccountComingSoonPage';
+import { AccountOrdersPage } from '@/pages/account/AccountOrdersPage';
+import { AccountOrderDetailPage } from '@/pages/account/AccountOrderDetailPage';
 
 function App() {
   const route = useRouter();
@@ -61,21 +71,112 @@ function App() {
     if (path === '/checkout') return <CheckoutPage />;
     if (path === '/success') return <SuccessPage />;
     if (path === '/cancel') return <CancelPage />;
-    if (path === '/account') return <AccountPage />;
+
+    if (path === '/account/login') {
+      return (
+        <AccountGate publicOnly>
+          <AccountLoginPage />
+        </AccountGate>
+      );
+    }
+    if (path === '/account/signup') {
+      return (
+        <AccountGate publicOnly>
+          <AccountSignupPage />
+        </AccountGate>
+      );
+    }
+    if (path === '/account/auth/callback') {
+      return (
+        <AccountGate publicOnly>
+          <AccountAuthCallbackPage />
+        </AccountGate>
+      );
+    }
+    if (path === '/account/reset-password') {
+      return (
+        <AccountGate publicOnly>
+          <AccountResetPasswordPage />
+        </AccountGate>
+      );
+    }
+    if (path === '/account') {
+      return (
+        <AccountGate>
+          <AccountOverviewPage />
+        </AccountGate>
+      );
+    }
+    if (path === '/account/profile') {
+      return (
+        <AccountGate>
+          <AccountProfilePage />
+        </AccountGate>
+      );
+    }
+    if (path === '/account/orders') {
+      return (
+        <AccountGate>
+          <AccountOrdersPage />
+        </AccountGate>
+      );
+    }
+    if (path.startsWith('/account/orders/')) {
+      const orderId = path.replace('/account/orders/', '').split('/')[0];
+      return (
+        <AccountGate>
+          <AccountOrderDetailPage orderId={orderId} />
+        </AccountGate>
+      );
+    }
+    if (path === '/account/membership') {
+      return (
+        <AccountGate>
+          <AccountComingSoonPage
+            active="membership"
+            title="Membership"
+            description="Membership details will appear here in a future update."
+          />
+        </AccountGate>
+      );
+    }
+    if (path === '/account/auto-refill') {
+      return (
+        <AccountGate>
+          <AccountComingSoonPage
+            active="auto-refill"
+            title="Auto-Refill"
+            description="Auto-Refill preferences will appear here in a future update."
+          />
+        </AccountGate>
+      );
+    }
+    if (path === '/account/requests') {
+      return (
+        <AccountGate>
+          <AccountComingSoonPage
+            active="requests"
+            title="Requests"
+            description="Refill, pause, and cancellation requests will appear here in a future update."
+          />
+        </AccountGate>
+      );
+    }
+
     if (path === '/track') return <TrackPage />;
     if (path === '/about') return <AboutPage />;
     if (path === '/faq') return <FaqPage />;
-  if (path === '/memberships') return <MembershipsPage />;
-  if (path === '/alacarte') return <AlaCartePage />;
-  if (path === '/refund-policy') return <RefundPolicyPage />;
-  if (path === '/shipping-policy') return <ShippingPolicyPage />;
-  if (path === '/membership-terms') return <MembershipTermsPage />;
-  if (path === '/accessibility') return <AccessibilityPage />;
-  if (path === '/consumer-data') return <ConsumerDataPage />;
-  if (path === '/contact') return <ContactPage />;
-  if (path === '/shop-all') return <ShopAllPage />;
-  if (path === '/privacy-policy') return <PrivacyPolicyPage />;
-  if (path === '/terms') return <TermsPage />;
+    if (path === '/memberships') return <MembershipsPage />;
+    if (path === '/alacarte') return <AlaCartePage />;
+    if (path === '/refund-policy') return <RefundPolicyPage />;
+    if (path === '/shipping-policy') return <ShippingPolicyPage />;
+    if (path === '/membership-terms') return <MembershipTermsPage />;
+    if (path === '/accessibility') return <AccessibilityPage />;
+    if (path === '/consumer-data') return <ConsumerDataPage />;
+    if (path === '/contact') return <ContactPage />;
+    if (path === '/shop-all') return <ShopAllPage />;
+    if (path === '/privacy-policy') return <PrivacyPolicyPage />;
+    if (path === '/terms') return <TermsPage />;
 
     return (
       <div className="pt-32 pb-20 text-center">
@@ -87,16 +188,18 @@ function App() {
   };
 
   return (
-    <MemberProvider>
-      <CartProvider>
-        <div className="min-h-screen bg-cream-50">
-          <Header />
-          <main>{renderPage()}</main>
-          <Footer />
-          <CartDrawer />
-        </div>
-      </CartProvider>
-    </MemberProvider>
+    <CustomerAuthProvider>
+      <MemberProvider>
+        <CartProvider>
+          <div className="min-h-screen bg-cream-50">
+            <Header />
+            <main>{renderPage()}</main>
+            <Footer />
+            <CartDrawer />
+          </div>
+        </CartProvider>
+      </MemberProvider>
+    </CustomerAuthProvider>
   );
 }
 

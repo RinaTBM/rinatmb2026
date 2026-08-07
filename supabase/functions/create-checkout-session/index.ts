@@ -62,8 +62,34 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const body = await req.json() as { items: CartItemRequest[]; isActiveMember?: boolean };
-    const { items, isActiveMember } = body;
+    const body = await req.json() as {
+      items: CartItemRequest[];
+      isActiveMember?: boolean;
+      customerUserId?: string;
+      customerEmail?: string;
+      customerName?: string;
+      shippingMethod?: string;
+      shippingCents?: number;
+      taxCents?: number;
+      subtotalCents?: number;
+      discountCents?: number;
+      freeShippingEligible?: boolean;
+      requiresProviderReview?: boolean;
+    };
+    const {
+      items,
+      isActiveMember,
+      customerUserId,
+      customerEmail,
+      customerName,
+      shippingMethod,
+      shippingCents,
+      taxCents,
+      subtotalCents,
+      discountCents,
+      freeShippingEligible,
+      requiresProviderReview,
+    } = body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return new Response(JSON.stringify({ error: "No items provided" }), {
@@ -190,6 +216,38 @@ Deno.serve(async (req: Request) => {
       "metadata[is_active_member]": isActiveMember ? "true" : "false",
       "metadata[stripe_mode]": usesCustomPriceData ? "test_custom_pricing" : "mapped_prices",
     };
+
+    if (customerUserId) {
+      sessionBody.client_reference_id = customerUserId;
+      sessionBody["metadata[customer_user_id]"] = customerUserId;
+    }
+    if (customerEmail) sessionBody["metadata[customer_email]"] = customerEmail.slice(0, 500);
+    if (customerName) sessionBody["metadata[customer_name]"] = customerName.slice(0, 500);
+    if (shippingMethod) sessionBody["metadata[shipping_method]"] = shippingMethod.slice(0, 100);
+    if (typeof shippingCents === "number") sessionBody["metadata[shipping_cents]"] = String(Math.max(0, Math.round(shippingCents)));
+    if (typeof taxCents === "number") sessionBody["metadata[tax_cents]"] = String(Math.max(0, Math.round(taxCents)));
+    if (typeof subtotalCents === "number") sessionBody["metadata[subtotal_cents]"] = String(Math.max(0, Math.round(subtotalCents)));
+    if (typeof discountCents === "number") sessionBody["metadata[discount_cents]"] = String(Math.max(0, Math.round(discountCents)));
+    if (typeof freeShippingEligible === "boolean") {
+      sessionBody["metadata[free_shipping_eligible]"] = freeShippingEligible ? "true" : "false";
+    }
+    if (requiresProviderReview) sessionBody["metadata[requires_provider_review]"] = "true";
+
+    // Compact item snapshots for order history (Stripe metadata value max 500 chars).
+    const snapshots = items.map((i) => ({
+      productId: i.productId,
+      productName: i.productName ?? i.productId,
+      variantLabel: i.variantLabel ?? null,
+      quantity: i.quantity,
+      unitPriceCents: i.unitAmountCents ?? undefined,
+      discountCents: 0,
+      lineTotalCents:
+        typeof i.unitAmountCents === "number" ? i.unitAmountCents * i.quantity : undefined,
+    }));
+    const snapJson = JSON.stringify(snapshots);
+    if (snapJson.length <= 500) {
+      sessionBody["metadata[item_snapshots]"] = snapJson;
+    }
 
     const params = new URLSearchParams(sessionBody);
     for (const li of lineItems) {

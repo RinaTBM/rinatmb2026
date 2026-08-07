@@ -49,6 +49,54 @@ export function SectionPage({ sectionId }: { sectionId: string; subFilter?: stri
   const isShopCategory = SHOP_CATEGORY_IDS.has(section.id);
   const isAccessories = section.id === 'accessories';
 
+  // Accessories are intentionally outside the Shop experience — own top-level destination.
+  if (isAccessories) {
+    return (
+      <div className="bg-cream-50 pt-28 md:pt-32">
+        <section className="py-16 md:py-24">
+          <div className="container-lux">
+            <Link to="/" className="inline-flex items-center gap-1 text-sm text-ink-500 hover:text-ink-900 mb-8 transition-colors">
+              <ArrowLeft size={14} /> Home
+            </Link>
+            <div className="flex items-start gap-5 mb-6">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-cream-200">
+                <Package size={28} className="text-gold-500" />
+              </div>
+              <div>
+                <p className="eyebrow mb-2 text-sm">{section.tagline}</p>
+                <h1 className="font-serif text-4xl md:text-5xl text-ink-900">{section.label}</h1>
+              </div>
+            </div>
+            <p className="text-lg text-ink-500 max-w-2xl leading-relaxed mb-3">{section.description}</p>
+            <p className="text-sm text-ink-400 max-w-2xl">
+              Optional add-ons to support your wellness routine — separate from our provider-guided product catalog.
+            </p>
+          </div>
+        </section>
+
+        <div className="container-lux">
+          <div className="rounded-xl px-5 py-4 mb-10 text-sm bg-gold-50 text-gold-800">
+            <div className="flex items-start gap-2">
+              <ShieldCheck size={18} className="flex-shrink-0 mt-0.5" />
+              <p>{section.disclosure}</p>
+            </div>
+          </div>
+        </div>
+
+        <section className="pb-24 md:pb-32">
+          <div className="container-lux">
+            <p className="text-sm text-ink-500 mb-8">{allProducts.length} accessor{allProducts.length !== 1 ? 'ies' : 'y'}</p>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6 xl:gap-8">
+              {allProducts.map(p => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-cream-50 pt-28 md:pt-32">
       <section className="py-16 md:py-24">
@@ -58,9 +106,7 @@ export function SectionPage({ sectionId }: { sectionId: string; subFilter?: stri
           </Link>
           <div className="flex items-start gap-5 mb-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-cream-200">
-              {isAccessories
-                ? <Package size={28} className="text-gold-500" />
-                : <ShieldCheck size={28} className="text-gold-500" />}
+              <ShieldCheck size={28} className="text-gold-500" />
             </div>
             <div>
               <p className="eyebrow mb-2 text-sm">{section.tagline}</p>
@@ -82,7 +128,7 @@ export function SectionPage({ sectionId }: { sectionId: string; subFilter?: stri
 
       <section className="pb-24 md:pb-32">
         <div className="container-lux">
-          {(isShopCategory || isAccessories) && (
+          {isShopCategory && (
             <ProductBrowseBar
               filters={filters}
               onChange={patch => setFilters(prev => ({ ...prev, ...patch }))}
@@ -93,7 +139,7 @@ export function SectionPage({ sectionId }: { sectionId: string; subFilter?: stri
             />
           )}
 
-          {!isShopCategory && !isAccessories && (
+          {!isShopCategory && (
             <p className="text-sm text-ink-500 mb-6">{filtered.length} product{filtered.length !== 1 ? 's' : ''}</p>
           )}
 

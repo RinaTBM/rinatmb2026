@@ -3,7 +3,11 @@ import type { DosageForm, Product } from '@/data/products';
 export type SortId = 'featured' | 'newest' | 'price-low' | 'price-high' | 'alpha';
 export type PriceBand = 'any' | 'under-100' | '100-199' | '200-299' | '300-plus';
 
-/** Wellness categories used in Shop navigation and filters. */
+/**
+ * Wellness categories used in Shop navigation and filters.
+ * Accessories and Provider Care are intentionally excluded — they remain
+ * top-level destinations outside the Shop catalog experience.
+ */
 export const SHOP_CATEGORIES: { id: string; label: string }[] = [
   { id: 'weight-management', label: 'Weight Management' },
   { id: 'womens-hormone-therapy', label: "Women's Hormone Therapy" },

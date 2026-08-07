@@ -3,8 +3,9 @@ import { Link, navigate, type Route } from '@/router';
 import { useAdminSession, readOAuthError } from '@/admin/useAdminSession';
 import { resolveAdminAccess, shouldRedirectToLogin, canRenderAdmin } from '@/lib/auth/adminAccess';
 import { supabase } from '@/lib/supabaseClient';
+import { BRAND_LOGO_SRC } from '@/components/BrandLogo';
 
-const LOGO = '/images/logo/ChatGPT_Image_Jul_31,_2026,_01_50_31_PM.png';
+const LOGO = BRAND_LOGO_SRC;
 
 type Session = ReturnType<typeof useAdminSession>;
 
@@ -58,7 +59,7 @@ function AdminLogin({ session }: { session: Session }) {
   return (
     <div className="min-h-screen bg-cream-50 grid place-items-center px-4">
       <div className="w-full max-w-sm card-lux p-8 text-center">
-        <img src={LOGO} alt="My Bare Method" className="mx-auto h-24 w-auto mb-4" />
+        <img src={LOGO} alt="My Bare Method Logo" className="mx-auto w-auto max-h-24 object-contain mb-4" />
         <h1 className="font-serif text-2xl text-ink-900 mb-1">Administrator Sign In</h1>
         <p className="text-sm text-ink-500 mb-6">Access is restricted to authorized administrators.</p>
         {!session.configured && (

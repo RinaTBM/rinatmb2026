@@ -3,6 +3,7 @@ import { Search, ShoppingBag, Menu, X, ChevronDown, ChevronRight } from 'lucide-
 import { Link, navigate } from '@/router';
 import { useCart } from '@/context/CartContext';
 import { products } from '@/data/products';
+import { BrandLogo } from '@/components/BrandLogo';
 
 const concernItems = [
   { label: 'Weight Management', to: '/concern/weight-management' },
@@ -91,11 +92,10 @@ export function Header() {
             </button>
 
             {/* Logo */}
-            <Link to="/" className="flex items-center group">
-              <img
-                src="/images/logo/ChatGPT_Image_Jul_31,_2026,_01_50_31_PM.png"
-                alt="My Bare Method"
-                className="h-32 md:h-44 w-auto"
+            <Link to="/" className="flex items-center group shrink-0" aria-label="My Bare Method home">
+              <BrandLogo
+                priority
+                className="w-auto max-h-12 md:max-h-[60px] object-contain"
               />
             </Link>
 

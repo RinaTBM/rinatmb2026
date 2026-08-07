@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link, navigate } from '@/router';
 import { Minus, Plus, ShieldCheck, RefreshCw, Truck, Check } from 'lucide-react';
-import { getMembership, getProduct, getRelatedProducts, sections, PROVIDER_ELIGIBILITY_NOTICE } from '@/data/products';
+import { getProduct, getRelatedProducts, sections, PROVIDER_ELIGIBILITY_NOTICE } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
 import { ProductCard } from '@/components/ProductCard';
@@ -18,7 +18,7 @@ export function ProductPage({ slug }: { slug: string }) {
   const [variantIndex, setVariantIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'overview' | 'eligibility' | 'formulation'>('overview');
-  /** null = use preferred default (Wellness Membership / Active Wellness when available). */
+  /** null = use preferred default (Active Wellness Membership when available). */
   const [selectedKind, setSelectedKind] = useState<PurchaseOptionKind | null>(null);
   const settings = useMemo(() => loadPurchaseDiscountSettings(), []);
 
@@ -32,17 +32,14 @@ export function ProductPage({ slug }: { slug: string }) {
       product,
       isActiveMember,
       settings,
-      selectedVariant: variant,
     });
   }, [product, variant, isActiveMember, settings]);
 
-  const preferredDefault: PurchaseOptionKind = options.some(o => o.kind === 'membership_program')
-    ? 'membership_program'
-    : options.some(o => o.kind === 'active_membership')
-      ? 'active_membership'
-      : options.some(o => o.kind === 'one_time')
-        ? 'one_time'
-        : (options[0]?.kind ?? 'one_time');
+  const preferredDefault: PurchaseOptionKind = options.some(o => o.kind === 'active_membership')
+    ? 'active_membership'
+    : options.some(o => o.kind === 'one_time')
+      ? 'one_time'
+      : (options[0]?.kind ?? 'one_time');
 
   const resolvedKind = selectedKind ?? preferredDefault;
 
@@ -62,7 +59,6 @@ export function ProductPage({ slug }: { slug: string }) {
 
   const section = sections.find(s => s.id === product.category);
   const related = getRelatedProducts(product);
-  const isProgramMembership = selected?.kind === 'membership_program';
 
   const containFit =
     product.slug === 'discreet-travel-bag' ||
@@ -73,27 +69,6 @@ export function ProductPage({ slug }: { slug: string }) {
 
   const handlePrimaryAction = () => {
     if (!selected) return;
-
-    if (selected.kind === 'membership_program' && selected.program) {
-      const membership = getMembership(selected.program.membershipSlug);
-      addItem({
-        productId: selected.program.checkoutProductId,
-        slug: selected.program.membershipSlug,
-        name: selected.program.cartLabel,
-        price: selected.program.monthlyPrice,
-        standardPrice: selected.program.monthlyPrice,
-        image: membership?.image ?? product.image,
-        subscription: true,
-        section: 'membership',
-        requiresIntake: true,
-        isMembership: true,
-        billingFrequency: 'monthly',
-        purchaseType: 'membership_program',
-        discountPercent: 0,
-        appliedDiscount: 'none',
-      }, 1);
-      return;
-    }
 
     if (selected.kind === 'active_membership' && !isActiveMember) {
       navigate('/memberships');
@@ -149,7 +124,6 @@ export function ProductPage({ slug }: { slug: string }) {
 
   const primaryLabel = () => {
     if (!selected) return 'Add to Cart';
-    if (selected.kind === 'membership_program') return selected.cta;
     if (selected.kind === 'active_membership' && !isActiveMember) return 'Become a Member';
     if (selected.kind === 'auto_refill') {
       return `Subscribe & Save — $${(selected.finalPrice * quantity).toFixed(2)}/mo`;
@@ -207,19 +181,8 @@ export function ProductPage({ slug }: { slug: string }) {
 
               <div className="mb-6">
                 <p className="text-sm font-medium text-ink-900 mb-2">
-                  {isProgramMembership
-                    ? 'Formulations in this program'
-                    : product.dosageForms.length > 1
-                      ? 'Select form & strength'
-                      : 'Select strength'}
+                  {product.dosageForms.length > 1 ? 'Select form & strength' : 'Select strength'}
                 </p>
-                {isProgramMembership && (
-                  <p className="mb-3 text-xs text-ink-500 leading-relaxed">
-                    Wellness Membership is a flat monthly rate. Customers do not select a membership dose — your
-                    licensed provider determines the appropriate formulation and strength. Strength selection below
-                    only affects Auto-Refill and One-Time Purchase pricing.
-                  </p>
-                )}
                 <div className="space-y-2">
                   {product.variants.map((v, i) => {
                     const selectedVariant = i === variantIndex;
@@ -251,12 +214,9 @@ export function ProductPage({ slug }: { slug: string }) {
 
                 {options.map(option => {
                   const isSelected = selected?.kind === option.kind;
-                  const isFlatMembership = option.kind === 'membership_program';
-                  const isPercentMembership = option.kind === 'active_membership';
-                  const isMembershipOption = isFlatMembership || isPercentMembership;
-                  const showBestValueRibbon = isMembershipOption && !(isPercentMembership && isActiveMember);
-                  const hideMemberCta = isPercentMembership && isActiveMember;
-                  const program = option.program;
+                  const isMembershipOption = option.kind === 'active_membership';
+                  const showBestValueRibbon = isMembershipOption && !isActiveMember;
+                  const hideMemberCta = isMembershipOption && isActiveMember;
                   return (
                     <button
                       key={option.kind}
@@ -282,9 +242,9 @@ export function ProductPage({ slug }: { slug: string }) {
                         </span>
                       )}
                       <div className="flex items-start justify-between gap-3 pr-6">
-                        <div className="min-w-0">
+                        <div>
                           <div className="flex flex-wrap items-center gap-2 mb-1">
-                            <span className="text-sm font-semibold text-ink-900">
+                            <span className={`text-sm font-semibold ${isMembershipOption ? 'text-ink-900' : 'text-ink-900'}`}>
                               {option.label}
                             </span>
                             {option.badge && !showBestValueRibbon && (
@@ -292,45 +252,14 @@ export function ProductPage({ slug }: { slug: string }) {
                                 {option.badge}
                               </span>
                             )}
-                            {isMembershipOption && isSelected && showBestValueRibbon && (
+                            {isMembershipOption && isSelected && !isActiveMember && (
                               <span className="text-[10px] font-medium uppercase tracking-wider text-gold-700">
                                 Recommended
                               </span>
                             )}
                           </div>
                           <p className="text-xs text-ink-500 leading-relaxed mb-2">{option.description}</p>
-                          {isFlatMembership && program && (
-                            <div className="space-y-2 mb-1">
-                              <ul className="space-y-1">
-                                {program.includedFormulations.map(f => (
-                                  <li key={f} className="flex items-start gap-1.5 text-[11px] text-ink-600">
-                                    <Check size={12} className="mt-0.5 shrink-0 text-gold-600" />
-                                    <span>{f}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                              <p className="text-[11px] text-ink-500 leading-relaxed">{program.customerNote}</p>
-                              {program.memberOnlyNotice && (
-                                <div className="rounded-lg border border-ink-200 bg-cream-50 p-3">
-                                  <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-800">
-                                    {program.memberOnlyNotice.title}
-                                  </p>
-                                  <p className="mt-1 font-serif text-xl text-ink-900">
-                                    ${program.memberOnlyNotice.monthlyPrice}
-                                    <span className="text-sm text-ink-500">/month</span>
-                                  </p>
-                                  <p className="mt-1 text-[11px] text-ink-600 leading-relaxed">
-                                    {program.memberOnlyNotice.description}
-                                  </p>
-                                  <p className="mt-1.5 text-[10px] text-ink-500">
-                                    Not available for self-serve purchase. Requires active membership, provider
-                                    direction, and authorized admin approval.
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          )}
-                          {isPercentMembership && !isActiveMember && (
+                          {isMembershipOption && !isActiveMember && (
                             <p className="text-xs text-gold-700">Members Save {settings.memberDiscountPercent}% · Preferred member pricing</p>
                           )}
                           {hideMemberCta && (
@@ -338,18 +267,16 @@ export function ProductPage({ slug }: { slug: string }) {
                           )}
                         </div>
                         <div className="text-right shrink-0">
-                          {!isFlatMembership && option.savingsAmount > 0 && (
+                          {option.savingsAmount > 0 && (
                             <p className="text-xs text-ink-400 line-through">${option.standardPrice.toFixed(2)}</p>
                           )}
                           <p className="font-serif text-2xl text-ink-900">
                             ${option.finalPrice.toFixed(2)}
-                            {option.recurring || isFlatMembership ? <span className="text-sm text-ink-500">/mo</span> : null}
+                            {option.recurring ? <span className="text-sm text-ink-500">/mo</span> : null}
                           </p>
-                          {isFlatMembership ? (
-                            <p className="text-xs text-ink-500">flat rate</p>
-                          ) : option.savingsAmount > 0 ? (
+                          {option.savingsAmount > 0 && (
                             <p className="text-xs text-gold-700">Save ${option.savingsAmount.toFixed(2)}</p>
-                          ) : null}
+                          )}
                         </div>
                       </div>
                     </button>
@@ -357,13 +284,11 @@ export function ProductPage({ slug }: { slug: string }) {
                 })}
 
                 <div className="flex items-center gap-3 pt-2">
-                  {!isProgramMembership && (
-                    <div className="flex items-center gap-2 rounded-full border border-ink-200 px-3 py-1.5">
-                      <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="text-ink-500 hover:text-ink-900" aria-label="Decrease quantity"><Minus size={16} /></button>
-                      <span className="w-6 text-center text-sm font-medium">{quantity}</span>
-                      <button onClick={() => setQuantity(q => q + 1)} className="text-ink-500 hover:text-ink-900" aria-label="Increase quantity"><Plus size={16} /></button>
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2 rounded-full border border-ink-200 px-3 py-1.5">
+                    <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="text-ink-500 hover:text-ink-900" aria-label="Decrease quantity"><Minus size={16} /></button>
+                    <span className="w-6 text-center text-sm font-medium">{quantity}</span>
+                    <button onClick={() => setQuantity(q => q + 1)} className="text-ink-500 hover:text-ink-900" aria-label="Increase quantity"><Plus size={16} /></button>
+                  </div>
                   <button onClick={handlePrimaryAction} className="btn-primary flex-1 text-base py-4">
                     {primaryLabel()}
                   </button>
@@ -377,7 +302,7 @@ export function ProductPage({ slug }: { slug: string }) {
                 <div className="mt-2 grid grid-cols-3 gap-2 text-center text-xs text-ink-500">
                   <div className="flex flex-col items-center gap-1"><Truck size={16} className="text-gold-500" /> Discreet shipping</div>
                   <div className="flex flex-col items-center gap-1"><ShieldCheck size={16} className="text-gold-500" /> Secure checkout</div>
-                  <div className="flex flex-col items-center gap-1"><RefreshCw size={16} className="text-gold-500" /> {selected?.kind === 'auto_refill' || selected?.kind === 'membership_program' ? 'Easy subscription management' : 'Provider-reviewed'}</div>
+                  <div className="flex flex-col items-center gap-1"><RefreshCw size={16} className="text-gold-500" /> {selected?.kind === 'auto_refill' ? 'Easy subscription management' : 'Provider-reviewed'}</div>
                 </div>
               </div>
             </div>

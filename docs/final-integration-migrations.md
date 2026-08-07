@@ -34,4 +34,5 @@ These migrations must **not** alter:
 2. Apply `20260806090000_catalog_admin_schema.sql`.
 3. Apply `20260806090100_seed_catalog.sql`.
 4. Apply `20260806100000_admin_auth.sql`.
-5. Verify: `admins.is_active`, `admins.updated_at`, `is_admin()` contains `is_active = true`, admin row count unchanged.
+5. Apply `20260807020000_purchase_savings_strategy.sql` when ready for purchase-savings persistence.
+6. Verify: `admins.is_active`, `admins.updated_at`, `is_admin()` contains `is_active = true`, admin row count unchanged; `store_purchase_settings` defaults 15/10.

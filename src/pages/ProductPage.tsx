@@ -63,7 +63,9 @@ export function ProductPage({ slug }: { slug: string }) {
   const containFit =
     product.slug === 'discreet-travel-bag' ||
     product.slug === 'temperature-controlled-travel-case' ||
-    product.slug === 'reusable-ice-pack';
+    product.slug === 'reusable-ice-pack' ||
+    product.slug === 'complete-injection-starter-kit' ||
+    product.slug === 'premium-3d-printed-peptide-case';
 
   const handlePrimaryAction = () => {
     if (!selected) return;

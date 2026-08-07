@@ -14,6 +14,8 @@ const CONTAIN_FIT_SLUGS = new Set([
   'discreet-travel-bag',
   'temperature-controlled-travel-case',
   'reusable-ice-pack',
+  'complete-injection-starter-kit',
+  'premium-3d-printed-peptide-case',
 ]);
 
 export function ProductCard({ product }: { product: Product }) {

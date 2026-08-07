@@ -371,10 +371,15 @@ export function CheckoutPage() {
                         ) : (
                           <>
                             {item.variantLabel && <p className="text-xs text-ink-500 truncate">{item.variantLabel}</p>}
-                            <p className="text-xs text-ink-500">
-                              {item.purchaseType === 'auto_refill' ? '○ Auto-Refill & Save' : '○ One-Time Purchase'}
-                              {item.purchaseType === 'auto_refill' ? ' · Monthly' : ''}
-                            </p>
+                            {item.section === 'accessories' ? (
+                              <p className="text-xs text-ink-500">Quantity: {item.quantity}</p>
+                            ) : (
+                              <p className="text-xs text-ink-500">
+                                {item.purchaseType === 'auto_refill'
+                                  ? '○ Auto-Refill & Save · Monthly'
+                                  : '○ One-Time Purchase'}
+                              </p>
+                            )}
                             {standard > item.price && (
                               <p className="text-xs text-ink-400">
                                 Standard ${standard.toFixed(2)}

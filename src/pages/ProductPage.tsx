@@ -5,13 +5,31 @@ import { getMembership, getProduct, getRelatedProducts, sections, PROVIDER_ELIGI
 import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
 import { ProductCard } from '@/components/ProductCard';
+import { AccessoryProductPage } from '@/components/AccessoryProductPage';
 import {
   buildPurchaseOptions,
   type PurchaseOptionKind,
 } from '@/lib/pricing/purchaseOptions';
 import { loadPurchaseDiscountSettings } from '@/lib/pricing/settings';
 
+/** Router — accessories get a simplified ecommerce page; wellness keeps existing purchase logic. */
 export function ProductPage({ slug }: { slug: string }) {
+  const product = getProduct(slug);
+  if (!product) {
+    return (
+      <div className="pt-32 pb-20 text-center">
+        <p className="text-ink-500">Product not found.</p>
+        <Link to="/" className="btn-outline mt-6">Back home</Link>
+      </div>
+    );
+  }
+  if (product.category === 'accessories') {
+    return <AccessoryProductPage product={product} />;
+  }
+  return <WellnessProductPage slug={slug} />;
+}
+
+function WellnessProductPage({ slug }: { slug: string }) {
   const product = getProduct(slug);
   const { addItem } = useCart();
   const { isActiveMember } = useMember();
@@ -63,9 +81,7 @@ export function ProductPage({ slug }: { slug: string }) {
   const section = sections.find(s => s.id === product.category);
   const related = getRelatedProducts(product);
   const isProgramMembership = selected?.kind === 'membership_program';
-
-  /** All Accessories use contain-fit so product photos are never cropped. */
-  const containFit = product.category === 'accessories';
+  const containFit = false;
 
   const handlePrimaryAction = () => {
     if (!selected) return;

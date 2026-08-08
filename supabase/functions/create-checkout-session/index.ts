@@ -30,7 +30,7 @@ interface CartItemRequest {
 
 const SEMAGLUTIDE_MEMBERSHIP_APP_ID = "m1";
 const TIRZEPATIDE_MEMBERSHIP_APP_ID = "m2";
-const SEMAGLUTIDE_MEMBERSHIP_CENTS = 19900;
+const SEMAGLUTIDE_MEMBERSHIP_CENTS = 14900;
 const TIRZEPATIDE_MEMBERSHIP_CENTS = 24900;
 const TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS = 35000;
 
@@ -40,6 +40,9 @@ const ACCESSORY_MEMBER_DISCOUNT_PERCENT = 15;
 /** Provider Care only — never a universal cart tax. */
 const PROVIDER_CARE_TAX_RATE = 0.018;
 const PROVIDER_CARE_TAX_RATE_PERCENT = 1.8;
+/** Accessory merchandise only — configurable interim sales-tax rate. */
+const ACCESSORY_SALES_TAX_RATE = 0.08;
+const ACCESSORY_SALES_TAX_RATE_PERCENT = 8;
 
 const TWO_DAY_SHIPPING_CENTS = 3000;
 const NEXT_DAY_SHIPPING_CENTS = 5000;
@@ -342,6 +345,16 @@ function isProviderCareResolvedLine(line: LineResolution): boolean {
   return /^pc\d+$/i.test(line.productId);
 }
 
+function isAccessoryResolvedLine(line: LineResolution): boolean {
+  if (
+    line.kind === "price_data" &&
+    (line.reason === "accessory_member_discount" || line.reason === "accessory_standard")
+  ) {
+    return true;
+  }
+  return /^a\d+$/i.test(line.productId);
+}
+
 function authorizeShippingCents(input: {
   shippingMethod?: string;
   clientShippingCents?: number;
@@ -566,6 +579,10 @@ Deno.serve(async (req: Request) => {
       if (!isProviderCareResolvedLine(line)) return sum;
       return sum + line.unitAmountCents * line.quantity;
     }, 0);
+    const accessoryTaxableSubtotal = resolved.reduce((sum, line) => {
+      if (!isAccessoryResolvedLine(line)) return sum;
+      return sum + line.unitAmountCents * line.quantity;
+    }, 0);
     const shippableSubtotal = authorizedSubtotal - providerCareTaxableSubtotal;
     const requiresPhysicalShipping = resolved.some((line) => !isProviderCareResolvedLine(line));
 
@@ -577,8 +594,10 @@ Deno.serve(async (req: Request) => {
     });
     if ("error" in shippingAuth) return jsonError(shippingAuth.error);
 
-    // Provider Care 1.8% only — never universal 8%, never on wellness/accessories/shipping.
+    // Provider Care 1.8% — only PC eligible subtotal.
     const providerCareTaxCents = Math.round(providerCareTaxableSubtotal * PROVIDER_CARE_TAX_RATE);
+    // Accessory sales tax — only accessory merchandise (configurable interim rate).
+    const accessorySalesTaxCents = Math.round(accessoryTaxableSubtotal * ACCESSORY_SALES_TAX_RATE);
     void taxCents;
 
     const origin = req.headers.get("origin") || "https://mybaremethod.com";
@@ -595,8 +614,11 @@ Deno.serve(async (req: Request) => {
       "metadata[provider_care_tax_rate]": String(PROVIDER_CARE_TAX_RATE_PERCENT),
       "metadata[provider_care_tax_cents]": String(providerCareTaxCents),
       "metadata[provider_care_taxable_subtotal_cents]": String(providerCareTaxableSubtotal),
-      // Webhook compatibility: tax_cents mirrors Provider Care tax (not accessory sales tax).
-      "metadata[tax_cents]": String(providerCareTaxCents),
+      "metadata[accessory_sales_tax_rate]": String(ACCESSORY_SALES_TAX_RATE_PERCENT),
+      "metadata[accessory_sales_tax_cents]": String(accessorySalesTaxCents),
+      "metadata[accessory_taxable_subtotal_cents]": String(accessoryTaxableSubtotal),
+      // Webhook compatibility: tax_cents = sum of authorized tax/fee components.
+      "metadata[tax_cents]": String(providerCareTaxCents + accessorySalesTaxCents),
     };
 
     if (requiresPhysicalShipping) {
@@ -658,13 +680,20 @@ Deno.serve(async (req: Request) => {
       }
     });
 
-    // Charge Provider Care 1.8% in Stripe when applicable (not metadata-only).
+    // Charge authorized tax/fee components in Stripe (not metadata-only).
+    let nextIdx = resolved.length;
     if (providerCareTaxCents > 0) {
-      const taxIdx = resolved.length;
-      params.append(`line_items[${taxIdx}][price_data][currency]`, "usd");
-      params.append(`line_items[${taxIdx}][price_data][unit_amount]`, String(providerCareTaxCents));
-      params.append(`line_items[${taxIdx}][price_data][product_data][name]`, "Provider Care Tax (1.8%)");
-      params.append(`line_items[${taxIdx}][quantity]`, "1");
+      params.append(`line_items[${nextIdx}][price_data][currency]`, "usd");
+      params.append(`line_items[${nextIdx}][price_data][unit_amount]`, String(providerCareTaxCents));
+      params.append(`line_items[${nextIdx}][price_data][product_data][name]`, "Provider Care Tax (1.8%)");
+      params.append(`line_items[${nextIdx}][quantity]`, "1");
+      nextIdx += 1;
+    }
+    if (accessorySalesTaxCents > 0) {
+      params.append(`line_items[${nextIdx}][price_data][currency]`, "usd");
+      params.append(`line_items[${nextIdx}][price_data][unit_amount]`, String(accessorySalesTaxCents));
+      params.append(`line_items[${nextIdx}][price_data][product_data][name]`, "Sales Tax");
+      params.append(`line_items[${nextIdx}][quantity]`, "1");
     }
 
     const sessionRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {

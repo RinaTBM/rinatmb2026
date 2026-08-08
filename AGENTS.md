@@ -25,8 +25,9 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Modern checkout maps Stripe TEST prices from `catalog_memberships.stripe_price_id_test` and `catalog_variants.stripe_price_id_test` after `stripe-sync`. It does **not** require legacy `public.stripe_products`.
 - Shared authorization logic lives in `src/lib/checkout/` (mirrored in the Deno edge function). Frontend must send `variantId` for undiscounted one-time mapped products.
 - Shipping is charged via Stripe Checkout `shipping_options` (Two-Day $30 / Next-Day $50 / free at $500+ merchandise). Browser `shipping_cents` is validated, not trusted. Provider Care–only carts do **not** get physical shipping.
-- Provider Care tax: **1.8% only** on Provider Care eligible subtotal (`provider_care_tax_*` metadata + charged Stripe line item). Universal 8% is removed. Do **not** apply 1.8% to wellness, memberships, accessories, or shipping.
-- Accessory sales tax is **pending** (no hardcoded rate). Stripe Tax is the recommended future path for destination-based accessory tax — do **not** enable without explicit approval.
+- Membership rates: Semaglutide **$149/mo**, Tirzepatide **$249/mo** (catalog + checkout constants).
+- Provider Care tax/fee: **1.8% only** on Provider Care eligible subtotal (`provider_care_tax_*` metadata + charged Stripe line item). Do **not** apply 1.8% to wellness, memberships, accessories, or shipping.
+- Accessory sales tax: configurable interim rate (`ACCESSORY_SALES_TAX_RATE`, currently 0.08) on accessory merchandise only. Stripe Tax remains the preferred long-term path — do **not** enable without explicit approval. Wellness products do not receive accessory sales tax.
 - Provider Care (`pc1`/`pc2`/`pc3`) is intentionally **not** in stripe-sync catalog tables; checkout charges approved fixed amounts via `price_data`.
 - Preserve webhook metadata keys (`client_reference_id`, `customer_user_id`, `shipping_cents`, `tax_cents`, `item_snapshots`, `provider_care_tax_*`, etc.). Do not modify `stripe-webhook` when changing checkout mapping.
 - TEST-only: reject live Stripe keys. Run `stripe-sync` apply before first mapped membership/product checkout after a fresh DB.

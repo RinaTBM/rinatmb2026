@@ -96,7 +96,7 @@ function buildRoutes() {
       path: '/memberships',
       component: createElement(MembershipsPage),
       title: 'Memberships — My Bare Method',
-      description: 'Locked-price, provider-guided Semaglutide ($199/mo) and Tirzepatide ($249/mo) memberships. One membership, one predictable monthly price. Provider review required.',
+      description: 'Locked-price, provider-guided Semaglutide ($149/mo) and Tirzepatide ($249/mo) memberships. One membership, one predictable monthly price. Provider review required.',
     },
     {
       path: '/alacarte',

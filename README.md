@@ -12,6 +12,6 @@ Do not treat older Bolt project snapshots as the source of truth. Import this Gi
 
 ## Key storefront notes
 
-- Semaglutide / Tirzepatide product pages offer flat-rate Wellness Membership ($199 / $249), Auto-Refill (10%), and One-Time Purchase by strength.
+- Semaglutide / Tirzepatide product pages offer flat-rate Wellness Membership ($149 / $249), Auto-Refill (10%), and One-Time Purchase by strength.
 - Shop navigation uses **Shop** → Shop All + Shop by Category (no Shop by Concern). Accessories and Provider Care remain top-level destinations.
 - Stripe checkout must remain in **test mode** for development.

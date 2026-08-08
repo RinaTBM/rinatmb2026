@@ -11,21 +11,21 @@ const howItWorks = [
 ];
 
 const faqs = [
-  { q: 'Will my price increase if my treatment changes?', a: 'Your Semaglutide membership remains $199 per month while your membership stays continuously active and your provider-selected treatment remains within the included program. Your Tirzepatide membership remains $249 per month while your provider-selected treatment remains within the included program through 25mg/2mg per mL, 2mL.' },
+  { q: 'Will my price increase if my treatment changes?', a: 'Your Semaglutide membership remains $149 per month while your membership stays continuously active and your provider-selected treatment remains within the included program. Your Tirzepatide membership remains $249 per month while your provider-selected treatment remains within the included program through 15mg.' },
   { q: 'Can I choose my dose?', a: 'No. Your licensed provider determines the appropriate formulation, strength, and treatment plan based on your eligibility and clinical information.' },
   { q: 'Does joining guarantee a prescription?', a: 'No. Membership enrollment and payment do not guarantee prescribing. A licensed provider must review your information and determine whether treatment is appropriate.' },
   { q: 'What happens if I cancel?', a: 'Canceling ends your locked membership rate. Future enrollment is subject to the membership price available at that time.' },
   { q: 'Can I switch programs?', a: 'Yes, when clinically appropriate. Switching programs requires enrollment at the current price for the new membership.' },
-  { q: 'Is the highest Tirzepatide formulation included?', a: 'The $249 membership includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above that program maximum are not included.' },
+  { q: 'Is the highest Tirzepatide formulation included?', a: 'The $249 membership includes eligible provider-selected formulations through 15mg.' },
   { q: 'Are labs included?', a: 'Laboratory testing is not included unless the current workflow specifically states otherwise. A provider may request labs before or during treatment.' },
   { q: 'Is shipping included?', a: 'Shipping is not included in the membership. Standard shipping options and any applicable fees are shown at checkout and follow our Shipping Policy. Certain medications may require temperature-controlled packaging.' },
 ];
 
 const comparisonRows: { feature: string; sema: string | boolean; tirz: string | boolean; onetime: string | boolean }[] = [
-  { feature: 'Monthly price', sema: '$199', tirz: '$249', onetime: 'Varies by selected product' },
+  { feature: 'Monthly price', sema: '$149', tirz: '$249', onetime: 'Varies by selected product' },
   { feature: '15% off eligible wellness products', sema: true, tirz: true, onetime: false },
   { feature: '15% off accessories', sema: true, tirz: true, onetime: false },
-  { feature: 'Included program', sema: 'Eligible included Semaglutide formulations', tirz: 'Eligible formulations through 25mg/2mg per mL, 2mL', onetime: 'Selected purchased formulation' },
+  { feature: 'Included program', sema: 'Eligible included Semaglutide formulations', tirz: 'Eligible formulations through 15mg', onetime: 'Selected purchased formulation' },
   { feature: 'Locked continuous-member rate', sema: true, tirz: true, onetime: false },
   { feature: 'Provider review required', sema: true, tirz: true, onetime: 'Provider-directed when applicable' },
   { feature: 'Provider-directed treatment adjustments', sema: 'Yes, within included program', tirz: 'Yes, within included program maximum', onetime: 'Provider-directed when applicable' },
@@ -231,8 +231,7 @@ export function MembershipsPage() {
               <div>
                 <h3 className="font-serif text-lg text-ink-900 mb-1">Tirzepatide program maximum</h3>
                 <p className="text-sm text-ink-500">
-                  The $249 Tirzepatide rate includes eligible provider-selected formulations through 25mg/2mg per mL,
-                  2mL. Formulations above that maximum (including 30mg/2mg per mL, 2mL) are not part of this membership.
+                  The $249 Tirzepatide rate includes eligible provider-selected formulations through 15mg.
                 </p>
               </div>
             </div>
@@ -311,7 +310,7 @@ export function MembershipsPage() {
             ))}
             <li className="flex items-start gap-3 text-sm text-ink-600">
               <Check size={16} className="flex-shrink-0 mt-0.5 text-gold-500" />
-              <span>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above the included maximum are not part of this membership.</span>
+              <span>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 15mg.</span>
             </li>
           </ul>
           <div className="mt-8 text-center">

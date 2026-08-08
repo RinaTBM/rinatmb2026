@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   ACCESSORY_MEMBER_DISCOUNT_PERCENT,
-  ACCESSORY_SALES_TAX_PENDING,
+  ACCESSORY_SALES_TAX_RATE,
   AUTO_REFILL_DISCOUNT_PERCENT,
   PROVIDER_CARE_FIXED_CENTS,
   PROVIDER_CARE_TAX_RATE,
@@ -19,6 +19,7 @@ import {
   TWO_DAY_SHIPPING_CENTS,
 } from '../orders/shipping';
 import {
+  authorizeAccessorySalesTax,
   authorizeProviderCareTax,
   authorizeShippingCents,
   authorizeWellnessUnitCents,
@@ -72,8 +73,8 @@ const tirzMembership: CatalogMembershipRow = {
 const semaVariant: CatalogVariantRow = {
   variant_key: 'semaglutide-v1',
   stripe_price_id_test: 'price_test_sema_v1',
-  price_cents: 14900,
-  display_name: '1mg/1mg per mL, 2mL',
+  price_cents: 11900,
+  display_name: '0.5mg, Vial',
   app_product_id: 'p1',
 };
 
@@ -81,13 +82,13 @@ describe('Stripe mapping (catalog TEST prices)', () => {
   it('Semaglutide membership resolves to catalog_memberships TEST price', () => {
     const line = expectMapped(
       resolveMembershipLine(
-        { productId: SEMAGLUTIDE_MEMBERSHIP_APP_ID, quantity: 1, purchaseType: 'membership_program', unitAmountCents: 19900 },
+        { productId: SEMAGLUTIDE_MEMBERSHIP_APP_ID, quantity: 1, purchaseType: 'membership_program', unitAmountCents: 14900 },
         semaMembership,
       ),
     );
     expect(line.source).toBe('catalog_memberships');
     expect(line.stripePriceId).toBe('price_test_sema_199');
-    expect(line.unitAmountCents).toBe(19900);
+    expect(line.unitAmountCents).toBe(14900);
   });
 
   it('Tirzepatide membership resolves to catalog_memberships TEST price', () => {
@@ -104,13 +105,14 @@ describe('Stripe mapping (catalog TEST prices)', () => {
   it('undiscounted one-time product resolves to catalog variant TEST price', () => {
     const line = expectMapped(
       resolveProductLine(
-        { productId: 'p1', quantity: 1, purchaseType: 'one_time', variantId: 'semaglutide-v1', standardPriceCents: 14900, unitAmountCents: 14900 },
+        { productId: 'p1', quantity: 1, purchaseType: 'one_time', variantId: 'semaglutide-v1', standardPriceCents: 11900, unitAmountCents: 11900 },
         false,
         semaVariant,
       ),
     );
     expect(line.source).toBe('catalog_variants');
     expect(line.stripePriceId).toBe('price_test_sema_v1');
+    expect(line.unitAmountCents).toBe(11900);
   });
 
   it('modern checkout does not require stripe_products / legacy sync-stripe-products', () => {
@@ -126,8 +128,8 @@ describe('Stripe mapping (catalog TEST prices)', () => {
 });
 
 describe('membership / savings rules', () => {
-  it('Semaglutide membership remains $199/month and Tirzepatide $249/month', () => {
-    expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(19900);
+  it('Semaglutide membership remains $149/month and Tirzepatide $249/month', () => {
+    expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
     expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(24900);
   });
 
@@ -149,11 +151,11 @@ describe('membership / savings rules', () => {
 
   it('Auto-Refill remains 10% via authorized price_data', () => {
     const auth = authorizeWellnessUnitCents(
-      { productId: 'p1', quantity: 1, purchaseType: 'auto_refill', subscription: true, standardPriceCents: 14900, unitAmountCents: 100 },
+      { productId: 'p1', quantity: 1, purchaseType: 'auto_refill', subscription: true, standardPriceCents: 11900, unitAmountCents: 100 },
       false,
     );
     expect(auth?.discountPercent).toBe(AUTO_REFILL_DISCOUNT_PERCENT);
-    expect(auth?.unitAmountCents).toBe(Math.round(14900 * 0.9));
+    expect(auth?.unitAmountCents).toBe(Math.round(11900 * 0.9));
     expect(normalizeVariantKey('semaglutide-v1-refill')).toBe('semaglutide-v1');
   });
 
@@ -329,8 +331,8 @@ describe('accessories (retail goods; sales tax pending)', () => {
     expect(isAccessoryLine({ productId: 'm1', section: 'membership' })).toBe(false);
   });
 
-  it('no hardcoded universal 8% accessory tax is introduced; sales tax remains pending', () => {
-    expect(ACCESSORY_SALES_TAX_PENDING).toBe(true);
+  it('accessory sales tax uses configurable rate on accessories only (not wellness/PC)', () => {
+    expect(ACCESSORY_SALES_TAX_RATE).toBe(0.08);
     const accessory = expectPriceData(
       resolveProductLine(
         {
@@ -346,7 +348,10 @@ describe('accessories (retail goods; sales tax pending)', () => {
       ),
     );
     expect(providerCareTaxableSubtotalCents([accessory])).toBe(0);
-    expect(authorizeProviderCareTax({ providerCareTaxableSubtotalCents: 0 }).providerCareTaxCents).toBe(0);
+    const tax = authorizeAccessorySalesTax({ accessoryTaxableSubtotalCents: 3400 });
+    expect(tax.accessorySalesTaxCents).toBe(Math.round(3400 * 0.08));
+    // Wellness subtotal must not receive accessory sales tax.
+    expect(authorizeAccessorySalesTax({ accessoryTaxableSubtotalCents: 0 }).accessorySalesTaxCents).toBe(0);
   });
 
   it('accessory member discount still works', () => {

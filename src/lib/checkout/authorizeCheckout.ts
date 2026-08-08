@@ -13,6 +13,8 @@ import {
 import {
   ACCESSORY_BUNDLE_PRODUCT_IDS,
   ACCESSORY_MEMBER_DISCOUNT_PERCENT,
+  ACCESSORY_SALES_TAX_RATE,
+  ACCESSORY_SALES_TAX_RATE_PERCENT,
   AUTO_REFILL_DISCOUNT_PERCENT,
   MEMBERSHIP_FIXED_CENTS,
   PROVIDER_CARE_FIXED_CENTS,
@@ -129,7 +131,7 @@ export function normalizeVariantKey(variantId: string | undefined | null): strin
 
 /**
  * Reject self-serve attempts to charge the Tirzepatide 30mg member-only $350 rate.
- * Public membership checkout is only $199 / $249 via catalog_memberships.
+ * Public membership checkout is only $149 / $249 via catalog_memberships.
  */
 export function isForbiddenSelfServeMemberOnly350(item: CheckoutCartItem): boolean {
   if (!isProgramMembership(item)) return false;
@@ -385,6 +387,13 @@ export function isProviderCareResolvedLine(line: LineResolution): boolean {
   return /^pc\d+$/i.test(line.productId);
 }
 
+export function isAccessoryResolvedLine(line: LineResolution): boolean {
+  if (line.kind === 'price_data' && (line.reason === 'accessory_member_discount' || line.reason === 'accessory_standard')) {
+    return true;
+  }
+  return /^a\d+$/i.test(line.productId);
+}
+
 /** Physical merchandise / memberships that may ship. Provider Care services do not. */
 export function isShippableResolvedLine(line: LineResolution): boolean {
   return !isProviderCareResolvedLine(line);
@@ -396,6 +405,10 @@ export function lineSubtotalCents(lines: LineResolution[]): number {
 
 export function providerCareTaxableSubtotalCents(lines: LineResolution[]): number {
   return lineSubtotalCents(lines.filter(isProviderCareResolvedLine));
+}
+
+export function accessoryTaxableSubtotalCents(lines: LineResolution[]): number {
+  return lineSubtotalCents(lines.filter(isAccessoryResolvedLine));
 }
 
 export function shippableMerchandiseSubtotalCents(lines: LineResolution[]): number {
@@ -422,13 +435,35 @@ export function authorizeProviderCareTax(input: {
 } {
   const taxable = Math.max(0, Math.round(input.providerCareTaxableSubtotalCents));
   const authorized = Math.round(taxable * PROVIDER_CARE_TAX_RATE);
-  // Never trust browser tax amounts (legacy universal 8% or otherwise).
   void input.clientProviderCareTaxCents;
   void input.clientTaxCents;
   return {
     providerCareTaxableSubtotalCents: taxable,
     providerCareTaxRatePercent: PROVIDER_CARE_TAX_RATE_PERCENT,
     providerCareTaxCents: authorized,
+  };
+}
+
+/**
+ * Accessory retail sales tax — configurable interim rate (default 8%).
+ * Applies ONLY to accessory merchandise. Not wellness / PC / memberships / shipping.
+ * Prefer Stripe Tax when explicitly approved later.
+ */
+export function authorizeAccessorySalesTax(input: {
+  accessoryTaxableSubtotalCents: number;
+  clientAccessoryTaxCents?: number;
+}): {
+  accessorySalesTaxCents: number;
+  accessorySalesTaxRatePercent: number;
+  accessoryTaxableSubtotalCents: number;
+} {
+  const taxable = Math.max(0, Math.round(input.accessoryTaxableSubtotalCents));
+  const authorized = Math.round(taxable * ACCESSORY_SALES_TAX_RATE);
+  void input.clientAccessoryTaxCents;
+  return {
+    accessoryTaxableSubtotalCents: taxable,
+    accessorySalesTaxRatePercent: ACCESSORY_SALES_TAX_RATE_PERCENT,
+    accessorySalesTaxCents: authorized,
   };
 }
 
@@ -505,32 +540,33 @@ export function shippingDisplayName(method: ShippingMethod): string {
 }
 
 /** Cart helpers for frontend display before Stripe session creation. */
+function cartLineCents(
+  item: Pick<CheckoutCartItem, 'quantity' | 'unitAmountCents'> & { priceDollars?: number },
+): number {
+  const unit =
+    typeof item.unitAmountCents === 'number'
+      ? Math.round(item.unitAmountCents)
+      : Math.round((item.priceDollars ?? 0) * 100);
+  const qty = Math.max(1, Math.round(item.quantity) || 1);
+  return unit * qty;
+}
+
 export function cartProviderCareSubtotalCents(
   items: Array<Pick<CheckoutCartItem, 'productId' | 'section' | 'quantity' | 'unitAmountCents'> & { priceDollars?: number }>,
 ): number {
-  return items.reduce((sum, item) => {
-    if (!isProviderCareLine(item)) return sum;
-    const unit =
-      typeof item.unitAmountCents === 'number'
-        ? Math.round(item.unitAmountCents)
-        : Math.round((item.priceDollars ?? 0) * 100);
-    const qty = Math.max(1, Math.round(item.quantity) || 1);
-    return sum + unit * qty;
-  }, 0);
+  return items.reduce((sum, item) => (isProviderCareLine(item) ? sum + cartLineCents(item) : sum), 0);
+}
+
+export function cartAccessorySubtotalCents(
+  items: Array<Pick<CheckoutCartItem, 'productId' | 'section' | 'quantity' | 'unitAmountCents'> & { priceDollars?: number }>,
+): number {
+  return items.reduce((sum, item) => (isAccessoryLine(item) ? sum + cartLineCents(item) : sum), 0);
 }
 
 export function cartShippableSubtotalCents(
   items: Array<Pick<CheckoutCartItem, 'productId' | 'section' | 'quantity' | 'unitAmountCents'> & { priceDollars?: number }>,
 ): number {
-  return items.reduce((sum, item) => {
-    if (isProviderCareLine(item)) return sum;
-    const unit =
-      typeof item.unitAmountCents === 'number'
-        ? Math.round(item.unitAmountCents)
-        : Math.round((item.priceDollars ?? 0) * 100);
-    const qty = Math.max(1, Math.round(item.quantity) || 1);
-    return sum + unit * qty;
-  }, 0);
+  return items.reduce((sum, item) => (isProviderCareLine(item) ? sum : sum + cartLineCents(item)), 0);
 }
 
 export function cartRequiresPhysicalShippingFromItems(

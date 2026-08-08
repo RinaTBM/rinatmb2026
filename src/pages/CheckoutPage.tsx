@@ -12,7 +12,9 @@ import {
   type ShippingMethod,
 } from '@/lib/orders/shipping';
 import {
+  authorizeAccessorySalesTax,
   authorizeProviderCareTax,
+  cartAccessorySubtotalCents,
   cartProviderCareSubtotalCents,
   cartRequiresPhysicalShippingFromItems,
   cartShippableSubtotalCents,
@@ -45,8 +47,12 @@ export function CheckoutPage() {
   const requiresPhysicalShipping = cartRequiresPhysicalShippingFromItems(cartItemsForAuth);
   const shippableSubtotalCents = cartShippableSubtotalCents(cartItemsForAuth);
   const providerCareTaxableCents = cartProviderCareSubtotalCents(cartItemsForAuth);
+  const accessoryTaxableCents = cartAccessorySubtotalCents(cartItemsForAuth);
   const providerCareTaxAuth = authorizeProviderCareTax({
     providerCareTaxableSubtotalCents: providerCareTaxableCents,
+  });
+  const accessoryTaxAuth = authorizeAccessorySalesTax({
+    accessoryTaxableSubtotalCents: accessoryTaxableCents,
   });
   const freeShippingEligible =
     requiresPhysicalShipping && isFreeShippingEligible(shippableSubtotalCents);
@@ -59,7 +65,8 @@ export function CheckoutPage() {
     ? shippingCentsForMethod(resolvedShippingMethod, shippableSubtotalCents) / 100
     : 0;
   const providerCareTax = providerCareTaxAuth.providerCareTaxCents / 100;
-  const total = subtotal + shipping + providerCareTax;
+  const accessorySalesTax = accessoryTaxAuth.accessorySalesTaxCents / 100;
+  const total = subtotal + shipping + providerCareTax + accessorySalesTax;
 
   const update = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
 
@@ -133,9 +140,12 @@ export function CheckoutPage() {
           subtotalCents,
           discountCents: Math.round(totalSavings * 100),
           shippingCents: Math.round(shipping * 100),
-          taxCents: providerCareTaxAuth.providerCareTaxCents,
+          taxCents:
+            providerCareTaxAuth.providerCareTaxCents + accessoryTaxAuth.accessorySalesTaxCents,
           providerCareTaxCents: providerCareTaxAuth.providerCareTaxCents,
           providerCareTaxableSubtotalCents: providerCareTaxAuth.providerCareTaxableSubtotalCents,
+          accessorySalesTaxCents: accessoryTaxAuth.accessorySalesTaxCents,
+          accessoryTaxableSubtotalCents: accessoryTaxAuth.accessoryTaxableSubtotalCents,
           shippingMethod: resolvedShippingMethod,
           freeShippingEligible,
           requiresProviderReview,
@@ -530,6 +540,12 @@ export function CheckoutPage() {
                     <div className="flex justify-between text-ink-600">
                       <span>Provider Care Tax (1.8%)</span>
                       <span>${providerCareTax.toFixed(2)}</span>
+                    </div>
+                  )}
+                  {accessorySalesTax > 0 && (
+                    <div className="flex justify-between text-ink-600">
+                      <span>Sales Tax</span>
+                      <span>${accessorySalesTax.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base"><span>Total</span><span>${total.toFixed(2)}</span></div>

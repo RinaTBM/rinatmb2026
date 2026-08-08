@@ -11,6 +11,12 @@ import {
   shippingCentsForMethod,
   type ShippingMethod,
 } from '@/lib/orders/shipping';
+import {
+  authorizeProviderCareTax,
+  cartProviderCareSubtotalCents,
+  cartRequiresPhysicalShippingFromItems,
+  cartShippableSubtotalCents,
+} from '@/lib/checkout/authorizeCheckout';
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
@@ -26,14 +32,34 @@ export function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const hasProviderCare = items.some(i => i.requiresIntake);
+  const hasProviderCare = items.some(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId));
+  const requiresProviderReview = hasProviderCare || items.some(i => i.requiresIntake);
   const hasVariablePricing = items.some(i => i.price === 0);
   const subtotalCents = Math.round(subtotal * 100);
-  const freeShippingEligible = isFreeShippingEligible(subtotalCents);
-  const resolvedShippingMethod: ShippingMethod = freeShippingEligible ? 'free_over_500' : shippingMethod;
-  const shipping = shippingCentsForMethod(resolvedShippingMethod, subtotalCents) / 100;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  const cartItemsForAuth = items.map(i => ({
+    productId: i.productId,
+    section: i.section,
+    quantity: i.quantity,
+    unitAmountCents: Math.round(i.price * 100),
+  }));
+  const requiresPhysicalShipping = cartRequiresPhysicalShippingFromItems(cartItemsForAuth);
+  const shippableSubtotalCents = cartShippableSubtotalCents(cartItemsForAuth);
+  const providerCareTaxableCents = cartProviderCareSubtotalCents(cartItemsForAuth);
+  const providerCareTaxAuth = authorizeProviderCareTax({
+    providerCareTaxableSubtotalCents: providerCareTaxableCents,
+  });
+  const freeShippingEligible =
+    requiresPhysicalShipping && isFreeShippingEligible(shippableSubtotalCents);
+  const resolvedShippingMethod: ShippingMethod = !requiresPhysicalShipping
+    ? 'none'
+    : freeShippingEligible
+      ? 'free_over_500'
+      : shippingMethod;
+  const shipping = requiresPhysicalShipping
+    ? shippingCentsForMethod(resolvedShippingMethod, shippableSubtotalCents) / 100
+    : 0;
+  const providerCareTax = providerCareTaxAuth.providerCareTaxCents / 100;
+  const total = subtotal + shipping + providerCareTax;
 
   const update = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
 
@@ -103,14 +129,16 @@ export function CheckoutPage() {
           customerUserId: user?.id,
           customerEmail: form.email || user?.email || undefined,
           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || undefined,
-          // Snapshot amounts as displayed at checkout (approved shipping policy).
+          // Snapshot amounts as displayed at checkout (server re-authorizes all of these).
           subtotalCents,
           discountCents: Math.round(totalSavings * 100),
           shippingCents: Math.round(shipping * 100),
-          taxCents: Math.round(tax * 100),
+          taxCents: providerCareTaxAuth.providerCareTaxCents,
+          providerCareTaxCents: providerCareTaxAuth.providerCareTaxCents,
+          providerCareTaxableSubtotalCents: providerCareTaxAuth.providerCareTaxableSubtotalCents,
           shippingMethod: resolvedShippingMethod,
           freeShippingEligible,
-          requiresProviderReview: hasProviderCare,
+          requiresProviderReview,
           items: items.map(i => ({
             productId: i.productId,
             quantity: i.quantity,
@@ -121,8 +149,12 @@ export function CheckoutPage() {
             discountPercent: i.discountPercent ?? 0,
             appliedDiscount: i.appliedDiscount ?? 'none',
             productName: i.name,
+            // Required for catalog_variants.stripe_price_id_test lookup (Auto-Refill may append -refill).
+            variantId: i.variantId,
             variantLabel: i.variantLabel,
             section: i.section,
+            // Bundles are never accessory-member-discount eligible; other accessories default eligible server-side.
+            memberPricingEligible: i.productId === 'a1' ? false : undefined,
           })),
         }),
       });
@@ -234,42 +266,48 @@ export function CheckoutPage() {
                     <input placeholder="Phone" value={form.phone} onChange={e => update('phone', e.target.value)} className="input-lux" />
                   </div>
                 </div>
-                <div>
-                  <h2 className="font-serif text-2xl text-ink-900 mb-4">Shipping Method</h2>
-                  {freeShippingEligible ? (
-                    <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                      Orders of $500 or more are eligible for free shipping.
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'two_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
-                        <span className="flex items-center gap-3">
-                          <input
-                            type="radio"
-                            name="shippingMethod"
-                            checked={shippingMethod === 'two_day'}
-                            onChange={() => setShippingMethod('two_day')}
-                          />
-                          Two-Day Shipping
-                        </span>
-                        <span className="font-medium text-ink-900">$30</span>
-                      </label>
-                      <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'next_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
-                        <span className="flex items-center gap-3">
-                          <input
-                            type="radio"
-                            name="shippingMethod"
-                            checked={shippingMethod === 'next_day'}
-                            onChange={() => setShippingMethod('next_day')}
-                          />
-                          Next-Day Shipping
-                        </span>
-                        <span className="font-medium text-ink-900">$50</span>
-                      </label>
-                      <p className="text-xs text-ink-500">Orders of $500 or more are eligible for free shipping. Most orders process within 1–3 business days after provider review and approval, when applicable.</p>
-                    </div>
-                  )}
-                </div>
+                {requiresPhysicalShipping ? (
+                  <div>
+                    <h2 className="font-serif text-2xl text-ink-900 mb-4">Shipping Method</h2>
+                    {freeShippingEligible ? (
+                      <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
+                        Orders of $500 or more in merchandise are eligible for free shipping.
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'two_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
+                          <span className="flex items-center gap-3">
+                            <input
+                              type="radio"
+                              name="shippingMethod"
+                              checked={shippingMethod === 'two_day'}
+                              onChange={() => setShippingMethod('two_day')}
+                            />
+                            Two-Day Shipping
+                          </span>
+                          <span className="font-medium text-ink-900">$30</span>
+                        </label>
+                        <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'next_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
+                          <span className="flex items-center gap-3">
+                            <input
+                              type="radio"
+                              name="shippingMethod"
+                              checked={shippingMethod === 'next_day'}
+                              onChange={() => setShippingMethod('next_day')}
+                            />
+                            Next-Day Shipping
+                          </span>
+                          <span className="font-medium text-ink-900">$50</span>
+                        </label>
+                        <p className="text-xs text-ink-500">Orders of $500 or more in merchandise are eligible for free shipping. Most orders process within 1–3 business days after provider review and approval, when applicable.</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-600">
+                    This order contains Provider Care services only. No physical shipping is charged.
+                  </div>
+                )}
                 <button type="button" onClick={() => setStep('payment')} className="btn-primary">Continue to Payment</button>
               </div>
             )}
@@ -482,11 +520,18 @@ export function CheckoutPage() {
                 )}
                 <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `$${subtotal.toFixed(2)}`}</span></div>
                 {!hasVariablePricing && <>
-                  <div className="flex justify-between text-ink-600">
-                    <span>{labelShippingMethod(resolvedShippingMethod)}</span>
-                    <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
-                  </div>
-                  <div className="flex justify-between text-ink-600"><span>Tax</span><span>${tax.toFixed(2)}</span></div>
+                  {requiresPhysicalShipping && (
+                    <div className="flex justify-between text-ink-600">
+                      <span>{labelShippingMethod(resolvedShippingMethod)}</span>
+                      <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                    </div>
+                  )}
+                  {providerCareTax > 0 && (
+                    <div className="flex justify-between text-ink-600">
+                      <span>Provider Care Tax (1.8%)</span>
+                      <span>${providerCareTax.toFixed(2)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base"><span>Total</span><span>${total.toFixed(2)}</span></div>
                 </>}
                 {hasVariablePricing && (

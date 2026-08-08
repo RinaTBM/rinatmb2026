@@ -5,7 +5,12 @@ import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
 import { useCustomerAuth } from '@/context/CustomerAuthContext';
 import { upsertManagedSubscription } from '@/lib/account/subscriptions';
-import { isFreeShippingEligible } from '@/lib/orders/shipping';
+import {
+  isFreeShippingEligible,
+  labelShippingMethod,
+  shippingCentsForMethod,
+  type ShippingMethod,
+} from '@/lib/orders/shipping';
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
@@ -17,12 +22,16 @@ export function CheckoutPage() {
   const [form, setForm] = useState({
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
   });
+  const [shippingMethod, setShippingMethod] = useState<'two_day' | 'next_day'>('two_day');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const hasProviderCare = items.some(i => i.requiresIntake);
   const hasVariablePricing = items.some(i => i.price === 0);
-  const shipping = subtotal > 75 ? 0 : 6.95;
+  const subtotalCents = Math.round(subtotal * 100);
+  const freeShippingEligible = isFreeShippingEligible(subtotalCents);
+  const resolvedShippingMethod: ShippingMethod = freeShippingEligible ? 'free_over_500' : shippingMethod;
+  const shipping = shippingCentsForMethod(resolvedShippingMethod, subtotalCents) / 100;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
@@ -94,13 +103,13 @@ export function CheckoutPage() {
           customerUserId: user?.id,
           customerEmail: form.email || user?.email || undefined,
           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || undefined,
-          // Snapshot amounts as displayed at checkout (shipping UI unchanged here).
-          subtotalCents: Math.round(subtotal * 100),
+          // Snapshot amounts as displayed at checkout (approved shipping policy).
+          subtotalCents,
           discountCents: Math.round(totalSavings * 100),
           shippingCents: Math.round(shipping * 100),
           taxCents: Math.round(tax * 100),
-          shippingMethod: 'standard',
-          freeShippingEligible: isFreeShippingEligible(Math.round(subtotal * 100)),
+          shippingMethod: resolvedShippingMethod,
+          freeShippingEligible,
           requiresProviderReview: hasProviderCare,
           items: items.map(i => ({
             productId: i.productId,
@@ -224,6 +233,42 @@ export function CheckoutPage() {
                     <input required placeholder="ZIP" value={form.zip} onChange={e => update('zip', e.target.value)} className="input-lux" />
                     <input placeholder="Phone" value={form.phone} onChange={e => update('phone', e.target.value)} className="input-lux" />
                   </div>
+                </div>
+                <div>
+                  <h2 className="font-serif text-2xl text-ink-900 mb-4">Shipping Method</h2>
+                  {freeShippingEligible ? (
+                    <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
+                      Orders of $500 or more are eligible for free shipping.
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'two_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
+                        <span className="flex items-center gap-3">
+                          <input
+                            type="radio"
+                            name="shippingMethod"
+                            checked={shippingMethod === 'two_day'}
+                            onChange={() => setShippingMethod('two_day')}
+                          />
+                          Two-Day Shipping
+                        </span>
+                        <span className="font-medium text-ink-900">$30</span>
+                      </label>
+                      <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'next_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
+                        <span className="flex items-center gap-3">
+                          <input
+                            type="radio"
+                            name="shippingMethod"
+                            checked={shippingMethod === 'next_day'}
+                            onChange={() => setShippingMethod('next_day')}
+                          />
+                          Next-Day Shipping
+                        </span>
+                        <span className="font-medium text-ink-900">$50</span>
+                      </label>
+                      <p className="text-xs text-ink-500">Orders of $500 or more are eligible for free shipping. Most orders process within 1–3 business days after provider review and approval, when applicable.</p>
+                    </div>
+                  )}
                 </div>
                 <button type="button" onClick={() => setStep('payment')} className="btn-primary">Continue to Payment</button>
               </div>
@@ -437,7 +482,10 @@ export function CheckoutPage() {
                 )}
                 <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `$${subtotal.toFixed(2)}`}</span></div>
                 {!hasVariablePricing && <>
-                  <div className="flex justify-between text-ink-600"><span>Shipping</span><span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span></div>
+                  <div className="flex justify-between text-ink-600">
+                    <span>{labelShippingMethod(resolvedShippingMethod)}</span>
+                    <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                  </div>
                   <div className="flex justify-between text-ink-600"><span>Tax</span><span>${tax.toFixed(2)}</span></div>
                   <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base"><span>Total</span><span>${total.toFixed(2)}</span></div>
                 </>}

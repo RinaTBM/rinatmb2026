@@ -20,11 +20,16 @@ export interface CartItem {
   variantId?: string;
   variantLabel?: string;
   isMembership?: boolean;
+  /**
+   * Normalized membership requested formulation (e.g. `getting_started`, `1mg`).
+   * Request only — not a guaranteed dose/prescription.
+   */
+  requestedFormulation?: string;
   billingFrequency?: 'monthly';
   purchaseType?: CartPurchaseType;
   discountPercent?: number;
   appliedDiscount?: AppliedDiscount;
-  /** Stable line identity: product + variant + purchase type. */
+  /** Stable line identity: product + variant + purchase type (+ requested dose for memberships). */
   key: string;
 }
 
@@ -33,9 +38,11 @@ export function lineKey(
   variantId: string | undefined,
   subscription: boolean,
   purchaseType?: CartPurchaseType,
+  requestedFormulation?: string,
 ) {
   const type = purchaseType ?? (subscription ? 'auto_refill' : 'one_time');
-  return `${productId}|${variantId ?? ''}|${type}`;
+  const dose = requestedFormulation ?? '';
+  return `${productId}|${variantId ?? ''}|${type}|${dose}`;
 }
 
 interface CartContextValue {
@@ -77,7 +84,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
               standardPrice: i.standardPrice ?? i.price,
               discountPercent: i.discountPercent ?? 0,
               appliedDiscount: i.appliedDiscount ?? 'none',
-              key: i.key ?? lineKey(i.productId, i.variantId, i.subscription, purchaseType),
+              key:
+                i.key ??
+                lineKey(
+                  i.productId,
+                  i.variantId,
+                  i.subscription,
+                  purchaseType,
+                  i.requestedFormulation,
+                ),
             };
           }),
         );
@@ -99,7 +114,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const purchaseType: CartPurchaseType =
       item.purchaseType ??
       (item.isMembership ? 'membership_program' : item.subscription ? 'auto_refill' : 'one_time');
-    const key = lineKey(item.productId, item.variantId, item.subscription, purchaseType);
+    const key = lineKey(
+      item.productId,
+      item.variantId,
+      item.subscription,
+      purchaseType,
+      item.requestedFormulation,
+    );
     setItems(prev => {
       const existing = prev.find(i => i.key === key);
       if (existing) {

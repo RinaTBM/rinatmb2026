@@ -59,7 +59,7 @@ const faqCategories = [
     faqs: [
       {
         q: 'What is an Active Wellness Membership?',
-        a: 'Active Wellness Memberships are Semaglutide Membership ($199/month) and Tirzepatide Membership ($249/month). Members receive locked membership pricing while continuously enrolled, provider-guided care when prescribed, and 15% off eligible wellness products and accessories. Members receive our best available pricing. Provider Care, shipping, taxes, and already-discounted accessory bundles (unless explicitly enabled) are not discounted.',
+        a: 'Active Wellness Memberships are Semaglutide Membership ($149/month) and Tirzepatide Membership ($249/month). Members receive locked membership pricing while continuously enrolled, provider-guided care when prescribed, and 15% off eligible wellness products and accessories. Members receive our best available pricing. Provider Care, shipping, taxes, and already-discounted accessory bundles (unless explicitly enabled) are not discounted.',
       },
       {
         q: 'What is the minimum commitment?',

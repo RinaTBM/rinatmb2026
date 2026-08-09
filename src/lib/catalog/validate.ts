@@ -69,15 +69,20 @@ export function validateCatalog(
     }
   }
 
-  // --- Program-specific safety: Tirzepatide must not include 30mg ---
+  // --- Program-specific safety: Tirzepatide must not include obsolete 30mg ---
   const tirz = memberships.find(m => m.slug === 'tirzepatide-membership');
   if (tirz) {
     if (tirz.includedFormulations.some(f => f.startsWith('30mg'))) {
-      errors.push('Tirzepatide membership must not include the 30mg/2mg per mL formulation.');
+      errors.push('Tirzepatide membership must not include the 30mg formulation.');
     }
-    if (tirz.status === 'active' && tirz.maximumIncludedFormulation !== '25mg/2mg per mL, 2mL') {
-      warnings.push('Tirzepatide membership maximum included formulation should be "25mg/2mg per mL, 2mL".');
+    if (tirz.status === 'active' && tirz.maximumIncludedFormulation !== '15mg') {
+      warnings.push('Tirzepatide membership maximum included formulation should be "15mg".');
     }
+  }
+
+  const semaMem = memberships.find(m => m.slug === 'semaglutide-membership');
+  if (semaMem && semaMem.status === 'active' && semaMem.monthlyPriceCents !== 14900) {
+    warnings.push('Semaglutide membership monthly price should be 14900 cents ($149).');
   }
 
   return { errors, warnings };

@@ -6,6 +6,13 @@ import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
 import { ProductCard } from '@/components/ProductCard';
 import { AccessoryProductPage } from '@/components/AccessoryProductPage';
+import { MembershipDetailPage } from '@/components/MembershipDetailPage';
+import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
+import { resolveStorefrontDetail } from '@/lib/catalog/resolveStorefrontDetail';
+import {
+  labelRequestedFormulation,
+  validateMembershipRequestedFormulation,
+} from '@/lib/membership/requestedFormulation';
 import {
   buildPurchaseOptions,
   type PurchaseOptionKind,
@@ -14,8 +21,11 @@ import { loadPurchaseDiscountSettings } from '@/lib/pricing/settings';
 
 /** Router — accessories get a simplified ecommerce page; wellness keeps existing purchase logic. */
 export function ProductPage({ slug }: { slug: string }) {
-  const product = getProduct(slug);
-  if (!product) {
+  const detail = resolveStorefrontDetail(slug);
+  if (detail.kind === 'membership') {
+    return <MembershipDetailPage membership={detail.membership} />;
+  }
+  if (detail.kind === 'not_found') {
     return (
       <div className="pt-32 pb-20 text-center">
         <p className="text-ink-500">Product not found.</p>
@@ -23,6 +33,7 @@ export function ProductPage({ slug }: { slug: string }) {
       </div>
     );
   }
+  const product = detail.product;
   if (product.category === 'accessories') {
     return <AccessoryProductPage product={product} />;
   }
@@ -38,6 +49,8 @@ function WellnessProductPage({ slug }: { slug: string }) {
   const [activeTab, setActiveTab] = useState<'overview' | 'eligibility' | 'formulation'>('overview');
   /** null = use preferred default (Wellness Membership / Active Wellness when available). */
   const [selectedKind, setSelectedKind] = useState<PurchaseOptionKind | null>(null);
+  const [requestedFormulation, setRequestedFormulation] = useState('');
+  const [doseError, setDoseError] = useState<string | null>(null);
   const settings = useMemo(() => loadPurchaseDiscountSettings(), []);
 
   const variant = product
@@ -88,6 +101,18 @@ function WellnessProductPage({ slug }: { slug: string }) {
 
     if (selected.kind === 'membership_program' && selected.program) {
       const membership = getMembership(selected.program.membershipSlug);
+      const included =
+        membership?.includedFormulations ?? selected.program.includedFormulations ?? [];
+      const validated = validateMembershipRequestedFormulation({
+        requestedFormulation,
+        includedFormulations: included,
+      });
+      if (!validated.ok) {
+        setDoseError(validated.error);
+        return;
+      }
+      setDoseError(null);
+      const doseLabel = labelRequestedFormulation(validated.value);
       addItem({
         productId: selected.program.checkoutProductId,
         slug: selected.program.membershipSlug,
@@ -103,6 +128,8 @@ function WellnessProductPage({ slug }: { slug: string }) {
         purchaseType: 'membership_program',
         discountPercent: 0,
         appliedDiscount: 'none',
+        requestedFormulation: validated.value,
+        variantLabel: `Requested dose: ${doseLabel}`,
       }, 1);
       return;
     }
@@ -367,6 +394,24 @@ function WellnessProductPage({ slug }: { slug: string }) {
                     </button>
                   );
                 })}
+
+                {isProgramMembership && selected?.program && (
+                  <div className="rounded-xl border border-cream-300 bg-cream-50/80 p-4">
+                    <MembershipRequestedDoseField
+                      id={`pdp-requested-dose-${selected.program.membershipSlug}`}
+                      includedFormulations={
+                        getMembership(selected.program.membershipSlug)?.includedFormulations ??
+                        selected.program.includedFormulations
+                      }
+                      value={requestedFormulation}
+                      onChange={v => {
+                        setRequestedFormulation(v);
+                        setDoseError(null);
+                      }}
+                    />
+                    {doseError && <p className="mt-2 text-xs text-red-700">{doseError}</p>}
+                  </div>
+                )}
 
                 <div className="flex items-center gap-3 pt-2">
                   {!isProgramMembership && (

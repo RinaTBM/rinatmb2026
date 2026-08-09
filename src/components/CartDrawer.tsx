@@ -1,6 +1,8 @@
 import { X, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link, navigate } from '@/router';
+import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
+import { labelRequestedFormulation } from '@/lib/membership/requestedFormulation';
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal, totalSavings, itemCount } = useCart();
@@ -41,16 +43,23 @@ export function CartDrawer() {
                   <div className="space-y-4">
                     {items.map(item => (
                       <div key={item.key} className="flex gap-4">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className={`h-20 w-20 rounded-xl flex-shrink-0 bg-cream-100 ${
-                            item.section === 'accessories' ? 'object-contain p-1.5' : 'object-cover'
-                          }`}
-                        />
+                        <Link
+                          to={cartItemDetailPath(item)}
+                          onClick={closeCart}
+                          className="flex-shrink-0"
+                          aria-label={`View ${item.name}`}
+                        >
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className={`h-20 w-20 rounded-xl bg-cream-100 ${
+                              item.section === 'accessories' ? 'object-contain p-1.5' : 'object-cover'
+                            }`}
+                          />
+                        </Link>
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between gap-2">
-                            <Link to={`/product/${item.slug}`} onClick={closeCart} className="font-medium text-ink-900 hover:text-gold-600 text-sm">
+                            <Link to={cartItemDetailPath(item)} onClick={closeCart} className="font-medium text-ink-900 hover:text-gold-600 text-sm">
                               {item.name}
                             </Link>
                             <button onClick={() => removeItem(item.key)} className="text-ink-400 hover:text-ink-900 flex-shrink-0">
@@ -62,9 +71,14 @@ export function CartDrawer() {
                           )}
                           {item.isMembership ? (
                             <div className="mt-1 space-y-0.5 text-xs text-ink-500">
+                              {item.requestedFormulation && (
+                                <p className="font-medium text-ink-800">
+                                  Requested dose: {labelRequestedFormulation(item.requestedFormulation)}
+                                </p>
+                              )}
                               <p className="text-gold-600 font-medium">Billed monthly · 3-month initial term</p>
-                              <p>Provider review required</p>
-                              <p>Shipping calculated separately</p>
+                              <p>Provider review required · prescription not guaranteed</p>
+                              <p>Shipping after provider approval</p>
                               <p>Cancel anytime after the initial term (canceling ends the locked rate)</p>
                             </div>
                           ) : (

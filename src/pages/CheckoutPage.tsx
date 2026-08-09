@@ -16,9 +16,9 @@ import {
   authorizeAccessorySalesTax,
   authorizeProviderCareTax,
   cartAccessorySubtotalCents,
+  cartFreeShippingMerchandiseSubtotalCents,
   cartProviderCareSubtotalCents,
   cartRequiresPhysicalShippingFromItems,
-  cartShippableSubtotalCents,
 } from '@/lib/checkout/authorizeCheckout';
 import { getMembership } from '@/data/products';
 import {
@@ -73,9 +73,13 @@ export function CheckoutPage() {
     section: i.section,
     quantity: i.quantity,
     unitAmountCents: Math.round(i.price * 100),
+    purchaseType: i.purchaseType,
+    subscription: i.subscription,
   }));
   const requiresPhysicalShipping = cartRequiresPhysicalShippingFromItems(cartItemsForAuth);
-  const shippableSubtotalCents = cartShippableSubtotalCents(cartItemsForAuth);
+  // $500 free-shipping threshold uses ordinary merchandise ONLY — never membership value.
+  const freeShippingMerchandiseSubtotalCents =
+    cartFreeShippingMerchandiseSubtotalCents(cartItemsForAuth);
   const providerCareTaxableCents = cartProviderCareSubtotalCents(cartItemsForAuth);
   const accessoryTaxableCents = cartAccessorySubtotalCents(cartItemsForAuth);
   const providerCareTaxAuth = authorizeProviderCareTax({
@@ -85,15 +89,19 @@ export function CheckoutPage() {
     accessoryTaxableSubtotalCents: accessoryTaxableCents,
   });
   const freeShippingEligible =
-    requiresPhysicalShipping && isFreeShippingEligible(shippableSubtotalCents);
+    requiresPhysicalShipping && isFreeShippingEligible(freeShippingMerchandiseSubtotalCents);
   const resolvedShippingMethod: ShippingMethod = !requiresPhysicalShipping
     ? 'none'
     : freeShippingEligible
       ? 'free_over_500'
       : shippingMethod;
-  const shipping = requiresPhysicalShipping
-    ? shippingCentsForMethod(resolvedShippingMethod, shippableSubtotalCents) / 100
-    : 0;
+  // Membership carts without free shipping always charge Two-Day / Next-Day amounts.
+  // Pass 0 as free-shipping subtotal here so membership value cannot zero out paid shipping.
+  const shipping = !requiresPhysicalShipping
+    ? 0
+    : freeShippingEligible
+      ? 0
+      : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
   const providerCareTax = providerCareTaxAuth.providerCareTaxCents / 100;
   const accessorySalesTax = accessoryTaxAuth.accessorySalesTaxCents / 100;
   const total = subtotal + shipping + providerCareTax + accessorySalesTax;
@@ -350,7 +358,8 @@ export function CheckoutPage() {
                     )}
                     {freeShippingEligible ? (
                       <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                        Orders of $500 or more in eligible merchandise are eligible for free shipping.
+                        Orders of $500 or more in eligible ordinary merchandise qualify for free shipping.
+                        Membership medication value does not count toward this threshold.
                       </div>
                     ) : (
                       <div className="space-y-2">

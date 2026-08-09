@@ -7,7 +7,6 @@ import {
   NEXT_DAY_SHIPPING_CENTS,
   TWO_DAY_SHIPPING_CENTS,
   isFreeShippingEligible,
-  shippingCentsForMethod,
   type ShippingMethod,
 } from '../orders/shipping';
 import {
@@ -99,7 +98,9 @@ export type LineResolution =
       variantLabel: string | null;
     };
 
-export function isProgramMembership(item: CheckoutCartItem): boolean {
+export function isProgramMembership(
+  item: Pick<CheckoutCartItem, 'productId' | 'purchaseType' | 'subscription'>,
+): boolean {
   const purchaseType: PurchaseType =
     item.purchaseType ?? (item.subscription ? 'auto_refill' : 'one_time');
   return (
@@ -416,6 +417,23 @@ export function isShippableResolvedLine(line: LineResolution): boolean {
   return !isProviderCareResolvedLine(line);
 }
 
+/** Active Wellness membership medication lines (m1 / m2 / catalog_memberships). */
+export function isMembershipResolvedLine(line: LineResolution): boolean {
+  if (line.kind === 'mapped_price' && line.source === 'catalog_memberships') return true;
+  return (
+    line.productId === SEMAGLUTIDE_MEMBERSHIP_APP_ID ||
+    line.productId === TIRZEPATIDE_MEMBERSHIP_APP_ID
+  );
+}
+
+/**
+ * Ordinary one-time (and Auto-Refill) shippable merchandise used for the $500
+ * free-shipping threshold. Memberships and Provider Care are excluded.
+ */
+export function isFreeShippingEligibleMerchandiseLine(line: LineResolution): boolean {
+  return isShippableResolvedLine(line) && !isMembershipResolvedLine(line);
+}
+
 export function lineSubtotalCents(lines: LineResolution[]): number {
   return lines.reduce((sum, line) => sum + line.unitAmountCents * line.quantity, 0);
 }
@@ -428,8 +446,17 @@ export function accessoryTaxableSubtotalCents(lines: LineResolution[]): number {
   return lineSubtotalCents(lines.filter(isAccessoryResolvedLine));
 }
 
+/** All physically shippable lines (includes memberships; excludes Provider Care). */
 export function shippableMerchandiseSubtotalCents(lines: LineResolution[]): number {
   return lineSubtotalCents(lines.filter(isShippableResolvedLine));
+}
+
+/**
+ * Subtotal for $500 free-shipping eligibility only.
+ * Membership medication value must never count toward this threshold.
+ */
+export function freeShippingEligibleMerchandiseSubtotalCents(lines: LineResolution[]): number {
+  return lineSubtotalCents(lines.filter(isFreeShippingEligibleMerchandiseLine));
 }
 
 export function cartRequiresPhysicalShipping(lines: LineResolution[]): boolean {
@@ -487,9 +514,14 @@ export function authorizeAccessorySalesTax(input: {
 export function authorizeShippingCents(input: {
   shippingMethod?: string;
   clientShippingCents?: number;
-  /** Shippable merchandise subtotal only (excludes Provider Care services). */
+  /**
+   * Subtotal used ONLY for the $500 free-shipping threshold.
+   * Must be ordinary eligible merchandise — never membership medication value.
+   */
   shippableSubtotalCents: number;
   requiresPhysicalShipping: boolean;
+  /** When true, membership medication is in the cart (still ships; never free by itself). */
+  containsMembership?: boolean;
 }): {
   shippingMethod: ShippingMethod;
   shippingCents: number;
@@ -518,6 +550,7 @@ export function authorizeShippingCents(input: {
     };
   }
 
+  // Free shipping is based solely on ordinary merchandise — membership value excluded.
   const free = isFreeShippingEligible(input.shippableSubtotalCents);
   let method: ShippingMethod;
 
@@ -525,19 +558,34 @@ export function authorizeShippingCents(input: {
     method = 'free_over_500';
   } else if (input.shippingMethod === 'next_day') {
     method = 'next_day';
+  } else if (input.shippingMethod === 'two_day') {
+    method = 'two_day';
   } else if (
-    input.shippingMethod === 'two_day' ||
     !input.shippingMethod ||
     input.shippingMethod === 'none'
   ) {
+    // Membership medication carts without free shipping must use paid Two-Day / Next-Day.
+    if (input.containsMembership) {
+      return {
+        error:
+          'Membership checkout requires a shipping method: two_day ($30) or next_day ($50).',
+      };
+    }
     method = 'two_day';
   } else if (input.shippingMethod === 'free_over_500') {
-    return { error: 'Free shipping requires a shippable merchandise subtotal of $500 or more.' };
+    return {
+      error:
+        'Free shipping requires $500 or more in eligible ordinary merchandise (membership value does not count).',
+    };
   } else {
     return { error: `Unsupported shipping method: ${input.shippingMethod}` };
   }
 
-  const authorized = shippingCentsForMethod(method, input.shippableSubtotalCents);
+  const authorized = free
+    ? 0
+    : method === 'next_day'
+      ? NEXT_DAY_SHIPPING_CENTS
+      : TWO_DAY_SHIPPING_CENTS;
 
   if (
     typeof input.clientShippingCents === 'number' &&
@@ -587,10 +635,38 @@ export function cartAccessorySubtotalCents(
   return items.reduce((sum, item) => (isAccessoryLine(item) ? sum + cartLineCents(item) : sum), 0);
 }
 
+/** All physically shippable cart cents (includes memberships; excludes Provider Care). */
 export function cartShippableSubtotalCents(
-  items: Array<Pick<CheckoutCartItem, 'productId' | 'section' | 'quantity' | 'unitAmountCents'> & { priceDollars?: number }>,
+  items: Array<
+    Pick<CheckoutCartItem, 'productId' | 'section' | 'quantity' | 'unitAmountCents' | 'purchaseType' | 'subscription'> & {
+      priceDollars?: number;
+    }
+  >,
 ): number {
   return items.reduce((sum, item) => (isProviderCareLine(item) ? sum : sum + cartLineCents(item)), 0);
+}
+
+/**
+ * Ordinary merchandise cents for the $500 free-shipping threshold.
+ * Memberships (m1/m2 / membership_program) never contribute.
+ */
+export function cartFreeShippingMerchandiseSubtotalCents(
+  items: Array<
+    Pick<CheckoutCartItem, 'productId' | 'section' | 'quantity' | 'unitAmountCents' | 'purchaseType' | 'subscription'> & {
+      priceDollars?: number;
+    }
+  >,
+): number {
+  return items.reduce((sum, item) => {
+    if (isProviderCareLine(item) || isProgramMembership(item)) return sum;
+    return sum + cartLineCents(item);
+  }, 0);
+}
+
+export function cartContainsMembership(
+  items: Array<Pick<CheckoutCartItem, 'productId' | 'purchaseType' | 'subscription' | 'section'>>,
+): boolean {
+  return items.some(isProgramMembership);
 }
 
 export function cartRequiresPhysicalShippingFromItems(

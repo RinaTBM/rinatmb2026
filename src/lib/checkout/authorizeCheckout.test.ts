@@ -23,7 +23,9 @@ import {
   authorizeProviderCareTax,
   authorizeShippingCents,
   authorizeWellnessUnitCents,
+  cartFreeShippingMerchandiseSubtotalCents,
   cartRequiresPhysicalShipping,
+  freeShippingEligibleMerchandiseSubtotalCents,
   isAccessoryLine,
   isForbiddenSelfServeMemberOnly350,
   lineSubtotalCents,
@@ -540,13 +542,188 @@ describe('shipping authorization', () => {
     const r = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: 3000,
-      shippableSubtotalCents: SEMAGLUTIDE_MEMBERSHIP_CENTS,
+      // Ordinary merchandise subtotal for free-shipping threshold (membership excluded).
+      shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
+      containsMembership: true,
     });
     expect('error' in r).toBe(false);
     if ('error' in r) return;
     expect(r.shippingCents).toBe(3000);
     expect(r.freeShippingEligible).toBe(false);
+  });
+});
+
+describe('membership shipping vs $500 free-shipping threshold', () => {
+  it('$149 Semaglutide membership does not receive free shipping', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: TWO_DAY_SHIPPING_CENTS,
+      shippableSubtotalCents: 0, // membership excluded from threshold
+      requiresPhysicalShipping: true,
+      containsMembership: true,
+    });
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(r.freeShippingEligible).toBe(false);
+    expect(r.shippingMethod).toBe('two_day');
+    expect(r.shippingCents).toBe(3000);
+    expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
+  });
+
+  it('$249 Tirzepatide membership does not receive free shipping', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'next_day',
+      clientShippingCents: NEXT_DAY_SHIPPING_CENTS,
+      shippableSubtotalCents: 0,
+      requiresPhysicalShipping: true,
+      containsMembership: true,
+    });
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(r.freeShippingEligible).toBe(false);
+    expect(r.shippingMethod).toBe('next_day');
+    expect(r.shippingCents).toBe(5000);
+    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(24900);
+  });
+
+  it('membership value does not count toward $500 threshold', () => {
+    const membershipLine = expectMapped(
+      resolveMembershipLine(
+        {
+          productId: 'm1',
+          quantity: 1,
+          purchaseType: 'membership_program',
+          requestedFormulation: '1mg',
+        },
+        semaMembership,
+      ),
+    );
+    // Even stacking memberships far above $500 must not unlock free shipping.
+    const stacked = [membershipLine, membershipLine, membershipLine, membershipLine];
+    expect(shippableMerchandiseSubtotalCents(stacked)).toBe(14900 * 4);
+    expect(freeShippingEligibleMerchandiseSubtotalCents(stacked)).toBe(0);
+    expect(
+      cartFreeShippingMerchandiseSubtotalCents([
+        {
+          productId: 'm1',
+          quantity: 4,
+          unitAmountCents: 14900,
+          purchaseType: 'membership_program',
+          section: 'membership',
+        },
+      ]),
+    ).toBe(0);
+  });
+
+  it('membership checkout requires two_day or next_day', () => {
+    const missing = authorizeShippingCents({
+      shippingMethod: undefined,
+      clientShippingCents: 3000,
+      shippableSubtotalCents: 0,
+      requiresPhysicalShipping: true,
+      containsMembership: true,
+    });
+    expect('error' in missing).toBe(true);
+    if (!('error' in missing)) return;
+    expect(missing.error).toMatch(/two_day|next_day/i);
+
+    const two = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: 3000,
+      shippableSubtotalCents: 0,
+      requiresPhysicalShipping: true,
+      containsMembership: true,
+    });
+    const next = authorizeShippingCents({
+      shippingMethod: 'next_day',
+      clientShippingCents: 5000,
+      shippableSubtotalCents: 0,
+      requiresPhysicalShipping: true,
+      containsMembership: true,
+    });
+    expect('error' in two).toBe(false);
+    expect('error' in next).toBe(false);
+    if ('error' in two || 'error' in next) return;
+    expect(two.shippingCents).toBe(3000);
+    expect(next.shippingCents).toBe(5000);
+  });
+
+  it('two_day = $30 and next_day = $50 for memberships', () => {
+    expect(TWO_DAY_SHIPPING_CENTS).toBe(3000);
+    expect(NEXT_DAY_SHIPPING_CENTS).toBe(5000);
+  });
+
+  it('$500+ eligible ordinary merchandise can still receive free shipping', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: 0,
+      shippableSubtotalCents: FREE_SHIPPING_THRESHOLD_CENTS,
+      requiresPhysicalShipping: true,
+      containsMembership: false,
+    });
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(r.freeShippingEligible).toBe(true);
+    expect(r.shippingMethod).toBe('free_over_500');
+    expect(r.shippingCents).toBe(0);
+  });
+
+  it('mixed cart cannot use membership value to reach the $500 threshold', () => {
+    const membership = expectMapped(
+      resolveMembershipLine(
+        {
+          productId: 'm2',
+          quantity: 1,
+          purchaseType: 'membership_program',
+          requestedFormulation: '7.5mg',
+        },
+        tirzMembership,
+      ),
+    );
+    const ordinary: LineResolution = {
+      kind: 'mapped_price',
+      stripePriceId: 'price_x',
+      quantity: 1,
+      unitAmountCents: 40000, // $400 ordinary
+      recurring: false,
+      source: 'catalog_variants',
+      productId: 'p9',
+      productName: 'Wellness',
+      variantLabel: null,
+    };
+    // $400 ordinary + $249 membership = $649 shippable, but free-shipping base is only $400.
+    expect(shippableMerchandiseSubtotalCents([ordinary, membership])).toBe(40000 + 24900);
+    expect(freeShippingEligibleMerchandiseSubtotalCents([ordinary, membership])).toBe(40000);
+
+    const r = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: TWO_DAY_SHIPPING_CENTS,
+      shippableSubtotalCents: freeShippingEligibleMerchandiseSubtotalCents([ordinary, membership]),
+      requiresPhysicalShipping: true,
+      containsMembership: true,
+    });
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(r.freeShippingEligible).toBe(false);
+    expect(r.shippingCents).toBe(3000);
+
+    // With $500 ordinary + membership, free shipping remains available from ordinary alone.
+    const ordinary500: LineResolution = { ...ordinary, unitAmountCents: 50000 };
+    const free = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: 0,
+      shippableSubtotalCents: freeShippingEligibleMerchandiseSubtotalCents([
+        ordinary500,
+        membership,
+      ]),
+      requiresPhysicalShipping: true,
+      containsMembership: true,
+    });
+    expect('error' in free).toBe(false);
+    if ('error' in free) return;
+    expect(free.freeShippingEligible).toBe(true);
+    expect(free.shippingCents).toBe(0);
   });
 });
 

@@ -27,24 +27,28 @@ describe('approved checkout shipping methods', () => {
     const r = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: 695,
-      shippableSubtotalCents: 14900,
+      shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
+      containsMembership: true,
     });
     expect('error' in r).toBe(true);
   });
 
   it('membership shipping metadata matches charged shipping', () => {
+    // Free-shipping subtotal is ordinary merchandise only (0 for membership-only carts).
     const two = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: 3000,
-      shippableSubtotalCents: 14900,
+      shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
+      containsMembership: true,
     });
     const next = authorizeShippingCents({
       shippingMethod: 'next_day',
       clientShippingCents: 5000,
-      shippableSubtotalCents: 24900,
+      shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
+      containsMembership: true,
     });
     expect('error' in two).toBe(false);
     expect('error' in next).toBe(false);

@@ -420,11 +420,19 @@ function isAccessoryResolvedLine(line: LineResolution): boolean {
   return /^a\d+$/i.test(line.productId);
 }
 
+function isMembershipResolvedLine(line: LineResolution): boolean {
+  if (line.kind === "mapped_price" && line.source === "catalog_memberships") return true;
+  return line.productId === SEMAGLUTIDE_MEMBERSHIP_APP_ID ||
+    line.productId === TIRZEPATIDE_MEMBERSHIP_APP_ID;
+}
+
 function authorizeShippingCents(input: {
   shippingMethod?: string;
   clientShippingCents?: number;
+  /** Ordinary merchandise only — membership value must never be included. */
   shippableSubtotalCents: number;
   requiresPhysicalShipping: boolean;
+  containsMembership?: boolean;
 }): { shippingMethod: ShippingMethod; shippingCents: number; freeShippingEligible: boolean } | { error: string } {
   if (!input.requiresPhysicalShipping) {
     if (
@@ -450,14 +458,21 @@ function authorizeShippingCents(input: {
     method = "free_over_500";
   } else if (input.shippingMethod === "next_day") {
     method = "next_day";
-  } else if (
-    input.shippingMethod === "two_day" ||
-    !input.shippingMethod ||
-    input.shippingMethod === "none"
-  ) {
+  } else if (input.shippingMethod === "two_day") {
+    method = "two_day";
+  } else if (!input.shippingMethod || input.shippingMethod === "none") {
+    if (input.containsMembership) {
+      return {
+        error:
+          "Membership checkout requires a shipping method: two_day ($30) or next_day ($50).",
+      };
+    }
     method = "two_day";
   } else if (input.shippingMethod === "free_over_500") {
-    return { error: "Free shipping requires a shippable merchandise subtotal of $500 or more." };
+    return {
+      error:
+        "Free shipping requires $500 or more in eligible ordinary merchandise (membership value does not count).",
+    };
   } else {
     return { error: `Unsupported shipping method: ${input.shippingMethod}` };
   }
@@ -655,14 +670,22 @@ Deno.serve(async (req: Request) => {
       if (!isAccessoryResolvedLine(line)) return sum;
       return sum + line.unitAmountCents * line.quantity;
     }, 0);
-    const shippableSubtotal = authorizedSubtotal - providerCareTaxableSubtotal;
+    const membershipSubtotal = resolved.reduce((sum, line) => {
+      if (!isMembershipResolvedLine(line)) return sum;
+      return sum + line.unitAmountCents * line.quantity;
+    }, 0);
+    // $500 free-shipping threshold: ordinary merchandise only (never membership value).
+    const freeShippingMerchandiseSubtotal =
+      authorizedSubtotal - providerCareTaxableSubtotal - membershipSubtotal;
+    const containsMembership = membershipSubtotal > 0;
     const requiresPhysicalShipping = resolved.some((line) => !isProviderCareResolvedLine(line));
 
     const shippingAuth = authorizeShippingCents({
       shippingMethod,
       clientShippingCents: shippingCents,
-      shippableSubtotalCents: shippableSubtotal,
+      shippableSubtotalCents: freeShippingMerchandiseSubtotal,
       requiresPhysicalShipping,
+      containsMembership,
     });
     if ("error" in shippingAuth) return jsonError(shippingAuth.error);
 

@@ -6,6 +6,8 @@ import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
 import { ProductCard } from '@/components/ProductCard';
 import { AccessoryProductPage } from '@/components/AccessoryProductPage';
+import { MembershipDetailPage } from '@/components/MembershipDetailPage';
+import { resolveStorefrontDetail } from '@/lib/catalog/resolveStorefrontDetail';
 import {
   buildPurchaseOptions,
   type PurchaseOptionKind,
@@ -14,8 +16,11 @@ import { loadPurchaseDiscountSettings } from '@/lib/pricing/settings';
 
 /** Router — accessories get a simplified ecommerce page; wellness keeps existing purchase logic. */
 export function ProductPage({ slug }: { slug: string }) {
-  const product = getProduct(slug);
-  if (!product) {
+  const detail = resolveStorefrontDetail(slug);
+  if (detail.kind === 'membership') {
+    return <MembershipDetailPage membership={detail.membership} />;
+  }
+  if (detail.kind === 'not_found') {
     return (
       <div className="pt-32 pb-20 text-center">
         <p className="text-ink-500">Product not found.</p>
@@ -23,6 +28,7 @@ export function ProductPage({ slug }: { slug: string }) {
       </div>
     );
   }
+  const product = detail.product;
   if (product.category === 'accessories') {
     return <AccessoryProductPage product={product} />;
   }

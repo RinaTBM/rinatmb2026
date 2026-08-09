@@ -2,6 +2,7 @@ import { Check, X, Lock, ArrowRight, ShieldCheck, ClipboardList, Stethoscope, Pa
 import { Link } from '@/router';
 import { visibleMemberships, type Membership } from '@/data/products';
 import { useCart } from '@/context/CartContext';
+import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
 
 const howItWorks = [
   { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide or Tirzepatide membership. No dose selection — one simple monthly price.' },
@@ -173,8 +174,11 @@ export function MembershipsPage() {
                 </p>
                 <p className="mb-4 text-xs text-ink-500">Shipping calculated separately. Initial term: 3 months, then month to month.</p>
 
-                <button onClick={() => handleJoin(m)} className={`btn-primary w-full ${m.highlighted ? '' : 'btn-outline'}`}>
-                  {m.cta} <ArrowRight size={16} />
+                <button
+                  onClick={() => handleJoin(m)}
+                  className={membershipJoinButtonClassName({ highlighted: m.highlighted })}
+                >
+                  {m.cta} <ArrowRight size={16} aria-hidden="true" />
                 </button>
               </div>
             ))}

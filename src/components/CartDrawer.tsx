@@ -1,6 +1,7 @@
 import { X, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link, navigate } from '@/router';
+import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal, totalSavings, itemCount } = useCart();
@@ -41,16 +42,23 @@ export function CartDrawer() {
                   <div className="space-y-4">
                     {items.map(item => (
                       <div key={item.key} className="flex gap-4">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className={`h-20 w-20 rounded-xl flex-shrink-0 bg-cream-100 ${
-                            item.section === 'accessories' ? 'object-contain p-1.5' : 'object-cover'
-                          }`}
-                        />
+                        <Link
+                          to={cartItemDetailPath(item)}
+                          onClick={closeCart}
+                          className="flex-shrink-0"
+                          aria-label={`View ${item.name}`}
+                        >
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className={`h-20 w-20 rounded-xl bg-cream-100 ${
+                              item.section === 'accessories' ? 'object-contain p-1.5' : 'object-cover'
+                            }`}
+                          />
+                        </Link>
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between gap-2">
-                            <Link to={`/product/${item.slug}`} onClick={closeCart} className="font-medium text-ink-900 hover:text-gold-600 text-sm">
+                            <Link to={cartItemDetailPath(item)} onClick={closeCart} className="font-medium text-ink-900 hover:text-gold-600 text-sm">
                               {item.name}
                             </Link>
                             <button onClick={() => removeItem(item.key)} className="text-ink-400 hover:text-ink-900 flex-shrink-0">

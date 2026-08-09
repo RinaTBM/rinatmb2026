@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Stethoscope, ShieldCheck, Sparkles } from 'lucid
 import { getConcern, getProductsByConcern, getMembershipsForConcern, concerns, type ConcernId } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
 import { useCart } from '@/context/CartContext';
+import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
 
 export function ConcernPage({ concernId }: { concernId: string }) {
   const concern = getConcern(concernId);
@@ -88,9 +89,9 @@ export function ConcernPage({ concernId }: { concernId: string }) {
                   </ul>
                   <button
                     onClick={() => addItem({ productId: m.checkoutProductId || m.id, slug: m.slug, name: m.displayName, price: m.monthlyPrice, standardPrice: m.monthlyPrice, image: m.image, subscription: true, section: 'membership', requiresIntake: true, isMembership: true, billingFrequency: 'monthly', purchaseType: 'membership_program', discountPercent: 0, appliedDiscount: 'none' })}
-                    className={`btn-primary w-full ${m.highlighted ? '' : 'btn-outline'}`}
+                    className={membershipJoinButtonClassName({ highlighted: m.highlighted })}
                   >
-                    Join {m.displayName.split(' ')[0]} <ArrowRight size={16} />
+                    Join {m.displayName.split(' ')[0]} <ArrowRight size={16} aria-hidden="true" />
                   </button>
                 </div>
               ))}

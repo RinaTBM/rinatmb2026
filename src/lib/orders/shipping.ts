@@ -1,22 +1,18 @@
 /**
  * Approved shipping options for order records (Phase 2).
- * Policy: Two-Day $30, Next-Day $50, free shipping at $500+ (eligible merchandise).
- * Do not use legacy $6.95 / $75 free-shipping threshold or "standard" in new checkout.
+ * Policy: Two-Day $30, Next-Day $50, free shipping at $500+.
+ * Do not use legacy $6.95 / $75 free-shipping threshold in new order records.
  */
 
-/** Methods accepted by modern checkout authorization. */
 export const SHIPPING_METHODS = [
   'two_day',
   'next_day',
   'free_over_500',
+  'standard',
   'none',
 ] as const;
 
 export type ShippingMethod = (typeof SHIPPING_METHODS)[number];
-
-/** Customer-selectable paid methods (excludes free_over_500 / none). */
-export const SELECTABLE_SHIPPING_METHODS = ['two_day', 'next_day'] as const;
-export type SelectableShippingMethod = (typeof SELECTABLE_SHIPPING_METHODS)[number];
 
 export const TWO_DAY_SHIPPING_CENTS = 3000;
 export const NEXT_DAY_SHIPPING_CENTS = 5000;
@@ -26,14 +22,8 @@ export const SHIPPING_METHOD_LABELS: Record<ShippingMethod, string> = {
   two_day: 'Two-Day Shipping',
   next_day: 'Next-Day Shipping',
   free_over_500: 'Free Shipping',
-  none: 'Shipping',
-};
-
-/** Labels for historical/legacy order rows only — never submitted by modern checkout. */
-const LEGACY_SHIPPING_LABELS: Record<string, string> = {
   standard: 'Standard Shipping',
-  ground: 'Ground Shipping',
-  economy: 'Economy Shipping',
+  none: 'Shipping',
 };
 
 export function labelShippingMethod(method: string | null | undefined): string {
@@ -41,13 +31,7 @@ export function labelShippingMethod(method: string | null | undefined): string {
   if ((SHIPPING_METHODS as readonly string[]).includes(method)) {
     return SHIPPING_METHOD_LABELS[method as ShippingMethod];
   }
-  return LEGACY_SHIPPING_LABELS[method] ?? method;
-}
-
-/** Reject obsolete values such as "standard" before calling Stripe. */
-export function isApprovedCheckoutShippingMethod(method: string | null | undefined): boolean {
-  if (!method) return false;
-  return (SHIPPING_METHODS as readonly string[]).includes(method);
+  return method;
 }
 
 export function isFreeShippingEligible(subtotalCents: number): boolean {
@@ -55,14 +39,12 @@ export function isFreeShippingEligible(subtotalCents: number): boolean {
 }
 
 export function shippingCentsForMethod(
-  method: ShippingMethod | string,
+  method: ShippingMethod,
   subtotalCents: number,
 ): number {
   if (isFreeShippingEligible(subtotalCents) || method === 'free_over_500') return 0;
   if (method === 'two_day') return TWO_DAY_SHIPPING_CENTS;
   if (method === 'next_day') return NEXT_DAY_SHIPPING_CENTS;
-  // Obsolete methods (e.g. "standard") must not silently charge $0 in checkout —
-  // callers should reject them via authorizeShippingCents before charging.
   return 0;
 }
 

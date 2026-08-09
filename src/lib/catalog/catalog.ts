@@ -88,12 +88,6 @@ export const CURRENCY = 'usd';
 /** Storefront-only categories preserved from website-improvements; not part of Stripe catalog sync. */
 const SYNC_EXCLUDED_CATEGORIES = new Set(['provider-care', 'accessories']);
 
-/**
- * Products kept in the storefront catalog but NOT on the approved wellness sync list.
- * Do not create Stripe TEST objects for these until explicitly reviewed.
- */
-const SYNC_EXCLUDED_PRODUCT_SLUGS = new Set(['tretinoin-cream', 'bimatoprost-solution']);
-
 export const toCents = (dollars: number): number => Math.round(dollars * 100);
 export const formatCents = (cents: number): string => `$${(cents / 100).toFixed(2)}`;
 
@@ -175,13 +169,7 @@ export const catalogMemberships: CatalogMembership[] = sourceMemberships.map(map
 
 /** Products that should be synced to Stripe (active + visible). Future/hidden excluded. */
 export const syncableProducts = (): CatalogProduct[] =>
-  catalogProducts.filter(
-    p => p.status === 'active' && p.isVisible && !SYNC_EXCLUDED_PRODUCT_SLUGS.has(p.slug),
-  );
-
-/** Active storefront products intentionally withheld from stripe-sync pending review. */
-export const syncReviewHoldProducts = (): CatalogProduct[] =>
-  catalogProducts.filter(p => SYNC_EXCLUDED_PRODUCT_SLUGS.has(p.slug));
+  catalogProducts.filter(p => p.status === 'active' && p.isVisible);
 
 /** Memberships that should be synced to Stripe (active + visible). */
 export const syncableMemberships = (): CatalogMembership[] =>

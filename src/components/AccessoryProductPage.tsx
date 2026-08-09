@@ -7,7 +7,6 @@ import {
   type Product,
 } from '@/data/products';
 import { useCart } from '@/context/CartContext';
-import { useMember } from '@/context/MemberContext';
 import { ProductCard } from '@/components/ProductCard';
 import {
   ACCESSORY_UNIT_QUANTITY_MAX,
@@ -18,27 +17,14 @@ import {
   clampAccessoryQuantity,
   isAccessoryCountProduct,
 } from '@/lib/accessories/accessoryPurchase';
-import { resolveAccessoryUnitPrice } from '@/lib/pricing/accessoryMemberDiscount';
-import {
-  getDefaultPurchaseDiscountSettings,
-  loadPurchaseDiscountSettings,
-} from '@/lib/pricing/settings';
 
 const ACCESSORY_NOTE = 'Accessories are wellness tools and supplies. They are not medications.';
 
 export function AccessoryProductPage({ product }: { product: Product }) {
   const { addItem } = useCart();
-  const { isActiveMember, status: membershipStatus } = useMember();
   const [quantity, setQuantity] = useState(1);
   const [variantIndex, setVariantIndex] = useState(0);
   const hasCountOptions = isAccessoryCountProduct(product);
-  const settings = useMemo(() => {
-    try {
-      return loadPurchaseDiscountSettings();
-    } catch {
-      return getDefaultPurchaseDiscountSettings();
-    }
-  }, []);
 
   const variant = product.variants[Math.min(variantIndex, product.variants.length - 1)];
   const section = sections.find(s => s.id === product.category);
@@ -46,15 +32,7 @@ export function AccessoryProductPage({ product }: { product: Product }) {
     () => getRelatedProducts(product).filter(p => p.category === 'accessories'),
     [product],
   );
-  const standardPrice = variant?.price ?? product.startingPrice;
-  const priced = resolveAccessoryUnitPrice({
-    standardPrice,
-    product,
-    isActiveMember,
-    membershipStatus,
-    settings,
-  });
-  const showMemberBenefit = priced.appliedDiscount === 'member';
+  const unitPrice = variant?.price ?? product.startingPrice;
 
   const handleAddToCart = () => {
     if (!variant) return;
@@ -63,8 +41,8 @@ export function AccessoryProductPage({ product }: { product: Product }) {
       productId: product.id,
       slug: product.slug,
       name: accessoryCartName(product, variant),
-      price: priced.finalPrice,
-      standardPrice,
+      price: unitPrice,
+      standardPrice: unitPrice,
       image: product.image,
       subscription: false,
       section: product.category,
@@ -72,8 +50,8 @@ export function AccessoryProductPage({ product }: { product: Product }) {
       variantId: variant.id,
       variantLabel: accessoryCartVariantLabel(product, variant),
       purchaseType: 'one_time',
-      discountPercent: priced.discountPercent,
-      appliedDiscount: priced.appliedDiscount,
+      discountPercent: 0,
+      appliedDiscount: 'none',
     }, qty);
   };
 
@@ -129,13 +107,6 @@ export function AccessoryProductPage({ product }: { product: Product }) {
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {product.variants.map((v, i) => {
                       const selected = i === variantIndex;
-                      const optionPriced = resolveAccessoryUnitPrice({
-                        standardPrice: v.price,
-                        product,
-                        isActiveMember,
-                        membershipStatus,
-                        settings,
-                      });
                       return (
                         <button
                           key={v.id}
@@ -151,14 +122,7 @@ export function AccessoryProductPage({ product }: { product: Product }) {
                           <span className="block text-sm font-medium text-ink-900">
                             {accessoryVariantOptionLabel(v)}
                           </span>
-                          {optionPriced.appliedDiscount === 'member' ? (
-                            <span className="block text-sm text-ink-600">
-                              <span className="text-ink-400 line-through mr-1">${v.price.toFixed(2)}</span>
-                              ${optionPriced.finalPrice.toFixed(2)}
-                            </span>
-                          ) : (
-                            <span className="block text-sm text-ink-600">${v.price.toFixed(2)}</span>
-                          )}
+                          <span className="block text-sm text-ink-600">${v.price.toFixed(2)}</span>
                         </button>
                       );
                     })}
@@ -168,30 +132,7 @@ export function AccessoryProductPage({ product }: { product: Product }) {
 
               <div className="rounded-2xl border border-cream-300 bg-white p-5 space-y-5">
                 <div>
-                  {showMemberBenefit ? (
-                    <div className="space-y-2">
-                      <p className="text-[11px] font-semibold uppercase tracking-wider text-gold-700">
-                        Member Benefit · Save {priced.discountPercent}%
-                      </p>
-                      <p className="font-serif text-3xl text-ink-900">
-                        ${priced.finalPrice.toFixed(2)}
-                      </p>
-                      <div className="text-sm text-ink-500 space-y-0.5">
-                        <p>
-                          Standard:{' '}
-                          <span className="line-through">${standardPrice.toFixed(2)}</span>
-                        </p>
-                        <p className="text-gold-700">
-                          Member Savings: −{priced.discountPercent}% (−${priced.savingsAmount.toFixed(2)})
-                        </p>
-                        <p className="text-ink-700 font-medium">
-                          Active Member Price: ${priced.finalPrice.toFixed(2)}
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="font-serif text-3xl text-ink-900">${standardPrice.toFixed(2)}</p>
-                  )}
+                  <p className="font-serif text-3xl text-ink-900">${unitPrice.toFixed(2)}</p>
                   {hasCountOptions && variant && (
                     <p className="mt-1 text-sm text-ink-500">
                       Selected: {accessoryVariantOptionLabel(variant)}

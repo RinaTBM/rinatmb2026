@@ -368,13 +368,8 @@ function mk(seed: ProductSeed): Product {
   // Future products default Auto-Refill OFF until manually approved.
   const autoRefillEligible =
     seed.autoRefillEligible ?? (!excludedFromDiscounts && status === 'active');
-  // Accessories: eligible for Active Wellness Member 15% by default (except kits/bundles).
-  // Wellness products: eligible unless excluded. Semaglutide/Tirzepatide set false explicitly.
   const memberPricingEligible =
-    seed.memberPricingEligible ??
-    (seed.category === 'accessories'
-      ? !(seed.slug.includes('kit') || seed.slug.includes('bundle') || !!seed.slug.match(/starter/))
-      : (!excludedFromDiscounts && status === 'active'));
+    seed.memberPricingEligible ?? (!excludedFromDiscounts && status === 'active');
   return {
     id: seed.id,
     slug: seed.slug,
@@ -455,13 +450,13 @@ export const products: Product[] = [
     imageAlt: 'Amber injection vial for Semaglutide + B6, a provider-directed weight-management option',
     providerDisclaimer: WEIGHT_DISCLAIMER,
     bestSeller: true,
-    // Membership savings do not apply — Semaglutide Membership ($149/mo) is the member offer.
+    // Membership savings do not apply — Semaglutide Membership ($199/mo) is the member offer.
     memberPricingEligible: false,
+    subscriptionPrice: 175,
     variants: [
-      { dosageForm: 'Injection', strength: '0.5mg', size: 'Vial', price: 119 },
-      { dosageForm: 'Injection', strength: '1mg', size: 'Vial', price: 139 },
-      { dosageForm: 'Injection', strength: '2.5mg', size: 'Vial', price: 189.02 },
-      { dosageForm: 'Injection', strength: '5mg', size: 'Vial', price: 329 },
+      { dosageForm: 'Injection', strength: '1mg/1mg per mL', size: '2mL', price: 149 },
+      { dosageForm: 'Injection', strength: '2mg/2mg per mL', size: '2mL', price: 169 },
+      { dosageForm: 'Injection', strength: '5mg/2mg per mL', size: '2mL', price: 199 },
     ],
   }),
   mk({
@@ -480,11 +475,12 @@ export const products: Product[] = [
     bestSeller: true,
     // Membership savings do not apply — Tirzepatide Membership ($249/mo) is the member offer.
     memberPricingEligible: false,
+    subscriptionPrice: 225,
     variants: [
-      { dosageForm: 'Injection', strength: '2.5mg', size: 'Vial', price: 189 },
-      { dosageForm: 'Injection', strength: '7.5mg', size: 'Vial', price: 258.99 },
-      { dosageForm: 'Injection', strength: '12.5mg', size: 'Vial', price: 369 },
-      { dosageForm: 'Injection', strength: '15mg', size: 'Vial', price: 429 },
+      { dosageForm: 'Injection', strength: '5mg/2mg per mL', size: '2mL', price: 199 },
+      { dosageForm: 'Injection', strength: '15mg/2mg per mL', size: '2mL', price: 269 },
+      { dosageForm: 'Injection', strength: '25mg/2mg per mL', size: '2mL', price: 379 },
+      { dosageForm: 'Injection', strength: '30mg/2mg per mL', size: '2mL', price: 449 },
     ],
     needsDedicatedImage: true,
   }),
@@ -504,9 +500,9 @@ export const products: Product[] = [
     imageAlt: 'Estradiol transdermal patch, a provider-directed hormone therapy option',
     providerDisclaimer: RX_DISCLAIMER,
     variants: [
-      { dosageForm: 'Patch', strength: '0.025mg twice weekly', size: '8 patches', price: 129 },
-      { dosageForm: 'Patch', strength: '0.05mg twice weekly', size: '8 patches', price: 138.98 },
-      { dosageForm: 'Patch', strength: '0.1mg twice weekly', size: '8 patches', price: 149 },
+      { dosageForm: 'Patch', strength: '0.025mg twice weekly', size: '8 patches', price: 119 },
+      { dosageForm: 'Patch', strength: '0.05mg twice weekly', size: '8 patches', price: 119 },
+      { dosageForm: 'Patch', strength: '0.1mg twice weekly', size: '8 patches', price: 135 },
     ],
   }),
   mk({
@@ -523,8 +519,8 @@ export const products: Product[] = [
     imageAlt: 'Progesterone capsules bottle, a provider-directed hormone therapy option',
     providerDisclaimer: RX_DISCLAIMER,
     variants: [
-      { dosageForm: 'Capsule', strength: '100mg', size: '30 capsules', price: 39 },
-      { dosageForm: 'Capsule', strength: '200mg', size: '30 capsules', price: 59 },
+      { dosageForm: 'Capsule', strength: '100mg', size: '30 capsules', price: 49 },
+      { dosageForm: 'Capsule', strength: '200mg', size: '30 capsules', price: 69 },
     ],
   }),
   mk({
@@ -549,20 +545,21 @@ export const products: Product[] = [
   mk({
     id: 'p9', // preserves previous NAD+ Injection app_product_id
     slug: 'nad-plus',
-    displayName: 'NAD+ Injection',
+    displayName: 'NAD+',
     shortName: 'NAD+',
     subtitle: 'Provider-directed compounded formulation',
     category: 'longevity-cognitive',
     goals: ['longevity'],
-    shortDescription: 'A provider-directed compounded NAD+ injection formulation.',
+    shortDescription: 'A provider-directed compounded NAD+ formulation, available in nasal spray and injection.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'NAD+ injection, a provider-directed compounded formulation',
+    imageAlt: 'NAD+ compounded formulation, provider-directed, available as nasal spray or injection',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     bestSeller: true,
     variants: [
-      { dosageForm: 'Injection', strength: '100mg/mL · 500mg total', size: '5mL', price: 199 },
-      { dosageForm: 'Injection', strength: '100mg/mL · 1,000mg total', size: '10mL', price: 229 },
+      { dosageForm: 'Nasal Spray', strength: '50mcg/50mcg per spray', size: '10mL', price: 149 },
+      { dosageForm: 'Injection', strength: '100mg/mL', size: '5mL', price: 199 },
+      { dosageForm: 'Injection', strength: '100mg/mL', size: '10mL', price: 219 },
     ],
   }),
   mk({
@@ -613,7 +610,7 @@ export const products: Product[] = [
     imageAlt: 'Selank and Semax blend nasal spray, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     variants: [
-      { dosageForm: 'Nasal Spray', strength: '50mcg/50mcg per spray', size: '10mL', price: 169 },
+      { dosageForm: 'Nasal Spray', strength: '50mcg/50mcg per spray', size: '10mL', price: 149 },
     ],
   }),
 
@@ -621,25 +618,23 @@ export const products: Product[] = [
   mk({
     id: 'p41', // preserves the previous BPC-157/TB-500 Injection app_product_id
     slug: 'bpc-157-tb-500',
-    displayName: 'Wolverine: BPC-157/TB-500',
-    shortName: 'Wolverine',
-    subtitle: 'BPC-157/TB-500 Blend',
+    displayName: 'BPC-157/TB-500 Blend',
+    shortName: 'BPC-157/TB-500',
+    subtitle: 'Wolverine Blend',
     category: 'recovery-performance',
     goals: ['recovery', 'performance'],
     shortDescription: 'A provider-directed compounded BPC-157/TB-500 blend, available in capsules and injection.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'Wolverine BPC-157/TB-500 blend, a provider-directed compounded formulation in capsule and injection forms',
+    imageAlt: 'BPC-157/TB-500 blend, a provider-directed compounded formulation in capsule and injection forms',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     variants: [
-      { dosageForm: 'Capsule', strength: 'Blend', size: 'Capsule', price: 99 },
-      { dosageForm: 'Injection', strength: 'Blend', size: 'Injection', price: 199 },
+      { dosageForm: 'Capsule', strength: '500mcg/500mcg per capsule', size: '30 capsules', price: 99 },
+      { dosageForm: 'Injection', strength: '1.66mg/3.33mg per mL', size: '3mL', price: 199 },
     ],
   }),
 
   // ===== PRESCRIPTION SKIN & HAIR =====
-  // Active on storefront historically, but NOT on the approved wellness sync list.
-  // Kept visible for browse; excluded from stripe-sync until reviewed (see catalog.ts).
   mk({
     id: 'p69',
     slug: 'tretinoin-cream',
@@ -677,11 +672,9 @@ export const products: Product[] = [
       'Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
     needsDedicatedImage: true,
     variants: [
-      { dosageForm: 'Topical Solution', strength: 'Combination formula', size: 'Bottle', price: 129 },
+      { dosageForm: 'Topical Solution', strength: '1% plus pharmacy-selected actives', size: '60mL', price: 119 },
     ],
   }),
-  // Active on storefront historically, but NOT on the approved wellness sync list.
-  // Kept visible for browse; excluded from stripe-sync until reviewed (see catalog.ts).
   mk({
     id: 'p71',
     slug: 'bimatoprost-solution',
@@ -769,8 +762,6 @@ export const products: Product[] = [
     variants: [{ dosageForm: 'Accessory', strength: 'Bundle', size: '1 kit', price: 119 }],
     providerDisclaimer: 'Accessories are wellness tools and supplies. They are not medications.',
     bestSeller: true,
-    // Already-discounted bundle — member accessory 15% stays OFF by default.
-    memberPricingEligible: false,
   }),
   mk({
     id: 'a2',
@@ -1068,15 +1059,14 @@ export interface Membership {
 }
 
 const SHARED_MEMBERSHIP_BENEFITS = [
-  'Flat-rate membership pricing for your weight-management program',
+  'Lowest pricing — members save 15% on eligible wellness products',
   'Locked membership pricing while continuously enrolled',
-  'Save 15% on other eligible wellness products',
-  'Save 15% on accessories',
-  'Priority access to new wellness products',
-  'Convenient ongoing wellness support',
+  'Priority access to new products',
+  'Convenient monthly wellness when prescribed',
   'Provider-guided care with licensed-provider eligibility review',
   'Routine renewal questionnaire or progress check-in',
   'Refill and pharmacy coordination',
+  'Members receive our best available pricing',
 ];
 
 const sharedTerms = (initialTermMonths: number) => [
@@ -1094,13 +1084,13 @@ export const memberships: Membership[] = [
     slug: 'semaglutide-membership',
     displayName: 'Semaglutide Membership',
     brandName: 'Bare Balance',
-    monthlyPrice: 149,
+    monthlyPrice: 199,
     billingFrequency: 'monthly',
     initialTermMonths: 3,
     lockedRate: true,
     includedProducts: ['Semaglutide + B6 Injection'],
-    includedFormulations: ['0.5mg', '1mg', '2.5mg', '5mg'],
-    maximumIncludedFormulation: '5mg',
+    includedFormulations: ['1mg/1mg per mL, 2mL', '2mg/2mg per mL, 2mL', '5mg/2mg per mL, 2mL'],
+    maximumIncludedFormulation: '5mg/2mg per mL, 2mL',
     excludedFormulations: [],
     providerReviewRequired: true,
     prescriptionGuaranteed: false,
@@ -1116,16 +1106,16 @@ export const memberships: Membership[] = [
     secondaryValueStatement:
       'Your membership price stays the same as your provider adjusts your eligible treatment within the included program.',
     benefits: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
       'Provider-directed formulation or strength adjustments within the included program',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
     ],
     exclusions: [],
     termsSummary: sharedTerms(3),
     faq: [
       {
         q: 'Will my price increase if my treatment changes?',
-        a: 'Your Semaglutide membership remains $149 per month while your membership stays continuously active and your provider-selected treatment remains within the included program.',
+        a: 'Your Semaglutide membership remains $199 per month while your membership stays continuously active and your provider-selected treatment remains within the included program.',
       },
     ],
     cta: 'Join Semaglutide Membership',
@@ -1135,15 +1125,15 @@ export const memberships: Membership[] = [
     imageAlt: 'Semaglutide Membership — provider-directed Semaglutide + B6 injection program',
 
     name: 'Semaglutide Membership',
-    price: 149,
+    price: 199,
     priceLabel: '/month',
     tagline: 'Bare Balance',
     description:
       'A provider-guided Semaglutide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program while you remain continuously enrolled.',
     features: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
       'Provider-directed formulation or strength adjustments within the included program',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
     ],
   },
   {
@@ -1156,9 +1146,9 @@ export const memberships: Membership[] = [
     initialTermMonths: 3,
     lockedRate: true,
     includedProducts: ['Tirzepatide + B6 Injection'],
-    includedFormulations: ['2.5mg', '7.5mg', '12.5mg', '15mg'],
-    maximumIncludedFormulation: '15mg',
-    excludedFormulations: [],
+    includedFormulations: ['5mg/2mg per mL, 2mL', '15mg/2mg per mL, 2mL', '25mg/2mg per mL, 2mL'],
+    maximumIncludedFormulation: '25mg/2mg per mL, 2mL',
+    excludedFormulations: ['30mg/2mg per mL, 2mL'],
     providerReviewRequired: true,
     prescriptionGuaranteed: false,
     shippingIncluded: false,
@@ -1168,28 +1158,28 @@ export const memberships: Membership[] = [
     supabaseId: 'm2',
     shortDescription: 'One predictable monthly rate through the included program maximum. Provider-directed Tirzepatide + B6 treatment.',
     longDescription:
-      'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 15mg while you remain continuously enrolled.',
+      'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 25mg/2mg per mL, 2mL while you remain continuously enrolled.',
     valueStatement: 'One predictable monthly rate through the included program maximum.',
     secondaryValueStatement:
       'Your membership price stays the same as your provider adjusts your eligible treatment within the included program maximum.',
     benefits: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
       'Provider-directed formulation or strength adjustments within the included program maximum',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
     ],
-    exclusions: [],
+    exclusions: ['Formulations above 25mg/2mg per mL, 2mL (including 30mg/2mg per mL, 2mL) are not part of this membership.'],
     termsSummary: [
       ...sharedTerms(3),
-      'The $249 locked rate includes eligible provider-selected formulations through 15mg.',
+      'The $249 locked rate includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above the included maximum are not part of this membership.',
     ],
     faq: [
       {
         q: 'Will my price increase if my treatment changes?',
-        a: 'Your Tirzepatide membership remains $249 per month while your membership stays continuously active and your provider-selected treatment remains within the included program through 15mg.',
+        a: 'Your Tirzepatide membership remains $249 per month while your membership stays continuously active and your provider-selected treatment remains within the included program through 25mg/2mg per mL, 2mL.',
       },
       {
         q: 'Is the highest Tirzepatide formulation included?',
-        a: 'The $249 membership includes eligible provider-selected formulations through 15mg.',
+        a: 'The $249 membership includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above that program maximum are not included.',
       },
     ],
     cta: 'Join Tirzepatide Membership',
@@ -1204,11 +1194,11 @@ export const memberships: Membership[] = [
     priceLabel: '/month',
     tagline: 'Bare Momentum',
     description:
-      'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 15mg while you remain continuously enrolled.',
+      'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 25mg/2mg per mL, 2mL while you remain continuously enrolled.',
     features: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 4),
       'Provider-directed formulation or strength adjustments within the included program maximum',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
+      ...SHARED_MEMBERSHIP_BENEFITS.slice(4),
     ],
   },
   // Retained but hidden (preserved, not deleted): non-weight wellness membership.

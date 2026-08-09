@@ -27,6 +27,3 @@ dist-ssr
 .env.production
 # Local Stripe sync mapping (IDs only, but keep out of git to avoid env drift)
 scripts/.stripe-sync-state.test.json
-# Local Supabase CLI cache
-supabase/.temp/
-supabase/.temp/

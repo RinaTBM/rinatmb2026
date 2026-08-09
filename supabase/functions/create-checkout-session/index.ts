@@ -19,149 +19,6 @@ interface CartItemRequest {
   appliedDiscount?: string;
   productName?: string;
   variantLabel?: string;
-  variantId?: string;
-  /** Storefront section/category — used to authorize accessory member pricing. */
-  section?: string;
-  /** Per-SKU eligibility flag from catalog (bundles default false). */
-  memberPricingEligible?: boolean;
-  /** Normalized membership requested formulation (request only). */
-  requestedFormulation?: string;
-  membershipSlug?: string;
-}
-
-/** Mirrors src/lib/checkout/checkoutConstants.ts + authorizeCheckout.ts */
-
-const SEMAGLUTIDE_MEMBERSHIP_APP_ID = "m1";
-const TIRZEPATIDE_MEMBERSHIP_APP_ID = "m2";
-const SEMAGLUTIDE_MEMBERSHIP_CENTS = 14900;
-const TIRZEPATIDE_MEMBERSHIP_CENTS = 24900;
-const TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS = 35000;
-
-const WELLNESS_MEMBER_DISCOUNT_PERCENT = 15;
-const AUTO_REFILL_DISCOUNT_PERCENT = 10;
-const ACCESSORY_MEMBER_DISCOUNT_PERCENT = 15;
-/** Provider Care only — never a universal cart tax. */
-const PROVIDER_CARE_TAX_RATE = 0.018;
-const PROVIDER_CARE_TAX_RATE_PERCENT = 1.8;
-/**
- * INTERIM TEST/STAGING ONLY — accessory merchandise sales-tax rate.
- * Applied ONLY to accessory merchandise subtotals (not wellness, memberships,
- * Provider Care, or shipping). Pending destination-based production sales-tax
- * implementation; do NOT enable Stripe Tax yet. Not a permanent legal rate.
- */
-const ACCESSORY_SALES_TAX_RATE = 0.08;
-const ACCESSORY_SALES_TAX_RATE_PERCENT = 8;
-
-const TWO_DAY_SHIPPING_CENTS = 3000;
-const NEXT_DAY_SHIPPING_CENTS = 5000;
-const FREE_SHIPPING_THRESHOLD_CENTS = 50000;
-
-const ACCESSORY_BUNDLE_PRODUCT_IDS = new Set(["a1"]);
-/** Semaglutide / Tirzepatide medication — never receive wellness 15% member discount. */
-const WEIGHT_MED_PRODUCT_IDS = new Set(["p1", "p5"]);
-
-const PROVIDER_CARE_FIXED_CENTS: Record<string, number> = {
-  pc1: 7500,
-  pc2: 5500,
-  pc3: 5500,
-};
-
-const MEMBERSHIP_FIXED_CENTS: Record<string, number> = {
-  [SEMAGLUTIDE_MEMBERSHIP_APP_ID]: SEMAGLUTIDE_MEMBERSHIP_CENTS,
-  [TIRZEPATIDE_MEMBERSHIP_APP_ID]: TIRZEPATIDE_MEMBERSHIP_CENTS,
-};
-
-type ShippingMethod = "two_day" | "next_day" | "free_over_500" | "none";
-
-const GETTING_STARTED_FORMULATION = "getting_started";
-const GETTING_STARTED_LABEL = "Getting Started / Not Sure";
-
-interface CatalogMembershipRow {
-  app_product_id: string;
-  stripe_price_id_test: string | null;
-  monthly_price_cents: number;
-  display_name: string;
-  slug?: string;
-  included_formulations?: string[] | null;
-}
-
-interface CatalogVariantRow {
-  variant_key: string;
-  stripe_price_id_test: string | null;
-  price_cents: number;
-  display_name: string;
-  app_product_id: string;
-}
-
-type LineResolution =
-  | {
-    kind: "mapped_price";
-    stripePriceId: string;
-    quantity: number;
-    unitAmountCents: number;
-    recurring: boolean;
-    source: "catalog_memberships" | "catalog_variants";
-    productId: string;
-    productName: string;
-    variantLabel: string | null;
-    requestedFormulation?: string | null;
-    membershipSlug?: string | null;
-  }
-  | {
-    kind: "price_data";
-    unitAmountCents: number;
-    quantity: number;
-    name: string;
-    recurring: boolean;
-    reason:
-      | "auto_refill"
-      | "wellness_member_discount"
-      | "accessory_member_discount"
-      | "accessory_standard"
-      | "provider_care";
-    productId: string;
-    productName: string;
-    variantLabel: string | null;
-  };
-
-function normalizeRequestedFormulation(raw: string | null | undefined): string | null {
-  if (raw == null) return null;
-  const trimmed = String(raw).trim();
-  if (!trimmed) return null;
-  const lower = trimmed.toLowerCase().replace(/[\s/-]+/g, "_");
-  if (
-    lower === GETTING_STARTED_FORMULATION ||
-    lower === "getting_started_not_sure" ||
-    trimmed === GETTING_STARTED_LABEL
-  ) {
-    return GETTING_STARTED_FORMULATION;
-  }
-  return trimmed;
-}
-
-function labelRequestedFormulation(value: string): string {
-  return value === GETTING_STARTED_FORMULATION ? GETTING_STARTED_LABEL : value;
-}
-
-function validateMembershipRequestedFormulation(input: {
-  requestedFormulation: string | null | undefined;
-  includedFormulations: readonly string[] | null | undefined;
-}): { ok: true; value: string } | { ok: false; error: string } {
-  const normalized = normalizeRequestedFormulation(input.requestedFormulation);
-  if (!normalized) {
-    return {
-      ok: false,
-      error: "Please select a requested dose before continuing with membership checkout.",
-    };
-  }
-  if (normalized === GETTING_STARTED_FORMULATION) return { ok: true, value: normalized };
-  if ((input.includedFormulations ?? []).includes(normalized)) {
-    return { ok: true, value: normalized };
-  }
-  return {
-    ok: false,
-    error: `Unsupported requested formulation: ${input.requestedFormulation}`,
-  };
 }
 
 function assertTestKey(secretKey: string) {
@@ -173,373 +30,36 @@ function assertTestKey(secretKey: string) {
   }
 }
 
-function applyPercentOffCents(standardCents: number, percent: number): number {
-  if (!Number.isFinite(standardCents) || standardCents < 0) return 0;
-  const p = Math.min(100, Math.max(0, percent));
-  return Math.round(standardCents * (1 - p / 100));
-}
-
-function isProgramMembership(item: CartItemRequest): boolean {
-  const purchaseType: PurchaseType = item.purchaseType ?? (item.subscription ? "auto_refill" : "one_time");
-  return (
-    purchaseType === "membership_program" ||
-    item.productId === SEMAGLUTIDE_MEMBERSHIP_APP_ID ||
-    item.productId === TIRZEPATIDE_MEMBERSHIP_APP_ID
-  );
-}
-
-function isAccessoryLine(item: CartItemRequest): boolean {
-  if (item.section === "accessories") return true;
-  return /^a\d+$/i.test(item.productId);
-}
-
-function isProviderCareLine(item: CartItemRequest): boolean {
-  if (item.section === "provider-care") return true;
-  return /^pc\d+$/i.test(item.productId);
-}
-
-function isAccessoryEligibleForMemberDiscount(item: CartItemRequest): boolean {
-  if (!isAccessoryLine(item)) return false;
-  if (ACCESSORY_BUNDLE_PRODUCT_IDS.has(item.productId)) return false;
-  if (item.memberPricingEligible === false) return false;
-  return true;
-}
-
-function normalizeVariantKey(variantId: string | undefined | null): string | null {
-  if (!variantId) return null;
-  return variantId.replace(/-refill$/i, "");
-}
-
-function isForbiddenSelfServeMemberOnly350(item: CartItemRequest): boolean {
-  if (!isProgramMembership(item)) return false;
-  const requested = typeof item.unitAmountCents === "number" ? Math.round(item.unitAmountCents) : null;
-  return requested === TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS;
-}
-
-function authorizeAccessoryUnitCents(item: CartItemRequest, isActiveMember: boolean): number | null {
-  if (!isAccessoryLine(item)) return null;
-  const standard = Math.max(0, Math.round(item.standardPriceCents ?? item.unitAmountCents ?? 0));
-  if (!standard) return null;
-  if (!isActiveMember || !isAccessoryEligibleForMemberDiscount(item)) return standard;
-  return applyPercentOffCents(standard, ACCESSORY_MEMBER_DISCOUNT_PERCENT);
-}
-
-function authorizeWellnessUnitCents(
-  item: CartItemRequest,
-  isActiveMember: boolean,
-): { unitAmountCents: number; reason: "auto_refill" | "wellness_member_discount" } | null {
-  if (isAccessoryLine(item) || isProviderCareLine(item) || isProgramMembership(item)) return null;
-  const standard = Math.max(0, Math.round(item.standardPriceCents ?? 0));
-  if (!standard) return null;
-
-  const purchaseType: PurchaseType = item.purchaseType ?? (item.subscription ? "auto_refill" : "one_time");
-
-  if (purchaseType === "auto_refill" || item.subscription) {
-    return {
-      unitAmountCents: applyPercentOffCents(standard, AUTO_REFILL_DISCOUNT_PERCENT),
-      reason: "auto_refill",
-    };
-  }
-
-  const wantsMember =
-    isActiveMember &&
-    item.memberPricingEligible !== false &&
-    !WEIGHT_MED_PRODUCT_IDS.has(item.productId) &&
-    (item.appliedDiscount === "member" ||
-      (typeof item.discountPercent === "number" && item.discountPercent > 0) ||
-      (typeof item.unitAmountCents === "number" &&
-        typeof item.standardPriceCents === "number" &&
-        item.unitAmountCents < item.standardPriceCents));
-
-  if (wantsMember) {
-    return {
-      unitAmountCents: applyPercentOffCents(standard, WELLNESS_MEMBER_DISCOUNT_PERCENT),
-      reason: "wellness_member_discount",
-    };
-  }
-
-  return null;
-}
-
-function resolveMembershipLine(
-  item: CartItemRequest,
-  membership: CatalogMembershipRow | undefined,
-): LineResolution | { error: string } {
-  if (isForbiddenSelfServeMemberOnly350(item)) {
-    return {
-      error:
-        "Tirzepatide 30mg member-only pricing is not available for self-service checkout. Provider/admin approval is required.",
-    };
-  }
-
-  const expected = MEMBERSHIP_FIXED_CENTS[item.productId];
-  if (expected == null) return { error: `Unknown membership product ${item.productId}` };
-  if (!membership?.stripe_price_id_test) {
-    return {
-      error: `Membership ${item.productId} is not synced to Stripe TEST (catalog_memberships.stripe_price_id_test missing).`,
-    };
-  }
-  if (membership.monthly_price_cents !== expected) {
-    return {
-      error: `Membership ${item.productId} catalog amount mismatch (expected ${expected}, got ${membership.monthly_price_cents}).`,
-    };
-  }
-
-  const dose = validateMembershipRequestedFormulation({
-    requestedFormulation: item.requestedFormulation,
-    includedFormulations: membership.included_formulations ?? [],
-  });
-  if (!dose.ok) return { error: dose.error };
-
-  const doseLabel = labelRequestedFormulation(dose.value);
-
-  return {
-    kind: "mapped_price",
-    stripePriceId: membership.stripe_price_id_test,
-    quantity: Math.max(1, Math.round(item.quantity) || 1),
-    unitAmountCents: expected,
-    recurring: true,
-    source: "catalog_memberships",
-    productId: item.productId,
-    productName: item.productName ?? membership.display_name,
-    variantLabel: item.variantLabel ?? `Requested dose: ${doseLabel}`,
-    requestedFormulation: dose.value,
-    membershipSlug: item.membershipSlug ?? membership.slug ?? null,
-  };
-}
-
-function resolveProviderCareLine(item: CartItemRequest): LineResolution | { error: string } {
-  const fixed = PROVIDER_CARE_FIXED_CENTS[item.productId];
-  if (fixed == null) return { error: `Unknown Provider Care product ${item.productId}` };
-  // Intentionally not in stripe-sync catalog_* — charge approved fixed storefront amounts.
-  return {
-    kind: "price_data",
-    unitAmountCents: fixed,
-    quantity: Math.max(1, Math.round(item.quantity) || 1),
-    name: item.productName ?? item.productId,
-    recurring: false,
-    reason: "provider_care",
-    productId: item.productId,
-    productName: item.productName ?? item.productId,
-    variantLabel: item.variantLabel ?? null,
-  };
-}
-
-function resolveProductLine(
-  item: CartItemRequest,
-  isActiveMember: boolean,
-  variant: CatalogVariantRow | undefined,
-): LineResolution | { error: string } {
-  if (isProviderCareLine(item)) return resolveProviderCareLine(item);
-
-  const qty = Math.max(1, Math.round(item.quantity) || 1);
-  const purchaseType: PurchaseType = item.purchaseType ?? (item.subscription ? "auto_refill" : "one_time");
-
-  if (isAccessoryLine(item)) {
-    if (purchaseType === "auto_refill" || item.subscription) {
-      return { error: "Auto-Refill is not available on accessories." };
-    }
-    const unit = authorizeAccessoryUnitCents(item, isActiveMember);
-    if (unit == null || unit <= 0) {
-      return { error: `Missing unit amount for accessory ${item.productId}` };
-    }
-    const name = item.variantLabel
-      ? `${item.productName ?? item.productId} (${item.variantLabel})`
-      : (item.productName ?? item.productId);
-    const discounted =
-      isActiveMember &&
-      isAccessoryEligibleForMemberDiscount(item) &&
-      unit < Math.round(item.standardPriceCents ?? unit);
-    return {
-      kind: "price_data",
-      unitAmountCents: unit,
-      quantity: qty,
-      name,
-      recurring: false,
-      reason: discounted ? "accessory_member_discount" : "accessory_standard",
-      productId: item.productId,
-      productName: item.productName ?? item.productId,
-      variantLabel: item.variantLabel ?? null,
-    };
-  }
-
-  const discounted = authorizeWellnessUnitCents(item, isActiveMember);
-  if (discounted) {
-    const name = item.variantLabel
-      ? `${item.productName ?? item.productId} (${item.variantLabel})`
-      : (item.productName ?? item.productId);
-    return {
-      kind: "price_data",
-      unitAmountCents: discounted.unitAmountCents,
-      quantity: qty,
-      name,
-      recurring: discounted.reason === "auto_refill",
-      reason: discounted.reason,
-      productId: item.productId,
-      productName: item.productName ?? item.productId,
-      variantLabel: item.variantLabel ?? null,
-    };
-  }
-
-  const variantKey = normalizeVariantKey(item.variantId);
-  if (!variantKey) return { error: `Missing variantId for product ${item.productId}` };
-  if (!variant?.stripe_price_id_test) {
-    return {
-      error: `Product variant ${variantKey} is not synced to Stripe TEST (catalog_variants.stripe_price_id_test missing).`,
-    };
-  }
-  if (variant.app_product_id && variant.app_product_id !== item.productId) {
-    return { error: `Variant ${variantKey} does not belong to product ${item.productId}` };
-  }
-
-  return {
-    kind: "mapped_price",
-    stripePriceId: variant.stripe_price_id_test,
-    quantity: qty,
-    unitAmountCents: variant.price_cents,
-    recurring: false,
-    source: "catalog_variants",
-    productId: item.productId,
-    productName: item.productName ?? variant.display_name,
-    variantLabel: item.variantLabel ?? variant.display_name,
-  };
-}
-
-function isProviderCareResolvedLine(line: LineResolution): boolean {
-  if (line.kind === "price_data" && line.reason === "provider_care") return true;
-  return /^pc\d+$/i.test(line.productId);
-}
-
-function isAccessoryResolvedLine(line: LineResolution): boolean {
-  if (
-    line.kind === "price_data" &&
-    (line.reason === "accessory_member_discount" || line.reason === "accessory_standard")
-  ) {
-    return true;
-  }
-  return /^a\d+$/i.test(line.productId);
-}
-
-function isMembershipResolvedLine(line: LineResolution): boolean {
-  if (line.kind === "mapped_price" && line.source === "catalog_memberships") return true;
-  return line.productId === SEMAGLUTIDE_MEMBERSHIP_APP_ID ||
-    line.productId === TIRZEPATIDE_MEMBERSHIP_APP_ID;
-}
-
-function authorizeShippingCents(input: {
-  shippingMethod?: string;
-  clientShippingCents?: number;
-  /** Ordinary merchandise only — membership value must never be included. */
-  shippableSubtotalCents: number;
-  requiresPhysicalShipping: boolean;
-  containsMembership?: boolean;
-}): { shippingMethod: ShippingMethod; shippingCents: number; freeShippingEligible: boolean } | { error: string } {
-  if (!input.requiresPhysicalShipping) {
-    if (
-      typeof input.clientShippingCents === "number" &&
-      Math.round(input.clientShippingCents) !== 0
-    ) {
-      return { error: "Physical shipping is not applicable to this order." };
-    }
-    return { shippingMethod: "none", shippingCents: 0, freeShippingEligible: false };
-  }
-
-  if (input.shippingMethod === "standard") {
-    return {
-      error:
-        "Unsupported shipping method: standard. Approved methods are two_day ($30) and next_day ($50).",
-    };
-  }
-
-  const free = input.shippableSubtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS;
-  let method: ShippingMethod;
-
-  if (free) {
-    method = "free_over_500";
-  } else if (input.shippingMethod === "next_day") {
-    method = "next_day";
-  } else if (input.shippingMethod === "two_day") {
-    method = "two_day";
-  } else if (!input.shippingMethod || input.shippingMethod === "none") {
-    if (input.containsMembership) {
-      return {
-        error:
-          "Membership checkout requires a shipping method: two_day ($30) or next_day ($50).",
-      };
-    }
-    method = "two_day";
-  } else if (input.shippingMethod === "free_over_500") {
-    return {
-      error:
-        "Free shipping requires $500 or more in eligible ordinary merchandise (membership value does not count).",
-    };
-  } else {
-    return { error: `Unsupported shipping method: ${input.shippingMethod}` };
-  }
-
-  const authorized = free
-    ? 0
-    : method === "next_day"
-    ? NEXT_DAY_SHIPPING_CENTS
-    : TWO_DAY_SHIPPING_CENTS;
-
-  if (
-    typeof input.clientShippingCents === "number" &&
-    Math.round(input.clientShippingCents) !== authorized
-  ) {
-    return {
-      error: `Shipping amount mismatch (authorized ${authorized} cents for ${method}).`,
-    };
-  }
-
-  return { shippingMethod: method, shippingCents: authorized, freeShippingEligible: free };
-}
-
-function shippingDisplayName(method: ShippingMethod): string {
-  if (method === "free_over_500") return "Free Shipping ($500+)";
-  if (method === "next_day") return "Next-Day Shipping";
-  if (method === "none") return "No shipping";
-  return "Two-Day Shipping";
-}
-
-function jsonError(message: string, status = 400): Response {
-  return new Response(JSON.stringify({ error: message }), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
-}
-
-async function sbGet<T>(supabaseUrl: string, serviceKey: string, path: string): Promise<T | { error: string }> {
-  const res = await fetch(`${supabaseUrl}${path}`, {
-    headers: {
-      apikey: serviceKey,
-      Authorization: `Bearer ${serviceKey}`,
-    },
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    return { error: `Catalog lookup failed (${res.status}): ${text}` };
-  }
-  return await res.json() as T;
-}
-
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
 
   const secretKey = Deno.env.get("STRIPE_SECRET_KEY_TEST") || Deno.env.get("STRIPE_SECRET_KEY");
-  if (!secretKey) return jsonError("Stripe not configured", 500);
+  if (!secretKey) {
+    return new Response(JSON.stringify({ error: "Stripe not configured" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     assertTestKey(secretKey);
   } catch (err) {
-    return jsonError(err.message, 500);
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  if (!supabaseUrl || !serviceKey) return jsonError("Supabase not configured", 500);
+  if (!supabaseUrl || !serviceKey) {
+    return new Response(JSON.stringify({ error: "Supabase not configured" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     const body = await req.json() as {
@@ -556,7 +76,6 @@ Deno.serve(async (req: Request) => {
       freeShippingEligible?: boolean;
       requiresProviderReview?: boolean;
     };
-
     const {
       items,
       isActiveMember,
@@ -566,134 +85,126 @@ Deno.serve(async (req: Request) => {
       shippingMethod,
       shippingCents,
       taxCents,
+      subtotalCents,
       discountCents,
+      freeShippingEligible,
       requiresProviderReview,
     } = body;
 
-    const memberClaim = isActiveMember === true;
-
     if (!items || !Array.isArray(items) || items.length === 0) {
-      return jsonError("No items provided");
+      return new Response(JSON.stringify({ error: "No items provided" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    // ---- Catalog lookups (modern stripe-sync targets). No stripe_products. ----
-    const membershipIds = [
-      ...new Set(
-        items.filter(isProgramMembership).map((i) => i.productId).filter((id) => id === "m1" || id === "m2"),
-      ),
-    ];
-    const variantKeys = [
-      ...new Set(
-        items
-          .filter((i) => !isProgramMembership(i) && !isAccessoryLine(i) && !isProviderCareLine(i))
-          .map((i) => normalizeVariantKey(i.variantId))
-          .filter((k): k is string => !!k),
-      ),
-    ];
+    const productIds = items.map((i) => i.productId);
+    const lookupRes = await fetch(
+      `${supabaseUrl}/rest/v1/stripe_products?app_product_id=in.(${productIds.join(",")})`,
+      {
+        headers: {
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+        },
+      },
+    );
 
-    const membershipMap = new Map<string, CatalogMembershipRow>();
-    if (membershipIds.length > 0) {
-      const mem = await sbGet<CatalogMembershipRow[]>(
-        supabaseUrl,
-        serviceKey,
-        `/rest/v1/catalog_memberships?app_product_id=in.(${membershipIds.join(",")})&select=app_product_id,slug,stripe_price_id_test,monthly_price_cents,display_name,included_formulations`,
-      );
-      if ("error" in mem) return jsonError(mem.error, 500);
-      for (const row of mem) membershipMap.set(row.app_product_id, row);
+    if (!lookupRes.ok) {
+      return new Response(JSON.stringify({ error: "Failed to look up products" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    const variantMap = new Map<string, CatalogVariantRow>();
-    if (variantKeys.length > 0) {
-      const encoded = variantKeys.map((k) => `"${k}"`).join(",");
-      const rows = await sbGet<
-        Array<{
-          variant_key: string;
-          stripe_price_id_test: string | null;
-          price_cents: number;
-          display_name: string;
-          catalog_products: { app_product_id: string } | { app_product_id: string }[] | null;
-        }>
-      >(
-        supabaseUrl,
-        serviceKey,
-        `/rest/v1/catalog_variants?variant_key=in.(${encoded})&select=variant_key,stripe_price_id_test,price_cents,display_name,catalog_products!inner(app_product_id)`,
-      );
-      if ("error" in rows) return jsonError(rows.error, 500);
-      for (const row of rows) {
-        const product = Array.isArray(row.catalog_products)
-          ? row.catalog_products[0]
-          : row.catalog_products;
-        variantMap.set(row.variant_key, {
-          variant_key: row.variant_key,
-          stripe_price_id_test: row.stripe_price_id_test,
-          price_cents: row.price_cents,
-          display_name: row.display_name,
-          app_product_id: product?.app_product_id ?? "",
-        });
-      }
-    }
+    const dbProducts = await lookupRes.json() as Array<{
+      app_product_id: string;
+      stripe_product_id: string;
+      stripe_price_id: string | null;
+      name: string;
+      price: number;
+      is_recurring: boolean;
+    }>;
 
-    const resolved: LineResolution[] = [];
+    const productMap = new Map(dbProducts.map((p) => [p.app_product_id, p]));
+    const lineItems: Array<Record<string, string>> = [];
+    let hasVariablePricing = false;
     let usesCustomPriceData = false;
     let hasRecurring = false;
 
-    for (const item of items) {
-      let line: LineResolution | { error: string };
-      if (isProgramMembership(item)) {
-        line = resolveMembershipLine(item, membershipMap.get(item.productId));
-      } else {
-        const key = normalizeVariantKey(item.variantId) ?? "";
-        line = resolveProductLine(item, memberClaim, variantMap.get(key));
+    for (const [idx, item] of items.entries()) {
+      const purchaseType: PurchaseType = item.purchaseType
+        ?? (item.subscription ? "auto_refill" : "one_time");
+      const isProgramMembership = purchaseType === "membership_program" || item.productId === "m1" || item.productId === "m2";
+      const needsCustomAmount =
+        !isProgramMembership &&
+        (
+          purchaseType === "auto_refill" ||
+          (typeof item.discountPercent === "number" && item.discountPercent > 0) ||
+          (typeof item.unitAmountCents === "number" &&
+            typeof item.standardPriceCents === "number" &&
+            item.unitAmountCents !== item.standardPriceCents)
+        );
+
+      if (needsCustomAmount) {
+        usesCustomPriceData = true;
+        const unitAmount = item.unitAmountCents;
+        if (!unitAmount || unitAmount < 0) {
+          return new Response(JSON.stringify({ error: `Missing unit amount for ${item.productId}` }), {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const name = item.variantLabel
+          ? `${item.productName ?? item.productId} (${item.variantLabel})`
+          : (item.productName ?? item.productId);
+        const recurring = purchaseType === "auto_refill" || !!item.subscription;
+        if (recurring) hasRecurring = true;
+
+        lineItems.push({
+          [`line_items[${idx}][price_data][currency]`]: "usd",
+          [`line_items[${idx}][price_data][unit_amount]`]: String(unitAmount),
+          [`line_items[${idx}][price_data][product_data][name]`]: name,
+          [`line_items[${idx}][quantity]`]: String(item.quantity),
+          ...(recurring
+            ? {
+              [`line_items[${idx}][price_data][recurring][interval]`]: "month",
+            }
+            : {}),
+        });
+        continue;
       }
-      if ("error" in line) return jsonError(line.error);
 
-      if (line.kind === "price_data") usesCustomPriceData = true;
-      if (line.recurring) hasRecurring = true;
-      resolved.push(line);
+      const dbProduct = productMap.get(item.productId);
+      if (!dbProduct) {
+        return new Response(JSON.stringify({ error: `Product ${item.productId} not synced to Stripe` }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      if (!dbProduct.stripe_price_id) {
+        hasVariablePricing = true;
+        continue;
+      }
+
+      if (dbProduct.is_recurring && (item.subscription || isProgramMembership)) {
+        hasRecurring = true;
+      }
+
+      lineItems.push({
+        [`line_items[${idx}][price]`]: dbProduct.stripe_price_id,
+        [`line_items[${idx}][quantity]`]: String(item.quantity),
+      });
     }
 
-    if (resolved.length === 0) {
-      return jsonError(
-        "Your cart contains only items with provider-determined pricing (e.g. HRT). After checkout you will complete a medical intake and, if needed, a consultation and lab review. Once your provider finalizes your treatment plan, you will receive an invoice for the exact cost before any charges are made.",
-      );
+    if (hasVariablePricing && lineItems.length === 0) {
+      return new Response(JSON.stringify({
+        error: "Your cart contains only items with provider-determined pricing (e.g. HRT). After checkout you will complete a medical intake and, if needed, a consultation and lab review. Once your provider finalizes your treatment plan, you will receive an invoice for the exact cost before any charges are made.",
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
-
-    const authorizedSubtotal = resolved.reduce(
-      (sum, line) => sum + line.unitAmountCents * line.quantity,
-      0,
-    );
-    const providerCareTaxableSubtotal = resolved.reduce((sum, line) => {
-      if (!isProviderCareResolvedLine(line)) return sum;
-      return sum + line.unitAmountCents * line.quantity;
-    }, 0);
-    const accessoryTaxableSubtotal = resolved.reduce((sum, line) => {
-      if (!isAccessoryResolvedLine(line)) return sum;
-      return sum + line.unitAmountCents * line.quantity;
-    }, 0);
-    const membershipSubtotal = resolved.reduce((sum, line) => {
-      if (!isMembershipResolvedLine(line)) return sum;
-      return sum + line.unitAmountCents * line.quantity;
-    }, 0);
-    // $500 free-shipping threshold: ordinary merchandise only (never membership value).
-    const freeShippingMerchandiseSubtotal =
-      authorizedSubtotal - providerCareTaxableSubtotal - membershipSubtotal;
-    const containsMembership = membershipSubtotal > 0;
-    const requiresPhysicalShipping = resolved.some((line) => !isProviderCareResolvedLine(line));
-
-    const shippingAuth = authorizeShippingCents({
-      shippingMethod,
-      clientShippingCents: shippingCents,
-      shippableSubtotalCents: freeShippingMerchandiseSubtotal,
-      requiresPhysicalShipping,
-      containsMembership,
-    });
-    if ("error" in shippingAuth) return jsonError(shippingAuth.error);
-
-    // Provider Care 1.8% — only PC eligible subtotal.
-    const providerCareTaxCents = Math.round(providerCareTaxableSubtotal * PROVIDER_CARE_TAX_RATE);
-    // Accessory sales tax — only accessory merchandise (configurable interim rate).
-    const accessorySalesTaxCents = Math.round(accessoryTaxableSubtotal * ACCESSORY_SALES_TAX_RATE);
-    void taxCents;
 
     const origin = req.headers.get("origin") || "https://mybaremethod.com";
 
@@ -702,31 +213,9 @@ Deno.serve(async (req: Request) => {
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/cancel`,
       "metadata[order_source]": "web",
-      "metadata[is_active_member]": memberClaim ? "true" : "false",
+      "metadata[is_active_member]": isActiveMember ? "true" : "false",
       "metadata[stripe_mode]": usesCustomPriceData ? "test_custom_pricing" : "mapped_prices",
-      "metadata[accessory_member_discount_percent]": String(ACCESSORY_MEMBER_DISCOUNT_PERCENT),
-      "metadata[catalog_price_source]": "catalog_memberships_and_variants_test",
-      "metadata[provider_care_tax_rate]": String(PROVIDER_CARE_TAX_RATE_PERCENT),
-      "metadata[provider_care_tax_cents]": String(providerCareTaxCents),
-      "metadata[provider_care_taxable_subtotal_cents]": String(providerCareTaxableSubtotal),
-      "metadata[accessory_sales_tax_rate]": String(ACCESSORY_SALES_TAX_RATE_PERCENT),
-      "metadata[accessory_sales_tax_cents]": String(accessorySalesTaxCents),
-      "metadata[accessory_taxable_subtotal_cents]": String(accessoryTaxableSubtotal),
-      // Webhook compatibility: tax_cents = sum of authorized tax/fee components.
-      "metadata[tax_cents]": String(providerCareTaxCents + accessorySalesTaxCents),
     };
-
-    if (requiresPhysicalShipping) {
-      sessionBody["shipping_address_collection[allowed_countries][0]"] = "US";
-      sessionBody["shipping_options[0][shipping_rate_data][type]"] = "fixed_amount";
-      sessionBody["shipping_options[0][shipping_rate_data][fixed_amount][amount]"] = String(
-        shippingAuth.shippingCents,
-      );
-      sessionBody["shipping_options[0][shipping_rate_data][fixed_amount][currency]"] = "usd";
-      sessionBody["shipping_options[0][shipping_rate_data][display_name]"] = shippingDisplayName(
-        shippingAuth.shippingMethod,
-      );
-    }
 
     if (customerUserId) {
       sessionBody.client_reference_id = customerUserId;
@@ -734,47 +223,26 @@ Deno.serve(async (req: Request) => {
     }
     if (customerEmail) sessionBody["metadata[customer_email]"] = customerEmail.slice(0, 500);
     if (customerName) sessionBody["metadata[customer_name]"] = customerName.slice(0, 500);
-
-    sessionBody["metadata[shipping_method]"] = shippingAuth.shippingMethod;
-    sessionBody["metadata[shipping_cents]"] = String(shippingAuth.shippingCents);
-    sessionBody["metadata[subtotal_cents]"] = String(authorizedSubtotal);
-    if (typeof discountCents === "number") {
-      sessionBody["metadata[discount_cents]"] = String(Math.max(0, Math.round(discountCents)));
+    if (shippingMethod) sessionBody["metadata[shipping_method]"] = shippingMethod.slice(0, 100);
+    if (typeof shippingCents === "number") sessionBody["metadata[shipping_cents]"] = String(Math.max(0, Math.round(shippingCents)));
+    if (typeof taxCents === "number") sessionBody["metadata[tax_cents]"] = String(Math.max(0, Math.round(taxCents)));
+    if (typeof subtotalCents === "number") sessionBody["metadata[subtotal_cents]"] = String(Math.max(0, Math.round(subtotalCents)));
+    if (typeof discountCents === "number") sessionBody["metadata[discount_cents]"] = String(Math.max(0, Math.round(discountCents)));
+    if (typeof freeShippingEligible === "boolean") {
+      sessionBody["metadata[free_shipping_eligible]"] = freeShippingEligible ? "true" : "false";
     }
-    sessionBody["metadata[free_shipping_eligible]"] = shippingAuth.freeShippingEligible ? "true" : "false";
     if (requiresProviderReview) sessionBody["metadata[requires_provider_review]"] = "true";
 
-    // Membership requested-dose metadata (validated against catalog_memberships.included_formulations).
-    const membershipLines = resolved.filter(
-      (line) => line.kind === "mapped_price" && line.source === "catalog_memberships",
-    );
-    if (membershipLines.length > 0) {
-      const first = membershipLines[0];
-      if (first.kind === "mapped_price") {
-        if (first.requestedFormulation) {
-          sessionBody["metadata[requested_formulation]"] = first.requestedFormulation;
-        }
-        if (first.membershipSlug) {
-          sessionBody["metadata[membership_slug]"] = first.membershipSlug;
-        }
-        sessionBody["metadata[membership_app_product_id]"] = first.productId;
-      }
-    }
-
-    const snapshots = resolved.map((line) => ({
-      productId: line.productId,
-      productName: line.productName,
-      variantLabel: line.variantLabel,
-      quantity: line.quantity,
-      unitPriceCents: line.unitAmountCents,
+    // Compact item snapshots for order history (Stripe metadata value max 500 chars).
+    const snapshots = items.map((i) => ({
+      productId: i.productId,
+      productName: i.productName ?? i.productId,
+      variantLabel: i.variantLabel ?? null,
+      quantity: i.quantity,
+      unitPriceCents: i.unitAmountCents ?? undefined,
       discountCents: 0,
-      lineTotalCents: line.unitAmountCents * line.quantity,
-      ...(line.kind === "mapped_price" && line.requestedFormulation
-        ? {
-          requestedFormulation: line.requestedFormulation,
-          membershipSlug: line.membershipSlug ?? null,
-        }
-        : {}),
+      lineTotalCents:
+        typeof i.unitAmountCents === "number" ? i.unitAmountCents * i.quantity : undefined,
     }));
     const snapJson = JSON.stringify(snapshots);
     if (snapJson.length <= 500) {
@@ -782,36 +250,10 @@ Deno.serve(async (req: Request) => {
     }
 
     const params = new URLSearchParams(sessionBody);
-
-    resolved.forEach((line, idx) => {
-      if (line.kind === "mapped_price") {
-        params.append(`line_items[${idx}][price]`, line.stripePriceId);
-        params.append(`line_items[${idx}][quantity]`, String(line.quantity));
-        return;
+    for (const li of lineItems) {
+      for (const [k, v] of Object.entries(li)) {
+        params.append(k, v);
       }
-      params.append(`line_items[${idx}][price_data][currency]`, "usd");
-      params.append(`line_items[${idx}][price_data][unit_amount]`, String(line.unitAmountCents));
-      params.append(`line_items[${idx}][price_data][product_data][name]`, line.name);
-      params.append(`line_items[${idx}][quantity]`, String(line.quantity));
-      if (line.recurring) {
-        params.append(`line_items[${idx}][price_data][recurring][interval]`, "month");
-      }
-    });
-
-    // Charge authorized tax/fee components in Stripe (not metadata-only).
-    let nextIdx = resolved.length;
-    if (providerCareTaxCents > 0) {
-      params.append(`line_items[${nextIdx}][price_data][currency]`, "usd");
-      params.append(`line_items[${nextIdx}][price_data][unit_amount]`, String(providerCareTaxCents));
-      params.append(`line_items[${nextIdx}][price_data][product_data][name]`, "Provider Care Tax (1.8%)");
-      params.append(`line_items[${nextIdx}][quantity]`, "1");
-      nextIdx += 1;
-    }
-    if (accessorySalesTaxCents > 0) {
-      params.append(`line_items[${nextIdx}][price_data][currency]`, "usd");
-      params.append(`line_items[${nextIdx}][price_data][unit_amount]`, String(accessorySalesTaxCents));
-      params.append(`line_items[${nextIdx}][price_data][product_data][name]`, "Sales Tax");
-      params.append(`line_items[${nextIdx}][quantity]`, "1");
     }
 
     const sessionRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
@@ -825,7 +267,10 @@ Deno.serve(async (req: Request) => {
 
     if (!sessionRes.ok) {
       const err = await sessionRes.text();
-      return jsonError(`Stripe error: ${err}`, 500);
+      return new Response(JSON.stringify({ error: `Stripe error: ${err}` }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const session = await sessionRes.json();
@@ -834,6 +279,9 @@ Deno.serve(async (req: Request) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
-    return jsonError(err.message, 500);
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 });

@@ -15,7 +15,7 @@ export function MembershipTermsPage() {
             <>
               <p>Current weight-management membership options:</p>
               <LegalBulletList items={[
-                'Semaglutide Membership — $149 per month',
+                'Semaglutide Membership — $199 per month',
                 'Tirzepatide Membership — $249 per month',
               ]} />
               <p>Membership availability, pricing, inclusions, and treatment eligibility may change. Membership does not guarantee that a particular medication or prescription will be approved.</p>
@@ -33,7 +33,7 @@ export function MembershipTermsPage() {
               <p>Membership enrollment and payment do not guarantee that a prescription will be issued. Continued treatment, formulation, strength, and fulfillment remain subject to provider approval, pharmacy availability, applicable law, and completion of required follow-up information.</p>
               <p>If a licensed provider determines that continued treatment is not appropriate, future membership charges will be discontinued according to the membership terms.</p>
               <p>Switching between Semaglutide and Tirzepatide requires enrollment in the current rate for the new membership program.</p>
-              <p>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 15mg.</p>
+              <p>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above the included maximum are not part of this membership.</p>
             </>
           ),
         },

@@ -1,14 +1,7 @@
-import { useState } from 'react';
 import { Check, X, Lock, ArrowRight, ShieldCheck, ClipboardList, Stethoscope, PackageCheck } from 'lucide-react';
 import { Link } from '@/router';
 import { visibleMemberships, type Membership } from '@/data/products';
 import { useCart } from '@/context/CartContext';
-import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
-import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
-import {
-  labelRequestedFormulation,
-  validateMembershipRequestedFormulation,
-} from '@/lib/membership/requestedFormulation';
 
 const howItWorks = [
   { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide or Tirzepatide membership. No dose selection — one simple monthly price.' },
@@ -18,21 +11,20 @@ const howItWorks = [
 ];
 
 const faqs = [
-  { q: 'Will my price increase if my treatment changes?', a: 'Your Semaglutide membership remains $149 per month while your membership stays continuously active and your provider-selected treatment remains within the included program. Your Tirzepatide membership remains $249 per month while your provider-selected treatment remains within the included program through 15mg.' },
+  { q: 'Will my price increase if my treatment changes?', a: 'Your Semaglutide membership remains $199 per month while your membership stays continuously active and your provider-selected treatment remains within the included program. Your Tirzepatide membership remains $249 per month while your provider-selected treatment remains within the included program through 25mg/2mg per mL, 2mL.' },
   { q: 'Can I choose my dose?', a: 'No. Your licensed provider determines the appropriate formulation, strength, and treatment plan based on your eligibility and clinical information.' },
   { q: 'Does joining guarantee a prescription?', a: 'No. Membership enrollment and payment do not guarantee prescribing. A licensed provider must review your information and determine whether treatment is appropriate.' },
   { q: 'What happens if I cancel?', a: 'Canceling ends your locked membership rate. Future enrollment is subject to the membership price available at that time.' },
   { q: 'Can I switch programs?', a: 'Yes, when clinically appropriate. Switching programs requires enrollment at the current price for the new membership.' },
-  { q: 'Is the highest Tirzepatide formulation included?', a: 'The $249 membership includes eligible provider-selected formulations through 15mg.' },
+  { q: 'Is the highest Tirzepatide formulation included?', a: 'The $249 membership includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above that program maximum are not included.' },
   { q: 'Are labs included?', a: 'Laboratory testing is not included unless the current workflow specifically states otherwise. A provider may request labs before or during treatment.' },
   { q: 'Is shipping included?', a: 'Shipping is not included in the membership. Standard shipping options and any applicable fees are shown at checkout and follow our Shipping Policy. Certain medications may require temperature-controlled packaging.' },
 ];
 
 const comparisonRows: { feature: string; sema: string | boolean; tirz: string | boolean; onetime: string | boolean }[] = [
-  { feature: 'Monthly price', sema: '$149', tirz: '$249', onetime: 'Varies by selected product' },
+  { feature: 'Monthly price', sema: '$199', tirz: '$249', onetime: 'Varies by selected product' },
   { feature: '15% off eligible wellness products', sema: true, tirz: true, onetime: false },
-  { feature: '15% off accessories', sema: true, tirz: true, onetime: false },
-  { feature: 'Included program', sema: 'Eligible included Semaglutide formulations', tirz: 'Eligible formulations through 15mg', onetime: 'Selected purchased formulation' },
+  { feature: 'Included program', sema: 'Eligible included Semaglutide formulations', tirz: 'Eligible formulations through 25mg/2mg per mL, 2mL', onetime: 'Selected purchased formulation' },
   { feature: 'Locked continuous-member rate', sema: true, tirz: true, onetime: false },
   { feature: 'Provider review required', sema: true, tirz: true, onetime: 'Provider-directed when applicable' },
   { feature: 'Provider-directed treatment adjustments', sema: 'Yes, within included program', tirz: 'Yes, within included program maximum', onetime: 'Provider-directed when applicable' },
@@ -53,24 +45,8 @@ function Cell({ value }: { value: string | boolean }) {
 
 export function MembershipsPage() {
   const { addItem } = useCart();
-  const [requestedBySlug, setRequestedBySlug] = useState<Record<string, string>>({});
-  const [doseErrors, setDoseErrors] = useState<Record<string, string>>({});
 
   const handleJoin = (m: Membership) => {
-    const validated = validateMembershipRequestedFormulation({
-      requestedFormulation: requestedBySlug[m.slug],
-      includedFormulations: m.includedFormulations,
-    });
-    if (!validated.ok) {
-      setDoseErrors(prev => ({ ...prev, [m.slug]: validated.error }));
-      return;
-    }
-    setDoseErrors(prev => {
-      const next = { ...prev };
-      delete next[m.slug];
-      return next;
-    });
-    const doseLabel = labelRequestedFormulation(validated.value);
     addItem({
       productId: m.checkoutProductId || m.id,
       slug: m.slug,
@@ -86,8 +62,6 @@ export function MembershipsPage() {
       purchaseType: 'membership_program',
       discountPercent: 0,
       appliedDiscount: 'none',
-      requestedFormulation: validated.value,
-      variantLabel: `Requested dose: ${doseLabel}`,
     });
   };
 
@@ -104,7 +78,7 @@ export function MembershipsPage() {
             included program.
           </p>
           <p className="text-base text-gold-700 font-medium">
-            Active Wellness Members save 15% on eligible wellness products and accessories.
+            Members receive our best available pricing — save 15% on eligible wellness products.
           </p>
         </div>
       </section>
@@ -114,12 +88,12 @@ export function MembershipsPage() {
         <div className="container-lux max-w-4xl">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              'Flat-rate membership pricing',
-              'Save 15% on eligible wellness products',
-              'Save 15% on accessories',
-              'Priority access to new wellness products',
-              'Convenient ongoing wellness support',
-              'Provider-guided care',
+              'Lowest Pricing',
+              'Save 15% on Eligible Wellness Products',
+              'Locked Membership Pricing',
+              'Priority Access to New Products',
+              'Convenient Monthly Wellness',
+              'Provider-Guided Care',
             ].map(benefit => (
               <div key={benefit} className="flex items-center gap-2 rounded-xl border border-gold-200 bg-gold-50/60 px-4 py-3 text-sm text-ink-800">
                 <Check size={16} className="text-gold-600 shrink-0" />
@@ -196,32 +170,10 @@ export function MembershipsPage() {
                 <p className="mb-2 flex items-center gap-1.5 text-xs text-gold-700">
                   <ShieldCheck size={14} /> Licensed-provider review required · enrollment does not guarantee a prescription
                 </p>
-                <p className="mb-4 text-xs text-ink-500">Shipping calculated separately after provider approval. Initial term: 3 months, then month to month.</p>
+                <p className="mb-4 text-xs text-ink-500">Shipping calculated separately. Initial term: 3 months, then month to month.</p>
 
-                <div className="mb-4 rounded-xl border border-cream-300 bg-cream-50/80 p-3">
-                  <MembershipRequestedDoseField
-                    id={`requested-dose-${m.slug}`}
-                    includedFormulations={m.includedFormulations}
-                    value={requestedBySlug[m.slug] ?? ''}
-                    onChange={v => {
-                      setRequestedBySlug(prev => ({ ...prev, [m.slug]: v }));
-                      setDoseErrors(prev => {
-                        const next = { ...prev };
-                        delete next[m.slug];
-                        return next;
-                      });
-                    }}
-                  />
-                  {doseErrors[m.slug] && (
-                    <p className="mt-2 text-xs text-red-700">{doseErrors[m.slug]}</p>
-                  )}
-                </div>
-
-                <button
-                  onClick={() => handleJoin(m)}
-                  className={membershipJoinButtonClassName({ highlighted: m.highlighted })}
-                >
-                  {m.cta} <ArrowRight size={16} aria-hidden="true" />
+                <button onClick={() => handleJoin(m)} className={`btn-primary w-full ${m.highlighted ? '' : 'btn-outline'}`}>
+                  {m.cta} <ArrowRight size={16} />
                 </button>
               </div>
             ))}
@@ -278,7 +230,8 @@ export function MembershipsPage() {
               <div>
                 <h3 className="font-serif text-lg text-ink-900 mb-1">Tirzepatide program maximum</h3>
                 <p className="text-sm text-ink-500">
-                  The $249 Tirzepatide rate includes eligible provider-selected formulations through 15mg.
+                  The $249 Tirzepatide rate includes eligible provider-selected formulations through 25mg/2mg per mL,
+                  2mL. Formulations above that maximum (including 30mg/2mg per mL, 2mL) are not part of this membership.
                 </p>
               </div>
             </div>
@@ -357,7 +310,7 @@ export function MembershipsPage() {
             ))}
             <li className="flex items-start gap-3 text-sm text-ink-600">
               <Check size={16} className="flex-shrink-0 mt-0.5 text-gold-500" />
-              <span>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 15mg.</span>
+              <span>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL. Formulations above the included maximum are not part of this membership.</span>
             </li>
           </ul>
           <div className="mt-8 text-center">

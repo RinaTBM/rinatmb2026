@@ -72,7 +72,7 @@ export function AccountPage() {
           </div>
           {member.isActiveMember && (
             <div className="rounded-full bg-gold-100 px-4 py-2 text-sm text-gold-800 flex items-center gap-2">
-              <Crown size={16} /> Active Wellness Member · Save 15% on products and accessories
+              <Crown size={16} /> Active Wellness Member · Save 15%
             </div>
           )}
         </div>
@@ -161,7 +161,7 @@ export function AccountPage() {
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <p className="font-medium text-ink-900">{member.displayName ?? memberships[0]?.name}</p>
-                          <p className="text-sm text-gold-700">Status: Active · Preferred Member Pricing (15% on eligible products and accessories)</p>
+                          <p className="text-sm text-gold-700">Status: Active · Preferred Member Pricing (15%)</p>
                           <p className="text-sm text-ink-500">
                             Renewal date:{' '}
                             {new Date(member.renewalDate ?? memberships[0]?.renewalDate ?? Date.now()).toLocaleDateString()}

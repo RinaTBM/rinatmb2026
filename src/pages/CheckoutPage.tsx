@@ -5,27 +5,7 @@ import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
 import { useCustomerAuth } from '@/context/CustomerAuthContext';
 import { upsertManagedSubscription } from '@/lib/account/subscriptions';
-import {
-  isFreeShippingEligible,
-  labelShippingMethod,
-  shippingCentsForMethod,
-  type SelectableShippingMethod,
-  type ShippingMethod,
-} from '@/lib/orders/shipping';
-import {
-  authorizeAccessorySalesTax,
-  authorizeProviderCareTax,
-  cartAccessorySubtotalCents,
-  cartFreeShippingMerchandiseSubtotalCents,
-  cartProviderCareSubtotalCents,
-  cartRequiresPhysicalShippingFromItems,
-} from '@/lib/checkout/authorizeCheckout';
-import { getMembership } from '@/data/products';
-import {
-  labelRequestedFormulation,
-  validateMembershipRequestedFormulation,
-} from '@/lib/membership/requestedFormulation';
-import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
+import { isFreeShippingEligible } from '@/lib/orders/shipping';
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
@@ -37,74 +17,14 @@ export function CheckoutPage() {
   const [form, setForm] = useState({
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
   });
-  const [shippingMethod, setShippingMethod] = useState<SelectableShippingMethod>('two_day');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const hasProviderCare = items.some(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId));
-  const hasMembership = items.some(
-    i => i.isMembership || i.purchaseType === 'membership_program',
-  );
-  const requiresProviderReview = hasProviderCare || items.some(i => i.requiresIntake) || hasMembership;
+  const hasProviderCare = items.some(i => i.requiresIntake);
   const hasVariablePricing = items.some(i => i.price === 0);
-  const membershipDoseIssues = items
-    .filter(i => i.isMembership || i.purchaseType === 'membership_program')
-    .map(i => {
-      const membership = getMembership(i.slug);
-      const validated = validateMembershipRequestedFormulation({
-        requestedFormulation: i.requestedFormulation,
-        includedFormulations: membership?.includedFormulations ?? [],
-      });
-      return validated.ok
-        ? null
-        : {
-            key: i.key,
-            slug: i.slug,
-            name: i.name,
-            error: validated.error,
-            fixPath: cartItemDetailPath(i),
-          };
-    })
-    .filter((x): x is NonNullable<typeof x> => !!x);
-  const membershipDoseBlocking = membershipDoseIssues.length > 0;
-  const subtotalCents = Math.round(subtotal * 100);
-  const cartItemsForAuth = items.map(i => ({
-    productId: i.productId,
-    section: i.section,
-    quantity: i.quantity,
-    unitAmountCents: Math.round(i.price * 100),
-    purchaseType: i.purchaseType,
-    subscription: i.subscription,
-  }));
-  const requiresPhysicalShipping = cartRequiresPhysicalShippingFromItems(cartItemsForAuth);
-  // $500 free-shipping threshold uses ordinary merchandise ONLY — never membership value.
-  const freeShippingMerchandiseSubtotalCents =
-    cartFreeShippingMerchandiseSubtotalCents(cartItemsForAuth);
-  const providerCareTaxableCents = cartProviderCareSubtotalCents(cartItemsForAuth);
-  const accessoryTaxableCents = cartAccessorySubtotalCents(cartItemsForAuth);
-  const providerCareTaxAuth = authorizeProviderCareTax({
-    providerCareTaxableSubtotalCents: providerCareTaxableCents,
-  });
-  const accessoryTaxAuth = authorizeAccessorySalesTax({
-    accessoryTaxableSubtotalCents: accessoryTaxableCents,
-  });
-  const freeShippingEligible =
-    requiresPhysicalShipping && isFreeShippingEligible(freeShippingMerchandiseSubtotalCents);
-  const resolvedShippingMethod: ShippingMethod = !requiresPhysicalShipping
-    ? 'none'
-    : freeShippingEligible
-      ? 'free_over_500'
-      : shippingMethod;
-  // Membership carts without free shipping always charge Two-Day / Next-Day amounts.
-  // Pass 0 as free-shipping subtotal here so membership value cannot zero out paid shipping.
-  const shipping = !requiresPhysicalShipping
-    ? 0
-    : freeShippingEligible
-      ? 0
-      : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
-  const providerCareTax = providerCareTaxAuth.providerCareTaxCents / 100;
-  const accessorySalesTax = accessoryTaxAuth.accessorySalesTaxCents / 100;
-  const total = subtotal + shipping + providerCareTax + accessorySalesTax;
+  const shipping = subtotal > 75 ? 0 : 6.95;
+  const tax = subtotal * 0.08;
+  const total = subtotal + shipping + tax;
 
   const update = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
 
@@ -159,14 +79,6 @@ export function CheckoutPage() {
     setLoading(true);
     setError(null);
 
-    if (membershipDoseBlocking) {
-      setError(
-        'Please select a requested dose for each membership before checkout. Open the membership details to choose a formulation.',
-      );
-      setLoading(false);
-      return;
-    }
-
     try {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -182,20 +94,14 @@ export function CheckoutPage() {
           customerUserId: user?.id,
           customerEmail: form.email || user?.email || undefined,
           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || undefined,
-          // Snapshot amounts as displayed at checkout (server re-authorizes all of these).
-          subtotalCents,
+          // Snapshot amounts as displayed at checkout (shipping UI unchanged here).
+          subtotalCents: Math.round(subtotal * 100),
           discountCents: Math.round(totalSavings * 100),
           shippingCents: Math.round(shipping * 100),
-          taxCents:
-            providerCareTaxAuth.providerCareTaxCents + accessoryTaxAuth.accessorySalesTaxCents,
-          providerCareTaxCents: providerCareTaxAuth.providerCareTaxCents,
-          providerCareTaxableSubtotalCents: providerCareTaxAuth.providerCareTaxableSubtotalCents,
-          accessorySalesTaxCents: accessoryTaxAuth.accessorySalesTaxCents,
-          accessoryTaxableSubtotalCents: accessoryTaxAuth.accessoryTaxableSubtotalCents,
-          // Never send obsolete "standard" — only two_day / next_day / free_over_500 / none.
-          shippingMethod: resolvedShippingMethod,
-          freeShippingEligible,
-          requiresProviderReview,
+          taxCents: Math.round(tax * 100),
+          shippingMethod: 'standard',
+          freeShippingEligible: isFreeShippingEligible(Math.round(subtotal * 100)),
+          requiresProviderReview: hasProviderCare,
           items: items.map(i => ({
             productId: i.productId,
             quantity: i.quantity,
@@ -206,14 +112,7 @@ export function CheckoutPage() {
             discountPercent: i.discountPercent ?? 0,
             appliedDiscount: i.appliedDiscount ?? 'none',
             productName: i.name,
-            // Required for catalog_variants.stripe_price_id_test lookup (Auto-Refill may append -refill).
-            variantId: i.variantId,
             variantLabel: i.variantLabel,
-            section: i.section,
-            membershipSlug: i.isMembership || i.purchaseType === 'membership_program' ? i.slug : undefined,
-            requestedFormulation: i.requestedFormulation,
-            // Bundles are never accessory-member-discount eligible; other accessories default eligible server-side.
-            memberPricingEligible: i.productId === 'a1' ? false : undefined,
           })),
         }),
       });
@@ -268,7 +167,7 @@ export function CheckoutPage() {
             )}
             <div className="flex items-center gap-2 text-sm text-ink-600">
               <Truck size={18} className="text-gold-500" />
-              <span>Most orders process within 1–3 business days after provider approval when applicable</span>
+              <span>Estimated delivery: 3–5 business days</span>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -325,89 +224,7 @@ export function CheckoutPage() {
                     <input placeholder="Phone" value={form.phone} onChange={e => update('phone', e.target.value)} className="input-lux" />
                   </div>
                 </div>
-                {membershipDoseBlocking && (
-                  <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-                    <p className="font-medium mb-1">Requested dose required</p>
-                    <p className="text-xs mb-2">
-                      Membership checkout cannot continue until each membership has a requested dose.
-                      Your selection is a request only and does not guarantee approval or a prescription.
-                    </p>
-                    <ul className="space-y-1 text-xs">
-                      {membershipDoseIssues.map(issue => (
-                        <li key={issue.key}>
-                          {issue.name}:{' '}
-                          <Link to={issue.fixPath} className="underline font-medium">
-                            choose requested dose
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {requiresPhysicalShipping ? (
-                  <div>
-                    <h2 className="font-serif text-2xl text-ink-900 mb-4">Shipping Method</h2>
-                    {hasMembership && (
-                      <div className="mb-3 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                        <p className="font-medium">Shipping after provider approval</p>
-                        <p className="mt-1 text-xs leading-relaxed">
-                          Choose your preferred shipping speed. Shipping occurs after provider approval
-                          and fulfillment processing. Shipping speed does not include provider-review time.
-                        </p>
-                      </div>
-                    )}
-                    {freeShippingEligible ? (
-                      <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                        Orders of $500 or more in eligible ordinary merchandise qualify for free shipping.
-                        Membership medication value does not count toward this threshold.
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'two_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
-                          <span className="flex items-center gap-3">
-                            <input
-                              type="radio"
-                              name="shippingMethod"
-                              checked={shippingMethod === 'two_day'}
-                              onChange={() => setShippingMethod('two_day')}
-                            />
-                            Two-Day Shipping
-                          </span>
-                          <span className="font-medium text-ink-900">$30</span>
-                        </label>
-                        <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'next_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
-                          <span className="flex items-center gap-3">
-                            <input
-                              type="radio"
-                              name="shippingMethod"
-                              checked={shippingMethod === 'next_day'}
-                              onChange={() => setShippingMethod('next_day')}
-                            />
-                            Next-Day Shipping
-                          </span>
-                          <span className="font-medium text-ink-900">$50</span>
-                        </label>
-                        <p className="text-xs text-ink-500">
-                          {hasMembership
-                            ? 'Most orders process within 1–3 business days after applicable provider review and approval. Shipping speed applies after approval and fulfillment processing.'
-                            : 'Orders of $500 or more in merchandise are eligible for free shipping. Most orders process within 1–3 business days after provider review and approval, when applicable.'}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-600">
-                    This order contains Provider Care services only. No physical shipping is charged.
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={() => setStep('payment')}
-                  className="btn-primary"
-                  disabled={membershipDoseBlocking}
-                >
-                  Continue to Payment
-                </button>
+                <button type="button" onClick={() => setStep('payment')} className="btn-primary">Continue to Payment</button>
               </div>
             )}
 
@@ -520,9 +337,9 @@ export function CheckoutPage() {
                   <button type="button" onClick={() => setStep('info')} className="btn-outline">Back</button>
                   <button
                     type="button"
-                    disabled={!allAccepted || loading || membershipDoseBlocking}
+                    disabled={!allAccepted || loading}
                     onClick={handleStripeCheckout}
-                    className={`btn-primary flex-1 ${!allAccepted || loading || membershipDoseBlocking ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`btn-primary flex-1 ${!allAccepted || loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {loading ? (
                       <span className="flex items-center justify-center gap-2">
@@ -562,15 +379,8 @@ export function CheckoutPage() {
                         <p className="text-sm font-medium text-ink-900 truncate">{item.name}</p>
                         {item.isMembership ? (
                           <>
-                            {item.requestedFormulation && (
-                              <p className="text-xs text-ink-700">
-                                Requested dose: {labelRequestedFormulation(item.requestedFormulation)}
-                              </p>
-                            )}
                             <p className="text-xs text-gold-600">Active Wellness Membership · billed monthly</p>
-                            <p className="text-xs text-ink-400">
-                              3-month initial term · Provider review required · prescription not guaranteed
-                            </p>
+                            <p className="text-xs text-ink-400">3-month initial term · Provider review required</p>
                           </>
                         ) : (
                           <>
@@ -626,24 +436,8 @@ export function CheckoutPage() {
                 )}
                 <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `$${subtotal.toFixed(2)}`}</span></div>
                 {!hasVariablePricing && <>
-                  {requiresPhysicalShipping && (
-                    <div className="flex justify-between text-ink-600">
-                      <span>{labelShippingMethod(resolvedShippingMethod)}</span>
-                      <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
-                    </div>
-                  )}
-                  {providerCareTax > 0 && (
-                    <div className="flex justify-between text-ink-600">
-                      <span>Provider Care Tax (1.8%)</span>
-                      <span>${providerCareTax.toFixed(2)}</span>
-                    </div>
-                  )}
-                  {accessorySalesTax > 0 && (
-                    <div className="flex justify-between text-ink-600">
-                      <span>Sales Tax</span>
-                      <span>${accessorySalesTax.toFixed(2)}</span>
-                    </div>
-                  )}
+                  <div className="flex justify-between text-ink-600"><span>Shipping</span><span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span></div>
+                  <div className="flex justify-between text-ink-600"><span>Tax</span><span>${tax.toFixed(2)}</span></div>
                   <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base"><span>Total</span><span>${total.toFixed(2)}</span></div>
                 </>}
                 {hasVariablePricing && (

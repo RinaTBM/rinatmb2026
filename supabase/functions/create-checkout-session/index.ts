@@ -40,7 +40,12 @@ const ACCESSORY_MEMBER_DISCOUNT_PERCENT = 15;
 /** Provider Care only — never a universal cart tax. */
 const PROVIDER_CARE_TAX_RATE = 0.018;
 const PROVIDER_CARE_TAX_RATE_PERCENT = 1.8;
-/** Accessory merchandise only — configurable interim sales-tax rate. */
+/**
+ * INTERIM TEST/STAGING ONLY — accessory merchandise sales-tax rate.
+ * Applied ONLY to accessory merchandise subtotals (not wellness, memberships,
+ * Provider Care, or shipping). Pending destination-based production sales-tax
+ * implementation; do NOT enable Stripe Tax yet. Not a permanent legal rate.
+ */
 const ACCESSORY_SALES_TAX_RATE = 0.08;
 const ACCESSORY_SALES_TAX_RATE_PERCENT = 8;
 

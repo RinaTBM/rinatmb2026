@@ -25,10 +25,10 @@ export const PROVIDER_CARE_TAX_RATE = 0.018;
 export const PROVIDER_CARE_TAX_RATE_PERCENT = 1.8;
 
 /**
- * Configurable accessory retail sales-tax rate for TEST/staging.
+ * INTERIM TEST/STAGING ONLY — accessory merchandise sales-tax rate.
  * Applied ONLY to accessory merchandise subtotals.
- * Prefer Stripe Tax / destination-based calculation when approved later —
- * this constant is the interim architecture (not a permanent legal rate).
+ * Pending destination-based production sales-tax implementation;
+ * do NOT enable Stripe Tax yet. Not a permanent legal rate.
  * Do NOT apply to wellness, memberships, Provider Care, or shipping.
  */
 export const ACCESSORY_SALES_TAX_RATE = 0.08;

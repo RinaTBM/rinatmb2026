@@ -16,6 +16,7 @@ import { BestSellersPage } from '@/pages/BestSellersPage';
 import { MembershipsPage } from '@/pages/MembershipsPage';
 import { AlaCartePage } from '@/pages/AlaCartePage';
 import { AboutPage } from '@/pages/AboutPage';
+import { MedicalDirectorPage } from '@/pages/MedicalDirectorPage';
 import { FaqPage } from '@/pages/FaqPage';
 import { ContactPage } from '@/pages/ContactPage';
 import { SuccessPage } from '@/pages/SuccessPage';
@@ -95,7 +96,7 @@ function buildRoutes() {
       path: '/memberships',
       component: createElement(MembershipsPage),
       title: 'Memberships — My Bare Method',
-      description: 'Locked-price, provider-guided Semaglutide ($199/mo) and Tirzepatide ($249/mo) memberships. One membership, one predictable monthly price. Provider review required.',
+      description: 'Locked-price, provider-guided Semaglutide ($149/mo) and Tirzepatide ($249/mo) memberships. One membership, one predictable monthly price. Provider review required.',
     },
     {
       path: '/alacarte',
@@ -108,6 +109,13 @@ function buildRoutes() {
       component: createElement(AboutPage),
       title: 'About — My Bare Method',
       description: 'Learn about My Bare Method — premium wellness products and provider-guided care.',
+    },
+    {
+      path: '/medical-director',
+      component: createElement(MedicalDirectorPage),
+      title: 'Meet Our Medical Director | My Bare Method',
+      description:
+        'Meet Dr. Jerry J. Cattelane Jr., D.O., Medical Director for My Bare Method, and learn about the clinical leadership supporting our provider-directed wellness programs.',
     },
     {
       path: '/faq',

@@ -6,8 +6,8 @@ const faqCategories = [
   {
     title: 'Orders & Shipping',
     faqs: [
-      { q: 'How long does shipping take?', a: 'Eligible orders are processed and shipped within 3–5 business days. You will receive a tracking number by email once your order ships.' },
-      { q: 'Do you offer free shipping?', a: 'Yes, orders over $75 ship free. Standard shipping is $6.95 for orders under $75. Shipping is never discounted by membership or Auto-Refill savings.' },
+      { q: 'How long does shipping take?', a: 'Most orders are processed within 1–3 business days after provider review and approval, when applicable. Shipping transit time begins after processing is complete. You will receive a tracking number by email once your order ships.' },
+      { q: 'Do you offer free shipping?', a: 'Orders of $500 or more are eligible for free shipping. We currently offer two shipping options: Two-Day Shipping — $30 and Next-Day Shipping — $50. Most orders are processed within 1–3 business days after provider review and approval, when applicable. Shipping transit time begins after processing is complete.' },
       { q: 'Can I track my order?', a: 'Absolutely. You can track your order anytime from the Track Order page using your order number, or from your account dashboard.' },
       { q: 'Do you ship internationally?', a: 'We currently ship within the United States. International shipping is coming soon.' },
     ],
@@ -38,11 +38,11 @@ const faqCategories = [
     faqs: [
       { q: 'What is Provider Care?', a: 'Provider Care includes services such as the Initial Provider Visit, Follow-Up Visit, and Laboratory Review. These involve scheduling and/or medical intake and review by a licensed provider when applicable. Provider Care is never discounted by membership or Auto-Refill savings.' },
       { q: 'What happens after I order a Provider Care product?', a: 'You will receive an email link to complete a secure medical intake when required. A licensed provider reviews your case within 2 business days.' },
-      { q: 'What if I am not approved?', a: 'If the provider determines the product is not appropriate for you, you will receive a full refund within 3 business days.' },
+      { q: 'What if I am not approved?', a: 'If a licensed provider determines that a requested treatment is not medically appropriate, the provider-directed product will not be fulfilled. Eligible charges for the unapproved product will be refunded in accordance with our refund policy. Refunds are typically reflected within 3–10 business days, depending on your financial institution.' },
       { q: 'Do you offer telemedicine appointments?', a: 'Yes. We offer telemedicine services via Zoom. Appointments are booked directly on our website by the patient.' },
-      { q: 'Which states or jurisdictions do you serve?', a: 'Our Medical Director is licensed in all 50 US states, so our telemedicine services are available nationwide.' },
-      { q: 'Who is your Medical Director?', a: 'Our Medical Director is Dr. Jerry Cattelane, DO. Dr. Cattelane oversees all provider care and telemedicine services.' },
-      { q: 'Which pharmacy fulfills your prescriptions?', a: 'All prescriptions are fulfilled through ScriptfulRx, our partnered pharmacy.' },
+      { q: 'Which states or jurisdictions do you serve?', a: 'Our Medical Director is a licensed physician in all states, so our telemedicine services are available nationwide.' },
+      { q: 'Who is your Medical Director?', a: 'Our Medical Director is Dr. Jerry J. Cattelane Jr., D.O. He provides clinical leadership and supports the provider-directed wellness programs available through My Bare Method. Treatment decisions are made by the licensed provider responsible for your care.' },
+      { q: 'Which pharmacy fulfills your prescriptions?', a: 'Provider-approved prescriptions are fulfilled through Ageless Pharma Rx, our partnered pharmacy. Fulfillment begins only after a licensed provider determines treatment is appropriate and any required review is complete.' },
     ],
   },
   {
@@ -59,7 +59,7 @@ const faqCategories = [
     faqs: [
       {
         q: 'What is an Active Wellness Membership?',
-        a: 'Active Wellness Memberships are Semaglutide Membership ($199/month) and Tirzepatide Membership ($249/month). Members receive locked membership pricing while continuously enrolled, provider-guided care when prescribed, and 15% off eligible wellness products. Members receive our best available pricing. Accessories, Provider Care, shipping, and taxes are not discounted.',
+        a: 'Active Wellness Memberships are Semaglutide Membership ($149/month) and Tirzepatide Membership ($249/month). Members receive locked membership pricing while continuously enrolled, provider-guided care when prescribed, and 15% off eligible wellness products and accessories. Members receive our best available pricing. Provider Care, shipping, taxes, and already-discounted accessory bundles (unless explicitly enabled) are not discounted.',
       },
       {
         q: 'What is the minimum commitment?',

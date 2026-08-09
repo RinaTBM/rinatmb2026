@@ -8,16 +8,17 @@
 import { getMembership, type Membership, type Product, type ProductVariant } from '../../data/products';
 
 /** Authoritative monthly rates (dollars). */
-export const SEMAGLUTIDE_MEMBERSHIP_MONTHLY = 199;
+export const SEMAGLUTIDE_MEMBERSHIP_MONTHLY = 149;
 export const TIRZEPATIDE_MEMBERSHIP_MONTHLY = 249;
 /** Provider/admin-gated; not a public self-serve upgrade. */
 export const TIRZEPATIDE_30MG_MEMBER_ONLY_MONTHLY = 350;
 
 /** Authoritative monthly rates (integer cents). */
-export const SEMAGLUTIDE_MEMBERSHIP_CENTS = 19900;
+export const SEMAGLUTIDE_MEMBERSHIP_CENTS = 14900;
 export const TIRZEPATIDE_MEMBERSHIP_CENTS = 24900;
 export const TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS = 35000;
 
+/** Legacy strength label retained only for rejecting obsolete self-serve attempts. */
 export const TIRZEPATIDE_30MG_STRENGTH = '30mg/2mg per mL';
 export const TIRZEPATIDE_30MG_SIZE = '2mL';
 
@@ -61,8 +62,8 @@ export function isTirzepatide30mgVariant(
   return variant.strength === TIRZEPATIDE_30MG_STRENGTH && variant.size === TIRZEPATIDE_30MG_SIZE;
 }
 
-const SEMAGLUTIDE_INCLUDED = ['1mg/1mg per mL, 2mL', '2mg/2mg per mL, 2mL', '5mg/2mg per mL, 2mL'];
-const TIRZEPATIDE_INCLUDED = ['5mg/2mg per mL, 2mL', '15mg/2mg per mL, 2mL', '25mg/2mg per mL, 2mL'];
+const SEMAGLUTIDE_INCLUDED = ['0.5mg', '1mg', '2.5mg', '5mg'];
+const TIRZEPATIDE_INCLUDED = ['2.5mg', '7.5mg', '12.5mg', '15mg'];
 
 function membershipForSlug(slug: WeightMedicationSlug): Membership | undefined {
   return getMembership(slug === 'semaglutide' ? 'semaglutide-membership' : 'tirzepatide-membership');
@@ -103,6 +104,7 @@ export function getWeightMembershipProgram(
     };
   }
 
+  // Obsolete 30mg SKU is no longer in the retail catalog; keep rejection path if revived.
   const show30mgNotice = isTirzepatide30mgVariant(selectedVariant);
   return {
     membershipSlug: membership?.slug ?? 'tirzepatide-membership',
@@ -112,9 +114,9 @@ export function getWeightMembershipProgram(
     cartLabel: `Tirzepatide Wellness Membership — $${TIRZEPATIDE_MEMBERSHIP_MONTHLY}/month`,
     cta: `Join Tirzepatide Membership — $${TIRZEPATIDE_MEMBERSHIP_MONTHLY}/month`,
     supportingCopy: show30mgNotice
-      ? 'The standard $249/month membership includes provider-selected formulations only through 25mg/2mg per mL, 2mL.'
+      ? 'The standard $249/month membership includes provider-selected formulations only through 15mg.'
       : 'One predictable monthly price through the included Tirzepatide program maximum.',
-    customerNote: 'Includes eligible provider-selected formulations through 25mg/2mg per mL, 2mL.',
+    customerNote: 'Includes eligible provider-selected formulations through 15mg.',
     includedFormulations: membership?.includedFormulations?.length
       ? [...membership.includedFormulations]
       : [...TIRZEPATIDE_INCLUDED],

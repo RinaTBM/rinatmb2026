@@ -3,7 +3,7 @@
  * Discounts never stack. Maximum automatic savings = member discount (default 15%).
  *
  * Semaglutide / Tirzepatide product pages use a separate flat-rate
- * `membership_program` option ($199 / $249) — never a 15% dose discount.
+ * `membership_program` option ($149 / $249) — never a 15% dose discount.
  */
 import type { Category, Product, ProductVariant } from '../../data/products';
 import {
@@ -70,6 +70,10 @@ export function isExcludedFromDiscounts(
 export function isMemberPricingEligible(
   product: Pick<Product, 'category' | 'memberPricingEligible' | 'excludedFromDiscounts'>,
 ): boolean {
+  // Provider care never receives automatic member % discounts.
+  if (product.category === 'provider-care') return false;
+  // Accessories use the dedicated accessory member-discount path (not wellness catalog %).
+  if (product.category === 'accessories') return false;
   if (isExcludedFromDiscounts(product)) return false;
   return product.memberPricingEligible !== false;
 }

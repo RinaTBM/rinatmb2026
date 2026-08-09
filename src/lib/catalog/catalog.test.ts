@@ -7,30 +7,34 @@ import { buildSyncPlan, summarizePlan, emptyState, type ExistingStripeState } fr
 import { priceFingerprint, productFingerprint, idempotencyKey, stableHash } from './fingerprint';
 
 describe('catalog normalization', () => {
-  it('has 13 syncable (active+visible) products; hidden/future excluded', () => {
-    expect(syncableProducts()).toHaveLength(13);
-    expect(catalogProducts.length).toBeGreaterThan(13); // includes hidden future products
+  it('has 11 syncable approved wellness products; review-hold + future excluded', () => {
+    expect(syncableProducts()).toHaveLength(11);
+    expect(catalogProducts.length).toBeGreaterThan(11);
     const slugs = syncableProducts().map(p => p.slug);
     expect(slugs).not.toContain('sermorelin');
     expect(slugs).not.toContain('minoxidil-tablets');
+    expect(slugs).not.toContain('tretinoin-cream');
+    expect(slugs).not.toContain('bimatoprost-solution');
   });
 
-  it('stores money as integer cents', () => {
+  it('stores money as integer cents and preserves fractional dollars', () => {
     for (const p of catalogProducts) {
       expect(Number.isInteger(p.startingPriceCents)).toBe(true);
       for (const v of p.variants) expect(Number.isInteger(v.priceCents)).toBe(true);
     }
-    expect(toCents(149)).toBe(14900);
+    expect(toCents(189.02)).toBe(18902);
+    expect(toCents(258.99)).toBe(25899);
+    expect(toCents(138.98)).toBe(13898);
     const sema = syncableProducts().find(p => p.slug === 'semaglutide')!;
-    expect(sema.variants[0].priceCents).toBe(14900);
+    expect(sema.variants.map(v => v.priceCents)).toEqual([11900, 13900, 18902, 32900]);
   });
 
-  it('exposes exactly 2 syncable memberships at $199 and $249, monthly recurring', () => {
+  it('exposes exactly 2 syncable memberships at $149 and $249, monthly recurring', () => {
     const mems = syncableMemberships();
     expect(mems).toHaveLength(2);
     const sema = mems.find(m => m.slug === 'semaglutide-membership')!;
     const tirz = mems.find(m => m.slug === 'tirzepatide-membership')!;
-    expect(sema.monthlyPriceCents).toBe(19900);
+    expect(sema.monthlyPriceCents).toBe(14900);
     expect(tirz.monthlyPriceCents).toBe(24900);
     expect(sema.billingInterval).toBe('month');
     expect(tirz.billingInterval).toBe('month');
@@ -38,9 +42,9 @@ describe('catalog normalization', () => {
     expect(tirz.initialTermMonths).toBe(3);
   });
 
-  it('Tirzepatide membership caps at 25mg and excludes 30mg', () => {
+  it('Tirzepatide membership caps at 15mg and excludes 30mg', () => {
     const tirz = syncableMemberships().find(m => m.slug === 'tirzepatide-membership')!;
-    expect(tirz.maximumIncludedFormulation).toBe('25mg/2mg per mL, 2mL');
+    expect(tirz.maximumIncludedFormulation).toBe('15mg');
     expect(tirz.includedFormulations.some(f => f.startsWith('30mg'))).toBe(false);
   });
 
@@ -93,16 +97,16 @@ describe('fingerprints & idempotency', () => {
 });
 
 describe('sync plan', () => {
-  it('first sync creates 15 products and one price per active variant + 2 membership prices', () => {
+  it('first sync creates 13 Stripe products (11 approved wellness + 2 memberships)', () => {
     const plan = buildSyncPlan('test', emptyState());
     const s = summarizePlan(plan);
-    expect(s.createProducts).toBe(15); // 13 products + 2 memberships
+    expect(s.createProducts).toBe(13); // 11 products + 2 memberships
     expect(s.reusePrices).toBe(0);
     expect(s.archivePrices).toBe(0);
     // exactly one recurring membership price each
     const recurringCreates = plan.filter(i => i.op === 'create_price' && i.billingType === 'recurring');
     expect(recurringCreates).toHaveLength(2);
-    expect(recurringCreates.map(i => i.amountCents).sort()).toEqual([19900, 24900]);
+    expect(recurringCreates.map(i => i.amountCents).sort()).toEqual([14900, 24900]);
   });
 
   it('reuses product + price when they already exist (idempotent)', () => {
@@ -121,7 +125,7 @@ describe('sync plan', () => {
     const plan = buildSyncPlan('test', state);
     const s = summarizePlan(plan);
     expect(s.createProducts).toBe(0);
-    expect(s.updateProducts).toBe(15);
+    expect(s.updateProducts).toBe(13);
     expect(s.createPrices).toBe(0);
     expect(s.reusePrices).toBeGreaterThan(0);
     expect(s.archivePrices).toBe(0);

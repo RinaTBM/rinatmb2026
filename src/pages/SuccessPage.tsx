@@ -19,7 +19,7 @@ export function SuccessPage() {
           </div>
           <div className="flex items-center gap-3">
             <Truck size={18} className="text-gold-500 flex-shrink-0" />
-            <p className="text-sm text-ink-600">Estimated delivery: 3–5 business days. You will receive tracking info once your order ships.</p>
+            <p className="text-sm text-ink-600">Most orders are processed within 1–3 business days after provider approval when applicable. You will receive tracking info once your order ships.</p>
           </div>
           <div className="flex items-start gap-3">
             <ShieldCheck size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />

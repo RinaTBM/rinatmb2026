@@ -1,13 +1,21 @@
+import { useState } from 'react';
 import { Link } from '@/router';
 import { ArrowLeft, ArrowRight, Stethoscope, ShieldCheck, Sparkles } from 'lucide-react';
 import { getConcern, getProductsByConcern, getMembershipsForConcern, concerns, type ConcernId } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
+import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
 import { useCart } from '@/context/CartContext';
 import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
+import {
+  labelRequestedFormulation,
+  validateMembershipRequestedFormulation,
+} from '@/lib/membership/requestedFormulation';
 
 export function ConcernPage({ concernId }: { concernId: string }) {
   const concern = getConcern(concernId);
   const { addItem } = useCart();
+  const [requestedBySlug, setRequestedBySlug] = useState<Record<string, string>>({});
+  const [doseErrors, setDoseErrors] = useState<Record<string, string>>({});
 
   if (!concern) {
     return (
@@ -79,7 +87,7 @@ export function ConcernPage({ concernId }: { concernId: string }) {
                     <span className="font-serif text-4xl text-ink-900">${m.price}</span>
                     <span className="text-ink-500 ml-1">{m.priceLabel}</span>
                   </div>
-                  <ul className="space-y-2.5 mb-8 flex-1">
+                  <ul className="space-y-2.5 mb-6 flex-1">
                     {m.features.slice(0, 4).map(f => (
                       <li key={f} className="flex items-start gap-2.5 text-sm text-ink-700">
                         <ShieldCheck size={16} className="flex-shrink-0 mt-0.5 text-gold-500" />
@@ -87,8 +95,54 @@ export function ConcernPage({ concernId }: { concernId: string }) {
                       </li>
                     ))}
                   </ul>
+                  <div className="mb-4 rounded-xl border border-cream-300 bg-cream-50/80 p-3">
+                    <MembershipRequestedDoseField
+                      id={`concern-requested-dose-${m.slug}`}
+                      includedFormulations={m.includedFormulations}
+                      value={requestedBySlug[m.slug] ?? ''}
+                      onChange={v => {
+                        setRequestedBySlug(prev => ({ ...prev, [m.slug]: v }));
+                        setDoseErrors(prev => {
+                          const next = { ...prev };
+                          delete next[m.slug];
+                          return next;
+                        });
+                      }}
+                    />
+                    {doseErrors[m.slug] && (
+                      <p className="mt-2 text-xs text-red-700">{doseErrors[m.slug]}</p>
+                    )}
+                  </div>
                   <button
-                    onClick={() => addItem({ productId: m.checkoutProductId || m.id, slug: m.slug, name: m.displayName, price: m.monthlyPrice, standardPrice: m.monthlyPrice, image: m.image, subscription: true, section: 'membership', requiresIntake: true, isMembership: true, billingFrequency: 'monthly', purchaseType: 'membership_program', discountPercent: 0, appliedDiscount: 'none' })}
+                    onClick={() => {
+                      const validated = validateMembershipRequestedFormulation({
+                        requestedFormulation: requestedBySlug[m.slug],
+                        includedFormulations: m.includedFormulations,
+                      });
+                      if (!validated.ok) {
+                        setDoseErrors(prev => ({ ...prev, [m.slug]: validated.error }));
+                        return;
+                      }
+                      const doseLabel = labelRequestedFormulation(validated.value);
+                      addItem({
+                        productId: m.checkoutProductId || m.id,
+                        slug: m.slug,
+                        name: m.displayName,
+                        price: m.monthlyPrice,
+                        standardPrice: m.monthlyPrice,
+                        image: m.image,
+                        subscription: true,
+                        section: 'membership',
+                        requiresIntake: true,
+                        isMembership: true,
+                        billingFrequency: 'monthly',
+                        purchaseType: 'membership_program',
+                        discountPercent: 0,
+                        appliedDiscount: 'none',
+                        requestedFormulation: validated.value,
+                        variantLabel: `Requested dose: ${doseLabel}`,
+                      });
+                    }}
                     className={membershipJoinButtonClassName({ highlighted: m.highlighted })}
                   >
                     Join {m.displayName.split(' ')[0]} <ArrowRight size={16} aria-hidden="true" />

@@ -1,14 +1,32 @@
+import { useState } from 'react';
 import { ArrowRight, Check, Lock, ShieldCheck } from 'lucide-react';
 import { Link } from '@/router';
 import type { Membership } from '@/data/products';
 import { useCart } from '@/context/CartContext';
+import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
 import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
+import {
+  labelRequestedFormulation,
+  validateMembershipRequestedFormulation,
+} from '@/lib/membership/requestedFormulation';
 
 /** Membership detail experience served at `/product/:membership-slug`. */
 export function MembershipDetailPage({ membership }: { membership: Membership }) {
   const { addItem } = useCart();
+  const [requestedFormulation, setRequestedFormulation] = useState('');
+  const [doseError, setDoseError] = useState<string | null>(null);
 
   const handleJoin = () => {
+    const validated = validateMembershipRequestedFormulation({
+      requestedFormulation,
+      includedFormulations: membership.includedFormulations,
+    });
+    if (!validated.ok) {
+      setDoseError(validated.error);
+      return;
+    }
+    setDoseError(null);
+    const doseLabel = labelRequestedFormulation(validated.value);
     addItem({
       productId: membership.checkoutProductId || membership.id,
       slug: membership.slug,
@@ -24,6 +42,8 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
       purchaseType: 'membership_program',
       discountPercent: 0,
       appliedDiscount: 'none',
+      requestedFormulation: validated.value,
+      variantLabel: `Requested dose: ${doseLabel}`,
     });
   };
 
@@ -57,13 +77,16 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
                 <span className="font-serif text-4xl text-ink-900">${membership.monthlyPrice}</span>
                 <span className="text-ink-500 ml-1">/month</span>
               </div>
-              <p className="text-ink-600 leading-relaxed mb-5">{membership.longDescription}</p>
+              <p className="text-ink-600 leading-relaxed mb-3">{membership.longDescription}</p>
+              <p className="text-sm text-ink-500 mb-5">
+                Initial term: {membership.initialTermMonths} months, then month to month.
+              </p>
 
               <div className="mb-4 flex items-start gap-2 rounded-xl bg-gold-50 border border-gold-200/70 p-3 text-sm text-gold-800">
                 <Lock size={16} className="flex-shrink-0 mt-0.5" />
                 <span>
                   Locked monthly rate while your membership stays continuously active and in good
-                  standing. Initial term: {membership.initialTermMonths} months.
+                  standing.
                 </span>
               </div>
 
@@ -87,6 +110,19 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
                 )}
               </div>
 
+              <div className="mb-5 rounded-xl border border-cream-300 bg-white p-4">
+                <MembershipRequestedDoseField
+                  id={`requested-dose-${membership.slug}`}
+                  includedFormulations={membership.includedFormulations}
+                  value={requestedFormulation}
+                  onChange={v => {
+                    setRequestedFormulation(v);
+                    setDoseError(null);
+                  }}
+                />
+                {doseError && <p className="mt-2 text-xs text-red-700">{doseError}</p>}
+              </div>
+
               <ul className="space-y-2 mb-6">
                 {membership.benefits.slice(0, 6).map(b => (
                   <li key={b} className="flex items-start gap-2.5 text-sm text-ink-700">
@@ -98,7 +134,8 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
 
               <p className="mb-4 flex items-start gap-1.5 text-xs text-gold-700">
                 <ShieldCheck size={14} className="mt-0.5 flex-shrink-0" />
-                Licensed-provider review required · enrollment does not guarantee a prescription
+                Licensed-provider review required · enrollment/payment does not guarantee a
+                prescription
               </p>
 
               <button

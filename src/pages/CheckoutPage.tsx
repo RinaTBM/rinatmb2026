@@ -9,6 +9,7 @@ import {
   isFreeShippingEligible,
   labelShippingMethod,
   shippingCentsForMethod,
+  type SelectableShippingMethod,
   type ShippingMethod,
 } from '@/lib/orders/shipping';
 import {
@@ -19,6 +20,12 @@ import {
   cartRequiresPhysicalShippingFromItems,
   cartShippableSubtotalCents,
 } from '@/lib/checkout/authorizeCheckout';
+import { getMembership } from '@/data/products';
+import {
+  labelRequestedFormulation,
+  validateMembershipRequestedFormulation,
+} from '@/lib/membership/requestedFormulation';
+import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
@@ -30,13 +37,36 @@ export function CheckoutPage() {
   const [form, setForm] = useState({
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
   });
-  const [shippingMethod, setShippingMethod] = useState<'two_day' | 'next_day'>('two_day');
+  const [shippingMethod, setShippingMethod] = useState<SelectableShippingMethod>('two_day');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const hasProviderCare = items.some(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId));
-  const requiresProviderReview = hasProviderCare || items.some(i => i.requiresIntake);
+  const hasMembership = items.some(
+    i => i.isMembership || i.purchaseType === 'membership_program',
+  );
+  const requiresProviderReview = hasProviderCare || items.some(i => i.requiresIntake) || hasMembership;
   const hasVariablePricing = items.some(i => i.price === 0);
+  const membershipDoseIssues = items
+    .filter(i => i.isMembership || i.purchaseType === 'membership_program')
+    .map(i => {
+      const membership = getMembership(i.slug);
+      const validated = validateMembershipRequestedFormulation({
+        requestedFormulation: i.requestedFormulation,
+        includedFormulations: membership?.includedFormulations ?? [],
+      });
+      return validated.ok
+        ? null
+        : {
+            key: i.key,
+            slug: i.slug,
+            name: i.name,
+            error: validated.error,
+            fixPath: cartItemDetailPath(i),
+          };
+    })
+    .filter((x): x is NonNullable<typeof x> => !!x);
+  const membershipDoseBlocking = membershipDoseIssues.length > 0;
   const subtotalCents = Math.round(subtotal * 100);
   const cartItemsForAuth = items.map(i => ({
     productId: i.productId,
@@ -121,6 +151,14 @@ export function CheckoutPage() {
     setLoading(true);
     setError(null);
 
+    if (membershipDoseBlocking) {
+      setError(
+        'Please select a requested dose for each membership before checkout. Open the membership details to choose a formulation.',
+      );
+      setLoading(false);
+      return;
+    }
+
     try {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -146,6 +184,7 @@ export function CheckoutPage() {
           providerCareTaxableSubtotalCents: providerCareTaxAuth.providerCareTaxableSubtotalCents,
           accessorySalesTaxCents: accessoryTaxAuth.accessorySalesTaxCents,
           accessoryTaxableSubtotalCents: accessoryTaxAuth.accessoryTaxableSubtotalCents,
+          // Never send obsolete "standard" — only two_day / next_day / free_over_500 / none.
           shippingMethod: resolvedShippingMethod,
           freeShippingEligible,
           requiresProviderReview,
@@ -163,6 +202,8 @@ export function CheckoutPage() {
             variantId: i.variantId,
             variantLabel: i.variantLabel,
             section: i.section,
+            membershipSlug: i.isMembership || i.purchaseType === 'membership_program' ? i.slug : undefined,
+            requestedFormulation: i.requestedFormulation,
             // Bundles are never accessory-member-discount eligible; other accessories default eligible server-side.
             memberPricingEligible: i.productId === 'a1' ? false : undefined,
           })),
@@ -276,12 +317,40 @@ export function CheckoutPage() {
                     <input placeholder="Phone" value={form.phone} onChange={e => update('phone', e.target.value)} className="input-lux" />
                   </div>
                 </div>
+                {membershipDoseBlocking && (
+                  <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                    <p className="font-medium mb-1">Requested dose required</p>
+                    <p className="text-xs mb-2">
+                      Membership checkout cannot continue until each membership has a requested dose.
+                      Your selection is a request only and does not guarantee approval or a prescription.
+                    </p>
+                    <ul className="space-y-1 text-xs">
+                      {membershipDoseIssues.map(issue => (
+                        <li key={issue.key}>
+                          {issue.name}:{' '}
+                          <Link to={issue.fixPath} className="underline font-medium">
+                            choose requested dose
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 {requiresPhysicalShipping ? (
                   <div>
                     <h2 className="font-serif text-2xl text-ink-900 mb-4">Shipping Method</h2>
+                    {hasMembership && (
+                      <div className="mb-3 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm text-gold-800">
+                        <p className="font-medium">Shipping after provider approval</p>
+                        <p className="mt-1 text-xs leading-relaxed">
+                          Choose your preferred shipping speed. Shipping occurs after provider approval
+                          and fulfillment processing. Shipping speed does not include provider-review time.
+                        </p>
+                      </div>
+                    )}
                     {freeShippingEligible ? (
                       <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                        Orders of $500 or more in merchandise are eligible for free shipping.
+                        Orders of $500 or more in eligible merchandise are eligible for free shipping.
                       </div>
                     ) : (
                       <div className="space-y-2">
@@ -309,7 +378,11 @@ export function CheckoutPage() {
                           </span>
                           <span className="font-medium text-ink-900">$50</span>
                         </label>
-                        <p className="text-xs text-ink-500">Orders of $500 or more in merchandise are eligible for free shipping. Most orders process within 1–3 business days after provider review and approval, when applicable.</p>
+                        <p className="text-xs text-ink-500">
+                          {hasMembership
+                            ? 'Most orders process within 1–3 business days after applicable provider review and approval. Shipping speed applies after approval and fulfillment processing.'
+                            : 'Orders of $500 or more in merchandise are eligible for free shipping. Most orders process within 1–3 business days after provider review and approval, when applicable.'}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -318,7 +391,14 @@ export function CheckoutPage() {
                     This order contains Provider Care services only. No physical shipping is charged.
                   </div>
                 )}
-                <button type="button" onClick={() => setStep('payment')} className="btn-primary">Continue to Payment</button>
+                <button
+                  type="button"
+                  onClick={() => setStep('payment')}
+                  className="btn-primary"
+                  disabled={membershipDoseBlocking}
+                >
+                  Continue to Payment
+                </button>
               </div>
             )}
 
@@ -431,9 +511,9 @@ export function CheckoutPage() {
                   <button type="button" onClick={() => setStep('info')} className="btn-outline">Back</button>
                   <button
                     type="button"
-                    disabled={!allAccepted || loading}
+                    disabled={!allAccepted || loading || membershipDoseBlocking}
                     onClick={handleStripeCheckout}
-                    className={`btn-primary flex-1 ${!allAccepted || loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`btn-primary flex-1 ${!allAccepted || loading || membershipDoseBlocking ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {loading ? (
                       <span className="flex items-center justify-center gap-2">
@@ -473,8 +553,15 @@ export function CheckoutPage() {
                         <p className="text-sm font-medium text-ink-900 truncate">{item.name}</p>
                         {item.isMembership ? (
                           <>
+                            {item.requestedFormulation && (
+                              <p className="text-xs text-ink-700">
+                                Requested dose: {labelRequestedFormulation(item.requestedFormulation)}
+                              </p>
+                            )}
                             <p className="text-xs text-gold-600">Active Wellness Membership · billed monthly</p>
-                            <p className="text-xs text-ink-400">3-month initial term · Provider review required</p>
+                            <p className="text-xs text-ink-400">
+                              3-month initial term · Provider review required · prescription not guaranteed
+                            </p>
                           </>
                         ) : (
                           <>

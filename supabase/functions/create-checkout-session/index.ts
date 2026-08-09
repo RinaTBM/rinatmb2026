@@ -24,6 +24,9 @@ interface CartItemRequest {
   section?: string;
   /** Per-SKU eligibility flag from catalog (bundles default false). */
   memberPricingEligible?: boolean;
+  /** Normalized membership requested formulation (request only). */
+  requestedFormulation?: string;
+  membershipSlug?: string;
 }
 
 /** Mirrors src/lib/checkout/checkoutConstants.ts + authorizeCheckout.ts */
@@ -70,11 +73,16 @@ const MEMBERSHIP_FIXED_CENTS: Record<string, number> = {
 
 type ShippingMethod = "two_day" | "next_day" | "free_over_500" | "none";
 
+const GETTING_STARTED_FORMULATION = "getting_started";
+const GETTING_STARTED_LABEL = "Getting Started / Not Sure";
+
 interface CatalogMembershipRow {
   app_product_id: string;
   stripe_price_id_test: string | null;
   monthly_price_cents: number;
   display_name: string;
+  slug?: string;
+  included_formulations?: string[] | null;
 }
 
 interface CatalogVariantRow {
@@ -96,6 +104,8 @@ type LineResolution =
     productId: string;
     productName: string;
     variantLabel: string | null;
+    requestedFormulation?: string | null;
+    membershipSlug?: string | null;
   }
   | {
     kind: "price_data";
@@ -113,6 +123,46 @@ type LineResolution =
     productName: string;
     variantLabel: string | null;
   };
+
+function normalizeRequestedFormulation(raw: string | null | undefined): string | null {
+  if (raw == null) return null;
+  const trimmed = String(raw).trim();
+  if (!trimmed) return null;
+  const lower = trimmed.toLowerCase().replace(/[\s/-]+/g, "_");
+  if (
+    lower === GETTING_STARTED_FORMULATION ||
+    lower === "getting_started_not_sure" ||
+    trimmed === GETTING_STARTED_LABEL
+  ) {
+    return GETTING_STARTED_FORMULATION;
+  }
+  return trimmed;
+}
+
+function labelRequestedFormulation(value: string): string {
+  return value === GETTING_STARTED_FORMULATION ? GETTING_STARTED_LABEL : value;
+}
+
+function validateMembershipRequestedFormulation(input: {
+  requestedFormulation: string | null | undefined;
+  includedFormulations: readonly string[] | null | undefined;
+}): { ok: true; value: string } | { ok: false; error: string } {
+  const normalized = normalizeRequestedFormulation(input.requestedFormulation);
+  if (!normalized) {
+    return {
+      ok: false,
+      error: "Please select a requested dose before continuing with membership checkout.",
+    };
+  }
+  if (normalized === GETTING_STARTED_FORMULATION) return { ok: true, value: normalized };
+  if ((input.includedFormulations ?? []).includes(normalized)) {
+    return { ok: true, value: normalized };
+  }
+  return {
+    ok: false,
+    error: `Unsupported requested formulation: ${input.requestedFormulation}`,
+  };
+}
 
 function assertTestKey(secretKey: string) {
   if (secretKey.startsWith("sk_live_") || secretKey.startsWith("rk_live_")) {
@@ -235,6 +285,14 @@ function resolveMembershipLine(
     };
   }
 
+  const dose = validateMembershipRequestedFormulation({
+    requestedFormulation: item.requestedFormulation,
+    includedFormulations: membership.included_formulations ?? [],
+  });
+  if (!dose.ok) return { error: dose.error };
+
+  const doseLabel = labelRequestedFormulation(dose.value);
+
   return {
     kind: "mapped_price",
     stripePriceId: membership.stripe_price_id_test,
@@ -244,7 +302,9 @@ function resolveMembershipLine(
     source: "catalog_memberships",
     productId: item.productId,
     productName: item.productName ?? membership.display_name,
-    variantLabel: item.variantLabel ?? null,
+    variantLabel: item.variantLabel ?? `Requested dose: ${doseLabel}`,
+    requestedFormulation: dose.value,
+    membershipSlug: item.membershipSlug ?? membership.slug ?? null,
   };
 }
 
@@ -374,6 +434,13 @@ function authorizeShippingCents(input: {
       return { error: "Physical shipping is not applicable to this order." };
     }
     return { shippingMethod: "none", shippingCents: 0, freeShippingEligible: false };
+  }
+
+  if (input.shippingMethod === "standard") {
+    return {
+      error:
+        "Unsupported shipping method: standard. Approved methods are two_day ($30) and next_day ($50).",
+    };
   }
 
   const free = input.shippableSubtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS;
@@ -514,7 +581,7 @@ Deno.serve(async (req: Request) => {
       const mem = await sbGet<CatalogMembershipRow[]>(
         supabaseUrl,
         serviceKey,
-        `/rest/v1/catalog_memberships?app_product_id=in.(${membershipIds.join(",")})&select=app_product_id,stripe_price_id_test,monthly_price_cents,display_name`,
+        `/rest/v1/catalog_memberships?app_product_id=in.(${membershipIds.join(",")})&select=app_product_id,slug,stripe_price_id_test,monthly_price_cents,display_name,included_formulations`,
       );
       if ("error" in mem) return jsonError(mem.error, 500);
       for (const row of mem) membershipMap.set(row.app_product_id, row);
@@ -654,6 +721,23 @@ Deno.serve(async (req: Request) => {
     sessionBody["metadata[free_shipping_eligible]"] = shippingAuth.freeShippingEligible ? "true" : "false";
     if (requiresProviderReview) sessionBody["metadata[requires_provider_review]"] = "true";
 
+    // Membership requested-dose metadata (validated against catalog_memberships.included_formulations).
+    const membershipLines = resolved.filter(
+      (line) => line.kind === "mapped_price" && line.source === "catalog_memberships",
+    );
+    if (membershipLines.length > 0) {
+      const first = membershipLines[0];
+      if (first.kind === "mapped_price") {
+        if (first.requestedFormulation) {
+          sessionBody["metadata[requested_formulation]"] = first.requestedFormulation;
+        }
+        if (first.membershipSlug) {
+          sessionBody["metadata[membership_slug]"] = first.membershipSlug;
+        }
+        sessionBody["metadata[membership_app_product_id]"] = first.productId;
+      }
+    }
+
     const snapshots = resolved.map((line) => ({
       productId: line.productId,
       productName: line.productName,
@@ -662,6 +746,12 @@ Deno.serve(async (req: Request) => {
       unitPriceCents: line.unitAmountCents,
       discountCents: 0,
       lineTotalCents: line.unitAmountCents * line.quantity,
+      ...(line.kind === "mapped_price" && line.requestedFormulation
+        ? {
+          requestedFormulation: line.requestedFormulation,
+          membershipSlug: line.membershipSlug ?? null,
+        }
+        : {}),
     }));
     const snapJson = JSON.stringify(snapshots);
     if (snapJson.length <= 500) {

@@ -2,6 +2,7 @@ import { X, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link, navigate } from '@/router';
 import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
+import { labelRequestedFormulation } from '@/lib/membership/requestedFormulation';
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal, totalSavings, itemCount } = useCart();
@@ -70,9 +71,14 @@ export function CartDrawer() {
                           )}
                           {item.isMembership ? (
                             <div className="mt-1 space-y-0.5 text-xs text-ink-500">
+                              {item.requestedFormulation && (
+                                <p className="font-medium text-ink-800">
+                                  Requested dose: {labelRequestedFormulation(item.requestedFormulation)}
+                                </p>
+                              )}
                               <p className="text-gold-600 font-medium">Billed monthly · 3-month initial term</p>
-                              <p>Provider review required</p>
-                              <p>Shipping calculated separately</p>
+                              <p>Provider review required · prescription not guaranteed</p>
+                              <p>Shipping after provider approval</p>
                               <p>Cancel anytime after the initial term (canceling ends the locked rate)</p>
                             </div>
                           ) : (

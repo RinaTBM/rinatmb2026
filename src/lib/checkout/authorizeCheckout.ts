@@ -11,6 +11,10 @@ import {
   type ShippingMethod,
 } from '../orders/shipping';
 import {
+  labelRequestedFormulation,
+  validateMembershipRequestedFormulation,
+} from '../membership/requestedFormulation';
+import {
   ACCESSORY_BUNDLE_PRODUCT_IDS,
   ACCESSORY_MEMBER_DISCOUNT_PERCENT,
   ACCESSORY_SALES_TAX_RATE,
@@ -43,6 +47,9 @@ export interface CheckoutCartItem {
   variantId?: string;
   section?: string;
   memberPricingEligible?: boolean;
+  /** Normalized membership requested formulation (request only). */
+  requestedFormulation?: string;
+  membershipSlug?: string;
 }
 
 export interface CatalogMembershipRow {
@@ -50,6 +57,8 @@ export interface CatalogMembershipRow {
   stripe_price_id_test: string | null;
   monthly_price_cents: number;
   display_name: string;
+  slug?: string;
+  included_formulations?: string[] | null;
 }
 
 export interface CatalogVariantRow {
@@ -233,6 +242,12 @@ export function resolveMembershipLine(
     };
   }
 
+  const dose = validateMembershipRequestedFormulation({
+    requestedFormulation: item.requestedFormulation,
+    includedFormulations: membership.included_formulations ?? [],
+  });
+  if (!dose.ok) return { error: dose.error };
+
   // Never honor client-supplied custom membership amounts.
   if (
     typeof item.unitAmountCents === 'number' &&
@@ -247,6 +262,8 @@ export function resolveMembershipLine(
     }
   }
 
+  const doseLabel = labelRequestedFormulation(dose.value);
+
   return {
     kind: 'mapped_price',
     stripePriceId: membership.stripe_price_id_test,
@@ -256,7 +273,7 @@ export function resolveMembershipLine(
     source: 'catalog_memberships',
     productId: item.productId,
     productName: item.productName ?? membership.display_name,
-    variantLabel: item.variantLabel ?? null,
+    variantLabel: item.variantLabel ?? `Requested dose: ${doseLabel}`,
   };
 }
 
@@ -491,6 +508,13 @@ export function authorizeShippingCents(input: {
       shippingMethod: 'none',
       shippingCents: 0,
       freeShippingEligible: false,
+    };
+  }
+
+  if (input.shippingMethod === 'standard') {
+    return {
+      error:
+        'Unsupported shipping method: standard. Approved methods are two_day ($30) and next_day ($50).',
     };
   }
 

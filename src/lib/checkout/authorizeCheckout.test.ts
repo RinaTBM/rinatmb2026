@@ -58,16 +58,20 @@ function expectPriceData(
 
 const semaMembership: CatalogMembershipRow = {
   app_product_id: 'm1',
+  slug: 'semaglutide-membership',
   stripe_price_id_test: 'price_test_sema_199',
   monthly_price_cents: SEMAGLUTIDE_MEMBERSHIP_CENTS,
   display_name: 'Semaglutide Membership',
+  included_formulations: ['0.5mg', '1mg', '2.5mg', '5mg'],
 };
 
 const tirzMembership: CatalogMembershipRow = {
   app_product_id: 'm2',
+  slug: 'tirzepatide-membership',
   stripe_price_id_test: 'price_test_tirz_249',
   monthly_price_cents: TIRZEPATIDE_MEMBERSHIP_CENTS,
   display_name: 'Tirzepatide Membership',
+  included_formulations: ['2.5mg', '7.5mg', '12.5mg', '15mg'],
 };
 
 const semaVariant: CatalogVariantRow = {
@@ -82,7 +86,13 @@ describe('Stripe mapping (catalog TEST prices)', () => {
   it('Semaglutide membership resolves to catalog_memberships TEST price', () => {
     const line = expectMapped(
       resolveMembershipLine(
-        { productId: SEMAGLUTIDE_MEMBERSHIP_APP_ID, quantity: 1, purchaseType: 'membership_program', unitAmountCents: 14900 },
+        {
+          productId: SEMAGLUTIDE_MEMBERSHIP_APP_ID,
+          quantity: 1,
+          purchaseType: 'membership_program',
+          unitAmountCents: 14900,
+          requestedFormulation: '1mg',
+        },
         semaMembership,
       ),
     );
@@ -94,7 +104,13 @@ describe('Stripe mapping (catalog TEST prices)', () => {
   it('Tirzepatide membership resolves to catalog_memberships TEST price', () => {
     const line = expectMapped(
       resolveMembershipLine(
-        { productId: TIRZEPATIDE_MEMBERSHIP_APP_ID, quantity: 1, purchaseType: 'membership_program', unitAmountCents: 24900 },
+        {
+          productId: TIRZEPATIDE_MEMBERSHIP_APP_ID,
+          quantity: 1,
+          purchaseType: 'membership_program',
+          unitAmountCents: 24900,
+          requestedFormulation: '7.5mg',
+        },
         tirzMembership,
       ),
     );
@@ -117,7 +133,15 @@ describe('Stripe mapping (catalog TEST prices)', () => {
 
   it('modern checkout does not require stripe_products / legacy sync-stripe-products', () => {
     const mem = expectMapped(
-      resolveMembershipLine({ productId: 'm1', quantity: 1, purchaseType: 'membership_program' }, semaMembership),
+      resolveMembershipLine(
+        {
+          productId: 'm1',
+          quantity: 1,
+          purchaseType: 'membership_program',
+          requestedFormulation: 'getting_started',
+        },
+        semaMembership,
+      ),
     );
     const one = expectMapped(
       resolveProductLine({ productId: 'p1', quantity: 1, purchaseType: 'one_time', variantId: 'semaglutide-v1' }, false, semaVariant),
@@ -271,7 +295,15 @@ describe('Provider Care + 1.8%', () => {
       ),
     );
     const membership = expectMapped(
-      resolveMembershipLine({ productId: 'm1', quantity: 1, purchaseType: 'membership_program' }, semaMembership),
+      resolveMembershipLine(
+        {
+          productId: 'm1',
+          quantity: 1,
+          purchaseType: 'membership_program',
+          requestedFormulation: '0.5mg',
+        },
+        semaMembership,
+      ),
     );
     const accessory = expectPriceData(
       resolveProductLine(
@@ -314,7 +346,15 @@ describe('Provider Care + 1.8%', () => {
     expect('CHECKOUT_TAX_RATE' in constants).toBe(false);
     expect(constants.PROVIDER_CARE_TAX_RATE).toBe(0.018);
     const membership = expectMapped(
-      resolveMembershipLine({ productId: 'm1', quantity: 1, purchaseType: 'membership_program' }, semaMembership),
+      resolveMembershipLine(
+        {
+          productId: 'm1',
+          quantity: 1,
+          purchaseType: 'membership_program',
+          requestedFormulation: '2.5mg',
+        },
+        semaMembership,
+      ),
     );
     // Membership cart subtotal must not be taxed at 8% or 1.8%.
     expect(providerCareTaxableSubtotalCents([membership])).toBe(0);
@@ -482,6 +522,86 @@ describe('shipping authorization', () => {
     expect(TWO_DAY_SHIPPING_CENTS).toBe(3000);
     expect(NEXT_DAY_SHIPPING_CENTS).toBe(5000);
     expect(FREE_SHIPPING_THRESHOLD_CENTS).toBe(50000);
+  });
+
+  it('rejects obsolete shipping method "standard"', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'standard',
+      clientShippingCents: 0,
+      shippableSubtotalCents: 14900,
+      requiresPhysicalShipping: true,
+    });
+    expect('error' in r).toBe(true);
+    if (!('error' in r)) return;
+    expect(r.error).toMatch(/standard/i);
+  });
+
+  it('membership-only carts under $500 still charge Two-Day / Next-Day (no silent free shipping)', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: 3000,
+      shippableSubtotalCents: SEMAGLUTIDE_MEMBERSHIP_CENTS,
+      requiresPhysicalShipping: true,
+    });
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(r.shippingCents).toBe(3000);
+    expect(r.freeShippingEligible).toBe(false);
+  });
+});
+
+describe('membership requested formulation authorization', () => {
+  it('accepts Getting Started / Not Sure and included formulations', () => {
+    for (const dose of ['getting_started', '0.5mg', '1mg', '2.5mg', '5mg']) {
+      const line = expectMapped(
+        resolveMembershipLine(
+          {
+            productId: 'm1',
+            quantity: 1,
+            purchaseType: 'membership_program',
+            requestedFormulation: dose,
+          },
+          semaMembership,
+        ),
+      );
+      expect(line.unitAmountCents).toBe(14900);
+      expect(line.variantLabel).toMatch(/Requested dose:/);
+    }
+    for (const dose of ['getting_started', '2.5mg', '7.5mg', '12.5mg', '15mg']) {
+      const line = expectMapped(
+        resolveMembershipLine(
+          {
+            productId: 'm2',
+            quantity: 1,
+            purchaseType: 'membership_program',
+            requestedFormulation: dose,
+          },
+          tirzMembership,
+        ),
+      );
+      expect(line.unitAmountCents).toBe(24900);
+    }
+  });
+
+  it('rejects unsupported requested formulation server-side', () => {
+    const missing = resolveMembershipLine(
+      { productId: 'm1', quantity: 1, purchaseType: 'membership_program' },
+      semaMembership,
+    );
+    expect('error' in missing).toBe(true);
+
+    const bad = resolveMembershipLine(
+      {
+        productId: 'm1',
+        quantity: 1,
+        purchaseType: 'membership_program',
+        requestedFormulation: '30mg',
+      },
+      semaMembership,
+    );
+    expect('error' in bad).toBe(true);
+    if (!('error' in bad)) return;
+    expect(bad.error).toMatch(/Unsupported requested formulation/i);
   });
 });
 

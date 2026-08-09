@@ -1,8 +1,14 @@
+import { useState } from 'react';
 import { Check, X, Lock, ArrowRight, ShieldCheck, ClipboardList, Stethoscope, PackageCheck } from 'lucide-react';
 import { Link } from '@/router';
 import { visibleMemberships, type Membership } from '@/data/products';
 import { useCart } from '@/context/CartContext';
+import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
 import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
+import {
+  labelRequestedFormulation,
+  validateMembershipRequestedFormulation,
+} from '@/lib/membership/requestedFormulation';
 
 const howItWorks = [
   { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide or Tirzepatide membership. No dose selection — one simple monthly price.' },
@@ -47,8 +53,24 @@ function Cell({ value }: { value: string | boolean }) {
 
 export function MembershipsPage() {
   const { addItem } = useCart();
+  const [requestedBySlug, setRequestedBySlug] = useState<Record<string, string>>({});
+  const [doseErrors, setDoseErrors] = useState<Record<string, string>>({});
 
   const handleJoin = (m: Membership) => {
+    const validated = validateMembershipRequestedFormulation({
+      requestedFormulation: requestedBySlug[m.slug],
+      includedFormulations: m.includedFormulations,
+    });
+    if (!validated.ok) {
+      setDoseErrors(prev => ({ ...prev, [m.slug]: validated.error }));
+      return;
+    }
+    setDoseErrors(prev => {
+      const next = { ...prev };
+      delete next[m.slug];
+      return next;
+    });
+    const doseLabel = labelRequestedFormulation(validated.value);
     addItem({
       productId: m.checkoutProductId || m.id,
       slug: m.slug,
@@ -64,6 +86,8 @@ export function MembershipsPage() {
       purchaseType: 'membership_program',
       discountPercent: 0,
       appliedDiscount: 'none',
+      requestedFormulation: validated.value,
+      variantLabel: `Requested dose: ${doseLabel}`,
     });
   };
 
@@ -172,7 +196,26 @@ export function MembershipsPage() {
                 <p className="mb-2 flex items-center gap-1.5 text-xs text-gold-700">
                   <ShieldCheck size={14} /> Licensed-provider review required · enrollment does not guarantee a prescription
                 </p>
-                <p className="mb-4 text-xs text-ink-500">Shipping calculated separately. Initial term: 3 months, then month to month.</p>
+                <p className="mb-4 text-xs text-ink-500">Shipping calculated separately after provider approval. Initial term: 3 months, then month to month.</p>
+
+                <div className="mb-4 rounded-xl border border-cream-300 bg-cream-50/80 p-3">
+                  <MembershipRequestedDoseField
+                    id={`requested-dose-${m.slug}`}
+                    includedFormulations={m.includedFormulations}
+                    value={requestedBySlug[m.slug] ?? ''}
+                    onChange={v => {
+                      setRequestedBySlug(prev => ({ ...prev, [m.slug]: v }));
+                      setDoseErrors(prev => {
+                        const next = { ...prev };
+                        delete next[m.slug];
+                        return next;
+                      });
+                    }}
+                  />
+                  {doseErrors[m.slug] && (
+                    <p className="mt-2 text-xs text-red-700">{doseErrors[m.slug]}</p>
+                  )}
+                </div>
 
                 <button
                   onClick={() => handleJoin(m)}

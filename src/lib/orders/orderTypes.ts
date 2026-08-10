@@ -6,11 +6,19 @@ export interface OrderRecord {
   customer_email: string;
   customer_name: string;
   public_order_number: string;
+  /** Legacy Stripe fields — retained for historical rows; unused by manual invoice checkout. */
   stripe_checkout_session_id: string | null;
   stripe_payment_intent_id: string | null;
   stripe_customer_id: string | null;
   order_status: OrderStatus | string;
   payment_status: PaymentStatus | string;
+  /** Processor-neutral: manual_ach | manual_wire | plaid_ach (future). */
+  payment_method?: string | null;
+  payment_reference?: string | null;
+  invoice_number?: string | null;
+  paid_at?: string | null;
+  paid_marked_by?: string | null;
+  payment_admin_note?: string | null;
   subtotal_cents: number;
   discount_cents: number;
   shipping_cents: number;

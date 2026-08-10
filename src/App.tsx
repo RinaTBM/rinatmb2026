@@ -13,6 +13,7 @@ import { SectionPage } from '@/pages/SectionPage';
 import { BestSellersPage } from '@/pages/BestSellersPage';
 import { ProductPage } from '@/pages/ProductPage';
 import { CheckoutPage } from '@/pages/CheckoutPage';
+import { OrderPaymentInstructionsPage } from '@/pages/OrderPaymentInstructionsPage';
 import { SuccessPage } from '@/pages/SuccessPage';
 import { CancelPage } from '@/pages/CancelPage';
 import { TrackPage } from '@/pages/TrackPage';
@@ -70,6 +71,10 @@ function App() {
     if (path === '/best-sellers') return <BestSellersPage />;
     if (path.startsWith('/product/')) return <ProductPage slug={path.replace('/product/', '')} />;
     if (path === '/checkout') return <CheckoutPage />;
+    if (path.startsWith('/order/payment/')) {
+      const orderNumber = path.replace('/order/payment/', '').split('/')[0];
+      return <OrderPaymentInstructionsPage publicOrderNumber={orderNumber} />;
+    }
     if (path === '/success') return <SuccessPage />;
     if (path === '/cancel') return <CancelPage />;
 

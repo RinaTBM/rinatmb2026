@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from '@/router';
+import { Link, navigate } from '@/router';
 import { ArrowLeft, Lock, Check, ShieldCheck, Truck, Ban, RefreshCw, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
@@ -26,6 +26,29 @@ import {
   validateMembershipRequestedFormulation,
 } from '@/lib/membership/requestedFormulation';
 import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
+import {
+  isManualCheckoutEnabled,
+  isStripeCheckoutEnabled,
+  PAYMENTS_UNAVAILABLE_MESSAGE,
+} from '@/lib/payments/paymentsEnabled';
+import {
+  ACTIVE_CHECKOUT_PAYMENT_METHODS,
+  assertSelectablePaymentMethod,
+  PAYMENT_METHOD_HELP,
+  PAYMENT_METHOD_LABELS,
+  type ActiveCheckoutPaymentMethod,
+} from '@/lib/payments/paymentMethods';
+import {
+  CHECKOUT_SUBMIT_CTA,
+  CHECKOUT_SUBMIT_SUPPORTING_COPY,
+} from '@/lib/payments/manualInvoice';
+import {
+  AUTO_REFILL_MANUAL_BILLING_NOTE,
+  cartHasRecurringItems,
+  MEMBERSHIP_MANUAL_BILLING_NOTE,
+  RECURRING_MANUAL_PAYMENT_DISCLOSURE,
+} from '@/lib/payments/recurringCopy';
+import { submitInvoiceOrder } from '@/lib/payments/submitInvoiceOrder';
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
@@ -38,8 +61,11 @@ export function CheckoutPage() {
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
   });
   const [shippingMethod, setShippingMethod] = useState<SelectableShippingMethod>('two_day');
+  const [paymentMethod, setPaymentMethod] = useState<ActiveCheckoutPaymentMethod>('manual_ach');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const checkoutEnabled = isManualCheckoutEnabled();
+  const hasRecurring = cartHasRecurringItems(items);
 
   const hasProviderCare = items.some(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId));
   const hasMembership = items.some(
@@ -155,7 +181,23 @@ export function CheckoutPage() {
     }
   };
 
-  const handleStripeCheckout = async () => {
+  const handleSubmitInvoiceOrder = async () => {
+    // Stripe checkout is permanently disabled — never call create-checkout-session.
+    if (isStripeCheckoutEnabled()) {
+      setError(PAYMENTS_UNAVAILABLE_MESSAGE);
+      return;
+    }
+    if (!checkoutEnabled) {
+      setError(PAYMENTS_UNAVAILABLE_MESSAGE);
+      return;
+    }
+
+    const methodCheck = assertSelectablePaymentMethod(paymentMethod);
+    if (!methodCheck.ok) {
+      setError(methodCheck.error);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -170,29 +212,33 @@ export function CheckoutPage() {
     try {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      if (!supabaseUrl || !anonKey) {
+        throw new Error('Checkout is not configured. Please contact us for assistance.');
+      }
 
-      const res = await fetch(`${supabaseUrl}/functions/v1/create-checkout-session`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${anonKey}`,
-        },
-        body: JSON.stringify({
+      const taxCents =
+        providerCareTaxAuth.providerCareTaxCents + accessoryTaxAuth.accessorySalesTaxCents;
+      const totalCents = Math.round(total * 100);
+
+      const result = await submitInvoiceOrder({
+        supabaseUrl,
+        anonKey,
+        accessToken: null,
+        body: {
+          paymentMethod: methodCheck.method,
           isActiveMember,
           customerUserId: user?.id,
-          customerEmail: form.email || user?.email || undefined,
-          customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || undefined,
-          // Snapshot amounts as displayed at checkout (server re-authorizes all of these).
+          customerEmail: form.email || user?.email || '',
+          customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || '',
           subtotalCents,
           discountCents: Math.round(totalSavings * 100),
           shippingCents: Math.round(shipping * 100),
-          taxCents:
-            providerCareTaxAuth.providerCareTaxCents + accessoryTaxAuth.accessorySalesTaxCents,
+          taxCents,
+          totalCents,
           providerCareTaxCents: providerCareTaxAuth.providerCareTaxCents,
           providerCareTaxableSubtotalCents: providerCareTaxAuth.providerCareTaxableSubtotalCents,
           accessorySalesTaxCents: accessoryTaxAuth.accessorySalesTaxCents,
           accessoryTaxableSubtotalCents: accessoryTaxAuth.accessoryTaxableSubtotalCents,
-          // Never send obsolete "standard" — only two_day / next_day / free_over_500 / none.
           shippingMethod: resolvedShippingMethod,
           freeShippingEligible,
           requiresProviderReview,
@@ -200,37 +246,45 @@ export function CheckoutPage() {
             productId: i.productId,
             quantity: i.quantity,
             subscription: i.subscription,
-            purchaseType: i.purchaseType ?? (i.isMembership ? 'membership_program' : i.subscription ? 'auto_refill' : 'one_time'),
+            purchaseType:
+              i.purchaseType ??
+              (i.isMembership ? 'membership_program' : i.subscription ? 'auto_refill' : 'one_time'),
             unitAmountCents: Math.round(i.price * 100),
             standardPriceCents: Math.round((i.standardPrice ?? i.price) * 100),
             discountPercent: i.discountPercent ?? 0,
             appliedDiscount: i.appliedDiscount ?? 'none',
             productName: i.name,
-            // Required for catalog_variants.stripe_price_id_test lookup (Auto-Refill may append -refill).
             variantId: i.variantId,
             variantLabel: i.variantLabel,
             section: i.section,
-            membershipSlug: i.isMembership || i.purchaseType === 'membership_program' ? i.slug : undefined,
+            membershipSlug:
+              i.isMembership || i.purchaseType === 'membership_program' ? i.slug : undefined,
             requestedFormulation: i.requestedFormulation,
-            // Bundles are never accessory-member-discount eligible; other accessories default eligible server-side.
             memberPricingEligible: i.productId === 'a1' ? false : undefined,
           })),
-        }),
+        },
       });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Failed to create checkout session');
+      if (!result.ok) {
+        throw new Error(result.error);
       }
 
-      const data = await res.json();
-      if (data.url) {
-        recordLocalSubscriptions();
-        clearCart();
-        window.location.href = data.url;
-      } else {
-        throw new Error('No checkout URL returned');
+      try {
+        sessionStorage.setItem(
+          `mbm-invoice:${result.publicOrderNumber}`,
+          JSON.stringify({
+            invoice: result.invoice,
+            bankInstructions: result.bankInstructions,
+            token: result.paymentAccessToken,
+          }),
+        );
+      } catch {
+        /* ignore quota */
       }
+
+      recordLocalSubscriptions();
+      clearCart();
+      navigate(result.paymentPath);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
       setLoading(false);
@@ -448,21 +502,69 @@ export function CheckoutPage() {
 
                 <div>
                   <h2 className="font-serif text-2xl text-ink-900 mb-4">Payment</h2>
-                  <div className="rounded-xl border border-cream-300 bg-white p-5">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Lock size={18} className="text-gold-500" />
-                      <p className="text-sm text-ink-600">Secure payment powered by Stripe (Test Mode for discounted / Auto-Refill custom prices)</p>
-                    </div>
-                    <p className="text-sm text-ink-500 mb-4">
-                      Click "Place Order" to be redirected to Stripe's secure checkout page where you can enter your payment details. Your card information is never stored on our servers.
-                    </p>
-                    {hasVariablePricing && (
-                      <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 mb-4 leading-relaxed">
-                        Your cart includes items with pricing determined after provider review (e.g. HRT). After checkout, you will complete a medical intake and, if needed, a consultation and lab review. Once your provider finalizes your personalized treatment plan, you will receive an invoice for the exact cost of your prescribed therapy before any charges are made.
+                  <div className="rounded-xl border border-cream-300 bg-white p-5 space-y-4">
+                    {!checkoutEnabled ? (
+                      <div className="flex items-start gap-3">
+                        <Lock size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-sm font-medium text-ink-900">{PAYMENTS_UNAVAILABLE_MESSAGE}</p>
                       </div>
+                    ) : (
+                      <>
+                        <div className="flex items-center gap-3">
+                          <Lock size={18} className="text-gold-500" />
+                          <p className="text-sm text-ink-600">
+                            Select how you will pay after submitting your order. No payment is withdrawn on this page.
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          {ACTIVE_CHECKOUT_PAYMENT_METHODS.map(method => (
+                            <label
+                              key={method}
+                              className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm ${
+                                paymentMethod === method ? 'border-ink-900 bg-white' : 'border-cream-300 bg-cream-50'
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name="paymentMethod"
+                                className="mt-1"
+                                checked={paymentMethod === method}
+                                onChange={() => setPaymentMethod(method)}
+                              />
+                              <span>
+                                <span className="font-medium text-ink-900 block">
+                                  {PAYMENT_METHOD_LABELS[method]}
+                                  {method === 'manual_ach' ? (
+                                    <span className="ml-2 text-[10px] uppercase tracking-wide text-gold-700">
+                                      Recommended
+                                    </span>
+                                  ) : null}
+                                </span>
+                                <span className="text-ink-500 text-xs">{PAYMENT_METHOD_HELP[method]}</span>
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                        <p className="text-sm text-ink-500">{CHECKOUT_SUBMIT_SUPPORTING_COPY}</p>
+                        {hasRecurring ? (
+                          <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 leading-relaxed space-y-2">
+                            <p className="font-medium">{RECURRING_MANUAL_PAYMENT_DISCLOSURE}</p>
+                            <p>{MEMBERSHIP_MANUAL_BILLING_NOTE}</p>
+                            <p>{AUTO_REFILL_MANUAL_BILLING_NOTE}</p>
+                          </div>
+                        ) : null}
+                        {hasVariablePricing && (
+                          <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 leading-relaxed">
+                            Your cart includes items with pricing determined after provider review (e.g. HRT). After
+                            payment is received, you will complete a medical intake and, if needed, a consultation and
+                            lab review. Once your provider finalizes your personalized treatment plan, you will receive
+                            an invoice for any additional prescribed therapy cost before those charges are due.
+                          </div>
+                        )}
+                      </>
                     )}
                     {error && (
-                      <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 mb-4">
+                      <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
                         {error}
                       </div>
                     )}
@@ -518,22 +620,29 @@ export function CheckoutPage() {
 
                 <div className="flex gap-3">
                   <button type="button" onClick={() => setStep('info')} className="btn-outline">Back</button>
-                  <button
-                    type="button"
-                    disabled={!allAccepted || loading || membershipDoseBlocking}
-                    onClick={handleStripeCheckout}
-                    className={`btn-primary flex-1 ${!allAccepted || loading || membershipDoseBlocking ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    {loading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <Loader2 size={18} className="animate-spin" /> Redirecting to Stripe...
-                      </span>
-                    ) : hasVariablePricing ? (
-                      'Begin Intake — Invoice After Review'
-                    ) : (
-                      `Place Order — $${total.toFixed(2)}`
-                    )}
-                  </button>
+                  {checkoutEnabled ? (
+                    <button
+                      type="button"
+                      disabled={!allAccepted || loading || membershipDoseBlocking}
+                      onClick={handleSubmitInvoiceOrder}
+                      className={`btn-primary flex-1 ${!allAccepted || loading || membershipDoseBlocking ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {loading ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <Loader2 size={18} className="animate-spin" /> Submitting order…
+                        </span>
+                      ) : (
+                        CHECKOUT_SUBMIT_CTA
+                      )}
+                    </button>
+                  ) : (
+                    <div
+                      role="status"
+                      className="flex-1 rounded-xl border border-cream-300 bg-cream-100 px-4 py-3 text-sm text-ink-700"
+                    >
+                      {PAYMENTS_UNAVAILABLE_MESSAGE}
+                    </div>
+                  )}
                 </div>
               </div>
             )}

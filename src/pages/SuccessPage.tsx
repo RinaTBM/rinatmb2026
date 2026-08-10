@@ -8,9 +8,9 @@ export function SuccessPage() {
         <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-gold-100">
           <Check size={40} className="text-gold-600" />
         </div>
-        <h1 className="font-serif text-4xl text-ink-900 mb-3">Payment Successful</h1>
+        <h1 className="font-serif text-4xl text-ink-900 mb-3">Order update</h1>
         <p className="text-ink-500 mb-8">
-          Thank you for your order. Your payment has been processed securely through Stripe.
+          Thank you for your order. If you just submitted checkout, use your payment instructions page to complete your bank transfer.
         </p>
         <div className="card-lux p-6 text-left mb-6 space-y-4">
           <div className="flex items-center gap-3">

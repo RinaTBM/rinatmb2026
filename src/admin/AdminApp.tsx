@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Link, navigate, type Route } from '@/router';
 import { useAdminSession, readOAuthError } from '@/admin/useAdminSession';
 import { resolveAdminAccess, shouldRedirectToLogin, canRenderAdmin } from '@/lib/auth/adminAccess';
@@ -9,7 +9,6 @@ import {
   type CatalogProduct, type CatalogMembership,
 } from '@/lib/catalog/catalog';
 import { validateCatalog } from '@/lib/catalog/validate';
-import { buildSyncPlan, summarizePlan, emptyState } from '@/lib/catalog/syncPlan';
 import {
   loadPurchaseDiscountSettings,
   savePurchaseDiscountSettings,
@@ -139,7 +138,7 @@ const SECTIONS = [
   { id: 'future', label: 'Future Releases' },
   { id: 'pricing', label: 'Purchase Pricing' },
   { id: 'cancellations', label: 'Cancellation Requests' },
-  { id: 'sync', label: 'Stripe Sync' },
+  { id: 'sync', label: 'Legacy Sync' },
   { id: 'sync-history', label: 'Sync History' },
   { id: 'audit', label: 'Audit History' },
 ] as const;
@@ -536,37 +535,25 @@ function FutureReleases() {
 }
 
 function StripeSync({ canWrite, accessToken }: { canWrite: boolean; accessToken: string | null }) {
-  const plan = useMemo(() => buildSyncPlan('test', emptyState()), []);
-  const summary = summarizePlan(plan);
-  const [result, setResult] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-
-  const invoke = async (action: 'dry-run' | 'apply') => {
-    if (!supabase || !canWrite || !accessToken) { setResult('Connect Supabase and sign in as an admin to run against Stripe test mode.'); return; }
-    setBusy(true); setResult(null);
-    const { data, error } = await supabase.functions.invoke('stripe-sync', { body: { action } });
-    setBusy(false);
-    setResult(error ? `Error: ${error.message}` : JSON.stringify(data, null, 2));
-  };
-
+  void canWrite;
+  void accessToken;
   return (
     <div>
-      <h1 className="font-serif text-3xl text-ink-900 mb-2">Stripe Sync (TEST)</h1>
-      <p className="text-sm text-ink-500 mb-6">Preview the change plan, then sync to Stripe <strong>test</strong> mode. Live Stripe is never touched.</p>
-      <div className="flex gap-3 mb-6">
-        <button className="btn-outline" disabled={busy} onClick={() => invoke('dry-run')}>Preview Stripe Sync (dry-run)</button>
-        <button className="btn-primary" disabled={busy} onClick={() => invoke('apply')}>Sync to Stripe Test</button>
+      <h1 className="font-serif text-3xl text-ink-900 mb-2">Legacy Sync Tools</h1>
+      <div className="card-lux p-5 text-sm text-ink-600 space-y-3">
+        <p className="font-medium text-ink-900">Card checkout sync is retired</p>
+        <p>
+          The previous card payment processor is permanently unavailable for this project.
+          Sync actions that connected catalog prices to that processor are disabled.
+        </p>
+        <p>
+          Active storefront checkout uses electronic invoice + ACH / bank transfer (with domestic wire
+          as a secondary option). Automated bank payments may be added later after approval.
+        </p>
+        <p className="text-xs text-ink-400">
+          Legacy tooling remains in the repository for reference only and is not invoked from this screen.
+        </p>
       </div>
-      <div className="card-lux p-4 mb-6 text-sm">
-        <p className="font-medium text-ink-900 mb-2">Offline plan preview (first sync)</p>
-        <p className="text-ink-600">create_product: {summary.createProducts} · create_price: {summary.createPrices} · reuse_price: {summary.reusePrices} · archive_price: {summary.archivePrices} · total: {summary.total}</p>
-        <div className="mt-3 max-h-72 overflow-y-auto font-mono text-xs text-ink-600 space-y-0.5">
-          {plan.map((i, idx) => (
-            <div key={idx}>{i.op} — {i.entityType} {i.slug}{i.variantKey ? ` / ${i.variantKey}` : ''} {i.amountCents != null ? formatCents(i.amountCents) : ''}{i.billingInterval ? `/${i.billingInterval}` : ''}</div>
-          ))}
-        </div>
-      </div>
-      {result && <pre className="card-lux p-4 text-xs overflow-x-auto whitespace-pre-wrap">{result}</pre>}
     </div>
   );
 }

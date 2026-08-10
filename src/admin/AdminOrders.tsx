@@ -3,6 +3,7 @@ import { navigate } from '@/router';
 import { supabase } from '@/lib/supabaseClient';
 import {
   adminAddNote,
+  adminMarkPaymentReceived,
   adminSetTracking,
   adminUpdateFulfillmentStatus,
   getAdminOrderDetail,
@@ -24,6 +25,8 @@ import {
 import { labelShippingMethod } from '@/lib/orders/shipping';
 import { TRACKING_CARRIERS } from '@/lib/orders/tracking';
 import { nextAdminStatusAction } from '@/lib/orders/webhookOrder';
+import { PAYMENT_METHOD_LABELS, type PaymentMethod } from '@/lib/payments/paymentMethods';
+import { isPaymentReceived } from '@/lib/payments/fulfillmentGuards';
 
 function Badge({ tone, children }: { tone: 'green' | 'gray' | 'gold' | 'red'; children: ReactNode }) {
   const map = {
@@ -75,7 +78,7 @@ export function AdminOrdersList({ canWrite }: { canWrite: boolean }) {
     <div>
       <h1 className="font-serif text-3xl text-ink-900 mb-2">Orders</h1>
       <p className="text-sm text-ink-500 mb-6">
-        Manage fulfillment and tracking. Payment amounts and Stripe transactions are not edited here.
+        Manage fulfillment and tracking. Mark invoice payments received after bank funds are verified.
         Provider-directed prescriptions are fulfilled through Ageless Pharma Rx when applicable.
       </p>
       <button className="btn-outline mb-4" onClick={() => void load()} disabled={loading}>
@@ -150,6 +153,8 @@ export function AdminOrderDetail({
   const [trackingUrl, setTrackingUrl] = useState('');
   const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
+  const [paymentNote, setPaymentNote] = useState('');
+  const [confirmPaid, setConfirmPaid] = useState(false);
 
   const load = async () => {
     if (!supabase || !canWrite) {
@@ -218,6 +223,28 @@ export function AdminOrderDetail({
     }
   };
 
+  const markPaid = async () => {
+    if (!supabase || !order || !confirmPaid) {
+      setMsg('Confirm the amount and payment details before marking payment received.');
+      return;
+    }
+    setBusy(true);
+    setMsg(null);
+    const { error } = await adminMarkPaymentReceived(supabase, {
+      orderId: order.id,
+      adminIdentity: adminEmail || adminUserId || 'admin',
+      confirmedTotalCents: order.total_cents,
+      paymentNote,
+    });
+    setBusy(false);
+    if (error) setMsg(error);
+    else {
+      setConfirmPaid(false);
+      setPaymentNote('');
+      await load();
+    }
+  };
+
   if (!order) {
     return (
       <div>
@@ -236,7 +263,7 @@ export function AdminOrderDetail({
       </button>
       <h1 className="font-serif text-3xl text-ink-900 mb-2">{order.public_order_number}</h1>
       <p className="text-sm text-ink-500 mb-6">
-        Admin order management — do not change charge amounts, prescription dose, or Stripe transactions here.
+        Admin order management — do not change charge amounts or prescription dose here.
       </p>
       {msg && <p className="text-sm text-red-700 mb-4" role="alert">{msg}</p>}
 
@@ -247,13 +274,60 @@ export function AdminOrderDetail({
           <p className="text-ink-500">{order.customer_email || '—'}</p>
         </section>
 
-        <section className="card-lux p-5 space-y-2 text-sm">
+        <section className="card-lux p-5 space-y-3 text-sm">
           <h2 className="font-serif text-xl text-ink-900 mb-2">Payment</h2>
           <p>Status: {labelPaymentStatus(order.payment_status)}</p>
-          <p>Total: {formatCents(order.total_cents)}</p>
-          <p className="text-xs text-ink-400">
-            Stripe session linked (internal). Not shown to customers as the order number.
+          <p>
+            Method:{' '}
+            {order.payment_method
+              ? PAYMENT_METHOD_LABELS[order.payment_method as PaymentMethod] || order.payment_method
+              : '—'}
           </p>
+          <p>Invoice: {order.invoice_number || '—'}</p>
+          <p>Reference / memo: {order.payment_reference || order.public_order_number}</p>
+          <p>Expected amount: {formatCents(order.total_cents)}</p>
+          {order.paid_at ? (
+            <p className="text-xs text-ink-500">
+              Paid at {new Date(order.paid_at).toLocaleString()}
+              {order.paid_marked_by ? ` · marked by ${order.paid_marked_by}` : ''}
+            </p>
+          ) : null}
+          {!isPaymentReceived(order.payment_status) ? (
+            <div className="mt-3 space-y-2 rounded-xl border border-cream-300 bg-cream-50 p-3">
+              <p className="font-medium text-ink-900">Mark payment received</p>
+              <p className="text-xs text-ink-500">
+                Confirm funds for {order.public_order_number} ({formatCents(order.total_cents)}) via{' '}
+                {order.payment_method
+                  ? PAYMENT_METHOD_LABELS[order.payment_method as PaymentMethod] || order.payment_method
+                  : 'selected method'}{' '}
+                before continuing fulfillment.
+              </p>
+              <input
+                className="input-lux text-xs"
+                placeholder="Optional internal payment note / bank reference"
+                value={paymentNote}
+                onChange={e => setPaymentNote(e.target.value)}
+              />
+              <label className="flex items-start gap-2 text-xs text-ink-600">
+                <input
+                  type="checkbox"
+                  className="mt-0.5"
+                  checked={confirmPaid}
+                  onChange={e => setConfirmPaid(e.target.checked)}
+                />
+                I confirm the expected amount was received and verified.
+              </label>
+              <button
+                className="btn-primary !py-1 !px-3 text-xs"
+                disabled={busy || !confirmPaid || !canWrite}
+                onClick={() => void markPaid()}
+              >
+                Mark Payment Received
+              </button>
+            </div>
+          ) : (
+            <Badge tone="green">Payment received</Badge>
+          )}
         </section>
 
         <section className="card-lux p-5 text-sm lg:col-span-2">

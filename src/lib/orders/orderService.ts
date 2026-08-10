@@ -10,6 +10,8 @@ import type {
 import { filterCustomerVisibleEvents } from './orderStatus';
 import { resolveTrackingUrl } from './tracking';
 import type { OrderStatus } from './orderStatus';
+import { canAdvanceFulfillment } from '../payments/fulfillmentGuards';
+import { assertMarkPaymentReceived } from '../payments/manualInvoice';
 
 export async function listCustomerOrders(
   client: SupabaseClient,
@@ -166,6 +168,20 @@ export async function adminUpdateFulfillmentStatus(
   status: OrderStatus,
   createdBy: string,
 ): Promise<{ error: string | null }> {
+  const { data: existing, error: loadErr } = await client
+    .from('orders')
+    .select('payment_status')
+    .eq('id', orderId)
+    .maybeSingle();
+  if (loadErr) return { error: loadErr.message };
+  if (!existing) return { error: 'Order not found.' };
+
+  const guard = canAdvanceFulfillment({
+    paymentStatus: String((existing as { payment_status?: string }).payment_status ?? ''),
+    nextFulfillmentStatus: status,
+  });
+  if (!guard.ok) return { error: guard.error };
+
   const patch: Record<string, unknown> = {
     fulfillment_status: status,
   };
@@ -195,6 +211,73 @@ export async function adminUpdateFulfillmentStatus(
   return { error: null };
 }
 
+export async function adminMarkPaymentReceived(
+  client: SupabaseClient,
+  input: {
+    orderId: string;
+    adminIdentity: string;
+    confirmedTotalCents: number;
+    paymentNote?: string;
+  },
+): Promise<{ error: string | null }> {
+  const { data: order, error: loadErr } = await client
+    .from('orders')
+    .select('id, payment_status, total_cents, public_order_number')
+    .eq('id', input.orderId)
+    .maybeSingle();
+  if (loadErr) return { error: loadErr.message };
+  if (!order) return { error: 'Order not found.' };
+
+  const row = order as {
+    payment_status: string;
+    total_cents: number;
+    public_order_number: string;
+  };
+  const check = assertMarkPaymentReceived({
+    currentPaymentStatus: row.payment_status,
+    expectedTotalCents: row.total_cents,
+    confirmedTotalCents: input.confirmedTotalCents,
+  });
+  if (!check.ok) return { error: check.error };
+
+  const paidAt = new Date().toISOString();
+  const { error: oErr } = await client
+    .from('orders')
+    .update({
+      payment_status: 'paid',
+      paid_at: paidAt,
+      paid_marked_by: input.adminIdentity,
+      payment_admin_note: input.paymentNote?.trim() || null,
+      order_status: 'payment_confirmed',
+    })
+    .eq('id', input.orderId);
+  if (oErr) return { error: oErr.message };
+
+  await client
+    .from('order_fulfillment')
+    .update({ fulfillment_status: 'payment_confirmed' })
+    .eq('order_id', input.orderId);
+
+  const { error: eErr } = await client.from('order_status_events').insert({
+    order_id: input.orderId,
+    status: 'payment_confirmed',
+    customer_visible: true,
+    note: 'Payment marked received by admin',
+    created_by: input.adminIdentity,
+  });
+  if (eErr) return { error: eErr.message };
+
+  if (input.paymentNote?.trim()) {
+    await client.from('order_admin_notes').insert({
+      order_id: input.orderId,
+      note: `Payment received note: ${input.paymentNote.trim()}`,
+      created_by: null,
+    });
+  }
+
+  return { error: null };
+}
+
 export async function adminSetTracking(
   client: SupabaseClient,
   orderId: string,
@@ -206,6 +289,20 @@ export async function adminSetTracking(
     createdBy: string;
   },
 ): Promise<{ error: string | null }> {
+  if (input.markShipped !== false) {
+    const { data: existing, error: loadErr } = await client
+      .from('orders')
+      .select('payment_status')
+      .eq('id', orderId)
+      .maybeSingle();
+    if (loadErr) return { error: loadErr.message };
+    const guard = canAdvanceFulfillment({
+      paymentStatus: String((existing as { payment_status?: string } | null)?.payment_status ?? ''),
+      nextFulfillmentStatus: 'shipped',
+    });
+    if (!guard.ok) return { error: guard.error };
+  }
+
   const resolved = resolveTrackingUrl({
     carrier: input.carrier,
     trackingNumber: input.trackingNumber,

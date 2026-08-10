@@ -2,7 +2,7 @@
 
 ## Cursor Cloud specific instructions
 
-This is a **Vite + React + TypeScript** static e-commerce frontend ("My Bare Method"). It is a single-page app with a small custom hash/path router (`src/router.tsx`); there is no separate backend server to run for local development. Supabase Edge Functions (`supabase/functions/*`) plus Stripe are used only by the checkout "Place Order" action and are optional external services — the app runs and the full browse/add-to-cart/checkout-form flow works without them.
+This is a **Vite + React + TypeScript** static e-commerce frontend ("My Bare Method"). It is a single-page app with a small custom hash/path router (`src/router.tsx`); there is no separate backend server to run for local development. Supabase Edge Functions power order creation and payment-instruction retrieval. Active checkout uses **manual invoice + ACH/wire** (not Stripe). See `docs/project-status-2026.md`.
 
 ### Services / commands
 
@@ -16,21 +16,20 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 
 ### Non-obvious notes
 
-- Stripe checkout (the final "Place Order" button on `/checkout`) calls a Supabase Edge Function using `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (read from `import.meta.env`). Without a `.env` providing these, browsing/adding to cart/filling the checkout form all still work; only the final redirect-to-Stripe step will fail. Set those vars in a `.env` file only if you need to exercise real Stripe checkout.
+- Active checkout CTA is **Submit Order & View Payment Instructions**. It calls `create-invoice-order` (not `create-checkout-session`). Stripe is retired — see `docs/stripe-legacy-inventory.md`.
+- Without `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`, browse/cart/checkout form still work; only final order submit fails.
+- Bank ACH/wire details are **Edge Function secrets only** (`MANUAL_ACH_*` / `MANUAL_WIRE_*`). Never put them in `VITE_*` or frontend source.
 - Node 22 is used here and works with Vite 5.
 - Customer account portal (`/account/*`) uses the same browser Supabase anon client as checkout. Auth screens may show an “unavailable until configured” state when local env vars are missing; that does **not** mean Bolt/Supabase is unconfigured. Admin Google auth remains separate (`/admin/*`, `admins` / `is_admin()`). See `docs/customer-account-phase1.md`.
 
-### Checkout alignment (create-checkout-session)
+### Checkout (manual invoice launch)
 
-- Modern checkout maps Stripe TEST prices from `catalog_memberships.stripe_price_id_test` and `catalog_variants.stripe_price_id_test` after `stripe-sync`. It does **not** require legacy `public.stripe_products`.
-- Shared authorization logic lives in `src/lib/checkout/` (mirrored in the Deno edge function). Frontend must send `variantId` for undiscounted one-time mapped products.
-- Shipping is charged via Stripe Checkout `shipping_options` (Two-Day $30 / Next-Day $50 / free at $500+ merchandise). Browser `shipping_cents` is validated, not trusted. Provider Care–only carts do **not** get physical shipping.
-- Membership rates: Semaglutide **$149/mo**, Tirzepatide **$249/mo** (catalog + checkout constants).
-- Provider Care tax/fee: **1.8% only** on Provider Care eligible subtotal (`provider_care_tax_*` metadata + charged Stripe line item). Do **not** apply 1.8% to wellness, memberships, accessories, or shipping.
-- Accessory sales tax: configurable interim rate (`ACCESSORY_SALES_TAX_RATE`, currently 0.08) on accessory merchandise only. Stripe Tax remains the preferred long-term path — do **not** enable without explicit approval. Wellness products do not receive accessory sales tax.
-- Provider Care (`pc1`/`pc2`/`pc3`) is intentionally **not** in stripe-sync catalog tables; checkout charges approved fixed amounts via `price_data`.
-- Preserve webhook metadata keys (`client_reference_id`, `customer_user_id`, `shipping_cents`, `tax_cents`, `item_snapshots`, `provider_care_tax_*`, etc.). Do not modify `stripe-webhook` when changing checkout mapping.
-- TEST-only: reject live Stripe keys. Run `stripe-sync` apply before first mapped membership/product checkout after a fresh DB.
+- Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
+- Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
+- Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
+- Admin marks funds received via Orders UI / `mark-payment-received` after verification.
+- Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold).
+- Legacy Stripe Edge Functions remain in repo but must not be deployed for launch.
 
 ### Bolt Database / migration safety (permanent)
 

@@ -1,7 +1,15 @@
 /**
  * Customer-facing / operational order & fulfillment statuses (Phase 2).
- * No clinical statuses (e.g. Prescription Approved/Denied).
+ * Payment statuses are separate — see MANUAL_PAYMENT_STATUSES in payments/manualInvoice.
  */
+
+import {
+  ALL_PAYMENT_STATUSES,
+  isAnyPaymentStatus,
+  labelManualPaymentStatus,
+  MANUAL_PAYMENT_STATUS_LABELS,
+  type AnyPaymentStatus,
+} from '../payments/manualInvoice';
 
 export const ORDER_STATUSES = [
   'order_received',
@@ -18,15 +26,9 @@ export const ORDER_STATUSES = [
 
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
-export const PAYMENT_STATUSES = [
-  'pending',
-  'paid',
-  'failed',
-  'refunded',
-  'partially_refunded',
-] as const;
-
-export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
+/** Includes launch manual statuses + legacy Stripe-era values. */
+export const PAYMENT_STATUSES = ALL_PAYMENT_STATUSES;
+export type PaymentStatus = AnyPaymentStatus;
 
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   order_received: 'Order Received',
@@ -41,11 +43,10 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   refunded: 'Refunded',
 };
 
-export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
+export const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  ...MANUAL_PAYMENT_STATUS_LABELS,
   pending: 'Pending',
-  paid: 'Paid',
   failed: 'Failed',
-  refunded: 'Refunded',
   partially_refunded: 'Partially Refunded',
 };
 
@@ -93,7 +94,7 @@ export function isOrderStatus(value: string): value is OrderStatus {
 }
 
 export function isPaymentStatus(value: string): value is PaymentStatus {
-  return (PAYMENT_STATUSES as readonly string[]).includes(value);
+  return isAnyPaymentStatus(value);
 }
 
 export function labelOrderStatus(status: string): string {
@@ -102,8 +103,8 @@ export function labelOrderStatus(status: string): string {
 }
 
 export function labelPaymentStatus(status: string): string {
-  if (isPaymentStatus(status)) return PAYMENT_STATUS_LABELS[status];
-  return status;
+  if (PAYMENT_STATUS_LABELS[status]) return PAYMENT_STATUS_LABELS[status];
+  return labelManualPaymentStatus(status);
 }
 
 export function timelineForOrder(requiresProviderReview: boolean): OrderStatus[] {

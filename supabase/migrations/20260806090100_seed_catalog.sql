@@ -9,7 +9,7 @@ insert into public.catalog_products
    status, is_visible, launch_phase, campaign_theme, requires_provider_review, requires_prescription,
    requires_compliance_review, requires_pharmacy_verification)
 values ('semaglutide', 'p1', 'Semaglutide + B6 Injection', 'Semaglutide', 'Provider-directed weight management', 'weight-management', 'Injection',
-   'A provider-directed weight-management injection pairing semaglutide with vitamin B6.', 'Prescription weight-management option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_0000000081dc822f831112a2c1e5d3d9 copy.png', 'Amber injection vial for Semaglutide + B6, a provider-directed weight-management option', 14900, 'usd',
+   'A provider-directed weight-management injection pairing semaglutide with vitamin B6.', 'Prescription weight-management option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_0000000081dc822f831112a2c1e5d3d9 copy.png', 'Amber injection vial for Semaglutide + B6, a provider-directed weight-management option', 11900, 'usd',
    'active', true, null, null, true, true,
    true, true)
 on conflict (slug) do update set
@@ -24,7 +24,7 @@ on conflict (slug) do update set
 
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'semaglutide-v1', '1mg/1mg per mL, 2mL', 'Injection', '1mg/1mg per mL', '2mL', 14900, 'usd', 'one_time', null, true, 0
+select p.id, 'semaglutide-v1', '0.5mg, Vial', 'Injection', '0.5mg', 'Vial', 11900, 'usd', 'one_time', null, true, 0
 from public.catalog_products p where p.slug = 'semaglutide'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -32,7 +32,7 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'semaglutide-v2', '2mg/2mg per mL, 2mL', 'Injection', '2mg/2mg per mL', '2mL', 16900, 'usd', 'one_time', null, true, 1
+select p.id, 'semaglutide-v2', '1mg, Vial', 'Injection', '1mg', 'Vial', 13900, 'usd', 'one_time', null, true, 1
 from public.catalog_products p where p.slug = 'semaglutide'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -40,7 +40,15 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'semaglutide-v3', '5mg/2mg per mL, 2mL', 'Injection', '5mg/2mg per mL', '2mL', 19900, 'usd', 'one_time', null, true, 2
+select p.id, 'semaglutide-v3', '2.5mg, Vial', 'Injection', '2.5mg', 'Vial', 18902, 'usd', 'one_time', null, true, 2
+from public.catalog_products p where p.slug = 'semaglutide'
+on conflict (product_id, variant_key) do update set
+  display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
+  price_cents = excluded.price_cents, currency = excluded.currency, billing_type = excluded.billing_type,
+  billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
+insert into public.catalog_variants
+  (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
+select p.id, 'semaglutide-v4', '5mg, Vial', 'Injection', '5mg', 'Vial', 32900, 'usd', 'one_time', null, true, 3
 from public.catalog_products p where p.slug = 'semaglutide'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -53,7 +61,7 @@ insert into public.catalog_products
    status, is_visible, launch_phase, campaign_theme, requires_provider_review, requires_prescription,
    requires_compliance_review, requires_pharmacy_verification)
 values ('tirzepatide', 'p5', 'Tirzepatide + B6 Injection', 'Tirzepatide', 'Provider-directed weight management', 'weight-management', 'Injection',
-   'A provider-directed weight-management injection pairing tirzepatide with vitamin B6.', 'Prescription weight-management option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_0000000081dc822f831112a2c1e5d3d9 copy.png', 'Amber injection vial for Tirzepatide + B6, a provider-directed weight-management option', 19900, 'usd',
+   'A provider-directed weight-management injection pairing tirzepatide with vitamin B6.', 'Prescription weight-management option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_0000000081dc822f831112a2c1e5d3d9 copy.png', 'Amber injection vial for Tirzepatide + B6, a provider-directed weight-management option', 18900, 'usd',
    'active', true, null, null, true, true,
    true, true)
 on conflict (slug) do update set
@@ -68,7 +76,7 @@ on conflict (slug) do update set
 
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'tirzepatide-v1', '5mg/2mg per mL, 2mL', 'Injection', '5mg/2mg per mL', '2mL', 19900, 'usd', 'one_time', null, true, 0
+select p.id, 'tirzepatide-v1', '2.5mg, Vial', 'Injection', '2.5mg', 'Vial', 18900, 'usd', 'one_time', null, true, 0
 from public.catalog_products p where p.slug = 'tirzepatide'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -76,7 +84,7 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'tirzepatide-v2', '15mg/2mg per mL, 2mL', 'Injection', '15mg/2mg per mL', '2mL', 26900, 'usd', 'one_time', null, true, 1
+select p.id, 'tirzepatide-v2', '7.5mg, Vial', 'Injection', '7.5mg', 'Vial', 25899, 'usd', 'one_time', null, true, 1
 from public.catalog_products p where p.slug = 'tirzepatide'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -84,7 +92,7 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'tirzepatide-v3', '25mg/2mg per mL, 2mL', 'Injection', '25mg/2mg per mL', '2mL', 37900, 'usd', 'one_time', null, true, 2
+select p.id, 'tirzepatide-v3', '12.5mg, Vial', 'Injection', '12.5mg', 'Vial', 36900, 'usd', 'one_time', null, true, 2
 from public.catalog_products p where p.slug = 'tirzepatide'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -92,7 +100,7 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'tirzepatide-v4', '30mg/2mg per mL, 2mL', 'Injection', '30mg/2mg per mL', '2mL', 44900, 'usd', 'one_time', null, true, 3
+select p.id, 'tirzepatide-v4', '15mg, Vial', 'Injection', '15mg', 'Vial', 42900, 'usd', 'one_time', null, true, 3
 from public.catalog_products p where p.slug = 'tirzepatide'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -105,7 +113,7 @@ insert into public.catalog_products
    status, is_visible, launch_phase, campaign_theme, requires_provider_review, requires_prescription,
    requires_compliance_review, requires_pharmacy_verification)
 values ('estradiol-patch', 'p16', 'Estradiol Patch', 'Estradiol Patch', 'Provider-directed hormone therapy', 'womens-hormone-therapy', 'Patch',
-   'A transdermal estradiol patch prescribed as part of provider-directed hormone therapy.', 'Prescription option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.', '/images/products/patches.png', 'Estradiol transdermal patch, a provider-directed hormone therapy option', 11900, 'usd',
+   'A transdermal estradiol patch prescribed as part of provider-directed hormone therapy.', 'Prescription option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.', '/images/products/patches.png', 'Estradiol transdermal patch, a provider-directed hormone therapy option', 12900, 'usd',
    'active', true, null, null, true, true,
    true, true)
 on conflict (slug) do update set
@@ -120,7 +128,7 @@ on conflict (slug) do update set
 
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'estradiol-patch-v1', '0.025mg twice weekly, 8 patches', 'Patch', '0.025mg twice weekly', '8 patches', 11900, 'usd', 'one_time', null, true, 0
+select p.id, 'estradiol-patch-v1', '0.025mg twice weekly, 8 patches', 'Patch', '0.025mg twice weekly', '8 patches', 12900, 'usd', 'one_time', null, true, 0
 from public.catalog_products p where p.slug = 'estradiol-patch'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -128,7 +136,7 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'estradiol-patch-v2', '0.05mg twice weekly, 8 patches', 'Patch', '0.05mg twice weekly', '8 patches', 11900, 'usd', 'one_time', null, true, 1
+select p.id, 'estradiol-patch-v2', '0.05mg twice weekly, 8 patches', 'Patch', '0.05mg twice weekly', '8 patches', 13898, 'usd', 'one_time', null, true, 1
 from public.catalog_products p where p.slug = 'estradiol-patch'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -136,7 +144,7 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'estradiol-patch-v3', '0.1mg twice weekly, 8 patches', 'Patch', '0.1mg twice weekly', '8 patches', 13500, 'usd', 'one_time', null, true, 2
+select p.id, 'estradiol-patch-v3', '0.1mg twice weekly, 8 patches', 'Patch', '0.1mg twice weekly', '8 patches', 14900, 'usd', 'one_time', null, true, 2
 from public.catalog_products p where p.slug = 'estradiol-patch'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -149,7 +157,7 @@ insert into public.catalog_products
    status, is_visible, launch_phase, campaign_theme, requires_provider_review, requires_prescription,
    requires_compliance_review, requires_pharmacy_verification)
 values ('progesterone-capsules', 'p23', 'Progesterone Capsules', 'Progesterone', 'Provider-directed hormone therapy', 'womens-hormone-therapy', 'Capsule',
-   'Oral progesterone capsules prescribed as part of provider-directed hormone therapy.', 'Prescription option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_00000000e110822fb1dd36d19b3c9896 copy.png', 'Progesterone capsules bottle, a provider-directed hormone therapy option', 4900, 'usd',
+   'Oral progesterone capsules prescribed as part of provider-directed hormone therapy.', 'Prescription option available following licensed-provider evaluation. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_00000000e110822fb1dd36d19b3c9896 copy.png', 'Progesterone capsules bottle, a provider-directed hormone therapy option', 3900, 'usd',
    'active', true, null, null, true, true,
    true, true)
 on conflict (slug) do update set
@@ -164,7 +172,7 @@ on conflict (slug) do update set
 
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'progesterone-capsules-v1', '100mg, 30 capsules', 'Capsule', '100mg', '30 capsules', 4900, 'usd', 'one_time', null, true, 0
+select p.id, 'progesterone-capsules-v1', '100mg, 30 capsules', 'Capsule', '100mg', '30 capsules', 3900, 'usd', 'one_time', null, true, 0
 from public.catalog_products p where p.slug = 'progesterone-capsules'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -172,7 +180,7 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'progesterone-capsules-v2', '200mg, 30 capsules', 'Capsule', '200mg', '30 capsules', 6900, 'usd', 'one_time', null, true, 1
+select p.id, 'progesterone-capsules-v2', '200mg, 30 capsules', 'Capsule', '200mg', '30 capsules', 5900, 'usd', 'one_time', null, true, 1
 from public.catalog_products p where p.slug = 'progesterone-capsules'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -212,8 +220,8 @@ insert into public.catalog_products
    short_description, long_description, image_url, image_alt, starting_price_cents, currency,
    status, is_visible, launch_phase, campaign_theme, requires_provider_review, requires_prescription,
    requires_compliance_review, requires_pharmacy_verification)
-values ('nad-plus', 'p9', 'NAD+', 'NAD+', 'Provider-directed compounded formulation', 'longevity-cognitive', 'Nasal Spray, Injection',
-   'A provider-directed compounded NAD+ formulation, available in nasal spray and injection.', 'Provider-directed compounded formulation available only following eligibility review. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_0000000081dc822f831112a2c1e5d3d9 copy.png', 'NAD+ compounded formulation, provider-directed, available as nasal spray or injection', 14900, 'usd',
+values ('nad-plus', 'p9', 'NAD+ Injection', 'NAD+', 'Provider-directed compounded formulation', 'longevity-cognitive', 'Injection',
+   'A provider-directed compounded NAD+ injection formulation.', 'Provider-directed compounded formulation available only following eligibility review. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_0000000081dc822f831112a2c1e5d3d9 copy.png', 'NAD+ injection, a provider-directed compounded formulation', 19900, 'usd',
    'active', true, null, null, true, true,
    true, true)
 on conflict (slug) do update set
@@ -228,7 +236,7 @@ on conflict (slug) do update set
 
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'nad-plus-v1', 'Nasal Spray, 50mcg/50mcg per spray, 10mL', 'Nasal Spray', '50mcg/50mcg per spray', '10mL', 14900, 'usd', 'one_time', null, true, 0
+select p.id, 'nad-plus-v1', '100mg/mL · 500mg total, 5mL', 'Injection', '100mg/mL · 500mg total', '5mL', 19900, 'usd', 'one_time', null, true, 0
 from public.catalog_products p where p.slug = 'nad-plus'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -236,15 +244,7 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'nad-plus-v2', 'Injection, 100mg/mL, 5mL', 'Injection', '100mg/mL', '5mL', 19900, 'usd', 'one_time', null, true, 1
-from public.catalog_products p where p.slug = 'nad-plus'
-on conflict (product_id, variant_key) do update set
-  display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
-  price_cents = excluded.price_cents, currency = excluded.currency, billing_type = excluded.billing_type,
-  billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
-insert into public.catalog_variants
-  (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'nad-plus-v3', 'Injection, 100mg/mL, 10mL', 'Injection', '100mg/mL', '10mL', 21900, 'usd', 'one_time', null, true, 2
+select p.id, 'nad-plus-v2', '100mg/mL · 1,000mg total, 10mL', 'Injection', '100mg/mL · 1,000mg total', '10mL', 22900, 'usd', 'one_time', null, true, 1
 from public.catalog_products p where p.slug = 'nad-plus'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -313,7 +313,7 @@ insert into public.catalog_products
    status, is_visible, launch_phase, campaign_theme, requires_provider_review, requires_prescription,
    requires_compliance_review, requires_pharmacy_verification)
 values ('selank-semax-nasal-spray', 'p68', 'Selank + Semax Blend Nasal Spray', 'Selank + Semax Blend', 'Provider-directed compounded formulation', 'longevity-cognitive', 'Nasal Spray',
-   'A provider-directed compounded Selank and Semax blend nasal spray, available only after eligibility review.', 'Provider-directed compounded formulation available only following eligibility review. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.', '/images/products/nasal-spray.png', 'Selank and Semax blend nasal spray, a provider-directed compounded formulation', 14900, 'usd',
+   'A provider-directed compounded Selank and Semax blend nasal spray, available only after eligibility review.', 'Provider-directed compounded formulation available only following eligibility review. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.', '/images/products/nasal-spray.png', 'Selank and Semax blend nasal spray, a provider-directed compounded formulation', 16900, 'usd',
    'active', true, null, null, true, true,
    true, true)
 on conflict (slug) do update set
@@ -328,7 +328,7 @@ on conflict (slug) do update set
 
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'selank-semax-nasal-spray-v1', '50mcg/50mcg per spray, 10mL', 'Nasal Spray', '50mcg/50mcg per spray', '10mL', 14900, 'usd', 'one_time', null, true, 0
+select p.id, 'selank-semax-nasal-spray-v1', '50mcg/50mcg per spray, 10mL', 'Nasal Spray', '50mcg/50mcg per spray', '10mL', 16900, 'usd', 'one_time', null, true, 0
 from public.catalog_products p where p.slug = 'selank-semax-nasal-spray'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -340,8 +340,8 @@ insert into public.catalog_products
    short_description, long_description, image_url, image_alt, starting_price_cents, currency,
    status, is_visible, launch_phase, campaign_theme, requires_provider_review, requires_prescription,
    requires_compliance_review, requires_pharmacy_verification)
-values ('bpc-157-tb-500', 'p41', 'BPC-157/TB-500 Blend', 'BPC-157/TB-500', 'Wolverine Blend', 'recovery-performance', 'Capsule, Injection',
-   'A provider-directed compounded BPC-157/TB-500 blend, available in capsules and injection.', 'Provider-directed compounded formulation available only following eligibility review. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_0000000081dc822f831112a2c1e5d3d9 copy.png', 'BPC-157/TB-500 blend, a provider-directed compounded formulation in capsule and injection forms', 9900, 'usd',
+values ('bpc-157-tb-500', 'p41', 'Wolverine: BPC-157/TB-500', 'Wolverine', 'BPC-157/TB-500 Blend', 'recovery-performance', 'Capsule, Injection',
+   'A provider-directed compounded BPC-157/TB-500 blend, available in capsules and injection.', 'Provider-directed compounded formulation available only following eligibility review. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.', '/images/products/file_0000000081dc822f831112a2c1e5d3d9 copy.png', 'Wolverine BPC-157/TB-500 blend, a provider-directed compounded formulation in capsule and injection forms', 9900, 'usd',
    'active', true, null, null, true, true,
    true, true)
 on conflict (slug) do update set
@@ -356,7 +356,7 @@ on conflict (slug) do update set
 
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'bpc-157-tb-500-v1', 'Capsule, 500mcg/500mcg per capsule, 30 capsules', 'Capsule', '500mcg/500mcg per capsule', '30 capsules', 9900, 'usd', 'one_time', null, true, 0
+select p.id, 'bpc-157-tb-500-v1', 'Capsule, Blend, Capsule', 'Capsule', 'Blend', 'Capsule', 9900, 'usd', 'one_time', null, true, 0
 from public.catalog_products p where p.slug = 'bpc-157-tb-500'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -364,7 +364,7 @@ on conflict (product_id, variant_key) do update set
   billing_interval = excluded.billing_interval, is_active = excluded.is_active, sort_order = excluded.sort_order;
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'bpc-157-tb-500-v2', 'Injection, 1.66mg/3.33mg per mL, 3mL', 'Injection', '1.66mg/3.33mg per mL', '3mL', 19900, 'usd', 'one_time', null, true, 1
+select p.id, 'bpc-157-tb-500-v2', 'Injection, Blend, Injection', 'Injection', 'Blend', 'Injection', 19900, 'usd', 'one_time', null, true, 1
 from public.catalog_products p where p.slug = 'bpc-157-tb-500'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -421,7 +421,7 @@ insert into public.catalog_products
    status, is_visible, launch_phase, campaign_theme, requires_provider_review, requires_prescription,
    requires_compliance_review, requires_pharmacy_verification)
 values ('minoxidil-topical', 'p70', 'Minoxidil Combination Topical Formula', 'Minoxidil Topical', 'Prescription hair care', 'prescription-skin-hair', 'Topical Solution',
-   'A compounded topical formula featuring minoxidil, personalized by the prescribing provider and dispensing pharmacy.', 'Prescription hair-care option available following licensed-provider review. Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.', '/images/products/ChatGPT_Image_Aug_3,_2026,_04_14_54_PM.png', 'Minoxidil combination topical formula, a prescription hair-care treatment', 11900, 'usd',
+   'A compounded topical formula featuring minoxidil, personalized by the prescribing provider and dispensing pharmacy.', 'Prescription hair-care option available following licensed-provider review. Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.', '/images/products/ChatGPT_Image_Aug_3,_2026,_04_14_54_PM.png', 'Minoxidil combination topical formula, a prescription hair-care treatment', 12900, 'usd',
    'active', true, null, null, true, true,
    true, true)
 on conflict (slug) do update set
@@ -436,7 +436,7 @@ on conflict (slug) do update set
 
 insert into public.catalog_variants
   (product_id, variant_key, display_name, dosage_form, strength, size, price_cents, currency, billing_type, billing_interval, is_active, sort_order)
-select p.id, 'minoxidil-topical-v1', '1% plus pharmacy-selected actives, 60mL', 'Topical Solution', '1% plus pharmacy-selected actives', '60mL', 11900, 'usd', 'one_time', null, true, 0
+select p.id, 'minoxidil-topical-v1', 'Combination formula, Bottle', 'Topical Solution', 'Combination formula', 'Bottle', 12900, 'usd', 'one_time', null, true, 0
 from public.catalog_products p where p.slug = 'minoxidil-topical'
 on conflict (product_id, variant_key) do update set
   display_name = excluded.display_name, dosage_form = excluded.dosage_form, strength = excluded.strength, size = excluded.size,
@@ -531,8 +531,8 @@ insert into public.catalog_memberships
   (slug, app_product_id, display_name, brand_name, short_description, long_description, monthly_price_cents, currency,
    billing_interval, initial_term_months, locked_rate, included_formulations, maximum_included_formulation,
    provider_review_required, prescription_guaranteed, shipping_included, status, is_visible)
-values ('semaglutide-membership', 'm1', 'Semaglutide Membership', 'Bare Balance', 'One membership. One predictable monthly price. Provider-directed Semaglutide + B6 treatment.', 'A provider-guided Semaglutide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program while you remain continuously enrolled.', 19900, 'usd',
-   'month', 3, true, '["1mg/1mg per mL, 2mL","2mg/2mg per mL, 2mL","5mg/2mg per mL, 2mL"]'::jsonb, '5mg/2mg per mL, 2mL',
+values ('semaglutide-membership', 'm1', 'Semaglutide Membership', 'Bare Balance', 'One membership. One predictable monthly price. Provider-directed Semaglutide + B6 treatment.', 'A provider-guided Semaglutide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program while you remain continuously enrolled.', 14900, 'usd',
+   'month', 3, true, '["0.5mg","1mg","2.5mg","5mg"]'::jsonb, '5mg',
    true, false, false, 'active', true)
 on conflict (slug) do update set
   app_product_id = excluded.app_product_id, display_name = excluded.display_name, brand_name = excluded.brand_name,
@@ -547,8 +547,8 @@ insert into public.catalog_memberships
   (slug, app_product_id, display_name, brand_name, short_description, long_description, monthly_price_cents, currency,
    billing_interval, initial_term_months, locked_rate, included_formulations, maximum_included_formulation,
    provider_review_required, prescription_guaranteed, shipping_included, status, is_visible)
-values ('tirzepatide-membership', 'm2', 'Tirzepatide Membership', 'Bare Momentum', 'One predictable monthly rate through the included program maximum. Provider-directed Tirzepatide + B6 treatment.', 'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 25mg/2mg per mL, 2mL while you remain continuously enrolled.', 24900, 'usd',
-   'month', 3, true, '["5mg/2mg per mL, 2mL","15mg/2mg per mL, 2mL","25mg/2mg per mL, 2mL"]'::jsonb, '25mg/2mg per mL, 2mL',
+values ('tirzepatide-membership', 'm2', 'Tirzepatide Membership', 'Bare Momentum', 'One predictable monthly rate through the included program maximum. Provider-directed Tirzepatide + B6 treatment.', 'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 15mg while you remain continuously enrolled.', 24900, 'usd',
+   'month', 3, true, '["2.5mg","7.5mg","12.5mg","15mg"]'::jsonb, '15mg',
    true, false, false, 'active', true)
 on conflict (slug) do update set
   app_product_id = excluded.app_product_id, display_name = excluded.display_name, brand_name = excluded.brand_name,

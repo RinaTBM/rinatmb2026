@@ -190,10 +190,10 @@ describe('accessory checkout authorization (server-side price math)', () => {
 });
 
 describe('unchanged membership / medication / auto-refill pricing', () => {
-  it('Semaglutide flat membership remains $199', () => {
-    expect(SEMAGLUTIDE_MEMBERSHIP_MONTHLY).toBe(199);
+  it('Semaglutide flat membership remains $149', () => {
+    expect(SEMAGLUTIDE_MEMBERSHIP_MONTHLY).toBe(149);
     const m = memberships.find(x => x.slug === 'semaglutide-membership')!;
-    expect(m.monthlyPrice).toBe(199);
+    expect(m.monthlyPrice).toBe(149);
   });
 
   it('Tirzepatide flat membership remains $249', () => {

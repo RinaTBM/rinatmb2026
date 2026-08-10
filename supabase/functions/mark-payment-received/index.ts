@@ -43,6 +43,7 @@ Deno.serve(async (req) => {
     const userId = user?.id as string | undefined;
     if (!userId) return json({ error: "Invalid admin session." }, 401);
 
+    // public.is_admin() takes no args and uses auth.uid() (SECURITY DEFINER).
     const adminRes = await fetch(`${supabaseUrl}/rest/v1/rpc/is_admin`, {
       method: "POST",
       headers: {
@@ -50,7 +51,7 @@ Deno.serve(async (req) => {
         apikey: anonKey,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ uid: userId }),
+      body: "{}",
     });
     const isAdmin = adminRes.ok ? await adminRes.json() : false;
     if (!isAdmin) return json({ error: "Admin authorization required." }, 403);

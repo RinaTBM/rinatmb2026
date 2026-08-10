@@ -28,6 +28,10 @@ import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { TermsPage } from '@/pages/TermsPage';
 import { ConcernPage } from '@/pages/ConcernPage';
 import { ShippingPolicyPage } from '@/pages/ShippingPolicyPage';
+import { BUILD_VERSION } from '@/buildVersion';
+
+// Keep the deploy marker in the customer bundle for staging sync verification (not rendered).
+void BUILD_VERSION;
 import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { MembershipTermsPage } from '@/pages/MembershipTermsPage';

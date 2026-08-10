@@ -10,15 +10,14 @@ Do **not** use staging URLs for Scriptful. Do **not** include hidden/future/inac
 
 ## Active product count
 
-**28**
+**27**
 
 ## Product links
 
 | Product | Category | Slug | Production URL | Active/Visible | Purchase modes | Formulation/dose requirements |
 |---|---|---|---|---|---|---|
-| Bare Elite Wellness | memberships | `elite-wellness-membership` | https://mybaremethod.com/product/elite-wellness-membership | active=true; visible=true | membership_program | Requested dose/formulation required before join/checkout |
-| Semaglutide Membership | memberships | `semaglutide-membership` | https://mybaremethod.com/product/semaglutide-membership | active=true; visible=true | membership_program | Requested dose/formulation required before join/checkout |
-| Tirzepatide Membership | memberships | `tirzepatide-membership` | https://mybaremethod.com/product/tirzepatide-membership | active=true; visible=true | membership_program | Requested dose/formulation required before join/checkout |
+| Semaglutide Membership | memberships | `semaglutide-membership` | https://mybaremethod.com/product/semaglutide-membership | status=active; visible=true | membership_program | Requested dose/formulation required before join/checkout |
+| Tirzepatide Membership | memberships | `tirzepatide-membership` | https://mybaremethod.com/product/tirzepatide-membership | status=active; visible=true | membership_program | Requested dose/formulation required before join/checkout |
 | Semaglutide + B6 Injection | weight-management | `semaglutide` | https://mybaremethod.com/product/semaglutide | status=active; visible=true | one_time | Variant/dose selection on product page |
 | Tirzepatide + B6 Injection | weight-management | `tirzepatide` | https://mybaremethod.com/product/tirzepatide | status=active; visible=true | one_time | Variant/dose selection on product page |
 | Estradiol Patch | womens-hormone-therapy | `estradiol-patch` | https://mybaremethod.com/product/estradiol-patch | status=active; visible=true | one_time | Variant/dose selection on product page |

@@ -6,10 +6,41 @@ const faqCategories = [
   {
     title: 'Orders & Shipping',
     faqs: [
-      { q: 'How long does shipping take?', a: 'Most orders are processed within 1–3 business days after provider review and approval, when applicable. Shipping transit time begins after processing is complete. You will receive a tracking number by email once your order ships.' },
-      { q: 'Do you offer free shipping?', a: 'Orders of $500 or more are eligible for free shipping. We currently offer two shipping options: Two-Day Shipping — $30 and Next-Day Shipping — $50. Most orders are processed within 1–3 business days after provider review and approval, when applicable. Shipping transit time begins after processing is complete.' },
+      {
+        q: 'How long does shipping take?',
+        a: 'Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Most eligible orders are then processed within 1–3 business days. Shipping transit time begins after processing is complete. You will receive a tracking number by email once your order ships.',
+      },
+      {
+        q: 'Do you offer free shipping?',
+        a: 'Orders of $500 or more in eligible ordinary merchandise are eligible for free shipping. We currently offer two shipping options: Two-Day Shipping — $30 and Next-Day Shipping — $50. Standard Shipping is not offered.',
+      },
       { q: 'Can I track my order?', a: 'Absolutely. You can track your order anytime from the Track Order page using your order number, or from your account dashboard.' },
       { q: 'Do you ship internationally?', a: 'We currently ship within the United States. International shipping is coming soon.' },
+    ],
+  },
+  {
+    title: 'Payment',
+    faqs: [
+      {
+        q: 'How do I pay?',
+        a: 'At checkout, select ACH / Bank Transfer (recommended) or Domestic Wire Transfer. After submitting your order, you receive an electronic invoice and secure instructions to complete payment. No payment is withdrawn from your bank when you submit your order.',
+      },
+      {
+        q: 'Is my bank automatically charged?',
+        a: 'No. Until automated bank payments are enabled, you initiate each payment using the invoice instructions. Your bank is not charged automatically at checkout.',
+      },
+      {
+        q: 'When is my order considered paid?',
+        a: 'Orders remain Awaiting Payment until funds are received and verified by My Bare Method. Only then is the order marked Paid.',
+      },
+      {
+        q: 'What reference should I include with my bank transfer?',
+        a: 'Include your order or payment reference number in the bank memo/reference field so we can match your payment to your order. The reference appears on your electronic invoice and payment instructions page.',
+      },
+      {
+        q: 'How do memberships work during manual bank payments?',
+        a: 'Membership pricing is billed per period ($149/month Semaglutide; $249/month Tirzepatide). Until automated bank payments are enabled, you will receive a new invoice for each billing period and payment must be completed using the provided bank-transfer instructions.',
+      },
     ],
   },
   {
@@ -21,11 +52,11 @@ const faqCategories = [
       },
       {
         q: 'How does Auto-Refill & Save work?',
-        a: 'Auto-Refill & Save gives 10% off eligible wellness products with convenient monthly deliveries. No membership is required. Provider appointments, accessories, shipping, and taxes are never discounted.',
+        a: 'Auto-Refill saves 10% on eligible products. Until automated bank payments are enabled, each refill period requires payment using the invoice instructions provided. Provider appointments, accessories, shipping, and taxes are never discounted by Auto-Refill.',
       },
       {
         q: 'Can I pause or cancel Auto-Refill?',
-        a: `${CANCELLATION_POLICY_COPY} Cancellation is a request reviewed by our team — it is not an automatic Stripe billing rule, and submitting a request does not by itself cancel billing until processed.`,
+        a: `${CANCELLATION_POLICY_COPY} Cancellation is a request reviewed by our team. Submitting a request does not by itself end the next billing period until it is processed.`,
       },
       {
         q: 'Can I change my Auto-Refill products myself?',
@@ -37,18 +68,18 @@ const faqCategories = [
     title: 'Telemedicine & Provider Care',
     faqs: [
       { q: 'What is Provider Care?', a: 'Provider Care includes services such as the Initial Provider Visit, Follow-Up Visit, and Laboratory Review. These involve scheduling and/or medical intake and review by a licensed provider when applicable. Provider Care is never discounted by membership or Auto-Refill savings.' },
-      { q: 'What happens after I order a Provider Care product?', a: 'You will receive an email link to complete a secure medical intake when required. A licensed provider reviews your case within 2 business days.' },
-      { q: 'What if I am not approved?', a: 'If a licensed provider determines that a requested treatment is not medically appropriate, the provider-directed product will not be fulfilled. Eligible charges for the unapproved product will be refunded in accordance with our refund policy. Refunds are typically reflected within 3–10 business days, depending on your financial institution.' },
+      { q: 'What happens after I order a Provider Care product?', a: 'After payment has been received and verified, you will receive an email link to complete a secure medical intake when required. A licensed provider reviews your case within 2 business days.' },
+      { q: 'What if I am not approved?', a: 'If a licensed provider determines that a requested treatment is not medically appropriate, the provider-directed product will not be fulfilled. If payment for that product has already been received and verified, eligible charges will be refunded in accordance with our refund policy.' },
       { q: 'Do you offer telemedicine appointments?', a: 'Yes. We offer telemedicine services via Zoom. Appointments are booked directly on our website by the patient.' },
       { q: 'Which states or jurisdictions do you serve?', a: 'Our Medical Director is a licensed physician in all states, so our telemedicine services are available nationwide.' },
       { q: 'Who is your Medical Director?', a: 'Our Medical Director is Dr. Jerry J. Cattelane Jr., D.O. He provides clinical leadership and supports the provider-directed wellness programs available through My Bare Method. Treatment decisions are made by the licensed provider responsible for your care.' },
-      { q: 'Which pharmacy fulfills your prescriptions?', a: 'Provider-approved prescriptions are fulfilled through Ageless Pharma Rx, our partnered pharmacy. Fulfillment begins only after a licensed provider determines treatment is appropriate and any required review is complete.' },
+      { q: 'Which pharmacy fulfills your prescriptions?', a: 'Provider-approved prescriptions are fulfilled through Ageless Pharma Rx, our partnered pharmacy. Fulfillment begins only after payment has been received and verified and a licensed provider determines treatment is appropriate and any required review is complete.' },
     ],
   },
   {
     title: 'Returns & Refunds',
     faqs: [
-      { q: 'What is your return policy?', a: 'All sales are final. No refunds or exchanges are issued after an order has been processed or shipped. Because many products are compounded, customized, or temperature-sensitive, returns are not accepted.' },
+      { q: 'What is your return policy?', a: 'All sales are final once payment has been received and verified and an order has been processed or shipped. Unpaid orders may be cancelled without a refund transaction because payment has not been received. Because many products are compounded, customized, or temperature-sensitive, returns are not accepted.' },
       { q: 'What if my order arrives damaged or is lost in transit?', a: 'If your order arrives damaged, is lost in transit, or arrives after the expected delivery window due to carrier delays that make the product unusable, we will replace the item at no additional cost after verification. You must notify us within 48 hours of delivery (or the expected delivery date for lost shipments) and provide photos of any damaged items or packaging when applicable.' },
       { q: 'How do I request a replacement?', a: 'Contact our support team with your order number within 48 hours. Include photos of the damaged item or packaging if applicable. We verify the claim and ship your replacement at no additional cost.' },
       { q: 'Where can I read the full policy?', a: 'The full Refund & Replacement Policy is available on our Refund Policy page. It is also displayed during checkout and included in your order confirmation email.' },
@@ -75,7 +106,7 @@ const faqCategories = [
       },
       {
         q: 'How do I cancel a membership?',
-        a: 'Submit a cancellation request from your account, or use the channels listed in Membership & Cancellation Terms. Requests are reviewed and processed by our team. Cancellation is not an automatic self-serve Stripe action from the storefront.',
+        a: 'Submit a cancellation request from your account, or use the channels listed in Membership & Cancellation Terms. Requests are reviewed and processed by our team.',
       },
     ],
   },
@@ -106,7 +137,7 @@ export function FaqPage() {
         <div className="container-lux max-w-2xl">
           <p className="eyebrow mb-3">We are here to help</p>
           <h1 className="font-serif text-5xl md:text-6xl text-ink-900 mb-4">Frequently Asked</h1>
-          <p className="text-ink-500 mb-8">Find answers to common questions about orders, purchasing options, Provider Care, memberships, and more.</p>
+          <p className="text-ink-500 mb-8">Find answers to common questions about orders, payment, purchasing options, Provider Care, memberships, and more.</p>
           <div className="relative max-w-md mx-auto">
             <input
               type="text"

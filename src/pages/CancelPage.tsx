@@ -10,7 +10,7 @@ export function CancelPage() {
         </div>
         <h1 className="font-serif text-4xl text-ink-900 mb-3">Checkout Cancelled</h1>
         <p className="text-ink-500 mb-8">
-          Your payment was not completed. No charge has been made to your card.
+          Your order was not completed and no payment has been recorded.
         </p>
         <p className="text-ink-500 mb-8">
           Your cart has been saved so you can try again whenever you are ready.

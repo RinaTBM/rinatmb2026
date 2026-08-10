@@ -1,4 +1,4 @@
-import { visibleProducts, memberships } from '../src/data/products.ts';
+import { visibleProducts, visibleMemberships } from '../src/data/products.ts';
 import { writeFileSync } from 'node:fs';
 
 type Row = {
@@ -38,8 +38,7 @@ function formulationReq(p: Record<string, unknown>): string {
 const rows: Row[] = [];
 const seen = new Set<string>();
 
-for (const m of memberships as Array<Record<string, unknown>>) {
-  if (m.active === false || m.visible === false) continue;
+for (const m of visibleMemberships as Array<Record<string, unknown>>) {
   const slug = String(m.slug || '');
   if (!slug || seen.has(slug)) continue;
   seen.add(slug);
@@ -48,7 +47,7 @@ for (const m of memberships as Array<Record<string, unknown>>) {
     category: 'memberships',
     slug,
     url: `https://mybaremethod.com/product/${slug}`,
-    activeVisible: 'active=true; visible=true',
+    activeVisible: 'status=active; visible=true',
     modes: 'membership_program',
     formulation: 'Requested dose/formulation required before join/checkout',
   });

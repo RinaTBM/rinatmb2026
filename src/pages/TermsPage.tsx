@@ -6,7 +6,7 @@ export function TermsPage() {
       eyebrow="Terms"
       title="Terms & Conditions"
       intro="These terms govern your use of our website and products. Please read them carefully before placing an order."
-      lastUpdated="July 29, 2026"
+      lastUpdated="August 10, 2026"
       sections={[
         {
           id: 'agreement',
@@ -67,25 +67,48 @@ export function TermsPage() {
               <p>
                 All prices are listed in U.S. dollars and are subject to change without notice. We strive for accuracy
                 but may occasionally display incorrect pricing. In the event of a pricing error, we may cancel your
-                order and issue a full refund. Some products, including Provider Care therapies, have variable pricing
-                determined after medical intake and provider review.
+                order and, if payment has already been received and verified, issue a refund of applicable paid amounts.
+                Some products, including Provider Care therapies, have variable pricing determined after medical intake
+                and provider review.
               </p>
             </>
           ),
         },
         {
-          id: 'subscriptions',
-          title: 'Subscriptions and Recurring Billing',
+          id: 'payment',
+          title: 'Payment Terms',
           body: (
             <>
               <p>
-                Certain products are available as subscriptions. By selecting a subscription, you authorize us to charge
-                your payment method on a recurring basis (monthly or as otherwise stated at checkout) until you cancel.
+                At checkout, you select ACH / Bank Transfer (primary) or Domestic Wire Transfer (secondary). After you
+                submit your order, you receive an electronic invoice and secure instructions to complete payment. No
+                payment is withdrawn from your bank when you submit your order.
               </p>
               <LegalBulletList items={[
-                'You may cancel a subscription at any time from your account or by contacting support. Cancellation takes effect at the end of the current billing cycle.',
-                'We may change subscription pricing with at least 30 days notice. Existing subscriptions are honored at the original price until the next renewal.',
-                'Failed payments may result in suspension of service until payment is resolved.',
+                'You initiate the bank transfer using the payment instructions provided after order submission.',
+                'Orders remain Awaiting Payment until funds are received and verified by My Bare Method.',
+                'Order submission alone does not constitute payment.',
+                'Include your order or payment reference number in the bank memo/reference field when sending funds.',
+                'Processing and fulfillment do not begin solely because checkout was submitted. Processing begins after payment has been received and verified and, where applicable, required provider review has been completed.',
+              ]} />
+            </>
+          ),
+        },
+        {
+          id: 'subscriptions',
+          title: 'Memberships, Auto-Refill, and Recurring Periods',
+          body: (
+            <>
+              <p>
+                Certain products are available as memberships or Auto-Refill. Membership and Auto-Refill pricing is
+                billed per period. Until automated bank payments are enabled, you will receive a new invoice for each
+                billing period and payment must be completed using the provided bank-transfer instructions. Your bank
+                is not charged automatically when you submit an order.
+              </p>
+              <LegalBulletList items={[
+                'You may submit a cancellation request from your account or by contacting support. Requests are reviewed by our team and do not reverse a payment that has already been received, or stop an order that has already entered provider, pharmacy, or fulfillment processing.',
+                'We may change subscription or membership pricing with at least 30 days notice when required.',
+                'Unpaid periods may result in pause or suspension of benefits until payment is resolved.',
               ]} />
             </>
           ),
@@ -96,8 +119,8 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                Membership plans include discounted pricing, priority support, and other benefits. Memberships are
-                billed on a recurring monthly basis.
+                Membership plans include discounted pricing, priority support, and other benefits. Membership pricing
+                is billed per period using the payment instructions provided with each invoice.
               </p>
               <p>
                 <strong>3-Month Commitment:</strong> By purchasing a membership, you commit to a minimum of three (3)
@@ -118,14 +141,16 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                Orders are processed within 1–2 business days. Shipping times vary by carrier and destination.
+                Processing and shipping timelines begin only after payment has been received and verified and any
+                required provider review/approval has been completed. Shipping times vary by carrier and destination.
                 Estimated delivery windows are provided at checkout and in your order confirmation. We are not liable
                 for carrier delays beyond our control.
               </p>
               <p>
                 Provider Care and therapy products require medical intake and provider approval before processing.
                 Fulfillment occurs only after a licensed provider approves the order. If a provider does not approve
-                the therapy, a full refund is issued.
+                the therapy after payment has been received, eligible paid amounts for the unapproved product are
+                refunded in accordance with our Refund Policy.
               </p>
             </>
           ),

@@ -249,9 +249,9 @@ export function buildPurchaseOptions(input: {
       label: 'Auto-Refill & Save',
       badge: `Save ${shownPercent}%`,
       description: isActiveMember && isMemberPricingEligible(product)
-        ? 'Convenient monthly deliveries at your Active Member price. Discounts do not stack.'
-        : 'Receive convenient monthly deliveries while saving on every eligible refill.',
-      cta: 'Subscribe & Save',
+        ? 'Convenient monthly deliveries at your Active Member price. Discounts do not stack. Until automated bank payments are enabled, each refill period requires payment using the invoice instructions provided.'
+        : 'Convenient monthly deliveries with 10% savings on eligible products. Until automated bank payments are enabled, each refill period requires payment using the invoice instructions provided.',
+      cta: 'Auto-Refill & Save',
       standardPrice,
       finalPrice: priced.finalPrice,
       discountPercent: priced.discountPercent,

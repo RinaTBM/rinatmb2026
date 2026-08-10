@@ -4,28 +4,14 @@ import { LegalBulletList } from '@/components/LegalPageLayout';
 
 const detailSections = [
   {
-    id: 'unpaid-orders',
-    title: 'Unpaid Orders',
-    body: (
-      <>
-        <p>
-          Orders remain Awaiting Payment until funds are received and verified. An unpaid order may be cancelled
-          without a refund transaction because payment has not been received. Order submission alone does not
-          constitute payment.
-        </p>
-      </>
-    ),
-  },
-  {
     id: 'final-sales',
     title: 'Final Sales',
     body: (
       <>
         <p>
-          All sales are final once payment has been received and verified and the order has been processed or shipped.
-          No returns or refunds are issued after an order has been processed or shipped, except where this policy
-          expressly provides otherwise. Because many of our products are compounded, customized, or
-          temperature-sensitive, they cannot be restocked or resold once they leave our facility.
+          All sales are final. No returns or refunds are issued after an order has been processed or shipped. Because
+          many of our products are compounded, customized, or temperature-sensitive, they cannot be restocked or
+          resold once they leave our facility.
         </p>
       </>
     ),
@@ -40,13 +26,8 @@ const detailSections = [
           'Compounded medications and therapies.',
           'Customized or personalized products.',
           'Temperature-sensitive items that have left our controlled storage.',
-          'Subscription and membership fees after the applicable billing period has begun and payment has been received.',
+          'Subscription and membership fees after the billing cycle has begun.',
         ]} />
-        <p>
-          If funds have already been received and verified, any refund that is approved under this policy follows the
-          applicable refund/cancellation rules and is returned by bank transfer or another method we specify — not to a
-          card, because card checkout is not an active payment method.
-        </p>
       </>
     ),
   },
@@ -88,10 +69,8 @@ const detailSections = [
     body: (
       <>
         <p>
-          If a licensed provider does not approve a requested therapy after medical intake, and payment for that
-          product has already been received and verified, a full refund of the applicable paid amount for that product
-          is issued. This is the primary circumstance under which a refund is available for provider-directed therapy
-          products.
+          If a licensed provider does not approve a requested therapy after medical intake, a full refund is issued
+          for that product. This is the only circumstance under which a refund is available.
         </p>
       </>
     ),
@@ -125,7 +104,7 @@ export function RefundPolicyPage() {
             We want you to feel confident about every order. Please review our policy carefully before completing your
             purchase.
           </p>
-          <p className="text-xs text-ink-400">Last updated: August 10, 2026</p>
+          <p className="text-xs text-ink-400">Last updated: July 29, 2026</p>
         </div>
       </section>
 

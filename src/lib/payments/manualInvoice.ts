@@ -49,7 +49,7 @@ export const MANUAL_PAYMENT_STATUS_LABELS: Record<ManualPaymentStatus, string> =
 export const CHECKOUT_SUBMIT_CTA = 'Submit Order & View Payment Instructions';
 
 export const CHECKOUT_SUBMIT_SUPPORTING_COPY =
-  "After submitting your order, you'll receive an electronic invoice and secure instructions to complete payment by ACH / bank transfer or domestic wire. No payment is withdrawn from your bank when you submit your order.";
+  "No payment will be withdrawn from your bank on this page. After submitting your order, you'll receive instructions to complete your bank transfer.";
 
 export const INVOICE_RECEIVED_HEADLINE = 'Order received — awaiting payment';
 

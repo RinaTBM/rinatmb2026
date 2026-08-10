@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from '@/router';
 import {
-  Package, Heart, RefreshCw, Settings, LogOut, Truck, Clock, CheckCircle, Crown, FileText,
+  Package, Heart, RefreshCw, Settings, LogOut, Truck, Clock, CheckCircle, Crown, CreditCard,
 } from 'lucide-react';
 import { useMember } from '@/context/MemberContext';
 import {
@@ -58,7 +58,7 @@ export function AccountPage() {
       customerNote: note || undefined,
     });
     setNote('');
-    setMessage('Cancellation request submitted. Our team will review and process it. This does not automatically end the current billing period or reverse a payment that has already been received.');
+    setMessage('Cancellation request submitted. An admin will review and process it in Stripe. This does not automatically cancel billing.');
     refresh();
   };
 
@@ -171,9 +171,9 @@ export function AccountPage() {
                       </div>
                       <p className="text-xs text-ink-500">Customers cannot modify medication strength or provider-directed treatment from this portal.</p>
                       <div className="flex flex-wrap gap-2">
-                        <Link to="/track" className="btn-outline text-xs inline-flex items-center gap-1">
-                          <FileText size={14} /> Payment Status
-                        </Link>
+                        <button type="button" className="btn-outline text-xs inline-flex items-center gap-1">
+                          <CreditCard size={14} /> Update Payment Method
+                        </button>
                         {(memberships[0] || member.isActiveMember) && (
                           <button
                             type="button"
@@ -230,9 +230,9 @@ export function AccountPage() {
                               <p className="text-xs text-ink-400 mt-1">Status: {sub.status.replace('_', ' ')}</p>
                             </div>
                             <div className="flex flex-col gap-2">
-                              <Link to="/track" className="btn-outline text-xs inline-flex items-center gap-1">
-                                <FileText size={14} /> View Payment Instructions
-                              </Link>
+                              <button type="button" className="btn-outline text-xs inline-flex items-center gap-1">
+                                <CreditCard size={14} /> Update Payment Method
+                              </button>
                               {sub.status === 'active' && (
                                 <button type="button" className="btn-ghost text-xs" onClick={() => handleCancel(sub)}>
                                   Submit Cancellation Request
@@ -250,9 +250,8 @@ export function AccountPage() {
                   <h3 className="font-medium text-ink-900 mb-2">Cancellation Request Policy</h3>
                   <p className="text-sm text-ink-600 leading-relaxed mb-4">{CANCELLATION_POLICY_COPY}</p>
                   <p className="text-xs text-ink-500 mb-3">
-                    The 7-day notice is a customer communication policy so our team can process your request before the
-                    next billing period. Cancellation requests are reviewed manually and do not automatically withdraw
-                    or reverse bank payments.
+                    The 7-day notice is a customer communication policy. It is not an automatic Stripe billing rule.
+                    Admins process cancellations manually in Stripe Test Mode.
                   </p>
                   <label className="block text-xs text-ink-500 mb-1">Email for confirmation</label>
                   <input className="input-lux mb-3" value={email} onChange={e => setEmail(e.target.value)} />

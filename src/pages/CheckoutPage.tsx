@@ -322,7 +322,7 @@ export function CheckoutPage() {
             )}
             <div className="flex items-center gap-2 text-sm text-ink-600">
               <Truck size={18} className="text-gold-500" />
-              <span>Processing begins after payment is verified and any required provider approval is complete</span>
+              <span>Most orders process within 1–3 business days after provider approval when applicable</span>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -443,8 +443,8 @@ export function CheckoutPage() {
                         </label>
                         <p className="text-xs text-ink-500">
                           {hasMembership
-                            ? 'Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Shipping speed applies after fulfillment processing.'
-                            : 'Orders of $500 or more in merchandise are eligible for free shipping. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'}
+                            ? 'Most orders process within 1–3 business days after applicable provider review and approval. Shipping speed applies after approval and fulfillment processing.'
+                            : 'Orders of $500 or more in merchandise are eligible for free shipping. Most orders process within 1–3 business days after provider review and approval, when applicable.'}
                         </p>
                       </div>
                     )}
@@ -513,8 +513,7 @@ export function CheckoutPage() {
                         <div className="flex items-center gap-3">
                           <Lock size={18} className="text-gold-500" />
                           <p className="text-sm text-ink-600">
-                            Select how you will pay after submitting your order. No payment is withdrawn from your bank
-                            when you submit your order.
+                            Select how you will pay after submitting your order. No payment is withdrawn on this page.
                           </p>
                         </div>
                         <div className="space-y-2">

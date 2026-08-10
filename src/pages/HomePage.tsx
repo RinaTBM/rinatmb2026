@@ -35,7 +35,7 @@ const featureCards = [
   {
     icon: PackageCheck,
     title: 'Discreet Shipping',
-    description: 'Plain, unmarked packaging delivered with care. Processing begins after payment is verified and any required provider approval is complete. Always private, always secure.',
+    description: 'Plain, unmarked packaging delivered with care. Most orders process within 1–3 business days after provider approval when applicable. Always private, always secure.',
   },
   {
     icon: HeartPulse,
@@ -45,22 +45,19 @@ const featureCards = [
 ];
 
 const howItWorksSteps = [
-  { icon: Activity, title: 'Choose Your Product', description: 'Browse wellness products and services by what matters to you — weight, longevity, hormones, energy, and more.' },
-  { icon: PackageCheck, title: 'Review Your Order', description: 'Confirm your cart, shipping option, and totals before checkout.' },
-  { icon: Lock, title: 'Submit & Receive Invoice', description: 'Submit your order to receive an electronic invoice. No payment is withdrawn from your bank when you submit.' },
-  { icon: Truck, title: 'Pay by ACH or Wire', description: 'Complete payment by ACH / Bank Transfer or Domestic Wire using the secure instructions. Orders remain Awaiting Payment until funds are verified.' },
-  { icon: Stethoscope, title: 'Intake & Provider Review', description: 'When applicable, complete intake so a licensed provider can review and approve your personalized plan.' },
-  { icon: HeartPulse, title: 'Fulfillment & Shipping', description: 'Approved, paid orders move to fulfillment and ship in plain, temperature-controlled packaging when required.' },
+  { icon: Activity, title: 'Choose Your Concern', description: 'Browse by what matters to you — weight, longevity, hormones, energy, and more.' },
+  { icon: Stethoscope, title: 'Provider Review', description: 'Complete a quick intake. Licensed providers review and approve your personalized plan.' },
+  { icon: PackageCheck, title: 'Discreet Delivery', description: 'Your products ship in plain, temperature-controlled packaging right to your door.' },
+  { icon: HeartPulse, title: 'Ongoing Support', description: 'Enjoy lasting results with recurring fulfillment, member discounts, and continuous care.' },
 ];
 
 
 
 const faqs = [
   { q: 'Do I need a membership to purchase?', a: 'No. You can make a one-time purchase or choose Auto-Refill & Save (10% off eligible wellness products). Active Wellness Members save 15% on eligible wellness products and accessories. Provider care, shipping, and taxes are never discounted. Already-discounted accessory bundles do not automatically receive an additional member discount.' },
-  { q: 'Is provider approval guaranteed?', a: 'No. Provider review and approval are required for certain products. Payment and order submission do not guarantee approval. If not approved after payment has been received and verified, eligible paid amounts for the unapproved product are refunded in accordance with our Refund Policy.' },
-  { q: 'What is the 3-month commitment?', a: 'Active Wellness Memberships require a 3-month minimum commitment. Membership pricing is billed per period using invoice bank-transfer instructions until automated bank payments are enabled. After the commitment period, you may submit a cancellation request. For Auto-Refill, please submit cancellation requests at least 7 calendar days before your renewal date.' },
-  { q: 'How do I pay?', a: 'Select ACH / Bank Transfer or Domestic Wire at checkout. After submitting your order, you receive an electronic invoice and secure payment instructions. Your bank is not charged automatically when you submit your order.' },
-  { q: 'How is shipping handled?', a: 'Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Orders ship in plain, discreet packaging. Temperature-controlled shipping is used for products requiring cold chain maintenance.' },
+  { q: 'Is provider approval guaranteed?', a: 'No. Provider review and approval are required for certain products. Purchase does not guarantee approval. If not approved, a full refund is issued.' },
+  { q: 'What is the 3-month commitment?', a: 'Active Wellness Memberships require a 3-month minimum commitment. After that period, you may submit a cancellation request. For Auto-Refill, please submit cancellation requests at least 7 calendar days before your renewal date so we can process them before the next cycle.' },
+  { q: 'How is shipping handled?', a: 'Orders ship in plain, discreet packaging. Temperature-controlled shipping is used for products requiring cold chain maintenance.' },
 ];
 
 export function HomePage() {
@@ -398,7 +395,7 @@ export function HomePage() {
             <p className="eyebrow mb-3">Simple, guided, personal</p>
             <h2 className="font-serif text-4xl md:text-5xl text-ink-900">How It Works</h2>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {howItWorksSteps.map(({ icon: Icon, title, description }, i) => (
               <div key={title} className="text-center">
                 <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-cream-200 text-gold-600">

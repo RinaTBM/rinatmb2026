@@ -6,7 +6,7 @@ export function ShippingPolicyPage() {
       eyebrow="Legal"
       title="Shipping Policy"
       intro="My Bare Method coordinates wellness fulfillment after all required steps have been completed. Products requiring provider review cannot be shipped until the applicable intake, eligibility review, prescription, payment, and pharmacy processing are complete."
-      lastUpdated="August 10, 2026"
+      lastUpdated="July 31, 2026"
       sections={[
         {
           id: 'before-an-order-ships',
@@ -31,7 +31,7 @@ export function ShippingPolicyPage() {
           title: 'Processing Time',
           body: (
             <>
-              <p>Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Once those steps are complete, most eligible orders are processed within approximately 1–3 business days.</p>
+              <p>Once the required intake, provider review, approval, and payment have been completed, most eligible orders are processed within approximately 1–3 business days.</p>
               <p>Processing times may be longer because of:</p>
               <LegalBulletList items={[
                 'Provider requests for additional information',
@@ -56,7 +56,7 @@ export function ShippingPolicyPage() {
                 'Two-Day Shipping — $30',
                 'Next-Day Shipping — $50',
               ]} />
-              <p>Shipping speeds are estimates provided by the carrier and begin after payment has been received and verified, any required provider review/approval has been completed, and the order has been processed and released for shipment. Delivery dates are not guaranteed. Standard Shipping is not offered.</p>
+              <p>Shipping speeds are estimates provided by the carrier and begin after the order has been processed and released for shipment. Delivery dates are not guaranteed.</p>
               <p>Certain medications may require temperature-controlled packaging or specific delivery methods. Available shipping options may vary by product, pharmacy, destination, and weather conditions.</p>
             </>
           ),

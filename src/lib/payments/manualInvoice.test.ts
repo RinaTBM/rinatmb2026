@@ -198,10 +198,8 @@ describe('recurring manual payment disclosure', () => {
     expect(cartHasRecurringItems([{ purchaseType: 'auto_refill' }])).toBe(true);
     expect(cartHasRecurringItems([{ purchaseType: 'one_time' }])).toBe(false);
     expect(RECURRING_MANUAL_PAYMENT_DISCLOSURE.toLowerCase()).toContain('each billing period');
-    expect(MEMBERSHIP_MANUAL_BILLING_NOTE.toLowerCase()).toContain('new invoice for each billing period');
-    expect(MEMBERSHIP_MANUAL_BILLING_NOTE.toLowerCase()).not.toContain('payment method on file');
+    expect(MEMBERSHIP_MANUAL_BILLING_NOTE.toLowerCase()).not.toContain('automatically charge');
     expect(AUTO_REFILL_MANUAL_BILLING_NOTE).toContain('10%');
-    expect(AUTO_REFILL_MANUAL_BILLING_NOTE.toLowerCase()).toContain('invoice instructions');
     expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
     expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(24900);
     expect(TWO_DAY_SHIPPING_CENTS).toBe(3000);

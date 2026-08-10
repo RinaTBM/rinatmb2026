@@ -191,7 +191,7 @@ function WellnessProductPage({ slug }: { slug: string }) {
     if (selected.kind === 'membership_program') return selected.cta;
     if (selected.kind === 'active_membership' && !isActiveMember) return 'Become a Member';
     if (selected.kind === 'auto_refill') {
-      return `Auto-Refill & Save — $${(selected.finalPrice * quantity).toFixed(2)}/mo`;
+      return `Subscribe & Save — $${(selected.finalPrice * quantity).toFixed(2)}/mo`;
     }
     return `${selected.cta} — $${(selected.finalPrice * quantity).toFixed(2)}`;
   };

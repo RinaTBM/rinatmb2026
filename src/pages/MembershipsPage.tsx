@@ -11,12 +11,10 @@ import {
 } from '@/lib/membership/requestedFormulation';
 
 const howItWorks = [
-  { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($149/month) or Tirzepatide ($249/month) membership and your requested dose.' },
-  { icon: PackageCheck, title: 'Review and submit your order', description: 'Confirm your cart, then submit your order to receive an electronic invoice. No payment is withdrawn from your bank when you submit.' },
-  { icon: Lock, title: 'Complete payment', description: 'Pay by ACH / Bank Transfer or Domestic Wire using the secure invoice instructions. Orders remain Awaiting Payment until funds are received and verified.' },
-  { icon: ClipboardList, title: 'Complete intake', description: 'After payment is verified, complete a secure medical intake so a licensed provider can review your information.' },
+  { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide or Tirzepatide membership. No dose selection — one simple monthly price.' },
+  { icon: PackageCheck, title: 'Complete intake', description: 'Complete a secure medical intake after checkout so a licensed provider can review your information.' },
   { icon: Stethoscope, title: 'Provider review', description: 'A licensed provider reviews your eligibility and determines the appropriate formulation, strength, and treatment plan.' },
-  { icon: ShieldCheck, title: 'Fulfillment when approved', description: 'When payment is verified and treatment is approved, your prescription is sent to the dispensing pharmacy and fulfilled according to the existing workflow.' },
+  { icon: ShieldCheck, title: 'Fulfillment when approved', description: 'When approved, your prescription is sent to the dispensing pharmacy and fulfilled according to the existing workflow.' },
 ];
 
 const faqs = [
@@ -27,8 +25,7 @@ const faqs = [
   { q: 'Can I switch programs?', a: 'Yes, when clinically appropriate. Switching programs requires enrollment at the current price for the new membership.' },
   { q: 'Is the highest Tirzepatide formulation included?', a: 'The $249 membership includes eligible provider-selected formulations through 15mg.' },
   { q: 'Are labs included?', a: 'Laboratory testing is not included unless the current workflow specifically states otherwise. A provider may request labs before or during treatment.' },
-  { q: 'Is shipping included?', a: 'Shipping is not included in the membership. Two-Day Shipping ($30) and Next-Day Shipping ($50) are shown at checkout and follow our Shipping Policy. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Certain medications may require temperature-controlled packaging.' },
-  { q: 'How do I pay for my membership?', a: 'Membership pricing is billed per period. Until automated bank payments are enabled, you will receive a new invoice for each billing period and payment must be completed using the provided bank-transfer instructions (ACH / Bank Transfer or Domestic Wire).' },
+  { q: 'Is shipping included?', a: 'Shipping is not included in the membership. Standard shipping options and any applicable fees are shown at checkout and follow our Shipping Policy. Certain medications may require temperature-controlled packaging.' },
 ];
 
 const comparisonRows: { feature: string; sema: string | boolean; tirz: string | boolean; onetime: string | boolean }[] = [
@@ -239,7 +236,7 @@ export function MembershipsPage() {
             <p className="eyebrow mb-3">Simple and guided</p>
             <h2 className="font-serif text-3xl md:text-4xl text-ink-900">How It Works</h2>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {howItWorks.map(({ icon: Icon, title, description }, i) => (
               <div key={title} className="text-center">
                 <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-cream-200 text-gold-600">

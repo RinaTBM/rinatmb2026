@@ -6,7 +6,7 @@ export function MembershipTermsPage() {
       eyebrow="Legal"
       title="Membership & Cancellation Terms"
       intro="These terms apply to recurring Wellness Memberships offered through My Bare Method."
-      lastUpdated="August 10, 2026"
+      lastUpdated="July 31, 2026"
       sections={[
         {
           id: 'available-memberships',
@@ -31,7 +31,7 @@ export function MembershipTermsPage() {
               <p>Your monthly membership rate remains locked while your membership stays continuously active and in good standing.</p>
               <p>If your membership is canceled or lapses beyond the permitted payment grace period, future enrollment will be subject to the membership pricing available at that time.</p>
               <p>Membership enrollment and payment do not guarantee that a prescription will be issued. Continued treatment, formulation, strength, and fulfillment remain subject to provider approval, pharmacy availability, applicable law, and completion of required follow-up information.</p>
-              <p>If a licensed provider determines that continued treatment is not appropriate, future membership billing periods will be discontinued according to the membership terms.</p>
+              <p>If a licensed provider determines that continued treatment is not appropriate, future membership charges will be discontinued according to the membership terms.</p>
               <p>Switching between Semaglutide and Tirzepatide requires enrollment in the current rate for the new membership program.</p>
               <p>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 15mg.</p>
             </>
@@ -43,7 +43,7 @@ export function MembershipTermsPage() {
           body: (
             <>
               <p>Wellness Memberships require an initial three-month minimum commitment.</p>
-              <p>By enrolling, the client agrees to the three-month minimum term and to complete payment for each billing period using the invoice and bank-transfer instructions provided, unless enrollment is canceled by My Bare Method because treatment is unavailable, medically inappropriate, legally restricted, or otherwise cannot be provided.</p>
+              <p>By enrolling, the client authorizes recurring monthly charges for the three-month minimum term unless enrollment is canceled by My Bare Method because treatment is unavailable, medically inappropriate, legally restricted, or otherwise cannot be provided.</p>
             </>
           ),
         },
@@ -90,9 +90,9 @@ export function MembershipTermsPage() {
           title: 'Recurring Billing',
           body: (
             <>
-              <p>Membership pricing is billed per period. Until automated bank payments are enabled, you will receive a new invoice for each billing period and payment must be completed using the provided bank-transfer instructions (ACH / Bank Transfer or Domestic Wire).</p>
-              <p>No payment is withdrawn from your bank when you submit an order. Orders remain Awaiting Payment until funds are received and verified.</p>
-              <p>Billing periods continue until canceled in accordance with these terms. Clients are responsible for completing each period&apos;s payment and keeping contact information current.</p>
+              <p>The client authorizes My Bare Method or its payment processor to charge the payment method on file each billing cycle.</p>
+              <p>Billing may continue automatically until canceled in accordance with these terms.</p>
+              <p>Clients are responsible for maintaining a valid payment method and current contact information.</p>
             </>
           ),
         },
@@ -108,7 +108,7 @@ export function MembershipTermsPage() {
                 'Email: info@thebaremethodmn.com',
                 'Cancellation Request Form: https://form.jotform.com/262115224996056',
               ]} />
-              <p>Submitting a cancellation request does not reverse a payment that has already been received and verified, or stop an order that has already entered provider, pharmacy, or fulfillment processing.</p>
+              <p>Submitting a cancellation request does not reverse a charge that has already been processed or stop an order that has already entered provider, pharmacy, or fulfillment processing.</p>
             </>
           ),
         },
@@ -164,12 +164,13 @@ export function MembershipTermsPage() {
         },
         {
           id: 'failed-payments',
-          title: 'Unpaid Billing Periods',
+          title: 'Failed Payments',
           body: (
             <>
-              <p>If payment for a billing period is not received and verified, My Bare Method may:</p>
+              <p>If a recurring payment fails, My Bare Method may:</p>
               <LegalBulletList items={[
-                'Send updated invoice and payment instructions',
+                'Retry the payment',
+                'Request another payment method',
                 'Pause member benefits',
                 'Delay fulfillment',
                 'Cancel the membership after notice',

@@ -116,4 +116,4 @@ export function updateCancellationStatus(
 }
 
 export const CANCELLATION_POLICY_COPY =
-  'Auto-Refill continues on a per-period schedule. Until automated bank payments are enabled, each refill period requires payment using the invoice instructions provided. To help us process your request before the next billing period, please submit cancellation requests at least 7 calendar days before your renewal date. Once processed, you will receive confirmation.';
+  'Auto-Refill subscriptions renew automatically each month. To help us process your request before your next renewal, please submit cancellation requests at least 7 calendar days before your renewal date. Once processed, you will receive confirmation.';

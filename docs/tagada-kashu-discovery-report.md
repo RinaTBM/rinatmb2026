@@ -440,21 +440,22 @@ Agent `TAGADA_API_KEY` / `TAGADA_STORE_ID` remain **64-char hex digests** equal 
 | Store name | My Bare Method |
 | Store type | tagadapay |
 | Currency | USD |
-| Tagada products | 13 |
-| Tagada variants | 26 |
-| Tagada prices | 26 |
+| Tagada products | 13 → **30** after sync |
+| Tagada variants | 26 → **53** after sync |
+| Tagada prices | 26 → **53** after sync |
 | MBM SKUs | 52 |
-| MATCHED | 25 |
-| MISSING | 24 |
+| MATCHED | **52** (post-sync, by variant SKU) |
+| MISSING | **0** |
 | DUPLICATE | 0 |
-| AMBIGUOUS | 3 |
+| AMBIGUOUS | **0** (resolved; see `docs/tagada-ambiguous-resolution.md`) |
 | PRICE MISMATCH | 0 |
-| Processor | My Bare Method - Airwallex (`processor_c4deb160d3cd`), enabled, **testMode=true** |
-| Payment flow | My Bare Method – Primary Checkout (`flow_de19e5fca1e7`), cascade → that processor |
-| tbmgroup.site | found, **isVerified=false**, **enabled=false**; DNS lookup returned no records |
-| checkout.mybaremethod.com | found, **verified=true**, **enabled=true** |
-| Webhooks | 1 endpoint → `https://mrp.kashupay.com/api/webhooks/tagada-store` (payment succeeded/failed/refunded). No MBM Supabase webhook. |
-| Funnels list | 404 / not returned by probed endpoints |
-| Subscriptions | API list OK; 0 subscriptions; payment flow has `subscriptionRetryEnabled=true` |
-| Product sync required | **YES** |
-| Writes | **None** (temp Edge Function deleted) |
+| Processor | My Bare Method - Airwallex (`processor_c4deb160d3cd`), enabled, **testMode=true** (**not modified**) |
+| Payment flow | My Bare Method – Primary Checkout (`flow_de19e5fca1e7`), cascade → that processor (**not modified**) |
+| tbmgroup.site | **VERIFIED=YES**, **ACTIVE=YES** (updated) |
+| checkout.mybaremethod.com | **VERIFIED=YES**, **ACTIVE=YES** |
+| Webhooks | Kashu MRP endpoint may exist; **MBM Supabase webhook NOT registered** (receiver/migration not deployed) |
+| Product sync | **Complete** — seed at `docs/kashu-sku-map-seed.json` |
+| Card enabled | **NO** (`VITE_KASHU_CARD_ENABLED` false) |
+| Blocker for test/live card | Awaiting Kashu Airwallex testMode/live-mode confirmation |
+
+See also: `docs/tagada-phase-status-domains-live.md`.

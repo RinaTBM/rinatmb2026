@@ -104,6 +104,24 @@ Deno.serve(async (req) => {
   const action = String(body.action || "sync");
 
   // ---------- LIST ----------
+
+  if (action === "list_webhooks") {
+    const wh = await tcall(base, key, "POST", "/api/public/v1/webhooks/list", { storeId });
+    // scrub secrets
+    const scrubbed = JSON.parse(
+      redact(JSON.stringify(wh.data), secrets).replace(
+        /"(secret|signingSecret|webhookSecret)"\s*:\s*"[^"]*"/gi,
+        '"$1":"[REDACTED]"',
+      ),
+    );
+    return json({ status: wh.status, data: scrubbed });
+  }
+
+  if (action === "list_domains") {
+    const dom = await tcall(base, key, "POST", "/api/public/v1/domains/list", {});
+    return json(JSON.parse(redact(JSON.stringify({ status: dom.status, data: dom.data }), secrets)));
+  }
+
   if (action === "list") {
     const pl = await tcall(base, key, "POST", "/api/public/v1/products/list", {
       storeId,
@@ -297,8 +315,27 @@ Deno.serve(async (req) => {
     const path = String(body.path || "");
     if (!path.startsWith("/api/public/v1/")) return json({ error: "path_not_allowed" }, 400);
     // allow only product-related paths
-    if (!path.includes("/products") && !path.includes("/variants") && !path.includes("/prices")) {
-      return json({ error: "path_not_product_related" }, 400);
+    const allowed =
+      path.includes("/products") ||
+      path.includes("/variants") ||
+      path.includes("/prices") ||
+      path.includes("/domains") ||
+      path.includes("/webhooks");
+    if (!allowed) {
+      return json({ error: "path_not_allowed" }, 400);
+    }
+    // Block mutating webhook/domain calls from this helper
+    if ((path.includes("/domains") || path.includes("/webhooks")) && method !== "GET" && method !== "POST") {
+      return json({ error: "mutating_domain_webhook_blocked" }, 400);
+    }
+    if (path.includes("/webhooks") && method === "POST" && !path.includes("/list")) {
+      // allow list body posts only when path ends with /list or action is list-like
+      if (!path.endsWith("/list") && !path.includes("/webhooks/list")) {
+        return json({ error: "webhook_create_blocked" }, 400);
+      }
+    }
+    if (path.includes("/domains") && method === "POST" && !path.includes("/list") && !path.includes("dns-lookup")) {
+      return json({ error: "domain_mutate_blocked" }, 400);
     }
     const r = await tcall(base, key, method, path, body.body);
     return json(JSON.parse(redact(JSON.stringify({ status: r.status, data: r.data }), secrets)));

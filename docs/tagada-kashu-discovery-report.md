@@ -430,3 +430,31 @@ A temporary Edge Function `tagada-readonly-discovery` was deployed once to read 
 **AUTHENTICATION: FAIL**
 
 Agent `TAGADA_API_KEY` / `TAGADA_STORE_ID` remain **64-char hex digests** equal to Supabase Management API digests — not Tagada dashboard key formats. `auth/test` → 401. No Tagada writes; no deploys; Supabase secrets not modified.
+
+## LIVE READ-ONLY DISCOVERY (2026-08-11)
+
+**AUTHENTICATION: PASS** (via BSG Edge secrets; Cursor agent `TAGADA_*` still digests — used temporary Edge Function, then deleted)
+
+| Item | Result |
+|------|--------|
+| Store name | My Bare Method |
+| Store type | tagadapay |
+| Currency | USD |
+| Tagada products | 13 |
+| Tagada variants | 26 |
+| Tagada prices | 26 |
+| MBM SKUs | 52 |
+| MATCHED | 25 |
+| MISSING | 24 |
+| DUPLICATE | 0 |
+| AMBIGUOUS | 3 |
+| PRICE MISMATCH | 0 |
+| Processor | My Bare Method - Airwallex (`processor_c4deb160d3cd`), enabled, **testMode=true** |
+| Payment flow | My Bare Method – Primary Checkout (`flow_de19e5fca1e7`), cascade → that processor |
+| tbmgroup.site | found, **isVerified=false**, **enabled=false**; DNS lookup returned no records |
+| checkout.mybaremethod.com | found, **verified=true**, **enabled=true** |
+| Webhooks | 1 endpoint → `https://mrp.kashupay.com/api/webhooks/tagada-store` (payment succeeded/failed/refunded). No MBM Supabase webhook. |
+| Funnels list | 404 / not returned by probed endpoints |
+| Subscriptions | API list OK; 0 subscriptions; payment flow has `subscriptionRetryEnabled=true` |
+| Product sync required | **YES** |
+| Writes | **None** (temp Edge Function deleted) |

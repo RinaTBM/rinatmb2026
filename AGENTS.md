@@ -26,7 +26,7 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 
 - Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
 - Kashu/Tagada card payments: discovery docs only (not enabled). See `docs/tagada-kashu-discovery-report.md` and `docs/tagada-product-mapping-review.md`. Prefer Tagada hosted checkout/init over Pay V2 for any future Phase 1 design. Do not deploy card checkout, apply Kashu migrations, or set `VITE_KASHU_CARD_ENABLED` without owner approval.
-- Tagada read-only discovery requires real `TAGADA_API_KEY` (UUID / `sk_crm_…` / `tp_sk_…`, **without** a `Bearer` prefix) and `TAGADA_STORE_ID` (`store_…`) in BSG Edge secrets. Do not store docs placeholders (`Bearer your-api-key`, `string`). Supabase Management API only exposes digests to the agent; Edge runtime holds plaintext.
+- Tagada credentials: keep real `TAGADA_API_KEY` (`sk_crm_…`) and `TAGADA_STORE_ID` (`store_…`) in **BSG Edge secrets**. Cursor agent env may only see Management API digests for the same names — do not treat those digests as API keys. Live discovery (2026-08-11): store “My Bare Method” auth PASS; catalog partial; `tbmgroup.site` unverified; `checkout.mybaremethod.com` verified; Airwallex processor in testMode.
 - Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
 - Admin marks funds received via Orders UI / `mark-payment-received` after verification.

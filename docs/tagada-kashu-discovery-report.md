@@ -394,3 +394,19 @@ Local code scaffolding may continue behind flags, but **production enablement is
 ---
 
 **Stop for owner approval.**
+
+## AUTHENTICATION ATTEMPT (READ-ONLY — 2026-08-11)
+
+**AUTHENTICATION: FAIL**
+
+| Item | Result |
+|------|--------|
+| BSG secret names `TAGADA_API_KEY` / `TAGADA_STORE_ID` | Present |
+| Plaintext available to agent | No — Management API returns digests; agent env matched those digests |
+| `POST /api/public/v1/auth/test` (prod + sandbox) | 401 invalid API key format |
+| Expected key formats (official) | UUID, `sk_crm_…`, or `tp_sk_…` |
+| Store / products / processors / domains / webhooks / funnels | **Not readable** (auth blocked) |
+| Writes performed | **None** |
+
+**Unblock:** Provide plaintext Tagada API key + `store_…` id to the Cursor agent secret store (not only as unreable Supabase digests).
+

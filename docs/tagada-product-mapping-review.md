@@ -9,11 +9,31 @@
 
 Tagada `POST /api/public/v1/products/list` was **not executed**.
 
-Reason: `TAGADA_API_KEY` (Bearer) and `TAGADA_STORE_ID` are **not available** in this cloud agent environment.
+### Authentication attempt (2026-08-11 read-only pass)
 
-Therefore every row is marked **MISSING IN TAGADA** as a provisional status meaning **“not yet compared”**, not a confirmed empty Kashu catalog.
+| Check | Result |
+|-------|--------|
+| Secret **names** on BSG Supabase | Present (`TAGADA_API_KEY`, `TAGADA_STORE_ID`) |
+| Plaintext usable by cloud agent | **No** |
+| Values visible via Supabase Management API / injected into agent | 64-char digests (not Tagada key material) |
+| `POST https://api.tagada.io/api/public/v1/auth/test` | **401** — key format rejected |
+| Tagada expected key formats | UUID, `sk_crm_…`, or partner `tp_sk_…` |
+| Store ID format received | 64-char digest (not `store_…`) |
 
-After secrets are provided, re-run read-only List Products / Get Product and update this file + CSV. **Do not create Tagada products until owner approval.**
+**AUTHENTICATION: FAIL**
+
+Therefore every row remains **MISSING IN TAGADA** as provisional **“not yet compared”** — **not** confirmation that the Kashu catalog is empty.
+
+**No Tagada writes were attempted.** No products/webhooks/processors/domains were modified.
+
+### Unblock requirement
+
+Re-inject **plaintext** Tagada credentials into the **Cursor cloud agent** secret store (Management API digests are not usable as Bearer tokens):
+
+1. `TAGADA_API_KEY` — dashboard API key (`UUID` or `sk_crm_…`)
+2. `TAGADA_STORE_ID` — Tagada store id (`store_…`)
+
+Then re-run read-only List Products / processors / domains / webhooks / funnels. **Do not create Tagada products until owner approval.**
 
 ## Summary counts (provisional)
 

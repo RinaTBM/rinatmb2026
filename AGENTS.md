@@ -26,6 +26,7 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 
 - Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
 - Kashu/Tagada card payments: discovery docs only (not enabled). See `docs/tagada-kashu-discovery-report.md` and `docs/tagada-product-mapping-review.md`. Prefer Tagada hosted checkout/init over Pay V2 for any future Phase 1 design. Do not deploy card checkout, apply Kashu migrations, or set `VITE_KASHU_CARD_ENABLED` without owner approval.
+- Tagada read-only discovery requires **plaintext** `TAGADA_API_KEY` (UUID / `sk_crm_…`) and `TAGADA_STORE_ID` (`store_…`) in the Cursor agent secret store. Supabase Management API only exposes digests; those cannot authenticate to Tagada.
 - Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
 - Admin marks funds received via Orders UI / `mark-payment-received` after verification.

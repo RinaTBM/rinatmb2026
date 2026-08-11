@@ -39,6 +39,9 @@ const notesFor = (p: Product, v: Variant) => {
   if (['tretinoin-cream', 'bimatoprost-solution'].includes(p.slug)) {
     notes.push('Storefront-active; excluded from Stripe sync until reviewed.');
   }
+  if (p.slug === 'bimatoprost-solution') {
+    notes.push('Display name Lash/Brow Growth Serum; underlying formulation Bimatoprost Solution.');
+  }
   return notes.join(' ');
 };
 

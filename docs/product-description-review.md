@@ -49,7 +49,7 @@ Final style pass: premium + benefit-forward + provider-guided presentation (TWC/
 - Wolverine: BPC-157/TB-500: Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.
 - Wolverine: BPC-157/TB-500: Catalog strength is "Blend" only — do not invent mg amounts.
 - Minoxidil Combination Topical Formula: Exact combination ingredients beyond minoxidil are not defined in catalog — do not invent them.
-- Bimatoprost Solution: Confirm preferred consumer wording for indication framing with medical director if needed.
+- Lash/Brow Growth Serum: Display name is Lash/Brow Growth Serum; underlying formulation remains Bimatoprost Solution (slug/SKU unchanged).
 - Complete Injection Starter Kit: Kit contents taken from catalog — do not add unverified extra items.
 - Temperature-Controlled Travel Case: Prior catalog “up to 48 hours” claim remains removed pending owner verification.
 - Premium Insulin Syringes: Needle gauge / unit markings not in catalog — confirm before publishing specs later.
@@ -577,41 +577,43 @@ Catalog limits intentionally preserved:
 **Needs verification:**
 - Exact combination ingredients beyond minoxidil are not defined in catalog — do not invent them.
 
-### Bimatoprost Solution
+### Lash/Brow Growth Serum
 
 - **Slug:** `bimatoprost-solution`
 - **Category:** prescription-skin-hair
-- **Benefit headline:** Prescription Support for Fuller-Looking Lashes
-- **Hero description:** Bimatoprost Solution is a prescription topical option people consider when they want fuller-looking eyelashes under clinical guidance. Application is typically limited to the lash line — this is not a general face serum.
-- **Highlights:** Lash Appearance Support · Prescription Topical · Targeted Application · Provider-Reviewed
+- **Benefit headline:** Prescription Support for Fuller-Looking Lashes & Brows
+- **Hero description:** Lash/Brow Growth Serum is a prescription topical option featuring bimatoprost that people consider when they want fuller-looking eyelashes and brows under clinical guidance. Application is typically limited to the lash or brow line — this is not a general face serum.
+- **Highlights:** Lash & Brow Appearance · Prescription Topical · Targeted Application · Provider-Reviewed
 
 **About**
-- Bimatoprost is used in clinical practice for effects related to eyelash growth when applied as directed. My Bare Method offers it as a prescription solution after provider review.
+- The customer-facing name for this product is Lash/Brow Growth Serum. The underlying formulation is a prescription bimatoprost solution. Bimatoprost is used in clinical practice for effects related to eyelash growth when applied as directed. My Bare Method offers it as a prescription solution after provider review.
 - Follow application instructions carefully and share eye or medical history during intake so your clinician can screen for appropriateness.
 
 **Potential benefits**
 - May support fuller-looking eyelashes with consistent, directed use
+- May be discussed for brow-appearance goals when your provider considers it appropriate
 - Provides a prescription pathway instead of unverified cosmetic shortcuts
-- Targeted lash-line application when used as instructed
+- Targeted line application when used as instructed
 - Includes clinical review before treatment begins
 
 **How it works:** Bimatoprost can influence the growth cycle of eyelashes for some users, which may lead to longer or fuller-looking lashes over time with consistent use. Changes are gradual and vary by person. Your provider and pharmacy materials explain exact technique.
 
 **Why people choose it**
-- Clear prescription positioning for lash goals
+- Clear prescription positioning for lash and brow goals
 - Small bottle size listed transparently on this page
 - Clinical screening before use
 - Instructions-focused experience that protects eye safety
 
-**What to expect:** Solution bottle at the strength and size listed. Use the applicator method described by your pharmacy and provider, usually along the upper eyelash line. Report eye irritation promptly.
+**What to expect:** Solution bottle at the strength and size listed. Use the applicator method described by your pharmacy and provider, usually along the upper eyelash line or as directed for brows. Report eye irritation promptly.
 
 **Important information:** Availability is subject to provider review. Your provider will determine whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history and individual needs. Completing payment does not guarantee a prescription.
 
 **Regulatory / claims notes:**
-- No guaranteed dramatic lash results.
+- No guaranteed dramatic lash or brow results.
+- Preserve formulation identity as bimatoprost solution for clinical/fulfillment clarity.
 
 **Needs verification:**
-- Confirm preferred consumer wording for indication framing with medical director if needed.
+- Display name is Lash/Brow Growth Serum; underlying formulation remains Bimatoprost Solution (slug/SKU unchanged).
 
 ### Initial Provider Visit
 

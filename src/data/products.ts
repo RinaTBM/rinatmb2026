@@ -798,17 +798,19 @@ export const products: Product[] = [
   mk({
     id: 'p71',
     slug: 'bimatoprost-solution',
-    displayName: 'Bimatoprost Solution',
-    shortName: 'Bimatoprost',
-    subtitle: 'Prescription eyelash care',
+    displayName: 'Lash/Brow Growth Serum',
+    shortName: 'Lash/Brow Growth Serum',
+    subtitle: 'Prescription bimatoprost solution',
     category: 'prescription-skin-hair',
     goals: ['beauty'],
     shortDescription: 'A prescription bimatoprost solution available following licensed-provider review.',
     longDescription: RX_DISCLAIMER,
     image: IMG_SPRAY,
-    imageAlt: 'Bimatoprost solution, a prescription treatment',
+    imageAlt: 'Lash/Brow Growth Serum — prescription bimatoprost solution',
     providerDisclaimer: RX_DISCLAIMER,
     needsDedicatedImage: true,
+    internalNotes:
+      'Customer-facing display name is Lash/Brow Growth Serum. Underlying formulation remains Bimatoprost Solution. Slug/SKU/IDs unchanged (bimatoprost-solution / MBM-SH-BIM-SOL-001 / p71).',
     variants: [
       { dosageForm: 'Solution', strength: '0.03%', size: '2.5mL', price: 89 },
     ],

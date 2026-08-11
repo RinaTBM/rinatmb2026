@@ -424,3 +424,9 @@ A temporary Edge Function `tagada-readonly-discovery` was deployed once to read 
 | Function left deployed | **No** (deleted after probe) |
 
 **Unblock:** Set real Kashu/Tagada dashboard API key (no `Bearer` prefix) and real `store_…` id in BSG Edge secrets.
+
+## AUTH RETRY (CURSOR AGENT — READ-ONLY)
+
+**AUTHENTICATION: FAIL**
+
+Agent `TAGADA_API_KEY` / `TAGADA_STORE_ID` remain **64-char hex digests** equal to Supabase Management API digests — not Tagada dashboard key formats. `auth/test` → 401. No Tagada writes; no deploys; Supabase secrets not modified.

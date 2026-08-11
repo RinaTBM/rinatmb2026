@@ -7,33 +7,33 @@
 
 ## Blocking caveat
 
-Tagada `POST /api/public/v1/products/list` was **not executed** successfully.
+Tagada catalog compare remains **blocked**.
 
-### Authentication attempts (read-only)
+### Auth retry (Cursor agent secrets — read-only)
 
 | Check | Result |
 |-------|--------|
-| Secret **names** on BSG Supabase Edge | Present (`TAGADA_API_KEY`, `TAGADA_STORE_ID`), updated 2026-08-11 |
-| Cursor agent env values | Digests only (Management API hashes) — not usable as Bearer tokens |
-| Temporary Edge Function probe (uses real Edge secret values) | Deployed + invoked once, then **deleted** |
-| Edge `TAGADA_API_KEY` shape | len=19, prefix `Bearer y…` — matches docs placeholder `Bearer your-api-key`, **not** a Tagada dashboard key |
-| Edge `TAGADA_STORE_ID` shape | len=6, value shape `string` — OpenAPI placeholder, **not** a `store_…` id |
-| `POST /api/public/v1/auth/test` | **401** invalid API key format (prod + via Edge) |
+| `TAGADA_API_KEY` / `TAGADA_STORE_ID` present in agent env | Yes |
+| Value shape | 64-char hex digests (identical to Supabase Management API secret digests) |
+| Tagada expected formats | UUID, `sk_crm_…`, or `tp_sk_…` + store id `store_…` |
+| `POST https://api.tagada.io/api/public/v1/auth/test` | **401** invalid API key format |
+| Sandbox auth | **401** same |
+| Prior Edge runtime probe | BSG Edge values were docs placeholders (`Bearer your-api-key` / `string`) |
 
 **AUTHENTICATION: FAIL**
 
-Therefore every row remains **MISSING IN TAGADA** as provisional **“not yet compared”** — **not** confirmation that the Kashu catalog is empty.
+Rows stay **MISSING IN TAGADA** = provisional **not yet compared** (not proof of empty catalog).
 
-**No Tagada resource writes were performed.** No products/webhooks/processors/domains were created or modified. Card checkout remains disabled.
+**No Tagada writes. No deploys. No Supabase secret modifications in this pass.**
 
-### Unblock requirement
+### Unblock
 
-Replace BSG Edge secrets (and Cursor agent secrets) with **real** values from Kashu CRM / Tagada dashboard (**Settings → API Keys** / store settings):
+Paste **real** Kashu/Tagada dashboard values into Cursor secrets (and update BSG Edge secrets to the same):
 
-1. `TAGADA_API_KEY` = raw key only (UUID or `sk_crm_…` or `tp_sk_…`) — **do not** include the word `Bearer`
-2. `TAGADA_STORE_ID` = real store id (`store_…`) — **not** the literal `string`
+1. `TAGADA_API_KEY` = raw key only (UUID or `sk_crm_…`) — never a 64-char hex digest, never `Bearer …`
+2. `TAGADA_STORE_ID` = `store_…` — never `string`, never a digest
 
-Then re-run read-only discovery. **Do not create Tagada products until owner approval.**
+Then re-run read-only discovery.
 
 
 ## Summary counts (provisional)

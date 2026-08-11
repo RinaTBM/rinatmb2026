@@ -8,6 +8,7 @@ import {
 } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
+import { ProductDescriptionSections } from '@/components/ProductDescriptionSections';
 import { ProductCard } from '@/components/ProductCard';
 import {
   ACCESSORY_UNIT_QUANTITY_MAX,
@@ -260,8 +261,7 @@ export function AccessoryProductPage({ product }: { product: Product }) {
 
       <section className="py-12 md:py-16 border-t border-cream-300">
         <div className="container-lux max-w-4xl">
-          <h2 className="font-serif text-3xl text-ink-900 mb-4">Overview</h2>
-          <p className="text-ink-600 leading-relaxed">{product.longDescription}</p>
+          <ProductDescriptionSections product={product} showEligibility={false} />
         </div>
       </section>
 

@@ -69,6 +69,12 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - Customer UI: `/account/orders`, `/account/orders/:orderId`. Admin UI: `/admin/orders`.
 - See `docs/customer-account-phase2.md` and `docs/customer-account-phase2-verification.sql`.
 
+### Product descriptions
+
+- Customer-facing copy lives in `src/data/productCopy.ts` (structured About / Common Uses / How It Works / What to Expect / Important Information) and is merged in `mk()` / membership definitions.
+- PDP layout: `ProductDescriptionSections` on wellness + accessories; membership detail has its own stacked sections.
+- Review packet: `docs/product-description-review.md` (regenerate via `npx tsx scripts/gen-product-description-review.ts`). Do not invent formulations when catalog says “Blend” / “Combination formula”.
+
 ### Variant-level SKUs (Scriptful)
 
 - Registry: `src/data/variantSkus.ts` (48 retail + 2 membership PROGRAM SKUs = 50).

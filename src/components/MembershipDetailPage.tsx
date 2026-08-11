@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Check, Lock, ShieldCheck } from 'lucide-react';
 import { Link } from '@/router';
 import type { Membership } from '@/data/products';
+import { paragraphs } from '@/data/productCopy';
 import { useCart } from '@/context/CartContext';
 import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
 import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
@@ -73,11 +74,11 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
               <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-3">
                 {membership.displayName}
               </h1>
+              <p className="text-ink-600 leading-relaxed mb-4">{membership.shortDescription}</p>
               <div className="mb-4">
                 <span className="font-serif text-4xl text-ink-900">${membership.monthlyPrice}</span>
                 <span className="text-ink-500 ml-1">/month</span>
               </div>
-              <p className="text-ink-600 leading-relaxed mb-3">{membership.longDescription}</p>
               <p className="text-sm text-ink-500 mb-5">
                 Initial term: {membership.initialTermMonths} months, then month to month.
               </p>
@@ -153,6 +154,88 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-12 md:py-16 border-t border-cream-300">
+        <div className="container-lux max-w-4xl space-y-10">
+          <div className="space-y-3">
+            <h2 className="font-serif text-2xl md:text-3xl text-ink-900">About This Membership</h2>
+            {paragraphs(membership.longDescription).map((p, i) => (
+              <p key={i} className="text-ink-600 leading-relaxed">
+                {p}
+              </p>
+            ))}
+          </div>
+
+          {membership.howItWorks && (
+            <div className="space-y-3">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink-900">
+                Program vs Medication Fulfillment
+              </h2>
+              {paragraphs(membership.howItWorks).map((p, i) => (
+                <p key={i} className="text-ink-600 leading-relaxed">
+                  {p}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {membership.whatToExpect && (
+            <div className="space-y-3">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink-900">What to Expect</h2>
+              {paragraphs(membership.whatToExpect).map((p, i) => (
+                <p key={i} className="text-ink-600 leading-relaxed">
+                  {p}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {membership.commonUses && membership.commonUses.length > 0 && (
+            <div className="space-y-3">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink-900">Why Members Choose This</h2>
+              <ul className="space-y-2.5">
+                {membership.commonUses.map(item => (
+                  <li key={item} className="flex items-start gap-2.5 text-ink-700">
+                    <Check size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />
+                    <span className="leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="space-y-3">
+            <h2 className="font-serif text-2xl md:text-3xl text-ink-900">Important Information</h2>
+            {paragraphs(
+              membership.importantInformation ||
+                'Membership enrollment and payment do not guarantee a prescription. Your provider determines appropriateness and dose.',
+            ).map((p, i) => (
+              <p key={i} className="text-ink-600 leading-relaxed">
+                {p}
+              </p>
+            ))}
+          </div>
+
+          {membership.faq.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink-900">Membership FAQ</h2>
+              <div className="space-y-3">
+                {membership.faq.map(faq => (
+                  <details key={faq.q} className="card-lux group p-5">
+                    <summary className="flex cursor-pointer items-center justify-between font-medium text-ink-900 list-none">
+                      {faq.q}
+                      <span className="ml-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-cream-200 text-ink-600 transition-transform group-open:rotate-45">
+                        <span className="text-lg leading-none">+</span>
+                      </span>
+                    </summary>
+                    <p className="mt-3 text-sm text-ink-500 leading-relaxed">{faq.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </div>

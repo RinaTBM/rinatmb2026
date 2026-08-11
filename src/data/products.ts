@@ -15,6 +15,7 @@ import {
   MEMBERSHIP_PROGRAM_SKU_BY_APP_ID,
   VARIANT_SKU_BY_ID,
 } from './variantSkus';
+import { MEMBERSHIP_COPY, PRODUCT_COPY } from './productCopy';
 
 // ---------------------------------------------------------------------------
 // Public categories (5)
@@ -81,6 +82,14 @@ export interface Product {
   // --- Copy ---
   shortDescription: string;
   longDescription: string;
+  /** Bullet list for "Common Uses / Why It May Be Considered". */
+  commonUses: string[];
+  /** Plain-language mechanism section. */
+  howItWorks: string;
+  /** Dosage form / administration expectations (not personalized dosing). */
+  whatToExpect: string;
+  /** Provider-review / claims-safe important notice. */
+  importantInformation: string;
 
   // --- Media ---
   image: string;
@@ -387,6 +396,19 @@ function mk(seed: ProductSeed): Product {
     (seed.category === 'accessories'
       ? !(seed.slug.includes('kit') || seed.slug.includes('bundle') || !!seed.slug.match(/starter/))
       : (!excludedFromDiscounts && status === 'active'));
+  const copy = PRODUCT_COPY[seed.slug];
+  const shortDescription = copy?.shortDescription ?? seed.shortDescription;
+  const longDescription = copy?.about ?? seed.longDescription;
+  const commonUses = copy?.commonUses ?? [];
+  const howItWorks = copy?.howItWorks ?? '';
+  const whatToExpect =
+    copy?.whatToExpect ??
+    (seed.category === 'accessories'
+      ? 'See the product options on this page for available counts and pack sizes.'
+      : 'Use only as directed by your prescribing provider after approval.');
+  const importantInformation =
+    copy?.importantInformation ??
+    seed.providerDisclaimer;
   return {
     id: seed.id,
     slug: seed.slug,
@@ -395,8 +417,12 @@ function mk(seed: ProductSeed): Product {
     subtitle: seed.subtitle,
     category: seed.category,
     dosageForms: forms,
-    shortDescription: seed.shortDescription,
-    longDescription: seed.longDescription,
+    shortDescription,
+    longDescription,
+    commonUses,
+    howItWorks,
+    whatToExpect,
+    importantInformation,
     image: seed.image,
     imageAlt: seed.imageAlt,
     variants,
@@ -436,9 +462,9 @@ function mk(seed: ProductSeed): Product {
     subscriptionPrice: seed.subscriptionPrice,
     startingAt: variants.length > 1,
     variablePricing: false,
-    benefits: [],
+    benefits: commonUses,
     ingredients: 'Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
-    directions: 'Use only as directed by your prescribing provider.',
+    directions: whatToExpect || 'Use only as directed by your prescribing provider.',
     bestSeller: seed.bestSeller,
     requiresIntake: seed.category !== 'accessories',
     providerReviewed: seed.category !== 'accessories',
@@ -1056,6 +1082,10 @@ export interface Membership {
   // --- Copy ---
   shortDescription: string;
   longDescription: string;
+  commonUses?: string[];
+  howItWorks?: string;
+  whatToExpect?: string;
+  importantInformation?: string;
   valueStatement: string;
   secondaryValueStatement: string;
   benefits: string[];
@@ -1124,23 +1154,30 @@ export const memberships: Membership[] = [
     checkoutProductId: 'm1',
     supabaseId: 'm1',
     programSku: MEMBERSHIP_PROGRAM_SKU_BY_APP_ID.m1,
-    shortDescription: 'One membership. One predictable monthly price. Provider-directed Semaglutide + B6 treatment.',
-    longDescription:
-      'A provider-guided Semaglutide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program while you remain continuously enrolled.',
+    shortDescription: MEMBERSHIP_COPY['semaglutide-membership'].shortDescription,
+    longDescription: MEMBERSHIP_COPY['semaglutide-membership'].about,
+    commonUses: MEMBERSHIP_COPY['semaglutide-membership'].commonUses,
+    howItWorks: MEMBERSHIP_COPY['semaglutide-membership'].howItWorks,
+    whatToExpect: MEMBERSHIP_COPY['semaglutide-membership'].whatToExpect,
+    importantInformation: MEMBERSHIP_COPY['semaglutide-membership'].importantInformation,
     valueStatement: 'One membership. One predictable monthly price.',
     secondaryValueStatement:
       'Your membership price stays the same as your provider adjusts your eligible treatment within the included program.',
-    benefits: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
-      'Provider-directed formulation or strength adjustments within the included program',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
-    ],
+    benefits: MEMBERSHIP_COPY['semaglutide-membership'].benefits ?? SHARED_MEMBERSHIP_BENEFITS,
     exclusions: [],
     termsSummary: sharedTerms(3),
     faq: [
       {
         q: 'Will my price increase if my treatment changes?',
         a: 'Your Semaglutide membership remains $149 per month while your membership stays continuously active and your provider-selected treatment remains within the included program.',
+      },
+      {
+        q: 'Is the membership the same as buying a retail vial?',
+        a: 'No. Membership is a program purchase with a flat monthly rate. Medication fulfillment uses the retail Semaglutide vial SKU that matches your provider-approved dose.',
+      },
+      {
+        q: 'Will my bank be charged automatically?',
+        a: 'Until automated bank payments are enabled, each billing period uses an invoice with ACH/bank-transfer or domestic wire instructions. Completing payment for one period does not automatically charge future periods.',
       },
     ],
     cta: 'Join Semaglutide Membership',
@@ -1153,13 +1190,8 @@ export const memberships: Membership[] = [
     price: 149,
     priceLabel: '/month',
     tagline: 'Bare Balance',
-    description:
-      'A provider-guided Semaglutide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program while you remain continuously enrolled.',
-    features: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
-      'Provider-directed formulation or strength adjustments within the included program',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
-    ],
+    description: MEMBERSHIP_COPY['semaglutide-membership'].about,
+    features: MEMBERSHIP_COPY['semaglutide-membership'].benefits ?? SHARED_MEMBERSHIP_BENEFITS,
   },
   {
     id: 'tirzepatide-membership',
@@ -1182,17 +1214,16 @@ export const memberships: Membership[] = [
     checkoutProductId: 'm2',
     supabaseId: 'm2',
     programSku: MEMBERSHIP_PROGRAM_SKU_BY_APP_ID.m2,
-    shortDescription: 'One predictable monthly rate through the included program maximum. Provider-directed Tirzepatide + B6 treatment.',
-    longDescription:
-      'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 15mg while you remain continuously enrolled.',
+    shortDescription: MEMBERSHIP_COPY['tirzepatide-membership'].shortDescription,
+    longDescription: MEMBERSHIP_COPY['tirzepatide-membership'].about,
+    commonUses: MEMBERSHIP_COPY['tirzepatide-membership'].commonUses,
+    howItWorks: MEMBERSHIP_COPY['tirzepatide-membership'].howItWorks,
+    whatToExpect: MEMBERSHIP_COPY['tirzepatide-membership'].whatToExpect,
+    importantInformation: MEMBERSHIP_COPY['tirzepatide-membership'].importantInformation,
     valueStatement: 'One predictable monthly rate through the included program maximum.',
     secondaryValueStatement:
       'Your membership price stays the same as your provider adjusts your eligible treatment within the included program maximum.',
-    benefits: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
-      'Provider-directed formulation or strength adjustments within the included program maximum',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
-    ],
+    benefits: MEMBERSHIP_COPY['tirzepatide-membership'].benefits ?? SHARED_MEMBERSHIP_BENEFITS,
     exclusions: [],
     termsSummary: [
       ...sharedTerms(3),
@@ -1205,7 +1236,15 @@ export const memberships: Membership[] = [
       },
       {
         q: 'Is the highest Tirzepatide formulation included?',
-        a: 'The $249 membership includes eligible provider-selected formulations through 15mg.',
+        a: 'The $249 membership includes eligible provider-selected formulations through 15mg. 30mg is not part of this program.',
+      },
+      {
+        q: 'Is membership the same as a retail vial purchase?',
+        a: 'No. Membership is a program purchase. Medication fulfillment uses the retail Tirzepatide vial SKU matching your provider-approved dose.',
+      },
+      {
+        q: 'Will my bank be charged automatically?',
+        a: 'Until automated bank payments are enabled, each billing period uses an invoice with ACH/bank-transfer or domestic wire instructions rather than an automatic storefront bank charge.',
       },
     ],
     cta: 'Join Tirzepatide Membership',
@@ -1219,13 +1258,8 @@ export const memberships: Membership[] = [
     price: 249,
     priceLabel: '/month',
     tagline: 'Bare Momentum',
-    description:
-      'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 15mg while you remain continuously enrolled.',
-    features: [
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(0, 5),
-      'Provider-directed formulation or strength adjustments within the included program maximum',
-      ...SHARED_MEMBERSHIP_BENEFITS.slice(5),
-    ],
+    description: MEMBERSHIP_COPY['tirzepatide-membership'].about,
+    features: MEMBERSHIP_COPY['tirzepatide-membership'].benefits ?? SHARED_MEMBERSHIP_BENEFITS,
   },
   // Retained but hidden (preserved, not deleted): non-weight wellness membership.
   {

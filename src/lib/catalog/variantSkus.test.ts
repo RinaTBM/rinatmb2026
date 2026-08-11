@@ -37,8 +37,8 @@ describe('variant SKU registry', () => {
     }
   });
 
-  it('assigns a SKU to every active visible selectable product variant', () => {
-    const active = products.filter(p => p.status === 'active' && p.isVisible);
+  it('assigns a SKU to every active selectable product variant (including pending-publish hidden)', () => {
+    const active = products.filter(p => p.status === 'active');
     const missing: string[] = [];
     for (const p of active) {
       for (const v of p.variants) {
@@ -49,8 +49,21 @@ describe('variant SKU registry', () => {
     expect(missing).toEqual([]);
   });
 
-  it('does not assign SKUs to future/hidden products or inactive memberships', () => {
-    const future = products.filter(p => p.status === 'future' || !p.isVisible);
+  it('keeps Tesamorelin and Fat Burner SKUs while withholding public visibility', () => {
+    const pending = products.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
+    expect(pending).toHaveLength(2);
+    for (const p of pending) {
+      expect(p.status).toBe('active');
+      expect(p.isVisible).toBe(false);
+      expect(p.variants[0]?.sku).toBeTruthy();
+      expect(VARIANT_SKU_BY_ID[p.variants[0].id]).toBe(p.variants[0].sku);
+    }
+    expect(VARIANT_SKU_BY_ID['tesamorelin-v1']).toBe('MBM-LON-TESA-INJ-001');
+    expect(VARIANT_SKU_BY_ID['fat-burner-v1']).toBe('MBM-WM-FB3-INJ-001');
+  });
+
+  it('does not assign SKUs to future products or inactive memberships', () => {
+    const future = products.filter(p => p.status === 'future');
     for (const p of future) {
       for (const v of p.variants) {
         expect(v.sku).toBeUndefined();

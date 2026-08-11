@@ -9,6 +9,8 @@ import {
 } from '../src/data/variantSkus';
 
 const ORIGIN = 'https://mybaremethod.com';
+const PENDING_MD_REVIEW_SLUGS = new Set(['tesamorelin', 'fat-burner']);
+
 const csvEscape = (v: unknown) => {
   const s = v == null ? '' : String(v);
   if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
@@ -18,8 +20,19 @@ const csvEscape = (v: unknown) => {
 type Product = (typeof products)[number];
 type Variant = Product['variants'][number];
 
+const publicStatusFor = (p: Product) => {
+  if (PENDING_MD_REVIEW_SLUGS.has(p.slug)) return 'Pending Medical Director Review';
+  if (p.status === 'active' && p.isVisible) return 'Public';
+  return 'Hidden';
+};
+
 const notesFor = (p: Product, v: Variant) => {
   const notes: string[] = [];
+  if (PENDING_MD_REVIEW_SLUGS.has(p.slug)) {
+    notes.push(
+      'Public Status = Pending Medical Director Review. Admin/backend ready; URL not publicly ready.',
+    );
+  }
   if (v.strength === 'Blend') notes.push('Catalog strength is "Blend" — concentration not invented.');
   if (v.strength === 'Combination formula') {
     notes.push('Catalog strength is "Combination formula" — concentration not invented.');
@@ -47,11 +60,17 @@ type Row = {
   size: string;
   url: string;
   active: string;
+  publicStatus: string;
   notes: string;
 };
 
+/** Active catalog products with SKUs — includes pending-publish (isVisible=false) rows. */
+const skuCatalogProducts = products.filter(
+  x => x.status === 'active' && (x.isVisible || PENDING_MD_REVIEW_SLUGS.has(x.slug)),
+);
+
 const retailRows: Row[] = [];
-for (const p of products.filter(x => x.status === 'active' && x.isVisible)) {
+for (const p of skuCatalogProducts) {
   for (const v of p.variants) {
     retailRows.push({
       product: p.displayName,
@@ -66,7 +85,8 @@ for (const p of products.filter(x => x.status === 'active' && x.isVisible)) {
       strength: v.strength,
       size: v.size,
       url: `${ORIGIN}/product/${p.slug}`,
-      active: 'true',
+      active: p.isVisible ? 'true' : 'false',
+      publicStatus: publicStatusFor(p),
       notes: notesFor(p, v),
     });
   }
@@ -89,6 +109,7 @@ for (const m of memberships.filter(x => x.status === 'active' && x.isVisible)) {
     size: 'monthly',
     url: `${ORIGIN}/product/${m.slug}`,
     active: 'true',
+    publicStatus: 'Public',
     notes:
       'PROGRAM SKU only. Fulfillment uses retail WM SKUs via dose crosswalk — no duplicate membership-medication SKUs.',
   });
@@ -110,6 +131,7 @@ for (const m of memberships.filter(x => x.status === 'active' && x.isVisible)) {
       size: 'monthly program',
       url: `${ORIGIN}/product/${m.slug}`,
       active: 'true',
+      publicStatus: 'Public',
       notes: `PROGRAM SKU=${programSku}; FULFILLMENT SKU=${cross?.fulfillmentSku || 'MISSING'} (retail vial ${cross?.fulfillmentVariantId || ''}).`,
     });
   }
@@ -129,6 +151,7 @@ const headers = [
   'Size / Quantity',
   'Production URL',
   'Active',
+  'Public Status',
   'Notes',
 ];
 
@@ -150,6 +173,7 @@ for (const r of allExportRows) {
       r.size,
       r.url,
       r.active,
+      r.publicStatus,
       r.notes,
     ]
       .map(csvEscape)
@@ -177,6 +201,10 @@ md.push('');
 md.push('**Production origin:** `https://mybaremethod.com`');
 md.push('');
 md.push('Route pattern: `/product/:slug`');
+md.push('');
+md.push(
+  '**Note:** Tesamorelin and Fat Burner are included for Scriptful/admin readiness with **Public Status = Pending Medical Director Review**. Their URLs are not publicly ready yet.',
+);
 md.push('');
 md.push('## Policy');
 md.push('');
@@ -228,12 +256,12 @@ md.push('');
 md.push('## Retail variant SKUs');
 md.push('');
 md.push(
-  '| Product | Variant / Dose | SKU | Parent ID | Variant ID | Category | Form | Strength | Size | URL | Notes |',
+  '| Product | Variant / Dose | SKU | Parent ID | Variant ID | Category | Form | Strength | Size | URL | Public Status | Notes |',
 );
-md.push('|---|---|---|---|---|---|---|---|---|---|---|');
+md.push('|---|---|---|---|---|---|---|---|---|---|---|---|');
 for (const r of retailRows) {
   md.push(
-    `| ${r.product} | ${r.variant} | \`${r.sku}\` | \`${r.parentId}\` | \`${r.variantId}\` | ${r.category} | ${r.dosageForm} | ${r.strength} | ${r.size} | ${r.url} | ${r.notes || ''} |`,
+    `| ${r.product} | ${r.variant} | \`${r.sku}\` | \`${r.parentId}\` | \`${r.variantId}\` | ${r.category} | ${r.dosageForm} | ${r.strength} | ${r.size} | ${r.url} | ${r.publicStatus} | ${r.notes || ''} |`,
   );
 }
 md.push('');
@@ -253,14 +281,17 @@ md.push('');
 md.push('Machine-readable export: [`scriptful-variant-skus.csv`](./scriptful-variant-skus.csv)');
 md.push('');
 md.push(
-  'CSV includes membership dose rows with both Program SKU and Fulfillment SKU columns populated.',
+  'CSV includes membership dose rows with both Program SKU and Fulfillment SKU columns populated, plus Public Status.',
 );
 md.push('');
 md.push('## Exclusions');
 md.push('');
 md.push('- Inactive Tirzepatide 30mg — excluded');
 md.push('- Inactive Bare Elite Wellness — excluded');
-md.push('- Future/hidden products (Sermorelin, Minoxidil Tablets) — no SKU assigned');
+md.push('- Future products (Sermorelin, Minoxidil Tablets) — no SKU assigned');
+md.push(
+  '- Tesamorelin / Fat Burner — included with SKUs but Public Status = Pending Medical Director Review (not publicly ready)',
+);
 md.push('');
 
 writeFileSync('docs/scriptful-variant-skus.md', md.join('\n'));
@@ -275,6 +306,9 @@ console.log(
       orphans,
       invalid,
       csvRows: allExportRows.length,
+      pendingMdReview: retailRows
+        .filter(r => r.publicStatus === 'Pending Medical Director Review')
+        .map(r => r.sku),
     },
     null,
     2,

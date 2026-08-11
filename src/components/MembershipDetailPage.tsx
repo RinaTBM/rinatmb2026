@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { ArrowRight, Check, Lock, ShieldCheck } from 'lucide-react';
 import { Link } from '@/router';
 import type { Membership } from '@/data/products';
+import { paragraphs } from '@/data/productCopy';
 import { useCart } from '@/context/CartContext';
 import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
+import { ProductHighlights } from '@/components/ProductDescriptionSections';
 import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
 import {
   labelRequestedFormulation,
@@ -47,6 +49,10 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
     });
   };
 
+  const highlights = membership.highlights ?? [];
+  const potentialBenefits = membership.potentialBenefits ?? membership.commonUses ?? [];
+  const whyChoose = membership.whyPeopleChooseIt ?? [];
+
   return (
     <div className="bg-cream-50 pt-28 md:pt-32 pb-20">
       <section className="pb-12">
@@ -70,14 +76,20 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
 
             <div className="flex flex-col">
               <p className="eyebrow text-gold-600 mb-2">{membership.brandName}</p>
-              <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-3">
+              <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-2">
                 {membership.displayName}
               </h1>
-              <div className="mb-4">
+              {membership.benefitHeadline && (
+                <p className="text-xl md:text-2xl text-ink-700 mb-3 leading-snug">
+                  {membership.benefitHeadline}
+                </p>
+              )}
+              <div className="mb-3">
                 <span className="font-serif text-4xl text-ink-900">${membership.monthlyPrice}</span>
                 <span className="text-ink-500 ml-1">/month</span>
               </div>
-              <p className="text-ink-600 leading-relaxed mb-3">{membership.longDescription}</p>
+              <p className="text-ink-600 leading-relaxed mb-4">{membership.shortDescription}</p>
+              <ProductHighlights highlights={highlights} />
               <p className="text-sm text-ink-500 mb-5">
                 Initial term: {membership.initialTermMonths} months, then month to month.
               </p>
@@ -92,7 +104,7 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
 
               <div className="mb-5">
                 <p className="text-xs font-semibold uppercase tracking-wider text-ink-400 mb-2">
-                  Included formulations
+                  Available requested doses
                 </p>
                 <ul className="space-y-1.5">
                   {membership.includedFormulations.map(f => (
@@ -153,6 +165,124 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-12 md:py-16 border-t border-cream-300">
+        <div className="container-lux max-w-4xl space-y-10">
+          <div className="space-y-3">
+            <h2 className="font-serif text-2xl md:text-3xl text-ink-900">What You Get</h2>
+            {paragraphs(membership.longDescription).map((p, i) => (
+              <p key={i} className="text-ink-600 leading-relaxed">
+                {p}
+              </p>
+            ))}
+          </div>
+
+          {potentialBenefits.length > 0 && (
+            <div className="space-y-3">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink-900">Potential Benefits</h2>
+              <ul className="space-y-2.5">
+                {potentialBenefits.map(item => (
+                  <li key={item} className="flex items-start gap-2.5 text-ink-700">
+                    <Check size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />
+                    <span className="leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {membership.howItWorks && (
+            <div className="space-y-3">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink-900">How It Works</h2>
+              {paragraphs(membership.howItWorks).map((p, i) => (
+                <p key={i} className="text-ink-600 leading-relaxed">
+                  {p}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {whyChoose.length > 0 && (
+            <div className="space-y-3">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink-900">Why People Choose It</h2>
+              <ul className="space-y-2.5">
+                {whyChoose.map(item => (
+                  <li key={item} className="flex items-start gap-2.5 text-ink-700">
+                    <Check size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />
+                    <span className="leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="space-y-3">
+            <h2 className="font-serif text-2xl md:text-3xl text-ink-900">
+              Available Requested Doses
+            </h2>
+            <ul className="space-y-2">
+              {membership.includedFormulations.map(f => (
+                <li
+                  key={f}
+                  className="rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-800"
+                >
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs text-ink-500">
+              Requested dose informs intake. Your provider determines the approved dose. Medication
+              fulfillment uses the matching retail vial SKU.
+            </p>
+          </div>
+
+          {membership.whatToExpect && (
+            <div className="space-y-3">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink-900">
+                Monthly Invoice &amp; ACH/Wire Payment
+              </h2>
+              {paragraphs(membership.whatToExpect).map((p, i) => (
+                <p key={i} className="text-ink-600 leading-relaxed">
+                  {p}
+                </p>
+              ))}
+            </div>
+          )}
+
+          <div className="space-y-3">
+            <h2 className="font-serif text-2xl md:text-3xl text-ink-900">
+              Provider Review &amp; Important Information
+            </h2>
+            {paragraphs(
+              membership.importantInformation ||
+                'Membership enrollment and payment do not guarantee a prescription. Your provider determines appropriateness and dose.',
+            ).map((p, i) => (
+              <p key={i} className="text-ink-600 leading-relaxed">
+                {p}
+              </p>
+            ))}
+          </div>
+
+          {membership.faq.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink-900">Membership FAQ</h2>
+              <div className="space-y-3">
+                {membership.faq.map(faq => (
+                  <details key={faq.q} className="card-lux group p-5">
+                    <summary className="flex cursor-pointer items-center justify-between font-medium text-ink-900 list-none">
+                      {faq.q}
+                      <span className="ml-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-cream-200 text-ink-600 transition-transform group-open:rotate-45">
+                        <span className="text-lg leading-none">+</span>
+                      </span>
+                    </summary>
+                    <p className="mt-3 text-sm text-ink-500 leading-relaxed">{faq.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </div>

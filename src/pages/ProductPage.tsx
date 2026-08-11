@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'react';
 import { Link, navigate } from '@/router';
 import { Minus, Plus, ShieldCheck, RefreshCw, Truck, Check } from 'lucide-react';
-import { getMembership, getProduct, getRelatedProducts, sections, PROVIDER_ELIGIBILITY_NOTICE } from '@/data/products';
+import { getMembership, getProduct, getRelatedProducts, sections } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
 import { ProductCard } from '@/components/ProductCard';
 import { AccessoryProductPage } from '@/components/AccessoryProductPage';
 import { MembershipDetailPage } from '@/components/MembershipDetailPage';
 import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
+import { ProductDescriptionSections, ProductHighlights } from '@/components/ProductDescriptionSections';
 import { resolveStorefrontDetail } from '@/lib/catalog/resolveStorefrontDetail';
 import {
   labelRequestedFormulation,
@@ -46,7 +47,6 @@ function WellnessProductPage({ slug }: { slug: string }) {
   const { isActiveMember } = useMember();
   const [variantIndex, setVariantIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState<'overview' | 'eligibility' | 'formulation'>('overview');
   /** null = use preferred default (Wellness Membership / Active Wellness when available). */
   const [selectedKind, setSelectedKind] = useState<PurchaseOptionKind | null>(null);
   const [requestedFormulation, setRequestedFormulation] = useState('');
@@ -241,8 +241,9 @@ function WellnessProductPage({ slug }: { slug: string }) {
                 </span>
               </div>
               <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-2 leading-tight">{product.displayName}</h1>
-              <p className="text-lg text-ink-500 mb-4">{product.subtitle}</p>
-              <p className="text-ink-600 leading-relaxed mb-6">{product.shortDescription}</p>
+              <p className="text-xl md:text-2xl text-ink-700 mb-3 leading-snug">{product.benefitHeadline}</p>
+              <p className="text-ink-600 leading-relaxed mb-5">{product.shortDescription}</p>
+              <ProductHighlights highlights={product.highlights} />
 
               <div className="mb-6">
                 <p className="text-sm font-medium text-ink-900 mb-2">
@@ -444,41 +445,7 @@ function WellnessProductPage({ slug }: { slug: string }) {
 
       <section className="py-12 md:py-16 border-t border-cream-300">
         <div className="container-lux max-w-4xl">
-          <div className="flex gap-2 border-b border-cream-300 mb-6">
-            {([
-              { id: 'overview', label: 'Overview' },
-              { id: 'eligibility', label: 'Eligibility & Provider Review' },
-              { id: 'formulation', label: 'Formulation' },
-            ] as const).map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
-                  activeTab === tab.id ? 'border-ink-900 text-ink-900' : 'border-transparent text-ink-400 hover:text-ink-700'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          <div className="prose prose-sm max-w-none">
-            {activeTab === 'overview' && (
-              <p className="text-ink-600 leading-relaxed">{product.longDescription}</p>
-            )}
-            {activeTab === 'eligibility' && (
-              <ul className="space-y-3">
-                {PROVIDER_ELIGIBILITY_NOTICE.map((line, i) => (
-                  <li key={i} className="flex items-start gap-3 text-ink-700">
-                    <Check size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />
-                    <span>{line}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {activeTab === 'formulation' && (
-              <p className="text-ink-600 leading-relaxed">{product.ingredients}</p>
-            )}
-          </div>
+          <ProductDescriptionSections product={product} />
         </div>
       </section>
 

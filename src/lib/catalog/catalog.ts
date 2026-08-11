@@ -29,6 +29,8 @@ export interface CatalogVariant {
   billingInterval: 'month' | null;
   isActive: boolean;
   sortOrder: number;
+  /** Stable Scriptful/retail SKU when assigned. */
+  sku?: string | null;
 }
 
 export interface CatalogProduct {
@@ -81,6 +83,8 @@ export interface CatalogMembership {
   isVisible: boolean;
   /** Stripe app_product_id used for mapping (e.g. m1/m2). */
   checkoutProductId: string;
+  /** Membership PROGRAM SKU (billing), when assigned. */
+  programSku?: string | null;
 }
 
 export const CURRENCY = 'usd';
@@ -111,6 +115,7 @@ function mapVariants(p: SourceProduct): CatalogVariant[] {
     billingInterval: null,
     isActive: true,
     sortOrder: i,
+    sku: v.sku ?? null,
   }));
 }
 
@@ -165,6 +170,7 @@ function mapMembership(m: SourceMembership): CatalogMembership {
     status: m.status,
     isVisible: m.isVisible,
     checkoutProductId: m.checkoutProductId,
+    programSku: m.programSku ?? null,
   };
 }
 

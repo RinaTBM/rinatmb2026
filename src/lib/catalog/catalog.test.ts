@@ -7,14 +7,23 @@ import { buildSyncPlan, summarizePlan, emptyState, type ExistingStripeState } fr
 import { priceFingerprint, productFingerprint, idempotencyKey, stableHash } from './fingerprint';
 
 describe('catalog normalization', () => {
-  it('has 11 syncable approved wellness products; review-hold + future excluded', () => {
+  it('has 11 syncable approved wellness products; pending-publish + review-hold + future excluded', () => {
     expect(syncableProducts()).toHaveLength(11);
     expect(catalogProducts.length).toBeGreaterThan(11);
     const slugs = syncableProducts().map(p => p.slug);
+    // Tesamorelin + Fat Burner are backend/admin-ready but isVisible=false until MD publish.
+    expect(slugs).not.toContain('tesamorelin');
+    expect(slugs).not.toContain('fat-burner');
     expect(slugs).not.toContain('sermorelin');
     expect(slugs).not.toContain('minoxidil-tablets');
     expect(slugs).not.toContain('tretinoin-cream');
     expect(slugs).not.toContain('bimatoprost-solution');
+    const pending = catalogProducts.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
+    expect(pending).toHaveLength(2);
+    for (const p of pending) {
+      expect(p.status).toBe('active');
+      expect(p.isVisible).toBe(false);
+    }
   });
 
   it('stores money as integer cents and preserves fractional dollars', () => {
@@ -100,7 +109,7 @@ describe('sync plan', () => {
   it('first sync creates 13 Stripe products (11 approved wellness + 2 memberships)', () => {
     const plan = buildSyncPlan('test', emptyState());
     const s = summarizePlan(plan);
-    expect(s.createProducts).toBe(13); // 11 products + 2 memberships
+    expect(s.createProducts).toBe(13); // 11 products + 2 memberships (pending-publish excluded)
     expect(s.reusePrices).toBe(0);
     expect(s.archivePrices).toBe(0);
     // exactly one recurring membership price each

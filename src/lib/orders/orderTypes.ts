@@ -38,6 +38,12 @@ export interface OrderItemRecord {
   product_id: string | null;
   product_name_snapshot: string;
   variant_snapshot: string | null;
+  /** Purchased SKU (retail variant or membership PROGRAM SKU). */
+  sku?: string | null;
+  /** Storefront variant id / catalog variant_key when applicable. */
+  variant_id?: string | null;
+  /** Membership medication fulfillment SKU when applicable. */
+  fulfillment_sku?: string | null;
   quantity: number;
   unit_price_cents: number;
   discount_cents: number;

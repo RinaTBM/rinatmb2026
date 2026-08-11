@@ -69,6 +69,27 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - Customer UI: `/account/orders`, `/account/orders/:orderId`. Admin UI: `/admin/orders`.
 - See `docs/customer-account-phase2.md` and `docs/customer-account-phase2-verification.sql`.
 
+### New catalog candidates (Tesamorelin / Fat Burner)
+
+- `tesamorelin` (`p73`) and `fat-burner` (`p74`) are in the TypeScript catalog + SKU registry + additive migration `20260811120000_tesamorelin_fat_burner.sql`.
+- Owner-approved retail: Tesamorelin **$149.00** (at-cost $83.33); Fat Burner **$259.00** (at-cost $150.00). Customer-facing copy on both pages completed a claims-safety pass (regulatory caveats in Important Information). **Public storefront visibility is OFF** (`isVisible: false`) until medical-director publish approval; products remain in admin/backend + SKU registry. Do not apply production ACH project migrations from Cursor unless credentials/approval cover that target.
+- Fat Burner is **not** SLU-PP-332.
+
+### Product descriptions
+
+- Customer-facing copy lives in `src/data/productCopy.ts` (structured About / Common Uses / How It Works / What to Expect / Important Information) and is merged in `mk()` / membership definitions.
+- PDP layout: `ProductDescriptionSections` on wellness + accessories; membership detail has its own stacked sections.
+- Review packet: `docs/product-description-review.md` (regenerate via `npx tsx scripts/gen-product-description-review.ts`). Do not invent formulations when catalog says “Blend” / “Combination formula”.
+
+### Variant-level SKUs (Scriptful)
+
+- Registry: `src/data/variantSkus.ts` (48 retail + 2 membership PROGRAM SKUs = 50).
+- Membership PROGRAM vs FULFILLMENT crosswalk: `src/lib/catalog/membershipSkuCrosswalk.ts`.
+- Export: `docs/scriptful-variant-skus.md` + `docs/scriptful-variant-skus.csv` (regenerate via `npx tsx scripts/gen-scriptful-variant-skus.ts`).
+- Additive migration (do **not** apply until approved): `supabase/migrations/20260811090000_variant_skus.sql` — adds `catalog_variants.sku` (unique when non-null), and `order_items.sku` / `variant_id` / `fulfillment_sku`.
+- Accessories and provider-care SKUs live in TypeScript only (not DB `catalog_variants`).
+- Invoice checkout sends SKU fields via `create-invoice-order` after the migration is applied; without the migration, PostgREST will reject unknown columns on insert.
+
 ### GitHub source of truth vs Bolt (permanent)
 
 **Authoritative GitHub source branch:** `production-source/my-bare-method-2026`  

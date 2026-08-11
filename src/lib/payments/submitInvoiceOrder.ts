@@ -18,6 +18,10 @@ export interface SubmitInvoiceOrderItem {
   productName: string;
   variantId?: string;
   variantLabel?: string;
+  /** Retail variant SKU or membership PROGRAM SKU. */
+  sku?: string;
+  /** Membership dose → retail medication fulfillment SKU. */
+  fulfillmentSku?: string;
   section?: string;
   membershipSlug?: string;
   requestedFormulation?: string;

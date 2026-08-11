@@ -167,119 +167,126 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   // ===== LONGEVITY & COGNITIVE =====
   'nad-plus': {
     shortDescription:
-      'A provider-directed compounded NAD+ injection that some people explore as part of longevity-focused wellness care.',
+      'A provider-directed compounded NAD+ injection available after eligibility review.',
     about: [
-      'NAD+ (nicotinamide adenine dinucleotide) is a molecule cells use in energy-related processes. This product is a compounded injectable NAD+ option available only after a licensed provider reviews your eligibility.',
-      'Interest in NAD+ often comes from wellness and longevity conversations. Evidence and clinical practice continue to evolve, so we describe this carefully: it may be considered as part of a supervised plan, not as a proven “anti-aging cure.”',
+      'NAD+ (nicotinamide adenine dinucleotide) is a molecule found naturally in the body and often discussed in wellness and longevity conversations. This listing is a compounded injectable NAD+ option offered only after a licensed provider reviews your eligibility.',
+      'What is commonly discussed: some people explore NAD+ as part of supervised wellness care related to energy or longevity interests.',
+      'What is not established on this page: NAD+ injection is not presented here as an FDA-approved anti-aging treatment, a cure for fatigue, or a therapy with guaranteed results. Your provider can explain whether it belongs in your plan and what expectations are realistic.',
     ].join('\n\n'),
     commonUses: [
-      'A provider may consider NAD+ injection as part of a longevity-oriented wellness plan',
-      'May be discussed when someone is exploring cellular-energy support under clinical guidance',
-      'Commonly paired with intake review and clear expectations about what is (and is not) established',
-      'Not a substitute for evaluation of fatigue, sleep, or medical conditions that need diagnosis',
+      'May be discussed when someone is exploring NAD+ under licensed-provider guidance',
+      'A provider may consider it only after intake and clinical judgment',
+      'Not a substitute for evaluation of fatigue, sleep problems, or other medical concerns that need diagnosis',
+      'Interest is often wellness-oriented; that interest alone does not make a use medically established',
     ],
     howItWorks:
-      'NAD+ participates in cellular processes tied to energy metabolism. Injectable forms deliver NAD+ under a provider’s direction. How you feel afterward varies widely; your care team should set realistic expectations.',
+      'In general biology, NAD+ is involved in normal cellular processes. How a compounded injectable form may feel for any one person varies widely, and storefront copy does not claim a specific clinical outcome. Your care team sets expectations if treatment is approved.',
     whatToExpect:
-      'Offered as an injection in vial sizes/total amounts listed on this page. Provider review is required before dispensing. Administration details and schedule come from your prescribing provider and pharmacy materials.',
+      'Offered as an injection in the vial sizes/total amounts listed on this page. Provider review is required before dispensing. Administration details and schedule come from your prescribing provider and pharmacy materials.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [
-      'Public marketing around NAD+ longevity benefits varies; confirm preferred claim boundary with medical director.',
+      'Confirm preferred public claim boundary for NAD+ (wellness interest vs any stronger longevity framing) with medical director.',
     ],
     regulatoryNotes: [
-      'Avoid “reverses aging,” “restores youth,” or guaranteed energy claims.',
-      'Compounded product — do not imply FDA approval of this formulation.',
+      'No anti-aging cure, guaranteed energy, or FDA-approval claims for this compounded formulation.',
+      'Customer copy distinguishes wellness interest from established medical use.',
     ],
   },
 
   selank: {
     shortDescription:
-      'A provider-directed compounded Selank injection some people discuss for calm focus and stress-related wellness goals.',
+      'A provider-directed compounded Selank injection available after eligibility review.',
     about: [
-      'Selank Injection is a compounded peptide option offered after eligibility review. Selank is distinct from Semax and from the Selank + Semax nasal blend — each product is its own formulation and route.',
-      'Conversations about Selank often involve stress resilience, calm, or cognitive comfort. These uses are emerging and should not be presented as guaranteed treatments for anxiety disorders or other diagnoses.',
+      'Selank Injection is a compounded peptide option offered after eligibility review. It is distinct from Semax Injection and from the Selank + Semax Blend Nasal Spray — each is its own product and route.',
+      'Common wellness interest: some people ask about Selank in conversations around calm, focus, or stress-related wellness goals.',
+      'Proposed / emerging uses: those topics are discussed in research and wellness settings, but they are not presented here as established, FDA-approved treatments for anxiety, mood disorders, or other diagnoses. Your provider decides whether this option is appropriate.',
     ].join('\n\n'),
     commonUses: [
-      'A provider may consider Selank when discussing calm-focus or stress-related wellness goals',
-      'May be explored only after intake and clinical judgment',
+      'May be discussed with a provider when reviewing compounded peptide options',
+      'Explored only after intake and clinical judgment — not for self-directed use',
       'Not interchangeable with Semax or the nasal Selank/Semax blend',
       'Should not replace evaluation of mental-health conditions that need dedicated care',
     ],
     howItWorks:
-      'Selank is a research-oriented peptide discussed in wellness settings for its possible effects on stress-related signaling. Exact mechanisms and benefits are not established as everyday medical fact on this storefront — your provider can explain whether it belongs in your plan.',
+      'Selank is a research-oriented peptide. This page does not claim a proven mechanism or guaranteed effect. If prescribed, your provider and pharmacy materials explain how to use it and what to watch for.',
     whatToExpect:
       'Supplied as an injection at the strength and vial size shown. Use only if prescribed. Dosing and frequency are provider-directed.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [RESEARCH_FLAG],
     regulatoryNotes: [
-      'Flag investigational/emerging framing; do not claim FDA-approved anxiety treatment.',
+      'Emerging/investigational framing only; no FDA-approved anxiety or mood-treatment claims.',
     ],
   },
 
   semax: {
     shortDescription:
-      'A provider-directed compounded Semax injection some people discuss for focus and cognitive-wellness support.',
+      'A provider-directed compounded Semax injection available after eligibility review.',
     about: [
       'Semax Injection is a compounded peptide option available after licensed-provider review. It is not the same product as Selank Injection or the Selank + Semax Blend Nasal Spray.',
-      'Interest in Semax often relates to focus, attention, or cognitive wellness. Those topics remain carefully framed here: a provider may consider this option, but it is not presented as a proven treatment for ADHD, dementia, or other specific diagnoses.',
+      'Common wellness interest: some people ask about Semax in conversations around focus, attention, or cognitive wellness.',
+      'Proposed / emerging uses: those interests appear in research and wellness discussions, but this page does not present Semax as an established treatment for ADHD, dementia, memory disease, or other specific diagnoses.',
     ].join('\n\n'),
     commonUses: [
-      'A provider may consider Semax when discussing focus or cognitive-wellness goals',
-      'May be used only under eligibility review and prescription when appropriate',
+      'May be discussed with a provider when reviewing compounded peptide options',
+      'Available only after eligibility review and prescription when appropriate',
       'Distinct from Selank and from the nasal combination spray',
       'Not a replacement for neurological or mental-health evaluation when symptoms warrant it',
     ],
     howItWorks:
-      'Semax is a research-oriented peptide discussed for possible effects related to focus and cognitive signaling. Because evidence is evolving, we avoid definitive medical claims; your provider interprets whether it is suitable for you.',
+      'Semax is a research-oriented peptide. Storefront copy does not claim proven cognitive benefits or a specific mechanism of action. Your provider interprets whether it is suitable for you.',
     whatToExpect:
       'Injectable vial at the listed strength/size. Provider determines if you receive it and how to use it. Do not combine peptide products unless your clinician specifically directs you to.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [RESEARCH_FLAG],
     regulatoryNotes: [
-      'Do not claim established treatment for cognitive disease.',
+      'No established cognitive-disease treatment claims; emerging framing only.',
     ],
   },
 
   'selank-semax-nasal-spray': {
     shortDescription:
-      'A compounded nasal spray that combines Selank and Semax in one provider-directed blend — different from either injection alone.',
+      'A compounded Selank + Semax nasal spray blend available after provider review — different from either injection alone.',
     about: [
       'Selank + Semax Blend Nasal Spray is a compounded combination delivered through the nose rather than by injection. It is not simply “the same as” ordering Selank Injection plus Semax Injection separately.',
-      'People may ask about a nasal option for convenience or preference. Suitability still depends on provider review, and combination products deserve clear counseling about expectations and safety.',
+      'Common wellness interest: some people prefer a nasal format or ask about a combined peptide option for convenience.',
+      'Proposed / emerging uses: any wellness goals discussed with Selank or Semax individually remain emerging here as well. This blend is not presented as an established treatment for anxiety, ADHD, dementia, or other diagnoses.',
     ].join('\n\n'),
     commonUses: [
-      'A provider may consider a combined nasal option when both peptides are appropriate for a supervised plan',
+      'A provider may consider a combined nasal option only when clinically appropriate after review',
       'May appeal to customers who prefer a nasal spray format over injections',
       'Not interchangeable with single-peptide injections',
-      'Should be discussed with realistic expectations around focus, calm, or wellness goals',
+      'Expectations should stay realistic — emerging wellness interest is not the same as proven medical use',
     ],
     howItWorks:
-      'The spray delivers a measured Selank/Semax blend through nasal absorption. Your provider explains technique, frequency, and whether a combination product fits better than a single agent.',
+      'This product is a nasal spray blend of Selank and Semax at the strength shown in the catalog. We do not claim a proven combined clinical effect. If prescribed, your provider explains technique, frequency, and whether a combination product fits better than a single agent.',
     whatToExpect:
       'Nasal spray bottle at the strength/size listed (micrograms per spray as shown in the catalog). Use only as prescribed. Follow pharmacy instructions for priming, storage, and dosing.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
-    reviewFlags: [RESEARCH_FLAG, 'Confirm preferred language for combination peptide nasal products.'],
+    reviewFlags: [RESEARCH_FLAG, 'Confirm preferred public language for combination peptide nasal products.'],
     regulatoryNotes: [
       'Preserve catalog strength text (50mcg/50mcg per spray); do not invent additional concentrations.',
+      'No established diagnosis-treatment claims for the blend.',
     ],
   },
 
   // ===== RECOVERY & PERFORMANCE =====
   'bpc-157-tb-500': {
     shortDescription:
-      'A provider-directed compounded blend of BPC-157 and TB-500, available in capsule or injection form after eligibility review.',
+      'A provider-directed compounded BPC-157/TB-500 blend available as capsule or injection after eligibility review.',
     about: [
-      'Wolverine: BPC-157/TB-500 is a compounded combination product. BPC-157 and TB-500 are peptides often discussed in recovery and performance wellness conversations. This listing offers two dosage forms — capsule and injection — so your provider can choose the route that fits the plan.',
-      'Interest in these peptides is frequently tied to tissue comfort, training recovery, or general repair-oriented wellness. Those uses are emerging and should not be framed as guaranteed injury healing or sports-medicine cures.',
+      'Wolverine: BPC-157/TB-500 is a compounded combination product. The catalog lists strength as a blend (exact amounts are determined by the prescribing provider and pharmacy). Two dosage forms are offered — capsule and injection.',
+      'Common wellness interest: these peptides are often mentioned in recovery and performance wellness conversations.',
+      'Proposed / emerging uses: discussions sometimes involve training recovery or repair-oriented wellness. Those uses are emerging and are not presented here as proven injury healing, sports-medicine cures, or guaranteed performance enhancement.',
+      'Established medical uses: this storefront does not describe BPC-157/TB-500 as an FDA-approved treatment for specific injuries or diagnoses.',
     ].join('\n\n'),
     commonUses: [
-      'A provider may consider this blend when discussing recovery-oriented wellness support',
-      'May be explored for performance-adjacent goals under clinical supervision',
+      'May be discussed with a provider when reviewing compounded peptide options',
       'Available as capsule or injection — forms are not automatically interchangeable without provider guidance',
       'Not a substitute for evaluation of injuries that need imaging, physical therapy, or specialist care',
+      'Should be approached with realistic expectations; emerging interest is not proven benefit',
     ],
     howItWorks:
-      'BPC-157 and TB-500 are research-oriented peptides discussed for possible roles in tissue signaling and recovery-related pathways. Because the science is still developing, we describe potential use carefully and leave clinical decisions to your licensed provider.',
+      'BPC-157 and TB-500 are research-oriented peptides. This page does not claim a proven healing mechanism or clinical outcome. If prescribed, your licensed provider and pharmacy determine the blend details and how to use the selected form.',
     whatToExpect:
       'Choose Capsule or Injection on this page (see Available Options). Exact blend details are determined by the prescribing provider and pharmacy. Administration method depends on the form prescribed. Do not self-direct peptide stacking.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
@@ -322,17 +329,17 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     shortDescription:
       'A compounded topical formula featuring minoxidil for prescription hair-care support after provider review.',
     about: [
-      'Minoxidil Combination Topical Formula is a compounded hair-care option built around minoxidil, a medicine commonly used to support hair density. The catalog describes this as a combination formula personalized by the prescribing provider and dispensing pharmacy.',
-      'Because the exact companion ingredients are determined clinically (not listed as a fixed consumer recipe here), we do not invent a full ingredient deck. Your provider and pharmacy confirm what is in your specific preparation.',
+      'Minoxidil Combination Topical Formula is a compounded hair-care option that features minoxidil. Minoxidil is a medicine commonly used in hair-care treatment plans. The catalog describes this product as a combination formula personalized by the prescribing provider and dispensing pharmacy.',
+      'Important limit: the exact companion ingredients beyond minoxidil are not listed in the live catalog, so this page does not invent an ingredient list. Your provider and pharmacy confirm what is in your specific preparation.',
     ].join('\n\n'),
     commonUses: [
-      'May be prescribed to support hair-density goals',
-      'Commonly considered for thinning hair when a topical approach is appropriate',
+      'May be prescribed to support hair-care goals when a topical approach is appropriate',
+      'Commonly considered for thinning hair in provider-directed plans that include minoxidil',
       'A provider may personalize the compounded combination based on your needs',
-      'Results vary; ongoing use is often required to maintain benefit when treatment works for you',
+      'Results vary; if treatment helps you, ongoing use is often needed to maintain benefit',
     ],
     howItWorks:
-      'Minoxidil is thought to support hair follicles and prolong growth phases for some users. A topical formula delivers medication to the scalp. Your provider explains application frequency and what realistic timelines look like.',
+      'Minoxidil is commonly used to support hair-care treatment plans. This compounded topical delivers medication to the scalp as directed by your provider. We do not claim a specific amount of hair growth or a fixed timeline. Ask your care team what to expect for your formula.',
     whatToExpect:
       'Supplied as a topical solution bottle. Apply only as directed after approval. Exact compounded contents are set by provider and pharmacy — ask your care team for your specific formula details if needed.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
@@ -341,6 +348,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     ],
     regulatoryNotes: [
       'Strength listed as "Combination formula" — preserve; no guaranteed hair-growth claims.',
+      'No invented companion-ingredient list.',
     ],
   },
 
@@ -478,10 +486,10 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   'temperature-controlled-travel-case': {
     shortDescription:
-      'An insulated travel case with thermal lining intended to help keep temperature-sensitive vials more stable on the go.',
+      'An insulated travel case with thermal lining for carrying temperature-sensitive vials on the go.',
     about: [
       'The Temperature-Controlled Travel Case is an insulated carrier with a built-in thermal lining for transporting peptide vials and similar supplies.',
-      'Catalog copy notes temperature maintenance for up to 48 hours under intended use conditions. Real-world performance still depends on ambient heat, packing method, and ice-pack use — treat medication storage guidance from your pharmacy as the authority.',
+      'It is designed to help buffer vials from ambient temperature swings during travel. Performance depends on packing method, ice-pack use, and outdoor conditions. Always follow the storage instructions from your pharmacy for your specific medication — this case does not replace those rules.',
     ].join('\n\n'),
     commonUses: [
       'Travel days when vials need insulation',
@@ -489,11 +497,14 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Pairing with a reusable ice pack for added cold support',
     ],
     whatToExpect:
-      'One insulated case. Add cold packs as needed and follow pharmacy storage instructions for your specific medication.',
+      'One insulated case. Add cold packs as needed and follow pharmacy storage instructions for your specific medication. We do not publish a guaranteed hold-time on this page.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications. Insulation claims follow catalog language; verify packing for your climate and trip length.',
+      'Accessories are wellness tools and supplies. They are not medications. Use pharmacy storage guidance as the authority for medication temperature requirements.',
     reviewFlags: [
-      '48-hour temperature claim comes from existing catalog copy — owner may wish to re-verify marketing precision.',
+      'Prior catalog mentioned “up to 48 hours”; that duration claim was removed from customer-facing copy pending owner verification of performance wording.',
+    ],
+    regulatoryNotes: [
+      'No guaranteed temperature-hold duration in customer copy.',
     ],
   },
 
@@ -592,22 +603,27 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   'premium-insulin-syringes': {
     shortDescription:
-      'Sterile insulin syringes for subcutaneous injections, offered in multiple pack counts.',
+      'Insulin syringes for subcutaneous injections, offered in multiple pack counts.',
     about: [
-      'Premium Insulin Syringes provide sterile syringes for subcutaneous injections when your prescribed routine uses this supply type.',
+      'Premium Insulin Syringes are injection supplies for subcutaneous use when your prescribed routine calls for this supply type.',
       'Select a pack count from 10 to 100 on this page. Cart quantity is the number of packs, separate from how many syringes are inside the selected pack.',
+      'Needle gauge, barrel units, and other technical specs are not listed in the live catalog, so this page does not invent them. Check the product packaging on arrival if you need exact details, or ask your care team which syringe type you should use.',
     ].join('\n\n'),
     commonUses: [
-      'Supply refills for subcutaneous injection routines',
+      'Supply refills for subcutaneous injection routines when directed',
       'Pair with alcohol wipes and a sharps container',
       'Choose a pack size that matches how often you inject',
     ],
     whatToExpect:
-      'One pack at the count selected. Needle gauge and barrel markings are not listed in the catalog, so we do not invent those specs here — check the product packaging on arrival if you need exact details.',
+      'One pack at the count selected. Confirm gauge and markings on the package before use. Dispose of used syringes in a proper sharps container.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications. Dispose of used syringes in a proper sharps container.',
+      'Accessories are wellness tools and supplies. They are not medications. Use only the syringe type your provider or pharmacy recommends for your medication.',
     reviewFlags: [
-      'Needle gauge / unit markings not in catalog — flagged rather than invented.',
+      'Needle gauge / unit markings not in catalog — still need owner confirmation if specific specs should be published later.',
+    ],
+    regulatoryNotes: [
+      'No invented gauge, length, or unit-marking claims.',
+      '“Sterile” packaging claims deferred to on-pack labeling rather than asserted beyond catalog supply description.',
     ],
   },
 };

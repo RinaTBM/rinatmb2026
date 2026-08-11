@@ -125,7 +125,13 @@ lines.push(
 );
 lines.push('- Insulin syringe needle gauge / unit markings not listed in catalog');
 lines.push(
-  '- Travel case “up to 48 hours” language retained from prior catalog copy — verify marketing precision if desired',
+  '- Travel case “up to 48 hours” duration claim **removed** from customer-facing copy pending owner verification',
+);
+lines.push('');
+lines.push('## Safety pass notes (flagged products only)');
+lines.push('');
+lines.push(
+  'A follow-up safety pass softened emerging-product framing (NAD+, Selank, Semax, Selank/Semax blend, BPC-157/TB-500), removed the travel-case hold-time claim, avoided inventing syringe gauges / minoxidil companion ingredients, and separated wellness interest from established medical use.',
 );
 lines.push('');
 lines.push('## Per-product review');

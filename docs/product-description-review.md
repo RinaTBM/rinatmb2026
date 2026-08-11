@@ -20,25 +20,29 @@ Review packet for the full customer-facing description rewrite.
 
 ## Flagged for owner / provider verification
 
-- NAD+ Injection: Public marketing around NAD+ longevity benefits varies; confirm preferred claim boundary with medical director.
+- NAD+ Injection: Confirm preferred public claim boundary for NAD+ (wellness interest vs any stronger longevity framing) with medical director.
 - Selank Injection: Emerging / research-oriented peptide wellness use — avoid presenting as established FDA-approved therapy for specific diagnoses; owner/provider should confirm public-facing regulatory framing.
 - Semax Injection: Emerging / research-oriented peptide wellness use — avoid presenting as established FDA-approved therapy for specific diagnoses; owner/provider should confirm public-facing regulatory framing.
 - Selank + Semax Blend Nasal Spray: Emerging / research-oriented peptide wellness use — avoid presenting as established FDA-approved therapy for specific diagnoses; owner/provider should confirm public-facing regulatory framing.
-- Selank + Semax Blend Nasal Spray: Confirm preferred language for combination peptide nasal products.
+- Selank + Semax Blend Nasal Spray: Confirm preferred public language for combination peptide nasal products.
 - Wolverine: BPC-157/TB-500: Emerging / research-oriented peptide wellness use — avoid presenting as established FDA-approved therapy for specific diagnoses; owner/provider should confirm public-facing regulatory framing.
 - Wolverine: BPC-157/TB-500: Catalog strength is "Blend" only — do not invent mg amounts for BPC-157 or TB-500.
 - Minoxidil Combination Topical Formula: Exact combination ingredients beyond minoxidil are not defined in catalog — do not invent them.
 - Bimatoprost Solution: Confirm preferred consumer wording for indication (eyelash hypotrichosis vs cosmetic framing) with medical director if needed.
 - Complete Injection Starter Kit: Kit contents taken from catalog shortDescription — do not add unverified extra items.
-- Temperature-Controlled Travel Case: 48-hour temperature claim comes from existing catalog copy — owner may wish to re-verify marketing precision.
-- Premium Insulin Syringes: Needle gauge / unit markings not in catalog — flagged rather than invented.
+- Temperature-Controlled Travel Case: Prior catalog mentioned “up to 48 hours”; that duration claim was removed from customer-facing copy pending owner verification of performance wording.
+- Premium Insulin Syringes: Needle gauge / unit markings not in catalog — still need owner confirmation if specific specs should be published later.
 
 Additional catalog limitations intentionally preserved (not invented):
 
 - Wolverine BPC-157/TB-500 strength remains **"Blend"**
 - Minoxidil topical strength remains **"Combination formula"** (no invented ingredient deck)
 - Insulin syringe needle gauge / unit markings not listed in catalog
-- Travel case “up to 48 hours” language retained from prior catalog copy — verify marketing precision if desired
+- Travel case “up to 48 hours” duration claim **removed** from customer-facing copy pending owner verification
+
+## Safety pass notes (flagged products only)
+
+A follow-up safety pass softened emerging-product framing (NAD+, Selank, Semax, Selank/Semax blend, BPC-157/TB-500), removed the travel-case hold-time claim, avoided inventing syringe gauges / minoxidil companion ingredients, and separated wellness interest from established medical use.
 
 ## Per-product review
 
@@ -201,32 +205,33 @@ _Important information:_ Availability is subject to provider review. Your provid
 - **Category:** longevity-cognitive
 - **Old short description:** A provider-directed compounded NAD+ injection formulation.
 - **Old long description:** Shared COMPOUNDED_DISCLAIMER only
-- **New short description:** A provider-directed compounded NAD+ injection that some people explore as part of longevity-focused wellness care.
+- **New short description:** A provider-directed compounded NAD+ injection available after eligibility review.
 
 **New full description (structured):**
 
 _About_
-- NAD+ (nicotinamide adenine dinucleotide) is a molecule cells use in energy-related processes. This product is a compounded injectable NAD+ option available only after a licensed provider reviews your eligibility.
-- Interest in NAD+ often comes from wellness and longevity conversations. Evidence and clinical practice continue to evolve, so we describe this carefully: it may be considered as part of a supervised plan, not as a proven “anti-aging cure.”
+- NAD+ (nicotinamide adenine dinucleotide) is a molecule found naturally in the body and often discussed in wellness and longevity conversations. This listing is a compounded injectable NAD+ option offered only after a licensed provider reviews your eligibility.
+- What is commonly discussed: some people explore NAD+ as part of supervised wellness care related to energy or longevity interests.
+- What is not established on this page: NAD+ injection is not presented here as an FDA-approved anti-aging treatment, a cure for fatigue, or a therapy with guaranteed results. Your provider can explain whether it belongs in your plan and what expectations are realistic.
 
 _Common uses_
-- A provider may consider NAD+ injection as part of a longevity-oriented wellness plan
-- May be discussed when someone is exploring cellular-energy support under clinical guidance
-- Commonly paired with intake review and clear expectations about what is (and is not) established
-- Not a substitute for evaluation of fatigue, sleep, or medical conditions that need diagnosis
+- May be discussed when someone is exploring NAD+ under licensed-provider guidance
+- A provider may consider it only after intake and clinical judgment
+- Not a substitute for evaluation of fatigue, sleep problems, or other medical concerns that need diagnosis
+- Interest is often wellness-oriented; that interest alone does not make a use medically established
 
-_How it works:_ NAD+ participates in cellular processes tied to energy metabolism. Injectable forms deliver NAD+ under a provider’s direction. How you feel afterward varies widely; your care team should set realistic expectations.
+_How it works:_ In general biology, NAD+ is involved in normal cellular processes. How a compounded injectable form may feel for any one person varies widely, and storefront copy does not claim a specific clinical outcome. Your care team sets expectations if treatment is approved.
 
-_What to expect:_ Offered as an injection in vial sizes/total amounts listed on this page. Provider review is required before dispensing. Administration details and schedule come from your prescribing provider and pharmacy materials.
+_What to expect:_ Offered as an injection in the vial sizes/total amounts listed on this page. Provider review is required before dispensing. Administration details and schedule come from your prescribing provider and pharmacy materials.
 
 _Important information:_ Availability is subject to provider review. Your provider will determine whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history and individual needs. Completing payment does not guarantee a prescription. This is a provider-directed compounded option. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.
 
 **Regulatory / claims notes:**
-- Avoid “reverses aging,” “restores youth,” or guaranteed energy claims.
-- Compounded product — do not imply FDA approval of this formulation.
+- No anti-aging cure, guaranteed energy, or FDA-approval claims for this compounded formulation.
+- Customer copy distinguishes wellness interest from established medical use.
 
 **Needs verification:**
-- Public marketing around NAD+ longevity benefits varies; confirm preferred claim boundary with medical director.
+- Confirm preferred public claim boundary for NAD+ (wellness interest vs any stronger longevity framing) with medical director.
 
 ### Selank Injection
 
@@ -234,28 +239,29 @@ _Important information:_ Availability is subject to provider review. Your provid
 - **Category:** longevity-cognitive
 - **Old short description:** A provider-directed compounded Selank injection, available only after eligibility review.
 - **Old long description:** Shared COMPOUNDED_DISCLAIMER only
-- **New short description:** A provider-directed compounded Selank injection some people discuss for calm focus and stress-related wellness goals.
+- **New short description:** A provider-directed compounded Selank injection available after eligibility review.
 
 **New full description (structured):**
 
 _About_
-- Selank Injection is a compounded peptide option offered after eligibility review. Selank is distinct from Semax and from the Selank + Semax nasal blend — each product is its own formulation and route.
-- Conversations about Selank often involve stress resilience, calm, or cognitive comfort. These uses are emerging and should not be presented as guaranteed treatments for anxiety disorders or other diagnoses.
+- Selank Injection is a compounded peptide option offered after eligibility review. It is distinct from Semax Injection and from the Selank + Semax Blend Nasal Spray — each is its own product and route.
+- Common wellness interest: some people ask about Selank in conversations around calm, focus, or stress-related wellness goals.
+- Proposed / emerging uses: those topics are discussed in research and wellness settings, but they are not presented here as established, FDA-approved treatments for anxiety, mood disorders, or other diagnoses. Your provider decides whether this option is appropriate.
 
 _Common uses_
-- A provider may consider Selank when discussing calm-focus or stress-related wellness goals
-- May be explored only after intake and clinical judgment
+- May be discussed with a provider when reviewing compounded peptide options
+- Explored only after intake and clinical judgment — not for self-directed use
 - Not interchangeable with Semax or the nasal Selank/Semax blend
 - Should not replace evaluation of mental-health conditions that need dedicated care
 
-_How it works:_ Selank is a research-oriented peptide discussed in wellness settings for its possible effects on stress-related signaling. Exact mechanisms and benefits are not established as everyday medical fact on this storefront — your provider can explain whether it belongs in your plan.
+_How it works:_ Selank is a research-oriented peptide. This page does not claim a proven mechanism or guaranteed effect. If prescribed, your provider and pharmacy materials explain how to use it and what to watch for.
 
 _What to expect:_ Supplied as an injection at the strength and vial size shown. Use only if prescribed. Dosing and frequency are provider-directed.
 
 _Important information:_ Availability is subject to provider review. Your provider will determine whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history and individual needs. Completing payment does not guarantee a prescription. This is a provider-directed compounded option. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.
 
 **Regulatory / claims notes:**
-- Flag investigational/emerging framing; do not claim FDA-approved anxiety treatment.
+- Emerging/investigational framing only; no FDA-approved anxiety or mood-treatment claims.
 
 **Needs verification:**
 - Emerging / research-oriented peptide wellness use — avoid presenting as established FDA-approved therapy for specific diagnoses; owner/provider should confirm public-facing regulatory framing.
@@ -266,28 +272,29 @@ _Important information:_ Availability is subject to provider review. Your provid
 - **Category:** longevity-cognitive
 - **Old short description:** A provider-directed compounded Semax injection, available only after eligibility review.
 - **Old long description:** Shared COMPOUNDED_DISCLAIMER only
-- **New short description:** A provider-directed compounded Semax injection some people discuss for focus and cognitive-wellness support.
+- **New short description:** A provider-directed compounded Semax injection available after eligibility review.
 
 **New full description (structured):**
 
 _About_
 - Semax Injection is a compounded peptide option available after licensed-provider review. It is not the same product as Selank Injection or the Selank + Semax Blend Nasal Spray.
-- Interest in Semax often relates to focus, attention, or cognitive wellness. Those topics remain carefully framed here: a provider may consider this option, but it is not presented as a proven treatment for ADHD, dementia, or other specific diagnoses.
+- Common wellness interest: some people ask about Semax in conversations around focus, attention, or cognitive wellness.
+- Proposed / emerging uses: those interests appear in research and wellness discussions, but this page does not present Semax as an established treatment for ADHD, dementia, memory disease, or other specific diagnoses.
 
 _Common uses_
-- A provider may consider Semax when discussing focus or cognitive-wellness goals
-- May be used only under eligibility review and prescription when appropriate
+- May be discussed with a provider when reviewing compounded peptide options
+- Available only after eligibility review and prescription when appropriate
 - Distinct from Selank and from the nasal combination spray
 - Not a replacement for neurological or mental-health evaluation when symptoms warrant it
 
-_How it works:_ Semax is a research-oriented peptide discussed for possible effects related to focus and cognitive signaling. Because evidence is evolving, we avoid definitive medical claims; your provider interprets whether it is suitable for you.
+_How it works:_ Semax is a research-oriented peptide. Storefront copy does not claim proven cognitive benefits or a specific mechanism of action. Your provider interprets whether it is suitable for you.
 
 _What to expect:_ Injectable vial at the listed strength/size. Provider determines if you receive it and how to use it. Do not combine peptide products unless your clinician specifically directs you to.
 
 _Important information:_ Availability is subject to provider review. Your provider will determine whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history and individual needs. Completing payment does not guarantee a prescription. This is a provider-directed compounded option. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.
 
 **Regulatory / claims notes:**
-- Do not claim established treatment for cognitive disease.
+- No established cognitive-disease treatment claims; emerging framing only.
 
 **Needs verification:**
 - Emerging / research-oriented peptide wellness use — avoid presenting as established FDA-approved therapy for specific diagnoses; owner/provider should confirm public-facing regulatory framing.
@@ -298,21 +305,22 @@ _Important information:_ Availability is subject to provider review. Your provid
 - **Category:** longevity-cognitive
 - **Old short description:** A provider-directed compounded Selank and Semax blend nasal spray, available only after eligibility review.
 - **Old long description:** Shared COMPOUNDED_DISCLAIMER only
-- **New short description:** A compounded nasal spray that combines Selank and Semax in one provider-directed blend — different from either injection alone.
+- **New short description:** A compounded Selank + Semax nasal spray blend available after provider review — different from either injection alone.
 
 **New full description (structured):**
 
 _About_
 - Selank + Semax Blend Nasal Spray is a compounded combination delivered through the nose rather than by injection. It is not simply “the same as” ordering Selank Injection plus Semax Injection separately.
-- People may ask about a nasal option for convenience or preference. Suitability still depends on provider review, and combination products deserve clear counseling about expectations and safety.
+- Common wellness interest: some people prefer a nasal format or ask about a combined peptide option for convenience.
+- Proposed / emerging uses: any wellness goals discussed with Selank or Semax individually remain emerging here as well. This blend is not presented as an established treatment for anxiety, ADHD, dementia, or other diagnoses.
 
 _Common uses_
-- A provider may consider a combined nasal option when both peptides are appropriate for a supervised plan
+- A provider may consider a combined nasal option only when clinically appropriate after review
 - May appeal to customers who prefer a nasal spray format over injections
 - Not interchangeable with single-peptide injections
-- Should be discussed with realistic expectations around focus, calm, or wellness goals
+- Expectations should stay realistic — emerging wellness interest is not the same as proven medical use
 
-_How it works:_ The spray delivers a measured Selank/Semax blend through nasal absorption. Your provider explains technique, frequency, and whether a combination product fits better than a single agent.
+_How it works:_ This product is a nasal spray blend of Selank and Semax at the strength shown in the catalog. We do not claim a proven combined clinical effect. If prescribed, your provider explains technique, frequency, and whether a combination product fits better than a single agent.
 
 _What to expect:_ Nasal spray bottle at the strength/size listed (micrograms per spray as shown in the catalog). Use only as prescribed. Follow pharmacy instructions for priming, storage, and dosing.
 
@@ -320,10 +328,11 @@ _Important information:_ Availability is subject to provider review. Your provid
 
 **Regulatory / claims notes:**
 - Preserve catalog strength text (50mcg/50mcg per spray); do not invent additional concentrations.
+- No established diagnosis-treatment claims for the blend.
 
 **Needs verification:**
 - Emerging / research-oriented peptide wellness use — avoid presenting as established FDA-approved therapy for specific diagnoses; owner/provider should confirm public-facing regulatory framing.
-- Confirm preferred language for combination peptide nasal products.
+- Confirm preferred public language for combination peptide nasal products.
 
 ### Wolverine: BPC-157/TB-500
 
@@ -331,21 +340,23 @@ _Important information:_ Availability is subject to provider review. Your provid
 - **Category:** recovery-performance
 - **Old short description:** A provider-directed compounded BPC-157/TB-500 blend, available in capsules and injection.
 - **Old long description:** Shared COMPOUNDED_DISCLAIMER only
-- **New short description:** A provider-directed compounded blend of BPC-157 and TB-500, available in capsule or injection form after eligibility review.
+- **New short description:** A provider-directed compounded BPC-157/TB-500 blend available as capsule or injection after eligibility review.
 
 **New full description (structured):**
 
 _About_
-- Wolverine: BPC-157/TB-500 is a compounded combination product. BPC-157 and TB-500 are peptides often discussed in recovery and performance wellness conversations. This listing offers two dosage forms — capsule and injection — so your provider can choose the route that fits the plan.
-- Interest in these peptides is frequently tied to tissue comfort, training recovery, or general repair-oriented wellness. Those uses are emerging and should not be framed as guaranteed injury healing or sports-medicine cures.
+- Wolverine: BPC-157/TB-500 is a compounded combination product. The catalog lists strength as a blend (exact amounts are determined by the prescribing provider and pharmacy). Two dosage forms are offered — capsule and injection.
+- Common wellness interest: these peptides are often mentioned in recovery and performance wellness conversations.
+- Proposed / emerging uses: discussions sometimes involve training recovery or repair-oriented wellness. Those uses are emerging and are not presented here as proven injury healing, sports-medicine cures, or guaranteed performance enhancement.
+- Established medical uses: this storefront does not describe BPC-157/TB-500 as an FDA-approved treatment for specific injuries or diagnoses.
 
 _Common uses_
-- A provider may consider this blend when discussing recovery-oriented wellness support
-- May be explored for performance-adjacent goals under clinical supervision
+- May be discussed with a provider when reviewing compounded peptide options
 - Available as capsule or injection — forms are not automatically interchangeable without provider guidance
 - Not a substitute for evaluation of injuries that need imaging, physical therapy, or specialist care
+- Should be approached with realistic expectations; emerging interest is not proven benefit
 
-_How it works:_ BPC-157 and TB-500 are research-oriented peptides discussed for possible roles in tissue signaling and recovery-related pathways. Because the science is still developing, we describe potential use carefully and leave clinical decisions to your licensed provider.
+_How it works:_ BPC-157 and TB-500 are research-oriented peptides. This page does not claim a proven healing mechanism or clinical outcome. If prescribed, your licensed provider and pharmacy determine the blend details and how to use the selected form.
 
 _What to expect:_ Choose Capsule or Injection on this page (see Available Options). Exact blend details are determined by the prescribing provider and pharmacy. Administration method depends on the form prescribed. Do not self-direct peptide stacking.
 
@@ -400,16 +411,16 @@ _Important information:_ Availability is subject to provider review. Your provid
 **New full description (structured):**
 
 _About_
-- Minoxidil Combination Topical Formula is a compounded hair-care option built around minoxidil, a medicine commonly used to support hair density. The catalog describes this as a combination formula personalized by the prescribing provider and dispensing pharmacy.
-- Because the exact companion ingredients are determined clinically (not listed as a fixed consumer recipe here), we do not invent a full ingredient deck. Your provider and pharmacy confirm what is in your specific preparation.
+- Minoxidil Combination Topical Formula is a compounded hair-care option that features minoxidil. Minoxidil is a medicine commonly used in hair-care treatment plans. The catalog describes this product as a combination formula personalized by the prescribing provider and dispensing pharmacy.
+- Important limit: the exact companion ingredients beyond minoxidil are not listed in the live catalog, so this page does not invent an ingredient list. Your provider and pharmacy confirm what is in your specific preparation.
 
 _Common uses_
-- May be prescribed to support hair-density goals
-- Commonly considered for thinning hair when a topical approach is appropriate
+- May be prescribed to support hair-care goals when a topical approach is appropriate
+- Commonly considered for thinning hair in provider-directed plans that include minoxidil
 - A provider may personalize the compounded combination based on your needs
-- Results vary; ongoing use is often required to maintain benefit when treatment works for you
+- Results vary; if treatment helps you, ongoing use is often needed to maintain benefit
 
-_How it works:_ Minoxidil is thought to support hair follicles and prolong growth phases for some users. A topical formula delivers medication to the scalp. Your provider explains application frequency and what realistic timelines look like.
+_How it works:_ Minoxidil is commonly used to support hair-care treatment plans. This compounded topical delivers medication to the scalp as directed by your provider. We do not claim a specific amount of hair growth or a fixed timeline. Ask your care team what to expect for your formula.
 
 _What to expect:_ Supplied as a topical solution bottle. Apply only as directed after approval. Exact compounded contents are set by provider and pharmacy — ask your care team for your specific formula details if needed.
 
@@ -417,6 +428,7 @@ _Important information:_ Availability is subject to provider review. Your provid
 
 **Regulatory / claims notes:**
 - Strength listed as "Combination formula" — preserve; no guaranteed hair-growth claims.
+- No invented companion-ingredient list.
 
 **Needs verification:**
 - Exact combination ingredients beyond minoxidil are not defined in catalog — do not invent them.
@@ -603,28 +615,28 @@ _Important information:_ Accessories are wellness tools and supplies. They are n
 - **Category:** accessories
 - **Old short description:** An insulated travel case with a built-in thermal lining that maintains temperature for up to 48 hours — perfect for transporting peptide vials.
 - **Old long description:** Prior product/accessory copy (often duplicated short text)
-- **New short description:** An insulated travel case with thermal lining intended to help keep temperature-sensitive vials more stable on the go.
+- **New short description:** An insulated travel case with thermal lining for carrying temperature-sensitive vials on the go.
 
 **New full description (structured):**
 
 _About_
 - The Temperature-Controlled Travel Case is an insulated carrier with a built-in thermal lining for transporting peptide vials and similar supplies.
-- Catalog copy notes temperature maintenance for up to 48 hours under intended use conditions. Real-world performance still depends on ambient heat, packing method, and ice-pack use — treat medication storage guidance from your pharmacy as the authority.
+- It is designed to help buffer vials from ambient temperature swings during travel. Performance depends on packing method, ice-pack use, and outdoor conditions. Always follow the storage instructions from your pharmacy for your specific medication — this case does not replace those rules.
 
 _Common uses_
 - Travel days when vials need insulation
 - Commuting between home and another location
 - Pairing with a reusable ice pack for added cold support
 
-_What to expect:_ One insulated case. Add cold packs as needed and follow pharmacy storage instructions for your specific medication.
+_What to expect:_ One insulated case. Add cold packs as needed and follow pharmacy storage instructions for your specific medication. We do not publish a guaranteed hold-time on this page.
 
-_Important information:_ Accessories are wellness tools and supplies. They are not medications. Insulation claims follow catalog language; verify packing for your climate and trip length.
+_Important information:_ Accessories are wellness tools and supplies. They are not medications. Use pharmacy storage guidance as the authority for medication temperature requirements.
 
 **Regulatory / claims notes:**
-- Claims language kept cautious (may / commonly / provider may consider).
+- No guaranteed temperature-hold duration in customer copy.
 
 **Needs verification:**
-- 48-hour temperature claim comes from existing catalog copy — owner may wish to re-verify marketing precision.
+- Prior catalog mentioned “up to 48 hours”; that duration claim was removed from customer-facing copy pending owner verification of performance wording.
 
 ### Discreet Travel Bag
 
@@ -762,28 +774,30 @@ _Important information:_ Accessories are wellness tools and supplies. They are n
 - **Category:** accessories
 - **Old short description:** Sterile insulin syringes for subcutaneous injections. Choose your pack count from 10 to 100.
 - **Old long description:** Prior product/accessory copy (often duplicated short text)
-- **New short description:** Sterile insulin syringes for subcutaneous injections, offered in multiple pack counts.
+- **New short description:** Insulin syringes for subcutaneous injections, offered in multiple pack counts.
 
 **New full description (structured):**
 
 _About_
-- Premium Insulin Syringes provide sterile syringes for subcutaneous injections when your prescribed routine uses this supply type.
+- Premium Insulin Syringes are injection supplies for subcutaneous use when your prescribed routine calls for this supply type.
 - Select a pack count from 10 to 100 on this page. Cart quantity is the number of packs, separate from how many syringes are inside the selected pack.
+- Needle gauge, barrel units, and other technical specs are not listed in the live catalog, so this page does not invent them. Check the product packaging on arrival if you need exact details, or ask your care team which syringe type you should use.
 
 _Common uses_
-- Supply refills for subcutaneous injection routines
+- Supply refills for subcutaneous injection routines when directed
 - Pair with alcohol wipes and a sharps container
 - Choose a pack size that matches how often you inject
 
-_What to expect:_ One pack at the count selected. Needle gauge and barrel markings are not listed in the catalog, so we do not invent those specs here — check the product packaging on arrival if you need exact details.
+_What to expect:_ One pack at the count selected. Confirm gauge and markings on the package before use. Dispose of used syringes in a proper sharps container.
 
-_Important information:_ Accessories are wellness tools and supplies. They are not medications. Dispose of used syringes in a proper sharps container.
+_Important information:_ Accessories are wellness tools and supplies. They are not medications. Use only the syringe type your provider or pharmacy recommends for your medication.
 
 **Regulatory / claims notes:**
-- Claims language kept cautious (may / commonly / provider may consider).
+- No invented gauge, length, or unit-marking claims.
+- “Sterile” packaging claims deferred to on-pack labeling rather than asserted beyond catalog supply description.
 
 **Needs verification:**
-- Needle gauge / unit markings not in catalog — flagged rather than invented.
+- Needle gauge / unit markings not in catalog — still need owner confirmation if specific specs should be published later.
 
 ### Semaglutide Membership
 

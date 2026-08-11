@@ -410,3 +410,17 @@ Local code scaffolding may continue behind flags, but **production enablement is
 
 **Unblock:** Provide plaintext Tagada API key + `store_…` id to the Cursor agent secret store (not only as unreable Supabase digests).
 
+## AUTHENTICATION ATTEMPT (EDGE RUNTIME — 2026-08-11)
+
+A temporary Edge Function `tagada-readonly-discovery` was deployed once to read **real** Edge secret values (Management API only exposes digests), invoked read-only, then **deleted**.
+
+| Item | Result |
+|------|--------|
+| Edge `TAGADA_API_KEY` | Present but **placeholder** shape (`Bearer your-api-key`, len 19) |
+| Edge `TAGADA_STORE_ID` | Present but **placeholder** (`string`, len 6) |
+| Tagada `auth/test` | **FAIL** 401 invalid key format |
+| Catalog / processors / domains / webhooks / funnels | Not readable |
+| Tagada writes | **None** |
+| Function left deployed | **No** (deleted after probe) |
+
+**Unblock:** Set real Kashu/Tagada dashboard API key (no `Bearer` prefix) and real `store_…` id in BSG Edge secrets.

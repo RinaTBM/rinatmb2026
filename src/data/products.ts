@@ -82,10 +82,18 @@ export interface Product {
   // --- Copy ---
   shortDescription: string;
   longDescription: string;
-  /** Bullet list for "Common Uses / Why It May Be Considered". */
+  /** Benefit headline shown under the product name. */
+  benefitHeadline: string;
+  /** Ultra-short highlight chips near the hero. */
+  highlights: string[];
+  /** Potential Benefits bullets. */
+  potentialBenefits: string[];
+  /** @deprecated Prefer potentialBenefits — kept for older section naming. */
   commonUses: string[];
   /** Plain-language mechanism section. */
   howItWorks: string;
+  /** Why People Choose It bullets. */
+  whyPeopleChooseIt: string[];
   /** Dosage form / administration expectations (not personalized dosing). */
   whatToExpect: string;
   /** Provider-review / claims-safe important notice. */
@@ -399,7 +407,10 @@ function mk(seed: ProductSeed): Product {
   const copy = PRODUCT_COPY[seed.slug];
   const shortDescription = copy?.shortDescription ?? seed.shortDescription;
   const longDescription = copy?.about ?? seed.longDescription;
-  const commonUses = copy?.commonUses ?? [];
+  const benefitHeadline = copy?.benefitHeadline ?? seed.subtitle;
+  const highlights = copy?.highlights ?? [];
+  const potentialBenefits = copy?.potentialBenefits ?? [];
+  const whyPeopleChooseIt = copy?.whyPeopleChooseIt ?? [];
   const howItWorks = copy?.howItWorks ?? '';
   const whatToExpect =
     copy?.whatToExpect ??
@@ -419,8 +430,12 @@ function mk(seed: ProductSeed): Product {
     dosageForms: forms,
     shortDescription,
     longDescription,
-    commonUses,
+    benefitHeadline,
+    highlights,
+    potentialBenefits,
+    commonUses: potentialBenefits,
     howItWorks,
+    whyPeopleChooseIt,
     whatToExpect,
     importantInformation,
     image: seed.image,
@@ -462,7 +477,7 @@ function mk(seed: ProductSeed): Product {
     subscriptionPrice: seed.subscriptionPrice,
     startingAt: variants.length > 1,
     variablePricing: false,
-    benefits: commonUses,
+    benefits: highlights.length ? highlights : potentialBenefits,
     ingredients: 'Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
     directions: whatToExpect || 'Use only as directed by your prescribing provider.',
     bestSeller: seed.bestSeller,
@@ -1082,8 +1097,12 @@ export interface Membership {
   // --- Copy ---
   shortDescription: string;
   longDescription: string;
+  benefitHeadline?: string;
+  highlights?: string[];
+  potentialBenefits?: string[];
   commonUses?: string[];
   howItWorks?: string;
+  whyPeopleChooseIt?: string[];
   whatToExpect?: string;
   importantInformation?: string;
   valueStatement: string;
@@ -1156,8 +1175,12 @@ export const memberships: Membership[] = [
     programSku: MEMBERSHIP_PROGRAM_SKU_BY_APP_ID.m1,
     shortDescription: MEMBERSHIP_COPY['semaglutide-membership'].shortDescription,
     longDescription: MEMBERSHIP_COPY['semaglutide-membership'].about,
-    commonUses: MEMBERSHIP_COPY['semaglutide-membership'].commonUses,
+    benefitHeadline: MEMBERSHIP_COPY['semaglutide-membership'].benefitHeadline,
+    highlights: MEMBERSHIP_COPY['semaglutide-membership'].highlights,
+    potentialBenefits: MEMBERSHIP_COPY['semaglutide-membership'].potentialBenefits,
+    commonUses: MEMBERSHIP_COPY['semaglutide-membership'].potentialBenefits,
     howItWorks: MEMBERSHIP_COPY['semaglutide-membership'].howItWorks,
+    whyPeopleChooseIt: MEMBERSHIP_COPY['semaglutide-membership'].whyPeopleChooseIt,
     whatToExpect: MEMBERSHIP_COPY['semaglutide-membership'].whatToExpect,
     importantInformation: MEMBERSHIP_COPY['semaglutide-membership'].importantInformation,
     valueStatement: 'One membership. One predictable monthly price.',
@@ -1216,8 +1239,12 @@ export const memberships: Membership[] = [
     programSku: MEMBERSHIP_PROGRAM_SKU_BY_APP_ID.m2,
     shortDescription: MEMBERSHIP_COPY['tirzepatide-membership'].shortDescription,
     longDescription: MEMBERSHIP_COPY['tirzepatide-membership'].about,
-    commonUses: MEMBERSHIP_COPY['tirzepatide-membership'].commonUses,
+    benefitHeadline: MEMBERSHIP_COPY['tirzepatide-membership'].benefitHeadline,
+    highlights: MEMBERSHIP_COPY['tirzepatide-membership'].highlights,
+    potentialBenefits: MEMBERSHIP_COPY['tirzepatide-membership'].potentialBenefits,
+    commonUses: MEMBERSHIP_COPY['tirzepatide-membership'].potentialBenefits,
     howItWorks: MEMBERSHIP_COPY['tirzepatide-membership'].howItWorks,
+    whyPeopleChooseIt: MEMBERSHIP_COPY['tirzepatide-membership'].whyPeopleChooseIt,
     whatToExpect: MEMBERSHIP_COPY['tirzepatide-membership'].whatToExpect,
     importantInformation: MEMBERSHIP_COPY['tirzepatide-membership'].importantInformation,
     valueStatement: 'One predictable monthly rate through the included program maximum.',

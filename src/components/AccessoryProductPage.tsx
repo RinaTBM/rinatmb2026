@@ -8,7 +8,7 @@ import {
 } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
-import { ProductDescriptionSections } from '@/components/ProductDescriptionSections';
+import { ProductDescriptionSections, ProductHighlights } from '@/components/ProductDescriptionSections';
 import { ProductCard } from '@/components/ProductCard';
 import {
   ACCESSORY_UNIT_QUANTITY_MAX,
@@ -121,8 +121,11 @@ export function AccessoryProductPage({ product }: { product: Product }) {
               <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-2 leading-tight">
                 {product.displayName}
               </h1>
-              <p className="text-lg text-ink-500 mb-4">{product.subtitle}</p>
-              <p className="text-ink-600 leading-relaxed mb-6">{product.shortDescription}</p>
+              <p className="text-xl md:text-2xl text-ink-700 mb-3 leading-snug">
+                {product.benefitHeadline}
+              </p>
+              <p className="text-ink-600 leading-relaxed mb-5">{product.shortDescription}</p>
+              <ProductHighlights highlights={product.highlights} />
 
               {hasCountOptions && product.variants.length > 1 && (
                 <div className="mb-6">

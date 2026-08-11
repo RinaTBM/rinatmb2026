@@ -30,6 +30,37 @@ function ParagraphBlock({ text }: { text: string }) {
   );
 }
 
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="space-y-2.5">
+      {items.map(item => (
+        <li key={item} className="flex items-start gap-2.5 text-ink-700">
+          <Check size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />
+          <span className="leading-relaxed">{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Hero highlight chips — keep near top of PDP. */
+export function ProductHighlights({ highlights }: { highlights: string[] }) {
+  if (!highlights.length) return null;
+  return (
+    <ul className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-2">
+      {highlights.map(item => (
+        <li
+          key={item}
+          className="flex items-center gap-2 rounded-xl border border-gold-200/80 bg-gold-50/60 px-3 py-2 text-sm text-ink-800"
+        >
+          <Check size={16} className="text-gold-600 flex-shrink-0" />
+          <span className="font-medium">{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /** Scannable product description stack shared by wellness + accessory PDPs. */
 export function ProductDescriptionSections({
   product,
@@ -40,6 +71,9 @@ export function ProductDescriptionSections({
 }) {
   const isAccessory = product.category === 'accessories';
   const isProviderCare = product.category === 'provider-care';
+  const potentialBenefits =
+    product.potentialBenefits?.length ? product.potentialBenefits : product.commonUses;
+  const whyChoose = product.whyPeopleChooseIt ?? [];
 
   return (
     <div className="space-y-10 md:space-y-12">
@@ -47,22 +81,9 @@ export function ProductDescriptionSections({
         <ParagraphBlock text={product.longDescription} />
       </Section>
 
-      {product.commonUses.length > 0 && (
-        <Section
-          title={
-            isAccessory || isProviderCare
-              ? 'When It May Help'
-              : 'Common Uses / Why It May Be Considered'
-          }
-        >
-          <ul className="space-y-2.5">
-            {product.commonUses.map(item => (
-              <li key={item} className="flex items-start gap-2.5 text-ink-700">
-                <Check size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />
-                <span className="leading-relaxed">{item}</span>
-              </li>
-            ))}
-          </ul>
+      {potentialBenefits.length > 0 && (
+        <Section title="Potential Benefits">
+          <BulletList items={potentialBenefits} />
         </Section>
       )}
 
@@ -72,9 +93,9 @@ export function ProductDescriptionSections({
         </Section>
       )}
 
-      {product.whatToExpect.trim() && (
-        <Section title={isProviderCare ? 'What Happens Next' : 'What to Expect / How It Is Used'}>
-          <ParagraphBlock text={product.whatToExpect} />
+      {whyChoose.length > 0 && (
+        <Section title="Why People Choose It">
+          <BulletList items={whyChoose} />
         </Section>
       )}
 
@@ -107,28 +128,27 @@ export function ProductDescriptionSections({
         )}
       </Section>
 
+      {product.whatToExpect.trim() && (
+        <Section title={isProviderCare ? 'What Happens Next' : 'What to Expect'}>
+          <ParagraphBlock text={product.whatToExpect} />
+        </Section>
+      )}
+
       <Section title="Important Information">
         <ParagraphBlock text={product.importantInformation || product.providerDisclaimer} />
       </Section>
 
       {showEligibility && !isAccessory && (
-        <Section title="Eligibility & Provider Review">
-          <ul className="space-y-2.5">
-            {(
-              [
-                'Provider review is required before any prescription product is dispensed.',
-                'Purchasing does not guarantee a prescription.',
-                'Eligibility is determined by a licensed provider.',
-                'Labs or a consultation may be requested.',
-                'Individual experiences and results vary.',
-              ] as const
-            ).map(line => (
-              <li key={line} className="flex items-start gap-2.5 text-ink-700">
-                <Check size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />
-                <span className="leading-relaxed">{line}</span>
-              </li>
-            ))}
-          </ul>
+        <Section title="Provider Review">
+          <BulletList
+            items={[
+              'Provider review is required before any prescription product is dispensed.',
+              'Purchasing does not guarantee a prescription.',
+              'Eligibility is determined by a licensed provider.',
+              'Labs or a consultation may be requested.',
+              'Individual experiences and results vary.',
+            ]}
+          />
         </Section>
       )}
     </div>

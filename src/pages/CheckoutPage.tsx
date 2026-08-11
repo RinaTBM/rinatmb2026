@@ -37,12 +37,14 @@ import {
   PAYMENTS_UNAVAILABLE_MESSAGE,
 } from '@/lib/payments/paymentsEnabled';
 import {
-  ACTIVE_CHECKOUT_PAYMENT_METHODS,
+  getActiveCheckoutPaymentMethods,
   assertSelectablePaymentMethod,
   PAYMENT_METHOD_HELP,
   PAYMENT_METHOD_LABELS,
-  type ActiveCheckoutPaymentMethod,
+  type PaymentMethod,
 } from '@/lib/payments/paymentMethods';
+import { createKashuCheckoutSession } from '@/lib/payments/createKashuCheckoutSession';
+import { KASHU_PAYMENT_METHOD } from '@/lib/payments/kashuTagada';
 import {
   CHECKOUT_SUBMIT_CTA,
   CHECKOUT_SUBMIT_SUPPORTING_COPY,
@@ -66,7 +68,7 @@ export function CheckoutPage() {
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
   });
   const [shippingMethod, setShippingMethod] = useState<SelectableShippingMethod>('two_day');
-  const [paymentMethod, setPaymentMethod] = useState<ActiveCheckoutPaymentMethod>('manual_ach');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('manual_ach');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const checkoutEnabled = isManualCheckoutEnabled();
@@ -309,6 +311,28 @@ export function CheckoutPage() {
 
       recordLocalSubscriptions();
       clearCart();
+
+      if (methodCheck.method === KASHU_PAYMENT_METHOD) {
+        const kashu = await createKashuCheckoutSession({
+          supabaseUrl,
+          anonKey,
+          accessToken: null,
+          publicOrderNumber: result.publicOrderNumber,
+          paymentAccessToken: result.paymentAccessToken,
+        });
+        if (!kashu.ok) {
+          throw new Error(
+            kashu.error +
+              (kashu.missingSkus?.length
+                ? ` Missing SKU mapping: ${kashu.missingSkus.join(', ')}`
+                : ''),
+          );
+        }
+        // Hosted Kashu/Tagada checkout — leave MBM SPA
+        window.location.assign(kashu.redirectUrl);
+        return;
+      }
+
       navigate(result.paymentPath);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
@@ -538,12 +562,12 @@ export function CheckoutPage() {
                         <div className="flex items-center gap-3">
                           <Lock size={18} className="text-gold-500" />
                           <p className="text-sm text-ink-600">
-                            Select how you will pay after submitting your order. No payment is withdrawn from your bank
-                            when you submit your order.
+                            Select how you will pay. ACH and wire provide payment instructions after you
+                            submit. Card payments are processed securely by Kashu on a hosted checkout.
                           </p>
                         </div>
                         <div className="space-y-2">
-                          {ACTIVE_CHECKOUT_PAYMENT_METHODS.map(method => (
+                          {getActiveCheckoutPaymentMethods().map(method => (
                             <label
                               key={method}
                               className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm ${

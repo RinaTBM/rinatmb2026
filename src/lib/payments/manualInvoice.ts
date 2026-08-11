@@ -6,7 +6,7 @@
 import type { OrderItemSnapshotInput } from '../orders/orderTypes';
 import type { OrderStatus } from '../orders/orderStatus';
 import {
-  isActiveCheckoutPaymentMethod,
+  isOrderPaymentMethod,
   type ActiveCheckoutPaymentMethod,
   type PaymentMethod,
 } from './paymentMethods';
@@ -147,7 +147,7 @@ export function buildManualOrderInsert(input: {
   paymentMethod: string;
   publicOrderNumber: string;
 }): { ok: true; order: BuiltManualOrderInsert } | { ok: false; error: string } {
-  if (!isActiveCheckoutPaymentMethod(input.paymentMethod)) {
+  if (!isOrderPaymentMethod(input.paymentMethod) || input.paymentMethod === 'plaid_ach') {
     return { ok: false, error: 'Invalid payment method.' };
   }
   const email = input.customer.customerEmail?.trim() ?? '';
@@ -283,7 +283,7 @@ export function createPaymentAccessToken(): string {
 }
 
 export interface BankInstructionsPublic {
-  method: ActiveCheckoutPaymentMethod;
+  method: PaymentMethod;
   configured: boolean;
   bankName?: string;
   accountName?: string;
@@ -295,6 +295,8 @@ export interface BankInstructionsPublic {
   wireSwift?: string;
   additionalInstructions?: string;
   unavailableMessage?: string;
+  /** Kashu hosted checkout — no bank details exposed. */
+  hostedCheckout?: boolean;
 }
 
 /**
@@ -302,9 +304,18 @@ export interface BankInstructionsPublic {
  * Never call this from the browser with real secrets — Edge Functions only.
  */
 export function bankInstructionsFromEnv(
-  method: ActiveCheckoutPaymentMethod,
+  method: PaymentMethod,
   env: Record<string, string | undefined>,
 ): BankInstructionsPublic {
+  if (method === 'kashu_card') {
+    return {
+      method,
+      configured: true,
+      hostedCheckout: true,
+      additionalInstructions:
+        'You will be redirected to Kashu’s secure card checkout to complete payment.',
+    };
+  }
   if (method === 'manual_ach') {
     const bankName = env.MANUAL_ACH_BANK_NAME?.trim();
     const accountName = env.MANUAL_ACH_ACCOUNT_NAME?.trim();

@@ -15,6 +15,12 @@ interface ImportMetaEnv {
    * "false" disables manual checkout. Does NOT enable Stripe.
    */
   readonly VITE_PAYMENTS_ENABLED?: string;
+  /**
+   * Show Kashu card option in checkout when "true".
+   * Does NOT put secrets in the browser — only reveals the UI affordance.
+   * Default/unset = hidden (ACH/Wire only).
+   */
+  readonly VITE_KASHU_CARD_ENABLED?: string;
 }
 
 interface ImportMeta {

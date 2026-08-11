@@ -37,14 +37,14 @@ Final style pass: premium + benefit-forward + provider-guided presentation (TWC/
 
 ## Flagged for owner / provider verification
 
-- Fat Burner: MEDICAL DIRECTOR REVIEW REQUIRED = YES — compounded AOD-9604/MOTS-C/Tesamorelin blend; emerging/research framing only; no FDA-approved blend or guaranteed fat-loss claims.
+- Fat Burner: MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public nickname “Fat Burner” + emerging three-peptide framing remains acceptable.
 - Fat Burner: Owner-approved retail $259.00 (at-cost $150.00).
 - NAD+ Injection: Confirm preferred public claim boundary for NAD+ with medical director.
 - Selank Injection: Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.
 - Semax Injection: Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.
 - Selank + Semax Blend Nasal Spray: Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.
 - Selank + Semax Blend Nasal Spray: Confirm preferred public language for combination peptide nasal products.
-- Tesamorelin Injection: MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public framing for uses beyond HIV-associated lipodystrophy labeled indication context.
+- Tesamorelin Injection: MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public framing for off-label/body-composition wellness interest beyond HIV-associated lipodystrophy labeled indication.
 - Tesamorelin Injection: Owner-approved retail $149.00 (at-cost $83.33).
 - Wolverine: BPC-157/TB-500: Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.
 - Wolverine: BPC-157/TB-500: Catalog strength is "Blend" only — do not invent mg amounts.
@@ -139,33 +139,33 @@ Catalog limits intentionally preserved:
 
 - **Slug:** `fat-burner`
 - **Category:** weight-management
-- **Benefit headline:** A Three-Peptide Compounded Option for Body-Composition Conversations
-- **Hero description:** Fat Burner is a provider-directed compounded injection combining AOD-9604, MOTS-C, and Tesamorelin. It is designed for supervised body-composition and metabolic wellness programs — with emerging research interest around each ingredient, and no guaranteed fat-loss or weight-loss outcomes.
-- **Highlights:** AOD-9604 + MOTS-C + Tesamorelin · Compounded Injection · Provider-Guided · Emerging Research Interest
+- **Benefit headline:** A Compounded Three-Peptide Option for Body-Composition Goals
+- **Hero description:** Fat Burner is an AOD-9604 + MOTS-C + Tesamorelin compounded injection for provider-guided body-composition and metabolic wellness conversations. Each ingredient has areas of emerging research interest — and your clinician decides whether this blend belongs in your plan.
+- **Highlights:** AOD-9604 + MOTS-C + Tesamorelin · Compounded Injection · Body-Composition Focus · Provider-Guided · Emerging Research Interest
 
 **About**
-- This product’s customer-facing name is Fat Burner. The formulation is a compounded blend of AOD-9604 (6 mg), MOTS-C (10 mg), and Tesamorelin (15 mg) in a 5 mL vial (approximately 1.2 mg/mL, 2 mg/mL, and 3 mg/mL respectively).
-- It is not the same as any oral “Fat Burner +” capsule product, and it does not include SLU-PP-332. The blend is not FDA-approved as a weight-loss drug, and this page does not claim clinically proven fat burning or guaranteed results.
-- A licensed provider reviews whether this compounded option fits your history and goals before anything is dispensed.
+- This listing is an AOD-9604 + MOTS-C + Tesamorelin compounded injection. The customer-facing name is Fat Burner; the formulation is AOD-9604 6 mg, MOTS-C 10 mg, and Tesamorelin 15 mg in a 5 mL vial (about 1.2 mg/mL, 2 mg/mL, and 3 mg/mL).
+- Providers may consider this option when discussing supervised body-composition or metabolic wellness goals. The nickname describes the conversation topic — it does not promise fat loss, weight loss, or metabolic improvement.
+- A licensed provider reviews your history and goals before anything is dispensed.
 
 **Potential benefits**
-- May be considered in provider-guided body-composition or metabolic wellness programs
-- Combines three ingredients that each have areas of emerging research interest
-- Offers a single compounded injectable format when a clinician wants this specific blend
-- Supports a supervised pathway rather than unsupervised supplement shopping
+- May be considered in provider-guided body-composition programs
+- May support metabolic-wellness conversations when a clinician wants this specific three-peptide blend
+- Combines three ingredients with areas of emerging research interest in one compounded vial
+- Offers transparent formulary amounts and concentrations for informed clinical discussion
 - Potential benefits are individualized and not guaranteed
 
-**How it works:** AOD-9604, MOTS-C, and Tesamorelin are each discussed in research and wellness settings for different proposed metabolic or body-composition interests. Tesamorelin is a growth hormone-releasing factor analog; AOD-9604 and MOTS-C are explored in emerging metabolic research contexts. Combining them in one compounded vial does not make the blend FDA-approved or clinically proven for weight loss. Your provider explains whether this approach is appropriate and how it should be used if approved.
+**How it works:** AOD-9604 and MOTS-C are explored in emerging metabolic and body-composition research contexts. Tesamorelin is a growth hormone-releasing factor analog discussed in related wellness settings. Combining them in one compounded vial does not create an FDA-approved weight-loss drug or prove clinical fat-loss outcomes for the blend. Your provider explains whether this approach may be appropriate and how it should be used if approved.
 
 **Why people choose it**
-- Want a clearly labeled three-ingredient compounded injectable under clinical review
-- Prefer provider-guided body-composition conversations over unverified over-the-counter products
-- Appreciate transparent formulary amounts and concentrations on the product page
-- Understand this is emerging-interest compounding — not a guaranteed fat-loss shot
+- Want a clearly labeled AOD-9604 + MOTS-C + Tesamorelin injectable under clinical review
+- Prefer provider-guided body-composition care over unsupervised supplement shopping
+- Appreciate transparent vial strengths and concentrations on this page
+- Value emerging-interest framing with realistic expectations
 
-**What to expect:** One active variant is listed: the full AOD-9604 / MOTS-C / Tesamorelin 5 mL vial. After checkout you complete intake. A licensed provider determines eligibility and instructions. Use only as directed if approved. Do not combine with other peptide products unless your clinician specifically directs you to.
+**What to expect:** One active option is listed: the AOD-9604 / MOTS-C / Tesamorelin 5 mL vial. After checkout you complete intake. A licensed provider determines eligibility and instructions. Use only as directed if approved. Do not combine with other peptide products unless your clinician specifically directs you to.
 
-**Important information:** Availability is subject to provider review. Your provider will determine whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history and individual needs. Completing payment does not guarantee a prescription. This is a provider-directed compounded option. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.
+**Important information:** Availability is subject to provider review. Your provider will determine whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history and individual needs. Completing payment does not guarantee a prescription. This is a provider-directed compounded option. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy. This compounded blend is not FDA-approved as a weight-loss or fat-loss drug. The name “Fat Burner” is a product nickname only and does not guarantee fat burning, abdominal fat reduction, weight loss, metabolic improvement, or muscle gain. This is not an oral “Fat Burner +” capsule product and does not include SLU-PP-332.
 
 **Regulatory / claims notes:**
 - Do not imply the blend is FDA-approved.
@@ -173,7 +173,7 @@ Catalog limits intentionally preserved:
 - Not SLU-PP-332 / Fat Burner+ capsules.
 
 **Needs verification:**
-- MEDICAL DIRECTOR REVIEW REQUIRED = YES — compounded AOD-9604/MOTS-C/Tesamorelin blend; emerging/research framing only; no FDA-approved blend or guaranteed fat-loss claims.
+- MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public nickname “Fat Burner” + emerging three-peptide framing remains acceptable.
 - Owner-approved retail $259.00 (at-cost $150.00).
 
 ### Estradiol Patch
@@ -431,32 +431,32 @@ Catalog limits intentionally preserved:
 
 - **Slug:** `tesamorelin`
 - **Category:** longevity-cognitive
-- **Benefit headline:** A Growth Hormone-Releasing Factor Option — Carefully Framed
-- **Hero description:** Tesamorelin Injection is a provider-directed compounded option featuring Tesamorelin, a growth hormone-releasing factor analog. People may discuss it in supervised body-composition or metabolic wellness conversations — with careful framing and no guaranteed fat-loss promises.
-- **Highlights:** GHRH Analog · 10mg / 2mL Vial · Provider-Directed · Compounded Injectable
+- **Benefit headline:** A Growth Hormone–Releasing Factor Option for Provider-Guided Care
+- **Hero description:** Tesamorelin Injection is a provider-directed compounded option featuring Tesamorelin, a growth hormone–releasing factor (GHRH) analog. People explore it when they want a supervised conversation about body composition that is distinct from GLP-1 appetite medications.
+- **Highlights:** GHRH Analog · 10mg / 2mL Vial · Not a GLP-1 · Provider-Directed · Compounded Injectable
 
 **About**
-- Tesamorelin is a growth hormone-releasing factor analog (not a GLP-1 medication and not interchangeable with Semaglutide or Tirzepatide). This listing is a compounded lyophilized injectable preparation totaling 10 mg in a 2 mL vial (5 mg/mL).
-- Tesamorelin has an FDA-approved indication related to reducing excess abdominal fat in adults with HIV-associated lipodystrophy. Broader wellness or body-composition interest outside that labeled context must stay carefully qualified and is flagged for medical-director review.
-- This page does not market Tesamorelin as FDA-approved general weight-loss therapy, an anti-aging treatment, or a guaranteed belly-fat or muscle solution.
+- Tesamorelin is a growth hormone–releasing factor analog. It is not a GLP-1 medication and is not interchangeable with Semaglutide or Tirzepatide. This listing is a compounded lyophilized injectable totaling 10 mg in a 2 mL vial (5 mg/mL).
+- Tesamorelin has an FDA-approved indication related to reducing excess abdominal fat in adults with HIV-associated lipodystrophy. Outside that labeled context, broader body-composition or wellness interest is provider-guided and may be considered off-label — it is not an FDA-approved general weight-loss indication.
+- A licensed provider reviews whether this option fits your history and goals before anything is dispensed.
 
 **Potential benefits**
-- May be discussed in provider-guided body-composition or metabolic wellness programs when clinically appropriate
+- May be considered in provider-guided body-composition or metabolic wellness programs when clinically appropriate
 - Offers a clearly labeled injectable strength and vial size for supervised care
-- Supports an education-first experience that distinguishes GHRH analogs from GLP-1 options
-- Keeps expectations realistic — individual responses vary and outcomes are not guaranteed
+- Provides a GHRH-analog option distinct from Semaglutide and Tirzepatide
+- Supports an individualized plan — responses vary and outcomes are not guaranteed
 
-**How it works:** Tesamorelin acts as a growth hormone-releasing factor analog — in plain language, it is designed to interact with pathways that stimulate the body’s own growth-hormone release signaling. That is a different mechanism family from GLP-1 appetite medications. How any one person responds varies. Your licensed provider decides whether this option fits your history, goals, and safety profile.
+**How it works:** As a growth hormone–releasing factor analog, Tesamorelin is designed to interact with pathways involved in the body’s own growth-hormone release signaling. That is a different mechanism family from GLP-1 appetite medications. How any one person responds varies. Your licensed provider decides whether this option may fit your history, goals, and safety profile — including whether any discussion is within labeled use or a carefully considered off-label wellness conversation.
 
 **Why people choose it**
-- Want a GHRH-analog conversation distinct from Semaglutide/Tirzepatide
+- Want a GHRH-analog conversation distinct from Semaglutide or Tirzepatide
 - Prefer transparent vial labeling (10 mg total · 5 mg/mL · 2 mL)
-- Value provider review before compounded peptides are dispensed
-- Appreciate clear boundaries around what is — and is not — being claimed
+- Value provider review before compounded options are dispensed
+- Appreciate clear education about labeled indication versus broader wellness interest
 
-**What to expect:** One active variant is listed: 10 mg total · 5 mg/mL · 2 mL vial for subcutaneous injection as directed. After order, complete intake for licensed-provider review. Exact use instructions come from your clinician and pharmacy if approved. Do not self-adjust dosing.
+**What to expect:** One active option is listed: 10 mg total · 5 mg/mL · 2 mL vial for subcutaneous injection as directed. After order, complete intake for licensed-provider review. Exact use instructions come from your clinician and pharmacy if approved. Do not self-adjust dosing.
 
-**Important information:** Availability is subject to provider review. Your provider will determine whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history and individual needs. Completing payment does not guarantee a prescription. This is a provider-directed compounded option. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.
+**Important information:** Availability is subject to provider review. Your provider will determine whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history and individual needs. Completing payment does not guarantee a prescription. This is a provider-directed compounded option. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy. Tesamorelin’s FDA-approved indication relates to excess abdominal fat in adults with HIV-associated lipodystrophy. This compounded listing is not marketed as FDA-approved therapy for general weight loss, general obesity, anti-aging, guaranteed abdominal fat reduction in the general population, or guaranteed muscle growth.
 
 **Regulatory / claims notes:**
 - Not a GLP-1; do not market as FDA-approved general weight loss.
@@ -464,7 +464,7 @@ Catalog limits intentionally preserved:
 - Compounded listing — do not imply FDA approval of this specific compounded product.
 
 **Needs verification:**
-- MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public framing for uses beyond HIV-associated lipodystrophy labeled indication context.
+- MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public framing for off-label/body-composition wellness interest beyond HIV-associated lipodystrophy labeled indication.
 - Owner-approved retail $149.00 (at-cost $83.33).
 
 ### Wolverine: BPC-157/TB-500

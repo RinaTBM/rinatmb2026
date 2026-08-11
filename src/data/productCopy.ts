@@ -167,7 +167,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [
       'MEDICAL DIRECTOR REVIEW REQUIRED = YES — compounded AOD-9604/MOTS-C/Tesamorelin blend; emerging/research framing only; no FDA-approved blend or guaranteed fat-loss claims.',
-      'Retail price pending owner approval (provisional catalog field currently holds at-cost $150.00).',
+      'Owner-approved retail $259.00 (at-cost $150.00).',
     ],
     regulatoryNotes: [
       'Do not imply the blend is FDA-approved.',
@@ -477,7 +477,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [
       'MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public framing for uses beyond HIV-associated lipodystrophy labeled indication context.',
-      'Retail price pending owner approval (provisional catalog field currently holds at-cost $83.33).',
+      'Owner-approved retail $149.00 (at-cost $83.33).',
     ],
     regulatoryNotes: [
       'Not a GLP-1; do not market as FDA-approved general weight loss.',

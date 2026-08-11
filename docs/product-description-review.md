@@ -38,14 +38,14 @@ Final style pass: premium + benefit-forward + provider-guided presentation (TWC/
 ## Flagged for owner / provider verification
 
 - Fat Burner: MEDICAL DIRECTOR REVIEW REQUIRED = YES — compounded AOD-9604/MOTS-C/Tesamorelin blend; emerging/research framing only; no FDA-approved blend or guaranteed fat-loss claims.
-- Fat Burner: Retail price pending owner approval (provisional catalog field currently holds at-cost $150.00).
+- Fat Burner: Owner-approved retail $259.00 (at-cost $150.00).
 - NAD+ Injection: Confirm preferred public claim boundary for NAD+ with medical director.
 - Selank Injection: Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.
 - Semax Injection: Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.
 - Selank + Semax Blend Nasal Spray: Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.
 - Selank + Semax Blend Nasal Spray: Confirm preferred public language for combination peptide nasal products.
 - Tesamorelin Injection: MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public framing for uses beyond HIV-associated lipodystrophy labeled indication context.
-- Tesamorelin Injection: Retail price pending owner approval (provisional catalog field currently holds at-cost $83.33).
+- Tesamorelin Injection: Owner-approved retail $149.00 (at-cost $83.33).
 - Wolverine: BPC-157/TB-500: Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.
 - Wolverine: BPC-157/TB-500: Catalog strength is "Blend" only — do not invent mg amounts.
 - Minoxidil Combination Topical Formula: Exact combination ingredients beyond minoxidil are not defined in catalog — do not invent them.
@@ -174,7 +174,7 @@ Catalog limits intentionally preserved:
 
 **Needs verification:**
 - MEDICAL DIRECTOR REVIEW REQUIRED = YES — compounded AOD-9604/MOTS-C/Tesamorelin blend; emerging/research framing only; no FDA-approved blend or guaranteed fat-loss claims.
-- Retail price pending owner approval (provisional catalog field currently holds at-cost $150.00).
+- Owner-approved retail $259.00 (at-cost $150.00).
 
 ### Estradiol Patch
 
@@ -465,7 +465,7 @@ Catalog limits intentionally preserved:
 
 **Needs verification:**
 - MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public framing for uses beyond HIV-associated lipodystrophy labeled indication context.
-- Retail price pending owner approval (provisional catalog field currently holds at-cost $83.33).
+- Owner-approved retail $149.00 (at-cost $83.33).
 
 ### Wolverine: BPC-157/TB-500
 

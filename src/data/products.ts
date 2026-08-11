@@ -555,18 +555,18 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Fat Burner compounded injection — AOD-9604, MOTS-C, and Tesamorelin',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    // Provisional catalog price = at-cost placeholder until owner sets retail. Do not deploy as final retail.
+    // Owner-approved retail $259.00 (at-cost $150.00). SKU MBM-WM-FB3-INJ-001.
     variants: [
       {
         dosageForm: 'Injection',
         strength: 'AOD-9604 6mg (1.2mg/mL) / MOTS-C 10mg (2mg/mL) / Tesamorelin 15mg (3mg/mL)',
         size: '5mL vial',
-        price: 150,
+        price: 259,
       },
     ],
     needsDedicatedImage: true,
     internalNotes:
-      'RETAIL PRICE PENDING OWNER APPROVAL. At-cost $150.00 recorded as provisional catalog price placeholder only. Do not publish until retail markup approved. MEDICAL DIRECTOR REVIEW REQUIRED. Not SLU-PP-332. Formulation: AOD-9604 6mg / MOTS-C 10mg / Tesamorelin 15mg in 5mL (1.2 / 2 / 3 mg/mL). SKU MBM-WM-FB3-INJ-001.',
+      'Owner-approved retail $259.00 (at-cost $150.00). MEDICAL DIRECTOR REVIEW REQUIRED. Not SLU-PP-332. Formulation: AOD-9604 6mg / MOTS-C 10mg / Tesamorelin 15mg in 5mL (1.2 / 2 / 3 mg/mL). SKU MBM-WM-FB3-INJ-001.',
   }),
 
   // ===== WOMEN'S HORMONE THERAPY =====
@@ -710,18 +710,18 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Tesamorelin injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    // Provisional catalog price = at-cost placeholder until owner sets retail. Do not deploy as final retail.
+    // Owner-approved retail $149.00 (at-cost $83.33). SKU MBM-LON-TESA-INJ-001.
     variants: [
       {
         dosageForm: 'Injection',
         strength: '10mg total · 5mg/mL',
         size: '2mL vial',
-        price: 83.33,
+        price: 149,
       },
     ],
     needsDedicatedImage: true,
     internalNotes:
-      'RETAIL PRICE PENDING OWNER APPROVAL. At-cost $83.33 recorded as provisional catalog price placeholder only. Do not publish until retail markup approved. MEDICAL DIRECTOR REVIEW REQUIRED for body-composition/wellness framing beyond HIV-associated lipodystrophy indication context. Lyophilized Tesamorelin 10mg / 2mL (5mg/mL). SKU MBM-LON-TESA-INJ-001.',
+      'Owner-approved retail $149.00 (at-cost $83.33). MEDICAL DIRECTOR REVIEW REQUIRED for body-composition/wellness framing beyond HIV-associated lipodystrophy indication context. Lyophilized Tesamorelin 10mg / 2mL (5mg/mL). SKU MBM-LON-TESA-INJ-001.',
   }),
 
   // ===== RECOVERY & PERFORMANCE =====

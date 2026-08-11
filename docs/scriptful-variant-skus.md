@@ -16,9 +16,9 @@ Route pattern: `/product/:slug`
 
 | Metric | Count |
 |---|---|
-| Retail / selectable variant SKUs | 48 |
+| Retail / selectable variant SKUs | 50 |
 | Membership PROGRAM SKUs | 2 |
-| **Total unique SKUs** | **50** (expected 50) |
+| **Total unique SKUs** | **52** (expected 52) |
 
 ## Validation snapshot
 
@@ -60,6 +60,7 @@ Semaglutide Membership
 | Tirzepatide + B6 Injection | 7.5mg, Vial | `MBM-WM-TIR-INJ-002` | `p5` | `tirzepatide-v2` | weight-management | Injection | 7.5mg | Vial | https://mybaremethod.com/product/tirzepatide |  |
 | Tirzepatide + B6 Injection | 12.5mg, Vial | `MBM-WM-TIR-INJ-003` | `p5` | `tirzepatide-v3` | weight-management | Injection | 12.5mg | Vial | https://mybaremethod.com/product/tirzepatide |  |
 | Tirzepatide + B6 Injection | 15mg, Vial | `MBM-WM-TIR-INJ-004` | `p5` | `tirzepatide-v4` | weight-management | Injection | 15mg | Vial | https://mybaremethod.com/product/tirzepatide |  |
+| Fat Burner | AOD-9604 6mg (1.2mg/mL) / MOTS-C 10mg (2mg/mL) / Tesamorelin 15mg (3mg/mL), 5mL vial | `MBM-WM-FB3-INJ-001` | `p74` | `fat-burner-v1` | weight-management | Injection | AOD-9604 6mg (1.2mg/mL) / MOTS-C 10mg (2mg/mL) / Tesamorelin 15mg (3mg/mL) | 5mL vial | https://mybaremethod.com/product/fat-burner |  |
 | Estradiol Patch | 0.025mg twice weekly, 8 patches | `MBM-HRT-EST-PAT-001` | `p16` | `estradiol-patch-v1` | womens-hormone-therapy | Patch | 0.025mg twice weekly | 8 patches | https://mybaremethod.com/product/estradiol-patch |  |
 | Estradiol Patch | 0.05mg twice weekly, 8 patches | `MBM-HRT-EST-PAT-002` | `p16` | `estradiol-patch-v2` | womens-hormone-therapy | Patch | 0.05mg twice weekly | 8 patches | https://mybaremethod.com/product/estradiol-patch |  |
 | Estradiol Patch | 0.1mg twice weekly, 8 patches | `MBM-HRT-EST-PAT-003` | `p16` | `estradiol-patch-v3` | womens-hormone-therapy | Patch | 0.1mg twice weekly | 8 patches | https://mybaremethod.com/product/estradiol-patch |  |
@@ -71,6 +72,7 @@ Semaglutide Membership
 | Selank Injection | 5mg/mL, 2mL | `MBM-LON-SEL-INJ-001` | `p48` | `selank-v1` | longevity-cognitive | Injection | 5mg/mL | 2mL | https://mybaremethod.com/product/selank |  |
 | Semax Injection | 5mg/mL, 2mL | `MBM-LON-SMX-INJ-001` | `p47` | `semax-v1` | longevity-cognitive | Injection | 5mg/mL | 2mL | https://mybaremethod.com/product/semax |  |
 | Selank + Semax Blend Nasal Spray | 50mcg/50mcg per spray, 10mL | `MBM-LON-SSN-NS-001` | `p68` | `selank-semax-nasal-spray-v1` | longevity-cognitive | Nasal Spray | 50mcg/50mcg per spray | 10mL | https://mybaremethod.com/product/selank-semax-nasal-spray |  |
+| Tesamorelin Injection | 10mg total · 5mg/mL, 2mL vial | `MBM-LON-TESA-INJ-001` | `p73` | `tesamorelin-v1` | longevity-cognitive | Injection | 10mg total · 5mg/mL | 2mL vial | https://mybaremethod.com/product/tesamorelin |  |
 | Wolverine: BPC-157/TB-500 | Capsule, Blend, Capsule | `MBM-RP-BPC-CAP-001` | `p41` | `bpc-157-tb-500-v1` | recovery-performance | Capsule | Blend | Capsule | https://mybaremethod.com/product/bpc-157-tb-500 | Catalog strength is "Blend" — concentration not invented. |
 | Wolverine: BPC-157/TB-500 | Injection, Blend, Injection | `MBM-RP-BPC-INJ-001` | `p41` | `bpc-157-tb-500-v2` | recovery-performance | Injection | Blend | Injection | https://mybaremethod.com/product/bpc-157-tb-500 | Catalog strength is "Blend" — concentration not invented. |
 | Tretinoin Cream | 0.025%, 20g | `MBM-SH-TRE-CRM-001` | `p69` | `tretinoin-cream-v1` | prescription-skin-hair | Cream | 0.025% | 20g | https://mybaremethod.com/product/tretinoin-cream | Storefront-active; excluded from Stripe sync until reviewed. |

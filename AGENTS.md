@@ -69,6 +69,12 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - Customer UI: `/account/orders`, `/account/orders/:orderId`. Admin UI: `/admin/orders`.
 - See `docs/customer-account-phase2.md` and `docs/customer-account-phase2-verification.sql`.
 
+### New catalog candidates (Tesamorelin / Fat Burner)
+
+- `tesamorelin` (`p73`) and `fat-burner` (`p74`) are in the TypeScript catalog + SKU registry + additive migration `20260811120000_tesamorelin_fat_burner.sql`.
+- Catalog `price` / `price_cents` currently hold **at-cost placeholders** ($83.33 / $150.00). Retail markups are **not** owner-approved — do not deploy/publish until retail pricing + medical-director copy review are approved.
+- Fat Burner is **not** SLU-PP-332.
+
 ### Product descriptions
 
 - Customer-facing copy lives in `src/data/productCopy.ts` (structured About / Common Uses / How It Works / What to Expect / Important Information) and is merged in `mk()` / membership definitions.

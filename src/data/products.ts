@@ -541,6 +541,33 @@ export const products: Product[] = [
     ],
     needsDedicatedImage: true,
   }),
+  mk({
+    id: 'p74',
+    slug: 'fat-burner',
+    displayName: 'Fat Burner',
+    shortName: 'Fat Burner',
+    subtitle: 'AOD-9604 + MOTS-C + Tesamorelin',
+    category: 'weight-management',
+    goals: ['weight-management'],
+    shortDescription:
+      'A provider-directed compounded injection combining AOD-9604, MOTS-C, and Tesamorelin for body-composition and metabolic wellness programs.',
+    longDescription: COMPOUNDED_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'Fat Burner compounded injection — AOD-9604, MOTS-C, and Tesamorelin',
+    providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    // Provisional catalog price = at-cost placeholder until owner sets retail. Do not deploy as final retail.
+    variants: [
+      {
+        dosageForm: 'Injection',
+        strength: 'AOD-9604 6mg (1.2mg/mL) / MOTS-C 10mg (2mg/mL) / Tesamorelin 15mg (3mg/mL)',
+        size: '5mL vial',
+        price: 150,
+      },
+    ],
+    needsDedicatedImage: true,
+    internalNotes:
+      'RETAIL PRICE PENDING OWNER APPROVAL. At-cost $150.00 recorded as provisional catalog price placeholder only. Do not publish until retail markup approved. MEDICAL DIRECTOR REVIEW REQUIRED. Not SLU-PP-332. Formulation: AOD-9604 6mg / MOTS-C 10mg / Tesamorelin 15mg in 5mL (1.2 / 2 / 3 mg/mL). SKU MBM-WM-FB3-INJ-001.',
+  }),
 
   // ===== WOMEN'S HORMONE THERAPY =====
   mk({
@@ -668,6 +695,33 @@ export const products: Product[] = [
     variants: [
       { dosageForm: 'Nasal Spray', strength: '50mcg/50mcg per spray', size: '10mL', price: 169 },
     ],
+  }),
+  mk({
+    id: 'p73',
+    slug: 'tesamorelin',
+    displayName: 'Tesamorelin Injection',
+    shortName: 'Tesamorelin',
+    subtitle: 'Provider-directed compounded formulation',
+    category: 'longevity-cognitive',
+    goals: ['longevity'],
+    shortDescription:
+      'A provider-directed compounded Tesamorelin injection (growth hormone-releasing factor analog) available after eligibility review.',
+    longDescription: COMPOUNDED_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'Tesamorelin injection, a provider-directed compounded formulation',
+    providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    // Provisional catalog price = at-cost placeholder until owner sets retail. Do not deploy as final retail.
+    variants: [
+      {
+        dosageForm: 'Injection',
+        strength: '10mg total · 5mg/mL',
+        size: '2mL vial',
+        price: 83.33,
+      },
+    ],
+    needsDedicatedImage: true,
+    internalNotes:
+      'RETAIL PRICE PENDING OWNER APPROVAL. At-cost $83.33 recorded as provisional catalog price placeholder only. Do not publish until retail markup approved. MEDICAL DIRECTOR REVIEW REQUIRED for body-composition/wellness framing beyond HIV-associated lipodystrophy indication context. Lyophilized Tesamorelin 10mg / 2mL (5mg/mL). SKU MBM-LON-TESA-INJ-001.',
   }),
 
   // ===== RECOVERY & PERFORMANCE =====

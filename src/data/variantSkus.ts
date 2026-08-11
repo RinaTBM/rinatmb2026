@@ -1,6 +1,6 @@
 /**
- * Approved variant-level SKU registry (50 total).
- * 48 retail/selectable variant SKUs + 2 membership program SKUs.
+ * Approved variant-level SKU registry (52 total).
+ * 50 retail/selectable variant SKUs + 2 membership program SKUs.
  * Do not invent abbreviations or renumber sequences.
  */
 
@@ -16,6 +16,7 @@ export const VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
   'tirzepatide-v2': 'MBM-WM-TIR-INJ-002',
   'tirzepatide-v3': 'MBM-WM-TIR-INJ-003',
   'tirzepatide-v4': 'MBM-WM-TIR-INJ-004',
+  'fat-burner-v1': 'MBM-WM-FB3-INJ-001',
   'estradiol-patch-v1': 'MBM-HRT-EST-PAT-001',
   'estradiol-patch-v2': 'MBM-HRT-EST-PAT-002',
   'estradiol-patch-v3': 'MBM-HRT-EST-PAT-003',
@@ -27,6 +28,7 @@ export const VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
   'selank-v1': 'MBM-LON-SEL-INJ-001',
   'semax-v1': 'MBM-LON-SMX-INJ-001',
   'selank-semax-nasal-spray-v1': 'MBM-LON-SSN-NS-001',
+  'tesamorelin-v1': 'MBM-LON-TESA-INJ-001',
   'bpc-157-tb-500-v1': 'MBM-RP-BPC-CAP-001',
   'bpc-157-tb-500-v2': 'MBM-RP-BPC-INJ-001',
   'tretinoin-cream-v1': 'MBM-SH-TRE-CRM-001',
@@ -64,7 +66,7 @@ export const MEMBERSHIP_PROGRAM_SKU_BY_APP_ID: Readonly<Record<string, string>> 
   m2: 'MBM-MEM-TIR-MEM-001',
 };
 
-export const EXPECTED_RETAIL_SKU_COUNT = 48;
+export const EXPECTED_RETAIL_SKU_COUNT = 50;
 export const EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT = 2;
 export const EXPECTED_TOTAL_SKU_COUNT =
   EXPECTED_RETAIL_SKU_COUNT + EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT;

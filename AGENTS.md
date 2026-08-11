@@ -25,9 +25,12 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 ### Checkout (manual invoice launch)
 
 - Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
-- Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
-- Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
-- Admin marks funds received via Orders UI / `mark-payment-received` after verification.
+- Kashu/TagadaPay card (`kashu_card`) is implemented locally but **gated** (`VITE_KASHU_CARD_ENABLED`) and **not deployed** until secrets + `kashu_sku_map` + owner approval. See `docs/kashu-tagadapay-integration.md`.
+- Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid by the browser.
+- Card paid status must come from `tagada-webhook` (signature verified), not the success redirect.
+- Payment instructions (ACH/Wire): `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
+- Card return (non-authoritative): `/order/card-result/:publicOrderNumber?token=...`
+- Admin marks ACH/Wire funds received via Orders UI / `mark-payment-received` after verification.
 - Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold).
 - Legacy Stripe Edge Functions remain in repo but must not be deployed for launch.
 

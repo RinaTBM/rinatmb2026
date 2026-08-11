@@ -12,7 +12,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
-type PaymentMethod = "manual_ach" | "manual_wire";
+type PaymentMethod = "manual_ach" | "manual_wire" | "kashu_card";
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -28,6 +28,15 @@ function createPaymentAccessToken(): string {
 }
 
 function bankInstructionsFromEnv(method: PaymentMethod) {
+  if (method === "kashu_card") {
+    return {
+      method,
+      configured: true,
+      hostedCheckout: true,
+      additionalInstructions:
+        "You will be redirected to Kashu’s secure card checkout to complete payment.",
+    };
+  }
   if (method === "manual_ach") {
     const bankName = Deno.env.get("MANUAL_ACH_BANK_NAME")?.trim();
     const accountName = Deno.env.get("MANUAL_ACH_ACCOUNT_NAME")?.trim();
@@ -83,8 +92,14 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json();
     const paymentMethod = body.paymentMethod as string;
-    if (paymentMethod !== "manual_ach" && paymentMethod !== "manual_wire") {
-      return json({ error: "Please select ACH / Bank Transfer or Domestic Wire Transfer." }, 400);
+    if (
+      paymentMethod !== "manual_ach" &&
+      paymentMethod !== "manual_wire" &&
+      paymentMethod !== "kashu_card"
+    ) {
+      return json({
+        error: "Please select ACH / Bank Transfer, Domestic Wire Transfer, or Credit / Debit Card.",
+      }, 400);
     }
 
     const customerEmail = String(body.customerEmail ?? "").trim();

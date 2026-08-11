@@ -27,17 +27,19 @@ import { NEXT_DAY_SHIPPING_CENTS, TWO_DAY_SHIPPING_CENTS } from '../orders/shipp
 import { adminCanManageOrders } from '../orders/orderStatus';
 
 describe('payment methods', () => {
-  it('exposes processor-neutral methods including future plaid_ach', () => {
-    expect(PAYMENT_METHODS).toEqual(['manual_ach', 'manual_wire', 'plaid_ach']);
+  it('exposes processor-neutral methods including future plaid_ach and kashu_card', () => {
+    expect(PAYMENT_METHODS).toEqual(['manual_ach', 'manual_wire', 'plaid_ach', 'kashu_card']);
     expect(isPlaidAchEnabled()).toBe(false);
     expect(isActiveCheckoutPaymentMethod('manual_ach')).toBe(true);
     expect(isActiveCheckoutPaymentMethod('plaid_ach')).toBe(false);
+    expect(isActiveCheckoutPaymentMethod('kashu_card')).toBe(false);
   });
 
-  it('accepts ACH and wire only for checkout selection', () => {
+  it('accepts ACH and wire only for checkout selection by default', () => {
     expect(assertSelectablePaymentMethod('manual_ach').ok).toBe(true);
     expect(assertSelectablePaymentMethod('manual_wire').ok).toBe(true);
     expect(assertSelectablePaymentMethod('plaid_ach').ok).toBe(false);
+    expect(assertSelectablePaymentMethod('kashu_card').ok).toBe(false);
     expect(assertSelectablePaymentMethod('stripe').ok).toBe(false);
   });
 });

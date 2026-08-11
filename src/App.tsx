@@ -16,6 +16,7 @@ import { CheckoutPage } from '@/pages/CheckoutPage';
 import { OrderPaymentInstructionsPage } from '@/pages/OrderPaymentInstructionsPage';
 import { SuccessPage } from '@/pages/SuccessPage';
 import { CancelPage } from '@/pages/CancelPage';
+import { KashuCardResultPage } from '@/pages/KashuCardResultPage';
 import { TrackPage } from '@/pages/TrackPage';
 import { AboutPage } from '@/pages/AboutPage';
 import { FaqPage } from '@/pages/FaqPage';
@@ -80,6 +81,7 @@ function App() {
       const orderNumber = path.replace('/order/payment/', '').split('/')[0];
       return <OrderPaymentInstructionsPage publicOrderNumber={orderNumber} />;
     }
+    if (path.startsWith('/order/card-result/')) return <KashuCardResultPage />;
     if (path === '/success') return <SuccessPage />;
     if (path === '/cancel') return <CancelPage />;
 

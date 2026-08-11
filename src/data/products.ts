@@ -11,6 +11,11 @@
 // `internalNotes` is NEVER rendered to customers.
 // =============================================================================
 
+import {
+  MEMBERSHIP_PROGRAM_SKU_BY_APP_ID,
+  VARIANT_SKU_BY_ID,
+} from './variantSkus';
+
 // ---------------------------------------------------------------------------
 // Public categories (5)
 // ---------------------------------------------------------------------------
@@ -59,6 +64,8 @@ export interface ProductVariant {
   price: number;
   /** Full customer-facing label, e.g. "Injection, 5mg/mL, 2mL" or "1mg/1mg per mL, 2mL". */
   label: string;
+  /** Stable Scriptful/retail SKU (MBM-…). Assigned for all active selectable variants. */
+  sku?: string;
 }
 
 export interface Product {
@@ -317,14 +324,19 @@ interface VariantSeed {
 function buildVariants(slug: string, seeds: VariantSeed[]): ProductVariant[] {
   const distinctForms = new Set(seeds.map(s => s.dosageForm));
   const multiForm = distinctForms.size > 1;
-  return seeds.map((s, i) => ({
-    id: `${slug}-v${i + 1}`,
-    dosageForm: s.dosageForm,
-    strength: s.strength,
-    size: s.size,
-    price: s.price,
-    label: multiForm ? `${s.dosageForm}, ${s.strength}, ${s.size}` : `${s.strength}, ${s.size}`,
-  }));
+  return seeds.map((s, i) => {
+    const id = `${slug}-v${i + 1}`;
+    const sku = VARIANT_SKU_BY_ID[id];
+    return {
+      id,
+      dosageForm: s.dosageForm,
+      strength: s.strength,
+      size: s.size,
+      price: s.price,
+      label: multiForm ? `${s.dosageForm}, ${s.strength}, ${s.size}` : `${s.strength}, ${s.size}`,
+      ...(sku ? { sku } : {}),
+    };
+  });
 }
 
 interface ProductSeed {
@@ -1039,6 +1051,8 @@ export interface Membership {
   // --- Commerce / integration ---
   checkoutProductId: string; // Stripe app_product_id (must be a recurring, synced product)
   supabaseId: string;
+  /** Membership PROGRAM SKU (billing). Fulfillment uses retail WM SKUs via crosswalk. */
+  programSku?: string;
   // --- Copy ---
   shortDescription: string;
   longDescription: string;
@@ -1109,6 +1123,7 @@ export const memberships: Membership[] = [
     isVisible: true,
     checkoutProductId: 'm1',
     supabaseId: 'm1',
+    programSku: MEMBERSHIP_PROGRAM_SKU_BY_APP_ID.m1,
     shortDescription: 'One membership. One predictable monthly price. Provider-directed Semaglutide + B6 treatment.',
     longDescription:
       'A provider-guided Semaglutide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program while you remain continuously enrolled.',
@@ -1166,6 +1181,7 @@ export const memberships: Membership[] = [
     isVisible: true,
     checkoutProductId: 'm2',
     supabaseId: 'm2',
+    programSku: MEMBERSHIP_PROGRAM_SKU_BY_APP_ID.m2,
     shortDescription: 'One predictable monthly rate through the included program maximum. Provider-directed Tirzepatide + B6 treatment.',
     longDescription:
       'A provider-guided Tirzepatide membership. Your monthly membership price stays the same as your provider adjusts your eligible treatment within the included program through 15mg while you remain continuously enrolled.',

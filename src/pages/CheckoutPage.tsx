@@ -22,6 +22,11 @@ import {
 } from '@/lib/checkout/authorizeCheckout';
 import { getMembership } from '@/data/products';
 import {
+  programSkuForMembershipAppId,
+  skuForVariantId,
+} from '@/data/variantSkus';
+import { resolveMembershipFulfillmentSku } from '@/lib/catalog/membershipSkuCrosswalk';
+import {
   labelRequestedFormulation,
   validateMembershipRequestedFormulation,
 } from '@/lib/membership/requestedFormulation';
@@ -242,26 +247,46 @@ export function CheckoutPage() {
           shippingMethod: resolvedShippingMethod,
           freeShippingEligible,
           requiresProviderReview,
-          items: items.map(i => ({
-            productId: i.productId,
-            quantity: i.quantity,
-            subscription: i.subscription,
-            purchaseType:
+          items: items.map(i => {
+            const purchaseType =
               i.purchaseType ??
-              (i.isMembership ? 'membership_program' : i.subscription ? 'auto_refill' : 'one_time'),
-            unitAmountCents: Math.round(i.price * 100),
-            standardPriceCents: Math.round((i.standardPrice ?? i.price) * 100),
-            discountPercent: i.discountPercent ?? 0,
-            appliedDiscount: i.appliedDiscount ?? 'none',
-            productName: i.name,
-            variantId: i.variantId,
-            variantLabel: i.variantLabel,
-            section: i.section,
-            membershipSlug:
-              i.isMembership || i.purchaseType === 'membership_program' ? i.slug : undefined,
-            requestedFormulation: i.requestedFormulation,
-            memberPricingEligible: i.productId === 'a1' ? false : undefined,
-          })),
+              (i.isMembership ? 'membership_program' : i.subscription ? 'auto_refill' : 'one_time');
+            const isMembershipLine =
+              Boolean(i.isMembership) || purchaseType === 'membership_program';
+            let sku: string | undefined;
+            let fulfillmentSku: string | undefined;
+            if (isMembershipLine) {
+              const programSku = programSkuForMembershipAppId(i.productId);
+              sku = programSku ?? undefined;
+              const cross = resolveMembershipFulfillmentSku(
+                i.productId,
+                i.requestedFormulation,
+              );
+              fulfillmentSku = cross?.fulfillmentSku;
+            } else {
+              sku = skuForVariantId(i.variantId) ?? undefined;
+            }
+            return {
+              productId: i.productId,
+              quantity: i.quantity,
+              subscription: i.subscription,
+              purchaseType,
+              unitAmountCents: Math.round(i.price * 100),
+              standardPriceCents: Math.round((i.standardPrice ?? i.price) * 100),
+              discountPercent: i.discountPercent ?? 0,
+              appliedDiscount: i.appliedDiscount ?? 'none',
+              productName: i.name,
+              variantId: i.variantId,
+              variantLabel: i.variantLabel,
+              sku,
+              fulfillmentSku,
+              section: i.section,
+              membershipSlug:
+                isMembershipLine ? i.slug : undefined,
+              requestedFormulation: i.requestedFormulation,
+              memberPricingEligible: i.productId === 'a1' ? false : undefined,
+            };
+          }),
         },
       });
 

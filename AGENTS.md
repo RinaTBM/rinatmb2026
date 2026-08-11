@@ -69,6 +69,15 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - Customer UI: `/account/orders`, `/account/orders/:orderId`. Admin UI: `/admin/orders`.
 - See `docs/customer-account-phase2.md` and `docs/customer-account-phase2-verification.sql`.
 
+### Variant-level SKUs (Scriptful)
+
+- Registry: `src/data/variantSkus.ts` (48 retail + 2 membership PROGRAM SKUs = 50).
+- Membership PROGRAM vs FULFILLMENT crosswalk: `src/lib/catalog/membershipSkuCrosswalk.ts`.
+- Export: `docs/scriptful-variant-skus.md` + `docs/scriptful-variant-skus.csv` (regenerate via `npx tsx scripts/gen-scriptful-variant-skus.ts`).
+- Additive migration (do **not** apply until approved): `supabase/migrations/20260811090000_variant_skus.sql` — adds `catalog_variants.sku` (unique when non-null), and `order_items.sku` / `variant_id` / `fulfillment_sku`.
+- Accessories and provider-care SKUs live in TypeScript only (not DB `catalog_variants`).
+- Invoice checkout sends SKU fields via `create-invoice-order` after the migration is applied; without the migration, PostgREST will reject unknown columns on insert.
+
 ### GitHub source of truth vs Bolt (permanent)
 
 **Authoritative GitHub source branch:** `production-source/my-bare-method-2026`  

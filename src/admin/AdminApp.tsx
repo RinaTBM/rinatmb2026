@@ -302,9 +302,10 @@ function ProductEditor({ slug, canWrite }: { slug: string; canWrite: boolean }) 
           <p className="text-xs uppercase tracking-wider text-ink-400 mb-2">Variants</p>
           <div className="space-y-2">
             {draft.variants.map((v, i) => (
-              <div key={v.variantKey} className="flex items-center gap-2 rounded-lg border border-cream-300 p-2 text-sm">
-                <span className="flex-1">{v.displayName}</span>
+              <div key={v.variantKey} className="flex flex-wrap items-center gap-2 rounded-lg border border-cream-300 p-2 text-sm">
+                <span className="flex-1 min-w-[8rem]">{v.displayName}</span>
                 <span className="text-ink-400">{v.dosageForm}</span>
+                <span className="font-mono text-xs text-ink-600" title="SKU">{v.sku || '—'}</span>
                 <div className="flex items-center gap-1">
                   <span className="text-ink-400">$</span>
                   <input className="w-20 rounded border border-cream-300 px-2 py-1" type="number" min={0} step="0.01"
@@ -348,6 +349,7 @@ function Memberships() {
             </div>
             <p className="text-sm text-ink-500">{m.brandName}</p>
             <p className="font-serif text-2xl text-ink-900 mt-2">{formatCents(m.monthlyPriceCents)}<span className="text-sm text-ink-500">/mo</span></p>
+            <p className="text-xs text-ink-500 mt-2 font-mono">Program SKU: {m.programSku || '—'}</p>
             <p className="text-xs text-ink-500 mt-2">Initial term: {m.initialTermMonths} months · Locked rate: {m.lockedRate ? 'yes' : 'no'}</p>
             <p className="text-xs text-ink-500 mt-1">Included max: {m.maximumIncludedFormulation || '—'}</p>
             <ul className="mt-2 text-xs text-ink-600 space-y-0.5">

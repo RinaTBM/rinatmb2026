@@ -194,11 +194,20 @@ Deno.serve(async (req) => {
         typeof i.variantLabel === "string" ? i.variantLabel : null,
         formulation ? `Requested dose: ${formulation}` : null,
       ].filter(Boolean);
+      const sku = typeof i.sku === "string" && i.sku.trim() ? i.sku.trim() : null;
+      const variantId = typeof i.variantId === "string" && i.variantId.trim() ? i.variantId.trim() : null;
+      const fulfillmentSku =
+        typeof i.fulfillmentSku === "string" && i.fulfillmentSku.trim()
+          ? i.fulfillmentSku.trim()
+          : null;
       return {
         order_id: orderId,
         product_id: typeof i.productId === "string" ? i.productId : null,
         product_name_snapshot: String(i.productName || "Item"),
         variant_snapshot: variantParts.length ? variantParts.join(" · ") : null,
+        sku,
+        variant_id: variantId,
+        fulfillment_sku: fulfillmentSku,
         quantity: qty,
         unit_price_cents: unit,
         discount_cents: 0,

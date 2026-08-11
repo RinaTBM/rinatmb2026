@@ -25,6 +25,7 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 ### Checkout (manual invoice launch)
 
 - Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
+- Kashu/Tagada card payments: discovery docs only (not enabled). See `docs/tagada-kashu-discovery-report.md` and `docs/tagada-product-mapping-review.md`. Prefer Tagada hosted checkout/init over Pay V2 for any future Phase 1 design. Do not deploy card checkout, apply Kashu migrations, or set `VITE_KASHU_CARD_ENABLED` without owner approval.
 - Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
 - Admin marks funds received via Orders UI / `mark-payment-received` after verification.

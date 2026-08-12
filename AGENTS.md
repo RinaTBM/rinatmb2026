@@ -25,6 +25,8 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 ### Checkout (manual invoice launch)
 
 - Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
+- Kashu/Tagada card payments: discovery docs only (not enabled). See `docs/tagada-kashu-discovery-report.md` and `docs/tagada-product-mapping-review.md`. Prefer Tagada hosted checkout/init over Pay V2 for any future Phase 1 design. Do not deploy card checkout, apply Kashu migrations, or set `VITE_KASHU_CARD_ENABLED` without owner approval.
+- Tagada credentials: keep real `TAGADA_API_KEY` (`sk_crm_…`) and `TAGADA_STORE_ID` (`store_…`) in **BSG Edge secrets**. Cursor agent env may only see Management API digests for the same names — do not treat those digests as API keys. Live discovery+sync (2026-08-11): store “My Bare Method” auth PASS; **52/52 MBM SKUs mapped** in Tagada; **`tbmgroup.site` and `checkout.mybaremethod.com` both verified+active**; Airwallex processor still **testMode=true** (do not change without Kashu). Card checkout remains disabled. MBM Tagada webhook not registered until Edge receiver + migration approved. See `docs/tagada-phase-status-domains-live.md` and `docs/kashu-sku-map-seed.json`.
 - Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
 - Admin marks funds received via Orders UI / `mark-payment-received` after verification.
@@ -72,7 +74,7 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 ### New catalog candidates (Tesamorelin / Fat Burner)
 
 - `tesamorelin` (`p73`) and `fat-burner` (`p74`) are in the TypeScript catalog + SKU registry + additive migration `20260811120000_tesamorelin_fat_burner.sql`.
-- Owner-approved retail: Tesamorelin **$149.00** (at-cost $83.33); Fat Burner **$259.00** (at-cost $150.00). Customer-facing copy on both pages completed a claims-safety pass (regulatory caveats in Important Information). **Public storefront visibility is OFF** (`isVisible: false`) until medical-director publish approval; products remain in admin/backend + SKU registry. Do not apply production ACH project migrations from Cursor unless credentials/approval cover that target.
+- Owner-approved retail: Tesamorelin **$149.00** (at-cost $83.33); Fat Burner **$259.00** (at-cost $150.00). Customer-facing copy medical-director approved. Both products are **active + visible** in catalog/backend for storefront publish. Do not auto-deploy frontend from Cursor without explicit publish step.
 - Fat Burner is **not** SLU-PP-332.
 
 ### Product descriptions
@@ -92,12 +94,14 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 
 ### GitHub source of truth vs Bolt (permanent)
 
-**Authoritative GitHub source branch:** `production-source/my-bare-method-2026`  
+**Current ACH/Wire production tip (post-reconcile):** `deploy/ach-launch-clean-2026`  
+**Historical immutable source label:** `production-source/my-bare-method-2026`  
 **Immutable pre-launch tag:** `my-bare-method-integrated-prelaunch-v1`
 
+- After production-source reconciliation (PRs #8 + #12 + #13), treat `deploy/ach-launch-clean-2026` as the branch to fast-forward from for storefront ACH/Wire launches. Kashu card UI stays off (`VITE_KASHU_CARD_ENABLED` unset/false) until Kashu assigns a final processor.
 - Bolt-controlled branches (for example `deploy/my-bare-method-integrated-2026`, `release/my-bare-method-final-2026`, and similar Bolt sync targets) are **disposable mirrors only**.
 - Never reconcile a source-of-truth / production-source branch by pulling a Bolt “Start repository” commit into it.
-- Never force-update `production-source/my-bare-method-2026` from Bolt.
-- All code changes originate from Cursor / GitHub source branches (`production-source/*`, `source-of-truth/*`, feature branches).
+- Never force-update historical `production-source/*` labels from Bolt.
+- All code changes originate from Cursor / GitHub source branches (`deploy/*`, `production-source/*`, `source-of-truth/*`, feature branches).
 - Bolt must never be treated as authoritative Git history.
 - Existing release tags (`my-bare-method-integrated-prelaunch-v1`, `customer-account-phase*-v1`, `deploy-pre-account-*`) are **immutable rollback points** — do not move or recreate them.

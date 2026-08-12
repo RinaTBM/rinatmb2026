@@ -28,7 +28,7 @@ Do **not** use staging URLs for Scriptful. Do **not** include hidden/future/inac
 | Selank Injection | longevity-cognitive | `selank` | https://mybaremethod.com/product/selank | status=active; visible=true | one_time | Variant/dose selection on product page |
 | Semax Injection | longevity-cognitive | `semax` | https://mybaremethod.com/product/semax | status=active; visible=true | one_time | Variant/dose selection on product page |
 | Wolverine: BPC-157/TB-500 | recovery-performance | `bpc-157-tb-500` | https://mybaremethod.com/product/bpc-157-tb-500 | status=active; visible=true | one_time | Variant selection on product page |
-| Bimatoprost Solution | prescription-skin-hair | `bimatoprost-solution` | https://mybaremethod.com/product/bimatoprost-solution | status=active; visible=true | one_time | None beyond standard add-to-cart |
+| Lash/Brow Growth Serum | prescription-skin-hair | `bimatoprost-solution` | https://mybaremethod.com/product/bimatoprost-solution | status=active; visible=true | one_time | Formulation: Bimatoprost Solution; none beyond standard add-to-cart |
 | Minoxidil Combination Topical Formula | prescription-skin-hair | `minoxidil-topical` | https://mybaremethod.com/product/minoxidil-topical | status=active; visible=true | one_time | None beyond standard add-to-cart |
 | Tretinoin Cream | prescription-skin-hair | `tretinoin-cream` | https://mybaremethod.com/product/tretinoin-cream | status=active; visible=true | one_time | Variant selection on product page |
 | Follow-Up Visit | provider-care | `follow-up-appointment` | https://mybaremethod.com/product/follow-up-appointment | status=active; visible=true | one_time | None beyond standard add-to-cart |

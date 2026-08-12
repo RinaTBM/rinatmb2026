@@ -555,9 +555,9 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Fat Burner compounded injection — AOD-9604, MOTS-C, and Tesamorelin',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    // Backend/admin ready; withheld from public storefront pending medical-director sign-off.
+    // Medical-director copy approved — active + visible for storefront publish.
     status: 'active',
-    isVisible: false,
+    isVisible: true,
     // Owner-approved retail $259.00 (at-cost $150.00). SKU MBM-WM-FB3-INJ-001.
     variants: [
       {
@@ -569,7 +569,7 @@ export const products: Product[] = [
     ],
     needsDedicatedImage: true,
     internalNotes:
-      'PUBLIC PUBLISH PENDING MEDICAL DIRECTOR REVIEW. Owner-approved retail $259.00 (at-cost $150.00). Not SLU-PP-332. Formulation: AOD-9604 6mg / MOTS-C 10mg / Tesamorelin 15mg in 5mL (1.2 / 2 / 3 mg/mL). SKU MBM-WM-FB3-INJ-001. Keep isVisible=false until publish approved.',
+      'Medical-director copy approved. Owner-approved retail $259.00 (at-cost $150.00). Not SLU-PP-332. Formulation: AOD-9604 6mg / MOTS-C 10mg / Tesamorelin 15mg in 5mL (1.2 / 2 / 3 mg/mL). SKU MBM-WM-FB3-INJ-001.',
   }),
 
   // ===== WOMEN'S HORMONE THERAPY =====
@@ -713,9 +713,9 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Tesamorelin injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    // Backend/admin ready; withheld from public storefront pending medical-director sign-off.
+    // Medical-director copy approved — active + visible for storefront publish.
     status: 'active',
-    isVisible: false,
+    isVisible: true,
     // Owner-approved retail $149.00 (at-cost $83.33). SKU MBM-LON-TESA-INJ-001.
     variants: [
       {
@@ -727,7 +727,7 @@ export const products: Product[] = [
     ],
     needsDedicatedImage: true,
     internalNotes:
-      'PUBLIC PUBLISH PENDING MEDICAL DIRECTOR REVIEW. Owner-approved retail $149.00 (at-cost $83.33). Body-composition/wellness framing beyond HIV-associated lipodystrophy indication context requires MD sign-off. Lyophilized Tesamorelin 10mg / 2mL (5mg/mL). SKU MBM-LON-TESA-INJ-001. Keep isVisible=false until publish approved.',
+      'Medical-director copy approved. Owner-approved retail $149.00 (at-cost $83.33). Lyophilized Tesamorelin 10mg / 2mL (5mg/mL). SKU MBM-LON-TESA-INJ-001.',
   }),
 
   // ===== RECOVERY & PERFORMANCE =====
@@ -798,17 +798,19 @@ export const products: Product[] = [
   mk({
     id: 'p71',
     slug: 'bimatoprost-solution',
-    displayName: 'Bimatoprost Solution',
-    shortName: 'Bimatoprost',
-    subtitle: 'Prescription eyelash care',
+    displayName: 'Lash/Brow Growth Serum',
+    shortName: 'Lash/Brow Growth Serum',
+    subtitle: 'Prescription bimatoprost solution',
     category: 'prescription-skin-hair',
     goals: ['beauty'],
     shortDescription: 'A prescription bimatoprost solution available following licensed-provider review.',
     longDescription: RX_DISCLAIMER,
     image: IMG_SPRAY,
-    imageAlt: 'Bimatoprost solution, a prescription treatment',
+    imageAlt: 'Lash/Brow Growth Serum — prescription bimatoprost solution',
     providerDisclaimer: RX_DISCLAIMER,
     needsDedicatedImage: true,
+    internalNotes:
+      'Customer-facing display name is Lash/Brow Growth Serum. Underlying formulation remains Bimatoprost Solution. Slug/SKU/IDs unchanged (bimatoprost-solution / MBM-SH-BIM-SOL-001 / p71).',
     variants: [
       { dosageForm: 'Solution', strength: '0.03%', size: '2.5mL', price: 89 },
     ],

@@ -62,6 +62,14 @@ function App() {
     }
   }, []);
 
+  // Legacy /shop alias → canonical /shop-all
+  useEffect(() => {
+    if (path === '/shop') {
+      window.history.replaceState({}, '', '/shop-all');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }
+  }, [path]);
+
   // Admin area renders with its own chrome (no storefront header/footer/cart).
   if (path === '/admin' || path.startsWith('/admin/')) {
     return <AdminApp route={route} />;
@@ -186,7 +194,7 @@ function App() {
     if (path === '/accessibility') return <AccessibilityPage />;
     if (path === '/consumer-data') return <ConsumerDataPage />;
     if (path === '/contact') return <ContactPage />;
-    if (path === '/shop-all') return <ShopAllPage />;
+    if (path === '/shop' || path === '/shop-all') return <ShopAllPage />;
     if (path === '/privacy-policy') return <PrivacyPolicyPage />;
     if (path === '/terms') return <TermsPage />;
 

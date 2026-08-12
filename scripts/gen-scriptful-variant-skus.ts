@@ -9,7 +9,6 @@ import {
 } from '../src/data/variantSkus';
 
 const ORIGIN = 'https://mybaremethod.com';
-const PENDING_MD_REVIEW_SLUGS = new Set(['tesamorelin', 'fat-burner']);
 
 const csvEscape = (v: unknown) => {
   const s = v == null ? '' : String(v);
@@ -21,17 +20,14 @@ type Product = (typeof products)[number];
 type Variant = Product['variants'][number];
 
 const publicStatusFor = (p: Product) => {
-  if (PENDING_MD_REVIEW_SLUGS.has(p.slug)) return 'Pending Medical Director Review';
-  if (p.status === 'active' && p.isVisible) return 'Public';
+  if (p.status === 'active' && p.isVisible) return 'Approved / Active';
   return 'Hidden';
 };
 
 const notesFor = (p: Product, v: Variant) => {
   const notes: string[] = [];
-  if (PENDING_MD_REVIEW_SLUGS.has(p.slug)) {
-    notes.push(
-      'Public Status = Pending Medical Director Review. Admin/backend ready; URL not publicly ready.',
-    );
+  if (['tesamorelin', 'fat-burner'].includes(p.slug)) {
+    notes.push('Medical-director copy approved. Public Status = Approved / Active.');
   }
   if (v.strength === 'Blend') notes.push('Catalog strength is "Blend" — concentration not invented.');
   if (v.strength === 'Combination formula') {
@@ -42,6 +38,9 @@ const notesFor = (p: Product, v: Variant) => {
   }
   if (['tretinoin-cream', 'bimatoprost-solution'].includes(p.slug)) {
     notes.push('Storefront-active; excluded from Stripe sync until reviewed.');
+  }
+  if (p.slug === 'bimatoprost-solution') {
+    notes.push('Display name Lash/Brow Growth Serum; underlying formulation Bimatoprost Solution.');
   }
   return notes.join(' ');
 };
@@ -64,13 +63,8 @@ type Row = {
   notes: string;
 };
 
-/** Active catalog products with SKUs — includes pending-publish (isVisible=false) rows. */
-const skuCatalogProducts = products.filter(
-  x => x.status === 'active' && (x.isVisible || PENDING_MD_REVIEW_SLUGS.has(x.slug)),
-);
-
 const retailRows: Row[] = [];
-for (const p of skuCatalogProducts) {
+for (const p of products.filter(x => x.status === 'active' && x.isVisible)) {
   for (const v of p.variants) {
     retailRows.push({
       product: p.displayName,
@@ -85,7 +79,7 @@ for (const p of skuCatalogProducts) {
       strength: v.strength,
       size: v.size,
       url: `${ORIGIN}/product/${p.slug}`,
-      active: p.isVisible ? 'true' : 'false',
+      active: 'true',
       publicStatus: publicStatusFor(p),
       notes: notesFor(p, v),
     });
@@ -109,7 +103,7 @@ for (const m of memberships.filter(x => x.status === 'active' && x.isVisible)) {
     size: 'monthly',
     url: `${ORIGIN}/product/${m.slug}`,
     active: 'true',
-    publicStatus: 'Public',
+    publicStatus: 'Approved / Active',
     notes:
       'PROGRAM SKU only. Fulfillment uses retail WM SKUs via dose crosswalk — no duplicate membership-medication SKUs.',
   });
@@ -131,7 +125,7 @@ for (const m of memberships.filter(x => x.status === 'active' && x.isVisible)) {
       size: 'monthly program',
       url: `${ORIGIN}/product/${m.slug}`,
       active: 'true',
-      publicStatus: 'Public',
+      publicStatus: 'Approved / Active',
       notes: `PROGRAM SKU=${programSku}; FULFILLMENT SKU=${cross?.fulfillmentSku || 'MISSING'} (retail vial ${cross?.fulfillmentVariantId || ''}).`,
     });
   }
@@ -203,7 +197,7 @@ md.push('');
 md.push('Route pattern: `/product/:slug`');
 md.push('');
 md.push(
-  '**Note:** Tesamorelin and Fat Burner are included for Scriptful/admin readiness with **Public Status = Pending Medical Director Review**. Their URLs are not publicly ready yet.',
+  '**Note:** Tesamorelin and Fat Burner are medical-director approved with **Public Status = Approved / Active**.',
 );
 md.push('');
 md.push('## Policy');
@@ -289,9 +283,6 @@ md.push('');
 md.push('- Inactive Tirzepatide 30mg — excluded');
 md.push('- Inactive Bare Elite Wellness — excluded');
 md.push('- Future products (Sermorelin, Minoxidil Tablets) — no SKU assigned');
-md.push(
-  '- Tesamorelin / Fat Burner — included with SKUs but Public Status = Pending Medical Director Review (not publicly ready)',
-);
 md.push('');
 
 writeFileSync('docs/scriptful-variant-skus.md', md.join('\n'));
@@ -306,9 +297,9 @@ console.log(
       orphans,
       invalid,
       csvRows: allExportRows.length,
-      pendingMdReview: retailRows
-        .filter(r => r.publicStatus === 'Pending Medical Director Review')
-        .map(r => r.sku),
+      approvedActive: retailRows.filter(r =>
+        ['tesamorelin-v1', 'fat-burner-v1'].includes(r.variantId),
+      ).map(r => ({ sku: r.sku, status: r.publicStatus })),
     },
     null,
     2,

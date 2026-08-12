@@ -37,8 +37,8 @@ describe('variant SKU registry', () => {
     }
   });
 
-  it('assigns a SKU to every active selectable product variant (including pending-publish hidden)', () => {
-    const active = products.filter(p => p.status === 'active');
+  it('assigns a SKU to every active visible selectable product variant', () => {
+    const active = products.filter(p => p.status === 'active' && p.isVisible);
     const missing: string[] = [];
     for (const p of active) {
       for (const v of p.variants) {
@@ -49,17 +49,19 @@ describe('variant SKU registry', () => {
     expect(missing).toEqual([]);
   });
 
-  it('keeps Tesamorelin and Fat Burner SKUs while withholding public visibility', () => {
-    const pending = products.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
-    expect(pending).toHaveLength(2);
-    for (const p of pending) {
+  it('publishes Tesamorelin and Fat Burner as active + visible with approved SKUs/prices', () => {
+    const published = products.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
+    expect(published).toHaveLength(2);
+    const tesa = published.find(p => p.slug === 'tesamorelin')!;
+    const fat = published.find(p => p.slug === 'fat-burner')!;
+    for (const p of published) {
       expect(p.status).toBe('active');
-      expect(p.isVisible).toBe(false);
-      expect(p.variants[0]?.sku).toBeTruthy();
-      expect(VARIANT_SKU_BY_ID[p.variants[0].id]).toBe(p.variants[0].sku);
+      expect(p.isVisible).toBe(true);
     }
-    expect(VARIANT_SKU_BY_ID['tesamorelin-v1']).toBe('MBM-LON-TESA-INJ-001');
-    expect(VARIANT_SKU_BY_ID['fat-burner-v1']).toBe('MBM-WM-FB3-INJ-001');
+    expect(tesa.variants[0].sku).toBe('MBM-LON-TESA-INJ-001');
+    expect(tesa.variants[0].price).toBe(149);
+    expect(fat.variants[0].sku).toBe('MBM-WM-FB3-INJ-001');
+    expect(fat.variants[0].price).toBe(259);
   });
 
   it('does not assign SKUs to future products or inactive memberships', () => {

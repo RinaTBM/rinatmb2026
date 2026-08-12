@@ -617,41 +617,43 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'bimatoprost-solution': {
-    benefitHeadline: 'Prescription Support for Fuller-Looking Lashes',
+    benefitHeadline: 'Prescription Support for Fuller-Looking Lashes & Brows',
     shortDescription:
-      'Bimatoprost Solution is a prescription topical option people consider when they want fuller-looking eyelashes under clinical guidance. Application is typically limited to the lash line — this is not a general face serum.',
+      'Lash/Brow Growth Serum is a prescription topical option featuring bimatoprost that people consider when they want fuller-looking eyelashes and brows under clinical guidance. Application is typically limited to the lash or brow line — this is not a general face serum.',
     highlights: [
-      'Lash Appearance Support',
+      'Lash & Brow Appearance',
       'Prescription Topical',
       'Targeted Application',
       'Provider-Reviewed',
     ],
     about: [
-      'Bimatoprost is used in clinical practice for effects related to eyelash growth when applied as directed. My Bare Method offers it as a prescription solution after provider review.',
+      'The customer-facing name for this product is Lash/Brow Growth Serum. The underlying formulation is a prescription bimatoprost solution. Bimatoprost is used in clinical practice for effects related to eyelash growth when applied as directed. My Bare Method offers it as a prescription solution after provider review.',
       'Follow application instructions carefully and share eye or medical history during intake so your clinician can screen for appropriateness.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support fuller-looking eyelashes with consistent, directed use',
+      'May be discussed for brow-appearance goals when your provider considers it appropriate',
       'Provides a prescription pathway instead of unverified cosmetic shortcuts',
-      'Targeted lash-line application when used as instructed',
+      'Targeted line application when used as instructed',
       'Includes clinical review before treatment begins',
     ],
     howItWorks:
       'Bimatoprost can influence the growth cycle of eyelashes for some users, which may lead to longer or fuller-looking lashes over time with consistent use. Changes are gradual and vary by person. Your provider and pharmacy materials explain exact technique.',
     whyPeopleChooseIt: [
-      'Clear prescription positioning for lash goals',
+      'Clear prescription positioning for lash and brow goals',
       'Small bottle size listed transparently on this page',
       'Clinical screening before use',
       'Instructions-focused experience that protects eye safety',
     ],
     whatToExpect:
-      'Solution bottle at the strength and size listed. Use the applicator method described by your pharmacy and provider, usually along the upper eyelash line. Report eye irritation promptly.',
+      'Solution bottle at the strength and size listed. Use the applicator method described by your pharmacy and provider, usually along the upper eyelash line or as directed for brows. Report eye irritation promptly.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     reviewFlags: [
-      'Confirm preferred consumer wording for indication framing with medical director if needed.',
+      'Display name is Lash/Brow Growth Serum; underlying formulation remains Bimatoprost Solution (slug/SKU unchanged).',
     ],
     regulatoryNotes: [
-      'No guaranteed dramatic lash results.',
+      'No guaranteed dramatic lash or brow results.',
+      'Preserve formulation identity as bimatoprost solution for clinical/fulfillment clarity.',
     ],
   },
 

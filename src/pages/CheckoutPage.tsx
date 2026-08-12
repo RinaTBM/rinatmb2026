@@ -563,7 +563,10 @@ export function CheckoutPage() {
                 {!guestAuthGate.ok && (
                   <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-900">
                     <p className="font-medium mb-1">Account required for prescription treatments</p>
-                    <p className="text-xs mb-2">{guestAuthGate.error}</p>
+                    <p className="text-xs mb-2">
+                      We need an account to securely match your treatment history and determine whether
+                      a provider visit is needed.
+                    </p>
                     <Link to="/account/login" className="text-xs font-medium underline">
                       Sign in or create an account
                     </Link>
@@ -576,9 +579,9 @@ export function CheckoutPage() {
                       <p className="mt-1 text-xs text-ink-600">{providerCopy.detail}</p>
                     ) : (
                       <>
-                        <div className="mt-2 flex items-start justify-between gap-3">
-                          <div>
-                            <p className="text-sm font-medium text-ink-900">{providerCopy.title}</p>
+                        <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-ink-900 break-words">{providerCopy.title}</p>
                             <p className="text-xs text-ink-500 mt-0.5">{providerCopy.detail}</p>
                             <p className="mt-1 inline-block rounded-full bg-cream-200 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-ink-700">
                               Required

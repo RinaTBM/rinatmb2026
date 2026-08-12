@@ -49,15 +49,13 @@ export function isProviderRequirementSatisfied(input: {
   if (input.providerWorkflowStatus !== 'COMPLETED') {
     return {
       ok: false,
-      error:
-        'Provider visit workflow must be marked completed (manual CrossTx) before fulfillment can advance.',
+      error: 'Provider review must be completed before this order can move to fulfillment.',
     };
   }
   if (!input.hasApprovedTherapyForOrder) {
     return {
       ok: false,
-      error:
-        'Provider approval must be recorded in therapy history before fulfillment can advance.',
+      error: 'Record the provider-approved treatment before fulfillment.',
     };
   }
   return { ok: true };
@@ -79,13 +77,13 @@ export function canAdvanceFulfillment(input: {
   if (next === 'provider_review_in_progress' && !isPaymentReceived(input.paymentStatus)) {
     return {
       ok: false,
-      error: 'Payment must be marked received before provider review can begin.',
+      error: 'Payment must be confirmed before fulfillment can continue.',
     };
   }
   if (REQUIRES_PAID.has(next) && !isPaymentReceived(input.paymentStatus)) {
     return {
       ok: false,
-      error: 'Payment must be marked received before fulfillment can advance.',
+      error: 'Payment must be confirmed before fulfillment can continue.',
     };
   }
 

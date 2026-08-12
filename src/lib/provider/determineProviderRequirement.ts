@@ -265,7 +265,7 @@ export function guestPrescriptionRequiresAuth(input: {
     return {
       ok: false,
       error:
-        'Please sign in or create an account before ordering prescription treatments. We use your account to determine whether a provider visit is required.',
+        'Please sign in or create an account to continue. We need an account to securely match your treatment history and determine whether a provider visit is needed.',
     };
   }
   return { ok: true };

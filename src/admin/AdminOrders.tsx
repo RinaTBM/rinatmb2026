@@ -537,8 +537,24 @@ export function AdminOrderDetail({
             <p className="font-medium text-ink-900">Record Provider Approval</p>
             <p className="text-xs text-ink-500">
               Therapy history is the source of truth. Do not auto-approve from payment or
-              fulfillment status.
+              fulfillment status. CrossTx is manual — this does not create an API appointment.
             </p>
+            <div className="rounded-lg border border-cream-300 bg-white p-2 text-xs text-ink-700 space-y-1">
+              <p>
+                <span className="text-ink-500">Customer:</span> {order.customer_name || '—'} (
+                {order.customer_email || '—'})
+              </p>
+              <p>
+                <span className="text-ink-500">Source order:</span> {order.public_order_number}
+              </p>
+              <p>
+                <span className="text-ink-500">Therapy family:</span> {approvalFamily || '—'}
+              </p>
+              <p>
+                <span className="text-ink-500">Product / variant / SKU:</span>{' '}
+                {approvalProductId || '—'} / {approvalVariantId || '—'} / {approvalSku || '—'}
+              </p>
+            </div>
             <div className="grid gap-2 sm:grid-cols-2">
               <label className="block text-xs">
                 Therapy family
@@ -604,6 +620,11 @@ export function AdminOrderDetail({
             >
               Record Provider Approval
             </button>
+            {msg && msg.toLowerCase().includes('approval') ? (
+              <p className="text-xs text-green-800">
+                After a successful save, refresh to confirm Approved status in therapy history notes.
+              </p>
+            ) : null}
           </div>
         </section>
 

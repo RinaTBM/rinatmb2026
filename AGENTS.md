@@ -72,7 +72,7 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 ### New catalog candidates (Tesamorelin / Fat Burner)
 
 - `tesamorelin` (`p73`) and `fat-burner` (`p74`) are in the TypeScript catalog + SKU registry + additive migration `20260811120000_tesamorelin_fat_burner.sql`.
-- Owner-approved retail: Tesamorelin **$149.00** (at-cost $83.33); Fat Burner **$259.00** (at-cost $150.00). Customer-facing copy on both pages completed a claims-safety pass (regulatory caveats in Important Information). **Public storefront visibility is OFF** (`isVisible: false`) until medical-director publish approval; products remain in admin/backend + SKU registry. Do not apply production ACH project migrations from Cursor unless credentials/approval cover that target.
+- Owner-approved retail: Tesamorelin **$149.00** (at-cost $83.33); Fat Burner **$259.00** (at-cost $150.00). Customer-facing copy medical-director approved. Both products are **active + visible** in catalog/backend for storefront publish. Do not auto-deploy frontend from Cursor without explicit publish step.
 - Fat Burner is **not** SLU-PP-332.
 
 ### Product descriptions

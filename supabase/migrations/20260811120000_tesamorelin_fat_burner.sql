@@ -2,7 +2,7 @@
 -- Does NOT modify existing catalog rows, prices, or SKUs.
 -- Owner-approved retail: Tesamorelin $149.00 (14900 cents), Fat Burner $259.00 (25900 cents).
 -- At-cost recorded in comments only: $83.33 / $150.00.
--- Inserted with is_visible=false (admin/backend ready; not public until medical-director publish).
+-- Inserted with is_visible=true (medical-director copy approved; storefront-ready).
 
 -- ---------------------------------------------------------------------------
 -- Tesamorelin Injection (p73 / tesamorelin)
@@ -29,7 +29,7 @@ values (
   14900,
   'usd',
   'active',
-  false,
+  true,
   null,
   null,
   true,
@@ -114,7 +114,7 @@ values (
   25900,
   'usd',
   'active',
-  false,
+  true,
   null,
   null,
   true,

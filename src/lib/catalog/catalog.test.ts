@@ -7,22 +7,21 @@ import { buildSyncPlan, summarizePlan, emptyState, type ExistingStripeState } fr
 import { priceFingerprint, productFingerprint, idempotencyKey, stableHash } from './fingerprint';
 
 describe('catalog normalization', () => {
-  it('has 11 syncable approved wellness products; pending-publish + review-hold + future excluded', () => {
-    expect(syncableProducts()).toHaveLength(11);
-    expect(catalogProducts.length).toBeGreaterThan(11);
+  it('has 13 syncable approved wellness products; review-hold + future excluded', () => {
+    expect(syncableProducts()).toHaveLength(13);
+    expect(catalogProducts.length).toBeGreaterThan(13);
     const slugs = syncableProducts().map(p => p.slug);
-    // Tesamorelin + Fat Burner are backend/admin-ready but isVisible=false until MD publish.
-    expect(slugs).not.toContain('tesamorelin');
-    expect(slugs).not.toContain('fat-burner');
+    expect(slugs).toContain('tesamorelin');
+    expect(slugs).toContain('fat-burner');
     expect(slugs).not.toContain('sermorelin');
     expect(slugs).not.toContain('minoxidil-tablets');
     expect(slugs).not.toContain('tretinoin-cream');
     expect(slugs).not.toContain('bimatoprost-solution');
-    const pending = catalogProducts.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
-    expect(pending).toHaveLength(2);
-    for (const p of pending) {
+    const published = catalogProducts.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
+    expect(published).toHaveLength(2);
+    for (const p of published) {
       expect(p.status).toBe('active');
-      expect(p.isVisible).toBe(false);
+      expect(p.isVisible).toBe(true);
     }
   });
 
@@ -106,10 +105,10 @@ describe('fingerprints & idempotency', () => {
 });
 
 describe('sync plan', () => {
-  it('first sync creates 13 Stripe products (11 approved wellness + 2 memberships)', () => {
+  it('first sync creates 15 Stripe products (13 approved wellness + 2 memberships)', () => {
     const plan = buildSyncPlan('test', emptyState());
     const s = summarizePlan(plan);
-    expect(s.createProducts).toBe(13); // 11 products + 2 memberships (pending-publish excluded)
+    expect(s.createProducts).toBe(15); // 13 products + 2 memberships
     expect(s.reusePrices).toBe(0);
     expect(s.archivePrices).toBe(0);
     // exactly one recurring membership price each
@@ -134,7 +133,7 @@ describe('sync plan', () => {
     const plan = buildSyncPlan('test', state);
     const s = summarizePlan(plan);
     expect(s.createProducts).toBe(0);
-    expect(s.updateProducts).toBe(13);
+    expect(s.updateProducts).toBe(15);
     expect(s.createPrices).toBe(0);
     expect(s.reusePrices).toBeGreaterThan(0);
     expect(s.archivePrices).toBe(0);

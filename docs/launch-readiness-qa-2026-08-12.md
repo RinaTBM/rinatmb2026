@@ -304,7 +304,7 @@ No payment, pricing, catalog SKU/price, auth, or legal policy rewrites.
 
 ```
 SOURCE BRANCH: cursor/launch-readiness-qa-945c (from deploy/ach-launch-clean-2026)
-HEAD: (see git after commit)
+HEAD: a6d911d
 WORKING TREE: clean after commit
 
 PRODUCTION SOURCE RECOMMENDATION:

@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
+  CustomerTherapyHistoryRecord,
   OrderAdminNoteRecord,
   OrderFulfillmentRecord,
   OrderItemRecord,
@@ -12,6 +13,13 @@ import { resolveTrackingUrl } from './tracking';
 import type { OrderStatus } from './orderStatus';
 import { canAdvanceFulfillment } from '../payments/fulfillmentGuards';
 import { assertMarkPaymentReceived } from '../payments/manualInvoice';
+import {
+  planMarkCrossTxAppointmentCompleted,
+  planRecordProviderApproval,
+  workflowStatusAfterPayment,
+} from '../provider/therapyApproval';
+import { isProviderGuidedPrescriptionLine } from '../provider/therapyFamilies';
+import { comparisonSkuForLine } from '../provider/determineProviderRequirement';
 
 export async function listCustomerOrders(
   client: SupabaseClient,
@@ -162,6 +170,48 @@ export async function getAdminOrderDetail(
   };
 }
 
+async function orderHasApprovedTherapyForFulfillment(
+  client: SupabaseClient,
+  order: OrderRecord,
+  items: OrderItemRecord[],
+): Promise<boolean> {
+  const req = order.provider_requirement;
+  if (!req || req === 'NONE') return true;
+  if (!order.customer_user_id) return false;
+
+  const { data, error } = await client
+    .from('customer_therapy_history')
+    .select('*')
+    .eq('customer_user_id', order.customer_user_id)
+    .eq('approval_status', 'APPROVED');
+  if (error || !data) return false;
+
+  const approved = data as CustomerTherapyHistoryRecord[];
+  const rxItems = items.filter(item =>
+    isProviderGuidedPrescriptionLine({
+      productId: item.product_id,
+      isMembership: Boolean(item.fulfillment_sku),
+      purchaseType: item.fulfillment_sku ? 'membership_program' : undefined,
+    }),
+  );
+  if (rxItems.length === 0) return true;
+
+  // Require an APPROVED row matching each ordered therapy comparison SKU when possible.
+  for (const item of rxItems) {
+    const sku = comparisonSkuForLine({
+      productId: item.product_id || '',
+      sku: item.sku,
+      fulfillmentSku: item.fulfillment_sku,
+      isMembership: Boolean(item.fulfillment_sku),
+      purchaseType: item.fulfillment_sku ? 'membership_program' : undefined,
+    });
+    if (!sku) continue;
+    const match = approved.some(h => h.sku === sku);
+    if (!match) return false;
+  }
+  return true;
+}
+
 export async function adminUpdateFulfillmentStatus(
   client: SupabaseClient,
   orderId: string,
@@ -170,15 +220,23 @@ export async function adminUpdateFulfillmentStatus(
 ): Promise<{ error: string | null }> {
   const { data: existing, error: loadErr } = await client
     .from('orders')
-    .select('payment_status')
+    .select('*')
     .eq('id', orderId)
     .maybeSingle();
   if (loadErr) return { error: loadErr.message };
   if (!existing) return { error: 'Order not found.' };
 
+  const order = existing as OrderRecord;
+  const { data: itemsData } = await client.from('order_items').select('*').eq('order_id', orderId);
+  const items = (itemsData ?? []) as OrderItemRecord[];
+  const hasApproved = await orderHasApprovedTherapyForFulfillment(client, order, items);
+
   const guard = canAdvanceFulfillment({
-    paymentStatus: String((existing as { payment_status?: string }).payment_status ?? ''),
+    paymentStatus: String(order.payment_status ?? ''),
     nextFulfillmentStatus: status,
+    providerRequirement: order.provider_requirement,
+    providerWorkflowStatus: order.provider_workflow_status,
+    hasApprovedTherapyForOrder: hasApproved,
   });
   if (!guard.ok) return { error: guard.error };
 
@@ -240,6 +298,16 @@ export async function adminMarkPaymentReceived(
   });
   if (!check.ok) return { error: check.error };
 
+  const { data: fullOrder } = await client
+    .from('orders')
+    .select('provider_requirement')
+    .eq('id', input.orderId)
+    .maybeSingle();
+  const providerRequirement = String(
+    (fullOrder as { provider_requirement?: string | null } | null)?.provider_requirement ?? 'NONE',
+  );
+  const workflow = workflowStatusAfterPayment(providerRequirement);
+
   const paidAt = new Date().toISOString();
   const { error: oErr } = await client
     .from('orders')
@@ -249,6 +317,7 @@ export async function adminMarkPaymentReceived(
       paid_marked_by: input.adminIdentity,
       payment_admin_note: input.paymentNote?.trim() || null,
       order_status: 'payment_confirmed',
+      provider_workflow_status: workflow.provider_workflow_status,
     })
     .eq('id', input.orderId);
   if (oErr) return { error: oErr.message };
@@ -292,13 +361,22 @@ export async function adminSetTracking(
   if (input.markShipped !== false) {
     const { data: existing, error: loadErr } = await client
       .from('orders')
-      .select('payment_status')
+      .select('*')
       .eq('id', orderId)
       .maybeSingle();
     if (loadErr) return { error: loadErr.message };
+    const order = existing as OrderRecord | null;
+    const { data: itemsData } = await client.from('order_items').select('*').eq('order_id', orderId);
+    const items = (itemsData ?? []) as OrderItemRecord[];
+    const hasApproved = order
+      ? await orderHasApprovedTherapyForFulfillment(client, order, items)
+      : false;
     const guard = canAdvanceFulfillment({
-      paymentStatus: String((existing as { payment_status?: string } | null)?.payment_status ?? ''),
+      paymentStatus: String(order?.payment_status ?? ''),
       nextFulfillmentStatus: 'shipped',
+      providerRequirement: order?.provider_requirement,
+      providerWorkflowStatus: order?.provider_workflow_status,
+      hasApprovedTherapyForOrder: hasApproved,
     });
     if (!guard.ok) return { error: guard.error };
   }
@@ -373,4 +451,109 @@ export async function adminAddCustomerVisibleEvent(
     created_by: createdBy,
   });
   return { error: error?.message ?? null };
+}
+
+export async function adminMarkCrossTxAppointmentCompleted(
+  client: SupabaseClient,
+  orderId: string,
+  adminIdentity: string,
+): Promise<{ error: string | null }> {
+  const { data: order, error: loadErr } = await client
+    .from('orders')
+    .select('provider_workflow_status')
+    .eq('id', orderId)
+    .maybeSingle();
+  if (loadErr) return { error: loadErr.message };
+  if (!order) return { error: 'Order not found.' };
+
+  const plan = planMarkCrossTxAppointmentCompleted({
+    currentWorkflowStatus: (order as { provider_workflow_status?: string | null })
+      .provider_workflow_status,
+  });
+  if (!plan.ok) return { error: plan.error };
+
+  const { error: oErr } = await client
+    .from('orders')
+    .update({ provider_workflow_status: plan.next })
+    .eq('id', orderId);
+  if (oErr) return { error: oErr.message };
+
+  await client.from('order_admin_notes').insert({
+    order_id: orderId,
+    note: 'CrossTx appointment marked completed in MBM tracking (manual — no API call).',
+    created_by: null,
+  });
+
+  await client.from('order_status_events').insert({
+    order_id: orderId,
+    status: 'provider_review_in_progress',
+    customer_visible: false,
+    note: 'Admin marked CrossTx appointment completed (MBM tracking only)',
+    created_by: adminIdentity,
+  });
+
+  return { error: null };
+}
+
+export async function adminRecordProviderApproval(
+  client: SupabaseClient,
+  input: {
+    customerUserId: string;
+    therapyFamily: string;
+    productId: string;
+    variantId: string;
+    sku: string;
+    sourceOrderId?: string | null;
+    approvedBy: string | null;
+    notes?: string | null;
+    confirm: boolean;
+  },
+): Promise<{ error: string | null }> {
+  if (!input.confirm) {
+    return { error: 'Explicit confirmation is required before recording provider approval.' };
+  }
+  if (!input.customerUserId || !input.therapyFamily || !input.sku) {
+    return { error: 'Therapy family, customer, and approved SKU are required.' };
+  }
+
+  const { data: current, error: loadErr } = await client
+    .from('customer_therapy_history')
+    .select('*')
+    .eq('customer_user_id', input.customerUserId)
+    .eq('therapy_family', input.therapyFamily)
+    .eq('approval_status', 'APPROVED');
+  if (loadErr) return { error: loadErr.message };
+
+  const plan = planRecordProviderApproval({
+    customerUserId: input.customerUserId,
+    therapyFamily: input.therapyFamily,
+    productId: input.productId,
+    variantId: input.variantId,
+    sku: input.sku,
+    sourceOrderId: input.sourceOrderId,
+    approvedBy: input.approvedBy,
+    notes: input.notes,
+    currentApprovedRows: (current ?? []) as CustomerTherapyHistoryRecord[],
+  });
+
+  if (plan.supersedeIds.length > 0) {
+    const { error: sErr } = await client
+      .from('customer_therapy_history')
+      .update({ approval_status: 'SUPERSEDED' })
+      .in('id', plan.supersedeIds);
+    if (sErr) return { error: sErr.message };
+  }
+
+  const { error: iErr } = await client.from('customer_therapy_history').insert(plan.insertRow);
+  if (iErr) return { error: iErr.message };
+
+  if (input.sourceOrderId) {
+    await client.from('order_admin_notes').insert({
+      order_id: input.sourceOrderId,
+      note: `Provider approval recorded for ${input.therapyFamily} / ${input.sku}`,
+      created_by: null,
+    });
+  }
+
+  return { error: null };
 }

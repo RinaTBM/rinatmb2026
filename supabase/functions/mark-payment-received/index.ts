@@ -84,6 +84,11 @@ Deno.serve(async (req) => {
 
     const paidAt = new Date().toISOString();
     const adminIdentity = (user.email as string) || userId;
+    const providerRequirement = String(order.provider_requirement || "NONE");
+    const providerWorkflowStatus =
+      !providerRequirement || providerRequirement === "NONE"
+        ? "NOT_REQUIRED"
+        : "MANUAL_ACTION_REQUIRED";
     const patchRes = await fetch(
       `${supabaseUrl}/rest/v1/orders?id=eq.${encodeURIComponent(orderId)}`,
       {
@@ -100,6 +105,7 @@ Deno.serve(async (req) => {
           paid_marked_by: adminIdentity,
           payment_admin_note: paymentNote || null,
           order_status: "payment_confirmed",
+          provider_workflow_status: providerWorkflowStatus,
         }),
       },
     );

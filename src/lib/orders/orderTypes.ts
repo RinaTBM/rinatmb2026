@@ -28,6 +28,30 @@ export interface OrderRecord {
   free_shipping_eligible: boolean;
   currency: string;
   requires_provider_review: boolean;
+  /** Provider appointment automation (nullable until migration applied). */
+  provider_requirement?: string | null;
+  provider_requirement_reason?: string | null;
+  previous_variant_sku?: string | null;
+  requested_variant_sku?: string | null;
+  required_provider_product_id?: string | null;
+  provider_visit_order_item_id?: string | null;
+  provider_workflow_status?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CustomerTherapyHistoryRecord {
+  id: string;
+  customer_user_id: string;
+  therapy_family: string;
+  product_id: string;
+  variant_id: string;
+  sku: string;
+  approval_status: string;
+  approved_at: string | null;
+  approved_by: string | null;
+  source_order_id: string | null;
+  notes: string | null;
   created_at: string;
   updated_at: string;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, navigate } from '@/router';
 import { ArrowLeft, Lock, Check, ShieldCheck, Truck, Ban, RefreshCw, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
@@ -54,11 +54,23 @@ import {
   RECURRING_MANUAL_PAYMENT_DISCLOSURE,
 } from '@/lib/payments/recurringCopy';
 import { submitInvoiceOrder } from '@/lib/payments/submitInvoiceOrder';
+import { supabase } from '@/lib/supabaseClient';
+import {
+  determineProviderRequirement,
+  guestPrescriptionRequiresAuth,
+  type ApprovedTherapyHistoryRow,
+} from '@/lib/provider/determineProviderRequirement';
+import {
+  customerCopyForRequirement,
+  isProviderVisitLine,
+  visitForRequirement,
+} from '@/lib/provider/providerVisits';
+import { isProviderGuidedPrescriptionLine } from '@/lib/provider/therapyFamilies';
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
   const { isActiveMember, activateMembership } = useMember();
-  const { user } = useCustomerAuth();
+  const { user, session } = useCustomerAuth();
   const [step, setStep] = useState<'info' | 'payment' | 'complete'>('info');
   const [acknowledged, setAcknowledged] = useState<{ terms: boolean; privacy: boolean; refund: boolean; address: boolean }>({ terms: false, privacy: false, refund: false, address: false });
   const allAccepted = acknowledged.terms && acknowledged.privacy && acknowledged.refund && acknowledged.address;
@@ -69,6 +81,7 @@ export function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<ActiveCheckoutPaymentMethod>('manual_ach');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [therapyHistory, setTherapyHistory] = useState<ApprovedTherapyHistoryRow[]>([]);
   const checkoutEnabled = isManualCheckoutEnabled();
   const hasRecurring = cartHasRecurringItems(items);
 
@@ -78,6 +91,116 @@ export function CheckoutPage() {
   );
   const requiresProviderReview = hasProviderCare || items.some(i => i.requiresIntake) || hasMembership;
   const hasVariablePricing = items.some(i => i.price === 0);
+
+  const cartLinesForProvider = useMemo(
+    () =>
+      items.map(i => {
+        const purchaseType =
+          i.purchaseType ??
+          (i.isMembership ? 'membership_program' : i.subscription ? 'auto_refill' : 'one_time');
+        const isMembershipLine =
+          Boolean(i.isMembership) || purchaseType === 'membership_program';
+        let sku: string | undefined;
+        let fulfillmentSku: string | undefined;
+        if (isMembershipLine) {
+          sku = programSkuForMembershipAppId(i.productId) ?? undefined;
+          fulfillmentSku = resolveMembershipFulfillmentSku(i.productId, i.requestedFormulation)
+            ?.fulfillmentSku;
+        } else {
+          sku = skuForVariantId(i.variantId) ?? undefined;
+        }
+        return {
+          productId: i.productId,
+          productName: i.name,
+          quantity: i.quantity,
+          unitAmountCents: Math.round(i.price * 100),
+          variantId: i.variantId,
+          variantLabel: i.variantLabel,
+          sku,
+          fulfillmentSku,
+          section: i.section,
+          slug: i.slug,
+          membershipSlug: isMembershipLine ? i.slug : undefined,
+          requestedFormulation: i.requestedFormulation,
+          purchaseType,
+          isMembership: isMembershipLine,
+        };
+      }),
+    [items],
+  );
+
+  const hasProviderGuidedPrescription = cartLinesForProvider.some(line =>
+    isProviderGuidedPrescriptionLine({
+      productId: line.productId,
+      slug: line.slug,
+      section: line.section,
+      isMembership: line.isMembership,
+      purchaseType: line.purchaseType,
+    }),
+  );
+
+  const guestAuthGate = guestPrescriptionRequiresAuth({
+    customerUserId: user?.id,
+    hasProviderGuidedPrescription,
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      if (!supabase || !user?.id) {
+        setTherapyHistory([]);
+        return;
+      }
+      const { data } = await supabase
+        .from('customer_therapy_history')
+        .select('therapy_family,product_id,variant_id,sku,approval_status,approved_at,created_at')
+        .eq('customer_user_id', user.id);
+      if (!cancelled) {
+        setTherapyHistory((data as ApprovedTherapyHistoryRow[]) ?? []);
+      }
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
+
+  const providerPreview = useMemo(() => {
+    if (!user?.id || !hasProviderGuidedPrescription) {
+      return determineProviderRequirement({
+        customerUserId: user?.id,
+        prescriptionLines: [],
+        approvedTherapyHistory: [],
+      });
+    }
+    return determineProviderRequirement({
+      customerUserId: user.id,
+      prescriptionLines: cartLinesForProvider
+        .filter(line =>
+          isProviderGuidedPrescriptionLine({
+            productId: line.productId,
+            slug: line.slug,
+            section: line.section,
+            isMembership: line.isMembership,
+            purchaseType: line.purchaseType,
+          }),
+        )
+        .map(line => ({
+          productId: line.productId,
+          slug: line.slug,
+          sku: line.sku,
+          fulfillmentSku: line.fulfillmentSku,
+          variantId: line.variantId,
+          isMembership: line.isMembership,
+          purchaseType: line.purchaseType,
+        })),
+      approvedTherapyHistory: therapyHistory,
+    });
+  }, [user?.id, hasProviderGuidedPrescription, cartLinesForProvider, therapyHistory]);
+
+  const providerCopy = customerCopyForRequirement(providerPreview.requirement);
+  const requiredVisit = visitForRequirement(providerPreview.requirement);
+
   const membershipDoseIssues = items
     .filter(i => i.isMembership || i.purchaseType === 'membership_program')
     .map(i => {
@@ -98,15 +221,46 @@ export function CheckoutPage() {
     })
     .filter((x): x is NonNullable<typeof x> => !!x);
   const membershipDoseBlocking = membershipDoseIssues.length > 0;
-  const subtotalCents = Math.round(subtotal * 100);
-  const cartItemsForAuth = items.map(i => ({
-    productId: i.productId,
-    section: i.section,
-    quantity: i.quantity,
-    unitAmountCents: Math.round(i.price * 100),
-    purchaseType: i.purchaseType,
-    subscription: i.subscription,
-  }));
+
+  // Strip client provider-visit lines from merchandise subtotal; reinject required visit for display.
+  const merchandiseSubtotalCents = items
+    .filter(
+      i =>
+        !isProviderVisitLine({
+          productId: i.productId,
+          sku: skuForVariantId(i.variantId) ?? null,
+        }),
+    )
+    .reduce((sum, i) => sum + Math.round(i.price * 100) * i.quantity, 0);
+  const requiredVisitCents = requiredVisit && user?.id ? requiredVisit.priceCents : 0;
+  const displaySubtotalCents = merchandiseSubtotalCents + requiredVisitCents;
+  const subtotalCents = displaySubtotalCents;
+  const cartItemsForAuth = items
+    .filter(
+      i =>
+        !isProviderVisitLine({
+          productId: i.productId,
+          sku: skuForVariantId(i.variantId) ?? null,
+        }),
+    )
+    .map(i => ({
+      productId: i.productId,
+      section: i.section,
+      quantity: i.quantity,
+      unitAmountCents: Math.round(i.price * 100),
+      purchaseType: i.purchaseType,
+      subscription: i.subscription,
+    }));
+  if (requiredVisit && user?.id) {
+    cartItemsForAuth.push({
+      productId: requiredVisit.productId,
+      section: requiredVisit.section,
+      quantity: 1,
+      unitAmountCents: requiredVisit.priceCents,
+      purchaseType: 'one_time',
+      subscription: false,
+    });
+  }
   const requiresPhysicalShipping = cartRequiresPhysicalShippingFromItems(cartItemsForAuth);
   // $500 free-shipping threshold uses ordinary merchandise ONLY — never membership value.
   const freeShippingMerchandiseSubtotalCents =
@@ -135,7 +289,8 @@ export function CheckoutPage() {
       : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
   const providerCareTax = providerCareTaxAuth.providerCareTaxCents / 100;
   const accessorySalesTax = accessoryTaxAuth.accessorySalesTaxCents / 100;
-  const total = subtotal + shipping + providerCareTax + accessorySalesTax;
+  const displaySubtotal = displaySubtotalCents / 100;
+  const total = displaySubtotal + shipping + providerCareTax + accessorySalesTax;
 
   const update = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
 
@@ -197,6 +352,11 @@ export function CheckoutPage() {
       return;
     }
 
+    if (!guestAuthGate.ok) {
+      setError(guestAuthGate.error);
+      return;
+    }
+
     const methodCheck = assertSelectablePaymentMethod(paymentMethod);
     if (!methodCheck.ok) {
       setError(methodCheck.error);
@@ -228,7 +388,7 @@ export function CheckoutPage() {
       const result = await submitInvoiceOrder({
         supabaseUrl,
         anonKey,
-        accessToken: null,
+        accessToken: session?.access_token ?? null,
         body: {
           paymentMethod: methodCheck.method,
           isActiveMember,
@@ -246,47 +406,24 @@ export function CheckoutPage() {
           accessoryTaxableSubtotalCents: accessoryTaxAuth.accessoryTaxableSubtotalCents,
           shippingMethod: resolvedShippingMethod,
           freeShippingEligible,
-          requiresProviderReview,
-          items: items.map(i => {
-            const purchaseType =
-              i.purchaseType ??
-              (i.isMembership ? 'membership_program' : i.subscription ? 'auto_refill' : 'one_time');
-            const isMembershipLine =
-              Boolean(i.isMembership) || purchaseType === 'membership_program';
-            let sku: string | undefined;
-            let fulfillmentSku: string | undefined;
-            if (isMembershipLine) {
-              const programSku = programSkuForMembershipAppId(i.productId);
-              sku = programSku ?? undefined;
-              const cross = resolveMembershipFulfillmentSku(
-                i.productId,
-                i.requestedFormulation,
-              );
-              fulfillmentSku = cross?.fulfillmentSku;
-            } else {
-              sku = skuForVariantId(i.variantId) ?? undefined;
-            }
-            return {
-              productId: i.productId,
-              quantity: i.quantity,
-              subscription: i.subscription,
-              purchaseType,
-              unitAmountCents: Math.round(i.price * 100),
-              standardPriceCents: Math.round((i.standardPrice ?? i.price) * 100),
-              discountPercent: i.discountPercent ?? 0,
-              appliedDiscount: i.appliedDiscount ?? 'none',
-              productName: i.name,
-              variantId: i.variantId,
-              variantLabel: i.variantLabel,
-              sku,
-              fulfillmentSku,
-              section: i.section,
-              membershipSlug:
-                isMembershipLine ? i.slug : undefined,
-              requestedFormulation: i.requestedFormulation,
-              memberPricingEligible: i.productId === 'a1' ? false : undefined,
-            };
-          }),
+          requiresProviderReview:
+            requiresProviderReview || providerPreview.requirement !== 'NONE',
+          items: cartLinesForProvider.map(line => ({
+            productId: line.productId,
+            quantity: line.quantity,
+            subscription: items.find(i => i.productId === line.productId)?.subscription,
+            purchaseType: line.purchaseType,
+            unitAmountCents: line.unitAmountCents,
+            productName: line.productName,
+            variantId: line.variantId,
+            variantLabel: line.variantLabel,
+            sku: line.sku,
+            fulfillmentSku: line.fulfillmentSku,
+            section: line.section,
+            membershipSlug: line.membershipSlug,
+            requestedFormulation: line.requestedFormulation,
+            memberPricingEligible: line.productId === 'a1' ? false : undefined,
+          })),
         },
       });
 
@@ -423,6 +560,41 @@ export function CheckoutPage() {
                     </ul>
                   </div>
                 )}
+                {!guestAuthGate.ok && (
+                  <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-900">
+                    <p className="font-medium mb-1">Account required for prescription treatments</p>
+                    <p className="text-xs mb-2">{guestAuthGate.error}</p>
+                    <Link to="/account/login" className="text-xs font-medium underline">
+                      Sign in or create an account
+                    </Link>
+                  </div>
+                )}
+                {guestAuthGate.ok && hasProviderGuidedPrescription && providerCopy && (
+                  <div className="rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-800">
+                    <p className="font-medium text-ink-900">Provider visit</p>
+                    {providerPreview.requirement === 'NONE' ? (
+                      <p className="mt-1 text-xs text-ink-600">{providerCopy.detail}</p>
+                    ) : (
+                      <>
+                        <div className="mt-2 flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-medium text-ink-900">{providerCopy.title}</p>
+                            <p className="text-xs text-ink-500 mt-0.5">{providerCopy.detail}</p>
+                            <p className="mt-1 inline-block rounded-full bg-cream-200 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-ink-700">
+                              Required
+                            </p>
+                          </div>
+                          <span className="text-sm font-medium text-ink-900 whitespace-nowrap">
+                            {providerCopy.priceLabel}
+                          </span>
+                        </div>
+                        <p className="mt-2 text-[11px] text-ink-400">
+                          This visit is required and cannot be removed. Pricing is set by My Bare Method.
+                        </p>
+                      </>
+                    )}
+                  </div>
+                )}
                 {requiresPhysicalShipping ? (
                   <div>
                     <h2 className="font-serif text-2xl text-ink-900 mb-4">Shipping Method</h2>
@@ -483,7 +655,7 @@ export function CheckoutPage() {
                   type="button"
                   onClick={() => setStep('payment')}
                   className="btn-primary"
-                  disabled={membershipDoseBlocking}
+                  disabled={membershipDoseBlocking || !guestAuthGate.ok}
                 >
                   Continue to Payment
                 </button>
@@ -649,9 +821,9 @@ export function CheckoutPage() {
                   {checkoutEnabled ? (
                     <button
                       type="button"
-                      disabled={!allAccepted || loading || membershipDoseBlocking}
+                      disabled={!allAccepted || loading || membershipDoseBlocking || !guestAuthGate.ok}
                       onClick={handleSubmitInvoiceOrder}
-                      className={`btn-primary flex-1 ${!allAccepted || loading || membershipDoseBlocking ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`btn-primary flex-1 ${!allAccepted || loading || membershipDoseBlocking || !guestAuthGate.ok ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       {loading ? (
                         <span className="flex items-center justify-center gap-2">
@@ -678,7 +850,15 @@ export function CheckoutPage() {
             <div className="card-lux p-5">
               <h3 className="font-serif text-xl text-ink-900 mb-4">Order Summary</h3>
               <div className="space-y-3 mb-4 max-h-80 overflow-y-auto">
-                {items.map(item => {
+                {items
+                  .filter(
+                    item =>
+                      !isProviderVisitLine({
+                        productId: item.productId,
+                        sku: skuForVariantId(item.variantId) ?? null,
+                      }),
+                  )
+                  .map(item => {
                   const standard = item.standardPrice ?? item.price;
                   const savings = Math.max(0, (standard - item.price) * item.quantity);
                   return (
@@ -745,6 +925,20 @@ export function CheckoutPage() {
                     </div>
                   );
                 })}
+                {requiredVisit && user?.id && providerCopy && providerPreview.requirement !== 'NONE' ? (
+                  <div className="flex gap-3 rounded-lg border border-cream-300 bg-cream-50 p-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-ink-900">{requiredVisit.name}</p>
+                      <p className="text-xs text-ink-500">{providerCopy.detail}</p>
+                      <p className="mt-1 inline-block rounded-full bg-ink-900 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-cream-50">
+                        Required
+                      </p>
+                    </div>
+                    <span className="text-sm font-medium text-ink-900">
+                      ${(requiredVisit.priceCents / 100).toFixed(2)}
+                    </span>
+                  </div>
+                ) : null}
               </div>
               <div className="space-y-2 border-t border-cream-300 pt-4 text-sm">
                 {!hasVariablePricing && standardSubtotal > subtotal && (
@@ -759,7 +953,7 @@ export function CheckoutPage() {
                     <span>−${totalSavings.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `$${subtotal.toFixed(2)}`}</span></div>
+                <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `$${displaySubtotal.toFixed(2)}`}</span></div>
                 {!hasVariablePricing && <>
                   {requiresPhysicalShipping && (
                     <div className="flex justify-between text-ink-600">

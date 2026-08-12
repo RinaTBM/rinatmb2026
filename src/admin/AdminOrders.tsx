@@ -3,7 +3,9 @@ import { navigate } from '@/router';
 import { supabase } from '@/lib/supabaseClient';
 import {
   adminAddNote,
+  adminMarkCrossTxAppointmentCompleted,
   adminMarkPaymentReceived,
+  adminRecordProviderApproval,
   adminSetTracking,
   adminUpdateFulfillmentStatus,
   getAdminOrderDetail,
@@ -27,7 +29,11 @@ import { TRACKING_CARRIERS } from '@/lib/orders/tracking';
 import { nextAdminStatusAction } from '@/lib/orders/webhookOrder';
 import { PAYMENT_METHOD_LABELS, type PaymentMethod } from '@/lib/payments/paymentMethods';
 import { isPaymentReceived } from '@/lib/payments/fulfillmentGuards';
-
+import {
+  FOLLOW_UP_PROVIDER_VISIT,
+  INITIAL_PROVIDER_VISIT,
+} from '@/lib/provider/providerVisits';
+import { resolveTherapyFamily, THERAPY_FAMILIES } from '@/lib/provider/therapyFamilies';
 function Badge({ tone, children }: { tone: 'green' | 'gray' | 'gold' | 'red'; children: ReactNode }) {
   const map = {
     green: 'bg-green-100 text-green-800',
@@ -155,6 +161,13 @@ export function AdminOrderDetail({
   const [busy, setBusy] = useState(false);
   const [paymentNote, setPaymentNote] = useState('');
   const [confirmPaid, setConfirmPaid] = useState(false);
+  const [confirmCrossTx, setConfirmCrossTx] = useState(false);
+  const [confirmApproval, setConfirmApproval] = useState(false);
+  const [approvalFamily, setApprovalFamily] = useState('');
+  const [approvalProductId, setApprovalProductId] = useState('');
+  const [approvalVariantId, setApprovalVariantId] = useState('');
+  const [approvalSku, setApprovalSku] = useState('');
+  const [approvalNotes, setApprovalNotes] = useState('');
 
   const load = async () => {
     if (!supabase || !canWrite) {
@@ -171,6 +184,22 @@ export function AdminOrderDetail({
     if (detail?.fulfillment?.carrier) setCarrier(detail.fulfillment.carrier);
     if (detail?.fulfillment?.tracking_number) setTrackingNumber(detail.fulfillment.tracking_number);
     if (detail?.fulfillment?.tracking_url) setTrackingUrl(detail.fulfillment.tracking_url);
+    if (detail) {
+      const rxItem =
+        detail.items.find(i => i.fulfillment_sku) ||
+        detail.items.find(i => i.sku && !String(i.sku).startsWith('MBM-PC-'));
+      if (rxItem) {
+        setApprovalProductId(rxItem.product_id || '');
+        setApprovalVariantId(rxItem.variant_id || '');
+        setApprovalSku(rxItem.fulfillment_sku || rxItem.sku || detail.requested_variant_sku || '');
+        const family =
+          resolveTherapyFamily({
+            productId: rxItem.product_id,
+            isMembership: Boolean(rxItem.fulfillment_sku),
+          }) || '';
+        setApprovalFamily(family);
+      }
+    }
   };
 
   useEffect(() => {
@@ -241,6 +270,57 @@ export function AdminOrderDetail({
     else {
       setConfirmPaid(false);
       setPaymentNote('');
+      await load();
+    }
+  };
+
+  const markCrossTxDone = async () => {
+    if (!supabase || !order || !confirmCrossTx) {
+      setMsg('Confirm CrossTx appointment was completed outside MBM before updating status.');
+      return;
+    }
+    setBusy(true);
+    setMsg(null);
+    const { error } = await adminMarkCrossTxAppointmentCompleted(
+      supabase,
+      order.id,
+      adminEmail || adminUserId || 'admin',
+    );
+    setBusy(false);
+    if (error) setMsg(error);
+    else {
+      setConfirmCrossTx(false);
+      await load();
+    }
+  };
+
+  const recordApproval = async () => {
+    if (!supabase || !order || !confirmApproval) {
+      setMsg('Confirm provider approval before recording therapy history.');
+      return;
+    }
+    if (!order.customer_user_id) {
+      setMsg('Order has no authenticated customer user id — cannot record therapy history.');
+      return;
+    }
+    setBusy(true);
+    setMsg(null);
+    const { error } = await adminRecordProviderApproval(supabase, {
+      customerUserId: order.customer_user_id,
+      therapyFamily: approvalFamily,
+      productId: approvalProductId,
+      variantId: approvalVariantId,
+      sku: approvalSku,
+      sourceOrderId: order.id,
+      approvedBy: adminUserId,
+      notes: approvalNotes,
+      confirm: true,
+    });
+    setBusy(false);
+    if (error) setMsg(error);
+    else {
+      setConfirmApproval(false);
+      setApprovalNotes('');
       await load();
     }
   };
@@ -378,6 +458,152 @@ export function AdminOrderDetail({
                 Provider Review In Progress
               </button>
             ) : null}
+          </div>
+        </section>
+
+        <section className="card-lux p-5 space-y-3 text-sm lg:col-span-2">
+          <h2 className="font-serif text-xl text-ink-900 mb-2">Provider appointment</h2>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <p>
+              <span className="text-ink-500">Provider Requirement:</span>{' '}
+              {order.provider_requirement || '—'}
+            </p>
+            <p>
+              <span className="text-ink-500">Provider Workflow Status:</span>{' '}
+              {order.provider_workflow_status === 'MANUAL_ACTION_REQUIRED' ? (
+                <Badge tone="gold">CrossTx: Manual Action Required</Badge>
+              ) : (
+                order.provider_workflow_status || '—'
+              )}
+            </p>
+            <p className="sm:col-span-2">
+              <span className="text-ink-500">Provider Requirement Reason:</span>{' '}
+              {order.provider_requirement_reason || '—'}
+            </p>
+            <p>
+              <span className="text-ink-500">Previous Variant SKU:</span>{' '}
+              {order.previous_variant_sku || '—'}
+            </p>
+            <p>
+              <span className="text-ink-500">Requested Variant SKU:</span>{' '}
+              {order.requested_variant_sku || '—'}
+            </p>
+            <p>
+              <span className="text-ink-500">Required Provider Visit:</span>{' '}
+              {order.required_provider_product_id === 'pc1'
+                ? INITIAL_PROVIDER_VISIT.name
+                : order.required_provider_product_id === 'pc2'
+                  ? FOLLOW_UP_PROVIDER_VISIT.name
+                  : order.required_provider_product_id || '—'}
+            </p>
+            <p>
+              <span className="text-ink-500">Provider Visit Charge:</span>{' '}
+              {order.required_provider_product_id === 'pc1'
+                ? formatCents(INITIAL_PROVIDER_VISIT.priceCents)
+                : order.required_provider_product_id === 'pc2'
+                  ? formatCents(FOLLOW_UP_PROVIDER_VISIT.priceCents)
+                  : '—'}
+            </p>
+          </div>
+
+          {order.provider_workflow_status === 'MANUAL_ACTION_REQUIRED' ||
+          order.provider_workflow_status === 'ERROR' ? (
+            <div className="rounded-xl border border-gold-300 bg-gold-50 p-3 space-y-2">
+              <p className="font-medium text-ink-900">CrossTx — Manual Action Required</p>
+              <p className="text-xs text-ink-600">
+                Create/complete the appointment in CrossTx outside MBM. This action only updates MBM
+                tracking — it does not create an appointment via API.
+              </p>
+              <label className="flex items-start gap-2 text-xs text-ink-600">
+                <input
+                  type="checkbox"
+                  className="mt-0.5"
+                  checked={confirmCrossTx}
+                  onChange={e => setConfirmCrossTx(e.target.checked)}
+                />
+                I confirm the CrossTx appointment was completed outside My Bare Method.
+              </label>
+              <button
+                className="btn-primary !py-1 !px-3 text-xs"
+                disabled={busy || !confirmCrossTx || !canWrite}
+                onClick={() => void markCrossTxDone()}
+              >
+                Mark CrossTx Appointment Completed
+              </button>
+            </div>
+          ) : null}
+
+          <div className="rounded-xl border border-cream-300 bg-cream-50 p-3 space-y-2">
+            <p className="font-medium text-ink-900">Record Provider Approval</p>
+            <p className="text-xs text-ink-500">
+              Therapy history is the source of truth. Do not auto-approve from payment or
+              fulfillment status.
+            </p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <label className="block text-xs">
+                Therapy family
+                <select
+                  className="input-lux mt-1 text-xs"
+                  value={approvalFamily}
+                  onChange={e => setApprovalFamily(e.target.value)}
+                >
+                  <option value="">Select…</option>
+                  {THERAPY_FAMILIES.map(f => (
+                    <option key={f} value={f}>
+                      {f}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="block text-xs">
+                Approved SKU
+                <input
+                  className="input-lux mt-1 text-xs"
+                  value={approvalSku}
+                  onChange={e => setApprovalSku(e.target.value)}
+                />
+              </label>
+              <label className="block text-xs">
+                Product ID
+                <input
+                  className="input-lux mt-1 text-xs"
+                  value={approvalProductId}
+                  onChange={e => setApprovalProductId(e.target.value)}
+                />
+              </label>
+              <label className="block text-xs">
+                Variant ID
+                <input
+                  className="input-lux mt-1 text-xs"
+                  value={approvalVariantId}
+                  onChange={e => setApprovalVariantId(e.target.value)}
+                />
+              </label>
+              <label className="block text-xs sm:col-span-2">
+                Notes (optional)
+                <input
+                  className="input-lux mt-1 text-xs"
+                  value={approvalNotes}
+                  onChange={e => setApprovalNotes(e.target.value)}
+                />
+              </label>
+            </div>
+            <label className="flex items-start gap-2 text-xs text-ink-600">
+              <input
+                type="checkbox"
+                className="mt-0.5"
+                checked={confirmApproval}
+                onChange={e => setConfirmApproval(e.target.checked)}
+              />
+              I confirm a licensed provider approved this therapy/option for this customer.
+            </label>
+            <button
+              className="btn-outline !py-1 !px-3 text-xs"
+              disabled={busy || !confirmApproval || !canWrite || !approvalFamily || !approvalSku}
+              onClick={() => void recordApproval()}
+            >
+              Record Provider Approval
+            </button>
           </div>
         </section>
 

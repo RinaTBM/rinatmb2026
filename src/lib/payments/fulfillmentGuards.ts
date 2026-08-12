@@ -1,6 +1,15 @@
 /**
  * Keep payment status separate from fulfillment. Unpaid orders must not
  * enter paid fulfillment paths as if funds were received.
+ *
+ * Provider-guided prescriptions also require provider workflow completion +
+ * APPROVED therapy history before final fulfillment/shipping (not for
+ * accessory / provider-service-only orders).
+ *
+ * Conflict note vs prior behavior:
+ * - `provider_review_in_progress` still only requires paid (manual CrossTx window).
+ * - Final paths (processing → delivered) additionally require provider satisfaction
+ *   when `provider_requirement` is INITIAL / FOLLOW_UP / NEW_THERAPY.
  */
 
 import type { OrderStatus } from '../orders/orderStatus';
@@ -16,13 +25,50 @@ const REQUIRES_PAID = new Set<OrderStatus>([
   'delivered',
 ]);
 
+/** Final fulfillment / shipping — provider must be satisfied when a visit was required. */
+const REQUIRES_PROVIDER_SATISFIED = new Set<OrderStatus>([
+  'processing',
+  'preparing_for_shipment',
+  'shipped',
+  'delivered',
+]);
+
 export function isPaymentReceived(paymentStatus: string): boolean {
   return PAID_LIKE.has(paymentStatus);
+}
+
+export function isProviderRequirementSatisfied(input: {
+  providerRequirement: string | null | undefined;
+  providerWorkflowStatus: string | null | undefined;
+  /** True when APPROVED therapy-history exists for ordered therapy/variant as appropriate. */
+  hasApprovedTherapyForOrder: boolean;
+}): { ok: true } | { ok: false; error: string } {
+  const req = input.providerRequirement;
+  if (!req || req === 'NONE') return { ok: true };
+
+  if (input.providerWorkflowStatus !== 'COMPLETED') {
+    return {
+      ok: false,
+      error:
+        'Provider visit workflow must be marked completed (manual CrossTx) before fulfillment can advance.',
+    };
+  }
+  if (!input.hasApprovedTherapyForOrder) {
+    return {
+      ok: false,
+      error:
+        'Provider approval must be recorded in therapy history before fulfillment can advance.',
+    };
+  }
+  return { ok: true };
 }
 
 export function canAdvanceFulfillment(input: {
   paymentStatus: string;
   nextFulfillmentStatus: OrderStatus | string;
+  providerRequirement?: string | null;
+  providerWorkflowStatus?: string | null;
+  hasApprovedTherapyForOrder?: boolean;
 }): { ok: true } | { ok: false; error: string } {
   const next = input.nextFulfillmentStatus as OrderStatus;
   if (next === 'canceled' || next === 'refunded' || next === 'order_received' || next === 'action_required') {
@@ -42,5 +88,15 @@ export function canAdvanceFulfillment(input: {
       error: 'Payment must be marked received before fulfillment can advance.',
     };
   }
+
+  if (REQUIRES_PROVIDER_SATISFIED.has(next)) {
+    const providerGuard = isProviderRequirementSatisfied({
+      providerRequirement: input.providerRequirement,
+      providerWorkflowStatus: input.providerWorkflowStatus,
+      hasApprovedTherapyForOrder: Boolean(input.hasApprovedTherapyForOrder),
+    });
+    if (!providerGuard.ok) return providerGuard;
+  }
+
   return { ok: true };
 }

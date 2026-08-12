@@ -1,10 +1,23 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
 /**
- * Create a manual invoice order (ACH / wire).
+ * Create a manual invoice order (ACH / wire / future kashu_card shell).
  * Does NOT call Stripe. Does NOT mark payment as paid.
  * Bank instructions come from Edge Function secrets only (never VITE_*).
+ *
+ * Provider appointment automation:
+ * - Guest Rx carts require authenticated customer_user_id
+ * - Server evaluates therapy history + injects required visit at authoritative price
+ * - Client cannot omit/remove/reprice required provider visits
  */
+
+import {
+  buildAuthoritativeOrderLines,
+  toPrescriptionLines,
+  type RawOrderLine,
+} from "../_shared/injectProviderVisit.ts";
+import { guestPrescriptionRequiresAuth } from "../_shared/determineProviderRequirement.ts";
+import type { ApprovedTherapyHistoryRow } from "../_shared/determineProviderRequirement.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -85,6 +98,52 @@ function bankInstructionsFromEnv(method: PaymentMethod) {
   };
 }
 
+async function resolveCustomerUserId(
+  req: Request,
+  bodyUserId: unknown,
+  supabaseUrl: string,
+  anonKey: string,
+): Promise<string | null> {
+  const fromBody = typeof bodyUserId === "string" && bodyUserId.trim() ? bodyUserId.trim() : null;
+  const auth = req.headers.get("Authorization") || "";
+  const jwt = auth.replace(/^Bearer\s+/i, "").trim();
+  if (!jwt || jwt === anonKey) return fromBody;
+  try {
+    const userRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
+      headers: { Authorization: `Bearer ${jwt}`, apikey: anonKey },
+    });
+    if (!userRes.ok) return fromBody;
+    const user = await userRes.json();
+    const id = typeof user?.id === "string" ? user.id : null;
+    return id || fromBody;
+  } catch {
+    return fromBody;
+  }
+}
+
+async function fetchApprovedTherapyHistory(
+  supabaseUrl: string,
+  serviceKey: string,
+  customerUserId: string,
+): Promise<ApprovedTherapyHistoryRow[]> {
+  const url =
+    `${supabaseUrl}/rest/v1/customer_therapy_history` +
+    `?customer_user_id=eq.${encodeURIComponent(customerUserId)}` +
+    `&select=therapy_family,product_id,variant_id,sku,approval_status,approved_at,created_at`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${serviceKey}`,
+      apikey: serviceKey,
+    },
+  });
+  if (!res.ok) {
+    // Table may not be applied yet — treat as empty history (safe: requires INITIAL).
+    return [];
+  }
+  const rows = await res.json();
+  return Array.isArray(rows) ? rows as ApprovedTherapyHistoryRow[] : [];
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
@@ -107,31 +166,61 @@ Deno.serve(async (req) => {
     if (!customerEmail.includes("@")) return json({ error: "A valid email is required." }, 400);
     if (!customerName) return json({ error: "Customer name is required." }, 400);
 
-    const subtotalCents = Number(body.subtotalCents) || 0;
-    const discountCents = Number(body.discountCents) || 0;
-    const shippingCents = Number(body.shippingCents) || 0;
-    const taxCents = Number(body.taxCents) || 0;
-    const totalCents = Number(body.totalCents);
-    const expected = subtotalCents - discountCents + shippingCents + taxCents;
-    if (!Number.isInteger(totalCents) || totalCents !== expected || totalCents < 0) {
-      return json({ error: "Order total does not reconcile. Please refresh checkout and try again." }, 400);
-    }
-
     const shippingMethod = String(body.shippingMethod ?? "");
     const allowedShipping = new Set(["two_day", "next_day", "free_over_500", "none"]);
     if (!allowedShipping.has(shippingMethod) || shippingMethod === "standard") {
       return json({ error: "Invalid shipping method. Choose Two-Day or Next-Day shipping." }, 400);
     }
 
-    const items = Array.isArray(body.items) ? body.items : [];
-    if (items.length === 0) return json({ error: "Your cart is empty." }, 400);
+    const rawItems: RawOrderLine[] = Array.isArray(body.items) ? body.items : [];
+    if (rawItems.length === 0) return json({ error: "Your cart is empty." }, 400);
 
-    // Idempotency: reject empty-token duplicates only via unique order numbers from RPC.
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
     if (!supabaseUrl || !serviceKey) {
       return json({ error: "Order service is not configured." }, 500);
     }
+
+    const customerUserId = await resolveCustomerUserId(
+      req,
+      body.customerUserId,
+      supabaseUrl,
+      anonKey || serviceKey,
+    );
+
+    const prescriptionLines = toPrescriptionLines(rawItems);
+    const hasProviderGuidedPrescription = prescriptionLines.length > 0;
+    const authGate = guestPrescriptionRequiresAuth({
+      customerUserId,
+      hasProviderGuidedPrescription,
+    });
+    if (!authGate.ok) {
+      return json({ error: authGate.error }, 401);
+    }
+
+    const history = customerUserId
+      ? await fetchApprovedTherapyHistory(supabaseUrl, serviceKey, customerUserId)
+      : [];
+
+    const discountCentsIn = Number(body.discountCents) || 0;
+    const shippingCentsIn = Number(body.shippingCents) || 0;
+
+    const built = buildAuthoritativeOrderLines({
+      customerUserId,
+      items: rawItems,
+      approvedTherapyHistory: history,
+      discountCents: discountCentsIn,
+      shippingCents: shippingCentsIn,
+    });
+
+    // Server-authoritative totals (provider visit reinjected / repriced).
+    const subtotalCents = built.subtotalCents;
+    const discountCents = built.discountCents;
+    const shippingCents = built.shippingCents;
+    const taxCents = built.taxCents;
+    const totalCents = built.totalCents;
+    const items = built.items;
 
     const numberRes = await fetch(`${supabaseUrl}/rest/v1/rpc/generate_public_order_number`, {
       method: "POST",
@@ -152,8 +241,17 @@ Deno.serve(async (req) => {
     const invoiceNumber = `INV-${publicOrderNumber}`;
     const now = new Date().toISOString();
 
-    const orderInsert = {
-      customer_user_id: body.customerUserId || null,
+    const requiresProviderReview =
+      Boolean(body.requiresProviderReview) ||
+      built.requirement.requirement !== "NONE" ||
+      hasProviderGuidedPrescription;
+
+    // Workflow status is finalized after verified payment; NONE can be set now.
+    const providerWorkflowStatus =
+      built.requirement.requirement === "NONE" ? "NOT_REQUIRED" : null;
+
+    const orderInsert: Record<string, unknown> = {
+      customer_user_id: customerUserId,
       customer_email: customerEmail,
       customer_name: customerName,
       public_order_number: publicOrderNumber,
@@ -175,7 +273,13 @@ Deno.serve(async (req) => {
       shipping_method: shippingMethod,
       free_shipping_eligible: Boolean(body.freeShippingEligible),
       currency: "usd",
-      requires_provider_review: Boolean(body.requiresProviderReview),
+      requires_provider_review: requiresProviderReview,
+      provider_requirement: built.requirement.requirement,
+      provider_requirement_reason: built.requirement.reason,
+      previous_variant_sku: built.requirement.previousVariantSku,
+      requested_variant_sku: built.requirement.requestedVariantSku,
+      required_provider_product_id: built.requirement.requiredProviderProductId,
+      provider_workflow_status: providerWorkflowStatus,
     };
 
     const orderRes = await fetch(`${supabaseUrl}/rest/v1/orders`, {
@@ -190,6 +294,61 @@ Deno.serve(async (req) => {
     });
     if (!orderRes.ok) {
       const t = await orderRes.text();
+      // Fallback if provider columns not migrated yet — retry without them.
+      if (t.includes("provider_requirement") || t.includes("schema cache")) {
+        const legacyInsert = { ...orderInsert };
+        delete legacyInsert.provider_requirement;
+        delete legacyInsert.provider_requirement_reason;
+        delete legacyInsert.previous_variant_sku;
+        delete legacyInsert.requested_variant_sku;
+        delete legacyInsert.required_provider_product_id;
+        delete legacyInsert.provider_workflow_status;
+        delete legacyInsert.provider_visit_order_item_id;
+        const retry = await fetch(`${supabaseUrl}/rest/v1/orders`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${serviceKey}`,
+            apikey: serviceKey,
+            "Content-Type": "application/json",
+            Prefer: "return=representation",
+          },
+          body: JSON.stringify(legacyInsert),
+        });
+        if (!retry.ok) {
+          return json({
+            error:
+              t.includes("payment_status") || t.includes("payment_method")
+                ? "Orders database needs the manual-payment migration before invoice checkout can run."
+                : `Unable to create order: ${await retry.text()}`,
+          }, 500);
+        }
+        const legacyRows = await retry.json();
+        const legacyOrder = Array.isArray(legacyRows) ? legacyRows[0] : legacyRows;
+        return await finalizeOrderResponse({
+          supabaseUrl,
+          serviceKey,
+          orderId: legacyOrder.id as string,
+          publicOrderNumber,
+          paymentAccessToken,
+          paymentReference,
+          invoiceNumber,
+          now,
+          customerName,
+          customerEmail,
+          paymentMethod: paymentMethod as PaymentMethod,
+          shippingMethod,
+          items,
+          subtotalCents,
+          discountCents,
+          shippingCents,
+          taxCents,
+          totalCents,
+          visitSku: built.requirement.requiredProviderProductId
+            ? items.find((i) => i.requiredProviderVisit)?.sku ?? null
+            : null,
+          patchProviderVisitItemId: false,
+        });
+      }
       return json({
         error:
           t.includes("payment_status") || t.includes("payment_method")
@@ -201,126 +360,208 @@ Deno.serve(async (req) => {
     const order = Array.isArray(orderRows) ? orderRows[0] : orderRows;
     const orderId = order.id as string;
 
-    const itemRows = items.map((i: Record<string, unknown>) => {
-      const qty = Math.max(1, Number(i.quantity) || 1);
-      const unit = Math.max(0, Number(i.unitAmountCents) || 0);
-      const line = unit * qty;
-      const formulation = typeof i.requestedFormulation === "string" ? i.requestedFormulation : null;
-      const variantParts = [
-        typeof i.variantLabel === "string" ? i.variantLabel : null,
-        formulation ? `Requested dose: ${formulation}` : null,
-      ].filter(Boolean);
-      const sku = typeof i.sku === "string" && i.sku.trim() ? i.sku.trim() : null;
-      const variantId = typeof i.variantId === "string" && i.variantId.trim() ? i.variantId.trim() : null;
-      const fulfillmentSku =
-        typeof i.fulfillmentSku === "string" && i.fulfillmentSku.trim()
-          ? i.fulfillmentSku.trim()
-          : null;
-      return {
-        order_id: orderId,
-        product_id: typeof i.productId === "string" ? i.productId : null,
-        product_name_snapshot: String(i.productName || "Item"),
-        variant_snapshot: variantParts.length ? variantParts.join(" · ") : null,
-        sku,
-        variant_id: variantId,
-        fulfillment_sku: fulfillmentSku,
-        quantity: qty,
-        unit_price_cents: unit,
-        discount_cents: 0,
-        line_total_cents: line,
-      };
-    });
-
-    const itemsRes = await fetch(`${supabaseUrl}/rest/v1/order_items`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${serviceKey}`,
-        apikey: serviceKey,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal",
-      },
-      body: JSON.stringify(itemRows),
-    });
-    if (!itemsRes.ok) {
-      return json({ error: `Order created but items failed: ${await itemsRes.text()}` }, 500);
-    }
-
-    await fetch(`${supabaseUrl}/rest/v1/order_fulfillment`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${serviceKey}`,
-        apikey: serviceKey,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal",
-      },
-      body: JSON.stringify({
-        order_id: orderId,
-        fulfillment_status: "order_received",
-      }),
-    });
-
-    await fetch(`${supabaseUrl}/rest/v1/order_status_events`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${serviceKey}`,
-        apikey: serviceKey,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal",
-      },
-      body: JSON.stringify({
-        order_id: orderId,
-        status: "order_received",
-        customer_visible: true,
-        note: "Order submitted — awaiting payment",
-        created_by: "system",
-      }),
-    });
-
-    const invoiceItems = itemRows.map((r: { product_id: string | null; product_name_snapshot: string; variant_snapshot: string | null; quantity: number; unit_price_cents: number; discount_cents: number; line_total_cents: number }) => ({
-      productId: r.product_id ?? undefined,
-      productName: r.product_name_snapshot,
-      variantLabel: r.variant_snapshot,
-      quantity: r.quantity,
-      unitPriceCents: r.unit_price_cents,
-      discountCents: r.discount_cents,
-      lineTotalCents: r.line_total_cents,
-    }));
-
-    const invoice = {
-      invoiceNumber,
-      orderNumber: publicOrderNumber,
+    return await finalizeOrderResponse({
+      supabaseUrl,
+      serviceKey,
+      orderId,
+      publicOrderNumber,
+      paymentAccessToken,
       paymentReference,
+      invoiceNumber,
+      now,
       customerName,
       customerEmail,
-      orderDateIso: now,
-      paymentMethod,
-      paymentStatus: "awaiting_payment",
-      items: invoiceItems,
+      paymentMethod: paymentMethod as PaymentMethod,
+      shippingMethod,
+      items,
       subtotalCents,
       discountCents,
       shippingCents,
       taxCents,
       totalCents,
-      shippingMethod,
-      currency: "usd",
-      headline: "Order received — awaiting payment",
-      memoInstruction:
-        "Please include your order number in the memo/reference field. Processing begins after payment has been received and verified.",
-    };
-
-    const bankInstructions = bankInstructionsFromEnv(paymentMethod);
-    const paymentPath =
-      `/order/payment/${encodeURIComponent(publicOrderNumber)}?token=${encodeURIComponent(paymentAccessToken)}`;
-
-    return json({
-      orderId,
-      publicOrderNumber,
-      paymentAccessToken,
-      paymentPath,
-      invoice,
-      bankInstructions,
+      visitSku: items.find((i) => i.requiredProviderVisit)?.sku ?? null,
+      patchProviderVisitItemId: true,
     });
   } catch (err) {
     return json({ error: err instanceof Error ? err.message : "Unexpected error" }, 500);
   }
 });
+
+async function finalizeOrderResponse(input: {
+  supabaseUrl: string;
+  serviceKey: string;
+  orderId: string;
+  publicOrderNumber: string;
+  paymentAccessToken: string;
+  paymentReference: string;
+  invoiceNumber: string;
+  now: string;
+  customerName: string;
+  customerEmail: string;
+  paymentMethod: PaymentMethod;
+  shippingMethod: string;
+  items: Array<{
+    productId: string;
+    productName: string;
+    quantity: number;
+    unitAmountCents: number;
+    variantId?: string;
+    variantLabel?: string;
+    sku: string;
+    fulfillmentSku?: string;
+    section?: string;
+    requestedFormulation?: string;
+    requiredProviderVisit?: boolean;
+  }>;
+  subtotalCents: number;
+  discountCents: number;
+  shippingCents: number;
+  taxCents: number;
+  totalCents: number;
+  visitSku: string | null;
+  patchProviderVisitItemId: boolean;
+}) {
+  const itemRows = input.items.map((i) => {
+    const qty = Math.max(1, Number(i.quantity) || 1);
+    const unit = Math.max(0, Number(i.unitAmountCents) || 0);
+    const formulation =
+      typeof i.requestedFormulation === "string" ? i.requestedFormulation : null;
+    const variantParts = [
+      typeof i.variantLabel === "string" ? i.variantLabel : null,
+      formulation ? `Requested dose: ${formulation}` : null,
+    ].filter(Boolean);
+    const sku = typeof i.sku === "string" && i.sku.trim() ? i.sku.trim() : null;
+    const variantId =
+      typeof i.variantId === "string" && i.variantId.trim() ? i.variantId.trim() : null;
+    const fulfillmentSku =
+      typeof i.fulfillmentSku === "string" && i.fulfillmentSku.trim()
+        ? i.fulfillmentSku.trim()
+        : null;
+    return {
+      order_id: input.orderId,
+      product_id: i.productId || null,
+      product_name_snapshot: String(i.productName || "Item"),
+      variant_snapshot: variantParts.length ? variantParts.join(" · ") : null,
+      sku,
+      variant_id: variantId,
+      fulfillment_sku: fulfillmentSku,
+      quantity: qty,
+      unit_price_cents: unit,
+      discount_cents: 0,
+      line_total_cents: unit * qty,
+    };
+  });
+
+  const itemsRes = await fetch(`${input.supabaseUrl}/rest/v1/order_items`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${input.serviceKey}`,
+      apikey: input.serviceKey,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+    },
+    body: JSON.stringify(itemRows),
+  });
+  if (!itemsRes.ok) {
+    return json({ error: `Order created but items failed: ${await itemsRes.text()}` }, 500);
+  }
+  const insertedItems = await itemsRes.json();
+  const insertedList = Array.isArray(insertedItems) ? insertedItems : [];
+
+  if (input.patchProviderVisitItemId && input.visitSku) {
+    const visitRow = insertedList.find(
+      (r: { sku?: string }) => r.sku === input.visitSku,
+    ) as { id?: string } | undefined;
+    if (visitRow?.id) {
+      await fetch(
+        `${input.supabaseUrl}/rest/v1/orders?id=eq.${encodeURIComponent(input.orderId)}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${input.serviceKey}`,
+            apikey: input.serviceKey,
+            "Content-Type": "application/json",
+            Prefer: "return=minimal",
+          },
+          body: JSON.stringify({ provider_visit_order_item_id: visitRow.id }),
+        },
+      );
+    }
+  }
+
+  await fetch(`${input.supabaseUrl}/rest/v1/order_fulfillment`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${input.serviceKey}`,
+      apikey: input.serviceKey,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal",
+    },
+    body: JSON.stringify({
+      order_id: input.orderId,
+      fulfillment_status: "order_received",
+    }),
+  });
+
+  await fetch(`${input.supabaseUrl}/rest/v1/order_status_events`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${input.serviceKey}`,
+      apikey: input.serviceKey,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal",
+    },
+    body: JSON.stringify({
+      order_id: input.orderId,
+      status: "order_received",
+      customer_visible: true,
+      note: "Order submitted — awaiting payment",
+      created_by: "system",
+    }),
+  });
+
+  const invoiceItems = itemRows.map((r) => ({
+    productId: r.product_id ?? undefined,
+    productName: r.product_name_snapshot,
+    variantLabel: r.variant_snapshot,
+    quantity: r.quantity,
+    unitPriceCents: r.unit_price_cents,
+    discountCents: r.discount_cents,
+    lineTotalCents: r.line_total_cents,
+  }));
+
+  const invoice = {
+    invoiceNumber: input.invoiceNumber,
+    orderNumber: input.publicOrderNumber,
+    paymentReference: input.paymentReference,
+    customerName: input.customerName,
+    customerEmail: input.customerEmail,
+    orderDateIso: input.now,
+    paymentMethod: input.paymentMethod,
+    paymentStatus: "awaiting_payment",
+    items: invoiceItems,
+    subtotalCents: input.subtotalCents,
+    discountCents: input.discountCents,
+    shippingCents: input.shippingCents,
+    taxCents: input.taxCents,
+    totalCents: input.totalCents,
+    shippingMethod: input.shippingMethod,
+    currency: "usd",
+    headline: "Order received — awaiting payment",
+    memoInstruction:
+      "Please include your order number in the memo/reference field. Processing begins after payment has been received and verified.",
+  };
+
+  const bankInstructions = bankInstructionsFromEnv(input.paymentMethod);
+  const paymentPath =
+    `/order/payment/${encodeURIComponent(input.publicOrderNumber)}?token=${encodeURIComponent(input.paymentAccessToken)}`;
+
+  return json({
+    orderId: input.orderId,
+    publicOrderNumber: input.publicOrderNumber,
+    paymentAccessToken: input.paymentAccessToken,
+    paymentPath,
+    invoice,
+    bankInstructions,
+  });
+}

@@ -92,6 +92,16 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - Accessories and provider-care SKUs live in TypeScript only (not DB `catalog_variants`).
 - Invoice checkout sends SKU fields via `create-invoice-order` after the migration is applied; without the migration, PostgREST will reject unknown columns on insert.
 
+### Provider appointment automation (Phase 2)
+
+- Docs: `docs/provider-appointment-automation.md` (rules), `docs/provider-automation-product-scope.md` (15 Rx families).
+- Pure engine: `src/lib/provider/` (mirrored in `supabase/functions/_shared/` for Deno).
+- Pending migration (do **not** apply until approved): `supabase/migrations/20260812120000_provider_appointment_automation.sql` — `customer_therapy_history` + order `provider_*` fields.
+- `create-invoice-order` injects required Initial ($75) / Follow-Up ($55) visit server-side; guest Rx requires auth.
+- Admin: CrossTx is **manual tracking only** (Mark Completed); Record Provider Approval writes therapy history. Paid ≠ approved.
+- Fulfillment: final shipping paths need paid + (NONE or COMPLETED workflow + APPROVED history). `provider_review_in_progress` still only needs paid.
+- Do not call CrossTx APIs; do not enable Kashu card; do not treat payment as therapy approval.
+
 ### GitHub source of truth vs Bolt (permanent)
 
 **Current ACH/Wire production tip (post-reconcile):** `deploy/ach-launch-clean-2026`  

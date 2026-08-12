@@ -24,3 +24,22 @@ PR #9/#10/#11 content is contained in #12 ancestry.
 ## Intended production tip
 
 Merge this branch into `deploy/ach-launch-clean-2026` (normal merge, no force push, no deploy from this task).
+
+
+## KNOWN-GOOD BASELINE LOCK
+
+**Date:** 2026-08-12  
+**Target branch:** `deploy/ach-launch-clean-2026`  
+**Source:** `cursor/production-source-reconcile-945c` @ `c0018cb`  
+**Merge commit:** `0aff53e`
+
+```
+KNOWN-GOOD BASELINE:
+ACH/WIRE LIVE
+52 SKU CATALOG
+KASHU BACKEND READY
+KASHU CARD OFF
+PROVIDER AUTOMATION NOT YET IMPLEMENTED
+```
+
+Do not start provider-appointment automation from any tip other than this merge.

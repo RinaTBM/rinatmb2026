@@ -352,8 +352,8 @@ export function HomePage() {
               <ul className="space-y-3 mb-8">
                 {[
                   '10% off eligible wellness products',
-                  'Monthly automatic deliveries',
-                  'Easy subscription management',
+                  'Scheduled monthly refills — pay each invoice by ACH or wire',
+                  'Manage or pause Auto-Refill anytime',
                   'No membership required',
                 ].map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-cream-100/80">

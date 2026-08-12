@@ -94,12 +94,14 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 
 ### GitHub source of truth vs Bolt (permanent)
 
-**Authoritative GitHub source branch:** `production-source/my-bare-method-2026`  
+**Current ACH/Wire production tip (post-reconcile):** `deploy/ach-launch-clean-2026`  
+**Historical immutable source label:** `production-source/my-bare-method-2026`  
 **Immutable pre-launch tag:** `my-bare-method-integrated-prelaunch-v1`
 
+- After production-source reconciliation (PRs #8 + #12 + #13), treat `deploy/ach-launch-clean-2026` as the branch to fast-forward from for storefront ACH/Wire launches. Kashu card UI stays off (`VITE_KASHU_CARD_ENABLED` unset/false) until Kashu assigns a final processor.
 - Bolt-controlled branches (for example `deploy/my-bare-method-integrated-2026`, `release/my-bare-method-final-2026`, and similar Bolt sync targets) are **disposable mirrors only**.
 - Never reconcile a source-of-truth / production-source branch by pulling a Bolt “Start repository” commit into it.
-- Never force-update `production-source/my-bare-method-2026` from Bolt.
-- All code changes originate from Cursor / GitHub source branches (`production-source/*`, `source-of-truth/*`, feature branches).
+- Never force-update historical `production-source/*` labels from Bolt.
+- All code changes originate from Cursor / GitHub source branches (`deploy/*`, `production-source/*`, `source-of-truth/*`, feature branches).
 - Bolt must never be treated as authoritative Git history.
 - Existing release tags (`my-bare-method-integrated-prelaunch-v1`, `customer-account-phase*-v1`, `deploy-pre-account-*`) are **immutable rollback points** — do not move or recreate them.

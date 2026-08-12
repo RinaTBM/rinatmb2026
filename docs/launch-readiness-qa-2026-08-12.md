@@ -1,10 +1,77 @@
 # Full My Bare Method Launch Readiness QA
 
-**Date:** 2026-08-12  
+**Date:** 2026-08-12 (updated with Kashu underwriting status)  
 **Auditor branch:** `cursor/launch-readiness-qa-945c`  
 **Live site:** https://mybaremethod.com  
 **Live backend:** BSG `bsgtuuzwgeetsjjdrtrm`  
 **Constraints honored:** no processor changes, no Airwallex testMode change, no real card charge, no `VITE_KASHU_CARD_ENABLED`, no Stripe revival, no ACH/Wire behavior change, no deploy of storefront, no orphan Tagada deletes.
+
+---
+
+## KASHU STATUS UPDATE (authoritative)
+
+Kashu confirmed:
+
+- Merchant application **completed**
+- Underwriting **still pending**
+- My Bare Method has **NOT** been assigned a final processor
+- After underwriting approval, Kashu will submit for gateway protection/configuration and test transactions
+- A processor will then be assigned
+
+| Field | Value |
+|-------|-------|
+| **KASHU CARD STATUS** | **UNDERWRITING PENDING** |
+| **KASHU PROCESSOR STATUS** | **NOT YET ASSIGNED** |
+| **AIRWALLEX ENTRY** (`My Bare Method - Airwallex`) | **TEMPORARY/TEST — DO NOT MODIFY** |
+| **CARD LAUNCH BLOCKER** | **FINAL PROCESSOR ASSIGNMENT + KASHU TEST TRANSACTION APPROVAL** |
+
+Do **not** assume Airwallex is the final processor. Do **not** represent card payments as live.
+
+---
+
+## READY NOW vs WAITING ON KASHU
+
+### READY NOW — safe for ACH/Wire launch
+
+| # | Item | Status |
+|---|------|--------|
+| 1 | Production source completeness (ACH/Wire + 52-SKU system on live) | PASS on **live**; merge PR #8 into git tip so source matches live |
+| 2 | All 52 SKUs | PASS |
+| 3 | 52/52 Tagada mappings | PASS (prep only; not customer card path) |
+| 4 | Product pages and links (live) | PASS |
+| 5 | Scriptful exports (52 unique SKUs) | PASS (align display names via PR #8 in git) |
+| 6 | Tesamorelin / Fat Burner | PASS on **live** (public); git deploy base still hidden until PR #7/#8 merged |
+| 7 | Lash/Brow Growth Serum rename | PASS on **live**; git deploy base still “Bimatoprost Solution” until PR #8 |
+| 8 | ACH checkout | PASS |
+| 9 | Wire checkout | PASS |
+| 10 | Admin payment confirmation | PASS |
+| 11 | Order SKU persistence | PASS (incl. `MBM-LON-TESA-INJ-001` on ACH test order) |
+| 12 | Shipping ($30 / $50) | PASS |
+| 13 | Discounts (10% / 15% / 15% non-stack) | PASS |
+| 14 | Membership pricing ($149 / $249) | PASS |
+| 15 | Customer policies/copy (ACH/Wire; no live card claims) | PASS on live |
+| 16 | Google admin auth | PASS |
+| 17 | Supabase/RLS security (orders + Kashu tables locked down) | PASS |
+| 18 | Kashu DB migration safety (additive) | PASS — applied on BSG |
+| 19 | Kashu SKU-map seed integrity (52/0 mismatch) | PASS — applied |
+| 20 | Kashu webhook security/code (unsigned → 401; HMAC path) | PASS — registered |
+| 21 | Hosted checkout **init code** (session/token; no payment) | PASS code path; page load still “Store not found” (Kashu infra) |
+| 22 | Frontend secret exposure scan | PASS |
+| 23 | Stripe-disabled verification (storefront) | PASS |
+| 24 | Build / tests / typecheck / lint | PASS (195 tests; 6 lint warnings) |
+| 25 | Mobile/desktop route QA (live) | PASS |
+
+### WAITING ON KASHU — requires final processor assignment
+
+| Item | Why blocked |
+|------|-------------|
+| Final payment processor assignment | Underwriting pending — Airwallex is temporary/test only |
+| Gateway protection / configuration | Kashu performs after underwriting |
+| Kashu-approved test transactions | Not authorized until processor assigned |
+| Hosted checkout storefront load | `checkout.mybaremethod.com` returns **Store not found** for valid init tokens |
+| Any representation of card as live | Forbidden until Kashu approval |
+| `VITE_KASHU_CARD_ENABLED=true` | Forbidden until above clear |
+| Live card payments | **NO** |
 
 ---
 
@@ -272,102 +339,102 @@ Redirect URL inventory for Supabase Auth (mybaremethod.com / checkout.mybaremeth
 
 ## 18 — BLOCKER CLASSIFICATION
 
-### CRITICAL — blocks full card launch (not ACH/Wire)
-1. Hosted checkout on `checkout.mybaremethod.com` returns **Store not found** for valid Tagada init tokens — Kashu must fix store/domain binding / exact `checkoutUrl`.
-2. Awaiting Kashu confirmation of Airwallex **testMode → live** transition (processor not modified).
+### CRITICAL — blocks card launch only (not ACH/Wire)
+1. **Final processor not assigned** — Kashu underwriting pending.
+2. Hosted checkout page on `checkout.mybaremethod.com` returns **Store not found** for valid init tokens (gateway/storefront binding — Kashu).
+3. No Kashu-authorized test transaction until processor assignment + gateway config.
 
-### HIGH — fix before declaring git = production
+### HIGH — git hygiene before treating deploy tip as SoT
 1. Merge PR #8 (publish + Lash/Brow rename) into production source so git matches live.
-2. Legacy Stripe Edge Functions still ACTIVE on BSG — disable/undeploy for launch hygiene (storefront already unused).
-3. Do not enable `VITE_KASHU_CARD_ENABLED` until (1)+(2) critical card blockers clear.
+2. Legacy Stripe Edge Functions still ACTIVE on BSG — disable/undeploy for hygiene (storefront unused).
+3. Keep `VITE_KASHU_CARD_ENABLED` off; do not market card as available.
 
 ### MEDIUM
 1. Home Auto-Refill “Monthly automatic deliveries” wording ambiguity.
-2. `/shop` 404 on deploy-base builds — **fixed on this QA branch** via alias to `/shop-all`.
-3. Multiple open Kashu PRs overlapping — collapse into Phase 2 tip when merging.
+2. `/shop` 404 on deploy-base builds — **fixed on this QA branch**.
+3. Overlapping Kashu PRs — collapse to Phase 2 tip when merging.
 
 ### LOW
 1. ESLint react-refresh warnings (6).
 2. Bundle size chunk warning (~758 kB JS).
 3. Newsletter button label “Subscribe”.
 
-### Safe fixes made on this QA branch (only)
+### Safe fixes on this QA branch only
 1. `/shop` → `/shop-all` alias.
-2. Deleted unrouted legacy `src/pages/checkout.html` Stripe sample.
-3. This report document.
+2. Removed unrouted `src/pages/checkout.html` Stripe sample.
+3. This report (incl. Kashu underwriting status update).
 
-No payment, pricing, catalog SKU/price, auth, or legal policy rewrites.
+No payment, pricing, catalog SKU/price, auth, legal, or processor changes.
 
 ---
 
 ## FINAL REPORT SUMMARY
 
 ```
-SOURCE BRANCH: cursor/launch-readiness-qa-945c (from deploy/ach-launch-clean-2026)
-HEAD: a6d911d
+SOURCE BRANCH: cursor/launch-readiness-qa-945c
+HEAD: (updated on commit)
 WORKING TREE: clean after commit
 
 PRODUCTION SOURCE RECOMMENDATION:
-  Merge #8 (lash/publish) → then #12 (kashu phase2) into deploy/ach-launch-clean-2026
-  or new production-source/my-bare-method-launch-2026
-  NOTE: live site already includes #8 catalog presentation.
+  Merge PR #8 (Tesamorelin + Fat Burner + Lash/Brow) into deploy/ach-launch-clean-2026
+  so git matches live, then merge PR #12 (Kashu Phase 2; card UI off).
+  Live storefront already reflects PR #8 catalog presentation.
 
-CATALOG:
-ACTIVE PRODUCTS: 25 visible on deploy base / 27 on live (Tesa+FB)
-MEMBERSHIPS: 2
-TOTAL SKUS: 52
-MISSING SKUS: 0
-DUPLICATE SKUS: 0
+READY NOW (ACH/Wire launch-safe):
+  - 52 SKUs / live product pages / Scriptful uniqueness
+  - Tesamorelin, Fat Burner, Lash/Brow Growth Serum on LIVE
+  - ACH + Wire checkout, admin mark-paid, SKU persistence
+  - Shipping $30/$50, discounts 10/15/15 non-stack
+  - Membership $149/$249 pricing + recurring catalog (no subscriptions created)
+  - Policies/copy without live-card claims
+  - Google admin auth, RLS, frontend secret scan
+  - Stripe storefront disabled
+  - Build/tests/typecheck/lint
+  - Kashu DB migration + 52-row map + webhook HMAC code (prep only)
+  - Hosted checkout SESSION INIT code (no payment completed)
 
-TAGADA:
-PRODUCTS: 30
-VARIANTS: 53
-PRICES: 53
-52/52 MAPPED: YES
-PRICE MISMATCHES: 0
+WAITING ON KASHU:
+  - Underwriting approval
+  - Final processor assignment (Airwallex is NOT final)
+  - Gateway protection/configuration
+  - Authorized test transactions
+  - Hosted checkout page load (“Store not found” today)
+  - Any live-card enablement
 
-SCRIPTFUL:
-ROWS: 60 (csv)
-UNIQUE SKUS: 52
-BROKEN LINKS: 0
+KASHU PROCESSOR STATUS: NOT YET ASSIGNED
+KASHU CARD STATUS: UNDERWRITING PENDING
+AIRWALLEX ENTRY: TEMPORARY/TEST — DO NOT MODIFY
+CARD FRONTEND FLAG: OFF
+STRIPE STOREFRONT INVOCATION: NO
+
+CATALOG: 52 SKUs / 0 missing / 0 duplicates
+TAGADA: 30 products / 53 variants / 53 prices / 52/52 mapped / 0 mismatches
+SCRIPTFUL: 60 csv rows / 52 unique SKUs / 0 broken links
 
 ACH: PASS
 WIRE: PASS
 ADMIN: PASS
 SHIPPING: PASS
 DISCOUNTS: PASS
-CUSTOMER COPY: PASS on live / FAIL display-name drift on git deploy base
-POLICIES: PASS
-AUTH: PASS
-SECURITY: PASS (frontend bundle)
+BUILD: PASS | TESTS: 195 PASS | TYPECHECK: PASS | LINT: PASS (6 warnings)
 
-KASHU MIGRATION: APPLIED
-KASHU SKU MAP: APPLIED
-KASHU EDGE FUNCTIONS: DEPLOYED
-MBM WEBHOOK: REGISTERED
-HOSTED CHECKOUT DRY RUN: FAIL (Store not found)
-AIRWALLEX: PROCESSOR FOUND (prior) / ENABLED true / TEST MODE true (unchanged)
-CARD FRONTEND FLAG: OFF
-STRIPE STOREFRONT INVOCATION: NO
+READY FOR ACH/WIRE LAUNCH: YES
+READY FOR KASHU INTEGRATION TEST AFTER PROCESSOR ASSIGNED: YES
+  (backend map + webhook + session init ready; still need Kashu processor,
+   gateway config, working hosted page, and Kashu test approval)
+READY FOR LIVE CARD PAYMENTS: NO
 
-BUILD: PASS
-TESTS: 195 PASS
-TYPECHECK: PASS
-LINT: PASS (6 warnings)
+EXACT REMAINING STEPS AFTER KASHU APPROVAL:
+1. Merge PR #8 into production-source/deploy tip (git = live catalog).
+2. Keep PR #12 Kashu backend merged with VITE_KASHU_CARD_ENABLED=false.
+3. Await Kashu underwriting approval + final processor assignment.
+4. Do NOT modify the temporary Airwallex entry; let Kashu configure the assigned processor.
+5. Kashu completes gateway protection/configuration.
+6. Kashu confirms hosted checkout loads (no more Store not found).
+7. Run Kashu-authorized test transaction only (no ad-hoc real charges).
+8. Confirm webhook marks paid correctly on that test event.
+9. Owner approval → set VITE_KASHU_CARD_ENABLED=true and redeploy storefront.
+10. Only then treat card as a customer payment option alongside ACH/Wire.
 
-READY FOR EXISTING ACH/WIRE LAUNCH: YES (live already serving ACH/Wire)
-READY FOR KASHU TEST TRANSACTION: NO
-READY FOR LIVE KASHU CARD PAYMENTS: NO
-
-EXACT NEXT STEPS TO FULL LAUNCH:
-1. Merge PR #8 into deploy/production-source so git matches live catalog.
-2. Merge PR #12 Kashu Phase 2 code into that tip (card UI still off).
-3. Ask Kashu to fix hosted checkout “Store not found” on checkout.mybaremethod.com.
-4. Ask Kashu for Airwallex testMode→live transition plan/confirmation.
-5. Undeploy/disable legacy Stripe Edge Functions on BSG.
-6. Re-run hosted checkout dry run until page loads (still no real charge).
-7. Only then consider controlled sandbox/test card with Kashu-approved method.
-8. Only after success + owner approval set VITE_KASHU_CARD_ENABLED=true and redeploy storefront.
-
-STOP. Do not enable live card payments. Do not change Airwallex processor. Do not perform a real card transaction.
+STOP. Do not enable live card payments. Do not change Airwallex. Do not perform a card charge. Do not deploy automatically.
 ```

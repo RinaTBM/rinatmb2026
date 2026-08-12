@@ -372,7 +372,7 @@ No payment, pricing, catalog SKU/price, auth, legal, or processor changes.
 
 ```
 SOURCE BRANCH: cursor/launch-readiness-qa-945c
-HEAD: (updated on commit)
+HEAD: 4cbed8c
 WORKING TREE: clean after commit
 
 PRODUCTION SOURCE RECOMMENDATION:

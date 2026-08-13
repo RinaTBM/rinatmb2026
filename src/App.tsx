@@ -6,7 +6,6 @@ import { useRouter } from '@/router';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CartDrawer } from '@/components/CartDrawer';
-import { HighLevelChatWidget } from '@/components/HighLevelChatWidget';
 import { HomePage } from '@/pages/HomePage';
 import { GoalsPage } from '@/pages/GoalsPage';
 import { GoalPage } from '@/pages/GoalPage';
@@ -217,7 +216,6 @@ function App() {
             <main>{renderPage()}</main>
             <Footer />
             <CartDrawer />
-            <HighLevelChatWidget />
           </div>
         </CartProvider>
       </MemberProvider>

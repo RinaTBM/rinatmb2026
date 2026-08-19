@@ -40,7 +40,7 @@ function apiBase(): string {
 
 function buildInitUrl(params: {
   storeId: string;
-  items: { variantId: string; quantity: number }[];
+  items: { variantId: string; quantity: number; priceId?: string }[];
   currency: string;
   checkoutUrl: string;
   returnUrl: string;
@@ -69,6 +69,17 @@ function extractToken(redirectUrl: string): string | null {
   } catch {
     return null;
   }
+}
+
+/** MBM shipping SKUs — Tagada init has no shipping-amount field; use mapped line items. */
+const SHIP_SKU_TWO_DAY = "MBM-SHIP-TWO-DAY-001";
+const SHIP_SKU_NEXT_DAY = "MBM-SHIP-NEXT-DAY-001";
+
+function shippingSkuForMethod(method: string | null | undefined): string | null {
+  const m = String(method || "").trim().toLowerCase();
+  if (m === "two_day") return SHIP_SKU_TWO_DAY;
+  if (m === "next_day") return SHIP_SKU_NEXT_DAY;
+  return null;
 }
 
 Deno.serve(async (req) => {
@@ -147,8 +158,22 @@ Deno.serve(async (req) => {
       }, 400);
     }
 
+    const membershipSkus = skus.filter((s: string) => String(s).startsWith("MBM-MEM-"));
+    if (membershipSkus.length) {
+      return json({
+        error:
+          "Membership programs cannot use card checkout in this phase. Please pay by ACH or wire.",
+        missingSkus: membershipSkus,
+      }, 409);
+    }
+
+    const shippingCents = Number(order.shipping_cents) || 0;
+    const shipSku =
+      shippingCents > 0 ? shippingSkuForMethod(order.shipping_method) : null;
+    const mapSkus = shipSku ? [...skus, shipSku] : skus;
+
     const mapRes = await fetch(
-      `${supabaseUrl}/rest/v1/kashu_sku_map?mbm_sku=in.(${skus.map((s: string) => `"${s}"`).join(",")})&is_active=eq.true&select=mbm_sku,tagada_variant_id,tagada_product_id`,
+      `${supabaseUrl}/rest/v1/kashu_sku_map?mbm_sku=in.(${mapSkus.map((s: string) => `"${s}"`).join(",")})&is_active=eq.true&select=mbm_sku,tagada_variant_id,tagada_product_id,tagada_price_id,mbm_price_cents,tagada_price_cents`,
       {
         headers: {
           Authorization: `Bearer ${serviceKey}`,
@@ -164,15 +189,28 @@ Deno.serve(async (req) => {
       }, 503);
     }
     const maps = await mapRes.json();
-    const bySku = new Map<string, { tagada_variant_id: string }>(
-      (Array.isArray(maps) ? maps : []).map((m: { mbm_sku: string; tagada_variant_id: string }) => [
-        m.mbm_sku,
-        m,
-      ]),
+    const bySku = new Map<
+      string,
+      {
+        tagada_variant_id: string;
+        tagada_price_id?: string | null;
+        mbm_price_cents?: number | null;
+        tagada_price_cents?: number | null;
+      }
+    >(
+      (Array.isArray(maps) ? maps : []).map((
+        m: {
+          mbm_sku: string;
+          tagada_variant_id: string;
+          tagada_price_id?: string | null;
+          mbm_price_cents?: number | null;
+          tagada_price_cents?: number | null;
+        },
+      ) => [m.mbm_sku, m]),
     );
 
     const missing: string[] = [];
-    const tagadaItems: { variantId: string; quantity: number }[] = [];
+    const tagadaItems: { variantId: string; quantity: number; priceId?: string }[] = [];
     for (const line of orderItems) {
       const sku = line.sku as string | null;
       if (!sku) {
@@ -195,6 +233,38 @@ Deno.serve(async (req) => {
           "Tagada product sync incomplete. Missing kashu_sku_map rows for one or more SKUs.",
         missingSkus: missing,
       }, 409);
+    }
+
+    // MBM is shipping source of truth. Tagada checkout/init has no shipping-amount field.
+    // Represent MBM shipping only via a mapped Tagada shipping variant at the exact cents.
+    if (shippingCents > 0) {
+      if (!shipSku) {
+        return json({
+          error:
+            "Card checkout cannot represent this shipping method in Tagada yet. Use ACH/Wire or a $0-shipping cart.",
+          blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
+          shippingCents,
+          shippingMethod: order.shipping_method,
+        }, 409);
+      }
+      const shipMap = bySku.get(shipSku);
+      const shipPrice =
+        shipMap?.tagada_price_cents ?? shipMap?.mbm_price_cents ?? null;
+      if (!shipMap?.tagada_variant_id || shipPrice !== shippingCents) {
+        return json({
+          error:
+            "Tagada shipping line mapping missing or price mismatch. MBM shipping is authoritative; card checkout blocked until a matching Tagada shipping variant exists.",
+          blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
+          shippingSku: shipSku,
+          shippingCents,
+          mappedPriceCents: shipPrice,
+        }, 409);
+      }
+      tagadaItems.push({
+        variantId: shipMap.tagada_variant_id,
+        quantity: 1,
+        ...(shipMap.tagada_price_id ? { priceId: shipMap.tagada_price_id } : {}),
+      });
     }
 
     const nameParts = String(order.customer_name || "").trim().split(/\s+/);

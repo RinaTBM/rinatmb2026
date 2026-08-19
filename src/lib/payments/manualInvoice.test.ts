@@ -28,7 +28,7 @@ import { adminCanManageOrders } from '../orders/orderStatus';
 
 describe('payment methods', () => {
   it('exposes processor-neutral methods including future plaid_ach', () => {
-    expect(PAYMENT_METHODS).toEqual(['manual_ach', 'manual_wire', 'plaid_ach']);
+    expect(PAYMENT_METHODS).toEqual(['manual_ach', 'manual_wire', 'plaid_ach', 'kashu_card']);
     expect(isPlaidAchEnabled()).toBe(false);
     expect(isActiveCheckoutPaymentMethod('manual_ach')).toBe(true);
     expect(isActiveCheckoutPaymentMethod('plaid_ach')).toBe(false);

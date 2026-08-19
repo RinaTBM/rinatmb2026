@@ -700,19 +700,25 @@ export function mbmOrderCustomerTag(orderNumber: string): string {
 }
 
 /**
- * Resolve Phase 4 card top-level gate from Vite env.
+ * Resolve Tagada card top-level gate from Vite env.
  * - explicit "false" / false → OFF (emergency kill switch)
  * - explicit "true" / true → ON
- * - undefined / empty → ON in production builds, OFF in development/test
- * Eligibility rules (membership, shipping, tax, SKU map) still apply independently.
+ * - undefined / empty / unset → ON by default
+ *
+ * Do NOT key the default off import.meta.env.PROD: Bolt Preview often runs as a
+ * non-production Vite build without reliable VITE_* injection, which previously
+ * hid card checkout for eligible carts. Kill switch remains explicit false only.
+ * Eligibility rules (membership, shipping, unexpected tax, SKU map) still apply.
+ *
+ * @param _isProd retained for call-site compatibility; unused for the default.
  */
 export function resolveKashuCardEnabledFlag(
   raw: string | boolean | undefined | null,
-  isProd: boolean,
+  _isProd?: boolean,
 ): boolean {
   if (raw === false || raw === 'false') return false;
   if (raw === true || raw === 'true') return true;
-  return Boolean(isProd);
+  return true;
 }
 
 export function isKashuCardEnabled(): boolean {
@@ -723,6 +729,7 @@ export function isKashuCardEnabled(): boolean {
       import.meta.env.PROD,
     );
   } catch {
+    // Fail closed only on unexpected runtime errors — not on unset env.
     return false;
   }
 }

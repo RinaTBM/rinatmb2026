@@ -208,15 +208,13 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
 });
 
 describe('Phase 4 card flag resolveKashuCardEnabledFlag', () => {
-  it('production + env undefined => card ON', () => {
+  it('env undefined/empty => card ON (Bolt preview + production; no PROD dependency)', () => {
     expect(resolveKashuCardEnabledFlag(undefined, true)).toBe(true);
     expect(resolveKashuCardEnabledFlag(null, true)).toBe(true);
     expect(resolveKashuCardEnabledFlag('', true)).toBe(true);
-  });
-
-  it('development/test + env undefined => card OFF', () => {
-    expect(resolveKashuCardEnabledFlag(undefined, false)).toBe(false);
-    expect(resolveKashuCardEnabledFlag(null, false)).toBe(false);
+    expect(resolveKashuCardEnabledFlag(undefined, false)).toBe(true);
+    expect(resolveKashuCardEnabledFlag(null, false)).toBe(true);
+    expect(resolveKashuCardEnabledFlag('', false)).toBe(true);
   });
 
   it('explicit env false => card disabled (kill switch)', () => {
@@ -231,14 +229,34 @@ describe('Phase 4 card flag resolveKashuCardEnabledFlag', () => {
     expect(resolveKashuCardEnabledFlag(true, false)).toBe(true);
   });
 
-  it('dev/test runtime hides public ACH/Wire and keeps Stripe disabled when flag unresolved', () => {
-    // Vitest runs with PROD=false and typically no VITE_KASHU_CARD_ENABLED → public methods empty.
-    expect(getActiveCheckoutPaymentMethods()).toEqual([]);
+  it('unset flag defaults public methods to Credit/Debit Card only; Stripe stays disabled', () => {
+    // Vitest typically has no VITE_KASHU_CARD_ENABLED → default ON → card only.
+    expect(getActiveCheckoutPaymentMethods()).toEqual(['kashu_card']);
     expect(isStripeCheckoutEnabled()).toBe(false);
   });
 
-  it('when card flag resolve is ON, public checkout exposes Credit/Debit Card only', () => {
-    expect(resolveKashuCardEnabledFlag('true', false)).toBe(true);
+  it('Bolt preview–style cart (one-time + IPV + $30 ship + $0 tax) is card-eligible when flag on', () => {
+    expect(
+      evaluateKashuCardCartEligibility({
+        flagEnabled: true,
+        shippingCents: 3000,
+        taxCents: 0,
+        items: [
+          {
+            purchaseType: 'one_time',
+            quantity: 1,
+            sku: 'MBM-WM-SEM-INJ-001',
+            productId: 'p1',
+          },
+          {
+            purchaseType: 'one_time',
+            quantity: 1,
+            sku: 'MBM-PC-IPV-SRV-001',
+            productId: 'pc1',
+          },
+        ],
+      }),
+    ).toEqual({ ok: true });
   });
 });
 

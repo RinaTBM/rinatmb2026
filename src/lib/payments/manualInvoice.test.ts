@@ -30,18 +30,19 @@ describe('payment methods', () => {
   it('exposes processor-neutral methods including future plaid_ach; ACH/Wire stay in enum', () => {
     expect(PAYMENT_METHODS).toEqual(['manual_ach', 'manual_wire', 'plaid_ach', 'kashu_card']);
     expect(isPlaidAchEnabled()).toBe(false);
-    // Public storefront hides ACH/Wire (card-first; flag off in vitest → empty).
+    // Public storefront: card-first; ACH/Wire hidden.
+    expect(isActiveCheckoutPaymentMethod('kashu_card')).toBe(true);
     expect(isActiveCheckoutPaymentMethod('manual_ach')).toBe(false);
     expect(isActiveCheckoutPaymentMethod('manual_wire')).toBe(false);
     expect(isActiveCheckoutPaymentMethod('plaid_ach')).toBe(false);
   });
 
-  it('rejects public ACH/Wire selection; card requires flag; Stripe never selectable', () => {
+  it('rejects public ACH/Wire selection; card selectable when flag default ON; Stripe never selectable', () => {
     expect(assertSelectablePaymentMethod('manual_ach').ok).toBe(false);
     expect(assertSelectablePaymentMethod('manual_wire').ok).toBe(false);
     expect(assertSelectablePaymentMethod('plaid_ach').ok).toBe(false);
     expect(assertSelectablePaymentMethod('stripe').ok).toBe(false);
-    expect(assertSelectablePaymentMethod('kashu_card').ok).toBe(false); // flag off in vitest
+    expect(assertSelectablePaymentMethod('kashu_card')).toEqual({ ok: true, method: 'kashu_card' });
   });
 });
 

@@ -30,9 +30,9 @@ describe('Kashu / TagadaPay payment method', () => {
     expect(PAYMENT_METHODS).toContain('manual_wire');
   });
 
-  it('does not enable card selection by default (flag off); ACH/Wire hidden publicly but enum preserved', () => {
-    expect(getActiveCheckoutPaymentMethods()).toEqual([]);
-    expect(assertSelectablePaymentMethod('kashu_card').ok).toBe(false);
+  it('defaults card ON when env unset; ACH/Wire stay in enum but are not publicly selectable', () => {
+    expect(getActiveCheckoutPaymentMethods()).toEqual(['kashu_card']);
+    expect(assertSelectablePaymentMethod('kashu_card')).toEqual({ ok: true, method: 'kashu_card' });
     expect(assertSelectablePaymentMethod('manual_ach').ok).toBe(false);
     expect(assertSelectablePaymentMethod('manual_wire').ok).toBe(false);
     // Backend/history enum still includes ACH/Wire.

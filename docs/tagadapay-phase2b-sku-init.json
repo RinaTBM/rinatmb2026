@@ -1,0 +1,365 @@
+{
+  "pass": 50,
+  "fail": 0,
+  "deferred": 2,
+  "rows": [
+    {
+      "sku": "MBM-ACC-APW-ACC-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=1312c1bbe535ca94291fe92bcad7c8b8&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-APW-ACC-002",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=760ad369cc9c7c829a3986845ca4a8f5&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-CIS-ACC-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=cefd223191f626da9b663e2291fd65a5&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-DTB-ACC-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=28f2c43f94f80eb774040eebe609b6fe&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-DWP-ACC-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=525fff64c95e01285135a5c7a447014d&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-ICE-ACC-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=a5b16d968f83db102a867093d44e1858&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=74a3dd8d5be55b1603610f668465436a&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-002",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=493af1aba9af74ebcba957c7f8e708f8&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-003",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=3db0f7a97e3a994174b8409d715fe67b&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-004",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=a236bfe76c4fbe52945622bb4fc849d4&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-005",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=694f437c72da069737e731acf03a7463&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-006",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=a02c91fc026beb03997a9ec37d63304b&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-007",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=cf0c793c2849a3daf24c7e00d0d95b68&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-008",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=e50537999eb51c3961699ad8d57b0200&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-009",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=c818c5f73e4d1e141c3b875b2aa32ff6&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PIS-ACC-010",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=7a815188dae7ebb5a0c76b2b050c4aa2&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-PPC-ACC-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=28224b746eda514cc0244876ba1dff9e&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-SHP-ACC-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=b3f2997684eb12d5f18d05b03c9049c2&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-ACC-TTC-ACC-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=ae965ea7acfaffa4318da91f817f4745&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-HRT-EST-PAT-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=b9e6b7a84a9208e3df36ac67967174b8&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-HRT-EST-PAT-002",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=274007cf9b87b9662b2a86e913baec0a&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-HRT-EST-PAT-003",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=64257b7b5cb94c4ee5cf1d29367befc3&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-HRT-PRG-CAP-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=969fde0b910411d7d4e34b7b2421ee38&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-HRT-PRG-CAP-002",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=5b76c3498087ad7fac9037373a6d2f1e&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-HRT-TST-CRM-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=719cd0234e3c764499339d97438633f3&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-LON-NAD-INJ-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=7d4b5a452d63c45526847a576916770a&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-LON-NAD-INJ-002",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=b5ddb627bb89f0852122c09a58e7d3a7&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-LON-SEL-INJ-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=29d224ac8171ffaff5d4be3b40ff0bbd&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-LON-SMX-INJ-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=8e05c4f10894106aba7bee672780a73d&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-LON-SSN-NS-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=442582f0467cbd52117d81ba820955bc&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-LON-TESA-INJ-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=17fa4a12059113349692ea00f720fad5&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-MEM-SEM-MEM-001",
+      "status": "MEMBERSHIP_DEFERRED"
+    },
+    {
+      "sku": "MBM-MEM-TIR-MEM-001",
+      "status": "MEMBERSHIP_DEFERRED"
+    },
+    {
+      "sku": "MBM-PC-FUV-SRV-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=1ff8c0dd6a64ac7a192b990a08033c68&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-PC-IPV-SRV-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=6f9202ef54461ec48aa440ce9255fed0&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-PC-LAB-SRV-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=e318de93435b5f1b65b978d34dd82ff2&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-RP-BPC-CAP-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=728ba53365d0c10496f2f991fbdea044&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-RP-BPC-INJ-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=49cd62d3f6d139301183233f2d4cbdfa&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-SH-BIM-SOL-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=8c70eb2863468f6797017b5d1b5a1ce8&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-SH-MIN-SOL-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=e639b07c48aba04e70dcc2e1cb968d8c&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-SH-TRE-CRM-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=7aa03444b19b8834ba0344b063ad0102&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-SH-TRE-CRM-002",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=3cce8a58b15fea5d4161d03c84fc5267&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-SH-TRE-CRM-003",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=455f677b58b292b5e9e30f20efe51c2e&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-WM-FB3-INJ-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=921aa9e36a88e6e1eeb0e9d9afaf772c&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-WM-SEM-INJ-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=2c481161594f2c187b476692f9f0e35e&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-WM-SEM-INJ-002",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=9458a32cf861742a6200845ed0bad78f&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-WM-SEM-INJ-003",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=cebd6059369d7cad02920c7d91396b2c&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-WM-SEM-INJ-004",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=ad84e4a2b1a25beb90f08fcddde7fd9e&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-WM-TIR-INJ-001",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=bba924da0aaf699b8ef2ad28b6477fa2&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-WM-TIR-INJ-002",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=8e16a0ba769705a1257684395b6c4aa2&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-WM-TIR-INJ-003",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=d0c3237760ffe27092aaf1e8bd256bcc&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    },
+    {
+      "sku": "MBM-WM-TIR-INJ-004",
+      "status": "PASS",
+      "http": 307,
+      "loc": "https://checkout.mybaremethod.com/checkout?checkoutToken=3eaa907bc3e38cb8e429fd25164d8629&token=eyJhbGciOiJIUzI1NiIsInR5",
+      "body": ""
+    }
+  ]
+}

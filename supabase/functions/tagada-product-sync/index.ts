@@ -363,6 +363,96 @@ Deno.serve(async (req) => {
   }
 
 
+  // ---------- Phase 2B: update product tax/shipping flags ----------
+  if (action === "update_product_flags") {
+    const productId = String(body.productId || "");
+    const name = String(body.name || "");
+    if (!productId || !name) return json({ error: "productId_and_name_required" }, 400);
+    const updatedData: Record<string, unknown> = { name };
+    if (typeof body.isTaxable === "boolean") updatedData.isTaxable = body.isTaxable;
+    if (typeof body.isShippable === "boolean") updatedData.isShippable = body.isShippable;
+    if (typeof body.active === "boolean") updatedData.active = body.active;
+    if (body.clearTaxCategory === true) {
+      updatedData.taxCategory = null;
+      updatedData.mappedTaxCategoryId = null;
+    }
+    if (typeof body.description === "string") updatedData.description = body.description;
+    const res = await tcall(
+      base,
+      key,
+      "PUT",
+      `/api/public/v1/products/${encodeURIComponent(productId)}`,
+      { updatedData },
+    );
+    return json(JSON.parse(redact(JSON.stringify({ ok: res.ok, status: res.status, data: res.data }), secrets)));
+  }
+
+  // ---------- Phase 2B: update variant price to authoritative MBM cents ----------
+  if (action === "update_variant_price") {
+    const productId = String(body.productId || "");
+    const variantId = String(body.variantId || "");
+    const amountCents = Number(body.amountCents);
+    if (!productId || !variantId || !Number.isFinite(amountCents) || amountCents < 0) {
+      return json({ error: "productId_variantId_amountCents_required" }, 400);
+    }
+    const got = await tcall(base, key, "GET", `/api/public/v1/products/${encodeURIComponent(productId)}`);
+    if (!got.ok) {
+      return json({ ok: false, step: "get_product", status: got.status, data: got.data }, 502);
+    }
+    const product = got.data as Record<string, unknown>;
+    const variants = (product.variants as Record<string, unknown>[]) || [];
+    const v = variants.find((x) => x.id === variantId);
+    if (!v) return json({ ok: false, step: "variant_not_found" }, 404);
+    const prices = (v.prices as Record<string, unknown>[]) || [];
+    if (!prices.length) return json({ ok: false, step: "no_prices" }, 400);
+    const nextPrices = prices.map((prc, idx) => {
+      const currencyOptions = {
+        ...((prc.currencyOptions as Record<string, unknown>) || {}),
+        USD: {
+          ...((((prc.currencyOptions as Record<string, unknown>) || {}).USD as Record<string, unknown>) ||
+            {}),
+          amount: idx === 0 ? amountCents : (
+            ((((prc.currencyOptions as Record<string, unknown>) || {}).USD as Record<string, unknown>) ||
+              {}) as { amount?: number }
+          ).amount,
+        },
+      };
+      return {
+        id: prc.id,
+        default: prc.default === true || idx === 0,
+        currencyOptions,
+        recurring: prc.recurring === true,
+        billingTiming: prc.billingTiming ?? "usage",
+        interval: prc.interval ?? null,
+        intervalCount: prc.intervalCount ?? 1,
+      };
+    });
+    const put = await tcall(base, key, "PUT", `/api/public/v1/variants/${encodeURIComponent(variantId)}`, {
+      updatedData: {
+        name: v.name,
+        description: v.description ?? undefined,
+        sku: v.sku,
+        active: v.active !== false,
+        default: v.default === true,
+        prices: nextPrices,
+      },
+    });
+    return json(
+      JSON.parse(
+        redact(
+          JSON.stringify({
+            ok: put.ok,
+            status: put.status,
+            variantId,
+            amountCents,
+            data: put.data,
+          }),
+          secrets,
+        ),
+      ),
+    );
+  }
+
   if (action === "raw") {
     const method = String(body.method || "GET");
     const path = String(body.path || "");
@@ -373,7 +463,8 @@ Deno.serve(async (req) => {
       path.includes("/variants") ||
       path.includes("/prices") ||
       path.includes("/domains") ||
-      path.includes("/webhooks");
+      path.includes("/webhooks") ||
+      path.includes("/shipping-rates");
     if (!allowed) {
       return json({ error: "path_not_allowed" }, 400);
     }

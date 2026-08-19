@@ -91,12 +91,169 @@ export const MBM_SHIPPING_SKU_TWO_DAY = 'MBM-SHIP-TWO-DAY-001';
 export const MBM_SHIPPING_SKU_NEXT_DAY = 'MBM-SHIP-NEXT-DAY-001';
 
 export const TAGADA_SHIPPING_PARITY_BLOCKER = 'TAGADA_SHIPPING_PARITY_BLOCKER';
+export const TAGADA_PRICE_PARITY_BLOCKER = 'TAGADA_PRICE_PARITY_BLOCKER';
+export const TAGADA_TAX_PARITY_BLOCKER = 'TAGADA_TAX_PARITY_BLOCKER';
+export const TAGADA_CHECKOUT_TOTAL_MISMATCH = 'TAGADA_CHECKOUT_TOTAL_MISMATCH';
+
+/** Allowed MBM shipping cents for card checkout (MBM is source of truth). */
+export const ALLOWED_CARD_SHIPPING_CENTS = [0, 3000, 5000] as const;
 
 export function shippingSkuForMethod(shippingMethod: string): string | null {
   const m = shippingMethod.trim().toLowerCase();
   if (m === 'two_day') return MBM_SHIPPING_SKU_TWO_DAY;
   if (m === 'next_day') return MBM_SHIPPING_SKU_NEXT_DAY;
   return null;
+}
+
+/**
+ * Map persisted MBM order.shipping_cents → shipping SKU.
+ * Do not infer shipping from Tagada cart subtotal.
+ */
+export function shippingSkuForCents(shippingCents: number): string | null {
+  const cents = Math.trunc(shippingCents);
+  if (cents === 3000) return MBM_SHIPPING_SKU_TWO_DAY;
+  if (cents === 5000) return MBM_SHIPPING_SKU_NEXT_DAY;
+  return null;
+}
+
+export function isAllowedCardShippingCents(shippingCents: number): boolean {
+  return (ALLOWED_CARD_SHIPPING_CENTS as readonly number[]).includes(Math.trunc(shippingCents));
+}
+
+/**
+ * Remap stale Tagada IDs by exact MBM SKU only (never by display name).
+ * Preserves MBM sku/product IDs; updates Tagada IDs from the live exact-SKU match.
+ */
+export function remapKashuRowByExactSku(input: {
+  current: {
+    mbmSku: string;
+    mbmProductId?: string | null;
+    tagadaProductId: string;
+    tagadaVariantId: string;
+    tagadaPriceId?: string | null;
+  };
+  liveByExactSku: Record<
+    string,
+    { productId: string; variantId: string; priceId?: string | null; priceCents?: number | null }
+  >;
+}):
+  | { changed: false; row: typeof input.current }
+  | {
+      changed: true;
+      row: {
+        mbmSku: string;
+        mbmProductId?: string | null;
+        tagadaProductId: string;
+        tagadaVariantId: string;
+        tagadaPriceId?: string | null;
+      };
+      before: { tagadaProductId: string; tagadaVariantId: string; tagadaPriceId?: string | null };
+      after: { tagadaProductId: string; tagadaVariantId: string; tagadaPriceId?: string | null };
+    }
+  | { changed: false; error: 'no_exact_sku_match' } {
+  const live = input.liveByExactSku[input.current.mbmSku];
+  if (!live?.variantId || !live.productId) {
+    return { changed: false, error: 'no_exact_sku_match' };
+  }
+  const nextPriceId =
+    live.priceId && live.priceId.length > 0
+      ? live.priceId
+      : input.current.tagadaPriceId ?? null;
+  const same =
+    live.productId === input.current.tagadaProductId &&
+    live.variantId === input.current.tagadaVariantId &&
+    (nextPriceId || null) === (input.current.tagadaPriceId || null);
+  if (same) {
+    return { changed: false, row: input.current };
+  }
+  return {
+    changed: true,
+    before: {
+      tagadaProductId: input.current.tagadaProductId,
+      tagadaVariantId: input.current.tagadaVariantId,
+      tagadaPriceId: input.current.tagadaPriceId ?? null,
+    },
+    after: {
+      tagadaProductId: live.productId,
+      tagadaVariantId: live.variantId,
+      tagadaPriceId: nextPriceId,
+    },
+    row: {
+      mbmSku: input.current.mbmSku,
+      mbmProductId: input.current.mbmProductId,
+      tagadaProductId: live.productId,
+      tagadaVariantId: live.variantId,
+      tagadaPriceId: nextPriceId,
+    },
+  };
+}
+
+/** MBM catalog price is authoritative; Tagada must match for card-eligible SKUs. */
+export function detectTagadaPriceDrift(input: {
+  sku: string;
+  mbmPriceCents: number;
+  tagadaLivePriceCents: number;
+}): { sku: string; mbmPriceCents: number; tagadaLivePriceCents: number; status: 'MATCH' | 'MISMATCH' } {
+  const status =
+    Math.trunc(input.mbmPriceCents) === Math.trunc(input.tagadaLivePriceCents) ? 'MATCH' : 'MISMATCH';
+  return {
+    sku: input.sku,
+    mbmPriceCents: Math.trunc(input.mbmPriceCents),
+    tagadaLivePriceCents: Math.trunc(input.tagadaLivePriceCents),
+    status,
+  };
+}
+
+/**
+ * V1 tax parity: Tagada must not add independent tax beyond MBM tax_cents.
+ * Hosted tax display may exist only when it resolves to exactly MBM tax.
+ */
+export function assertTagadaTaxEqualsMbmTax(input: {
+  mbmTaxCents: number;
+  tagadaTaxCents: number;
+}): { ok: true } | { ok: false; blocker: typeof TAGADA_TAX_PARITY_BLOCKER } {
+  if (Math.trunc(input.mbmTaxCents) === Math.trunc(input.tagadaTaxCents)) {
+    return { ok: true };
+  }
+  return { ok: false, blocker: TAGADA_TAX_PARITY_BLOCKER };
+}
+
+/**
+ * Pre-redirect total parity: mapped Tagada lines + MBM shipping line + MBM tax
+ * must equal orders.total_cents. Do not redirect on mismatch.
+ */
+export function assertTagadaCheckoutTotalParity(input: {
+  publicOrderNumber: string;
+  mbmTotalCents: number;
+  mappedMerchandiseCents: number;
+  mappedShippingCents: number;
+  mbmTaxCents: number;
+  skuList: string[];
+}):
+  | { ok: true; calculatedTagadaTotalCents: number }
+  | {
+      ok: false;
+      error: typeof TAGADA_CHECKOUT_TOTAL_MISMATCH;
+      publicOrderNumber: string;
+      mbmTotalCents: number;
+      calculatedTagadaTotalCents: number;
+      skuList: string[];
+    } {
+  const calculatedTagadaTotalCents =
+    Math.trunc(input.mappedMerchandiseCents) +
+    Math.trunc(input.mappedShippingCents) +
+    Math.trunc(input.mbmTaxCents);
+  if (calculatedTagadaTotalCents === Math.trunc(input.mbmTotalCents)) {
+    return { ok: true, calculatedTagadaTotalCents };
+  }
+  return {
+    ok: false,
+    error: TAGADA_CHECKOUT_TOTAL_MISMATCH,
+    publicOrderNumber: input.publicOrderNumber,
+    mbmTotalCents: Math.trunc(input.mbmTotalCents),
+    calculatedTagadaTotalCents,
+    skuList: input.skuList,
+  };
 }
 
 export type KashuCardCartLine = {

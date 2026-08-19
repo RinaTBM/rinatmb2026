@@ -75,10 +75,9 @@ function extractToken(redirectUrl: string): string | null {
 const SHIP_SKU_TWO_DAY = "MBM-SHIP-TWO-DAY-001";
 const SHIP_SKU_NEXT_DAY = "MBM-SHIP-NEXT-DAY-001";
 
-function shippingSkuForMethod(method: string | null | undefined): string | null {
-  const m = String(method || "").trim().toLowerCase();
-  if (m === "two_day") return SHIP_SKU_TWO_DAY;
-  if (m === "next_day") return SHIP_SKU_NEXT_DAY;
+function shippingSkuForCents(shippingCents: number): string | null {
+  if (shippingCents === 3000) return SHIP_SKU_TWO_DAY;
+  if (shippingCents === 5000) return SHIP_SKU_NEXT_DAY;
   return null;
 }
 
@@ -168,8 +167,7 @@ Deno.serve(async (req) => {
     }
 
     const shippingCents = Number(order.shipping_cents) || 0;
-    const shipSku =
-      shippingCents > 0 ? shippingSkuForMethod(order.shipping_method) : null;
+    const shipSku = shippingCents > 0 ? shippingSkuForCents(shippingCents) : null;
     const mapSkus = shipSku ? [...skus, shipSku] : skus;
 
     const mapRes = await fetch(
@@ -211,8 +209,11 @@ Deno.serve(async (req) => {
 
     const missing: string[] = [];
     const tagadaItems: { variantId: string; quantity: number; priceId?: string }[] = [];
+    const skuList: string[] = [];
+    let calculatedTagadaMerchandiseCents = 0;
     for (const line of orderItems) {
       const sku = line.sku as string | null;
+      const qty = Number(line.quantity) || 1;
       if (!sku) {
         missing.push(String(line.product_name_snapshot || "item"));
         continue;
@@ -222,9 +223,17 @@ Deno.serve(async (req) => {
         missing.push(sku);
         continue;
       }
+      const unit = Number(mapped.tagada_price_cents ?? mapped.mbm_price_cents);
+      if (!Number.isFinite(unit)) {
+        missing.push(sku);
+        continue;
+      }
+      calculatedTagadaMerchandiseCents += Math.trunc(unit) * qty;
+      skuList.push(`${sku}×${qty}`);
       tagadaItems.push({
         variantId: mapped.tagada_variant_id,
-        quantity: Number(line.quantity) || 1,
+        quantity: qty,
+        ...(mapped.tagada_price_id ? { priceId: mapped.tagada_price_id } : {}),
       });
     }
     if (missing.length) {
@@ -235,8 +244,19 @@ Deno.serve(async (req) => {
       }, 409);
     }
 
-    // MBM is shipping source of truth. Tagada checkout/init has no shipping-amount field.
-    // Represent MBM shipping only via a mapped Tagada shipping variant at the exact cents.
+    // MBM is shipping source of truth. Only $0 / $30 / $50 are supported for card.
+    const allowedShipping = new Set([0, 3000, 5000]);
+    if (!allowedShipping.has(shippingCents)) {
+      return json({
+        error:
+          "Unexpected MBM shipping amount for card checkout. Only $0, $30 (Two-Day), or $50 (Next-Day) are supported.",
+        blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
+        shippingCents,
+        shippingMethod: order.shipping_method,
+      }, 409);
+    }
+
+    let calculatedShippingCents = 0;
     if (shippingCents > 0) {
       if (!shipSku) {
         return json({
@@ -260,11 +280,33 @@ Deno.serve(async (req) => {
           mappedPriceCents: shipPrice,
         }, 409);
       }
+      calculatedShippingCents = shippingCents;
+      skuList.push(`${shipSku}×1`);
       tagadaItems.push({
         variantId: shipMap.tagada_variant_id,
         quantity: 1,
         ...(shipMap.tagada_price_id ? { priceId: shipMap.tagada_price_id } : {}),
       });
+    }
+
+    const mbmTaxCents = Number(order.tax_cents) || 0;
+    const mbmTotalCents = Number(order.total_cents) || 0;
+    // V1: Tagada catalog must not add independent tax — expected Tagada charge =
+    // mapped line prices + MBM shipping line + MBM tax_cents (usually 0 when Tagada tax is off).
+    const calculatedTagadaTotalCents =
+      calculatedTagadaMerchandiseCents + calculatedShippingCents + mbmTaxCents;
+    if (calculatedTagadaTotalCents !== mbmTotalCents) {
+      return json({
+        error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+        blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+        publicOrderNumber,
+        mbmTotalCents,
+        calculatedTagadaTotalCents,
+        calculatedTagadaMerchandiseCents,
+        calculatedShippingCents,
+        mbmTaxCents,
+        skuList,
+      }, 409);
     }
 
     const nameParts = String(order.customer_name || "").trim().split(/\s+/);

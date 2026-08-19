@@ -263,13 +263,28 @@ describe('Phase 2B memberships stay ACH/Wire-only + webhook amount equality inta
     ).toMatchObject({ ok: false, reason: 'mismatch' });
   });
 
-  it('provider-visit carts remain card-eligible at $0 shipping (non-shippable services)', () => {
+  it('provider-visit carts remain card-eligible at $0 shipping and $0 tax (non-shippable services)', () => {
     expect(
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
         shippingCents: 0,
+        taxCents: 0,
         items: [{ purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' }],
       }).ok,
     ).toBe(true);
+  });
+
+  it('blocks provider-visit carts when Provider Care Tax > 0 (Tagada cannot host tax line)', () => {
+    const r = evaluateKashuCardCartEligibility({
+      flagEnabled: true,
+      shippingCents: 0,
+      taxCents: 135,
+      items: [{ purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' }],
+    });
+    expect(r.ok).toBe(false);
+    if (!r.ok) {
+      expect(r.reason).toBe('tax_parity');
+      expect(r.blockerCode).toBe(TAGADA_TAX_PARITY_BLOCKER);
+    }
   });
 });

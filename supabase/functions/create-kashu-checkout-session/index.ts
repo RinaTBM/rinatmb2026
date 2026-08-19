@@ -291,8 +291,20 @@ Deno.serve(async (req) => {
 
     const mbmTaxCents = Number(order.tax_cents) || 0;
     const mbmTotalCents = Number(order.total_cents) || 0;
-    // V1: Tagada catalog must not add independent tax — expected Tagada charge =
-    // mapped line prices + MBM shipping line + MBM tax_cents (usually 0 when Tagada tax is off).
+    // V1: Tagada checkout/init has no MBM tax line item. Catalog is isTaxable=false.
+    // Do not pretend tax is included in hosted total — reject tax-bearing card orders.
+    if (mbmTaxCents > 0) {
+      return json({
+        error: "TAGADA_TAX_PARITY_BLOCKER",
+        blocker: "TAGADA_TAX_PARITY_BLOCKER",
+        message:
+          "Card checkout cannot represent MBM tax_cents on Tagada hosted checkout (V1). Use ACH/Wire.",
+        publicOrderNumber,
+        mbmTaxCents,
+        mbmTotalCents,
+      }, 409);
+    }
+    // Expected Tagada charge = mapped merchandise + MBM shipping line only (tax must be 0).
     const calculatedTagadaTotalCents =
       calculatedTagadaMerchandiseCents + calculatedShippingCents + mbmTaxCents;
     if (calculatedTagadaTotalCents !== mbmTotalCents) {

@@ -12,7 +12,8 @@ export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
 export const BANK_CHECKOUT_PAYMENT_METHODS = ['manual_ach', 'manual_wire'] as const;
 
 /**
- * Customer-selectable methods. Card appears only when VITE_KASHU_CARD_ENABLED=true.
+ * Customer-selectable methods. Card appears when isKashuCardEnabled() is true
+ * (explicit VITE_KASHU_CARD_ENABLED=true, or undefined in production builds).
  * ACH/Wire always included. Callers must still enforce cart eligibility for card.
  */
 export function getActiveCheckoutPaymentMethods(): readonly PaymentMethod[] {

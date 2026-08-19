@@ -25,7 +25,7 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 ### Checkout (manual invoice launch)
 
 - Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
-- Kashu/Tagada card payments: hosted checkout path is live on production tip `deploy/ach-launch-clean-2026` with **Phase 4 limited public rollout** (`VITE_KASHU_CARD_ENABLED=true` in production build). Prefer Tagada hosted checkout/init over Pay V2. Browser never marks paid — `tagada-webhook` is authoritative. Monitor first customer card payments closely; if parity/webhook fails, set `VITE_KASHU_CARD_ENABLED=false` and redeploy. Reports: `docs/tagadapay-phase3-controlled-live-test.md`, `docs/tagadapay-phase4-predeploy-report.md`.
+- Kashu/Tagada card payments: hosted checkout path is live on production tip `deploy/ach-launch-clean-2026` with **Phase 4 limited public rollout**. Gate: `resolveKashuCardEnabledFlag` — explicit `VITE_KASHU_CARD_ENABLED=false` kills card; `true` forces on; **undefined defaults ON in production Vite builds and OFF in dev/test** (Bolt often cannot keep `.env.production`). Prefer Tagada hosted checkout/init over Pay V2. Browser never marks paid — `tagada-webhook` is authoritative. Monitor first customer card payments closely; if parity/webhook fails, build with `VITE_KASHU_CARD_ENABLED=false` and redeploy. Card eligibility still independently blocks memberships, unsupported shipping, unmapped SKUs, and **any `tax_cents > 0`** (Tagada V1 has no MBM tax line — `TAGADA_TAX_PARITY_BLOCKER`). Checkout copy mentioning card is always shown when checkout is enabled; the Credit/Debit radio only appears when flag + eligibility pass. Reports: `docs/tagadapay-phase3-controlled-live-test.md`, `docs/tagadapay-phase4-predeploy-report.md`.
 - Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`.
 - Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
@@ -49,9 +49,9 @@ Permanent rules for future agents. Do not regress these:
 - Do not weaken webhook amount equality. (Paid amount must match MBM order total.)
 - Memberships remain ACH/Wire-only until recurring card processing is implemented separately. (`MEMBERSHIP_DEFERRED`.)
 - Do not re-enable Stripe.
-- Phase 3 controlled live card test **PASS**. Phase 4: `VITE_KASHU_CARD_ENABLED=true` is owner-approved for limited public one-time card checkout only. Memberships remain ACH/Wire-only. If the first customer card payments fail webhook/parity, disable the flag and redeploy immediately.
+- Phase 3 controlled live card test **PASS**. Phase 4: production builds enable the card gate when `VITE_KASHU_CARD_ENABLED` is unset (or set to `true`); explicit `false` remains the emergency kill switch. Memberships remain ACH/Wire-only. If the first customer card payments fail webhook/parity, disable the flag and redeploy immediately.
 
-Tax note (related): Tagada catalog products are `isTaxable=false` for V1; MBM `tax_cents` remains authoritative.
+Tax note (related): Tagada catalog products are `isTaxable=false` for V1; MBM `tax_cents` remains authoritative. Public card UI and `create-kashu-checkout-session` must reject `tax_cents > 0` until hosted checkout can represent that exact tax (do not enable Tagada automatic tax; do not weaken webhook amount equality).
 
 ### Bolt Database / migration safety (permanent)
 
@@ -128,7 +128,7 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 **Historical immutable source label:** `production-source/my-bare-method-2026`  
 **Immutable pre-launch tag:** `my-bare-method-integrated-prelaunch-v1`
 
-- After production-source reconciliation (PRs #8 + #12 + #13), treat `deploy/ach-launch-clean-2026` as the production storefront tip (ACH/Wire + Phase 4 limited card). Card uses `VITE_KASHU_CARD_ENABLED=true` in `.env.production` for Bolt/`vite build` only — memberships stay ACH/Wire-only.
+- After production-source reconciliation (PRs #8 + #12 + #13), treat `deploy/ach-launch-clean-2026` as the production storefront tip (ACH/Wire + Phase 4 limited card). Do not rely on committed `.env.production` for the card flag (Bolt may delete it); production builds default the gate ON when the env var is unset. Memberships stay ACH/Wire-only.
 - Bolt-controlled branches (for example `deploy/my-bare-method-integrated-2026`, `release/my-bare-method-final-2026`, and similar Bolt sync targets) are **disposable mirrors only**.
 - Never reconcile a source-of-truth / production-source branch by pulling a Bolt “Start repository” commit into it.
 - Never force-update historical `production-source/*` labels from Bolt.

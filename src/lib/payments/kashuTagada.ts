@@ -268,20 +268,30 @@ export type KashuCardEligibility =
   | { ok: true }
   | {
       ok: false;
-      reason: 'flag_off' | 'empty' | 'membership' | 'shipping_parity' | 'invalid_quantity';
+      reason:
+        | 'flag_off'
+        | 'empty'
+        | 'membership'
+        | 'shipping_parity'
+        | 'tax_parity'
+        | 'invalid_quantity';
       message: string;
-      blockerCode?: typeof TAGADA_SHIPPING_PARITY_BLOCKER;
+      blockerCode?: typeof TAGADA_SHIPPING_PARITY_BLOCKER | typeof TAGADA_TAX_PARITY_BLOCKER;
     };
 
 /**
  * V1 card eligibility: flag on, non-empty cart, positive qty, no membership programs.
  * Shipping must be MBM $0 / $30 / $50 only (mapped Tagada MBM-SHIP-* line items).
  * Reject unexpected positive shipping amounts.
+ * Tax must be $0: Tagada hosted init has no MBM tax line; tax_cents > 0 cannot
+ * reproduce exact hosted-total parity under V1 (isTaxable=false catalog).
  */
 export function evaluateKashuCardCartEligibility(input: {
   flagEnabled: boolean;
   items: KashuCardCartLine[];
   shippingCents: number;
+  /** MBM tax_cents (provider care + accessory). Defaults to 0 when omitted. */
+  taxCents?: number;
 }): KashuCardEligibility {
   if (!input.flagEnabled) {
     return {
@@ -319,6 +329,16 @@ export function evaluateKashuCardCartEligibility(input: {
       blockerCode: TAGADA_SHIPPING_PARITY_BLOCKER,
       message:
         'Card checkout only supports $0, $30 (Two-Day), or $50 (Next-Day) shipping. Choose ACH / Wire, or adjust shipping.',
+    };
+  }
+  const taxCents = Math.max(0, Math.trunc(Number(input.taxCents ?? 0) || 0));
+  if (taxCents > 0) {
+    return {
+      ok: false,
+      reason: 'tax_parity',
+      blockerCode: TAGADA_TAX_PARITY_BLOCKER,
+      message:
+        'Card checkout cannot include provider-care or sales tax yet. Choose ACH / Wire, or remove taxable items.',
     };
   }
   return { ok: true };
@@ -675,11 +695,29 @@ export function mbmOrderCustomerTag(orderNumber: string): string {
   return `mbmOrder:${orderNumber}`;
 }
 
+/**
+ * Resolve Phase 4 card top-level gate from Vite env.
+ * - explicit "false" / false → OFF (emergency kill switch)
+ * - explicit "true" / true → ON
+ * - undefined / empty → ON in production builds, OFF in development/test
+ * Eligibility rules (membership, shipping, tax, SKU map) still apply independently.
+ */
+export function resolveKashuCardEnabledFlag(
+  raw: string | boolean | undefined | null,
+  isProd: boolean,
+): boolean {
+  if (raw === false || raw === 'false') return false;
+  if (raw === true || raw === 'true') return true;
+  return Boolean(isProd);
+}
+
 export function isKashuCardEnabled(): boolean {
-  // Frontend feature flag — default OFF until secrets + product sync + deploy approved.
+  // Use static import.meta.env.VITE_* access (no optional chaining) so Vite inlines env at build time.
   try {
-    const flag = import.meta.env?.VITE_KASHU_CARD_ENABLED;
-    return flag === 'true';
+    return resolveKashuCardEnabledFlag(
+      import.meta.env.VITE_KASHU_CARD_ENABLED as string | boolean | undefined,
+      import.meta.env.PROD,
+    );
   } catch {
     return false;
   }

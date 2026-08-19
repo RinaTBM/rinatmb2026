@@ -304,9 +304,12 @@ export function CheckoutPage() {
   const total = displaySubtotal + shipping + providerCareTax + accessorySalesTax;
   const shippingCents = Math.round(shipping * 100);
 
+  const taxCents =
+    providerCareTaxAuth.providerCareTaxCents + accessoryTaxAuth.accessorySalesTaxCents;
   const cardEligibility = evaluateKashuCardCartEligibility({
     flagEnabled: isKashuCardEnabled(),
     shippingCents,
+    taxCents,
     items: items.map(i => ({
       isMembership: i.isMembership,
       purchaseType: i.purchaseType,

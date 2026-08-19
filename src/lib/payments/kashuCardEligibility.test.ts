@@ -3,8 +3,10 @@ import {
   evaluateKashuCardCartEligibility,
   MBM_SHIPPING_SKU_NEXT_DAY,
   MBM_SHIPPING_SKU_TWO_DAY,
+  resolveKashuCardEnabledFlag,
   shippingSkuForMethod,
   TAGADA_SHIPPING_PARITY_BLOCKER,
+  TAGADA_TAX_PARITY_BLOCKER,
   buildTagadaCheckoutInitUrl,
   TAGADA_API_BASE_PRODUCTION,
 } from './kashuTagada';
@@ -15,8 +17,10 @@ import {
   shippingCentsForMethod,
   isFreeShippingEligible,
 } from '@/lib/orders/shipping';
+import { getActiveCheckoutPaymentMethods } from './paymentMethods';
+import { isStripeCheckoutEnabled } from './paymentsEnabled';
 
-describe('Kashu card cart eligibility (memberships + shipping)', () => {
+describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
   const oneTime = {
     purchaseType: 'one_time' as const,
     quantity: 1,
@@ -24,11 +28,12 @@ describe('Kashu card cart eligibility (memberships + shipping)', () => {
     productId: 'p1',
   };
 
-  it('allows card when flag on, one-time items, and $0 shipping', () => {
+  it('allows card when flag on, one-time items, $0 shipping, and $0 tax', () => {
     expect(
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
         shippingCents: 0,
+        taxCents: 0,
         items: [oneTime],
       }),
     ).toEqual({ ok: true });
@@ -86,6 +91,7 @@ describe('Kashu card cart eligibility (memberships + shipping)', () => {
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
         shippingCents: TWO_DAY_SHIPPING_CENTS,
+        taxCents: 0,
         items: [oneTime],
       }),
     ).toEqual({ ok: true });
@@ -94,6 +100,7 @@ describe('Kashu card cart eligibility (memberships + shipping)', () => {
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
         shippingCents: NEXT_DAY_SHIPPING_CENTS,
+        taxCents: 0,
         items: [oneTime],
       }),
     ).toEqual({ ok: true });
@@ -119,16 +126,18 @@ describe('Kashu card cart eligibility (memberships + shipping)', () => {
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
         shippingCents: 0,
+        taxCents: 0,
         items: [{ ...oneTime, quantity: 2 }],
       }).ok,
     ).toBe(true);
   });
 
-  it('allows service-only ($0 shipping) carts for card', () => {
+  it('allows service-only ($0 shipping, $0 tax) carts for card', () => {
     expect(
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
         shippingCents: 0,
+        taxCents: 0,
         items: [
           {
             purchaseType: 'one_time',
@@ -141,6 +150,52 @@ describe('Kashu card cart eligibility (memberships + shipping)', () => {
     ).toBe(true);
   });
 
+  it('blocks tax-bearing carts (Provider Care Tax / sales tax) — Tagada V1 cannot host MBM tax_cents', () => {
+    const r = evaluateKashuCardCartEligibility({
+      flagEnabled: true,
+      shippingCents: TWO_DAY_SHIPPING_CENTS,
+      taxCents: 135,
+      items: [
+        oneTime,
+        {
+          purchaseType: 'one_time',
+          quantity: 1,
+          sku: 'MBM-PC-IPV-SRV-001',
+          productId: 'pc1',
+        },
+      ],
+    });
+    expect(r.ok).toBe(false);
+    if (!r.ok) {
+      expect(r.reason).toBe('tax_parity');
+      expect(r.blockerCode).toBe(TAGADA_TAX_PARITY_BLOCKER);
+    }
+  });
+
+  it('blocks screenshot-style Estradiol + IPV + $30 ship + $1.35 tax cart', () => {
+    const r = evaluateKashuCardCartEligibility({
+      flagEnabled: true,
+      shippingCents: 3000,
+      taxCents: 135,
+      items: [
+        {
+          purchaseType: 'one_time',
+          quantity: 1,
+          sku: 'MBM-HRT-EST-PTC-001',
+          productId: 'estradiol',
+        },
+        {
+          purchaseType: 'one_time',
+          quantity: 1,
+          sku: 'MBM-PC-IPV-SRV-001',
+          productId: 'pc1',
+        },
+      ],
+    });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toBe('tax_parity');
+  });
+
   it('rejects invalid quantities', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
@@ -149,6 +204,37 @@ describe('Kashu card cart eligibility (memberships + shipping)', () => {
     });
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.reason).toBe('invalid_quantity');
+  });
+});
+
+describe('Phase 4 card flag resolveKashuCardEnabledFlag', () => {
+  it('production + env undefined => card ON', () => {
+    expect(resolveKashuCardEnabledFlag(undefined, true)).toBe(true);
+    expect(resolveKashuCardEnabledFlag(null, true)).toBe(true);
+    expect(resolveKashuCardEnabledFlag('', true)).toBe(true);
+  });
+
+  it('development/test + env undefined => card OFF', () => {
+    expect(resolveKashuCardEnabledFlag(undefined, false)).toBe(false);
+    expect(resolveKashuCardEnabledFlag(null, false)).toBe(false);
+  });
+
+  it('explicit env false => card disabled (kill switch)', () => {
+    expect(resolveKashuCardEnabledFlag('false', true)).toBe(false);
+    expect(resolveKashuCardEnabledFlag('false', false)).toBe(false);
+    expect(resolveKashuCardEnabledFlag(false, true)).toBe(false);
+  });
+
+  it('explicit env true => card enabled', () => {
+    expect(resolveKashuCardEnabledFlag('true', true)).toBe(true);
+    expect(resolveKashuCardEnabledFlag('true', false)).toBe(true);
+    expect(resolveKashuCardEnabledFlag(true, false)).toBe(true);
+  });
+
+  it('dev/test runtime keeps ACH/Wire active and Stripe disabled when flag unresolved', () => {
+    // Vitest runs with PROD=false and typically no VITE_KASHU_CARD_ENABLED.
+    expect(getActiveCheckoutPaymentMethods()).toEqual(['manual_ach', 'manual_wire']);
+    expect(isStripeCheckoutEnabled()).toBe(false);
   });
 });
 

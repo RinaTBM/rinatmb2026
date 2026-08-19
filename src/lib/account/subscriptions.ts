@@ -1,10 +1,16 @@
 /** Client-side subscription + cancellation-request store (pre-portal). */
 
+import {
+  canSelfServiceCancelMembership,
+  MEMBERSHIP_MINIMUM_CANCEL_BLOCK_MESSAGE,
+} from '@/lib/membership/tagadaMembershipBilling';
+
 export type CancellationStatus =
   | 'submitted'
   | 'under_review'
   | 'processed'
-  | 'cancellation_confirmed';
+  | 'cancellation_confirmed'
+  | 'blocked_minimum_term';
 
 export type ManagedSubscriptionKind = 'active_wellness_membership' | 'auto_refill';
 
@@ -19,8 +25,15 @@ export interface ManagedSubscription {
   discountPercent: number;
   billingFrequency: 'monthly';
   renewalDate: string;
-  status: 'active' | 'cancel_pending' | 'canceled';
+  status: 'active' | 'cancel_pending' | 'canceled' | 'past_due' | 'paused' | 'cancel_scheduled';
   createdAt: string;
+  /** Server-backed fields when synced from customer_memberships (optional). */
+  membershipSku?: string;
+  tagadaSubscriptionId?: string;
+  minimumTermEndsAt?: string;
+  nextBillingAt?: string;
+  monthlyAmountCents?: number;
+  cancelScheduledAt?: string;
 }
 
 export interface CancellationRequest {
@@ -73,7 +86,23 @@ export function submitCancellationRequest(input: {
   subscription: ManagedSubscription;
   customerEmail: string;
   customerNote?: string;
-}): CancellationRequest {
+  now?: Date;
+}): CancellationRequest | { ok: false; error: string } {
+  if (input.subscription.kind === 'active_wellness_membership') {
+    const gate = canSelfServiceCancelMembership({
+      minimumTermEndsAt: input.subscription.minimumTermEndsAt ?? null,
+      now: input.now,
+    });
+    // If minimumTermEndsAt is unknown (legacy localStorage), still show the
+    // contractual message rather than silently allowing cancel.
+    if (!input.subscription.minimumTermEndsAt || !gate.ok) {
+      return {
+        ok: false,
+        error: gate.ok === false ? gate.message : MEMBERSHIP_MINIMUM_CANCEL_BLOCK_MESSAGE,
+      };
+    }
+  }
+
   const req: CancellationRequest = {
     id: `cancel_${Date.now().toString(36)}`,
     subscriptionId: input.subscription.id,
@@ -116,4 +145,4 @@ export function updateCancellationStatus(
 }
 
 export const CANCELLATION_POLICY_COPY =
-  'Auto-Refill continues on a per-period schedule. Until automated bank payments are enabled, each refill period requires payment using the invoice instructions provided. To help us process your request before the next billing period, please submit cancellation requests at least 7 calendar days before your renewal date. Once processed, you will receive confirmation.';
+  'Active Wellness memberships have a 3-month minimum commitment. After the initial term, cancellation may be scheduled through your account. Auto-Refill continues on a per-period schedule. To help us process Auto-Refill requests before the next billing period, please submit at least 7 calendar days before your renewal date.';

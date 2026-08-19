@@ -1,6 +1,6 @@
 /**
- * Temporary launch copy for membership / Auto-Refill while manual ACH is used.
- * Do not claim automatic bank debits until Plaid (or another automated ACH) is live.
+ * Recurring billing copy for membership / Auto-Refill.
+ * Membership card path uses Tagada native monthly rebilling when enabled.
  */
 
 export const PAYMENT_MODEL_OVERVIEW =
@@ -19,7 +19,10 @@ export const RECURRING_MANUAL_PAYMENT_DISCLOSURE =
   'Payment is required for each billing period until automated bank payments are enabled.';
 
 export const MEMBERSHIP_MANUAL_BILLING_NOTE =
-  'Membership pricing is billed per period. Until automated bank payments are enabled, you will receive a new invoice for each billing period and payment must be completed using the provided bank-transfer instructions.';
+  'Membership pricing is billed per period. When card enrollment is unavailable, you will receive a new invoice for each billing period and payment must be completed using the provided bank-transfer instructions.';
+
+export const MEMBERSHIP_CARD_BILLING_NOTE =
+  'Your card will be charged monthly while your membership is active. A 3-month minimum commitment applies.';
 
 export const AUTO_REFILL_MANUAL_BILLING_NOTE =
   'Auto-Refill saves 10% on eligible products. Until automated bank payments are enabled, each refill period requires payment using the invoice instructions provided.';

@@ -222,7 +222,7 @@ describe('card-first public payment selector', () => {
     expect(PAYMENT_METHODS).toContain('manual_wire');
   });
 
-  it('membership blocked from hosted card; mixed membership blocked', () => {
+  it('SEM/TIRZ membership card recurring allowed; mixed membership still blocked', () => {
     const membership = evaluateKashuCardCartEligibility({
       flagEnabled: true,
       shippingCents: 0,
@@ -237,8 +237,7 @@ describe('card-first public payment selector', () => {
         },
       ],
     });
-    expect(membership.ok).toBe(false);
-    if (!membership.ok) expect(membership.reason).toBe('membership');
+    expect(membership).toEqual({ ok: true, membershipRecurring: true });
 
     const mixed = evaluateKashuCardCartEligibility({
       flagEnabled: true,
@@ -256,7 +255,7 @@ describe('card-first public payment selector', () => {
       ],
     });
     expect(mixed.ok).toBe(false);
-    if (!mixed.ok) expect(mixed.reason).toBe('membership');
+    if (!mixed.ok) expect(['membership', 'membership_mixed']).toContain(mixed.reason);
     expect(MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE).toMatch(/contact us/i);
   });
 

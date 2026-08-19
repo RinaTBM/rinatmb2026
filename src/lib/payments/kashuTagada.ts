@@ -14,6 +14,10 @@
  */
 
 import type { ManualPaymentStatus } from './manualInvoice';
+import {
+  evaluateMembershipCardCheckoutCart,
+  isMembershipLineItem,
+} from '@/lib/membership/tagadaMembershipBilling';
 
 export const KASHU_PAYMENT_METHOD = 'kashu_card' as const;
 
@@ -319,13 +323,14 @@ export type KashuCardCartLine = {
 };
 
 export type KashuCardEligibility =
-  | { ok: true }
+  | { ok: true; membershipRecurring?: true }
   | {
       ok: false;
       reason:
         | 'flag_off'
         | 'empty'
         | 'membership'
+        | 'membership_mixed'
         | 'shipping_parity'
         | 'unexpected_tax'
         | 'invalid_quantity';
@@ -337,10 +342,12 @@ export type KashuCardEligibility =
     };
 
 /**
- * Card eligibility: flag on, non-empty cart, positive qty, no membership programs.
- * Shipping must be MBM $0 / $30 / $50 only (mapped Tagada MBM-SHIP-* line items).
+ * Card eligibility: flag on, non-empty cart, positive qty.
+ * - One-time carts: no membership; shipping $0 / $30 / $50; tax_cents = 0.
+ * - Membership recurring (SEM/TIRZ only): exactly one program SKU, qty 1, no mix,
+ *   shipping_cents must be 0 (recurring Tagada price is not shippable; first-fulfillment
+ *   shipping is separate MBM workflow — do not bake into subscription).
  * Tax-inclusive architecture: NEW orders must have tax_cents = 0.
- * Any tax_cents > 0 is a fail-safe (stale deploy / unexpected tax) — do not charge.
  */
 export function evaluateKashuCardCartEligibility(input: {
   flagEnabled: boolean;
@@ -359,6 +366,43 @@ export function evaluateKashuCardCartEligibility(input: {
   if (!input.items.length) {
     return { ok: false, reason: 'empty', message: 'Your cart is empty.' };
   }
+
+  const hasMembership = input.items.some(isMembershipLineItem);
+  if (hasMembership) {
+    const membershipCart = evaluateMembershipCardCheckoutCart(input.items);
+    if (!membershipCart.ok) {
+      return {
+        ok: false,
+        reason: membershipCart.reason === 'mixed_cart' || membershipCart.reason === 'multiple_memberships'
+          ? 'membership_mixed'
+          : 'membership',
+        message: membershipCart.message,
+      };
+    }
+    // Membership recurring Tagada charge excludes shipping line items.
+    const shippingCents = Math.trunc(input.shippingCents);
+    if (shippingCents !== 0) {
+      return {
+        ok: false,
+        reason: 'shipping_parity',
+        blockerCode: TAGADA_SHIPPING_PARITY_BLOCKER,
+        message:
+          'Membership card enrollment charges the monthly membership only. Remove paid shipping from this enrollment — first medication shipping is arranged after provider approval.',
+      };
+    }
+    const taxCents = Math.max(0, Math.trunc(Number(input.taxCents ?? 0) || 0));
+    if (taxCents > 0) {
+      return {
+        ok: false,
+        reason: 'unexpected_tax',
+        blockerCode: TAGADA_UNEXPECTED_TAX_AMOUNT,
+        message:
+          'This order has an unexpected tax amount for card checkout. Please contact us for assistance.',
+      };
+    }
+    return { ok: true, membershipRecurring: true };
+  }
+
   for (const item of input.items) {
     const qty = Number(item.quantity);
     if (!Number.isInteger(qty) || qty < 1) {
@@ -366,14 +410,6 @@ export function evaluateKashuCardCartEligibility(input: {
         ok: false,
         reason: 'invalid_quantity',
         message: 'Each item must have a positive whole-number quantity.',
-      };
-    }
-    if (item.isMembership || item.purchaseType === 'membership_program') {
-      return {
-        ok: false,
-        reason: 'membership',
-        message:
-          'Online membership enrollment is being updated. Please contact us for assistance.',
       };
     }
   }
@@ -768,6 +804,7 @@ export function resolveKashuCardEnabledFlag(
   raw: string | boolean | undefined | null,
   _isProd?: boolean,
 ): boolean {
+  void _isProd;
   if (raw === false || raw === 'false') return false;
   if (raw === true || raw === 'true') return true;
   return true;

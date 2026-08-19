@@ -30,6 +30,7 @@ const cancelStatusLabel: Record<CancellationRequest['status'], string> = {
   under_review: 'Under Review',
   processed: 'Processed',
   cancellation_confirmed: 'Cancellation Confirmed',
+  blocked_minimum_term: 'Blocked (3-month minimum)',
 };
 
 export function AccountPage() {
@@ -52,11 +53,15 @@ export function AccountPage() {
   const autoRefills = subs.filter(s => s.kind === 'auto_refill');
 
   const handleCancel = (subscription: ManagedSubscription) => {
-    submitCancellationRequest({
+    const result = submitCancellationRequest({
       subscription,
       customerEmail: email,
       customerNote: note || undefined,
     });
+    if ('ok' in result && result.ok === false) {
+      setMessage(result.error);
+      return;
+    }
     setNote('');
     setMessage('Cancellation request submitted. Our team will review and process it. This does not automatically end the current billing period or reverse a payment that has already been received.');
     refresh();
@@ -161,15 +166,54 @@ export function AccountPage() {
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <p className="font-medium text-ink-900">{member.displayName ?? memberships[0]?.name}</p>
-                          <p className="text-sm text-gold-700">Status: Active · Preferred Member Pricing (15% on eligible products and accessories)</p>
-                          <p className="text-sm text-ink-500">
-                            Renewal date:{' '}
-                            {new Date(member.renewalDate ?? memberships[0]?.renewalDate ?? Date.now()).toLocaleDateString()}
+                          <p className="text-sm text-gold-700">
+                            Status: {(memberships[0]?.status ?? 'active').replace(/_/g, ' ')}
+                            {memberships[0]?.status === 'active' || !memberships[0]
+                              ? ' · Preferred Member Pricing (15% on eligible products and accessories)'
+                              : ''}
                           </p>
+                          <p className="text-sm text-ink-500">
+                            Monthly price:{' '}
+                            $
+                            {(
+                              memberships[0]?.monthlyAmountCents != null
+                                ? memberships[0].monthlyAmountCents / 100
+                                : memberships[0]?.unitPrice ??
+                                  (member.program === 'semaglutide' ? 149 : 249)
+                            ).toFixed(0)}
+                            /month
+                          </p>
+                          <p className="text-sm text-ink-500">
+                            Next billing:{' '}
+                            {new Date(
+                              memberships[0]?.nextBillingAt ??
+                                member.renewalDate ??
+                                memberships[0]?.renewalDate ??
+                                Date.now(),
+                            ).toLocaleDateString()}
+                          </p>
+                          {memberships[0]?.minimumTermEndsAt ? (
+                            <p className="text-sm text-ink-500">
+                              Minimum commitment ends:{' '}
+                              {new Date(memberships[0].minimumTermEndsAt).toLocaleDateString()}
+                            </p>
+                          ) : (
+                            <p className="text-sm text-ink-500">
+                              3-month minimum commitment applies from membership start.
+                            </p>
+                          )}
+                          {memberships[0]?.cancelScheduledAt ? (
+                            <p className="text-sm text-ink-500">
+                              Cancellation scheduled:{' '}
+                              {new Date(memberships[0].cancelScheduledAt).toLocaleDateString()}
+                            </p>
+                          ) : null}
                         </div>
-                        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">Active</span>
+                        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
+                          {(memberships[0]?.status ?? 'active').replace(/_/g, ' ')}
+                        </span>
                       </div>
-                      <p className="text-xs text-ink-500">Customers cannot modify medication strength or provider-directed treatment from this portal.</p>
+                      <p className="text-xs text-ink-500">Customers cannot modify medication strength or provider-directed treatment from this portal. Full server-backed membership portal sync is a follow-up phase.</p>
                       <div className="flex flex-wrap gap-2">
                         <Link to="/track" className="btn-outline text-xs inline-flex items-center gap-1">
                           <FileText size={14} /> Payment Status
@@ -185,8 +229,8 @@ export function AccountPage() {
                                 name: member.displayName ?? 'Active Wellness Membership',
                                 productId: member.checkoutProductId ?? 'm2',
                                 slug: member.program === 'semaglutide' ? 'semaglutide-membership' : 'tirzepatide-membership',
-                                unitPrice: member.program === 'semaglutide' ? 199 : 249,
-                                standardPrice: member.program === 'semaglutide' ? 199 : 249,
+                                unitPrice: member.program === 'semaglutide' ? 149 : 249,
+                                standardPrice: member.program === 'semaglutide' ? 149 : 249,
                                 discountPercent: 0,
                                 billingFrequency: 'monthly' as const,
                                 renewalDate: member.renewalDate ?? new Date().toISOString(),

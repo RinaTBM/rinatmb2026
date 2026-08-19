@@ -49,10 +49,11 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
     if (!r.ok) expect(r.reason).toBe('flag_off');
   });
 
-  it('blocks recurring membership carts from card (ACH/Wire remain for those)', () => {
+  it('allows SEM membership recurring card carts (variantId+priceId path)', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
       shippingCents: 0,
+      taxCents: 0,
       items: [
         {
           isMembership: true,
@@ -63,8 +64,7 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
         },
       ],
     });
-    expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.reason).toBe('membership');
+    expect(r).toEqual({ ok: true, membershipRecurring: true });
   });
 
   it('blocks mixed membership + one-time from becoming a one-time card purchase', () => {
@@ -83,7 +83,7 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
       ],
     });
     expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.reason).toBe('membership');
+    if (!r.ok) expect(['membership', 'membership_mixed']).toContain(r.reason);
   });
 
   it('allows Two-Day / Next-Day shipping when mapped MBM-SHIP line items are used ($30 / $50)', () => {

@@ -28,7 +28,7 @@ const faqs = [
   { q: 'Is the highest Tirzepatide formulation included?', a: 'The $249 membership includes eligible provider-selected formulations through 15mg.' },
   { q: 'Are labs included?', a: 'Laboratory testing is not included unless the current workflow specifically states otherwise. A provider may request labs before or during treatment.' },
   { q: 'Is shipping included?', a: 'Shipping is not included in the membership. Two-Day Shipping ($30) and Next-Day Shipping ($50) are shown at checkout and follow our Shipping Policy. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Certain medications may require temperature-controlled packaging.' },
-  { q: 'How do I pay for my membership?', a: 'Membership pricing is billed per period. Until automated bank payments are enabled, you will receive a new invoice for each billing period and payment must be completed using the provided bank-transfer instructions (ACH / Bank Transfer or Domestic Wire).' },
+  { q: 'How do I pay for my membership?', a: 'Join with Credit / Debit Card. Your card is charged monthly while your membership stays active. A 3-month minimum commitment applies. First medication shipping (Two-Day $30 / Next-Day $50) is arranged after provider approval and is not part of the monthly membership rate.' },
 ];
 
 const comparisonRows: { feature: string; sema: string | boolean; tirz: string | boolean; onetime: string | boolean }[] = [

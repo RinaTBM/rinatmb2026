@@ -43,7 +43,7 @@ export const PAYMENT_METHOD_HELP: Partial<Record<PaymentMethod, string>> = {
 };
 
 export const MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE =
-  'Online membership enrollment is being updated. Please contact us for assistance.';
+  'Online enrollment for this membership program is not available yet. Please contact us for assistance.';
 
 export const CARD_CHECKOUT_INIT_FAILED_MESSAGE =
   "We couldn't start secure card checkout. Please try again or contact us for assistance.";

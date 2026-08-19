@@ -29,8 +29,18 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Public payment selector (eligible one-time carts): **Credit / Debit Card** only (primary/default). Hide ACH / Wire from the public storefront. Keep ACH/Wire backend + admin/manual invoice paths and payment enums (`manual_ach` / `manual_wire`). `plaid_ach` remains reserved/disabled.
 - Flow: `CheckoutPage` → `create-invoice-order` → `create-kashu-checkout-session` → **top-level** navigate to `checkout.mybaremethod.com` (`navigateToKashuHostedCheckout` / `window.top.location.assign` with HTTPS host allowlist). Bolt Preview embeds MBM in an iframe — do not use iframe-only `window.location.assign` for Tagada checkout. Browser return never marks paid.
 - Kashu/Tagada gate: `resolveKashuCardEnabledFlag` — explicit `VITE_KASHU_CARD_ENABLED=false` kills card; `true` forces on; **undefined/empty defaults ON** (do not key off `import.meta.env.PROD` — Bolt Preview often builds non-PROD without reliable VITE injection). Prefer Tagada hosted checkout/init over Pay V2. If hosted init fails, show contact/retry copy — do **not** auto-fall back to public ACH/Wire.
-- Card eligibility blocks: memberships / mixed membership, unsupported shipping, unmapped SKUs, and **any unexpected `tax_cents > 0`** after tax-inclusive migration (`TAGADA_UNEXPECTED_TAX_AMOUNT` fail-safe — do not silently ignore). Do not re-enable separate MBM tax add-ons without an explicit product decision.
-- Memberships: **not** one-time hosted card. Prefer controlled “online membership enrollment is being updated / contact us” messaging until recurring card billing exists. Preserve $149 / $249, 3-month minimum, locked pricing, provider-review rules. Do not modify membership pricing here.
+- Card eligibility: one-time carts (no membership mix), **or** SEM/TIRZ membership-only recurring carts; unsupported shipping, unmapped SKUs, and **any unexpected `tax_cents > 0`** (`TAGADA_UNEXPECTED_TAX_AMOUNT` fail-safe). Do not re-enable separate MBM tax add-ons without an explicit product decision.
+- **Membership Tagada card recurring (SEM / TIRZ):**
+  - Semaglutide Membership `MBM-MEM-SEM-MEM-001` — **$149/month** — Tagada `price_344d3dacb4ab` (`variant_6973906c4bd6`)
+  - Tirzepatide Membership `MBM-MEM-TIR-MEM-001` — **$249/month** — Tagada `price_5cf1fa89610c` (`variant_b3890c799e09`)
+  - Hosted recurring init **must** send both `variantId` + `priceId` (priceId authoritative). Do not create new Tagada products/prices/stores.
+  - Tagada handles automatic monthly rebill; MBM `customer_memberships` + `tagada-webhook` `subscription/*` events are authoritative for status.
+  - **Browser return never activates membership.** Activate only on Tagada payment/subscription evidence.
+  - **3-month minimum** is MBM-enforced (`minimum_term_ends_at`) — do not assume Tagada-native cancel lock.
+  - Recurring program price is **not shippable** (`isShippable=false`, `addDeliveryOnRebill=false`). Do **not** bake $30/$50 shipping into the Tagada subscription. First-fulfillment shipping remains separate MBM workflow after provider approval. Membership value stays excluded from the **$500** free-shipping merchandise threshold.
+  - Tirzepatide membership included formulations through **15mg**; **30mg excluded**. Requested dose is subject to provider approval (not guaranteed).
+  - Public membership checkout: Credit/Debit Card only (ACH/Wire hidden). Mixed SEM+TIRZ or membership+one-time carts fail safely.
+  - Migration (do not apply until approved): `20260819140000_customer_memberships.sql`. Redeploy Edge after approval: `create-kashu-checkout-session`, `tagada-webhook`, `cancel-membership-subscription`.
 - Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`.
 - Public `public_order_number` values are allocated server-side via Postgres `generate_public_order_number()` (`nextval` on `order_number_seq`). If the sequence drifts behind existing `MBM-YYYY-######` rows, insert can hit `orders_public_order_number_key` — repair with migration `20260819120000_repair_public_order_number_allocator.sql` (collision-skipping allocator + sequence resync). `create-invoice-order` also retries allocation on 23505 and never returns raw Postgres errors to customers.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation). Admin marks funds received via Orders UI / `mark-payment-received` after verification (ACH/Wire emergency path).
@@ -52,7 +62,7 @@ Permanent rules for future agents. Do not regress these:
 - Tagada hosted total must exactly equal MBM `orders.total_cents`. (Reject with `TAGADA_CHECKOUT_TOTAL_MISMATCH` before redirect.)
 - Do not weaken webhook amount equality. (Paid amount must match MBM order total.)
 - Tagada payment products used by MBM hosted checkout remain **`isTaxable=false`**. Do **not** enable Tagada automatic tax / TaxJar categories for checkout totals. Do not delete unused dashboard Provider Tax 1.8% / Sales Tax 8% records unless explicitly required — they may remain unused config.
-- Memberships remain outside one-time hosted card until recurring card processing is implemented separately. (`MEMBERSHIP_DEFERRED`.)
+- Membership SEM/TIRZ card recurring is implemented separately from one-time hosted card (see membership section above). Do not treat remaining unmapped `MBM-MEM-*` SKUs as card-eligible.
 - Do not re-enable Stripe.
 - Phase 3 controlled live card test **PASS**. Card gate defaults **ON** when `VITE_KASHU_CARD_ENABLED` is unset (Bolt Preview + production); explicit `false` remains the emergency kill switch. If customer card payments fail webhook/parity, disable the flag and redeploy immediately.
 

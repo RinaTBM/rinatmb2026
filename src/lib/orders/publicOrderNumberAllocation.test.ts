@@ -169,7 +169,7 @@ describe('checkout rules preserved alongside order-number fix', () => {
     expect(freeShip.totalCents).toBe(2900);
   });
 
-  it('membership remains blocked from hosted card; ACH/Wire hidden; Stripe off', () => {
+  it('SEM membership card recurring allowed; ACH/Wire hidden; Stripe off', () => {
     const membership = evaluateKashuCardCartEligibility({
       flagEnabled: true,
       shippingCents: 0,
@@ -183,8 +183,7 @@ describe('checkout rules preserved alongside order-number fix', () => {
         },
       ],
     });
-    expect(membership.ok).toBe(false);
-    if (!membership.ok) expect(membership.reason).toBe('membership');
+    expect(membership).toEqual({ ok: true, membershipRecurring: true });
     expect(getActiveCheckoutPaymentMethods()).not.toContain('manual_ach');
     expect(getActiveCheckoutPaymentMethods()).not.toContain('manual_wire');
     expect(isStripeCheckoutEnabled()).toBe(false);

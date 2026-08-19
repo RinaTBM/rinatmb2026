@@ -61,6 +61,115 @@ function mapStatus(eventType: string): string | null {
   }
 }
 
+const SUBSCRIPTION_EVENTS = new Set([
+  "subscription/created",
+  "subscription/canceled",
+  "subscription/paused",
+  "subscription/resumed",
+  "subscription/pastDue",
+  "subscription/rebillUpcoming",
+  "subscription/rebillSucceeded",
+  "subscription/rebillDeclined",
+  "subscription/cancelScheduled",
+  "subscription/rebillCaptureFailed",
+]);
+
+function mapSubscriptionStatus(eventType: string): string | "ignore" | null {
+  switch (eventType) {
+    case "subscription/created":
+    case "subscription/rebillSucceeded":
+    case "subscription/resumed":
+      return "active";
+    case "subscription/pastDue":
+      return "past_due";
+    case "subscription/rebillDeclined":
+    case "subscription/rebillCaptureFailed":
+      return "payment_issue";
+    case "subscription/paused":
+      return "paused";
+    case "subscription/cancelScheduled":
+      return "cancel_scheduled";
+    case "subscription/canceled":
+      return "canceled";
+    case "subscription/rebillUpcoming":
+      return "ignore";
+    default:
+      return null;
+  }
+}
+
+function asId(v: unknown): string | null {
+  return typeof v === "string" && v.trim() ? v.trim() : null;
+}
+
+function asIso(v: unknown): string | null {
+  if (typeof v !== "string" || !v.trim()) return null;
+  const d = new Date(v);
+  return Number.isNaN(d.getTime()) ? null : d.toISOString();
+}
+
+/** Extract subscription fields only from common Tagada shapes — do not invent. */
+function extractSubscriptionFields(payload: Record<string, unknown>) {
+  const data = asRecord(payload.data);
+  const subscription =
+    asRecord(payload.subscription) ??
+    asRecord(data?.subscription) ??
+    (typeof data?.id === "string" && String(data.id).startsWith("sub_") ? data : undefined);
+  const customer =
+    asRecord(payload.customer) ?? asRecord(data?.customer) ?? asRecord(subscription?.customer);
+  const price = asRecord(subscription?.price) ?? asRecord(data?.price);
+  const payment = asRecord(payload.payment) ?? asRecord(data?.payment);
+  return {
+    subscriptionId:
+      asId(payload.subscriptionId) ||
+      asId(data?.subscriptionId) ||
+      asId(subscription?.id) ||
+      asId(subscription?.subscriptionId) ||
+      null,
+    customerId:
+      asId(payload.customerId) ||
+      asId(data?.customerId) ||
+      asId(customer?.id) ||
+      asId(customer?.customerId) ||
+      asId(subscription?.customerId) ||
+      null,
+    priceId:
+      asId(payload.priceId) ||
+      asId(data?.priceId) ||
+      asId(subscription?.priceId) ||
+      asId(price?.id) ||
+      null,
+    currentPeriodStart:
+      asIso(subscription?.currentPeriodStart) ||
+      asIso(subscription?.current_period_start) ||
+      asIso(data?.currentPeriodStart) ||
+      null,
+    currentPeriodEnd:
+      asIso(subscription?.currentPeriodEnd) ||
+      asIso(subscription?.current_period_end) ||
+      asIso(data?.currentPeriodEnd) ||
+      null,
+    nextBillingAt:
+      asIso(subscription?.nextBillingDate) ||
+      asIso(subscription?.next_billing_date) ||
+      asIso(subscription?.nextBillingAt) ||
+      asIso(data?.nextBillingDate) ||
+      null,
+    paymentId:
+      asId(payload.paymentId) ||
+      asId(data?.paymentId) ||
+      asId(payment?.id) ||
+      asId(payment?.paymentId) ||
+      null,
+  };
+}
+
+function addMonthsUtc(iso: string, months: number): string {
+  const d = new Date(iso);
+  d.setUTCMonth(d.getUTCMonth() + months);
+  return d.toISOString();
+}
+
 function extractEventType(payload: Record<string, unknown>): string {
   const t = payload.eventType ?? payload.type ?? payload.event_type;
   return typeof t === "string" ? t : "";
@@ -231,6 +340,187 @@ Deno.serve(async (req) => {
   }
 
   if (!targetStatus) {
+    if (SUBSCRIPTION_EVENTS.has(eventType)) {
+      const subStatus = mapSubscriptionStatus(eventType);
+      const fields = extractSubscriptionFields(payload);
+      const orderNumber = extractOrderNumber(payload);
+
+      // Resolve membership by Tagada subscription id first, then by enrollment order.
+      let membership: Record<string, unknown> | null = null;
+      if (fields.subscriptionId) {
+        const bySub = await fetch(
+          `${supabaseUrl}/rest/v1/customer_memberships?tagada_subscription_id=eq.${encodeURIComponent(fields.subscriptionId)}&select=*&limit=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${serviceKey}`,
+              apikey: serviceKey,
+            },
+          },
+        );
+        const rows = await bySub.json();
+        membership = Array.isArray(rows) ? rows[0] : null;
+      }
+      if (!membership && orderNumber) {
+        const byOrder = await fetch(
+          `${supabaseUrl}/rest/v1/customer_memberships?enrollment_public_order_number=eq.${encodeURIComponent(orderNumber)}&select=*&order=created_at.desc&limit=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${serviceKey}`,
+              apikey: serviceKey,
+            },
+          },
+        );
+        const rows = await byOrder.json();
+        membership = Array.isArray(rows) ? rows[0] : null;
+      }
+
+      if (!membership) {
+        await fetch(
+          `${supabaseUrl}/rest/v1/payment_webhook_events?processor=eq.kashu_tagada&event_id=eq.${encodeURIComponent(eventId)}`,
+          {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${serviceKey}`,
+              apikey: serviceKey,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              processing_result: "subscription_membership_not_found",
+              public_order_number: orderNumber,
+              error_message: `subscriptionId=${fields.subscriptionId}`,
+            }),
+          },
+        );
+        return json({
+          ok: false,
+          error: "subscription_membership_not_found",
+          eventType,
+        }, 200);
+      }
+
+      if (subStatus === "ignore") {
+        await fetch(
+          `${supabaseUrl}/rest/v1/payment_webhook_events?processor=eq.kashu_tagada&event_id=eq.${encodeURIComponent(eventId)}`,
+          {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${serviceKey}`,
+              apikey: serviceKey,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              processing_result: "subscription_ignored_informational",
+              public_order_number: orderNumber,
+              order_id: membership.enrollment_order_id ?? null,
+            }),
+          },
+        );
+        return json({ ok: true, ignored: true, eventType });
+      }
+
+      const now = new Date().toISOString();
+      const startedAt =
+        (typeof membership.started_at === "string" && membership.started_at) ||
+        fields.currentPeriodStart ||
+        now;
+      const minimumTermEndsAt =
+        (typeof membership.minimum_term_ends_at === "string" && membership.minimum_term_ends_at) ||
+        addMonthsUtc(startedAt, 3);
+
+      const patch: Record<string, unknown> = {
+        status: subStatus,
+        updated_at: now,
+        last_rebill_status: eventType,
+      };
+      if (fields.subscriptionId) patch.tagada_subscription_id = fields.subscriptionId;
+      if (fields.customerId) patch.tagada_customer_id = fields.customerId;
+      if (fields.priceId) patch.tagada_price_id = fields.priceId;
+      if (fields.currentPeriodStart) patch.current_period_start = fields.currentPeriodStart;
+      if (fields.currentPeriodEnd) patch.current_period_end = fields.currentPeriodEnd;
+      if (fields.nextBillingAt) patch.next_billing_at = fields.nextBillingAt;
+
+      if (subStatus === "active") {
+        patch.started_at = startedAt;
+        patch.minimum_term_ends_at = minimumTermEndsAt;
+        if (eventType === "subscription/rebillSucceeded") {
+          patch.last_rebill_at = now;
+          if (fields.paymentId) patch.last_rebill_payment_id = fields.paymentId;
+        }
+      }
+      if (subStatus === "past_due" || subStatus === "payment_issue") {
+        patch.past_due_at = now;
+      }
+      if (subStatus === "cancel_scheduled") {
+        patch.cancel_scheduled_at = now;
+      }
+      if (subStatus === "canceled") {
+        patch.canceled_at = now;
+      }
+
+      await fetch(`${supabaseUrl}/rest/v1/customer_memberships?id=eq.${membership.id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(patch),
+      });
+
+      // Idempotent rebill event log (unique on tagada_event_id).
+      if (
+        eventType === "subscription/rebillSucceeded" ||
+        eventType === "subscription/rebillDeclined" ||
+        eventType === "subscription/rebillCaptureFailed"
+      ) {
+        await fetch(`${supabaseUrl}/rest/v1/membership_rebill_events`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${serviceKey}`,
+            apikey: serviceKey,
+            "Content-Type": "application/json",
+            Prefer: "resolution=ignore-duplicates,return=minimal",
+          },
+          body: JSON.stringify({
+            customer_membership_id: membership.id,
+            tagada_event_id: eventId,
+            tagada_payment_id: fields.paymentId,
+            event_type: eventType,
+            amount_cents: membership.monthly_amount_cents ?? null,
+            processing_result: `applied_${subStatus}`,
+          }),
+        });
+      }
+
+      // Initial activation: also mark enrollment order paid when subscription/created
+      // coincides with authoritative evidence (amount equality still required for order/paid path).
+      // subscription/created alone activates membership; payment/succeeded / order/paid still
+      // run through the one-time amount-equality path for the enrollment order.
+
+      await fetch(
+        `${supabaseUrl}/rest/v1/payment_webhook_events?processor=eq.kashu_tagada&event_id=eq.${encodeURIComponent(eventId)}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${serviceKey}`,
+            apikey: serviceKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            processing_result: `subscription_applied_${subStatus}`,
+            public_order_number: orderNumber,
+            order_id: membership.enrollment_order_id ?? null,
+          }),
+        },
+      );
+      return json({
+        ok: true,
+        eventType,
+        membershipStatus: subStatus,
+        membershipId: membership.id,
+      });
+    }
+
     await fetch(
       `${supabaseUrl}/rest/v1/payment_webhook_events?processor=eq.kashu_tagada&event_id=eq.${encodeURIComponent(eventId)}`,
       {
@@ -384,6 +674,41 @@ Deno.serve(async (req) => {
         created_by: "tagada_webhook",
       }),
     });
+
+    // Membership enrollment: initial payment success is authoritative activation evidence
+    // together with (or ahead of) subscription/created. Browser return never does this.
+    const memRes = await fetch(
+      `${supabaseUrl}/rest/v1/customer_memberships?enrollment_order_id=eq.${order.id}&select=*&limit=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+        },
+      },
+    );
+    if (memRes.ok) {
+      const memRows = await memRes.json();
+      const mem = Array.isArray(memRows) ? memRows[0] : null;
+      if (mem && (mem.status === "pending_payment" || mem.status === "payment_issue" || mem.status === "past_due")) {
+        const startedAt = mem.started_at || now;
+        const minimumTermEndsAt = mem.minimum_term_ends_at || addMonthsUtc(startedAt, 3);
+        await fetch(`${supabaseUrl}/rest/v1/customer_memberships?id=eq.${mem.id}`, {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${serviceKey}`,
+            apikey: serviceKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status: "active",
+            started_at: startedAt,
+            minimum_term_ends_at: minimumTermEndsAt,
+            updated_at: now,
+            last_rebill_status: eventType,
+          }),
+        });
+      }
+    }
   } else {
     await fetch(`${supabaseUrl}/rest/v1/orders?id=eq.${order.id}`, {
       method: "PATCH",

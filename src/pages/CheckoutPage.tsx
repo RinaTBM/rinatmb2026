@@ -40,11 +40,15 @@ import {
   assertSelectablePaymentMethod,
   CARD_CHECKOUT_INIT_FAILED_MESSAGE,
   getActiveCheckoutPaymentMethods,
-  MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE,
   PAYMENT_METHOD_HELP,
   PAYMENT_METHOD_LABELS,
   type PaymentMethod,
 } from '@/lib/payments/paymentMethods';
+import {
+  MEMBERSHIP_CARD_RECURRING_DISCLOSURE,
+  MEMBERSHIP_CARD_SHIPPING_NOTE,
+  MEMBERSHIP_TERMS_ACCEPTANCE_LABEL,
+} from '@/lib/membership/tagadaMembershipBilling';
 import {
   CHECKOUT_SUBMIT_CTA,
   CHECKOUT_SUBMIT_SUPPORTING_COPY,
@@ -83,8 +87,13 @@ export function CheckoutPage() {
   const { isActiveMember, activateMembership } = useMember();
   const { user, session } = useCustomerAuth();
   const [step, setStep] = useState<'info' | 'payment' | 'complete'>('info');
-  const [acknowledged, setAcknowledged] = useState<{ terms: boolean; privacy: boolean; refund: boolean; address: boolean }>({ terms: false, privacy: false, refund: false, address: false });
-  const allAccepted = acknowledged.terms && acknowledged.privacy && acknowledged.refund && acknowledged.address;
+  const [acknowledged, setAcknowledged] = useState<{
+    terms: boolean;
+    privacy: boolean;
+    refund: boolean;
+    address: boolean;
+    membershipTerms: boolean;
+  }>({ terms: false, privacy: false, refund: false, address: false, membershipTerms: false });
   const [form, setForm] = useState({
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
   });
@@ -104,6 +113,12 @@ export function CheckoutPage() {
   const hasMembership = items.some(
     i => i.isMembership || i.purchaseType === 'membership_program',
   );
+  const allAccepted =
+    acknowledged.terms &&
+    acknowledged.privacy &&
+    acknowledged.refund &&
+    acknowledged.address &&
+    (!hasMembership || acknowledged.membershipTerms);
   const requiresProviderReview = hasProviderCare || items.some(i => i.requiresIntake) || hasMembership;
   const hasVariablePricing = items.some(i => i.price === 0);
 
@@ -295,13 +310,16 @@ export function CheckoutPage() {
     : freeShippingEligible
       ? 'free_over_500'
       : shippingMethod;
-  // Membership carts without free shipping always charge Two-Day / Next-Day amounts.
-  // Pass 0 as free-shipping subtotal here so membership value cannot zero out paid shipping.
+  // Membership carts: Tagada recurring price is not shippable. Enrollment charge =
+  // monthly membership only (shipping arranged after provider approval).
+  // One-time carts: $500 free-shipping threshold uses ordinary merchandise ONLY.
   const shipping = !requiresPhysicalShipping
     ? 0
-    : freeShippingEligible
+    : hasMembership
       ? 0
-      : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
+      : freeShippingEligible
+        ? 0
+        : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
   const displaySubtotal = displaySubtotalCents / 100;
   const total = displaySubtotal + shipping;
   const shippingCents = Math.round(shipping * 100);
@@ -312,22 +330,27 @@ export function CheckoutPage() {
     flagEnabled: isKashuCardEnabled(),
     shippingCents,
     taxCents,
-    items: items.map(i => ({
-      isMembership: i.isMembership,
-      purchaseType: i.purchaseType,
-      quantity: i.quantity,
-      sku: i.variantId ? skuForVariantId(i.variantId) : undefined,
-      productId: i.productId,
-    })),
+    items: items.map(i => {
+      const isMembershipLine =
+        Boolean(i.isMembership) || i.purchaseType === 'membership_program';
+      return {
+        isMembership: i.isMembership,
+        purchaseType: i.purchaseType,
+        quantity: i.quantity,
+        sku: isMembershipLine
+          ? programSkuForMembershipAppId(i.productId) ?? undefined
+          : i.variantId
+            ? skuForVariantId(i.variantId) ?? undefined
+            : undefined,
+        productId: i.productId,
+      };
+    }),
   });
 
-  const hasMembershipItems = items.some(
-    i => i.isMembership || i.purchaseType === 'membership_program',
-  );
+  const hasMembershipItems = hasMembership;
 
   const selectablePaymentMethods = getActiveCheckoutPaymentMethods().filter(method => {
     if (method !== KASHU_PAYMENT_METHOD) return false;
-    if (hasMembershipItems) return false;
     return cardEligibility.ok;
   });
 
@@ -343,13 +366,17 @@ export function CheckoutPage() {
 
   const update = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
 
-  const recordLocalSubscriptions = () => {
+  const recordLocalSubscriptions = (opts?: { activateMemberships?: boolean }) => {
     const renewal = new Date();
     renewal.setMonth(renewal.getMonth() + 1);
     const renewalDate = renewal.toISOString();
+    const activateMemberships = opts?.activateMemberships !== false;
 
     for (const item of items) {
       if (item.isMembership || item.purchaseType === 'membership_program') {
+        // Card membership: browser return / order create must NOT activate.
+        // Webhook + customer_memberships are authoritative.
+        if (!activateMemberships) continue;
         const program = item.slug.includes('tirzepatide') ? 'tirzepatide' : 'semaglutide';
         activateMembership({
           program,
@@ -401,8 +428,8 @@ export function CheckoutPage() {
       return;
     }
 
-    if (hasMembershipItems) {
-      setError(MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE);
+    if (hasMembershipItems && !cardEligibility.ok) {
+      setError(cardEligibility.message);
       return;
     }
 
@@ -553,7 +580,8 @@ export function CheckoutPage() {
               ` Your order ${result.publicOrderNumber} was saved unpaid — you can retry secure payment without creating a duplicate.`,
           );
         }
-        recordLocalSubscriptions();
+        // Do NOT activate membership on redirect — Tagada webhooks are authoritative.
+        recordLocalSubscriptions({ activateMemberships: false });
         clearCart();
         const nav = navigateToKashuHostedCheckout(kashu.redirectUrl);
         if (!nav.ok) {
@@ -562,7 +590,7 @@ export function CheckoutPage() {
         return;
       }
 
-      recordLocalSubscriptions();
+      recordLocalSubscriptions({ activateMemberships: !hasMembershipItems });
       clearCart();
       navigate(result.paymentPath);
     } catch (err) {
@@ -723,8 +751,8 @@ export function CheckoutPage() {
                       <div className="mb-3 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm text-gold-800">
                         <p className="font-medium">Shipping after provider approval</p>
                         <p className="mt-1 text-xs leading-relaxed">
-                          Choose your preferred shipping speed. Shipping occurs after provider approval
-                          and fulfillment processing. Shipping speed does not include provider-review time.
+                          {MEMBERSHIP_CARD_SHIPPING_NOTE} Choose a preferred shipping speed for your first
+                          medication shipment — it is not charged on this monthly membership enrollment.
                         </p>
                       </div>
                     )}
@@ -743,9 +771,11 @@ export function CheckoutPage() {
                               checked={shippingMethod === 'two_day'}
                               onChange={() => setShippingMethod('two_day')}
                             />
-                            Two-Day Shipping
+                            Two-Day Shipping{hasMembership ? ' (preferred)' : ''}
                           </span>
-                          <span className="font-medium text-ink-900">$30</span>
+                          <span className="font-medium text-ink-900">
+                            {hasMembership ? 'Later' : '$30'}
+                          </span>
                         </label>
                         <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'next_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
                           <span className="flex items-center gap-3">
@@ -755,13 +785,15 @@ export function CheckoutPage() {
                               checked={shippingMethod === 'next_day'}
                               onChange={() => setShippingMethod('next_day')}
                             />
-                            Next-Day Shipping
+                            Next-Day Shipping{hasMembership ? ' (preferred)' : ''}
                           </span>
-                          <span className="font-medium text-ink-900">$50</span>
+                          <span className="font-medium text-ink-900">
+                            {hasMembership ? 'Later' : '$50'}
+                          </span>
                         </label>
                         <p className="text-xs text-ink-500">
                           {hasMembership
-                            ? 'Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Shipping speed applies after fulfillment processing.'
+                            ? 'Membership value is excluded from the $500 free-shipping merchandise threshold. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'
                             : 'Orders of $500 or more in merchandise are eligible for free shipping. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'}
                         </p>
                       </div>
@@ -834,9 +866,7 @@ export function CheckoutPage() {
                             Pay securely by Credit / Debit Card through our encrypted payment checkout.
                           </p>
                         </div>
-                        {hasMembershipItems ? (
-                          <p className="text-sm text-ink-700">{MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE}</p>
-                        ) : selectablePaymentMethods.length === 0 ? (
+                        {selectablePaymentMethods.length === 0 ? (
                           <p className="text-sm text-ink-700">
                             {!isKashuCardEnabled()
                               ? PAYMENTS_UNAVAILABLE_MESSAGE
@@ -875,7 +905,6 @@ export function CheckoutPage() {
                           </div>
                         )}
                         {isKashuCardEnabled() &&
-                        !hasMembershipItems &&
                         !cardEligibility.ok &&
                         cardEligibility.reason !== 'flag_off' &&
                         selectablePaymentMethods.length > 0 ? (
@@ -884,7 +913,9 @@ export function CheckoutPage() {
                         {selectablePaymentMethods.length > 0 ? (
                           <p className="text-sm text-ink-500">
                             {paymentMethod === KASHU_PAYMENT_METHOD
-                              ? 'You will be redirected to complete card payment securely. Your order stays unpaid until payment is confirmed.'
+                              ? hasMembershipItems
+                                ? 'You will be redirected to complete card enrollment securely. Your membership stays inactive until payment and subscription are confirmed.'
+                                : 'You will be redirected to complete card payment securely. Your order stays unpaid until payment is confirmed.'
                               : CHECKOUT_SUBMIT_SUPPORTING_COPY}
                           </p>
                         ) : null}
@@ -894,9 +925,22 @@ export function CheckoutPage() {
                             <p>{AUTO_REFILL_MANUAL_BILLING_NOTE}</p>
                           </div>
                         ) : null}
-                        {hasMembershipItems ? (
+                        {hasMembershipItems && selectablePaymentMethods.length > 0 ? (
                           <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 leading-relaxed space-y-2">
-                            <p className="font-medium">{MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE}</p>
+                            <p className="font-medium">{MEMBERSHIP_CARD_RECURRING_DISCLOSURE}</p>
+                            <p>{MEMBERSHIP_CARD_SHIPPING_NOTE}</p>
+                            <p className="text-xs">
+                              Applicable taxes are included in displayed prices where required. Monthly rate:{' '}
+                              {items
+                                .filter(i => i.isMembership || i.purchaseType === 'membership_program')
+                                .map(i => `${i.name} $${i.price.toFixed(0)}/month`)
+                                .join(' · ')}
+                            </p>
+                          </div>
+                        ) : null}
+                        {hasMembershipItems && selectablePaymentMethods.length === 0 ? (
+                          <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 leading-relaxed space-y-2">
+                            <p className="font-medium">{cardEligibility.ok ? PAYMENTS_UNAVAILABLE_MESSAGE : cardEligibility.message}</p>
                             <p>{MEMBERSHIP_MANUAL_BILLING_NOTE}</p>
                           </div>
                         ) : null}
@@ -963,6 +1007,29 @@ export function CheckoutPage() {
                       </span>
                     </label>
                   ))}
+                  {hasMembershipItems ? (
+                    <label
+                      className={`flex items-start gap-3 rounded-xl border p-4 cursor-pointer transition-colors ${
+                        acknowledged.membershipTerms ? 'border-gold-400 bg-gold-50/50' : 'border-cream-300 bg-white'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={acknowledged.membershipTerms}
+                        onChange={e =>
+                          setAcknowledged(prev => ({ ...prev, membershipTerms: e.target.checked }))
+                        }
+                        className="mt-0.5 h-4 w-4 flex-shrink-0 accent-gold-500"
+                      />
+                      <span className="text-xs text-ink-600">
+                        {MEMBERSHIP_TERMS_ACCEPTANCE_LABEL}{' '}
+                        <Link to="/membership-terms" className="text-gold-600 hover:text-gold-700">
+                          Membership &amp; Cancellation Terms
+                        </Link>
+                        .
+                      </span>
+                    </label>
+                  ) : null}
                 </div>
 
                 <div className="flex gap-3">
@@ -975,7 +1042,6 @@ export function CheckoutPage() {
                         loading ||
                         membershipDoseBlocking ||
                         !guestAuthGate.ok ||
-                        hasMembershipItems ||
                         selectablePaymentMethods.length === 0
                       }
                       onClick={handleSubmitInvoiceOrder}
@@ -984,7 +1050,6 @@ export function CheckoutPage() {
                         loading ||
                         membershipDoseBlocking ||
                         !guestAuthGate.ok ||
-                        hasMembershipItems ||
                         selectablePaymentMethods.length === 0
                           ? 'opacity-50 cursor-not-allowed'
                           : ''
@@ -1123,16 +1188,29 @@ export function CheckoutPage() {
                     <span>−${totalSavings.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `$${displaySubtotal.toFixed(2)}`}</span></div>
+                <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `$${displaySubtotal.toFixed(2)}${hasMembershipItems ? '/month' : ''}`}</span></div>
                 {!hasVariablePricing && <>
                   {requiresPhysicalShipping && (
                     <div className="flex justify-between text-ink-600">
-                      <span>{labelShippingMethod(resolvedShippingMethod)}</span>
-                      <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                      <span>
+                        {hasMembershipItems
+                          ? `Preferred: ${labelShippingMethod(resolvedShippingMethod)}`
+                          : labelShippingMethod(resolvedShippingMethod)}
+                      </span>
+                      <span>
+                        {hasMembershipItems
+                          ? 'After approval'
+                          : shipping === 0
+                            ? 'Free'
+                            : `$${shipping.toFixed(2)}`}
+                      </span>
                     </div>
                   )}
                   <p className="text-[11px] text-ink-500 leading-snug">{TAX_INCLUSIVE_CHECKOUT_DISCLOSURE}</p>
-                  <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base"><span>Total</span><span>${total.toFixed(2)}</span></div>
+                  <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base">
+                    <span>{hasMembershipItems ? 'Due today (monthly)' : 'Total'}</span>
+                    <span>${total.toFixed(2)}{hasMembershipItems ? '/mo' : ''}</span>
+                  </div>
                 </>}
                 {hasVariablePricing && (
                   <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base"><span>Total</span><span>TBD after intake</span></div>

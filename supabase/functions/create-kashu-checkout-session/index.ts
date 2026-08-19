@@ -157,17 +157,80 @@ Deno.serve(async (req) => {
       }, 400);
     }
 
+    const SUPPORTED_MEM_SKUS = new Set(["MBM-MEM-SEM-MEM-001", "MBM-MEM-TIR-MEM-001"]);
+    const MEM_PRICE_BY_SKU: Record<string, { priceId: string; cents: number; type: string }> = {
+      "MBM-MEM-SEM-MEM-001": {
+        priceId: "price_344d3dacb4ab",
+        cents: 14900,
+        type: "semaglutide",
+      },
+      "MBM-MEM-TIR-MEM-001": {
+        priceId: "price_5cf1fa89610c",
+        cents: 24900,
+        type: "tirzepatide",
+      },
+    };
     const membershipSkus = skus.filter((s: string) => String(s).startsWith("MBM-MEM-"));
-    if (membershipSkus.length) {
-      return json({
-        error:
-          "Membership programs cannot use card checkout in this phase. Please pay by ACH or wire.",
-        missingSkus: membershipSkus,
-      }, 409);
+    const isMembershipCheckout = membershipSkus.length > 0;
+    if (isMembershipCheckout) {
+      if (skus.length !== 1 || membershipSkus.length !== 1) {
+        return json({
+          error:
+            "Membership card enrollment must contain exactly one supported membership program and no other items.",
+          missingSkus: skus,
+        }, 409);
+      }
+      const memSku = membershipSkus[0];
+      if (!SUPPORTED_MEM_SKUS.has(memSku)) {
+        return json({
+          error:
+            "Online enrollment for this membership program is not available yet. Please contact us for assistance.",
+          missingSkus: [memSku],
+        }, 409);
+      }
+      if (orderItems.length !== 1 || Number(orderItems[0].quantity) !== 1) {
+        return json({
+          error: "Membership enrollment quantity must be exactly 1.",
+        }, 409);
+      }
+      // Recurring Tagada membership price is not shippable — do not mix shipping lines.
+      if ((Number(order.shipping_cents) || 0) !== 0) {
+        return json({
+          error:
+            "Membership card enrollment charges the monthly membership only (no Tagada shipping line). First medication shipping is arranged after provider approval.",
+          blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
+          shippingCents: Number(order.shipping_cents) || 0,
+        }, 409);
+      }
+      // Duplicate open enrollment guard (same email + program).
+      const email = String(order.customer_email || "").trim().toLowerCase();
+      if (email) {
+        const dupRes = await fetch(
+          `${supabaseUrl}/rest/v1/customer_memberships?membership_sku=eq.${encodeURIComponent(memSku)}&customer_email=ilike.${encodeURIComponent(email)}&status=in.(pending_payment,active,past_due,paused,cancel_scheduled,payment_issue)&select=id,status&limit=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${serviceKey}`,
+              apikey: serviceKey,
+            },
+          },
+        );
+        if (dupRes.ok) {
+          const dups = await dupRes.json();
+          if (Array.isArray(dups) && dups.length > 0 && dups[0].status !== "pending_payment") {
+            return json({
+              error:
+                "You already have an active or open membership for this program. Manage it from your account or contact us — a duplicate subscription was not created.",
+              existingMembershipId: dups[0].id,
+              existingStatus: dups[0].status,
+            }, 409);
+          }
+        }
+      }
     }
 
     const shippingCents = Number(order.shipping_cents) || 0;
-    const shipSku = shippingCents > 0 ? shippingSkuForCents(shippingCents) : null;
+    const shipSku =
+      !isMembershipCheckout && shippingCents > 0 ? shippingSkuForCents(shippingCents) : null;
     const mapSkus = shipSku ? [...skus, shipSku] : skus;
 
     const mapRes = await fetch(
@@ -230,11 +293,39 @@ Deno.serve(async (req) => {
       }
       calculatedTagadaMerchandiseCents += Math.trunc(unit) * qty;
       skuList.push(`${sku}×${qty}`);
-      tagadaItems.push({
-        variantId: mapped.tagada_variant_id,
-        quantity: qty,
-        ...(mapped.tagada_price_id ? { priceId: mapped.tagada_price_id } : {}),
-      });
+      if (isMembershipCheckout) {
+        const memCfg = MEM_PRICE_BY_SKU[sku];
+        const priceId = memCfg?.priceId || mapped.tagada_price_id;
+        if (!priceId) {
+          return json({
+            error:
+              "Membership recurring checkout requires Tagada priceId (variantId alone is not allowed).",
+            sku,
+          }, 409);
+        }
+        // Authoritative recurring amount from verified Tagada price mapping.
+        if (memCfg && Math.trunc(unit) !== memCfg.cents) {
+          return json({
+            error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+            blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+            message: "Membership Tagada price cents do not match verified MBM membership amount.",
+            sku,
+            mappedCents: unit,
+            expectedCents: memCfg.cents,
+          }, 409);
+        }
+        tagadaItems.push({
+          variantId: mapped.tagada_variant_id,
+          quantity: 1,
+          priceId,
+        });
+      } else {
+        tagadaItems.push({
+          variantId: mapped.tagada_variant_id,
+          quantity: qty,
+          ...(mapped.tagada_price_id ? { priceId: mapped.tagada_price_id } : {}),
+        });
+      }
     }
     if (missing.length) {
       return json({
@@ -244,12 +335,14 @@ Deno.serve(async (req) => {
       }, 409);
     }
 
-    // MBM is shipping source of truth. Only $0 / $30 / $50 are supported for card.
-    const allowedShipping = new Set([0, 3000, 5000]);
+    // MBM is shipping source of truth. Membership recurring: shipping must stay $0 on Tagada.
+    // One-time card: only $0 / $30 / $50.
+    const allowedShipping = isMembershipCheckout ? new Set([0]) : new Set([0, 3000, 5000]);
     if (!allowedShipping.has(shippingCents)) {
       return json({
-        error:
-          "Unexpected MBM shipping amount for card checkout. Only $0, $30 (Two-Day), or $50 (Next-Day) are supported.",
+        error: isMembershipCheckout
+          ? "Membership card enrollment must not include a Tagada shipping charge."
+          : "Unexpected MBM shipping amount for card checkout. Only $0, $30 (Two-Day), or $50 (Next-Day) are supported.",
         blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
         shippingCents,
         shippingMethod: order.shipping_method,
@@ -257,7 +350,7 @@ Deno.serve(async (req) => {
     }
 
     let calculatedShippingCents = 0;
-    if (shippingCents > 0) {
+    if (!isMembershipCheckout && shippingCents > 0) {
       if (!shipSku) {
         return json({
           error:
@@ -374,11 +467,43 @@ Deno.serve(async (req) => {
       }),
     });
 
+    // Pending membership enrollment — unpaid until Tagada webhook activates.
+    // Browser return must not activate. Requires migration 20260819140000_customer_memberships.sql.
+    if (isMembershipCheckout) {
+      const memSku = membershipSkus[0] as string;
+      const memCfg = MEM_PRICE_BY_SKU[memSku];
+      const mapped = bySku.get(memSku);
+      await fetch(`${supabaseUrl}/rest/v1/customer_memberships`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+          "Content-Type": "application/json",
+          Prefer: "resolution=merge-duplicates,return=minimal",
+        },
+        body: JSON.stringify({
+          customer_user_id: order.customer_user_id || null,
+          customer_email: order.customer_email || null,
+          enrollment_order_id: order.id,
+          enrollment_public_order_number: publicOrderNumber,
+          membership_sku: memSku,
+          membership_type: memCfg.type,
+          status: "pending_payment",
+          tagada_price_id: memCfg.priceId,
+          tagada_variant_id: mapped?.tagada_variant_id || null,
+          monthly_amount_cents: memCfg.cents,
+          currency: "USD",
+          updated_at: new Date().toISOString(),
+        }),
+      });
+    }
+
     return json({
       ok: true,
       redirectUrl,
       checkoutToken,
       publicOrderNumber,
+      membershipRecurring: isMembershipCheckout,
       // Authoritative total for client display only — Kashu charges Tagada catalog prices.
       orderTotalCents: order.total_cents,
     });

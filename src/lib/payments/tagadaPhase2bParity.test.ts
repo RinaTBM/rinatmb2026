@@ -237,11 +237,12 @@ describe('Phase 2B total mismatch rejection', () => {
   });
 });
 
-describe('Phase 2B memberships stay ACH/Wire-only + webhook amount equality intact', () => {
-  it('excludes membership SKUs from card eligibility', () => {
+describe('Phase 2B membership recurring card + webhook amount equality intact', () => {
+  it('allows SEM membership SKU on recurring card path ($0 shipping)', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
       shippingCents: 0,
+      taxCents: 0,
       items: [
         {
           isMembership: true,
@@ -251,8 +252,7 @@ describe('Phase 2B memberships stay ACH/Wire-only + webhook amount equality inta
         },
       ],
     });
-    expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.reason).toBe('membership');
+    expect(r).toEqual({ ok: true, membershipRecurring: true });
   });
 
   it('does not weaken webhook amount equality', () => {

@@ -51,7 +51,7 @@ Permanent rules for future agents. Do not regress these:
 - Do not re-enable Stripe.
 - Phase 3 controlled live card test **PASS**. Phase 4: production builds enable the card gate when `VITE_KASHU_CARD_ENABLED` is unset (or set to `true`); explicit `false` remains the emergency kill switch. Memberships remain ACH/Wire-only. If the first customer card payments fail webhook/parity, disable the flag and redeploy immediately.
 
-Tax note (related): Tagada catalog products are `isTaxable=false` for V1; MBM `tax_cents` remains authoritative. Public card UI and `create-kashu-checkout-session` must reject `tax_cents > 0` until hosted checkout can represent that exact tax (do not enable Tagada automatic tax; do not weaken webhook amount equality).
+Tax note (related): Tagada catalog products are `isTaxable=false` for V1; MBM `tax_cents` remains authoritative. Public card UI and `create-kashu-checkout-session` must reject `tax_cents > 0` until hosted checkout can represent that exact tax (do not enable Tagada automatic tax; do not weaken webhook amount equality). Investigation: `docs/tagadapay-phase4-tax-parity-investigation.md` — Tagada init has no MBM tax amount field; dynamic tax ≠ fixed ship SKUs; taxed accessory/Provider Care carts remain ACH/Wire.
 
 ### Bolt Database / migration safety (permanent)
 

@@ -1,8 +1,9 @@
 // =============================================================================
 // My Bare Method — Central Product Catalog (single source of truth)
 // -----------------------------------------------------------------------------
-// Relaunch 2026: 13 active base products with selectable variants, grouped into
-// 5 public categories. Retired products are preserved (not deleted) as hidden
+// Relaunch 2026: public catalog includes active wellness, HRT, longevity,
+// recovery, dermatology, provider-care, and accessory products with selectable
+// variants. Retired products are preserved (not deleted) as hidden
 // "future" products so they can be re-released later through campaigns.
 //
 // Compliance: no benefit/outcome/dosing claims, no branded drug names, no

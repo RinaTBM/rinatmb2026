@@ -5,6 +5,7 @@ import {
 } from '@/lib/checkout/checkoutConstants';
 import {
   assertMembershipRecurringInitItem,
+  assertMembershipRebillAmountMatches,
   buildMembershipEnrollmentTagadaInitItems,
   buildMembershipTagadaInitItem,
   canSelfServiceCancelMembership,
@@ -16,13 +17,17 @@ import {
   membershipEnrollmentDueTodayCents,
   MEMBERSHIP_MINIMUM_CANCEL_BLOCK_MESSAGE,
   SEM_MEMBERSHIP_SKU,
+  SEM_NEXT_DAY_COMBO_PRICE_ID,
   SEM_TAGADA_PRICE_ID,
   SEM_TAGADA_VARIANT_ID,
+  SEM_TWO_DAY_COMBO_PRICE_ID,
   shouldActivateMembershipFromSources,
   TAGADA_MEMBERSHIP_PROGRAMS,
   TIRZ_MEMBERSHIP_SKU,
+  TIRZ_NEXT_DAY_COMBO_PRICE_ID,
   TIRZ_TAGADA_PRICE_ID,
   TIRZ_TAGADA_VARIANT_ID,
+  TIRZ_TWO_DAY_COMBO_PRICE_ID,
 } from './tagadaMembershipBilling';
 import { evaluateKashuCardCartEligibility } from '@/lib/payments/kashuTagada';
 import { isStripeCheckoutEnabled } from '@/lib/payments/paymentsEnabled';
@@ -42,9 +47,13 @@ describe('Tagada membership recurring billing', () => {
     expect(TAGADA_MEMBERSHIP_PROGRAMS[TIRZ_MEMBERSHIP_SKU].monthlyAmountCents).toBe(24900);
   });
 
-  it('includes verified recurring priceIds', () => {
+  it('includes verified base + combo recurring priceIds', () => {
     expect(SEM_TAGADA_PRICE_ID).toBe('price_344d3dacb4ab');
     expect(TIRZ_TAGADA_PRICE_ID).toBe('price_5cf1fa89610c');
+    expect(SEM_TWO_DAY_COMBO_PRICE_ID).toBe('price_41179f7cafe2');
+    expect(SEM_NEXT_DAY_COMBO_PRICE_ID).toBe('price_7ce0f74a7509');
+    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).toBe('price_e0ebef9851a8');
+    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).toBe('price_ef9ea132d6cf');
   });
 
   it('builds init with variantId + priceId (never variant alone)', () => {
@@ -162,7 +171,7 @@ describe('Tagada membership recurring billing', () => {
     ).toEqual({ ok: true, membershipRecurring: true });
   });
 
-  it('SEM + IPV + Two-Day: due today 25400; rebill 14900; ship 3000 one-time', () => {
+  it('SEM + IPV + Two-Day: due today 25400; rebill 17900; combo price; no MBM-SHIP line', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: SEM_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
@@ -171,9 +180,12 @@ describe('Tagada membership recurring billing', () => {
     expect(due).toEqual({
       ok: true,
       dueTodayCents: 25400,
-      monthlyRebillCents: 14900,
+      monthlyRebillCents: 17900,
+      baseMembershipAmountCents: 14900,
       visitCents: 7500,
       shippingCents: 3000,
+      selectedShippingMethod: 'two_day',
+      tagadaPriceId: SEM_TWO_DAY_COMBO_PRICE_ID,
     });
     const init = buildMembershipEnrollmentTagadaInitItems({
       membershipSku: SEM_MEMBERSHIP_SKU,
@@ -188,15 +200,16 @@ describe('Tagada membership recurring billing', () => {
     expect(init.ok).toBe(true);
     if (!init.ok) return;
     expect(init.dueTodayCents).toBe(25400);
-    expect(init.monthlyRebillCents).toBe(14900);
+    expect(init.monthlyRebillCents).toBe(17900);
     expect(init.shippingCents).toBe(3000);
-    expect(init.items).toHaveLength(3);
-    expect(init.items[0].priceId).toBe(SEM_TAGADA_PRICE_ID);
-    expect(init.items[1].priceId).not.toBe(SEM_TAGADA_PRICE_ID);
-    expect(init.items[2].priceId).toBe('price_c65bb478d609');
+    expect(init.shippingSku).toBeNull();
+    expect(init.items).toHaveLength(2);
+    expect(init.items[0].priceId).toBe(SEM_TWO_DAY_COMBO_PRICE_ID);
+    expect(init.items[1].priceId).toBe('price_6163adf08816');
+    expect(init.items.some((i) => i.priceId === 'price_c65bb478d609')).toBe(false);
   });
 
-  it('SEM + IPV + Next-Day: due today 27400; rebill 14900; ship 5000 one-time', () => {
+  it('SEM + IPV + Next-Day: due today 27400; rebill 19900', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: SEM_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
@@ -205,12 +218,13 @@ describe('Tagada membership recurring billing', () => {
     expect(due).toMatchObject({
       ok: true,
       dueTodayCents: 27400,
-      monthlyRebillCents: 14900,
+      monthlyRebillCents: 19900,
       shippingCents: 5000,
+      tagadaPriceId: SEM_NEXT_DAY_COMBO_PRICE_ID,
     });
   });
 
-  it('TIRZ + IPV + Two-Day: due today 35400; rebill 24900', () => {
+  it('TIRZ + IPV + Two-Day: due today 35400; rebill 27900', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
@@ -219,12 +233,13 @@ describe('Tagada membership recurring billing', () => {
     expect(due).toMatchObject({
       ok: true,
       dueTodayCents: 35400,
-      monthlyRebillCents: 24900,
+      monthlyRebillCents: 27900,
       shippingCents: 3000,
+      tagadaPriceId: TIRZ_TWO_DAY_COMBO_PRICE_ID,
     });
   });
 
-  it('TIRZ + IPV + Next-Day: due today 37400; rebill 24900', () => {
+  it('TIRZ + IPV + Next-Day: due today 37400; rebill 29900', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
@@ -233,7 +248,7 @@ describe('Tagada membership recurring billing', () => {
     expect(due).toMatchObject({
       ok: true,
       dueTodayCents: 37400,
-      monthlyRebillCents: 24900,
+      monthlyRebillCents: 29900,
       shippingCents: 5000,
     });
     const init = buildMembershipEnrollmentTagadaInitItems({
@@ -248,9 +263,11 @@ describe('Tagada membership recurring billing', () => {
     });
     expect(init.ok).toBe(true);
     if (!init.ok) return;
-    expect(init.items[0].priceId).toBe(TIRZ_TAGADA_PRICE_ID);
-    expect(init.monthlyRebillCents).toBe(24900);
+    expect(init.items).toHaveLength(2);
+    expect(init.items[0].priceId).toBe(TIRZ_NEXT_DAY_COMBO_PRICE_ID);
+    expect(init.monthlyRebillCents).toBe(29900);
     expect(init.dueTodayCents).toBe(37400);
+    expect(init.shippingSku).toBeNull();
   });
 
   it('rejects missing enrollment shipping ($0)', () => {
@@ -272,18 +289,31 @@ describe('Tagada membership recurring billing', () => {
     ).toBe(false);
   });
 
-  it('rejects visit/shipping priced with membership recurring priceId', () => {
+  it('rejects visit priced with combo/membership recurring priceId', () => {
     const bad = buildMembershipEnrollmentTagadaInitItems({
       membershipSku: SEM_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
       shippingCents: 3000,
       membershipVariantId: SEM_TAGADA_VARIANT_ID,
       visitVariantId: 'variant_3b859fb20d65',
-      visitPriceId: SEM_TAGADA_PRICE_ID,
-      shippingVariantId: 'variant_18c3ab5eadee',
-      shippingPriceId: 'price_c65bb478d609',
+      visitPriceId: SEM_TWO_DAY_COMBO_PRICE_ID,
     });
     expect(bad).toEqual({ ok: false, reason: 'one_time_must_not_use_membership_price' });
+  });
+
+  it('validates rebill against stored combo monthly amount (not base 14900)', () => {
+    expect(
+      assertMembershipRebillAmountMatches({
+        expectedMonthlyAmountCents: 17900,
+        paidAmountCents: 17900,
+      }),
+    ).toEqual({ ok: true });
+    expect(
+      assertMembershipRebillAmountMatches({
+        expectedMonthlyAmountCents: 17900,
+        paidAmountCents: 14900,
+      }),
+    ).toEqual({ ok: false, expected: 17900, paid: 14900 });
   });
 
   it('blocks unmapped MBM-MEM-* (not broadly all MEM SKUs)', () => {
@@ -434,10 +464,23 @@ describe('Tagada membership recurring billing', () => {
     expect(getActiveCheckoutPaymentMethods()).toEqual(['kashu_card']);
   });
 
-  it('no recurring Tagada shipping on membership program config', () => {
-    // Membership Tagada products are isShippable=false / addDeliveryOnRebill=false (verified live).
-    // Enrollment init item is membership-only — no MBM-SHIP-* line.
+  it('combo recurring price includes shipping dollars; no separate MBM-SHIP init line', () => {
+    // Membership Tagada products remain isShippable=false / addDeliveryOnRebill=false.
+    // Shipping is baked into combo recurring priceId — not a separate Tagada ShippingRate.
     const item = buildMembershipTagadaInitItem(TAGADA_MEMBERSHIP_PROGRAMS[SEM_MEMBERSHIP_SKU]);
     expect(Object.keys(item).sort()).toEqual(['priceId', 'quantity', 'variantId']);
+    const enrollment = buildMembershipEnrollmentTagadaInitItems({
+      membershipSku: SEM_MEMBERSHIP_SKU,
+      visitSku: 'MBM-PC-IPV-SRV-001',
+      shippingCents: 3000,
+      membershipVariantId: SEM_TAGADA_VARIANT_ID,
+      visitVariantId: 'variant_3b859fb20d65',
+      visitPriceId: 'price_6163adf08816',
+    });
+    expect(enrollment.ok).toBe(true);
+    if (!enrollment.ok) return;
+    expect(enrollment.items).toHaveLength(2);
+    expect(enrollment.shippingSku).toBeNull();
+    expect(enrollment.monthlyRebillCents).toBe(17900);
   });
 });

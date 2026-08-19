@@ -347,8 +347,8 @@ export type KashuCardEligibility =
  * - One-time carts: no membership; shipping $0 / $30 / $50; tax_cents = 0.
  * - Membership recurring (SEM/TIRZ only): exactly one program SKU, qty 1,
  *   optional required provider-visit SKU (IPV/FUV) as ONE-TIME enrollment charge,
- *   plus exactly one enrollment shipping amount ($30 Two-Day or $50 Next-Day) as
- *   ONE-TIME mapped MBM-SHIP line (never part of monthly rebill).
+ *   plus exactly one shipping selection ($30 Two-Day or $50 Next-Day) included in
+ *   the combo recurring Tagada priceId (do NOT append MBM-SHIP on membership).
  *   Ordinary merchandise mixed with membership remains blocked.
  * Tax-inclusive architecture: NEW orders must have tax_cents = 0.
  */
@@ -382,7 +382,7 @@ export function evaluateKashuCardCartEligibility(input: {
         message: membershipCart.message,
       };
     }
-    // Option 2: membership enrollment collects $30/$50 shipping once (not recurring).
+    // Membership enrollment requires $30/$50 shipping selection (combo recurring price).
     const ship = evaluateMembershipEnrollmentShipping(Math.trunc(input.shippingCents));
     if (!ship.ok) {
       return {

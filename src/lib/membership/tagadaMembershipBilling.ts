@@ -22,9 +22,24 @@ export type TagadaMembershipProgramSku = (typeof TAGADA_MEMBERSHIP_PROGRAM_SKUS)
 export const SEM_MEMBERSHIP_SKU: TagadaMembershipProgramSku = 'MBM-MEM-SEM-MEM-001';
 export const TIRZ_MEMBERSHIP_SKU: TagadaMembershipProgramSku = 'MBM-MEM-TIR-MEM-001';
 
-/** Verified live Tagada recurring priceIds (do not create new prices). */
+/**
+ * Verified live Tagada BASE recurring priceIds (keep — do not delete).
+ * Customer-facing base membership display remains $149 / $249.
+ * Enrollment checkout uses combo membership+shipping priceIds below.
+ */
 export const SEM_TAGADA_PRICE_ID = 'price_344d3dacb4ab';
 export const TIRZ_TAGADA_PRICE_ID = 'price_5cf1fa89610c';
+
+/** Combo recurring prices (membership + selected shipping). Created 2026-08-19. */
+export const SEM_TWO_DAY_COMBO_PRICE_ID = 'price_41179f7cafe2';
+export const SEM_NEXT_DAY_COMBO_PRICE_ID = 'price_7ce0f74a7509';
+export const TIRZ_TWO_DAY_COMBO_PRICE_ID = 'price_e0ebef9851a8';
+export const TIRZ_NEXT_DAY_COMBO_PRICE_ID = 'price_ef9ea132d6cf';
+
+export const SEM_TWO_DAY_MONTHLY_CENTS = 17900;
+export const SEM_NEXT_DAY_MONTHLY_CENTS = 19900;
+export const TIRZ_TWO_DAY_MONTHLY_CENTS = 27900;
+export const TIRZ_NEXT_DAY_MONTHLY_CENTS = 29900;
 
 export const SEM_TAGADA_VARIANT_ID = 'variant_6973906c4bd6';
 export const TIRZ_TAGADA_VARIANT_ID = 'variant_b3890c799e09';
@@ -38,14 +53,17 @@ export const MEMBERSHIP_CARD_RECURRING_DISCLOSURE =
   'Your card will be charged monthly while your membership is active. A 3-month minimum commitment applies.';
 
 export const MEMBERSHIP_CARD_SHIPPING_NOTE =
-  'Shipping is collected today. Medication ships after required provider review and approval. Shipping is a one-time enrollment charge — it is not part of your monthly membership rebill.';
+  'Your selected shipping method is included with each monthly membership renewal. Medication fulfillment remains subject to required provider review and approval.';
 
-/** Allowed one-time enrollment shipping amounts (never recurring). */
+/** Allowed enrollment shipping amounts (included in combo recurring price). */
 export const MEMBERSHIP_ENROLLMENT_SHIPPING_CENTS = [3000, 5000] as const;
 
 export type MembershipEnrollmentShippingCents =
   (typeof MEMBERSHIP_ENROLLMENT_SHIPPING_CENTS)[number];
 
+export type MembershipSelectedShippingMethod = 'two_day' | 'next_day';
+
+/** Ordinary one-time product carts still use these SKUs — NOT membership enrollment. */
 export const MEMBERSHIP_ENROLLMENT_SHIP_SKU_TWO_DAY = 'MBM-SHIP-TWO-DAY-001';
 export const MEMBERSHIP_ENROLLMENT_SHIP_SKU_NEXT_DAY = 'MBM-SHIP-NEXT-DAY-001';
 
@@ -66,15 +84,92 @@ export function membershipEnrollmentShippingSkuForCents(
   return null;
 }
 
+export function membershipSelectedShippingMethodForCents(
+  shippingCents: number,
+): MembershipSelectedShippingMethod | null {
+  const c = Math.trunc(shippingCents);
+  if (c === 3000) return 'two_day';
+  if (c === 5000) return 'next_day';
+  return null;
+}
+
+export type MembershipComboSelection = {
+  sku: TagadaMembershipProgramSku;
+  shippingCents: MembershipEnrollmentShippingCents;
+  selectedShippingMethod: MembershipSelectedShippingMethod;
+  baseMembershipAmountCents: number;
+  monthlyAmountCents: number;
+  tagadaPriceId: string;
+  tagadaVariantId: string;
+};
+
+const MEMBERSHIP_COMBO_BY_SKU_SHIP: Record<
+  TagadaMembershipProgramSku,
+  Record<
+    MembershipEnrollmentShippingCents,
+    { priceId: string; monthlyCents: number; method: MembershipSelectedShippingMethod }
+  >
+> = {
+  [SEM_MEMBERSHIP_SKU]: {
+    3000: {
+      priceId: SEM_TWO_DAY_COMBO_PRICE_ID,
+      monthlyCents: SEM_TWO_DAY_MONTHLY_CENTS,
+      method: 'two_day',
+    },
+    5000: {
+      priceId: SEM_NEXT_DAY_COMBO_PRICE_ID,
+      monthlyCents: SEM_NEXT_DAY_MONTHLY_CENTS,
+      method: 'next_day',
+    },
+  },
+  [TIRZ_MEMBERSHIP_SKU]: {
+    3000: {
+      priceId: TIRZ_TWO_DAY_COMBO_PRICE_ID,
+      monthlyCents: TIRZ_TWO_DAY_MONTHLY_CENTS,
+      method: 'two_day',
+    },
+    5000: {
+      priceId: TIRZ_NEXT_DAY_COMBO_PRICE_ID,
+      monthlyCents: TIRZ_NEXT_DAY_MONTHLY_CENTS,
+      method: 'next_day',
+    },
+  },
+};
+
+/**
+ * Resolve exact Tagada combo recurring priceId from membership SKU + shipping cents.
+ * Do not infer by arithmetic in the browser — server/Edge uses this map.
+ */
+export function resolveMembershipComboSelection(
+  membershipSku: string,
+  shippingCents: number,
+): MembershipComboSelection | null {
+  if (!isTagadaMembershipProgramSku(membershipSku)) return null;
+  if (!isMembershipEnrollmentShippingCents(shippingCents)) return null;
+  const program = TAGADA_MEMBERSHIP_PROGRAMS[membershipSku];
+  const combo = MEMBERSHIP_COMBO_BY_SKU_SHIP[membershipSku][shippingCents];
+  return {
+    sku: membershipSku,
+    shippingCents,
+    selectedShippingMethod: combo.method,
+    baseMembershipAmountCents: program.monthlyAmountCents,
+    monthlyAmountCents: combo.monthlyCents,
+    tagadaPriceId: combo.priceId,
+    tagadaVariantId: program.tagadaVariantId,
+  };
+}
+
 /**
  * Exactly one of Two-Day ($30) or Next-Day ($50) is required for membership enrollment.
- * Shipping is ONE-TIME — never part of monthly_amount_cents / Tagada rebill.
+ * Shipping is included in the Tagada combo recurring price (not a separate MBM-SHIP line).
+ * Ordinary one-time product carts still append MBM-SHIP-* separately.
  */
 export function evaluateMembershipEnrollmentShipping(shippingCents: number):
   | {
       ok: true;
       shippingCents: MembershipEnrollmentShippingCents;
       shippingSku: typeof MEMBERSHIP_ENROLLMENT_SHIP_SKU_TWO_DAY | typeof MEMBERSHIP_ENROLLMENT_SHIP_SKU_NEXT_DAY;
+      selectedShippingMethod: MembershipSelectedShippingMethod;
     }
   | { ok: false; reason: 'missing_shipping' | 'invalid_shipping'; message: string } {
   const c = Math.trunc(shippingCents);
@@ -83,19 +178,20 @@ export function evaluateMembershipEnrollmentShipping(shippingCents: number):
       ok: false,
       reason: 'missing_shipping',
       message:
-        'Select Two-Day ($30) or Next-Day ($50) shipping for membership enrollment. Shipping is collected today as a one-time charge.',
+        'Select Two-Day ($30) or Next-Day ($50) shipping for membership enrollment. Your selected shipping method is included with each monthly membership renewal.',
     };
   }
   const sku = membershipEnrollmentShippingSkuForCents(c);
-  if (!sku || !isMembershipEnrollmentShippingCents(c)) {
+  const method = membershipSelectedShippingMethodForCents(c);
+  if (!sku || !method || !isMembershipEnrollmentShippingCents(c)) {
     return {
       ok: false,
       reason: 'invalid_shipping',
       message:
-        'Membership enrollment supports only Two-Day ($30) or Next-Day ($50) shipping as a one-time charge.',
+        'Membership enrollment supports only Two-Day ($30) or Next-Day ($50) shipping.',
     };
   }
-  return { ok: true, shippingCents: c, shippingSku: sku };
+  return { ok: true, shippingCents: c, shippingSku: sku, selectedShippingMethod: method };
 }
 
 export const MEMBERSHIP_TERMS_ACCEPTANCE_LABEL =
@@ -224,11 +320,11 @@ export const MEMBERSHIP_ENROLLMENT_VISIT_CENTS: Record<
 
 /**
  * Due today for membership enrollment:
- * recurring program monthly + optional required provider visit (one-time)
- * + optional enrollment shipping (one-time $30/$50 when `shippingCents` is provided).
- * Recurring rebill remains program monthly amount only (never visit or shipping).
+ *   combo monthly (base membership + selected shipping) + optional IPV/FUV (one-time).
+ * Recurring rebill = combo monthly only (IPV never recurs; shipping IS in the combo).
  *
- * Omit `shippingCents` when evaluating cart line composition only.
+ * When `shippingCents` is omitted, returns base membership amounts for cart composition
+ * only (monthlyRebillCents = base). Pass shipping for authoritative combo totals.
  */
 export function membershipEnrollmentDueTodayCents(input: {
   membershipSku: string;
@@ -239,8 +335,11 @@ export function membershipEnrollmentDueTodayCents(input: {
       ok: true;
       dueTodayCents: number;
       monthlyRebillCents: number;
+      baseMembershipAmountCents: number;
       visitCents: number;
       shippingCents: number;
+      selectedShippingMethod: MembershipSelectedShippingMethod | null;
+      tagadaPriceId: string;
     }
   | { ok: false; reason: string } {
   const program = getTagadaMembershipProgram(input.membershipSku);
@@ -254,18 +353,43 @@ export function membershipEnrollmentDueTodayCents(input: {
     visitCents = MEMBERSHIP_ENROLLMENT_VISIT_CENTS[visitSku];
   }
   let shippingCents = 0;
+  let selectedShippingMethod: MembershipSelectedShippingMethod | null = null;
+  let monthlyRebillCents = program.monthlyAmountCents;
+  let tagadaPriceId = program.tagadaPriceId;
   if (input.shippingCents !== undefined && input.shippingCents !== null) {
     const ship = evaluateMembershipEnrollmentShipping(Number(input.shippingCents) || 0);
     if (!ship.ok) return { ok: false, reason: ship.reason };
     shippingCents = ship.shippingCents;
+    selectedShippingMethod = ship.selectedShippingMethod;
+    const combo = resolveMembershipComboSelection(program.sku, shippingCents);
+    if (!combo) return { ok: false, reason: 'unsupported_combo' };
+    monthlyRebillCents = combo.monthlyAmountCents;
+    tagadaPriceId = combo.tagadaPriceId;
   }
   return {
     ok: true,
-    dueTodayCents: program.monthlyAmountCents + visitCents + shippingCents,
-    monthlyRebillCents: program.monthlyAmountCents,
+    dueTodayCents: monthlyRebillCents + visitCents,
+    monthlyRebillCents,
+    baseMembershipAmountCents: program.monthlyAmountCents,
     visitCents,
     shippingCents,
+    selectedShippingMethod,
+    tagadaPriceId,
   };
+}
+
+/**
+ * Validate a rebill / subscription charge against the stored combo monthly amount.
+ * Do not compare all SEM renewals against 14900 or all TIRZ against 24900.
+ */
+export function assertMembershipRebillAmountMatches(input: {
+  expectedMonthlyAmountCents: number;
+  paidAmountCents: number;
+}): { ok: true } | { ok: false; expected: number; paid: number } {
+  const expected = Math.trunc(input.expectedMonthlyAmountCents);
+  const paid = Math.trunc(input.paidAmountCents);
+  if (expected > 0 && paid === expected) return { ok: true };
+  return { ok: false, expected, paid };
 }
 
 /**
@@ -325,7 +449,7 @@ export function evaluateMembershipCardCheckoutCart(items: Array<{
       ok: false,
       reason: 'mixed_cart',
       message:
-        'Membership enrollment cannot be mixed with ordinary products. A required provider visit and one selected shipping method may be included as one-time enrollment charges only.',
+        'Membership enrollment cannot be mixed with ordinary products. A required provider visit may be included as a one-time enrollment charge; shipping is selected at checkout and included in the monthly membership renewal.',
     };
   }
 
@@ -418,8 +542,9 @@ export function evaluateMembershipCardCheckoutCart(items: Array<{
 
 /**
  * Build Tagada checkout/init items for membership enrollment.
- * Recurring membership uses verified priceId; optional provider visit is ONE-TIME
- * (mapped one-time priceId / variant only — never a membership recurring price).
+ * ONE combo recurring priceId (membership + shipping) + optional ONE-TIME visit.
+ * Do NOT append MBM-SHIP-* — shipping is inside the combo price.
+ * shippingVariantId / shippingPriceId are ignored (kept for call-site compat).
  */
 export function buildMembershipEnrollmentTagadaInitItems(input: {
   membershipSku: TagadaMembershipProgramSku;
@@ -428,7 +553,9 @@ export function buildMembershipEnrollmentTagadaInitItems(input: {
   membershipVariantId: string;
   visitVariantId?: string | null;
   visitPriceId?: string | null;
+  /** @deprecated Ignored — membership enrollment does not append MBM-SHIP lines. */
   shippingVariantId?: string | null;
+  /** @deprecated Ignored — membership enrollment does not append MBM-SHIP lines. */
   shippingPriceId?: string | null;
 }):
   | {
@@ -436,17 +563,24 @@ export function buildMembershipEnrollmentTagadaInitItems(input: {
       items: Array<{ variantId: string; quantity: number; priceId?: string }>;
       dueTodayCents: number;
       monthlyRebillCents: number;
+      baseMembershipAmountCents: number;
       visitCents: number;
       shippingCents: number;
-      shippingSku: string | null;
+      selectedShippingMethod: MembershipSelectedShippingMethod | null;
+      tagadaPriceId: string;
+      /** Always null for membership — shipping is in the combo price. */
+      shippingSku: null;
     }
   | { ok: false; reason: string } {
   const program = getTagadaMembershipProgram(input.membershipSku);
   if (!program) return { ok: false, reason: 'unsupported_membership' };
+  if (input.shippingCents === undefined || input.shippingCents === null) {
+    return { ok: false, reason: 'missing_shipping' };
+  }
   const due = membershipEnrollmentDueTodayCents({
     membershipSku: input.membershipSku,
     visitSku: input.visitSku ?? null,
-    shippingCents: input.shippingCents ?? null,
+    shippingCents: input.shippingCents,
   });
   if (!due.ok) return { ok: false, reason: due.reason };
 
@@ -454,7 +588,7 @@ export function buildMembershipEnrollmentTagadaInitItems(input: {
     {
       variantId: input.membershipVariantId,
       quantity: 1,
-      priceId: program.tagadaPriceId,
+      priceId: due.tagadaPriceId,
     },
   ];
 
@@ -469,20 +603,7 @@ export function buildMembershipEnrollmentTagadaInitItems(input: {
     });
   }
 
-  let shippingSku: string | null = null;
-  if (due.shippingCents > 0) {
-    shippingSku = membershipEnrollmentShippingSkuForCents(due.shippingCents);
-    if (!shippingSku || !input.shippingVariantId?.trim()) {
-      return { ok: false, reason: 'missing_shipping_variant' };
-    }
-    items.push({
-      variantId: input.shippingVariantId,
-      quantity: 1,
-      ...(input.shippingPriceId ? { priceId: input.shippingPriceId } : {}),
-    });
-  }
-
-  // Recurring rebill = membership priceId only — visit/shipping must not share that priceId.
+  // IPV must never use the combo/membership recurring priceId.
   const memItem = items[0];
   for (const extra of items.slice(1)) {
     if (extra.priceId && extra.priceId === memItem.priceId) {
@@ -495,15 +616,19 @@ export function buildMembershipEnrollmentTagadaInitItems(input: {
     items,
     dueTodayCents: due.dueTodayCents,
     monthlyRebillCents: due.monthlyRebillCents,
+    baseMembershipAmountCents: due.baseMembershipAmountCents,
     visitCents: due.visitCents,
     shippingCents: due.shippingCents,
-    shippingSku,
+    selectedShippingMethod: due.selectedShippingMethod,
+    tagadaPriceId: due.tagadaPriceId,
+    shippingSku: null,
   };
 }
 
 /**
  * Hosted recurring init MUST send both variantId and priceId.
- * Tagada priceId is authoritative for $149 / $249.
+ * Base program helper — enrollment should use combo priceId via
+ * buildMembershipEnrollmentTagadaInitItems / resolveMembershipComboSelection.
  */
 export function buildMembershipTagadaInitItem(program: TagadaMembershipProgramConfig): {
   variantId: string;

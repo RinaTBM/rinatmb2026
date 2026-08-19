@@ -427,8 +427,18 @@ Deno.serve(async (req) => {
         (typeof membership.minimum_term_ends_at === "string" && membership.minimum_term_ends_at) ||
         addMonthsUtc(startedAt, 3);
 
+      // Validate rebill against stored combo monthly_amount_cents (not always base 14900/24900).
+      const expectedMonthlyCents = Number(membership.monthly_amount_cents) || 0;
+      const rebillPaidCents = extractAmountCents(payload);
+      const rebillAmountMismatch =
+        eventType === "subscription/rebillSucceeded" &&
+        rebillPaidCents != null &&
+        expectedMonthlyCents > 0 &&
+        rebillPaidCents !== expectedMonthlyCents;
+      const effectiveSubStatus = rebillAmountMismatch ? "payment_issue" : subStatus;
+
       const patch: Record<string, unknown> = {
-        status: subStatus,
+        status: effectiveSubStatus,
         updated_at: now,
         last_rebill_status: eventType,
       };
@@ -439,7 +449,7 @@ Deno.serve(async (req) => {
       if (fields.currentPeriodEnd) patch.current_period_end = fields.currentPeriodEnd;
       if (fields.nextBillingAt) patch.next_billing_at = fields.nextBillingAt;
 
-      if (subStatus === "active") {
+      if (effectiveSubStatus === "active") {
         patch.started_at = startedAt;
         patch.minimum_term_ends_at = minimumTermEndsAt;
         if (eventType === "subscription/rebillSucceeded") {
@@ -447,13 +457,13 @@ Deno.serve(async (req) => {
           if (fields.paymentId) patch.last_rebill_payment_id = fields.paymentId;
         }
       }
-      if (subStatus === "past_due" || subStatus === "payment_issue") {
+      if (effectiveSubStatus === "past_due" || effectiveSubStatus === "payment_issue") {
         patch.past_due_at = now;
       }
-      if (subStatus === "cancel_scheduled") {
+      if (effectiveSubStatus === "cancel_scheduled") {
         patch.cancel_scheduled_at = now;
       }
-      if (subStatus === "canceled") {
+      if (effectiveSubStatus === "canceled") {
         patch.canceled_at = now;
       }
 
@@ -486,8 +496,10 @@ Deno.serve(async (req) => {
             tagada_event_id: eventId,
             tagada_payment_id: fields.paymentId,
             event_type: eventType,
-            amount_cents: membership.monthly_amount_cents ?? null,
-            processing_result: `applied_${subStatus}`,
+            amount_cents: rebillPaidCents ?? membership.monthly_amount_cents ?? null,
+            processing_result: rebillAmountMismatch
+              ? "rebill_amount_mismatch_under_review"
+              : `applied_${effectiveSubStatus}`,
           }),
         });
       }
@@ -507,17 +519,32 @@ Deno.serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            processing_result: `subscription_applied_${subStatus}`,
+            processing_result: rebillAmountMismatch
+              ? "rebill_amount_mismatch_under_review"
+              : `subscription_applied_${effectiveSubStatus}`,
             public_order_number: orderNumber,
             order_id: membership.enrollment_order_id ?? null,
+            ...(rebillAmountMismatch
+              ? {
+                  error_message:
+                    `expected_monthly=${expectedMonthlyCents};paid=${rebillPaidCents}`,
+                }
+              : {}),
           }),
         },
       );
       return json({
-        ok: true,
+        ok: !rebillAmountMismatch,
         eventType,
-        membershipStatus: subStatus,
+        membershipStatus: effectiveSubStatus,
         membershipId: membership.id,
+        ...(rebillAmountMismatch
+          ? {
+              error: "rebill_amount_mismatch",
+              expectedMonthlyCents,
+              paidCents: rebillPaidCents,
+            }
+          : {}),
       });
     }
 

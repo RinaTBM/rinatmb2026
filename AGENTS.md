@@ -31,19 +31,24 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Kashu/Tagada gate: `resolveKashuCardEnabledFlag` — explicit `VITE_KASHU_CARD_ENABLED=false` kills card; `true` forces on; **undefined/empty defaults ON** (do not key off `import.meta.env.PROD` — Bolt Preview often builds non-PROD without reliable VITE injection). Prefer Tagada hosted checkout/init over Pay V2. If hosted init fails, show contact/retry copy — do **not** auto-fall back to public ACH/Wire.
 - Card eligibility: one-time carts (no membership+ordinary-merchandise mix), **or** SEM/TIRZ membership recurring carts with optional required provider-visit SKU (IPV/FUV) as a one-time enrollment line; unsupported shipping, unmapped SKUs, and **any unexpected `tax_cents > 0`** (`TAGADA_UNEXPECTED_TAX_AMOUNT` fail-safe). Do not re-enable separate MBM tax add-ons without an explicit product decision.
 - **Membership Tagada card recurring (SEM / TIRZ):**
-  - Semaglutide Membership `MBM-MEM-SEM-MEM-001` — **$149/month** — Tagada `price_344d3dacb4ab` (`variant_6973906c4bd6`)
-  - Tirzepatide Membership `MBM-MEM-TIR-MEM-001` — **$249/month** — Tagada `price_5cf1fa89610c` (`variant_b3890c799e09`)
-  - Hosted recurring init **must** send both `variantId` + `priceId` (priceId authoritative). Do not create new Tagada products/prices/stores.
-  - Tagada handles automatic monthly rebill; MBM `customer_memberships` + `tagada-webhook` `subscription/*` events are authoritative for status.
+  - Semaglutide Membership `MBM-MEM-SEM-MEM-001` — **$149/month base** (display) — base Tagada `price_344d3dacb4ab` (`variant_6973906c4bd6`) — keep; do not delete
+  - Tirzepatide Membership `MBM-MEM-TIR-MEM-001` — **$249/month base** (display) — base Tagada `price_5cf1fa89610c` (`variant_b3890c799e09`) — keep; do not delete
+  - **Combo recurring prices (membership + selected shipping)** — enrollment uses these `priceId`s (not base):
+    - SEM + Two-Day `$179/mo` → `price_41179f7cafe2` (17900)
+    - SEM + Next-Day `$199/mo` → `price_7ce0f74a7509` (19900)
+    - TIRZ + Two-Day `$279/mo` → `price_e0ebef9851a8` (27900)
+    - TIRZ + Next-Day `$299/mo` → `price_ef9ea132d6cf` (29900)
+  - Hosted recurring init **must** send both `variantId` + **combo** `priceId` (priceId authoritative). Do not recreate Tagada store ShippingRates. Do not use `addDeliveryOnRebill`.
+  - Tagada handles automatic monthly rebill; MBM `customer_memberships` + `tagada-webhook` `subscription/*` events are authoritative for status. Rebill amount validation uses stored `monthly_amount_cents` (combo), not always 14900/24900.
   - **Browser return never activates membership.** Activate only on Tagada payment/subscription evidence.
   - **3-month minimum** is MBM-enforced (`minimum_term_ends_at`) — do not assume Tagada-native cancel lock.
-  - Recurring program price is **not shippable** (`isShippable=false`, `addDeliveryOnRebill=false`). Enrollment collects one-time Two-Day/Next-Day shipping as a mapped MBM-SHIP line — **do not** bake $30/$50 into the Tagada recurring membership price. Membership value stays excluded from the **$500** free-shipping merchandise threshold.
+  - Recurring program product remains **not shippable** (`isShippable=false`, `addDeliveryOnRebill=false`). Shipping dollars are inside the combo recurring price — **do not** append `MBM-SHIP-*` on membership enrollment (prevents duplicate shipping). Membership value stays excluded from the **$500** free-shipping merchandise threshold.
   - Tirzepatide membership included formulations through **15mg**; **30mg excluded**. Requested dose is subject to provider approval (not guaranteed).
   - Public membership checkout: Credit/Debit Card only (ACH/Wire hidden). Mixed SEM+TIRZ or membership+ordinary merchandise carts fail safely.
-  - **Required provider visit exception:** membership + Initial Provider Visit (`MBM-PC-IPV-SRV-001`, $75 one-time) is allowed in one Tagada hosted checkout.
-  - **Option 2 enrollment shipping:** membership enrollment also requires exactly one one-time shipping line — Two-Day `$30` (`MBM-SHIP-TWO-DAY-001`) or Next-Day `$50` (`MBM-SHIP-NEXT-DAY-001`). Due today = membership monthly + visit + shipping; recurring rebill = membership monthly only. Shipping never uses the membership recurring `priceId` and never enters `monthly_amount_cents`. Do **not** recreate Tagada store Shipping Rates.
-  - Migration (do not apply until approved): `20260819140000_customer_memberships.sql`. Redeploy Edge after approval: `create-kashu-checkout-session`, `tagada-webhook`, `cancel-membership-subscription`.
-  - After membership+IPV+shipping enrollment checkout changes: redeploy **`create-kashu-checkout-session`**.
+  - **Required provider visit exception:** membership + Initial Provider Visit (`MBM-PC-IPV-SRV-001`, $75 one-time) is allowed in one Tagada hosted checkout. IPV never recurs.
+  - **Combo enrollment shipping:** customer selects Two-Day `$30` or Next-Day `$50`. Storefront still breaks out Membership + Shipping. Due today = combo monthly + IPV; renews = combo monthly. Persist `base_membership_amount_cents`, `shipping_cents`, `selected_shipping_method`, `monthly_amount_cents` (combo), `tagada_price_id` (combo). Ordinary one-time product carts still append `MBM-SHIP-TWO-DAY-001` / `MBM-SHIP-NEXT-DAY-001`. Do **not** recreate Tagada store Shipping Rates.
+  - Migrations: `20260819140000_customer_memberships.sql`, `20260819190000_membership_combo_shipping_fields.sql`. Redeploy Edge after apply: `create-kashu-checkout-session`, `tagada-webhook` (and `cancel-membership-subscription` if changed).
+  - After membership combo shipping cutover: redeploy **`create-kashu-checkout-session`** + **`tagada-webhook`**.
 - Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`.
 - Public `public_order_number` values are allocated server-side via Postgres `generate_public_order_number()` (`nextval` on `order_number_seq`). If the sequence drifts behind existing `MBM-YYYY-######` rows, insert can hit `orders_public_order_number_key` — repair with migration `20260819120000_repair_public_order_number_allocator.sql` (collision-skipping allocator + sequence resync). `create-invoice-order` also retries allocation on 23505 and never returns raw Postgres errors to customers.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation). Admin marks funds received via Orders UI / `mark-payment-received` after verification (ACH/Wire emergency path).
@@ -58,8 +63,9 @@ Permanent rules for future agents. Do not regress these:
 - Do NOT recreate Tagada store-level Shipping Rates.
 - Do NOT recreate/add the ShippingRates / Shipping Method island to the Simple Checkout funnel. (Applies to Simple Checkout on `checkout.mybaremethod.com`.)
 - Hiding Tagada rates is NOT sufficient; store rates must remain absent. (Phase 2C proved hide ≠ disable; rates must stay deleted.)
-- Two-Day shipping is represented by mapped MBM-SHIP-TWO-DAY-001. ($30 / `shipping_cents=3000`, appended by `create-kashu-checkout-session`.)
-- Next-Day shipping is represented by mapped MBM-SHIP-NEXT-DAY-001. ($50 / `shipping_cents=5000`, appended by `create-kashu-checkout-session`.)
+- Two-Day shipping is represented by mapped MBM-SHIP-TWO-DAY-001. ($30 / `shipping_cents=3000`, appended by `create-kashu-checkout-session` for **one-time product carts only**.)
+- Next-Day shipping is represented by mapped MBM-SHIP-NEXT-DAY-001. ($50 / `shipping_cents=5000`, appended by `create-kashu-checkout-session` for **one-time product carts only**.)
+- Membership enrollment does **not** append MBM-SHIP lines — shipping is inside the combo recurring `priceId`.
 - Free/service-only shipping uses no shipping line. (`shipping_cents=0`.)
 - Allowed card-flow shipping amounts are currently $0, $30, or $50; other positive amounts must fail safely. (`TAGADA_SHIPPING_PARITY_BLOCKER`.)
 - Tagada hosted total must exactly equal MBM `orders.total_cents`. (Reject with `TAGADA_CHECKOUT_TOTAL_MISMATCH` before redirect.)

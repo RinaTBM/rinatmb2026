@@ -71,7 +71,7 @@ function extractToken(redirectUrl: string): string | null {
   }
 }
 
-/** MBM shipping SKUs — Tagada init has no shipping-amount field; use mapped line items. */
+/** MBM shipping SKUs — used for ONE-TIME product carts only (not membership enrollment). */
 const SHIP_SKU_TWO_DAY = "MBM-SHIP-TWO-DAY-001";
 const SHIP_SKU_NEXT_DAY = "MBM-SHIP-NEXT-DAY-001";
 
@@ -80,6 +80,35 @@ function shippingSkuForCents(shippingCents: number): string | null {
   if (shippingCents === 5000) return SHIP_SKU_NEXT_DAY;
   return null;
 }
+
+/** Base membership display amounts (customer-facing). Kept; not deleted. */
+const MEM_BASE_BY_SKU: Record<string, { basePriceId: string; baseCents: number; type: string }> = {
+  "MBM-MEM-SEM-MEM-001": {
+    basePriceId: "price_344d3dacb4ab",
+    baseCents: 14900,
+    type: "semaglutide",
+  },
+  "MBM-MEM-TIR-MEM-001": {
+    basePriceId: "price_5cf1fa89610c",
+    baseCents: 24900,
+    type: "tirzepatide",
+  },
+};
+
+/** Combo recurring prices: membership + shipping. Exact priceIds — do not infer in browser. */
+const MEM_COMBO_BY_SKU_SHIP: Record<
+  string,
+  Record<number, { priceId: string; monthlyCents: number; method: "two_day" | "next_day" }>
+> = {
+  "MBM-MEM-SEM-MEM-001": {
+    3000: { priceId: "price_41179f7cafe2", monthlyCents: 17900, method: "two_day" },
+    5000: { priceId: "price_7ce0f74a7509", monthlyCents: 19900, method: "next_day" },
+  },
+  "MBM-MEM-TIR-MEM-001": {
+    3000: { priceId: "price_e0ebef9851a8", monthlyCents: 27900, method: "two_day" },
+    5000: { priceId: "price_ef9ea132d6cf", monthlyCents: 29900, method: "next_day" },
+  },
+};
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders });
@@ -163,32 +192,31 @@ Deno.serve(async (req) => {
       "MBM-PC-IPV-SRV-001": 7500,
       "MBM-PC-FUV-SRV-001": 5500,
     };
-    const MEM_PRICE_BY_SKU: Record<string, { priceId: string; cents: number; type: string }> = {
-      "MBM-MEM-SEM-MEM-001": {
-        priceId: "price_344d3dacb4ab",
-        cents: 14900,
-        type: "semaglutide",
-      },
-      "MBM-MEM-TIR-MEM-001": {
-        priceId: "price_5cf1fa89610c",
-        cents: 24900,
-        type: "tirzepatide",
-      },
-    };
     const membershipSkus = skus.filter((s: string) => String(s).startsWith("MBM-MEM-"));
     const visitSkus = skus.filter((s: string) => ENROLLMENT_VISIT_SKUS.has(String(s)));
     const otherSkus = skus.filter(
       (s: string) => !String(s).startsWith("MBM-MEM-") && !ENROLLMENT_VISIT_SKUS.has(String(s)),
     );
     const isMembershipCheckout = membershipSkus.length > 0;
+    let membershipCombo:
+      | {
+          memSku: string;
+          priceId: string;
+          monthlyCents: number;
+          baseCents: number;
+          shippingCents: number;
+          method: "two_day" | "next_day";
+          type: string;
+        }
+      | null = null;
     if (isMembershipCheckout) {
       // Allowed: exactly one supported MEM program (+ optional one required provider visit).
-      // Provider visit is ONE-TIME. Shipping is ONE-TIME via order.shipping_cents ($30/$50).
-      // Neither visit nor shipping enters monthly_amount_cents / Tagada rebill.
+      // Provider visit is ONE-TIME. Shipping is selected and baked into the combo recurring price.
+      // Do NOT append MBM-SHIP-* on membership enrollment (prevents duplicate shipping).
       if (membershipSkus.length !== 1 || otherSkus.length > 0 || visitSkus.length > 1) {
         return json({
           error:
-            "Membership card enrollment allows exactly one supported membership program plus an optional required provider visit (one-time) and one selected shipping method (one-time). Ordinary products cannot be mixed into the Tagada subscription session.",
+            "Membership card enrollment allows exactly one supported membership program plus an optional required provider visit (one-time). Shipping is included in the monthly membership renewal. Ordinary products cannot be mixed into the Tagada subscription session.",
           code: "MEMBERSHIP_ENROLLMENT_CART_INVALID",
           membershipSkus,
           visitSkus,
@@ -221,16 +249,27 @@ Deno.serve(async (req) => {
           }, 409);
         }
       }
-      // Option 2: require exactly one enrollment shipping amount ($30 or $50).
+      // Require exactly one enrollment shipping selection ($30 or $50) → combo priceId.
       const memShipCents = Number(order.shipping_cents) || 0;
-      if (memShipCents !== 3000 && memShipCents !== 5000) {
+      const baseCfg = MEM_BASE_BY_SKU[memSku];
+      const comboCfg = MEM_COMBO_BY_SKU_SHIP[memSku]?.[memShipCents];
+      if (!baseCfg || !comboCfg) {
         return json({
           error:
-            "Membership card enrollment requires Two-Day ($30) or Next-Day ($50) shipping as a one-time charge. Shipping is not part of the monthly membership rebill.",
+            "Membership card enrollment requires Two-Day ($30) or Next-Day ($50) shipping. Shipping is included with each monthly membership renewal.",
           blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
           shippingCents: memShipCents,
         }, 409);
       }
+      membershipCombo = {
+        memSku,
+        priceId: comboCfg.priceId,
+        monthlyCents: comboCfg.monthlyCents,
+        baseCents: baseCfg.baseCents,
+        shippingCents: memShipCents,
+        method: comboCfg.method,
+        type: baseCfg.type,
+      };
       // Duplicate open enrollment guard (same email + program).
       const email = String(order.customer_email || "").trim().toLowerCase();
       if (email) {
@@ -258,8 +297,10 @@ Deno.serve(async (req) => {
     }
 
     const shippingCents = Number(order.shipping_cents) || 0;
-    // Membership: append one-time MBM-SHIP line. One-time carts: same when shipping > 0.
-    const shipSku = shippingCents > 0 ? shippingSkuForCents(shippingCents) : null;
+    // Membership: do NOT append MBM-SHIP (shipping is in combo recurring price).
+    // One-time carts: append mapped MBM-SHIP when shipping > 0.
+    const shipSku =
+      !isMembershipCheckout && shippingCents > 0 ? shippingSkuForCents(shippingCents) : null;
     const mapSkus = shipSku ? [...skus, shipSku] : skus;
 
     const mapRes = await fetch(
@@ -323,31 +364,24 @@ Deno.serve(async (req) => {
       calculatedTagadaMerchandiseCents += Math.trunc(unit) * qty;
       skuList.push(`${sku}×${qty}`);
       if (isMembershipCheckout) {
-        const memCfg = MEM_PRICE_BY_SKU[sku];
-        if (memCfg) {
-          const priceId = memCfg.priceId || mapped.tagada_price_id;
-          if (!priceId) {
-            return json({
-              error:
-                "Membership recurring checkout requires Tagada priceId (variantId alone is not allowed).",
-              sku,
-            }, 409);
-          }
-          // Authoritative recurring amount from verified Tagada price mapping.
-          if (Math.trunc(unit) !== memCfg.cents) {
+        if (membershipCombo && sku === membershipCombo.memSku) {
+          // Combo recurring priceId (membership + shipping). Map base cents stay 14900/24900
+          // for display; Tagada charge uses combo monthly cents.
+          if (Math.trunc(unit) !== membershipCombo.baseCents) {
             return json({
               error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
               blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
-              message: "Membership Tagada price cents do not match verified MBM membership amount.",
+              message: "Membership Tagada base price cents do not match verified MBM membership amount.",
               sku,
               mappedCents: unit,
-              expectedCents: memCfg.cents,
+              expectedCents: membershipCombo.baseCents,
             }, 409);
           }
+          calculatedTagadaMerchandiseCents += membershipCombo.monthlyCents - Math.trunc(unit);
           tagadaItems.push({
             variantId: mapped.tagada_variant_id,
             quantity: 1,
-            priceId,
+            priceId: membershipCombo.priceId,
           });
         } else if (ENROLLMENT_VISIT_SKUS.has(sku)) {
           // ONE-TIME enrollment visit — use mapped one-time priceId; never a recurring MEM price.
@@ -390,15 +424,16 @@ Deno.serve(async (req) => {
       }, 409);
     }
 
-    // MBM is shipping source of truth. Membership enrollment: one-time $30/$50 only.
-    // One-time card: $0 / $30 / $50.
+    // MBM is shipping source of truth.
+    // Membership: $30/$50 required (baked into combo recurring price — no MBM-SHIP Tagada line).
+    // One-time card: $0 / $30 / $50 via mapped MBM-SHIP line when > 0.
     const allowedShipping = isMembershipCheckout
       ? new Set([3000, 5000])
       : new Set([0, 3000, 5000]);
     if (!allowedShipping.has(shippingCents)) {
       return json({
         error: isMembershipCheckout
-          ? "Membership card enrollment requires Two-Day ($30) or Next-Day ($50) shipping as a one-time charge."
+          ? "Membership card enrollment requires Two-Day ($30) or Next-Day ($50) shipping. Shipping is included with each monthly membership renewal."
           : "Unexpected MBM shipping amount for card checkout. Only $0, $30 (Two-Day), or $50 (Next-Day) are supported.",
         blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
         shippingCents,
@@ -407,7 +442,7 @@ Deno.serve(async (req) => {
     }
 
     let calculatedShippingCents = 0;
-    if (shippingCents > 0) {
+    if (!isMembershipCheckout && shippingCents > 0) {
       if (!shipSku) {
         return json({
           error:
@@ -438,6 +473,8 @@ Deno.serve(async (req) => {
         ...(shipMap.tagada_price_id ? { priceId: shipMap.tagada_price_id } : {}),
       });
     }
+    // Membership: shipping dollars are already inside combo monthlyCents — do not add again.
+    // Order.total_cents still includes shipping_cents; merchandise total was adjusted to combo.
 
     const mbmTaxCents = Number(order.tax_cents) || 0;
     const mbmTotalCents = Number(order.total_cents) || 0;
@@ -525,11 +562,10 @@ Deno.serve(async (req) => {
     });
 
     // Pending membership enrollment — unpaid until Tagada webhook activates.
-    // Browser return must not activate. Requires migration 20260819140000_customer_memberships.sql.
-    if (isMembershipCheckout) {
-      const memSku = membershipSkus[0] as string;
-      const memCfg = MEM_PRICE_BY_SKU[memSku];
-      const mapped = bySku.get(memSku);
+    // Browser return must not activate. Requires migration 20260819140000_customer_memberships.sql
+    // + 20260819190000_membership_combo_shipping_fields.sql for combo columns.
+    if (isMembershipCheckout && membershipCombo) {
+      const mapped = bySku.get(membershipCombo.memSku);
       await fetch(`${supabaseUrl}/rest/v1/customer_memberships`, {
         method: "POST",
         headers: {
@@ -543,12 +579,15 @@ Deno.serve(async (req) => {
           customer_email: order.customer_email || null,
           enrollment_order_id: order.id,
           enrollment_public_order_number: publicOrderNumber,
-          membership_sku: memSku,
-          membership_type: memCfg.type,
+          membership_sku: membershipCombo.memSku,
+          membership_type: membershipCombo.type,
           status: "pending_payment",
-          tagada_price_id: memCfg.priceId,
+          tagada_price_id: membershipCombo.priceId,
           tagada_variant_id: mapped?.tagada_variant_id || null,
-          monthly_amount_cents: memCfg.cents,
+          base_membership_amount_cents: membershipCombo.baseCents,
+          shipping_cents: membershipCombo.shippingCents,
+          selected_shipping_method: membershipCombo.method,
+          monthly_amount_cents: membershipCombo.monthlyCents,
           currency: "USD",
           updated_at: new Date().toISOString(),
         }),

@@ -313,7 +313,7 @@ export function CheckoutPage() {
     : freeShippingEligible
       ? 'free_over_500'
       : shippingMethod;
-  // Membership Option 2: collect Two-Day ($30) / Next-Day ($50) once at enrollment.
+  // Membership: collect Two-Day ($30) / Next-Day ($50); shipping is included in combo monthly rebill.
   // Never free-ship membership enrollment via the $500 merchandise threshold.
   // One-time carts: $500 free-shipping threshold uses ordinary merchandise ONLY.
   const shipping = !requiresPhysicalShipping
@@ -335,13 +335,17 @@ export function CheckoutPage() {
     .map(i => programSkuForMembershipAppId(i.productId))
     .find((s): s is string => Boolean(s));
   const membershipProgram = getTagadaMembershipProgram(membershipProgramSku);
-  const membershipMonthlyCents = membershipProgram?.monthlyAmountCents ?? 0;
+  const membershipBaseCents = membershipProgram?.monthlyAmountCents ?? 0;
+  const membershipMonthlyCents =
+    hasMembership && shippingCents > 0
+      ? membershipBaseCents + shippingCents
+      : membershipBaseCents;
   const membershipEnrollmentVisitCents =
     hasMembership && requiredVisit && user?.id && providerPreview.requirement !== 'NONE'
       ? requiredVisit.priceCents
       : 0;
   const membershipDueTodayCents = hasMembership
-    ? membershipMonthlyCents + membershipEnrollmentVisitCents + shippingCents
+    ? membershipMonthlyCents + membershipEnrollmentVisitCents
     : 0;
 
   const taxCents =
@@ -1221,7 +1225,7 @@ export function CheckoutPage() {
                     {membershipProgram ? (
                       <div className="flex justify-between text-ink-600">
                         <span>{membershipProgram.displayName}</span>
-                        <span>${(membershipMonthlyCents / 100).toFixed(2)}</span>
+                        <span>${(membershipBaseCents / 100).toFixed(2)}</span>
                       </div>
                     ) : null}
                     {membershipEnrollmentVisitCents > 0 && requiredVisit ? (
@@ -1245,16 +1249,34 @@ export function CheckoutPage() {
                       <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">
                         Renews monthly
                       </p>
-                      <div className="flex justify-between text-sm text-ink-700">
-                        <span>
-                          {items.find(i => i.isMembership || i.purchaseType === 'membership_program')
-                            ?.name ?? membershipProgram?.displayName ?? 'Membership'}
-                        </span>
+                      {membershipProgram ? (
+                        <div className="flex justify-between text-sm text-ink-700">
+                          <span>{membershipProgram.displayName}</span>
+                          <span>${(membershipBaseCents / 100).toFixed(2)}</span>
+                        </div>
+                      ) : null}
+                      {shippingCents > 0 && (
+                        <div className="flex justify-between text-sm text-ink-700">
+                          <span>
+                            {labelShippingMethod(
+                              resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day',
+                            )}
+                          </span>
+                          <span>${(shippingCents / 100).toFixed(2)}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between border-t border-cream-300 pt-2 text-sm font-medium text-ink-900">
+                        <span>Monthly renewal</span>
                         <span>${(membershipMonthlyCents / 100).toFixed(2)}/month</span>
                       </div>
                       <p className="text-[11px] text-ink-500 leading-snug">
-                        Provider visit and shipping are one-time enrollment charges and do not rebill.
+                        {MEMBERSHIP_CARD_SHIPPING_NOTE}
                       </p>
+                      {membershipEnrollmentVisitCents > 0 ? (
+                        <p className="text-[11px] text-ink-500 leading-snug">
+                          Initial Provider Visit is a one-time enrollment charge and does not rebill.
+                        </p>
+                      ) : null}
                     </div>
                   </>
                 ) : (

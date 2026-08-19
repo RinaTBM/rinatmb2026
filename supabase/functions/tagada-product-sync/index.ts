@@ -487,9 +487,15 @@ Deno.serve(async (req) => {
       path.includes("/prices") ||
       path.includes("/domains") ||
       path.includes("/webhooks") ||
-      path.includes("/shipping-rates");
+      path.includes("/shipping-rates") ||
+      path.includes("/checkout-sessions") ||
+      path.includes("/funnels");
     if (!allowed) {
       return json({ error: "path_not_allowed" }, 400);
+    }
+    // Phase 2C: allow read-only checkout-session shipping inspection only.
+    if (path.includes("/checkout-sessions") && method !== "GET") {
+      return json({ error: "checkout_session_mutate_blocked" }, 400);
     }
     // Block mutating webhook/domain calls from this helper
     if ((path.includes("/domains") || path.includes("/webhooks")) && method !== "GET" && method !== "POST") {

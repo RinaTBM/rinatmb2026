@@ -1,0 +1,43 @@
+{
+  "date": "2026-08-19",
+  "hypothesis": "Hiding all 3 Tagada shipping rates (0 of 3 visible) effectively disables ShippingRates charges",
+  "result": "REJECTED",
+  "cases": [
+    {
+      "label": "ship30",
+      "mbm_total_cents": 14900,
+      "observed_total_usd": 199.0,
+      "tagada_shipping_line_usd": 50.0,
+      "ui_rates": "No shipping methods available",
+      "parity": "FAIL"
+    },
+    {
+      "label": "ship50",
+      "mbm_total_cents": 16900,
+      "observed_total_usd": 219.0,
+      "tagada_shipping_line_usd": 50.0,
+      "ui_rates": "No shipping methods available / empty",
+      "parity": "FAIL"
+    },
+    {
+      "label": "free0",
+      "mbm_total_cents": 59500,
+      "observed_total_usd": 595.0,
+      "tagada_shipping_line": "Free",
+      "parity": "PASS"
+    },
+    {
+      "label": "ipv",
+      "mbm_total_cents": 7500,
+      "observed_total_usd": 125.0,
+      "tagada_shipping_line_usd": 50.0,
+      "ui_rates": "No shipping methods available",
+      "parity": "FAIL"
+    }
+  ],
+  "shippingrates_island_still_in_html": true,
+  "checkout_requires_tagada_shipping_selection": false,
+  "tagada_extra_shipping_charge": true,
+  "shippingrates_effectively_disabled": false,
+  "ready_for_controlled_live_test": false
+}

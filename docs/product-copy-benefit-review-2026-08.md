@@ -66,41 +66,41 @@
 
 - **ORIGINAL CONCERN:** Nickname + emerging three-peptide framing
 - **WHY FLAGGED:** Risk of implying guaranteed fat loss
-- **FINAL CUSTOMER-FACING WORDING:** Benefit-forward body-composition/metabolic pathway education; nickname explicitly ≠ outcome
+- **FINAL CUSTOMER-FACING WORDING:** Benefit-forward body-composition/metabolic pathway education; nickname kept; no-guarantee clarification in Important Information (hero disclaimer shortened per owner pass)
 - **EVIDENCE CLASSIFICATION:** E — Investigational / research-interest peptide blend
-- **REMAINING QUESTION:** Confirm public nickname remains acceptable
+- **REMAINING QUESTION:** Confirm public nickname remains acceptable (MD) — MOTS-C kept as cellular-energy pathway interest only
 
 ### NAD+ Injection
 
 - **ORIGINAL CONCERN:** Claim boundary for cellular energy / longevity
 - **WHY FLAGGED:** Biology ≠ clinical outcome
-- **FINAL CUSTOMER-FACING WORDING:** Coenzyme biology + specific wellness interests; no aging cure
+- **FINAL CUSTOMER-FACING WORDING:** Cellular energy grounded in biology; recovery & healthy-aging framed as wellness/research interest (owner pass)
 - **EVIDENCE CLASSIFICATION:** D — Emerging / limited-evidence wellness therapy (compounded injectable)
-- **REMAINING QUESTION:** Preferred public claim boundary
+- **REMAINING QUESTION:** Optional MD final claim-boundary sign-off
 
 ### Selank Injection
 
 - **ORIGINAL CONCERN:** Emerging neuropeptide benefits
 - **WHY FLAGGED:** Not FDA-established anxiety/focus treatment
-- **FINAL CUSTOMER-FACING WORDING:** Specific stress-response / calm-focus research interest; emerging framing
+- **FINAL CUSTOMER-FACING WORDING:** Headline = “A Neuropeptide Explored for Stress-Response & Calm-Focus Goals” (owner pass)
 - **EVIDENCE CLASSIFICATION:** E — Investigational / research-interest neuropeptide
-- **REMAINING QUESTION:** Confirm public framing
+- **REMAINING QUESTION:** Optional MD confirm
 
 ### Semax Injection
 
 - **ORIGINAL CONCERN:** Emerging cognitive benefits
 - **WHY FLAGGED:** Not FDA-established cognitive treatment
-- **FINAL CUSTOMER-FACING WORDING:** Focus/clarity research interest; emerging framing
+- **FINAL CUSTOMER-FACING WORDING:** Headline = “A Neuropeptide Explored for Focus & Cognitive Research” (owner pass)
 - **EVIDENCE CLASSIFICATION:** E — Investigational / research-interest neuropeptide
-- **REMAINING QUESTION:** Confirm public framing
+- **REMAINING QUESTION:** Optional MD confirm
 
 ### Selank + Semax Blend Nasal Spray
 
 - **ORIGINAL CONCERN:** Combination claims
 - **WHY FLAGGED:** No proven synergy
-- **FINAL CUSTOMER-FACING WORDING:** Combined concept as convenience; no synergy claim
+- **FINAL CUSTOMER-FACING WORDING:** Headline leads with blend/explored goals; calm focus & attention/clarity retained in hero as discussion reasons (owner pass)
 - **EVIDENCE CLASSIFICATION:** E — Investigational / research-interest neuropeptide blend
-- **REMAINING QUESTION:** Confirm combination language
+- **REMAINING QUESTION:** Optional MD confirm
 
 ### Tesamorelin Injection
 

@@ -137,7 +137,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'fat-burner': {
     benefitHeadline: 'Three Peptides Aimed at Body Composition & Metabolic Goals',
     shortDescription:
-      'Fat Burner combines AOD-9604, MOTS-C, and Tesamorelin in one compounded injection for people focused on body composition and metabolic wellness. Each peptide brings a different area of research interest — and your clinician decides whether this blend belongs in your plan. The product name describes the conversation topic, not a guaranteed result.',
+      'Fat Burner combines AOD-9604, MOTS-C, and Tesamorelin in one compounded injection for people focused on body composition and metabolic wellness. Each peptide brings a different area of research interest — and your clinician decides whether this blend belongs in your plan.',
     highlights: [
       'AOD-9604 + MOTS-C + Tesamorelin',
       'Body-Composition Focus',
@@ -173,7 +173,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'This is not an oral “Fat Burner +” capsule product and does not include SLU-PP-332.',
     ].join(' '),
     reviewFlags: [
-      'MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public nickname “Fat Burner” + three-peptide benefit framing.',
+      'Owner pass: nickname retained; no-guaranteed-fat-loss kept in Important Information (not hero). MOTS-C framed as cellular-energy pathway interest only. MD still confirms nickname if not yet approved.',
       'Owner-approved retail $259.00 (at-cost $150.00).',
     ],
     regulatoryNotes: [
@@ -299,50 +299,50 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== LONGEVITY & COGNITIVE =====
   'nad-plus': {
-    benefitHeadline: 'Cellular Energy Support People Explore for Recovery & Longevity Interest',
+    benefitHeadline: 'Cellular Energy Pathways People Explore for Wellness & Longevity Research',
     shortDescription:
-      'NAD+ is a coenzyme your cells already use to turn nutrients into usable energy. This compounded injectable option is for people curious about energy-focused wellness, recovery, cellular health, and healthy-aging research — delivered under clinical review, without aging-cure claims.',
+      'NAD+ is a coenzyme your cells already use to turn nutrients into usable energy. This compounded injectable option is for people curious about cellular-energy biology and wellness conversations around recovery interest and healthy-aging research — under clinical review, without treating those interests as guaranteed injectable outcomes.',
     highlights: [
       'Cellular Energy Pathways',
-      'Recovery-Oriented Interest',
-      'Metabolic Wellness Focus',
+      'Recovery Research Interest',
+      'Healthy-Aging Research Interest',
       'Two Vial Sizes',
     ],
     about: [
-      'NAD+ (nicotinamide adenine dinucleotide) is a naturally occurring coenzyme involved in cellular energy production and everyday metabolic processes. Wellness customers often ask about it for energy, recovery, cellular health, metabolic wellness, and healthy-aging research interest.',
-      'This listing is a compounded injectable NAD+ option after eligibility review. Knowing NAD+’s biological role is not the same as proving that injections deliver every wellness outcome people hope for. We do not claim NAD+ reverses aging, cures fatigue, or treats disease.',
+      'NAD+ (nicotinamide adenine dinucleotide) is a naturally occurring coenzyme involved in cellular energy production and everyday metabolic processes. Wellness customers often ask about it in relation to cellular energy, recovery-oriented wellness interest, cellular health, metabolic wellness, and healthy-aging research.',
+      'This listing is a compounded injectable NAD+ option after eligibility review. Knowing NAD+’s biological role is not the same as proving that injections deliver energy restoration, recovery results, or healthy-aging outcomes. We do not claim NAD+ reverses aging, cures fatigue, restores mitochondria, or treats disease.',
       'Note: the current catalog offers NAD+ Injection only (two vial sizes) — there is no separate NAD+ nasal spray listing on this storefront.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Cellular-energy pathway support under clinical guidance',
-      'Recovery- and wellness-oriented conversations after demanding periods',
-      'Metabolic wellness interest tied to NAD+’s natural cellular role',
-      'Healthy-aging research interest without cure claims',
+      'Cellular-energy pathway interest grounded in NAD+’s natural biological role',
+      'Recovery-oriented wellness research interest (not a guaranteed treatment outcome)',
+      'Metabolic wellness conversations tied to NAD+’s cellular role',
+      'Healthy-aging research interest without cure or lifespan claims',
       'Two vial totals so clinicians can match volume to the plan',
     ],
     howItWorks:
       'In normal biology, NAD+ helps cells convert food into energy and supports many cellular reactions. A compounded injectable delivers NAD+ as directed by your provider. How you feel afterward varies widely — your care team sets expectations that fit you, not a marketing timeline.',
     whyPeopleChooseIt: [
-      'Curious about cellular energy and longevity-oriented wellness with oversight',
+      'Curious about cellular energy biology and longevity-oriented wellness with oversight',
       'Want transparent vial options instead of vague supplement claims',
       'Prefer clinical screening before starting injectable wellness therapies',
       'Appreciate clear boundaries: interesting biology, individualized results',
     ],
     whatToExpect:
-      'Select a vial size, complete intake, and await review. Administration details come from your provider and pharmacy materials if approved. Responses differ; no energy or anti-aging outcome is guaranteed.',
+      'Select a vial size, complete intake, and await review. Administration details come from your provider and pharmacy materials if approved. Responses differ; no energy, recovery, or anti-aging outcome is guaranteed.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [
-      'Confirm preferred public claim boundary for NAD+ with medical director.',
+      'Owner pass: recovery / healthy-aging framed as wellness/research interest, not expected injectable outcomes. MD may still confirm final claim boundary.',
     ],
     regulatoryNotes: [
-      'No anti-aging cure, disease treatment, lifespan extension, or guaranteed energy claims.',
+      'No anti-aging cure, disease treatment, lifespan extension, mitochondrial restoration, or guaranteed energy/recovery claims.',
       'Compounded injectable — do not imply FDA approval of this formulation.',
       'Catalog has NAD+ Injection only — no nasal spray SKU.',
     ],
   },
 
   selank: {
-    benefitHeadline: 'A Calm-Focus Neuropeptide for Stress-Response Research Interest',
+    benefitHeadline: 'A Neuropeptide Explored for Stress-Response & Calm-Focus Goals',
     shortDescription:
       'Selank is a research-oriented neuropeptide people discuss when they want support around stress response, emotional steadiness, and calm focus. Interest comes from emerging research — not from an established U.S. anxiety or focus medication claim — and any use here requires clinical review.',
     highlights: [
@@ -372,14 +372,16 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     whatToExpect:
       'Supplied at the listed strength and vial size. Use only if prescribed. Dosing is clinician-directed — not DIY stacking.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
-    reviewFlags: [RESEARCH_FLAG],
+    reviewFlags: [
+      'Owner pass: headline reframed to “explored for” stress-response & calm-focus goals (less outcome-sounding). MD may still confirm.',
+    ],
     regulatoryNotes: [
       'Emerging/investigational framing; no FDA-established anxiety or cognitive treatment claims.',
     ],
   },
 
   semax: {
-    benefitHeadline: 'A Focus & Clarity Neuropeptide for Cognitive Research Interest',
+    benefitHeadline: 'A Neuropeptide Explored for Focus & Cognitive Research',
     shortDescription:
       'Semax is a research-oriented neuropeptide people explore when attention, mental clarity, and cognitive performance are top of mind. Interest is emerging and research-driven — not an established U.S. treatment for ADHD, dementia, or other diagnoses — and use requires clinical review.',
     highlights: [
@@ -409,7 +411,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     whatToExpect:
       'Injectable vial at the listed strength. Approval and instructions come from your clinician. Do not combine peptides unless directed.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
-    reviewFlags: [RESEARCH_FLAG],
+    reviewFlags: [
+      'Owner pass: headline reframed to “explored for” focus & cognitive research (less outcome-sounding). MD may still confirm.',
+    ],
     regulatoryNotes: [
       'No established cognitive-disease treatment claims.',
       'Not presented as treatment for ADHD, dementia, or related diagnoses.',
@@ -417,13 +421,13 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'selank-semax-nasal-spray': {
-    benefitHeadline: 'Calm Focus + Cognitive Interest — Together in a Nasal Spray',
+    benefitHeadline: 'Selank + Semax Nasal Blend Explored for Stress-Response & Cognitive Goals',
     shortDescription:
-      'This compounded nasal spray pairs Selank and Semax for people who want both stress-response and cognitive research interests in one needle-free format. Selank is often discussed for calm focus; Semax for attention and clarity. Combining them is a convenience choice — not a proven “better together” guarantee.',
+      'This compounded nasal spray pairs Selank and Semax for people who want both research interests in one needle-free format. Selank is often discussed for calm focus; Semax for attention and clarity. Combining them is a convenience choice — not a proven “better together” guarantee.',
     highlights: [
       'Needle-Free Nasal Format',
       'Selank + Semax Blend',
-      'Calm + Clarity Interest',
+      'Stress-Response & Cognitive Research Interest',
       'Convenient Daily Use',
     ],
     about: [
@@ -447,7 +451,10 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     whatToExpect:
       'Nasal spray at the listed strength/size. Use only as prescribed. Follow pharmacy instructions for priming, storage, and dosing.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
-    reviewFlags: [RESEARCH_FLAG, 'Confirm preferred public language for combination peptide nasal products.'],
+    reviewFlags: [
+      RESEARCH_FLAG,
+      'Owner pass: headline leads with blend format / researched goals; calm focus & attention/clarity retained in hero as discussion reasons, not unqualified headline lead-ins.',
+    ],
     regulatoryNotes: [
       'Preserve catalog strength (50mcg/50mcg per spray).',
       'No diagnosis-treatment claims; no proven synergy claims.',

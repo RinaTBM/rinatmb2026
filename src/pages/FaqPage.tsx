@@ -41,6 +41,10 @@ const faqCategories = [
         q: 'How do memberships work during manual bank payments?',
         a: 'Membership pricing is billed per period ($149/month Semaglutide; $249/month Tirzepatide). Until automated bank payments are enabled, you will receive a new invoice for each billing period and payment must be completed using the provided bank-transfer instructions.',
       },
+      {
+        q: 'Can I pay over time with Cherry?',
+        a: 'Financing options may be available through Cherry. Approval and terms are determined by Cherry. Cherry is a financing discovery option and does not replace My Bare Method checkout or recurring membership card billing.',
+      },
     ],
   },
   {

@@ -49,6 +49,7 @@ import { AccountProfilePage } from '@/pages/account/AccountProfilePage';
 import { AccountComingSoonPage } from '@/pages/account/AccountComingSoonPage';
 import { AccountOrdersPage } from '@/pages/account/AccountOrdersPage';
 import { AccountOrderDetailPage } from '@/pages/account/AccountOrderDetailPage';
+import { CherryFinancingWidget } from '@/components/CherryFinancingWidget';
 
 function App() {
   const route = useRouter();
@@ -220,6 +221,8 @@ function App() {
             <main>{renderPage()}</main>
             <Footer />
             <CartDrawer />
+            {/* Financing discovery only — does not replace Tagada card checkout */}
+            <CherryFinancingWidget />
           </div>
         </CartProvider>
       </MemberProvider>

@@ -81,25 +81,35 @@ describe('Kashu card cart eligibility (memberships + shipping)', () => {
     if (!r.ok) expect(r.reason).toBe('membership');
   });
 
-  it('blocks positive Two-Day / Next-Day shipping until Tagada shipping SKUs are mapped', () => {
-    const twoDay = evaluateKashuCardCartEligibility({
-      flagEnabled: true,
-      shippingCents: TWO_DAY_SHIPPING_CENTS,
-      items: [oneTime],
-    });
-    expect(twoDay.ok).toBe(false);
-    if (!twoDay.ok) {
-      expect(twoDay.reason).toBe('shipping_parity');
-      expect(twoDay.blockerCode).toBe(TAGADA_SHIPPING_PARITY_BLOCKER);
-    }
+  it('allows Two-Day / Next-Day shipping when mapped MBM-SHIP line items are used ($30 / $50)', () => {
+    expect(
+      evaluateKashuCardCartEligibility({
+        flagEnabled: true,
+        shippingCents: TWO_DAY_SHIPPING_CENTS,
+        items: [oneTime],
+      }),
+    ).toEqual({ ok: true });
 
-    const nextDay = evaluateKashuCardCartEligibility({
+    expect(
+      evaluateKashuCardCartEligibility({
+        flagEnabled: true,
+        shippingCents: NEXT_DAY_SHIPPING_CENTS,
+        items: [oneTime],
+      }),
+    ).toEqual({ ok: true });
+  });
+
+  it('blocks unexpected positive shipping cents (not $0 / $30 / $50)', () => {
+    const weird = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: NEXT_DAY_SHIPPING_CENTS,
+      shippingCents: 2500,
       items: [oneTime],
     });
-    expect(nextDay.ok).toBe(false);
-    if (!nextDay.ok) expect(nextDay.blockerCode).toBe(TAGADA_SHIPPING_PARITY_BLOCKER);
+    expect(weird.ok).toBe(false);
+    if (!weird.ok) {
+      expect(weird.reason).toBe('shipping_parity');
+      expect(weird.blockerCode).toBe(TAGADA_SHIPPING_PARITY_BLOCKER);
+    }
   });
 
   it('allows free-shipping threshold carts ($0 shipping) for card eligibility', () => {

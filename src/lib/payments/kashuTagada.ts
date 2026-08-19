@@ -274,8 +274,9 @@ export type KashuCardEligibility =
     };
 
 /**
- * V1 card eligibility: flag on, non-empty cart, positive qty, no membership programs,
- * and shipping_cents === 0 until mapped Tagada shipping SKUs exist for MBM rates.
+ * V1 card eligibility: flag on, non-empty cart, positive qty, no membership programs.
+ * Shipping must be MBM $0 / $30 / $50 only (mapped Tagada MBM-SHIP-* line items).
+ * Reject unexpected positive shipping amounts.
  */
 export function evaluateKashuCardCartEligibility(input: {
   flagEnabled: boolean;
@@ -310,13 +311,14 @@ export function evaluateKashuCardCartEligibility(input: {
       };
     }
   }
-  if (Math.trunc(input.shippingCents) > 0) {
+  const shippingCents = Math.trunc(input.shippingCents);
+  if (!isAllowedCardShippingCents(shippingCents)) {
     return {
       ok: false,
       reason: 'shipping_parity',
       blockerCode: TAGADA_SHIPPING_PARITY_BLOCKER,
       message:
-        'Card checkout cannot yet include shipping charges. Choose ACH / Wire, or a cart with $0 shipping (service-only or free-shipping threshold).',
+        'Card checkout only supports $0, $30 (Two-Day), or $50 (Next-Day) shipping. Choose ACH / Wire, or adjust shipping.',
     };
   }
   return { ok: true };

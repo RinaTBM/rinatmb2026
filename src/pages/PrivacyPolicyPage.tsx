@@ -17,7 +17,7 @@ export function PrivacyPolicyPage() {
               <LegalBulletList items={[
                 'Account information: name, email address, password (hashed), and phone number when you create an account.',
                 'Intake forms: medical history, current medications, symptoms, goals, and other health details submitted during provider-guided therapy intake.',
-                'Payment information: billing name and address, payment method type (for example, Credit / Debit Card via our secure hosted checkout), order references, and payment status. Card details are processed by our payment processor; My Bare Method does not store full card numbers on the storefront.',
+                'Payment information: billing name and address, payment method type (for example, Credit / Debit Card via our secure hosted checkout), order references, and payment status. Payment card information is processed securely by our payment service providers. My Bare Method does not store full card numbers or security codes.',
                 'Shipping information: delivery name, address, and phone number provided at checkout.',
                 'Order history: products purchased, dates, quantities, and order status.',
                 'Usage data: pages visited, time on site, and interactions collected via cookies and analytics tools.',
@@ -51,8 +51,8 @@ export function PrivacyPolicyPage() {
               <p>
                 Your data is stored on secure servers with access restricted to authorized personnel who need it to
                 perform their duties. We use encryption in transit (TLS) and at rest. Customers complete public checkout
-                through a secure hosted card payment flow. Card details are handled by our payment processor; My Bare
-                Method does not store full card numbers collected through the website checkout.
+                through a secure hosted card payment flow. Payment card information is processed securely by our payment
+                service providers. My Bare Method does not store full card numbers or security codes.
               </p>
               <p>
                 Despite our safeguards, no system is perfectly secure. In the event of a data breach affecting your

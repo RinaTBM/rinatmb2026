@@ -261,7 +261,7 @@ export function HomePage() {
             <p className="eyebrow mb-3">Know what you need?</p>
             <h2 className="font-serif text-4xl md:text-5xl text-ink-900 mb-4">Shop by Category</h2>
             <p className="text-lg text-ink-500 max-w-xl mx-auto">
-              Browse our catalog by product type — from weight management to research products and accessories.
+              Browse our catalog by product type — from weight management to longevity, recovery, and accessories.
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

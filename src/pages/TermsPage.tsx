@@ -199,8 +199,8 @@ export function TermsPage() {
               <p>You agree not to:</p>
               <LegalBulletList items={[
                 'Use the Site for any unlawful purpose or in violation of these Terms.',
-                'Resell, redistribute, or mislabel our products, especially research products, which are sold for laboratory use only and not for human consumption.',
-                'Use research products for human consumption, injection, or any non-laboratory application.',
+                'Resell, redistribute, or mislabel our products.',
+                'Use provider-directed or prescription products without required licensed-provider review, or contrary to applicable law and labeling.',
                 'Attempt to reverse engineer, decompile, or otherwise extract source code or proprietary data.',
                 'Interfere with the Site\'s security, operation, or functionality.',
                 'Scrape, harvest, or collect user data without authorization.',

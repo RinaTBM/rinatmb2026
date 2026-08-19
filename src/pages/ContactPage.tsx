@@ -104,7 +104,7 @@ export function ContactPage() {
                         value={form.email}
                         onChange={e => setForm({ ...form, email: e.target.value })}
                         className="input-lux"
-                        placeholder="you@example.com"
+                        placeholder="Your email"
                       />
                     </div>
                   </div>

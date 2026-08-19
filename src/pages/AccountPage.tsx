@@ -38,7 +38,7 @@ export function AccountPage() {
   const [activeTab, setActiveTab] = useState<'orders' | 'subscriptions' | 'rewards' | 'settings'>('subscriptions');
   const [subs, setSubs] = useState<ManagedSubscription[]>([]);
   const [cancels, setCancels] = useState<CancellationRequest[]>([]);
-  const [email, setEmail] = useState('member@mybaremethod.com');
+  const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
   const [message, setMessage] = useState<string | null>(null);
 

@@ -23,7 +23,7 @@ export function Footer() {
               <a href="#" className="text-cream-100/70 hover:text-gold-300 transition-colors" aria-label="Instagram">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-cream-100/70 hover:text-gold-300 transition-colors" aria-label="Email">
+              <a href="mailto:info@thebaremethodmn.com" className="text-cream-100/70 hover:text-gold-300 transition-colors" aria-label="Email">
                 <Mail size={20} />
               </a>
             </div>
@@ -79,7 +79,7 @@ export function Footer() {
         {/* Disclosures */}
         <div className="mt-12 border-t border-cream-100/10 pt-8">
           <p className="text-xs text-cream-100/50 leading-relaxed mb-4">
-            These statements have not been evaluated by the Food and Drug Administration. Products are not intended to diagnose, treat, cure, or prevent any disease. Research products are sold for laboratory use only and are not for human consumption. Provider Care and other therapy products require a medical intake and review by a licensed provider; fulfillment occurs only after provider approval and is not a guarantee of prescription. If not approved, a full refund is issued.
+            These statements have not been evaluated by the Food and Drug Administration. Products are not intended to diagnose, treat, cure, or prevent any disease. Provider Care and other therapy products require a medical intake and review by a licensed provider; fulfillment occurs only after provider approval and is not a guarantee of prescription. If not approved, a full refund is issued.
           </p>
           <p className="text-xs text-cream-100/50 leading-relaxed mb-4">
             Telemedicine services available in all 50 states. Appointments conducted via Zoom and booked on our website. Medical Director: Dr. Jerry J. Cattelane Jr., D.O. Pharmacy: Ageless Pharma Rx.

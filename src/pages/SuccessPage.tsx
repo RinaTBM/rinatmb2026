@@ -10,7 +10,8 @@ export function SuccessPage() {
         </div>
         <h1 className="font-serif text-4xl text-ink-900 mb-3">Order update</h1>
         <p className="text-ink-500 mb-8">
-          Thank you for your order. If you just submitted checkout, use your payment instructions page to complete your bank transfer.
+          Thank you for your order. If payment is still pending, continue through the secure payment flow linked from
+          your order confirmation. Your order remains unpaid until card payment is confirmed.
         </p>
         <div className="card-lux p-6 text-left mb-6 space-y-4">
           <div className="flex items-center gap-3">
@@ -19,7 +20,7 @@ export function SuccessPage() {
           </div>
           <div className="flex items-center gap-3">
             <Truck size={18} className="text-gold-500 flex-shrink-0" />
-            <p className="text-sm text-ink-600">Most orders are processed within 1–3 business days after provider approval when applicable. You will receive tracking info once your order ships.</p>
+        <p className="text-sm text-ink-600">Most orders are processed within 1–3 business days after payment is received and any required provider approval is complete. You will receive tracking info once your order ships.</p>
           </div>
           <div className="flex items-start gap-3">
             <ShieldCheck size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />

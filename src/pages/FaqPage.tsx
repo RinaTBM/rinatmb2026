@@ -7,39 +7,51 @@ const faqCategories = [
     title: 'Orders & Shipping',
     faqs: [
       {
-        q: 'How long does shipping take?',
-        a: 'Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Most eligible orders are then processed within 1–3 business days. Shipping transit time begins after processing is complete. You will receive a tracking number by email once your order ships.',
+        q: 'How does checkout work?',
+        a: 'Add items to your cart, choose shipping when required, review totals, and complete payment by Credit / Debit Card through our secure hosted checkout. Processing and fulfillment begin only after payment is received and any required provider review/approval is complete.',
+      },
+      {
+        q: 'How much is shipping?',
+        a: 'For eligible one-time medication/product orders: Two-Day Shipping is $30 and Next-Day Shipping is $50 (fixed fees). Membership shipping is selected at enrollment and recurs monthly (+$30 Two-Day or +$50 Next-Day). Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping; membership value is excluded from that threshold.',
+      },
+      {
+        q: 'When will my order ship?',
+        a: 'Processing and shipping timelines begin only after payment has been received and any required provider review/approval has been completed. Most eligible orders are then processed within 1–3 business days. Carrier transit begins after processing. You will receive tracking by email once your order ships. Payment does not guarantee treatment approval or shipment.',
       },
       {
         q: 'Do you offer free shipping?',
-        a: 'Orders of $500 or more in eligible ordinary merchandise are eligible for free shipping. We currently offer two shipping options: Two-Day Shipping — $30 and Next-Day Shipping — $50. Standard Shipping is not offered.',
+        a: 'Orders of $500 or more in eligible ordinary merchandise are eligible for free shipping. Membership value is excluded from the $500 free-shipping threshold. Standard Shipping is not offered.',
       },
-      { q: 'Can I track my order?', a: 'Absolutely. You can track your order anytime from the Track Order page using your order number, or from your account dashboard.' },
+      { q: 'Can I track my order?', a: 'Yes. Track from the Track Order page using your order number, or from your account dashboard.' },
       { q: 'Do you ship internationally?', a: 'We currently ship within the United States. International shipping is coming soon.' },
+      {
+        q: 'What happens if my shipment is lost, damaged, or delayed?',
+        a: 'Eligible damaged, lost, or delayed-and-unusable shipments may be replaced at no additional product cost after verification. Notify us within 48 hours of delivery (or the expected delivery date for lost shipments) with photos when applicable. Refunds are not automatic for carrier delays or incorrect addresses — see our Refund & Replacement Policy and Shipping Policy.',
+      },
     ],
   },
   {
-    title: 'Payment',
+    title: 'Payment & Taxes',
     faqs: [
       {
         q: 'How do I pay?',
-        a: 'At checkout, select ACH / Bank Transfer (recommended) or Domestic Wire Transfer. After submitting your order, you receive an electronic invoice and secure instructions to complete payment. No payment is withdrawn from your bank when you submit your order.',
+        a: 'Public checkout uses Credit / Debit Card through our secure hosted card checkout. Your order remains unpaid until card payment is confirmed.',
       },
       {
-        q: 'Is my bank automatically charged?',
-        a: 'No. Until automated bank payments are enabled, you initiate each payment using the invoice instructions. Your bank is not charged automatically at checkout.',
+        q: 'Are taxes added at checkout?',
+        a: 'Applicable taxes are included in displayed prices where required. Tax is not added as a separate line at checkout.',
       },
       {
-        q: 'When is my order considered paid?',
-        a: 'Orders remain Awaiting Payment until funds are received and verified by My Bare Method. Only then is the order marked Paid.',
+        q: 'Does paying guarantee treatment approval?',
+        a: 'No. Purchase and payment do not guarantee a prescription or treatment approval. A licensed provider may require additional information, consultation, labs, or other steps. Fulfillment and shipping occur only when applicable requirements are satisfied.',
       },
       {
-        q: 'What reference should I include with my bank transfer?',
-        a: 'Include your order or payment reference number in the bank memo/reference field so we can match your payment to your order. The reference appears on your electronic invoice and payment instructions page.',
+        q: 'Can I use OGTBM?',
+        a: 'Yes, when the promotion is available. Enter OGTBM at checkout. It provides $50 off each eligible item (not $50 off the entire order). Quantity applies per eligible item/unit where supported. A promo cannot reduce an item below $0. Promotions are generally non-stackable. OGTBM does not change ongoing recurring membership renewal amounts.',
       },
       {
-        q: 'How do memberships work during manual bank payments?',
-        a: 'Membership pricing is billed per period ($149/month Semaglutide; $249/month Tirzepatide). Until automated bank payments are enabled, you will receive a new invoice for each billing period and payment must be completed using the provided bank-transfer instructions.',
+        q: 'What does OGTBM exclude?',
+        a: 'OGTBM excludes accessories; dermatology / prescription skin & hair; Initial Provider Visit; Follow-Up Visit; Lab Review; Lab Kit; other provider services; and shipping.',
       },
     ],
   },
@@ -52,7 +64,7 @@ const faqCategories = [
       },
       {
         q: 'How does Auto-Refill & Save work?',
-        a: 'Auto-Refill saves 10% on eligible products. Until automated bank payments are enabled, each refill period requires payment using the invoice instructions provided. Provider appointments, accessories, shipping, and taxes are never discounted by Auto-Refill.',
+        a: 'Auto-Refill saves 10% on eligible products with scheduled monthly deliveries. Each refill period is billed according to your selected payment method. Provider appointments, accessories, shipping, and taxes are never discounted by Auto-Refill.',
       },
       {
         q: 'Can I pause or cancel Auto-Refill?',
@@ -68,37 +80,88 @@ const faqCategories = [
     title: 'Telemedicine & Provider Care',
     faqs: [
       { q: 'What is Provider Care?', a: 'Provider Care includes services such as the Initial Provider Visit, Follow-Up Visit, and Laboratory Review. These involve scheduling and/or medical intake and review by a licensed provider when applicable. Provider Care is never discounted by membership or Auto-Refill savings.' },
-      { q: 'What happens after I order a Provider Care product?', a: 'After payment has been received and verified, you will receive an email link to complete a secure medical intake when required. A licensed provider reviews your case within 2 business days.' },
-      { q: 'What if I am not approved?', a: 'If a licensed provider determines that a requested treatment is not medically appropriate, the provider-directed product will not be fulfilled. If payment for that product has already been received and verified, eligible charges will be refunded in accordance with our refund policy.' },
+      { q: 'What happens after I order a Provider Care product?', a: 'After payment has been received, you will receive an email link to complete a secure medical intake when required. A licensed provider reviews your case within 2 business days.' },
+      { q: 'What if I am not approved?', a: 'If a licensed provider determines that a requested treatment is not medically appropriate, the provider-directed product will not be fulfilled. If payment for that product has already been received, eligible charges will be refunded in accordance with our refund policy.' },
       { q: 'Do you offer telemedicine appointments?', a: 'Yes. We offer telemedicine services via Zoom. Appointments are booked directly on our website by the patient.' },
       { q: 'Which states or jurisdictions do you serve?', a: 'Our Medical Director is a licensed physician in all states, so our telemedicine services are available nationwide.' },
       { q: 'Who is your Medical Director?', a: 'Our Medical Director is Dr. Jerry J. Cattelane Jr., D.O. He provides clinical leadership and supports the provider-directed wellness programs available through My Bare Method. Treatment decisions are made by the licensed provider responsible for your care.' },
-      { q: 'Which pharmacy fulfills your prescriptions?', a: 'Provider-approved prescriptions are fulfilled through Ageless Pharma Rx, our partnered pharmacy. Fulfillment begins only after payment has been received and verified and a licensed provider determines treatment is appropriate and any required review is complete.' },
+      { q: 'Which pharmacy fulfills your prescriptions?', a: 'Provider-approved prescriptions are fulfilled through Ageless Pharma Rx, our partnered pharmacy. Fulfillment begins only after payment has been received and a licensed provider determines treatment is appropriate and any required review is complete.' },
+    ],
+  },
+  {
+    title: 'HRT Lab Package',
+    faqs: [
+      {
+        q: 'Do I need labs for HRT?',
+        a: 'For applicable initial Women’s Hormone Therapy orders, a Required HRT Lab Package is added once so a licensed provider can review laboratory results before treatment decisions. Established HRT customers with approved therapy history may not be charged the package again under current history rules.',
+      },
+      {
+        q: 'What does the $260 HRT Lab Package include?',
+        a: 'Required HRT Lab Package — $260. Breakdown: Lab Kit — $200 (includes Lab Kit shipping) and Lab Review — $60.',
+      },
+      {
+        q: 'Is Lab Kit shipping included?',
+        a: 'Yes. Lab Kit shipping is included in the $200 Lab Kit price. That does not include medication shipping, which remains separate where applicable.',
+      },
+      {
+        q: 'Will I be charged the HRT Lab Package more than once in one order?',
+        a: 'No. For an applicable initial HRT order, the required lab package is added once. Multiple HRT products in the same applicable initial order do not multiply the lab-package charge.',
+      },
     ],
   },
   {
     title: 'Returns & Refunds',
     faqs: [
-      { q: 'What is your return policy?', a: 'All sales are final once payment has been received and verified and an order has been processed or shipped. Unpaid orders may be cancelled without a refund transaction because payment has not been received. Because many products are compounded, customized, or temperature-sensitive, returns are not accepted.' },
-      { q: 'What if my order arrives damaged or is lost in transit?', a: 'If your order arrives damaged, is lost in transit, or arrives after the expected delivery window due to carrier delays that make the product unusable, we will replace the item at no additional cost after verification. You must notify us within 48 hours of delivery (or the expected delivery date for lost shipments) and provide photos of any damaged items or packaging when applicable.' },
+      { q: 'What is your return policy?', a: 'All sales are final once payment has been received and an order has been processed or shipped. Because many products are compounded, customized, or temperature-sensitive, returns are not accepted.' },
+      { q: 'Are medications/products refundable?', a: 'Physical, compounded, customized, and temperature-sensitive products are generally final sale after processing or shipment. Eligible damaged, lost, or delayed-and-unusable shipments may be replaced after verification — see our Refund & Replacement Policy.' },
+      { q: 'Are provider visits refundable?', a: 'Provider visits and lab services are not automatically refundable once the applicable service has begun. If a licensed provider does not approve a requested therapy after intake and payment was received for that product, eligible paid amounts for the unapproved product may be refunded per our Refund Policy.' },
+      { q: 'What if my order arrives damaged or is lost in transit?', a: 'If your order arrives damaged, is lost in transit, or arrives after the expected delivery window due to carrier delays that make the product unusable, we will replace the item at no additional cost after verification. Notify us within 48 hours of delivery (or the expected delivery date for lost shipments) and provide photos when applicable.' },
       { q: 'How do I request a replacement?', a: 'Contact our support team with your order number within 48 hours. Include photos of the damaged item or packaging if applicable. We verify the claim and ship your replacement at no additional cost.' },
-      { q: 'Where can I read the full policy?', a: 'The full Refund & Replacement Policy is available on our Refund Policy page. It is also displayed during checkout and included in your order confirmation email.' },
+      { q: 'Where can I read the full policy?', a: 'The full Refund & Replacement Policy is available on our Refund Policy page. It is also displayed during checkout.' },
     ],
   },
   {
     title: 'Memberships',
     faqs: [
       {
-        q: 'What is an Active Wellness Membership?',
-        a: 'Active Wellness Memberships are Semaglutide Membership ($149/month) and Tirzepatide Membership ($249/month). Members receive locked membership pricing while continuously enrolled, provider-guided care when prescribed, and 15% off eligible wellness products and accessories. Members receive our best available pricing. Provider Care, shipping, taxes, and already-discounted accessory bundles (unless explicitly enabled) are not discounted.',
+        q: 'How does the Semaglutide membership work?',
+        a: 'Semaglutide Membership is $149/month base. You select Two-Day (+$30/month) or Next-Day (+$50/month) shipping at enrollment; that shipping recurs with each monthly card charge ($179 or $199/month). A one-time Initial Provider Visit ($75) may apply when required. Provider review is required; payment does not guarantee a prescription.',
       },
       {
-        q: 'What is the minimum commitment?',
-        a: 'Both Semaglutide and Tirzepatide memberships require a 3-month minimum commitment. After that, membership continues month to month until a cancellation request is submitted and processed.',
+        q: 'How does the Tirzepatide membership work?',
+        a: 'Tirzepatide Membership is $249/month base. Selected shipping recurs monthly (+$30 Two-Day or +$50 Next-Day), so monthly card charges are $279 or $299. A one-time Initial Provider Visit ($75) may apply when required. The program includes eligible formulations through 15mg. Provider review is required; payment does not guarantee a prescription.',
       },
       {
-        q: 'Will my membership price increase?',
-        a: 'Your monthly membership rate remains locked while your membership stays continuously active and in good standing and your provider-selected treatment remains within the included program.',
+        q: 'What is charged today when I join a membership?',
+        a: 'Due today typically includes membership base + selected shipping + the $75 Initial Provider Visit when required. Examples: Semaglutide + Two-Day $254; Semaglutide + Next-Day $274; Tirzepatide + Two-Day $354; Tirzepatide + Next-Day $374. Those due-today totals are not the ongoing monthly rate.',
+      },
+      {
+        q: 'What is charged every month?',
+        a: 'Monthly renewal is membership base plus your selected shipping only: Semaglutide $179 or $199/month; Tirzepatide $279 or $299/month. The Initial Provider Visit does not recur.',
+      },
+      {
+        q: 'Is shipping included in the membership price?',
+        a: 'No. Shipping is not included in the base $149 / $249 membership price. You select shipping at enrollment and it is billed with each monthly renewal.',
+      },
+      {
+        q: 'Is membership shipping recurring?',
+        a: 'Yes. Selected membership shipping is included in each monthly card charge (+$30 Two-Day or +$50 Next-Day) until a valid cancellation becomes effective.',
+      },
+      {
+        q: 'What is the 3-month minimum?',
+        a: 'Both memberships require a 3-month minimum commitment under My Bare Method membership rules. Normal self-service cancellation is not available before that term ends.',
+      },
+      {
+        q: 'When can I cancel?',
+        a: 'After the initial three-month commitment, you may cancel according to the current cancellation process (account, email, or cancellation form). Recurring billing continues until a valid cancellation becomes effective.',
+      },
+      {
+        q: 'What happens if a membership payment fails?',
+        a: 'A failed payment may place your membership in past-due or payment-issue status. Benefits may pause, fulfillment may delay, and the membership may be canceled after notice if payment is not resolved.',
+      },
+      {
+        q: 'Will I keep my same price if I cancel and rejoin?',
+        a: 'No guarantee. Pricing remains locked while continuously active and in good standing. Cancellation or lapse does not guarantee the same prior price on re-enrollment.',
       },
       {
         q: 'Can I buy products without a membership?',

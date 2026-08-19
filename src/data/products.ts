@@ -1280,8 +1280,8 @@ export const memberships: Membership[] = [
         a: 'No. Membership is a program purchase with a flat monthly rate. Medication fulfillment uses the retail Semaglutide vial SKU that matches your provider-approved dose.',
       },
       {
-        q: 'Will my bank be charged automatically?',
-        a: 'Until automated bank payments are enabled, each billing period uses an invoice with ACH/bank-transfer or domestic wire instructions. Completing payment for one period does not automatically charge future periods.',
+        q: 'How is membership billed?',
+        a: 'Join with Credit / Debit Card. Your card is charged monthly for the $149 membership plus selected shipping ($179 Two-Day or $199 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
       },
     ],
     cta: 'Join Semaglutide Membership',
@@ -1351,8 +1351,8 @@ export const memberships: Membership[] = [
         a: 'No. Membership is a program purchase. Medication fulfillment uses the retail Tirzepatide vial SKU matching your provider-approved dose.',
       },
       {
-        q: 'Will my bank be charged automatically?',
-        a: 'Until automated bank payments are enabled, each billing period uses an invoice with ACH/bank-transfer or domestic wire instructions rather than an automatic storefront bank charge.',
+        q: 'How is membership billed?',
+        a: 'Join with Credit / Debit Card. Your card is charged monthly for the $249 membership plus selected shipping ($279 Two-Day or $299 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
       },
     ],
     cta: 'Join Tirzepatide Membership',

@@ -295,8 +295,8 @@ export function AccountPage() {
                   <p className="text-sm text-ink-600 leading-relaxed mb-4">{CANCELLATION_POLICY_COPY}</p>
                   <p className="text-xs text-ink-500 mb-3">
                     The 7-day notice is a customer communication policy so our team can process your request before the
-                    next billing period. Cancellation requests are reviewed manually and do not automatically withdraw
-                    or reverse bank payments.
+                    next billing period. Cancellation requests are reviewed manually and do not automatically reverse
+                    prior card charges.
                   </p>
                   <label className="block text-xs text-ink-500 mb-1">Email for confirmation</label>
                   <input className="input-lux mb-3" value={email} onChange={e => setEmail(e.target.value)} />

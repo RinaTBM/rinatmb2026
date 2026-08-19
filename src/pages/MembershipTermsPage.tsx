@@ -6,19 +6,60 @@ export function MembershipTermsPage() {
       eyebrow="Legal"
       title="Membership & Cancellation Terms"
       intro="These terms apply to recurring Wellness Memberships offered through My Bare Method."
-      lastUpdated="August 10, 2026"
+      lastUpdated="August 19, 2026"
       sections={[
         {
           id: 'available-memberships',
           title: 'Available Memberships',
           body: (
             <>
-              <p>Current weight-management membership options:</p>
+              <p>Current weight-management membership base rates:</p>
               <LegalBulletList items={[
                 'Semaglutide Membership — $149 per month',
                 'Tirzepatide Membership — $249 per month',
               ]} />
-              <p>Membership availability, pricing, inclusions, and treatment eligibility may change. Membership does not guarantee that a particular medication or prescription will be approved.</p>
+              <p>
+                Selected shipping is billed with each monthly membership renewal and is not included in the base
+                $149 / $249 membership price:
+              </p>
+              <LegalBulletList items={[
+                'Two-Day Shipping — +$30 per month',
+                'Next-Day Shipping — +$50 per month',
+              ]} />
+              <p>Therefore, your monthly card charge (membership + selected shipping) is:</p>
+              <LegalBulletList items={[
+                'Semaglutide + Two-Day — $179/month',
+                'Semaglutide + Next-Day — $199/month',
+                'Tirzepatide + Two-Day — $279/month',
+                'Tirzepatide + Next-Day — $299/month',
+              ]} />
+              <p>
+                Membership availability, pricing, inclusions, and treatment eligibility may change. Membership does
+                not guarantee that a particular medication or prescription will be approved.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: 'due-today-vs-monthly',
+          title: 'Due Today vs Monthly Renewal',
+          body: (
+            <>
+              <p>
+                Your first charge may be higher than the ongoing monthly renewal when a required one-time Initial
+                Provider Visit ($75) is added. The Initial Provider Visit does not recur.
+              </p>
+              <p>Examples (when the Initial Provider Visit is required):</p>
+              <LegalBulletList items={[
+                'Semaglutide + Two-Day — Due today $254; renews $179/month',
+                'Semaglutide + Next-Day — Due today $274; renews $199/month',
+                'Tirzepatide + Two-Day — Due today $354; renews $279/month',
+                'Tirzepatide + Next-Day — Due today $374; renews $299/month',
+              ]} />
+              <p>
+                Do not treat due-today totals ($254 / $274 / $354 / $374) as the ongoing monthly rate. Monthly renewal
+                is membership base plus your selected shipping only.
+              </p>
             </>
           ),
         },
@@ -27,12 +68,32 @@ export function MembershipTermsPage() {
           title: 'Locked Pricing & Program Terms',
           body: (
             <>
-              <p>Your initial membership term is three months. After the initial term, your membership continues month to month until canceled.</p>
-              <p>Your monthly membership rate remains locked while your membership stays continuously active and in good standing.</p>
-              <p>If your membership is canceled or lapses beyond the permitted payment grace period, future enrollment will be subject to the membership pricing available at that time.</p>
-              <p>Membership enrollment and payment do not guarantee that a prescription will be issued. Continued treatment, formulation, strength, and fulfillment remain subject to provider approval, pharmacy availability, applicable law, and completion of required follow-up information.</p>
-              <p>If a licensed provider determines that continued treatment is not appropriate, future membership billing periods will be discontinued according to the membership terms.</p>
-              <p>Switching between Semaglutide and Tirzepatide requires enrollment in the current rate for the new membership program.</p>
+              <p>
+                Your initial membership term is three months. After the initial term, your membership continues month
+                to month until a valid cancellation becomes effective.
+              </p>
+              <p>
+                Your monthly membership rate (including the selected recurring shipping amount) remains locked while
+                your membership stays continuously active and in good standing.
+              </p>
+              <p>
+                If your membership is canceled or lapses beyond the permitted payment grace period, future enrollment
+                will be subject to the membership pricing available at that time. Re-enrollment is not guaranteed to
+                match a prior canceled price.
+              </p>
+              <p>
+                Membership enrollment and payment do not guarantee that a prescription will be issued. Continued
+                treatment, formulation, strength, and fulfillment remain subject to provider approval, pharmacy
+                availability, applicable law, and completion of required follow-up information.
+              </p>
+              <p>
+                If a licensed provider determines that continued treatment is not appropriate, future membership
+                billing periods will be discontinued according to these terms.
+              </p>
+              <p>
+                Switching between Semaglutide and Tirzepatide requires enrollment in the current rate for the new
+                membership program.
+              </p>
               <p>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 15mg.</p>
             </>
           ),
@@ -42,8 +103,16 @@ export function MembershipTermsPage() {
           title: 'Initial Commitment',
           body: (
             <>
-              <p>Wellness Memberships require an initial three-month minimum commitment.</p>
-              <p>By enrolling, the client agrees to the three-month minimum term and to complete payment for each billing period using the invoice and bank-transfer instructions provided, unless enrollment is canceled by My Bare Method because treatment is unavailable, medically inappropriate, legally restricted, or otherwise cannot be provided.</p>
+              <p>
+                Wellness Memberships require an initial three-month minimum commitment. This is a My Bare Method
+                membership rule.
+              </p>
+              <p>
+                By enrolling, you agree to the three-month minimum term and to monthly card billing for membership
+                plus your selected recurring shipping. Normal self-service cancellation is not available before the
+                minimum term ends, unless enrollment is canceled by My Bare Method because treatment is unavailable,
+                medically inappropriate, legally restricted, or otherwise cannot be provided.
+              </p>
             </>
           ),
         },
@@ -60,7 +129,10 @@ export function MembershipTermsPage() {
                 'Provider-directed treatment adjustments within the included program',
                 'Access to designated member benefits',
               ]} />
-              <p>Medication eligibility, dosage, treatment continuation, and refill approval remain subject to provider review.</p>
+              <p>
+                Medication eligibility, dosage, treatment continuation, and refill approval remain subject to provider
+                review.
+              </p>
               <p>Membership benefits have no cash value and cannot be transferred.</p>
             </>
           ),
@@ -70,18 +142,17 @@ export function MembershipTermsPage() {
           title: 'What Is Not Automatically Included',
           body: (
             <>
-              <p>Unless expressly stated, membership pricing does not automatically include:</p>
+              <p>Unless expressly stated, the base membership price ($149 / $249) does not automatically include:</p>
               <LegalBulletList items={[
-                'The $25 Initial Wellness Intake',
-                'A $75 Detailed Wellness Consultation',
-                'Laboratory testing',
-                'Shipping',
+                'The $75 Initial Provider Visit (one-time when required; does not recur)',
+                'Laboratory testing or the Required HRT Lab Package',
+                'Shipping (selected shipping is billed separately and recurs monthly with membership)',
                 'Supplies',
                 'Additional provider visits',
                 'Treatments outside the selected membership',
                 'Replacement products caused by client error',
               ]} />
-              <p>Display all applicable charges before payment whenever reasonably possible.</p>
+              <p>Applicable charges are shown before you complete payment whenever reasonably possible.</p>
             </>
           ),
         },
@@ -90,9 +161,19 @@ export function MembershipTermsPage() {
           title: 'Recurring Billing',
           body: (
             <>
-              <p>Membership pricing is billed per period. Until automated bank payments are enabled, you will receive a new invoice for each billing period and payment must be completed using the provided bank-transfer instructions (ACH / Bank Transfer or Domestic Wire).</p>
-              <p>No payment is withdrawn from your bank when you submit an order. Orders remain Awaiting Payment until funds are received and verified.</p>
-              <p>Billing periods continue until canceled in accordance with these terms. Clients are responsible for completing each period&apos;s payment and keeping contact information current.</p>
+              <p>
+                Memberships are paid by Credit / Debit Card through secure hosted card checkout. Your card is billed
+                monthly while your membership remains active. Selected shipping is included in each recurring monthly
+                card charge as described above.
+              </p>
+              <p>
+                Recurring billing continues until a valid cancellation becomes effective after the initial commitment,
+                or until My Bare Method cancels the membership under these terms.
+              </p>
+              <p>
+                Applicable taxes are included in displayed prices where required. Clients are responsible for keeping
+                billing and contact information current.
+              </p>
             </>
           ),
         },
@@ -101,14 +182,22 @@ export function MembershipTermsPage() {
           title: 'Cancellation After the Minimum Term',
           body: (
             <>
-              <p>After the initial three-month commitment has been completed, the membership may be canceled before the next billing date.</p>
+              <p>
+                After the initial three-month commitment has been completed, you may cancel according to the current
+                cancellation process before the next billing date.
+              </p>
               <p>Cancellation requests must be submitted through:</p>
               <LegalBulletList items={[
                 'The client account, when available',
                 'Email: info@thebaremethodmn.com',
                 'Cancellation Request Form: https://form.jotform.com/262115224996056',
               ]} />
-              <p>Submitting a cancellation request does not reverse a payment that has already been received and verified, or stop an order that has already entered provider, pharmacy, or fulfillment processing.</p>
+              <p>
+                Submitting a cancellation request does not reverse a payment that has already been received, or stop
+                an order that has already entered provider, pharmacy, or fulfillment processing. Cancellation does not
+                retroactively refund prior membership or recurring shipping charges except where required by law or
+                expressly approved under our Refund Policy.
+              </p>
             </>
           ),
         },
@@ -127,7 +216,10 @@ export function MembershipTermsPage() {
           title: 'Early Cancellation',
           body: (
             <>
-              <p>The initial three-month commitment generally cannot be canceled early simply because the client changes their mind, does not complete required forms, or no longer wants to continue.</p>
+              <p>
+                The initial three-month commitment generally cannot be canceled early simply because the client changes
+                their mind, does not complete required forms, or no longer wants to continue.
+              </p>
               <p>Contact customer support regarding exceptional circumstances.</p>
               <p>My Bare Method may cancel or modify a membership when:</p>
               <LegalBulletList items={[
@@ -158,18 +250,23 @@ export function MembershipTermsPage() {
                 'Continued treatment',
                 'Specific results',
               ]} />
-              <p>The provider may recommend a different option, request testing, require a consultation, pause treatment, or decline treatment.</p>
+              <p>
+                The provider may recommend a different option, request testing, require a consultation, pause
+                treatment, or decline treatment. Purchase and payment do not guarantee prescription or treatment
+                approval. Fulfillment and shipping occur only when applicable requirements are satisfied.
+              </p>
             </>
           ),
         },
         {
           id: 'failed-payments',
-          title: 'Unpaid Billing Periods',
+          title: 'Failed or Past-Due Payments',
           body: (
             <>
-              <p>If payment for a billing period is not received and verified, My Bare Method may:</p>
+              <p>If a membership payment fails or is not completed, My Bare Method may:</p>
               <LegalBulletList items={[
-                'Send updated invoice and payment instructions',
+                'Mark the membership as past due or under a payment issue status',
+                'Retry or request updated payment',
                 'Pause member benefits',
                 'Delay fulfillment',
                 'Cancel the membership after notice',
@@ -182,8 +279,14 @@ export function MembershipTermsPage() {
           title: 'Refunds',
           body: (
             <>
-              <p>Membership fees are generally nonrefundable once the applicable billing period begins.</p>
-              <p>Refunds may be issued when required by law or approved because of a verified billing error or service that My Bare Method is unable to provide.</p>
+              <p>
+                Membership fees and recurring shipping charges are generally nonrefundable once the applicable billing
+                period begins and payment has been received.
+              </p>
+              <p>
+                Refunds may be issued when required by law or approved because of a verified billing error or service
+                that My Bare Method is unable to provide.
+              </p>
             </>
           ),
         },
@@ -192,8 +295,15 @@ export function MembershipTermsPage() {
           title: 'Changes to Memberships',
           body: (
             <>
-              <p>We may update membership pricing, inclusions, or terms. When required, advance notice will be provided before a material change takes effect.</p>
-              <p>Locked pricing applies only while the applicable membership remains continuously active and may not apply to taxes, shipping, labs, pharmacy charges, or services outside the membership.</p>
+              <p>
+                We may update membership pricing, inclusions, or terms. When required, advance notice will be provided
+                before a material change takes effect.
+              </p>
+              <p>
+                Locked pricing applies only while the applicable membership remains continuously active and in good
+                standing. Locked membership pricing does not automatically apply to laboratory services, pharmacy
+                charges outside the program, or services outside the membership.
+              </p>
             </>
           ),
         },

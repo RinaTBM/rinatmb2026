@@ -141,7 +141,7 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 **Historical immutable source label:** `production-source/my-bare-method-2026`  
 **Immutable pre-launch tag:** `my-bare-method-integrated-prelaunch-v1`
 
-- After production-source reconciliation (PRs #8 + #12 + #13), treat `deploy/ach-launch-clean-2026` as the production storefront tip (tax-inclusive + card-first for eligible one-time carts). Do not rely on committed `.env.production` for the card flag (Bolt may delete it); **unset `VITE_KASHU_CARD_ENABLED` defaults the gate ON** even in non-PROD/Bolt Preview builds. Explicit `false` is the kill switch. Memberships remain blocked from hosted card.
+- After production-source reconciliation (PRs #8 + #12 + #13), treat `deploy/ach-launch-clean-2026` as the production storefront tip (tax-inclusive + card-first for eligible one-time carts; SEM/TIRZ Tagada recurring membership card billing included). Do not rely on committed `.env.production` for the card flag (Bolt may delete it); **unset `VITE_KASHU_CARD_ENABLED` defaults the gate ON** even in non-PROD/Bolt Preview builds. Explicit `false` is the kill switch.
 - Bolt-controlled branches (for example `deploy/my-bare-method-integrated-2026`, `release/my-bare-method-final-2026`, and similar Bolt sync targets) are **disposable mirrors only**.
 - Never reconcile a source-of-truth / production-source branch by pulling a Bolt “Start repository” commit into it.
 - Never force-update historical `production-source/*` labels from Bolt.

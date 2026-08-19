@@ -344,9 +344,11 @@ export type KashuCardEligibility =
 /**
  * Card eligibility: flag on, non-empty cart, positive qty.
  * - One-time carts: no membership; shipping $0 / $30 / $50; tax_cents = 0.
- * - Membership recurring (SEM/TIRZ only): exactly one program SKU, qty 1, no mix,
+ * - Membership recurring (SEM/TIRZ only): exactly one program SKU, qty 1,
+ *   optional required provider-visit SKU (IPV/FUV) as ONE-TIME enrollment charge,
  *   shipping_cents must be 0 (recurring Tagada price is not shippable; first-fulfillment
  *   shipping is separate MBM workflow — do not bake into subscription).
+ *   Ordinary merchandise mixed with membership remains blocked.
  * Tax-inclusive architecture: NEW orders must have tax_cents = 0.
  */
 export function evaluateKashuCardCartEligibility(input: {

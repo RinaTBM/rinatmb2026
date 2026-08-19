@@ -48,6 +48,7 @@ import {
   MEMBERSHIP_CARD_RECURRING_DISCLOSURE,
   MEMBERSHIP_CARD_SHIPPING_NOTE,
   MEMBERSHIP_TERMS_ACCEPTANCE_LABEL,
+  getTagadaMembershipProgram,
 } from '@/lib/membership/tagadaMembershipBilling';
 import {
   CHECKOUT_SUBMIT_CTA,
@@ -311,7 +312,8 @@ export function CheckoutPage() {
       ? 'free_over_500'
       : shippingMethod;
   // Membership carts: Tagada recurring price is not shippable. Enrollment charge =
-  // monthly membership only (shipping arranged after provider approval).
+  // monthly membership + optional required provider visit (one-time). Shipping $0
+  // at enrollment (arranged after provider approval).
   // One-time carts: $500 free-shipping threshold uses ordinary merchandise ONLY.
   const shipping = !requiresPhysicalShipping
     ? 0
@@ -324,27 +326,53 @@ export function CheckoutPage() {
   const total = displaySubtotal + shipping;
   const shippingCents = Math.round(shipping * 100);
 
+  const membershipProgramSku = items
+    .filter(i => i.isMembership || i.purchaseType === 'membership_program')
+    .map(i => programSkuForMembershipAppId(i.productId))
+    .find((s): s is string => Boolean(s));
+  const membershipProgram = getTagadaMembershipProgram(membershipProgramSku);
+  const membershipMonthlyCents = membershipProgram?.monthlyAmountCents ?? 0;
+  const membershipEnrollmentVisitCents =
+    hasMembership && requiredVisit && user?.id && providerPreview.requirement !== 'NONE'
+      ? requiredVisit.priceCents
+      : 0;
+  const membershipDueTodayCents = hasMembership
+    ? membershipMonthlyCents + membershipEnrollmentVisitCents
+    : 0;
+
   const taxCents =
     providerCareTaxAuth.providerCareTaxCents + accessoryTaxAuth.accessorySalesTaxCents;
+  const cardEligibilityItems = items.map(i => {
+    const isMembershipLine =
+      Boolean(i.isMembership) || i.purchaseType === 'membership_program';
+    return {
+      isMembership: i.isMembership,
+      purchaseType: i.purchaseType,
+      quantity: i.quantity,
+      sku: isMembershipLine
+        ? programSkuForMembershipAppId(i.productId) ?? undefined
+        : i.variantId
+          ? skuForVariantId(i.variantId) ?? undefined
+          : undefined,
+      productId: i.productId,
+    };
+  });
+  // Include server-required provider visit in eligibility so membership+IPV is evaluated
+  // the same way create-invoice-order / create-kashu-checkout-session will see it.
+  if (requiredVisit && user?.id && providerPreview.requirement !== 'NONE') {
+    cardEligibilityItems.push({
+      isMembership: false,
+      purchaseType: 'one_time',
+      quantity: 1,
+      sku: requiredVisit.sku,
+      productId: requiredVisit.productId,
+    });
+  }
   const cardEligibility = evaluateKashuCardCartEligibility({
     flagEnabled: isKashuCardEnabled(),
     shippingCents,
     taxCents,
-    items: items.map(i => {
-      const isMembershipLine =
-        Boolean(i.isMembership) || i.purchaseType === 'membership_program';
-      return {
-        isMembership: i.isMembership,
-        purchaseType: i.purchaseType,
-        quantity: i.quantity,
-        sku: isMembershipLine
-          ? programSkuForMembershipAppId(i.productId) ?? undefined
-          : i.variantId
-            ? skuForVariantId(i.variantId) ?? undefined
-            : undefined,
-        productId: i.productId,
-      };
-    }),
+    items: cardEligibilityItems,
   });
 
   const hasMembershipItems = hasMembership;
@@ -487,7 +515,8 @@ export function CheckoutPage() {
         if (!kashu.ok) {
           throw new Error(
             CARD_CHECKOUT_INIT_FAILED_MESSAGE +
-              (kashu.missingSkus?.length
+              (kashu.error ? ` ${kashu.error}` : '') +
+              (!kashu.error && kashu.missingSkus?.length
                 ? ` Missing SKU mapping: ${kashu.missingSkus.join(', ')}`
                 : ''),
           );
@@ -574,7 +603,8 @@ export function CheckoutPage() {
         if (!kashu.ok) {
           throw new Error(
             CARD_CHECKOUT_INIT_FAILED_MESSAGE +
-              (kashu.missingSkus?.length
+              (kashu.error ? ` ${kashu.error}` : '') +
+              (!kashu.error && kashu.missingSkus?.length
                 ? ` Missing SKU mapping: ${kashu.missingSkus.join(', ')}`
                 : '') +
               ` Your order ${result.publicOrderNumber} was saved unpaid — you can retry secure payment without creating a duplicate.`,
@@ -1176,44 +1206,94 @@ export function CheckoutPage() {
                 ) : null}
               </div>
               <div className="space-y-2 border-t border-cream-300 pt-4 text-sm">
-                {!hasVariablePricing && standardSubtotal > subtotal && (
+                {!hasVariablePricing && standardSubtotal > subtotal && !hasMembershipItems && (
                   <div className="flex justify-between text-ink-500">
                     <span>Standard price</span>
                     <span>${standardSubtotal.toFixed(2)}</span>
                   </div>
                 )}
-                {totalSavings > 0 && (
+                {totalSavings > 0 && !hasMembershipItems && (
                   <div className="flex justify-between text-gold-700">
                     <span>{isActiveMember ? 'Member savings' : 'Savings'}</span>
                     <span>−${totalSavings.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-ink-600"><span>Subtotal</span><span>{hasVariablePricing ? 'TBD after intake' : `$${displaySubtotal.toFixed(2)}${hasMembershipItems ? '/month' : ''}`}</span></div>
-                {!hasVariablePricing && <>
-                  {requiresPhysicalShipping && (
+                {hasMembershipItems && !hasVariablePricing ? (
+                  <>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">Due today</p>
+                    {membershipProgram ? (
+                      <div className="flex justify-between text-ink-600">
+                        <span>{membershipProgram.displayName}</span>
+                        <span>${(membershipMonthlyCents / 100).toFixed(2)}</span>
+                      </div>
+                    ) : null}
+                    {membershipEnrollmentVisitCents > 0 && requiredVisit ? (
+                      <div className="flex justify-between text-ink-600">
+                        <span>{requiredVisit.name}</span>
+                        <span>${(membershipEnrollmentVisitCents / 100).toFixed(2)}</span>
+                      </div>
+                    ) : null}
+                    {requiresPhysicalShipping && (
+                      <div className="flex justify-between text-ink-600">
+                        <span>Preferred: {labelShippingMethod(resolvedShippingMethod)}</span>
+                        <span>After approval</span>
+                      </div>
+                    )}
+                    <p className="text-[11px] text-ink-500 leading-snug">{TAX_INCLUSIVE_CHECKOUT_DISCLOSURE}</p>
+                    <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base">
+                      <span>Total due today</span>
+                      <span>${(membershipDueTodayCents / 100).toFixed(2)}</span>
+                    </div>
+                    <div className="mt-3 space-y-1 rounded-lg border border-cream-300 bg-cream-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">
+                        Renews monthly
+                      </p>
+                      <div className="flex justify-between text-sm text-ink-700">
+                        <span>
+                          {items.find(i => i.isMembership || i.purchaseType === 'membership_program')
+                            ?.name ?? membershipProgram?.displayName ?? 'Membership'}
+                        </span>
+                        <span>${(membershipMonthlyCents / 100).toFixed(2)}/month</span>
+                      </div>
+                      {membershipEnrollmentVisitCents > 0 ? (
+                        <p className="text-[11px] text-ink-500 leading-snug">
+                          Provider visit is a one-time enrollment charge and does not rebill.
+                        </p>
+                      ) : null}
+                    </div>
+                  </>
+                ) : (
+                  <>
                     <div className="flex justify-between text-ink-600">
+                      <span>Subtotal</span>
                       <span>
-                        {hasMembershipItems
-                          ? `Preferred: ${labelShippingMethod(resolvedShippingMethod)}`
-                          : labelShippingMethod(resolvedShippingMethod)}
-                      </span>
-                      <span>
-                        {hasMembershipItems
-                          ? 'After approval'
-                          : shipping === 0
-                            ? 'Free'
-                            : `$${shipping.toFixed(2)}`}
+                        {hasVariablePricing ? 'TBD after intake' : `$${displaySubtotal.toFixed(2)}`}
                       </span>
                     </div>
-                  )}
-                  <p className="text-[11px] text-ink-500 leading-snug">{TAX_INCLUSIVE_CHECKOUT_DISCLOSURE}</p>
-                  <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base">
-                    <span>{hasMembershipItems ? 'Due today (monthly)' : 'Total'}</span>
-                    <span>${total.toFixed(2)}{hasMembershipItems ? '/mo' : ''}</span>
-                  </div>
-                </>}
-                {hasVariablePricing && (
-                  <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base"><span>Total</span><span>TBD after intake</span></div>
+                    {!hasVariablePricing && (
+                      <>
+                        {requiresPhysicalShipping && (
+                          <div className="flex justify-between text-ink-600">
+                            <span>{labelShippingMethod(resolvedShippingMethod)}</span>
+                            <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                          </div>
+                        )}
+                        <p className="text-[11px] text-ink-500 leading-snug">
+                          {TAX_INCLUSIVE_CHECKOUT_DISCLOSURE}
+                        </p>
+                        <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base">
+                          <span>Total</span>
+                          <span>${total.toFixed(2)}</span>
+                        </div>
+                      </>
+                    )}
+                    {hasVariablePricing && (
+                      <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base">
+                        <span>Total</span>
+                        <span>TBD after intake</span>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
               {hasProviderCare && (

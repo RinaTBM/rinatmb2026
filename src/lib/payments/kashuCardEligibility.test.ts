@@ -67,7 +67,7 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
     expect(r).toEqual({ ok: true, membershipRecurring: true });
   });
 
-  it('blocks mixed membership + one-time from becoming a one-time card purchase', () => {
+  it('blocks mixed membership + ordinary one-time merchandise from becoming a one-time card purchase', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
       shippingCents: 0,
@@ -84,6 +84,31 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
     });
     expect(r.ok).toBe(false);
     if (!r.ok) expect(['membership', 'membership_mixed']).toContain(r.reason);
+  });
+
+  it('allows SEM membership + required IPV as enrollment (not ordinary mixed cart)', () => {
+    expect(
+      evaluateKashuCardCartEligibility({
+        flagEnabled: true,
+        shippingCents: 0,
+        taxCents: 0,
+        items: [
+          {
+            isMembership: true,
+            purchaseType: 'membership_program',
+            quantity: 1,
+            sku: 'MBM-MEM-SEM-MEM-001',
+            productId: 'm1',
+          },
+          {
+            purchaseType: 'one_time',
+            quantity: 1,
+            sku: 'MBM-PC-IPV-SRV-001',
+            productId: 'pc1',
+          },
+        ],
+      }),
+    ).toEqual({ ok: true, membershipRecurring: true });
   });
 
   it('allows Two-Day / Next-Day shipping when mapped MBM-SHIP line items are used ($30 / $50)', () => {

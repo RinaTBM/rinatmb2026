@@ -5,6 +5,7 @@ import {
 } from '@/lib/checkout/checkoutConstants';
 import {
   assertMembershipRecurringInitItem,
+  buildMembershipEnrollmentTagadaInitItems,
   buildMembershipTagadaInitItem,
   canSelfServiceCancelMembership,
   computeMinimumTermEndsAt,
@@ -12,6 +13,7 @@ import {
   extractTagadaSubscriptionFields,
   mapTagadaSubscriptionEventToMembershipStatus,
   membershipActivationFromBrowserReturn,
+  membershipEnrollmentDueTodayCents,
   MEMBERSHIP_MINIMUM_CANCEL_BLOCK_MESSAGE,
   SEM_MEMBERSHIP_SKU,
   SEM_TAGADA_PRICE_ID,
@@ -107,7 +109,7 @@ describe('Tagada membership recurring billing', () => {
     if (!r.ok) expect(r.reason).toBe('multiple_memberships');
   });
 
-  it('blocks membership + one-time mixed cart', () => {
+  it('blocks membership + ordinary merchandise mixed cart (IPV exception is separate)', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
       shippingCents: 0,
@@ -124,6 +126,161 @@ describe('Tagada membership recurring billing', () => {
     });
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.reason).toBe('membership_mixed');
+  });
+
+  it('allows SEM membership + required Initial Provider Visit (one-time enrollment)', () => {
+    const cart = evaluateMembershipCardCheckoutCart([
+      {
+        isMembership: true,
+        purchaseType: 'membership_program',
+        quantity: 1,
+        sku: SEM_MEMBERSHIP_SKU,
+      },
+      { purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' },
+    ]);
+    expect(cart).toMatchObject({
+      ok: true,
+      enrollmentVisitSku: 'MBM-PC-IPV-SRV-001',
+      dueTodayCents: 22400,
+      monthlyRebillCents: 14900,
+    });
+    expect(
+      evaluateKashuCardCartEligibility({
+        flagEnabled: true,
+        shippingCents: 0,
+        taxCents: 0,
+        items: [
+          {
+            isMembership: true,
+            purchaseType: 'membership_program',
+            quantity: 1,
+            sku: SEM_MEMBERSHIP_SKU,
+          },
+          { purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' },
+        ],
+      }),
+    ).toEqual({ ok: true, membershipRecurring: true });
+  });
+
+  it('SEM enrollment: first charge 22400; recurring rebill 14900 only (IPV never rebills)', () => {
+    const due = membershipEnrollmentDueTodayCents({
+      membershipSku: SEM_MEMBERSHIP_SKU,
+      visitSku: 'MBM-PC-IPV-SRV-001',
+    });
+    expect(due).toEqual({
+      ok: true,
+      dueTodayCents: 22400,
+      monthlyRebillCents: 14900,
+      visitCents: 7500,
+    });
+    const init = buildMembershipEnrollmentTagadaInitItems({
+      membershipSku: SEM_MEMBERSHIP_SKU,
+      visitSku: 'MBM-PC-IPV-SRV-001',
+      membershipVariantId: SEM_TAGADA_VARIANT_ID,
+      visitVariantId: 'variant_08bf53e519ce',
+      visitPriceId: 'price_6b59dbc48752',
+    });
+    expect(init.ok).toBe(true);
+    if (!init.ok) return;
+    expect(init.dueTodayCents).toBe(22400);
+    expect(init.monthlyRebillCents).toBe(14900);
+    expect(init.visitCents).toBe(7500);
+    expect(init.items).toHaveLength(2);
+    expect(init.items[0]).toEqual({
+      variantId: SEM_TAGADA_VARIANT_ID,
+      quantity: 1,
+      priceId: SEM_TAGADA_PRICE_ID,
+    });
+    expect(init.items[1].priceId).not.toBe(SEM_TAGADA_PRICE_ID);
+    expect(init.items[1].priceId).toBe('price_6b59dbc48752');
+    // Shipping not in enrollment init.
+    expect(init.items.every(i => !String(i.variantId).includes('ship'))).toBe(true);
+  });
+
+  it('TIRZ enrollment: first charge 32400; recurring rebill 24900 only', () => {
+    const due = membershipEnrollmentDueTodayCents({
+      membershipSku: TIRZ_MEMBERSHIP_SKU,
+      visitSku: 'MBM-PC-IPV-SRV-001',
+    });
+    expect(due).toEqual({
+      ok: true,
+      dueTodayCents: 32400,
+      monthlyRebillCents: 24900,
+      visitCents: 7500,
+    });
+    const cart = evaluateMembershipCardCheckoutCart([
+      {
+        isMembership: true,
+        purchaseType: 'membership_program',
+        quantity: 1,
+        sku: TIRZ_MEMBERSHIP_SKU,
+      },
+      { purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' },
+    ]);
+    expect(cart).toMatchObject({
+      ok: true,
+      dueTodayCents: 32400,
+      monthlyRebillCents: 24900,
+      enrollmentVisitSku: 'MBM-PC-IPV-SRV-001',
+    });
+    const init = buildMembershipEnrollmentTagadaInitItems({
+      membershipSku: TIRZ_MEMBERSHIP_SKU,
+      visitSku: 'MBM-PC-IPV-SRV-001',
+      membershipVariantId: TIRZ_TAGADA_VARIANT_ID,
+      visitVariantId: 'variant_08bf53e519ce',
+      visitPriceId: 'price_6b59dbc48752',
+    });
+    expect(init.ok).toBe(true);
+    if (!init.ok) return;
+    expect(init.items[0].priceId).toBe(TIRZ_TAGADA_PRICE_ID);
+    expect(init.monthlyRebillCents).toBe(24900);
+    expect(init.dueTodayCents).toBe(32400);
+  });
+
+  it('membership enrollment shipping charged at enrollment is $0', () => {
+    expect(
+      evaluateKashuCardCartEligibility({
+        flagEnabled: true,
+        shippingCents: 0,
+        taxCents: 0,
+        items: [
+          {
+            isMembership: true,
+            purchaseType: 'membership_program',
+            quantity: 1,
+            sku: SEM_MEMBERSHIP_SKU,
+          },
+          { purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' },
+        ],
+      }).ok,
+    ).toBe(true);
+    expect(
+      evaluateKashuCardCartEligibility({
+        flagEnabled: true,
+        shippingCents: 3000,
+        taxCents: 0,
+        items: [
+          {
+            isMembership: true,
+            purchaseType: 'membership_program',
+            quantity: 1,
+            sku: SEM_MEMBERSHIP_SKU,
+          },
+          { purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' },
+        ],
+      }).ok,
+    ).toBe(false);
+  });
+
+  it('rejects visit priced with membership recurring priceId', () => {
+    const bad = buildMembershipEnrollmentTagadaInitItems({
+      membershipSku: SEM_MEMBERSHIP_SKU,
+      visitSku: 'MBM-PC-IPV-SRV-001',
+      membershipVariantId: SEM_TAGADA_VARIANT_ID,
+      visitVariantId: 'variant_08bf53e519ce',
+      visitPriceId: SEM_TAGADA_PRICE_ID,
+    });
+    expect(bad).toEqual({ ok: false, reason: 'visit_must_not_use_membership_price' });
   });
 
   it('blocks unmapped MBM-MEM-* (not broadly all MEM SKUs)', () => {

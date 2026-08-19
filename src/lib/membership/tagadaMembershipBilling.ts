@@ -38,7 +38,7 @@ export const MEMBERSHIP_CARD_RECURRING_DISCLOSURE =
   'Your card will be charged monthly while your membership is active. A 3-month minimum commitment applies.';
 
 export const MEMBERSHIP_CARD_SHIPPING_NOTE =
-  'Membership enrollment charges the monthly membership rate only. First medication shipment shipping (Two-Day $30 / Next-Day $50) is arranged after provider approval — it is not part of the Tagada recurring membership price.';
+  'Membership enrollment charges the monthly membership rate plus any required provider visit due today. First medication shipment shipping (Two-Day $30 / Next-Day $50) is arranged after provider approval — it is not part of the Tagada recurring membership price.';
 
 export const MEMBERSHIP_TERMS_ACCEPTANCE_LABEL =
   'I agree to the Membership & Cancellation Terms, including the 3-month minimum commitment and monthly card billing.';
@@ -134,8 +134,70 @@ export function isMembershipLineItem(item: {
 }
 
 /**
- * Membership card checkout: exactly ONE supported program SKU, qty 1, no other lines.
- * Mixed SEM+TIRZ, membership+one-time, or unmapped MBM-MEM-* → fail safe.
+ * Required provider-visit SKUs allowed alongside membership enrollment (ONE TIME).
+ * These are enrollment charges — never recurring Tagada subscription lines.
+ * Ordinary merchandise mixed with membership remains blocked.
+ */
+export const MEMBERSHIP_ENROLLMENT_ONE_TIME_VISIT_SKUS = [
+  'MBM-PC-IPV-SRV-001',
+  'MBM-PC-FUV-SRV-001',
+] as const;
+
+export type MembershipEnrollmentOneTimeVisitSku =
+  (typeof MEMBERSHIP_ENROLLMENT_ONE_TIME_VISIT_SKUS)[number];
+
+export function isMembershipEnrollmentOneTimeVisitSku(
+  sku: string | null | undefined,
+): sku is MembershipEnrollmentOneTimeVisitSku {
+  return (
+    typeof sku === 'string' &&
+    (MEMBERSHIP_ENROLLMENT_ONE_TIME_VISIT_SKUS as readonly string[]).includes(sku)
+  );
+}
+
+/** Authoritative one-time visit amounts (must match providerVisits / catalog). */
+export const MEMBERSHIP_ENROLLMENT_VISIT_CENTS: Record<
+  MembershipEnrollmentOneTimeVisitSku,
+  number
+> = {
+  'MBM-PC-IPV-SRV-001': 7500,
+  'MBM-PC-FUV-SRV-001': 5500,
+};
+
+/**
+ * Due today for membership enrollment:
+ * recurring program monthly amount + optional required provider visit (one-time).
+ * Recurring rebill remains program monthly amount only.
+ */
+export function membershipEnrollmentDueTodayCents(input: {
+  membershipSku: string;
+  visitSku?: string | null;
+}): { ok: true; dueTodayCents: number; monthlyRebillCents: number; visitCents: number } | {
+  ok: false;
+  reason: string;
+} {
+  const program = getTagadaMembershipProgram(input.membershipSku);
+  if (!program) return { ok: false, reason: 'unsupported_membership' };
+  const visitSku = input.visitSku ?? null;
+  let visitCents = 0;
+  if (visitSku) {
+    if (!isMembershipEnrollmentOneTimeVisitSku(visitSku)) {
+      return { ok: false, reason: 'unsupported_visit' };
+    }
+    visitCents = MEMBERSHIP_ENROLLMENT_VISIT_CENTS[visitSku];
+  }
+  return {
+    ok: true,
+    dueTodayCents: program.monthlyAmountCents + visitCents,
+    monthlyRebillCents: program.monthlyAmountCents,
+    visitCents,
+  };
+}
+
+/**
+ * Membership card checkout: exactly ONE supported program SKU (qty 1),
+ * plus at most one required provider-visit SKU (qty 1) as a one-time enrollment charge.
+ * Mixed SEM+TIRZ, membership+ordinary merchandise, or unmapped MBM-MEM-* → fail safe.
  */
 export function evaluateMembershipCardCheckoutCart(items: Array<{
   isMembership?: boolean;
@@ -143,7 +205,13 @@ export function evaluateMembershipCardCheckoutCart(items: Array<{
   quantity: number;
   sku?: string | null;
 }>):
-  | { ok: true; program: TagadaMembershipProgramConfig }
+  | {
+      ok: true;
+      program: TagadaMembershipProgramConfig;
+      enrollmentVisitSku: MembershipEnrollmentOneTimeVisitSku | null;
+      dueTodayCents: number;
+      monthlyRebillCents: number;
+    }
   | {
       ok: false;
       reason:
@@ -152,7 +220,8 @@ export function evaluateMembershipCardCheckoutCart(items: Array<{
         | 'unsupported_membership'
         | 'multiple_memberships'
         | 'invalid_quantity'
-        | 'not_membership_only';
+        | 'not_membership_only'
+        | 'invalid_enrollment_visit';
       message: string;
     } {
   if (!items.length) {
@@ -170,13 +239,39 @@ export function evaluateMembershipCardCheckoutCart(items: Array<{
     };
   }
 
-  if (nonMembershipLines.length > 0) {
+  const visitLines = nonMembershipLines.filter(i =>
+    isMembershipEnrollmentOneTimeVisitSku(i.sku ?? null),
+  );
+  const otherLines = nonMembershipLines.filter(
+    i => !isMembershipEnrollmentOneTimeVisitSku(i.sku ?? null),
+  );
+
+  if (otherLines.length > 0) {
     return {
       ok: false,
       reason: 'mixed_cart',
       message:
-        'Membership enrollment must be checked out alone. Remove other products to continue with card membership billing.',
+        'Membership enrollment cannot be mixed with ordinary products. A required provider visit may be included as a one-time enrollment charge only.',
     };
+  }
+
+  if (visitLines.length > 1) {
+    return {
+      ok: false,
+      reason: 'invalid_enrollment_visit',
+      message: 'Only one required provider visit can be included with membership enrollment.',
+    };
+  }
+
+  if (visitLines.length === 1) {
+    const vQty = Number(visitLines[0].quantity);
+    if (!Number.isInteger(vQty) || vQty !== 1) {
+      return {
+        ok: false,
+        reason: 'invalid_enrollment_visit',
+        message: 'Required provider visit quantity must be exactly 1.',
+      };
+    }
   }
 
   if (membershipLines.length > 1) {
@@ -222,7 +317,92 @@ export function evaluateMembershipCardCheckoutCart(items: Array<{
     };
   }
 
-  return { ok: true, program };
+  const enrollmentVisitSku =
+    visitLines.length === 1 && isMembershipEnrollmentOneTimeVisitSku(visitLines[0].sku)
+      ? visitLines[0].sku
+      : null;
+  const due = membershipEnrollmentDueTodayCents({
+    membershipSku: program.sku,
+    visitSku: enrollmentVisitSku,
+  });
+  if (!due.ok) {
+    return {
+      ok: false,
+      reason: 'invalid_enrollment_visit',
+      message: 'Unable to price the required provider visit for membership enrollment.',
+    };
+  }
+
+  return {
+    ok: true,
+    program,
+    enrollmentVisitSku,
+    dueTodayCents: due.dueTodayCents,
+    monthlyRebillCents: due.monthlyRebillCents,
+  };
+}
+
+/**
+ * Build Tagada checkout/init items for membership enrollment.
+ * Recurring membership uses verified priceId; optional provider visit is ONE-TIME
+ * (mapped one-time priceId / variant only — never a membership recurring price).
+ */
+export function buildMembershipEnrollmentTagadaInitItems(input: {
+  membershipSku: TagadaMembershipProgramSku;
+  visitSku?: MembershipEnrollmentOneTimeVisitSku | null;
+  membershipVariantId: string;
+  visitVariantId?: string | null;
+  visitPriceId?: string | null;
+}):
+  | {
+      ok: true;
+      items: Array<{ variantId: string; quantity: number; priceId?: string }>;
+      dueTodayCents: number;
+      monthlyRebillCents: number;
+      visitCents: number;
+    }
+  | { ok: false; reason: string } {
+  const program = getTagadaMembershipProgram(input.membershipSku);
+  if (!program) return { ok: false, reason: 'unsupported_membership' };
+  const due = membershipEnrollmentDueTodayCents({
+    membershipSku: input.membershipSku,
+    visitSku: input.visitSku ?? null,
+  });
+  if (!due.ok) return { ok: false, reason: due.reason };
+
+  const items: Array<{ variantId: string; quantity: number; priceId?: string }> = [
+    {
+      variantId: input.membershipVariantId,
+      quantity: 1,
+      priceId: program.tagadaPriceId,
+    },
+  ];
+
+  if (input.visitSku) {
+    if (!input.visitVariantId?.trim()) {
+      return { ok: false, reason: 'missing_visit_variant' };
+    }
+    items.push({
+      variantId: input.visitVariantId,
+      quantity: 1,
+      ...(input.visitPriceId ? { priceId: input.visitPriceId } : {}),
+    });
+  }
+
+  // Recurring rebill = membership priceId only — visit must not share that priceId.
+  const memItem = items[0];
+  const visitItem = items[1];
+  if (visitItem?.priceId && visitItem.priceId === memItem.priceId) {
+    return { ok: false, reason: 'visit_must_not_use_membership_price' };
+  }
+
+  return {
+    ok: true,
+    items,
+    dueTodayCents: due.dueTodayCents,
+    monthlyRebillCents: due.monthlyRebillCents,
+    visitCents: due.visitCents,
+  };
 }
 
 /**

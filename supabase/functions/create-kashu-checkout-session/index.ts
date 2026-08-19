@@ -158,6 +158,11 @@ Deno.serve(async (req) => {
     }
 
     const SUPPORTED_MEM_SKUS = new Set(["MBM-MEM-SEM-MEM-001", "MBM-MEM-TIR-MEM-001"]);
+    const ENROLLMENT_VISIT_SKUS = new Set(["MBM-PC-IPV-SRV-001", "MBM-PC-FUV-SRV-001"]);
+    const ENROLLMENT_VISIT_CENTS: Record<string, number> = {
+      "MBM-PC-IPV-SRV-001": 7500,
+      "MBM-PC-FUV-SRV-001": 5500,
+    };
     const MEM_PRICE_BY_SKU: Record<string, { priceId: string; cents: number; type: string }> = {
       "MBM-MEM-SEM-MEM-001": {
         priceId: "price_344d3dacb4ab",
@@ -171,13 +176,22 @@ Deno.serve(async (req) => {
       },
     };
     const membershipSkus = skus.filter((s: string) => String(s).startsWith("MBM-MEM-"));
+    const visitSkus = skus.filter((s: string) => ENROLLMENT_VISIT_SKUS.has(String(s)));
+    const otherSkus = skus.filter(
+      (s: string) => !String(s).startsWith("MBM-MEM-") && !ENROLLMENT_VISIT_SKUS.has(String(s)),
+    );
     const isMembershipCheckout = membershipSkus.length > 0;
     if (isMembershipCheckout) {
-      if (skus.length !== 1 || membershipSkus.length !== 1) {
+      // Allowed: exactly one supported MEM program (+ optional one required provider visit).
+      // Provider visit is ONE-TIME enrollment charge — never part of monthly rebill.
+      if (membershipSkus.length !== 1 || otherSkus.length > 0 || visitSkus.length > 1) {
         return json({
           error:
-            "Membership card enrollment must contain exactly one supported membership program and no other items.",
-          missingSkus: skus,
+            "Membership card enrollment allows exactly one supported membership program plus an optional required provider visit (one-time). Ordinary products and shipping cannot be mixed into the Tagada subscription session.",
+          code: "MEMBERSHIP_ENROLLMENT_CART_INVALID",
+          membershipSkus,
+          visitSkus,
+          otherSkus,
         }, 409);
       }
       const memSku = membershipSkus[0];
@@ -185,19 +199,32 @@ Deno.serve(async (req) => {
         return json({
           error:
             "Online enrollment for this membership program is not available yet. Please contact us for assistance.",
-          missingSkus: [memSku],
+          code: "UNSUPPORTED_MEMBERSHIP",
+          membershipSku: memSku,
         }, 409);
       }
-      if (orderItems.length !== 1 || Number(orderItems[0].quantity) !== 1) {
+      const memLines = orderItems.filter((i: { sku: string | null }) => i.sku === memSku);
+      if (memLines.length !== 1 || Number(memLines[0].quantity) !== 1) {
         return json({
           error: "Membership enrollment quantity must be exactly 1.",
+          code: "INVALID_MEMBERSHIP_QUANTITY",
         }, 409);
+      }
+      if (visitSkus.length === 1) {
+        const vSku = visitSkus[0];
+        const visitLines = orderItems.filter((i: { sku: string | null }) => i.sku === vSku);
+        if (visitLines.length !== 1 || Number(visitLines[0].quantity) !== 1) {
+          return json({
+            error: "Required provider visit quantity must be exactly 1.",
+            code: "INVALID_ENROLLMENT_VISIT_QUANTITY",
+          }, 409);
+        }
       }
       // Recurring Tagada membership price is not shippable — do not mix shipping lines.
       if ((Number(order.shipping_cents) || 0) !== 0) {
         return json({
           error:
-            "Membership card enrollment charges the monthly membership only (no Tagada shipping line). First medication shipping is arranged after provider approval.",
+            "Membership card enrollment charges membership (+ required provider visit when applicable) only — no Tagada shipping line. First medication shipping is arranged after provider approval.",
           blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
           shippingCents: Number(order.shipping_cents) || 0,
         }, 409);
@@ -295,30 +322,56 @@ Deno.serve(async (req) => {
       skuList.push(`${sku}×${qty}`);
       if (isMembershipCheckout) {
         const memCfg = MEM_PRICE_BY_SKU[sku];
-        const priceId = memCfg?.priceId || mapped.tagada_price_id;
-        if (!priceId) {
+        if (memCfg) {
+          const priceId = memCfg.priceId || mapped.tagada_price_id;
+          if (!priceId) {
+            return json({
+              error:
+                "Membership recurring checkout requires Tagada priceId (variantId alone is not allowed).",
+              sku,
+            }, 409);
+          }
+          // Authoritative recurring amount from verified Tagada price mapping.
+          if (Math.trunc(unit) !== memCfg.cents) {
+            return json({
+              error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+              blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+              message: "Membership Tagada price cents do not match verified MBM membership amount.",
+              sku,
+              mappedCents: unit,
+              expectedCents: memCfg.cents,
+            }, 409);
+          }
+          tagadaItems.push({
+            variantId: mapped.tagada_variant_id,
+            quantity: 1,
+            priceId,
+          });
+        } else if (ENROLLMENT_VISIT_SKUS.has(sku)) {
+          // ONE-TIME enrollment visit — use mapped one-time priceId; never a recurring MEM price.
+          const expectedVisit = ENROLLMENT_VISIT_CENTS[sku];
+          if (Math.trunc(unit) !== expectedVisit) {
+            return json({
+              error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+              blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+              message: "Provider visit Tagada price cents do not match verified MBM visit amount.",
+              sku,
+              mappedCents: unit,
+              expectedCents: expectedVisit,
+            }, 409);
+          }
+          tagadaItems.push({
+            variantId: mapped.tagada_variant_id,
+            quantity: 1,
+            ...(mapped.tagada_price_id ? { priceId: mapped.tagada_price_id } : {}),
+          });
+        } else {
           return json({
-            error:
-              "Membership recurring checkout requires Tagada priceId (variantId alone is not allowed).",
+            error: "Unexpected SKU on membership enrollment checkout.",
+            code: "MEMBERSHIP_ENROLLMENT_CART_INVALID",
             sku,
           }, 409);
         }
-        // Authoritative recurring amount from verified Tagada price mapping.
-        if (memCfg && Math.trunc(unit) !== memCfg.cents) {
-          return json({
-            error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
-            blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
-            message: "Membership Tagada price cents do not match verified MBM membership amount.",
-            sku,
-            mappedCents: unit,
-            expectedCents: memCfg.cents,
-          }, 409);
-        }
-        tagadaItems.push({
-          variantId: mapped.tagada_variant_id,
-          quantity: 1,
-          priceId,
-        });
       } else {
         tagadaItems.push({
           variantId: mapped.tagada_variant_id,

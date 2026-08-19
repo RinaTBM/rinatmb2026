@@ -529,29 +529,73 @@ export function extractCheckoutTokenFromRedirectUrl(redirectUrl: string): string
  * webhook guide we reviewed — try common documented/commerce shapes only.
  * Returns null if no trusted amount field is present (caller must NOT mark paid).
  */
+function asRecord(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === 'object' ? (value as Record<string, unknown>) : undefined;
+}
+
+function centsCandidate(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isFinite(value)) return Math.trunc(value);
+  if (typeof value === 'string' && value.trim() && !Number.isNaN(Number(value))) {
+    return Math.trunc(Number(value));
+  }
+  return null;
+}
+
+/**
+ * Best-effort extract of paid amount in cents from a Tagada webhook JSON payload.
+ * Live Tagada `payment/succeeded` envelopes put cents on `data.amount` and
+ * `data.order.paidAmount` (already cents — do NOT multiply by 100).
+ * Returns null if no trusted amount field is present (caller must NOT mark paid).
+ */
 export function extractPaidAmountCentsFromTagadaPayload(payload: unknown): number | null {
   if (!payload || typeof payload !== 'object') return null;
   const root = payload as Record<string, unknown>;
+  const data = asRecord(root.data);
+  const order = asRecord(root.order) ?? asRecord(data?.order);
+  const payment = asRecord(root.payment) ?? asRecord(data?.payment);
   const candidates: unknown[] = [
     root.amountCents,
     root.amount_cents,
     root.totalCents,
     root.total_cents,
-    (root.order as Record<string, unknown> | undefined)?.amountCents,
-    (root.order as Record<string, unknown> | undefined)?.totalCents,
-    (root.order as Record<string, unknown> | undefined)?.amount_cents,
-    (root.payment as Record<string, unknown> | undefined)?.amountCents,
-    (root.payment as Record<string, unknown> | undefined)?.amount_cents,
-    (root.data as Record<string, unknown> | undefined)?.amountCents,
+    // Live Tagada payment/succeeded — integer cents
+    data?.amount,
+    data?.amountCents,
+    order?.paidAmount,
+    order?.amountCents,
+    order?.totalCents,
+    order?.amount_cents,
+    payment?.amountCents,
+    payment?.amount_cents,
+    payment?.amount,
+    // Flat payloads / tests
+    root.amount,
   ];
   for (const c of candidates) {
-    if (typeof c === 'number' && Number.isFinite(c)) return Math.trunc(c);
-    if (typeof c === 'string' && c.trim() && !Number.isNaN(Number(c))) return Math.trunc(Number(c));
+    const n = centsCandidate(c);
+    if (n != null) return n;
   }
-  // Dollars → cents only when explicitly labeled
-  const dollarFields = [root.amount, root.total, (root.order as Record<string, unknown> | undefined)?.total];
+  // Dollars → cents only when explicitly labeled as dollars
+  const dollarFields = [
+    root.amountDollars,
+    root.totalDollars,
+    order?.totalDollars,
+    data?.amountDollars,
+  ];
   for (const d of dollarFields) {
     if (typeof d === 'number' && Number.isFinite(d)) return Math.round(d * 100);
+  }
+  return null;
+}
+
+function mbmOrderFromTags(tags: unknown): string | null {
+  if (!Array.isArray(tags)) return null;
+  for (const t of tags) {
+    if (typeof t !== 'string') continue;
+    if (t.startsWith('mbmOrder:')) return t.slice('mbmOrder:'.length).trim();
+    // Tagada sometimes stores the init query echo as customerTags:mbmOrder:...
+    const echoed = t.match(/(?:^|:)mbmOrder:([A-Z0-9-]+)/i);
+    if (echoed?.[1]) return echoed[1];
   }
   return null;
 }
@@ -559,30 +603,72 @@ export function extractPaidAmountCentsFromTagadaPayload(payload: unknown): numbe
 /**
  * Best-effort MBM order number from Tagada payload / return metadata.
  * Prefer explicit fields we pass via customerTags / returnUrl (mbmOrderNumber).
+ * Live webhooks nest tags under `data.customer.tags` (not top-level customerTags).
  */
 export function extractMbmOrderNumberFromTagadaPayload(payload: unknown): string | null {
   if (!payload || typeof payload !== 'object') return null;
   const root = payload as Record<string, unknown>;
+  const data = asRecord(root.data);
   const keys = ['mbmOrderNumber', 'mbm_order_number', 'payment_reference', 'externalReference'];
-  for (const k of keys) {
-    const v = root[k];
-    if (typeof v === 'string' && v.trim()) return v.trim();
-  }
-  const meta = root.metadata;
-  if (meta && typeof meta === 'object') {
-    const m = meta as Record<string, unknown>;
+  for (const layer of [root, data, asRecord(root.metadata), asRecord(data?.metadata)]) {
+    if (!layer) continue;
     for (const k of keys) {
-      const v = m[k];
+      const v = layer[k];
       if (typeof v === 'string' && v.trim()) return v.trim();
     }
   }
-  const tags = root.customerTags ?? (root.customer as Record<string, unknown> | undefined)?.tags;
-  if (Array.isArray(tags)) {
-    for (const t of tags) {
-      if (typeof t === 'string' && t.startsWith('mbmOrder:')) return t.slice('mbmOrder:'.length);
+  const tagSets = [
+    root.customerTags,
+    asRecord(root.customer)?.tags,
+    asRecord(data?.customer)?.tags,
+    data?.customerTags,
+  ];
+  for (const tags of tagSets) {
+    const fromTags = mbmOrderFromTags(tags);
+    if (fromTags) return fromTags;
+  }
+  // order/paid metadata may echo the init query string
+  const orderMeta = asRecord(data?.order_metadata);
+  const qp = orderMeta?.queryParams;
+  if (typeof qp === 'string' && qp.includes('mbmOrder')) {
+    try {
+      const params = new URLSearchParams(qp.startsWith('?') ? qp.slice(1) : qp);
+      const raw = params.get('customerTags') || '';
+      const fromQuery = mbmOrderFromTags(raw.split(',').map((s) => s.trim()).filter(Boolean));
+      if (fromQuery) return fromQuery;
+    } catch {
+      /* ignore */
     }
   }
   return null;
+}
+
+/** External Tagada IDs from live nested `data` envelopes or flat test payloads. */
+export function extractTagadaExternalIdsFromPayload(payload: unknown): {
+  externalOrderId: string | null;
+  externalPaymentId: string | null;
+  externalCheckoutSessionId: string | null;
+} {
+  const root = asRecord(payload) || {};
+  const data = asRecord(root.data);
+  const order = asRecord(root.order) ?? asRecord(data?.order);
+  const payment = asRecord(root.payment) ?? asRecord(data?.payment);
+  const asId = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null);
+  return {
+    externalOrderId:
+      asId(root.orderId) || asId(data?.orderId) || asId(order?.id) || asId(order?.orderId) || null,
+    externalPaymentId:
+      asId(root.paymentId) ||
+      asId(data?.paymentId) ||
+      asId(payment?.id) ||
+      asId(payment?.paymentId) ||
+      null,
+    externalCheckoutSessionId:
+      asId(root.checkoutSessionId) ||
+      asId(root.checkout_session_id) ||
+      asId(data?.checkoutSessionId) ||
+      null,
+  };
 }
 
 export function mbmOrderCustomerTag(orderNumber: string): string {

@@ -10,6 +10,7 @@ import {
   KASHU_PAYMENT_METHOD,
   mapTagadaEventToPaymentStatus,
   mbmOrderCustomerTag,
+  extractTagadaExternalIdsFromPayload,
   TAGADA_API_BASE_PRODUCTION,
   verifyTagadaWebhookSignatureSync,
 } from './kashuTagada';
@@ -182,6 +183,34 @@ describe('Tagada checkout init URL builder', () => {
     expect(extractPaidAmountCentsFromTagadaPayload({ amountCents: 25900 })).toBe(25900);
     expect(extractPaidAmountCentsFromTagadaPayload({ order: { totalCents: 100 } })).toBe(100);
     expect(extractPaidAmountCentsFromTagadaPayload({})).toBeNull();
+  });
+
+  it('extracts nested live Tagada payment/succeeded envelope (Phase 3)', () => {
+    const live = {
+      id: '7cf0c363-b650-44bf-a7c9-1434d46c9315',
+      type: 'payment/succeeded',
+      data: {
+        amount: 3399,
+        paymentId: 'pay_1e0bd6751467',
+        orderId: 'order_b2ee61c57a77',
+        checkoutSessionId: 'cs_726480b958ea',
+        status: 'succeeded',
+        order: { status: 'paid', paidAmount: 3399 },
+        customer: {
+          tags: [
+            'customerTags:mbmOrder:MBM-P3-LIVE-1787118084',
+            'mbmOrder:MBM-P3-LIVE-1787118084',
+          ],
+        },
+      },
+    };
+    expect(extractMbmOrderNumberFromTagadaPayload(live)).toBe('MBM-P3-LIVE-1787118084');
+    expect(extractPaidAmountCentsFromTagadaPayload(live)).toBe(3399);
+    expect(extractTagadaExternalIdsFromPayload(live)).toEqual({
+      externalOrderId: 'order_b2ee61c57a77',
+      externalPaymentId: 'pay_1e0bd6751467',
+      externalCheckoutSessionId: 'cs_726480b958ea',
+    });
   });
 
   it('fingerprint helper stays stable for idempotency keys', () => {

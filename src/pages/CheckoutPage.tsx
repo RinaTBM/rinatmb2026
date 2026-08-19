@@ -62,6 +62,7 @@ import {
   isKashuCardEnabled,
   KASHU_CARD_SUBMIT_CTA,
   KASHU_PAYMENT_METHOD,
+  navigateToKashuHostedCheckout,
 } from '@/lib/payments/kashuTagada';
 import { TAX_INCLUSIVE_CHECKOUT_DISCLOSURE } from '@/lib/checkout/checkoutConstants';
 import { supabase } from '@/lib/supabaseClient';
@@ -465,7 +466,10 @@ export function CheckoutPage() {
           );
         }
         clearCart();
-        window.location.assign(kashu.redirectUrl);
+        const nav = navigateToKashuHostedCheckout(kashu.redirectUrl);
+        if (!nav.ok) {
+          throw new Error(CARD_CHECKOUT_INIT_FAILED_MESSAGE);
+        }
         return;
       }
 
@@ -551,7 +555,10 @@ export function CheckoutPage() {
         }
         recordLocalSubscriptions();
         clearCart();
-        window.location.assign(kashu.redirectUrl);
+        const nav = navigateToKashuHostedCheckout(kashu.redirectUrl);
+        if (!nav.ok) {
+          throw new Error(CARD_CHECKOUT_INIT_FAILED_MESSAGE);
+        }
         return;
       }
 

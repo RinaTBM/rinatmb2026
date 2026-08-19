@@ -83,6 +83,58 @@ export const KASHU_CARD_RESULT_CANCEL_COPY =
   'Payment was not completed. Your order remains unpaid. You can try card payment again or contact us for assistance.';
 
 /**
+ * Approved HTTPS hosts for Kashu/Tagada hosted checkout redirects.
+ * Never navigate to an arbitrary URL returned by the network.
+ */
+export const APPROVED_KASHU_CHECKOUT_HOSTS = ['checkout.mybaremethod.com'] as const;
+
+export function isApprovedKashuCheckoutRedirectUrl(
+  redirectUrl: string,
+): { ok: true; url: URL } | { ok: false; error: string } {
+  let url: URL;
+  try {
+    url = new URL(redirectUrl);
+  } catch {
+    return { ok: false, error: 'Invalid checkout URL.' };
+  }
+  if (url.protocol !== 'https:') {
+    return { ok: false, error: 'Checkout URL must use HTTPS.' };
+  }
+  if (!(APPROVED_KASHU_CHECKOUT_HOSTS as readonly string[]).includes(url.hostname)) {
+    return { ok: false, error: 'Checkout URL host is not approved.' };
+  }
+  // Hosted Simple Checkout path is /checkout (optional trailing segments / query).
+  if (!url.pathname.startsWith('/checkout')) {
+    return { ok: false, error: 'Checkout URL path is not approved.' };
+  }
+  return { ok: true, url };
+}
+
+/**
+ * Navigate the customer's top-level browser to Tagada hosted checkout.
+ * Bolt Preview (and similar) embed MBM in an iframe — window.location.assign only
+ * navigates the frame and can show "refused to connect". Prefer window.top.
+ * Does not mark the order paid.
+ */
+export function navigateToKashuHostedCheckout(redirectUrl: string): { ok: true } | { ok: false; error: string } {
+  const approved = isApprovedKashuCheckoutRedirectUrl(redirectUrl);
+  if (!approved.ok) return approved;
+  const href = approved.url.toString();
+  try {
+    if (typeof window !== 'undefined' && window.top && window.top !== window) {
+      window.top.location.assign(href);
+      return { ok: true };
+    }
+  } catch {
+    // Cross-origin frame access can throw — fall through to same-window navigation.
+  }
+  if (typeof window !== 'undefined') {
+    window.location.assign(href);
+  }
+  return { ok: true };
+}
+
+/**
  * Canonical MBM shipping SKUs for Tagada line-item parity.
  * Official checkout/init cannot take a custom shipping amount — only variantId items.
  * These SKUs must exist in kashu_sku_map (and Tagada catalog) at the exact MBM cents.

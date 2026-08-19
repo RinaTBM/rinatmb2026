@@ -3,6 +3,8 @@
  * Never sends API secrets from the browser — Edge Function only.
  */
 
+import { isApprovedKashuCheckoutRedirectUrl } from './kashuTagada';
+
 export interface CreateKashuCheckoutSuccess {
   ok: true;
   redirectUrl: string;
@@ -45,9 +47,14 @@ export async function createKashuCheckoutSession(input: {
         missingSkus: Array.isArray(data?.missingSkus) ? data.missingSkus : undefined,
       };
     }
+    const redirectUrl = String(data.redirectUrl);
+    const approved = isApprovedKashuCheckoutRedirectUrl(redirectUrl);
+    if (!approved.ok) {
+      return { ok: false, error: 'Unable to start card checkout.' };
+    }
     return {
       ok: true,
-      redirectUrl: String(data.redirectUrl),
+      redirectUrl: approved.url.toString(),
       checkoutToken: data.checkoutToken ?? null,
       publicOrderNumber: String(data.publicOrderNumber || input.publicOrderNumber),
       orderTotalCents: Number(data.orderTotalCents) || 0,

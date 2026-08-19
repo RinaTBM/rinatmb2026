@@ -78,7 +78,7 @@ function buildRoutes() {
       path: '/',
       component: createElement(HomePage),
       title: 'My Bare Method — Wellness, Elevated. Beautifully Personalized.',
-      description: 'Premium wellness products and provider-guided care, thoughtfully curated to help you feel your best—delivered with discretion, quality, and care. GLP-1 memberships, HRT, longevity, and more.',
+      description: 'Premium wellness products and provider-guided care, thoughtfully curated to help you feel your best—delivered with discretion, quality, and care. Semaglutide and Tirzepatide memberships, HRT, longevity, and more.',
     },
     {
       path: '/shop-all',

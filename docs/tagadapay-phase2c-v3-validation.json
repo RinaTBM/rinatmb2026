@@ -1,0 +1,37 @@
+{
+  "date": "2026-08-19",
+  "shippingrates_island_in_html": false,
+  "shippingrates_removed": true,
+  "cases": [
+    {
+      "label": "ship30",
+      "mbm_total": 14900,
+      "hosted_total_usd": 199.0,
+      "tagada_shipping_usd": 50.0,
+      "parity": "FAIL"
+    },
+    {
+      "label": "ship50",
+      "mbm_total": 16900,
+      "hosted_total_usd": 219.0,
+      "tagada_shipping_usd": 50.0,
+      "parity": "FAIL"
+    },
+    {
+      "label": "free0",
+      "mbm_total": 59500,
+      "hosted_total_usd": 595.0,
+      "tagada_shipping": "Free",
+      "parity": "PASS"
+    },
+    {
+      "label": "ipv",
+      "mbm_total": 7500,
+      "hosted_total_usd": 125.0,
+      "tagada_shipping_usd": 50.0,
+      "parity": "FAIL"
+    }
+  ],
+  "tagada_extra_shipping_charge": true,
+  "ready_for_controlled_live_test": false
+}

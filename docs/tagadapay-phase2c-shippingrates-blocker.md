@@ -44,14 +44,17 @@ CHECKOUT REQUIRES TAGADA SHIPPING SELECTION: NO
 READY FOR CONTROLLED LIVE TEST: NO
 ```
 
-### Required next dashboard action (stronger than hide)
+## Phase 2C v3 (island deleted — still auto-charges)
 
-Unchecking / “0 of 3 visible” is **not** enough. Do one of:
+Owner deleted the ShippingRates island and published. Live HTML: **no** `data-tagada-island="ShippingRates"`.
 
-1. **Preferred:** Remove the **Shipping Method / ShippingRates** island from the Checkout page editor, save, publish to `checkout.mybaremethod.com`.
-2. **Or:** Fully **delete / deactivate** the store shipping rates (not merely hide from the funnel visibility list), then re-test. Confirm totals no longer show a $50 Shipping line when MBM already passed `MBM-SHIP-*` or `$0` shipping.
+Hosted revalidation still **FAIL** for Two-Day / Next-Day / IPV (extra **$50** Shipping). Free $595 **PASS**.
 
-Then ask Cursor to re-run the four hosted non-payment checks.
+See `docs/tagadapay-phase2c-v3-validation.md`.
+
+### Required next dashboard action
+
+Island removal + hide-visible are **not** enough. Fully **delete or deactivate** store shipping rates (Two-Day $30, Next-Day $50, free-threshold), then ask Cursor to re-run the four hosted non-payment checks.
 
 ---
 

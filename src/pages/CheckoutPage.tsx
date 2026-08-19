@@ -643,7 +643,11 @@ export function CheckoutPage() {
         clearCart();
         const nav = navigateToKashuHostedCheckout(kashu.redirectUrl);
         if (!nav.ok) {
-          throw new Error(CARD_CHECKOUT_INIT_FAILED_MESSAGE);
+          throw new Error(
+            nav.error ||
+              CARD_CHECKOUT_INIT_FAILED_MESSAGE +
+                ' If you are in Bolt Preview, open the site in a full browser tab and retry.',
+          );
         }
         return;
       }
@@ -739,7 +743,11 @@ export function CheckoutPage() {
         clearCart();
         const nav = navigateToKashuHostedCheckout(kashu.redirectUrl);
         if (!nav.ok) {
-          throw new Error(CARD_CHECKOUT_INIT_FAILED_MESSAGE);
+          throw new Error(
+            nav.error ||
+              CARD_CHECKOUT_INIT_FAILED_MESSAGE +
+                ' If you are in Bolt Preview, open the site in a full browser tab and retry.',
+          );
         }
         return;
       }

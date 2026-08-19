@@ -117,26 +117,94 @@ export function isApprovedKashuCheckoutRedirectUrl(
 
 /**
  * Navigate the customer's top-level browser to Tagada hosted checkout.
- * Bolt Preview (and similar) embed MBM in an iframe — window.location.assign only
- * navigates the frame and can show "refused to connect". Prefer window.top.
- * Does not mark the order paid.
+ * Bolt Preview embeds MBM in an iframe — navigating the frame to
+ * checkout.mybaremethod.com shows "refused to connect" (X-Frame-Options).
+ *
+ * Rules:
+ * - Always validate HTTPS + checkout.mybaremethod.com + /checkout path first.
+ * - When framed, NEVER fall back to same-frame window.location navigation.
+ * - Prefer window.top breakout; then window.open('_top'); then <a target="_top">.
+ * - Does not mark the order paid.
  */
-export function navigateToKashuHostedCheckout(redirectUrl: string): { ok: true } | { ok: false; error: string } {
+export type KashuCheckoutNavigationMethod =
+  | 'top_href'
+  | 'top_assign'
+  | 'open_top'
+  | 'anchor_top'
+  | 'self_assign';
+
+export function isEmbeddedInIframe(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.top != null && window.top !== window;
+  } catch {
+    // Some sandboxes throw on window.top access — treat as embedded.
+    return true;
+  }
+}
+
+export function navigateToKashuHostedCheckout(
+  redirectUrl: string,
+): { ok: true; method: KashuCheckoutNavigationMethod } | { ok: false; error: string } {
   const approved = isApprovedKashuCheckoutRedirectUrl(redirectUrl);
   if (!approved.ok) return approved;
   const href = approved.url.toString();
-  try {
-    if (typeof window !== 'undefined' && window.top && window.top !== window) {
-      window.top.location.assign(href);
-      return { ok: true };
+  if (typeof window === 'undefined') {
+    return { ok: false, error: 'Checkout navigation is unavailable.' };
+  }
+
+  const framed = isEmbeddedInIframe();
+
+  if (framed) {
+    // 1) Direct top location href (often works with user activation).
+    try {
+      if (window.top) {
+        window.top.location.href = href;
+        return { ok: true, method: 'top_href' };
+      }
+    } catch {
+      /* continue */
     }
-  } catch {
-    // Cross-origin frame access can throw — fall through to same-window navigation.
+    // 2) top.location.assign
+    try {
+      if (window.top) {
+        window.top.location.assign(href);
+        return { ok: true, method: 'top_assign' };
+      }
+    } catch {
+      /* continue */
+    }
+    // 3) window.open with _top target
+    try {
+      window.open(href, '_top');
+      return { ok: true, method: 'open_top' };
+    } catch {
+      /* continue */
+    }
+    // 4) Synthetic <a target="_top"> click (user-gesture breakout)
+    try {
+      const anchor = document.createElement('a');
+      anchor.href = href;
+      anchor.target = '_top';
+      anchor.rel = 'noopener noreferrer';
+      anchor.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      return { ok: true, method: 'anchor_top' };
+    } catch {
+      /* continue */
+    }
+    // NEVER navigate the iframe — that causes "refused to connect".
+    return {
+      ok: false,
+      error:
+        'Unable to open secure checkout outside this preview frame. Open the site in a full browser tab and try Continue to Secure Payment again.',
+    };
   }
-  if (typeof window !== 'undefined') {
-    window.location.assign(href);
-  }
-  return { ok: true };
+
+  window.location.assign(href);
+  return { ok: true, method: 'self_assign' };
 }
 
 /**

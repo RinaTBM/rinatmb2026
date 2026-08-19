@@ -183,11 +183,12 @@ Deno.serve(async (req) => {
     const isMembershipCheckout = membershipSkus.length > 0;
     if (isMembershipCheckout) {
       // Allowed: exactly one supported MEM program (+ optional one required provider visit).
-      // Provider visit is ONE-TIME enrollment charge — never part of monthly rebill.
+      // Provider visit is ONE-TIME. Shipping is ONE-TIME via order.shipping_cents ($30/$50).
+      // Neither visit nor shipping enters monthly_amount_cents / Tagada rebill.
       if (membershipSkus.length !== 1 || otherSkus.length > 0 || visitSkus.length > 1) {
         return json({
           error:
-            "Membership card enrollment allows exactly one supported membership program plus an optional required provider visit (one-time). Ordinary products and shipping cannot be mixed into the Tagada subscription session.",
+            "Membership card enrollment allows exactly one supported membership program plus an optional required provider visit (one-time) and one selected shipping method (one-time). Ordinary products cannot be mixed into the Tagada subscription session.",
           code: "MEMBERSHIP_ENROLLMENT_CART_INVALID",
           membershipSkus,
           visitSkus,
@@ -220,13 +221,14 @@ Deno.serve(async (req) => {
           }, 409);
         }
       }
-      // Recurring Tagada membership price is not shippable — do not mix shipping lines.
-      if ((Number(order.shipping_cents) || 0) !== 0) {
+      // Option 2: require exactly one enrollment shipping amount ($30 or $50).
+      const memShipCents = Number(order.shipping_cents) || 0;
+      if (memShipCents !== 3000 && memShipCents !== 5000) {
         return json({
           error:
-            "Membership card enrollment charges membership (+ required provider visit when applicable) only — no Tagada shipping line. First medication shipping is arranged after provider approval.",
+            "Membership card enrollment requires Two-Day ($30) or Next-Day ($50) shipping as a one-time charge. Shipping is not part of the monthly membership rebill.",
           blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
-          shippingCents: Number(order.shipping_cents) || 0,
+          shippingCents: memShipCents,
         }, 409);
       }
       // Duplicate open enrollment guard (same email + program).
@@ -256,8 +258,8 @@ Deno.serve(async (req) => {
     }
 
     const shippingCents = Number(order.shipping_cents) || 0;
-    const shipSku =
-      !isMembershipCheckout && shippingCents > 0 ? shippingSkuForCents(shippingCents) : null;
+    // Membership: append one-time MBM-SHIP line. One-time carts: same when shipping > 0.
+    const shipSku = shippingCents > 0 ? shippingSkuForCents(shippingCents) : null;
     const mapSkus = shipSku ? [...skus, shipSku] : skus;
 
     const mapRes = await fetch(
@@ -388,13 +390,15 @@ Deno.serve(async (req) => {
       }, 409);
     }
 
-    // MBM is shipping source of truth. Membership recurring: shipping must stay $0 on Tagada.
-    // One-time card: only $0 / $30 / $50.
-    const allowedShipping = isMembershipCheckout ? new Set([0]) : new Set([0, 3000, 5000]);
+    // MBM is shipping source of truth. Membership enrollment: one-time $30/$50 only.
+    // One-time card: $0 / $30 / $50.
+    const allowedShipping = isMembershipCheckout
+      ? new Set([3000, 5000])
+      : new Set([0, 3000, 5000]);
     if (!allowedShipping.has(shippingCents)) {
       return json({
         error: isMembershipCheckout
-          ? "Membership card enrollment must not include a Tagada shipping charge."
+          ? "Membership card enrollment requires Two-Day ($30) or Next-Day ($50) shipping as a one-time charge."
           : "Unexpected MBM shipping amount for card checkout. Only $0, $30 (Two-Day), or $50 (Next-Day) are supported.",
         blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
         shippingCents,
@@ -403,11 +407,11 @@ Deno.serve(async (req) => {
     }
 
     let calculatedShippingCents = 0;
-    if (!isMembershipCheckout && shippingCents > 0) {
+    if (shippingCents > 0) {
       if (!shipSku) {
         return json({
           error:
-            "Card checkout cannot represent this shipping method in Tagada yet. Use ACH/Wire or a $0-shipping cart.",
+            "Card checkout cannot represent this shipping method in Tagada yet. Use a supported $30 / $50 shipping selection.",
           blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
           shippingCents,
           shippingMethod: order.shipping_method,

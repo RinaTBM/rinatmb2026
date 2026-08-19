@@ -64,10 +64,10 @@ describe('Tagada membership recurring billing', () => {
     expect(tirz.variantId).toBe(TIRZ_TAGADA_VARIANT_ID);
   });
 
-  it('allows SEM-only membership card cart with $0 shipping and tax_cents=0', () => {
+  it('allows SEM-only membership card cart with Two-Day shipping and tax_cents=0', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 0,
+      shippingCents: 3000,
       taxCents: 0,
       items: [
         {
@@ -82,11 +82,11 @@ describe('Tagada membership recurring billing', () => {
     expect(r).toEqual({ ok: true, membershipRecurring: true });
   });
 
-  it('allows TIRZ-only membership card cart', () => {
+  it('allows TIRZ-only membership card cart with Next-Day shipping', () => {
     expect(
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
-        shippingCents: 0,
+        shippingCents: 5000,
         taxCents: 0,
         items: [
           {
@@ -128,7 +128,7 @@ describe('Tagada membership recurring billing', () => {
     if (!r.ok) expect(r.reason).toBe('membership_mixed');
   });
 
-  it('allows SEM membership + required Initial Provider Visit (one-time enrollment)', () => {
+  it('allows SEM membership + required Initial Provider Visit with Two-Day shipping', () => {
     const cart = evaluateMembershipCardCheckoutCart([
       {
         isMembership: true,
@@ -147,7 +147,7 @@ describe('Tagada membership recurring billing', () => {
     expect(
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
-        shippingCents: 0,
+        shippingCents: 3000,
         taxCents: 0,
         items: [
           {
@@ -162,82 +162,98 @@ describe('Tagada membership recurring billing', () => {
     ).toEqual({ ok: true, membershipRecurring: true });
   });
 
-  it('SEM enrollment: first charge 22400; recurring rebill 14900 only (IPV never rebills)', () => {
+  it('SEM + IPV + Two-Day: due today 25400; rebill 14900; ship 3000 one-time', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: SEM_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
+      shippingCents: 3000,
     });
     expect(due).toEqual({
       ok: true,
-      dueTodayCents: 22400,
+      dueTodayCents: 25400,
       monthlyRebillCents: 14900,
       visitCents: 7500,
+      shippingCents: 3000,
     });
     const init = buildMembershipEnrollmentTagadaInitItems({
       membershipSku: SEM_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
+      shippingCents: 3000,
       membershipVariantId: SEM_TAGADA_VARIANT_ID,
-      visitVariantId: 'variant_08bf53e519ce',
-      visitPriceId: 'price_6b59dbc48752',
+      visitVariantId: 'variant_3b859fb20d65',
+      visitPriceId: 'price_6163adf08816',
+      shippingVariantId: 'variant_18c3ab5eadee',
+      shippingPriceId: 'price_c65bb478d609',
     });
     expect(init.ok).toBe(true);
     if (!init.ok) return;
-    expect(init.dueTodayCents).toBe(22400);
+    expect(init.dueTodayCents).toBe(25400);
     expect(init.monthlyRebillCents).toBe(14900);
-    expect(init.visitCents).toBe(7500);
-    expect(init.items).toHaveLength(2);
-    expect(init.items[0]).toEqual({
-      variantId: SEM_TAGADA_VARIANT_ID,
-      quantity: 1,
-      priceId: SEM_TAGADA_PRICE_ID,
-    });
+    expect(init.shippingCents).toBe(3000);
+    expect(init.items).toHaveLength(3);
+    expect(init.items[0].priceId).toBe(SEM_TAGADA_PRICE_ID);
     expect(init.items[1].priceId).not.toBe(SEM_TAGADA_PRICE_ID);
-    expect(init.items[1].priceId).toBe('price_6b59dbc48752');
-    // Shipping not in enrollment init.
-    expect(init.items.every(i => !String(i.variantId).includes('ship'))).toBe(true);
+    expect(init.items[2].priceId).toBe('price_c65bb478d609');
   });
 
-  it('TIRZ enrollment: first charge 32400; recurring rebill 24900 only', () => {
+  it('SEM + IPV + Next-Day: due today 27400; rebill 14900; ship 5000 one-time', () => {
+    const due = membershipEnrollmentDueTodayCents({
+      membershipSku: SEM_MEMBERSHIP_SKU,
+      visitSku: 'MBM-PC-IPV-SRV-001',
+      shippingCents: 5000,
+    });
+    expect(due).toMatchObject({
+      ok: true,
+      dueTodayCents: 27400,
+      monthlyRebillCents: 14900,
+      shippingCents: 5000,
+    });
+  });
+
+  it('TIRZ + IPV + Two-Day: due today 35400; rebill 24900', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
+      shippingCents: 3000,
     });
-    expect(due).toEqual({
+    expect(due).toMatchObject({
       ok: true,
-      dueTodayCents: 32400,
+      dueTodayCents: 35400,
       monthlyRebillCents: 24900,
-      visitCents: 7500,
+      shippingCents: 3000,
     });
-    const cart = evaluateMembershipCardCheckoutCart([
-      {
-        isMembership: true,
-        purchaseType: 'membership_program',
-        quantity: 1,
-        sku: TIRZ_MEMBERSHIP_SKU,
-      },
-      { purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' },
-    ]);
-    expect(cart).toMatchObject({
+  });
+
+  it('TIRZ + IPV + Next-Day: due today 37400; rebill 24900', () => {
+    const due = membershipEnrollmentDueTodayCents({
+      membershipSku: TIRZ_MEMBERSHIP_SKU,
+      visitSku: 'MBM-PC-IPV-SRV-001',
+      shippingCents: 5000,
+    });
+    expect(due).toMatchObject({
       ok: true,
-      dueTodayCents: 32400,
+      dueTodayCents: 37400,
       monthlyRebillCents: 24900,
-      enrollmentVisitSku: 'MBM-PC-IPV-SRV-001',
+      shippingCents: 5000,
     });
     const init = buildMembershipEnrollmentTagadaInitItems({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
+      shippingCents: 5000,
       membershipVariantId: TIRZ_TAGADA_VARIANT_ID,
-      visitVariantId: 'variant_08bf53e519ce',
-      visitPriceId: 'price_6b59dbc48752',
+      visitVariantId: 'variant_3b859fb20d65',
+      visitPriceId: 'price_6163adf08816',
+      shippingVariantId: 'variant_6817c3c6e31a',
+      shippingPriceId: 'price_53861f3e4cad',
     });
     expect(init.ok).toBe(true);
     if (!init.ok) return;
     expect(init.items[0].priceId).toBe(TIRZ_TAGADA_PRICE_ID);
     expect(init.monthlyRebillCents).toBe(24900);
-    expect(init.dueTodayCents).toBe(32400);
+    expect(init.dueTodayCents).toBe(37400);
   });
 
-  it('membership enrollment shipping charged at enrollment is $0', () => {
+  it('rejects missing enrollment shipping ($0)', () => {
     expect(
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
@@ -253,34 +269,21 @@ describe('Tagada membership recurring billing', () => {
           { purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' },
         ],
       }).ok,
-    ).toBe(true);
-    expect(
-      evaluateKashuCardCartEligibility({
-        flagEnabled: true,
-        shippingCents: 3000,
-        taxCents: 0,
-        items: [
-          {
-            isMembership: true,
-            purchaseType: 'membership_program',
-            quantity: 1,
-            sku: SEM_MEMBERSHIP_SKU,
-          },
-          { purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001' },
-        ],
-      }).ok,
     ).toBe(false);
   });
 
-  it('rejects visit priced with membership recurring priceId', () => {
+  it('rejects visit/shipping priced with membership recurring priceId', () => {
     const bad = buildMembershipEnrollmentTagadaInitItems({
       membershipSku: SEM_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
+      shippingCents: 3000,
       membershipVariantId: SEM_TAGADA_VARIANT_ID,
-      visitVariantId: 'variant_08bf53e519ce',
+      visitVariantId: 'variant_3b859fb20d65',
       visitPriceId: SEM_TAGADA_PRICE_ID,
+      shippingVariantId: 'variant_18c3ab5eadee',
+      shippingPriceId: 'price_c65bb478d609',
     });
-    expect(bad).toEqual({ ok: false, reason: 'visit_must_not_use_membership_price' });
+    expect(bad).toEqual({ ok: false, reason: 'one_time_must_not_use_membership_price' });
   });
 
   it('blocks unmapped MBM-MEM-* (not broadly all MEM SKUs)', () => {
@@ -296,10 +299,10 @@ describe('Tagada membership recurring billing', () => {
     if (!r.ok) expect(r.reason).toBe('unsupported_membership');
   });
 
-  it('blocks membership card when paid shipping is attached to enrollment', () => {
+  it('blocks membership card when enrollment shipping is missing ($0)', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 3000,
+      shippingCents: 0,
       taxCents: 0,
       items: [
         {
@@ -317,7 +320,7 @@ describe('Tagada membership recurring billing', () => {
   it('tax_cents must be 0 for membership card', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 0,
+      shippingCents: 3000,
       taxCents: 800,
       items: [
         {

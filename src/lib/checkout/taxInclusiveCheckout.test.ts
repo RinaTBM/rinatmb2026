@@ -225,7 +225,7 @@ describe('card-first public payment selector', () => {
   it('SEM/TIRZ membership card recurring allowed; mixed membership still blocked', () => {
     const membership = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 0,
+      shippingCents: 3000,
       taxCents: 0,
       items: [
         {
@@ -241,7 +241,7 @@ describe('card-first public payment selector', () => {
 
     const mixed = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 0,
+      shippingCents: 3000,
       taxCents: 0,
       items: [
         { purchaseType: 'one_time', quantity: 1, sku: 'MBM-ACC-PLN-ACC-001' },

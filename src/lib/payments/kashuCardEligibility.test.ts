@@ -49,10 +49,10 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
     if (!r.ok) expect(r.reason).toBe('flag_off');
   });
 
-  it('allows SEM membership recurring card carts (variantId+priceId path)', () => {
+  it('allows SEM membership recurring card carts with Two-Day shipping', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 0,
+      shippingCents: 3000,
       taxCents: 0,
       items: [
         {
@@ -70,7 +70,7 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
   it('blocks mixed membership + ordinary one-time merchandise from becoming a one-time card purchase', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 0,
+      shippingCents: 3000,
       items: [
         oneTime,
         {
@@ -86,11 +86,11 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
     if (!r.ok) expect(['membership', 'membership_mixed']).toContain(r.reason);
   });
 
-  it('allows SEM membership + required IPV as enrollment (not ordinary mixed cart)', () => {
+  it('allows SEM membership + required IPV + Two-Day as enrollment (not ordinary mixed cart)', () => {
     expect(
       evaluateKashuCardCartEligibility({
         flagEnabled: true,
-        shippingCents: 0,
+        shippingCents: 3000,
         taxCents: 0,
         items: [
           {

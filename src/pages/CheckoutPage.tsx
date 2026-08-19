@@ -305,20 +305,24 @@ export function CheckoutPage() {
     accessoryTaxableSubtotalCents: accessoryTaxableCents,
   });
   const freeShippingEligible =
-    requiresPhysicalShipping && isFreeShippingEligible(freeShippingMerchandiseSubtotalCents);
+    requiresPhysicalShipping &&
+    !hasMembership &&
+    isFreeShippingEligible(freeShippingMerchandiseSubtotalCents);
   const resolvedShippingMethod: ShippingMethod = !requiresPhysicalShipping
     ? 'none'
     : freeShippingEligible
       ? 'free_over_500'
       : shippingMethod;
-  // Membership carts: Tagada recurring price is not shippable. Enrollment charge =
-  // monthly membership + optional required provider visit (one-time). Shipping $0
-  // at enrollment (arranged after provider approval).
+  // Membership Option 2: collect Two-Day ($30) / Next-Day ($50) once at enrollment.
+  // Never free-ship membership enrollment via the $500 merchandise threshold.
   // One-time carts: $500 free-shipping threshold uses ordinary merchandise ONLY.
   const shipping = !requiresPhysicalShipping
     ? 0
     : hasMembership
-      ? 0
+      ? shippingCentsForMethod(
+          resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day',
+          0,
+        ) / 100
       : freeShippingEligible
         ? 0
         : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
@@ -337,7 +341,7 @@ export function CheckoutPage() {
       ? requiredVisit.priceCents
       : 0;
   const membershipDueTodayCents = hasMembership
-    ? membershipMonthlyCents + membershipEnrollmentVisitCents
+    ? membershipMonthlyCents + membershipEnrollmentVisitCents + shippingCents
     : 0;
 
   const taxCents =
@@ -779,11 +783,8 @@ export function CheckoutPage() {
                     <h2 className="font-serif text-2xl text-ink-900 mb-4">Shipping Method</h2>
                     {hasMembership && (
                       <div className="mb-3 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                        <p className="font-medium">Shipping after provider approval</p>
-                        <p className="mt-1 text-xs leading-relaxed">
-                          {MEMBERSHIP_CARD_SHIPPING_NOTE} Choose a preferred shipping speed for your first
-                          medication shipment — it is not charged on this monthly membership enrollment.
-                        </p>
+                        <p className="font-medium">Shipping collected today</p>
+                        <p className="mt-1 text-xs leading-relaxed">{MEMBERSHIP_CARD_SHIPPING_NOTE}</p>
                       </div>
                     )}
                     {freeShippingEligible ? (
@@ -801,11 +802,9 @@ export function CheckoutPage() {
                               checked={shippingMethod === 'two_day'}
                               onChange={() => setShippingMethod('two_day')}
                             />
-                            Two-Day Shipping{hasMembership ? ' (preferred)' : ''}
+                            Two-Day Shipping
                           </span>
-                          <span className="font-medium text-ink-900">
-                            {hasMembership ? 'Later' : '$30'}
-                          </span>
+                          <span className="font-medium text-ink-900">$30</span>
                         </label>
                         <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'next_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
                           <span className="flex items-center gap-3">
@@ -815,15 +814,13 @@ export function CheckoutPage() {
                               checked={shippingMethod === 'next_day'}
                               onChange={() => setShippingMethod('next_day')}
                             />
-                            Next-Day Shipping{hasMembership ? ' (preferred)' : ''}
+                            Next-Day Shipping
                           </span>
-                          <span className="font-medium text-ink-900">
-                            {hasMembership ? 'Later' : '$50'}
-                          </span>
+                          <span className="font-medium text-ink-900">$50</span>
                         </label>
                         <p className="text-xs text-ink-500">
                           {hasMembership
-                            ? 'Membership value is excluded from the $500 free-shipping merchandise threshold. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'
+                            ? 'Membership value is excluded from the $500 free-shipping merchandise threshold. Medication ships after required provider review and approval.'
                             : 'Orders of $500 or more in merchandise are eligible for free shipping. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'}
                         </p>
                       </div>
@@ -1233,10 +1230,10 @@ export function CheckoutPage() {
                         <span>${(membershipEnrollmentVisitCents / 100).toFixed(2)}</span>
                       </div>
                     ) : null}
-                    {requiresPhysicalShipping && (
+                    {shippingCents > 0 && (
                       <div className="flex justify-between text-ink-600">
-                        <span>Preferred: {labelShippingMethod(resolvedShippingMethod)}</span>
-                        <span>After approval</span>
+                        <span>{labelShippingMethod(resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day')}</span>
+                        <span>${(shippingCents / 100).toFixed(2)}</span>
                       </div>
                     )}
                     <p className="text-[11px] text-ink-500 leading-snug">{TAX_INCLUSIVE_CHECKOUT_DISCLOSURE}</p>
@@ -1255,11 +1252,9 @@ export function CheckoutPage() {
                         </span>
                         <span>${(membershipMonthlyCents / 100).toFixed(2)}/month</span>
                       </div>
-                      {membershipEnrollmentVisitCents > 0 ? (
-                        <p className="text-[11px] text-ink-500 leading-snug">
-                          Provider visit is a one-time enrollment charge and does not rebill.
-                        </p>
-                      ) : null}
+                      <p className="text-[11px] text-ink-500 leading-snug">
+                        Provider visit and shipping are one-time enrollment charges and do not rebill.
+                      </p>
                     </div>
                   </>
                 ) : (

@@ -16,6 +16,7 @@
 import type { ManualPaymentStatus } from './manualInvoice';
 import {
   evaluateMembershipCardCheckoutCart,
+  evaluateMembershipEnrollmentShipping,
   isMembershipLineItem,
 } from '@/lib/membership/tagadaMembershipBilling';
 
@@ -346,8 +347,8 @@ export type KashuCardEligibility =
  * - One-time carts: no membership; shipping $0 / $30 / $50; tax_cents = 0.
  * - Membership recurring (SEM/TIRZ only): exactly one program SKU, qty 1,
  *   optional required provider-visit SKU (IPV/FUV) as ONE-TIME enrollment charge,
- *   shipping_cents must be 0 (recurring Tagada price is not shippable; first-fulfillment
- *   shipping is separate MBM workflow — do not bake into subscription).
+ *   plus exactly one enrollment shipping amount ($30 Two-Day or $50 Next-Day) as
+ *   ONE-TIME mapped MBM-SHIP line (never part of monthly rebill).
  *   Ordinary merchandise mixed with membership remains blocked.
  * Tax-inclusive architecture: NEW orders must have tax_cents = 0.
  */
@@ -381,15 +382,14 @@ export function evaluateKashuCardCartEligibility(input: {
         message: membershipCart.message,
       };
     }
-    // Membership recurring Tagada charge excludes shipping line items.
-    const shippingCents = Math.trunc(input.shippingCents);
-    if (shippingCents !== 0) {
+    // Option 2: membership enrollment collects $30/$50 shipping once (not recurring).
+    const ship = evaluateMembershipEnrollmentShipping(Math.trunc(input.shippingCents));
+    if (!ship.ok) {
       return {
         ok: false,
         reason: 'shipping_parity',
         blockerCode: TAGADA_SHIPPING_PARITY_BLOCKER,
-        message:
-          'Membership card enrollment charges the monthly membership only. Remove paid shipping from this enrollment — first medication shipping is arranged after provider approval.',
+        message: ship.message,
       };
     }
     const taxCents = Math.max(0, Math.trunc(Number(input.taxCents ?? 0) || 0));

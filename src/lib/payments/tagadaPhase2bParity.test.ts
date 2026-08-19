@@ -238,10 +238,10 @@ describe('Phase 2B total mismatch rejection', () => {
 });
 
 describe('Phase 2B membership recurring card + webhook amount equality intact', () => {
-  it('allows SEM membership SKU on recurring card path ($0 shipping)', () => {
+  it('allows SEM membership SKU on recurring card path (Two-Day shipping)', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 0,
+      shippingCents: 3000,
       taxCents: 0,
       items: [
         {

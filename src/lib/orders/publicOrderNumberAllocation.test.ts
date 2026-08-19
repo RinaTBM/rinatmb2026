@@ -172,7 +172,7 @@ describe('checkout rules preserved alongside order-number fix', () => {
   it('SEM membership card recurring allowed; ACH/Wire hidden; Stripe off', () => {
     const membership = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 0,
+      shippingCents: 3000,
       taxCents: 0,
       items: [
         {

@@ -53,6 +53,10 @@ const faqCategories = [
         q: 'What does OGTBM exclude?',
         a: 'OGTBM excludes accessories; dermatology / prescription skin & hair; Initial Provider Visit; Follow-Up Visit; Lab Review; Lab Kit; other provider services; and shipping.',
       },
+      {
+        q: 'Can I pay over time with Cherry?',
+        a: 'Financing options may be available through Cherry. Approval and terms are determined by Cherry. Cherry is a financing discovery option and does not replace My Bare Method checkout or recurring membership card billing.',
+      },
     ],
   },
   {

@@ -29,6 +29,7 @@ const faqs = [
   { q: 'Are labs included?', a: 'Laboratory testing is not included unless the current workflow specifically states otherwise. A provider may request labs before or during treatment.' },
   { q: 'Is shipping included?', a: 'Two-Day Shipping ($30) and Next-Day Shipping ($50) are selected at checkout and included with each monthly membership renewal. Medication fulfillment remains subject to required provider review and approval. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Certain medications may require temperature-controlled packaging.' },
   { q: 'How do I pay for my membership?', a: 'Join with Credit / Debit Card. Your card is charged monthly while your membership stays active. A 3-month minimum commitment applies. Your selected shipping method is included with each monthly membership renewal.' },
+  { q: 'Can I use Cherry financing with a membership?', a: 'Cherry financing availability and terms are determined by Cherry. Recurring membership billing remains subject to My Bare Method membership terms and is charged to your card monthly while active.' },
 ];
 
 const comparisonRows: { feature: string; sema: string | boolean; tirz: string | boolean; onetime: string | boolean }[] = [

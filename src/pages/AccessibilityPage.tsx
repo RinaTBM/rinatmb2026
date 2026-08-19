@@ -70,7 +70,7 @@ export function AccessibilityPage() {
               ]} />
               <p>Accessibility support:</p>
               <p>
-                Email: [ACCESSIBILITY EMAIL]<br />
+                Email: info@thebaremethodmn.com<br />
                 Phone: (218) 656-7189
               </p>
               <p>We will make reasonable efforts to provide the requested information, service, or assistance through an accessible alternative.</p>

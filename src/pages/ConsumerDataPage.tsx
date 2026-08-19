@@ -172,9 +172,8 @@ export function ConsumerDataPage() {
             <>
               <p>Submit a privacy request through:</p>
               <LegalBulletList items={[
-                '[PRIVACY REQUEST FORM LINK]',
-                '[PRIVACY EMAIL]',
-                '15115 Cedar Ave Suite 33, Apple Valley, MN 55124',
+                'Email: info@thebaremethodmn.com',
+                'Mail: 15115 Cedar Ave Suite 33, Apple Valley, MN 55124',
               ]} />
               <p>Use the subject: <strong>Consumer Health Data Request</strong></p>
               <p>We may request reasonable information to verify identity and prevent unauthorized access.</p>
@@ -238,7 +237,7 @@ export function ConsumerDataPage() {
             <>
               <p>Privacy and consumer health data questions:</p>
               <p>
-                Email: [PRIVACY EMAIL]<br />
+                Email: info@thebaremethodmn.com<br />
                 Phone: (218) 656-7189<br />
                 Mailing Address: 15115 Cedar Ave Suite 33, Apple Valley, MN 55124
               </p>

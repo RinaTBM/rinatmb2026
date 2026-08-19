@@ -149,6 +149,29 @@ Deno.serve(async (req) => {
     return json(JSON.parse(redact(JSON.stringify({ storeIdPresent: true, attempts }), secrets)));
   }
 
+  // Phase 2C read-only: inspect Simple Checkout funnel (no writes).
+  if (action === "list_funnels") {
+    const res = await tcall(
+      base,
+      key,
+      "GET",
+      `/api/public/v1/stores/${encodeURIComponent(storeId)}/funnels`,
+    );
+    return json(JSON.parse(redact(JSON.stringify({ status: res.status, data: res.data }), secrets)));
+  }
+
+  if (action === "get_funnel") {
+    const funnelId = String(body.funnelId || "").trim();
+    if (!funnelId) return json({ error: "funnelId_required" }, 400);
+    const res = await tcall(
+      base,
+      key,
+      "GET",
+      `/api/public/v1/funnels/${encodeURIComponent(funnelId)}`,
+    );
+    return json(JSON.parse(redact(JSON.stringify({ status: res.status, data: res.data }), secrets)));
+  }
+
   if (action === "audit_product_tax") {
     const pl = await tcall(base, key, "POST", "/api/public/v1/products/list", {
       storeId,

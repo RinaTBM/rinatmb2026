@@ -40,6 +40,63 @@ function createPaymentAccessToken(): string {
   return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+/** Never expose Postgres / PostgREST internals to customers. */
+const CHECKOUT_ORDER_CREATE_FAILED_MESSAGE =
+  "We couldn't start your checkout. Please try again.";
+
+function isUniquePublicOrderNumberConflict(errorText: string): boolean {
+  const t = errorText.toLowerCase();
+  return (
+    t.includes("23505") ||
+    t.includes("duplicate key") ||
+    t.includes("orders_public_order_number_key") ||
+    (t.includes("unique constraint") && t.includes("public_order_number"))
+  );
+}
+
+function sanitizeCheckoutOrderError(raw: string): string {
+  const text = String(raw || "");
+  if (!text.trim()) return CHECKOUT_ORDER_CREATE_FAILED_MESSAGE;
+  if (
+    isUniquePublicOrderNumberConflict(text) ||
+    /postgres|postgrest|violates unique|duplicate key|schema cache|sqlstate/i.test(text) ||
+    /unable to create order:/i.test(text) ||
+    /unable to allocate order number:/i.test(text) ||
+    text.trim().startsWith("{") ||
+    text.includes("\n") ||
+    text.length > 180
+  ) {
+    return CHECKOUT_ORDER_CREATE_FAILED_MESSAGE;
+  }
+  return text;
+}
+
+async function allocatePublicOrderNumber(
+  supabaseUrl: string,
+  serviceKey: string,
+): Promise<{ ok: true; publicOrderNumber: string } | { ok: false; detail: string }> {
+  const numberRes = await fetch(`${supabaseUrl}/rest/v1/rpc/generate_public_order_number`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${serviceKey}`,
+      apikey: serviceKey,
+      "Content-Type": "application/json",
+    },
+    body: "{}",
+  });
+  if (!numberRes.ok) {
+    const t = await numberRes.text();
+    console.error("generate_public_order_number failed", t.slice(0, 500));
+    return { ok: false, detail: t };
+  }
+  const publicOrderNumber = String(await numberRes.json()).trim().toUpperCase();
+  if (!/^MBM-\d{4}-\d{6}$/.test(publicOrderNumber)) {
+    console.error("generate_public_order_number returned unexpected value", publicOrderNumber);
+    return { ok: false, detail: "invalid_order_number_format" };
+  }
+  return { ok: true, publicOrderNumber };
+}
+
 function bankInstructionsFromEnv(method: PaymentMethod) {
   if (method === "kashu_card") {
     return {
@@ -222,23 +279,7 @@ Deno.serve(async (req) => {
     const totalCents = built.totalCents;
     const items = built.items;
 
-    const numberRes = await fetch(`${supabaseUrl}/rest/v1/rpc/generate_public_order_number`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${serviceKey}`,
-        apikey: serviceKey,
-        "Content-Type": "application/json",
-      },
-      body: "{}",
-    });
-    if (!numberRes.ok) {
-      const t = await numberRes.text();
-      return json({ error: `Unable to allocate order number: ${t}` }, 500);
-    }
-    const publicOrderNumber = String(await numberRes.json()).trim().toUpperCase();
     const paymentAccessToken = createPaymentAccessToken();
-    const paymentReference = publicOrderNumber;
-    const invoiceNumber = `INV-${publicOrderNumber}`;
     const now = new Date().toISOString();
 
     const requiresProviderReview =
@@ -250,51 +291,83 @@ Deno.serve(async (req) => {
     const providerWorkflowStatus =
       built.requirement.requirement === "NONE" ? "NOT_REQUIRED" : null;
 
-    const orderInsert: Record<string, unknown> = {
-      customer_user_id: customerUserId,
-      customer_email: customerEmail,
-      customer_name: customerName,
-      public_order_number: publicOrderNumber,
-      stripe_checkout_session_id: null,
-      stripe_payment_intent_id: null,
-      stripe_customer_id: null,
-      order_status: "order_received",
-      payment_status: "awaiting_payment",
-      payment_method: paymentMethod,
-      payment_processor: paymentMethod === "kashu_card" ? "kashu_tagada" : "manual",
-      payment_reference: paymentReference,
-      invoice_number: invoiceNumber,
-      payment_access_token: paymentAccessToken,
-      subtotal_cents: subtotalCents,
-      discount_cents: discountCents,
-      shipping_cents: shippingCents,
-      tax_cents: taxCents,
-      total_cents: totalCents,
-      shipping_method: shippingMethod,
-      free_shipping_eligible: Boolean(body.freeShippingEligible),
-      currency: "usd",
-      requires_provider_review: requiresProviderReview,
-      provider_requirement: built.requirement.requirement,
-      provider_requirement_reason: built.requirement.reason,
-      previous_variant_sku: built.requirement.previousVariantSku,
-      requested_variant_sku: built.requirement.requestedVariantSku,
-      required_provider_product_id: built.requirement.requiredProviderProductId,
-      provider_workflow_status: providerWorkflowStatus,
-    };
+    const MAX_ORDER_INSERT_ATTEMPTS = 5;
+    let publicOrderNumber = "";
+    let orderId = "";
+    let usedLegacyInsert = false;
 
-    const orderRes = await fetch(`${supabaseUrl}/rest/v1/orders`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${serviceKey}`,
-        apikey: serviceKey,
-        "Content-Type": "application/json",
-        Prefer: "return=representation",
-      },
-      body: JSON.stringify(orderInsert),
-    });
-    if (!orderRes.ok) {
+    for (let attempt = 1; attempt <= MAX_ORDER_INSERT_ATTEMPTS; attempt++) {
+      const allocated = await allocatePublicOrderNumber(supabaseUrl, serviceKey);
+      if (!allocated.ok) {
+        return json({ error: CHECKOUT_ORDER_CREATE_FAILED_MESSAGE }, 500);
+      }
+      publicOrderNumber = allocated.publicOrderNumber;
+      const paymentReference = publicOrderNumber;
+      const invoiceNumber = `INV-${publicOrderNumber}`;
+
+      const orderInsert: Record<string, unknown> = {
+        customer_user_id: customerUserId,
+        customer_email: customerEmail,
+        customer_name: customerName,
+        public_order_number: publicOrderNumber,
+        stripe_checkout_session_id: null,
+        stripe_payment_intent_id: null,
+        stripe_customer_id: null,
+        order_status: "order_received",
+        payment_status: "awaiting_payment",
+        payment_method: paymentMethod,
+        payment_processor: paymentMethod === "kashu_card" ? "kashu_tagada" : "manual",
+        payment_reference: paymentReference,
+        invoice_number: invoiceNumber,
+        payment_access_token: paymentAccessToken,
+        subtotal_cents: subtotalCents,
+        discount_cents: discountCents,
+        shipping_cents: shippingCents,
+        tax_cents: taxCents,
+        total_cents: totalCents,
+        shipping_method: shippingMethod,
+        free_shipping_eligible: Boolean(body.freeShippingEligible),
+        currency: "usd",
+        requires_provider_review: requiresProviderReview,
+        provider_requirement: built.requirement.requirement,
+        provider_requirement_reason: built.requirement.reason,
+        previous_variant_sku: built.requirement.previousVariantSku,
+        requested_variant_sku: built.requirement.requestedVariantSku,
+        required_provider_product_id: built.requirement.requiredProviderProductId,
+        provider_workflow_status: providerWorkflowStatus,
+      };
+
+      const orderRes = await fetch(`${supabaseUrl}/rest/v1/orders`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+          "Content-Type": "application/json",
+          Prefer: "return=representation",
+        },
+        body: JSON.stringify(orderInsert),
+      });
+
+      if (orderRes.ok) {
+        const orderRows = await orderRes.json();
+        const order = Array.isArray(orderRows) ? orderRows[0] : orderRows;
+        orderId = order.id as string;
+        break;
+      }
+
       const t = await orderRes.text();
-      // Fallback if provider columns not migrated yet — retry without them.
+      console.error("create-invoice-order insert failed", {
+        attempt,
+        publicOrderNumber,
+        detail: t.slice(0, 500),
+      });
+
+      // Unique collision: allocate a fresh number and retry (sequence drift / race).
+      if (isUniquePublicOrderNumberConflict(t) && attempt < MAX_ORDER_INSERT_ATTEMPTS) {
+        continue;
+      }
+
+      // Fallback if provider columns not migrated yet — retry without them (same number).
       if (t.includes("provider_requirement") || t.includes("schema cache")) {
         const legacyInsert = { ...orderInsert };
         delete legacyInsert.provider_requirement;
@@ -314,51 +387,39 @@ Deno.serve(async (req) => {
           },
           body: JSON.stringify(legacyInsert),
         });
-        if (!retry.ok) {
-          return json({
-            error:
-              t.includes("payment_status") || t.includes("payment_method")
-                ? "Orders database needs the manual-payment migration before invoice checkout can run."
-                : `Unable to create order: ${await retry.text()}`,
-          }, 500);
+        if (retry.ok) {
+          const legacyRows = await retry.json();
+          const legacyOrder = Array.isArray(legacyRows) ? legacyRows[0] : legacyRows;
+          orderId = legacyOrder.id as string;
+          usedLegacyInsert = true;
+          break;
         }
-        const legacyRows = await retry.json();
-        const legacyOrder = Array.isArray(legacyRows) ? legacyRows[0] : legacyRows;
-        return await finalizeOrderResponse({
-          supabaseUrl,
-          serviceKey,
-          orderId: legacyOrder.id as string,
-          publicOrderNumber,
-          paymentAccessToken,
-          paymentReference,
-          invoiceNumber,
-          now,
-          customerName,
-          customerEmail,
-          paymentMethod: paymentMethod as PaymentMethod,
-          shippingMethod,
-          items,
-          subtotalCents,
-          discountCents,
-          shippingCents,
-          taxCents,
-          totalCents,
-          visitSku: built.requirement.requiredProviderProductId
-            ? items.find((i) => i.requiredProviderVisit)?.sku ?? null
-            : null,
-          patchProviderVisitItemId: false,
-        });
+        const retryText = await retry.text();
+        console.error("create-invoice-order legacy insert failed", retryText.slice(0, 500));
+        if (isUniquePublicOrderNumberConflict(retryText) && attempt < MAX_ORDER_INSERT_ATTEMPTS) {
+          continue;
+        }
+        return json({ error: CHECKOUT_ORDER_CREATE_FAILED_MESSAGE }, 500);
       }
-      return json({
-        error:
-          t.includes("payment_status") || t.includes("payment_method")
-            ? "Orders database needs the manual-payment migration before invoice checkout can run."
-            : `Unable to create order: ${t}`,
-      }, 500);
+
+      if (
+        t.includes("payment_status") || t.includes("payment_method")
+      ) {
+        return json({
+          error:
+            "Orders database needs the manual-payment migration before invoice checkout can run.",
+        }, 500);
+      }
+
+      return json({ error: CHECKOUT_ORDER_CREATE_FAILED_MESSAGE }, 500);
     }
-    const orderRows = await orderRes.json();
-    const order = Array.isArray(orderRows) ? orderRows[0] : orderRows;
-    const orderId = order.id as string;
+
+    if (!orderId || !publicOrderNumber) {
+      return json({ error: CHECKOUT_ORDER_CREATE_FAILED_MESSAGE }, 500);
+    }
+
+    const paymentReference = publicOrderNumber;
+    const invoiceNumber = `INV-${publicOrderNumber}`;
 
     return await finalizeOrderResponse({
       supabaseUrl,
@@ -380,10 +441,13 @@ Deno.serve(async (req) => {
       taxCents,
       totalCents,
       visitSku: items.find((i) => i.requiredProviderVisit)?.sku ?? null,
-      patchProviderVisitItemId: true,
+      patchProviderVisitItemId: !usedLegacyInsert,
     });
   } catch (err) {
-    return json({ error: err instanceof Error ? err.message : "Unexpected error" }, 500);
+    console.error("create-invoice-order unexpected", err);
+    return json({
+      error: sanitizeCheckoutOrderError(err instanceof Error ? err.message : ""),
+    }, 500);
   }
 });
 

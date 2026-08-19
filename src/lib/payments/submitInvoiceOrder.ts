@@ -5,6 +5,7 @@
 
 import type { ActiveCheckoutPaymentMethod } from './paymentMethods';
 import type { BankInstructionsPublic, InvoiceViewModel } from './manualInvoice';
+import { sanitizeCheckoutOrderError } from '../orders/orderNumber';
 
 export interface SubmitInvoiceOrderItem {
   productId: string;
@@ -85,7 +86,9 @@ export async function submitInvoiceOrder(input: {
     if (!res.ok) {
       return {
         ok: false,
-        error: typeof data.error === 'string' ? data.error : 'Unable to submit order. Please try again.',
+        error: sanitizeCheckoutOrderError(
+          typeof data.error === 'string' ? data.error : '',
+        ),
       };
     }
     if (

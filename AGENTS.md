@@ -37,19 +37,19 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 
 Permanent rules for future agents. Do not regress these:
 
-- **My Bare Method is the authoritative shipping source of truth.** Do not infer shipping from Tagada cart subtotal, store rates, or funnel UI.
-- **Do NOT recreate Tagada store-level Shipping Rates.**
-- **Do NOT recreate/add the ShippingRates / Shipping Method island** to the Simple Checkout funnel on `checkout.mybaremethod.com`.
-- **Hiding Tagada rates is NOT sufficient;** store shipping rates must remain fully absent/deleted (Phase 2C proved hide ≠ disable).
-- **Two-Day shipping** is represented by mapped Tagada line item **`MBM-SHIP-TWO-DAY-001`** ($30 / `shipping_cents=3000`), appended by `create-kashu-checkout-session`.
-- **Next-Day shipping** is represented by mapped Tagada line item **`MBM-SHIP-NEXT-DAY-001`** ($50 / `shipping_cents=5000`), appended by `create-kashu-checkout-session`.
-- **Free / service-only shipping** uses **no** shipping line (`shipping_cents=0`).
-- **Allowed card-flow shipping amounts** are currently **$0, $30, or $50** only; any other positive `shipping_cents` must **fail safely** (`TAGADA_SHIPPING_PARITY_BLOCKER`).
-- **Tagada hosted total must exactly equal** MBM `orders.total_cents` before redirect (`TAGADA_CHECKOUT_TOTAL_MISMATCH` on mismatch).
-- **Do not weaken webhook amount equality** (paid amount must match MBM order total).
-- **Memberships remain ACH/Wire-only** until recurring card processing is implemented separately (`MEMBERSHIP_DEFERRED`).
-- **Do not re-enable Stripe.**
-- **`VITE_KASHU_CARD_ENABLED` must remain false** until controlled live testing is complete and the owner explicitly approves enabling it.
+- My Bare Method is the authoritative shipping source of truth. Do not infer shipping from Tagada cart subtotal, store rates, or funnel UI.
+- Do NOT recreate Tagada store-level Shipping Rates.
+- Do NOT recreate/add the ShippingRates / Shipping Method island to the Simple Checkout funnel. (Applies to Simple Checkout on `checkout.mybaremethod.com`.)
+- Hiding Tagada rates is NOT sufficient; store rates must remain absent. (Phase 2C proved hide ≠ disable; rates must stay deleted.)
+- Two-Day shipping is represented by mapped MBM-SHIP-TWO-DAY-001. ($30 / `shipping_cents=3000`, appended by `create-kashu-checkout-session`.)
+- Next-Day shipping is represented by mapped MBM-SHIP-NEXT-DAY-001. ($50 / `shipping_cents=5000`, appended by `create-kashu-checkout-session`.)
+- Free/service-only shipping uses no shipping line. (`shipping_cents=0`.)
+- Allowed card-flow shipping amounts are currently $0, $30, or $50; other positive amounts must fail safely. (`TAGADA_SHIPPING_PARITY_BLOCKER`.)
+- Tagada hosted total must exactly equal MBM orders.total_cents. (Reject with `TAGADA_CHECKOUT_TOTAL_MISMATCH` before redirect.)
+- Do not weaken webhook amount equality. (Paid amount must match MBM order total.)
+- Memberships remain ACH/Wire-only until recurring card processing is implemented separately. (`MEMBERSHIP_DEFERRED`.)
+- Do not re-enable Stripe.
+- VITE_KASHU_CARD_ENABLED must remain false until controlled live testing is complete. (Owner must explicitly approve enabling it.)
 
 Tax note (related): Tagada catalog products are `isTaxable=false` for V1; MBM `tax_cents` remains authoritative.
 

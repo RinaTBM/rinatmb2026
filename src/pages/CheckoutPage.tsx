@@ -89,8 +89,10 @@ import {
 } from '@/lib/promo/ogtbmPromo';
 import {
   buildHrtLabPackageLines,
+  HRT_LAB_PACKAGE_HEADING,
+  HRT_LAB_PACKAGE_TOTAL_CENTS,
   HRT_LAB_REQUIRED_COPY,
-  LAB_KIT_SHIPPING_INCLUDED_COPY,
+  LAB_KIT_INCLUDES_SHIPPING_COPY,
   shouldAutoAddHrtLabPackage,
 } from '@/lib/provider/hrtLabPackage';
 
@@ -279,18 +281,20 @@ export function CheckoutPage() {
   const requiredVisitCents = requiredVisit && user?.id ? requiredVisit.priceCents : 0;
 
   const hrtLabPreview = useMemo(() => {
-    const previewItems = [
-      ...items.map(i => ({
-        productId: i.productId,
-        slug: i.slug,
-        sku: skuForVariantId(i.variantId) ?? programSkuForMembershipAppId(i.productId) ?? null,
-      })),
-    ];
+    const previewItems = items.map(i => ({
+      productId: i.productId,
+      slug: i.slug,
+      sku: skuForVariantId(i.variantId) ?? programSkuForMembershipAppId(i.productId) ?? null,
+      section: i.section,
+      category: i.section,
+    }));
+    // Show required package whenever HRT is in cart and no APPROVED HRT history suppresses it.
+    // Do not require auth for preview — guests still need to see the $260 package before signing in.
+    // Logged-in customers use loaded therapyHistory (empty array until fetch completes / when none).
     if (
-      !user?.id ||
       !shouldAutoAddHrtLabPackage({
         items: previewItems,
-        approvedTherapyHistory: therapyHistory,
+        approvedTherapyHistory: user?.id ? therapyHistory : [],
       })
     ) {
       return { lines: [] as ReturnType<typeof buildHrtLabPackageLines>, cents: 0 };
@@ -683,6 +687,7 @@ export function CheckoutPage() {
             sku: line.sku,
             fulfillmentSku: line.fulfillmentSku,
             section: line.section,
+            slug: line.slug,
             membershipSlug: line.membershipSlug,
             requestedFormulation: line.requestedFormulation,
             memberPricingEligible: line.productId === 'a1' ? false : undefined,
@@ -1319,14 +1324,15 @@ export function CheckoutPage() {
                 {hrtLabPreview.lines.length > 0 ? (
                   <div className="space-y-2 rounded-lg border border-cream-300 bg-cream-50 p-2">
                     <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">
-                      {HRT_LAB_REQUIRED_COPY}
+                      {HRT_LAB_PACKAGE_HEADING}
                     </p>
+                    <p className="text-[11px] text-ink-500">{HRT_LAB_REQUIRED_COPY}</p>
                     {hrtLabPreview.lines.map(line => (
                       <div key={line.sku} className="flex gap-3">
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-ink-900">{line.productName}</p>
                           {line.shippingIncluded ? (
-                            <p className="text-xs text-ink-500">{LAB_KIT_SHIPPING_INCLUDED_COPY}</p>
+                            <p className="text-xs text-ink-500">{LAB_KIT_INCLUDES_SHIPPING_COPY}</p>
                           ) : (
                             <p className="text-xs text-ink-500">Not a medication</p>
                           )}
@@ -1336,6 +1342,10 @@ export function CheckoutPage() {
                         </span>
                       </div>
                     ))}
+                    <div className="flex justify-between border-t border-cream-300 pt-2 text-sm font-medium text-ink-900">
+                      <span>Total required lab package</span>
+                      <span>${(HRT_LAB_PACKAGE_TOTAL_CENTS / 100).toFixed(2)}</span>
+                    </div>
                   </div>
                 ) : null}
               </div>

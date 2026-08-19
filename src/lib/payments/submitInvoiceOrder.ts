@@ -24,6 +24,8 @@ export interface SubmitInvoiceOrderItem {
   /** Membership dose → retail medication fulfillment SKU. */
   fulfillmentSku?: string;
   section?: string;
+  /** Product slug (required for HRT / therapy-family detection server-side). */
+  slug?: string;
   membershipSlug?: string;
   requestedFormulation?: string;
   memberPricingEligible?: boolean;

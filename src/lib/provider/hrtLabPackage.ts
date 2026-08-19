@@ -11,6 +11,10 @@
  */
 
 import type { ApprovedTherapyHistoryRow } from './determineProviderRequirement';
+import {
+  THERAPY_FAMILY_BY_PRODUCT_ID,
+  THERAPY_FAMILY_BY_SLUG,
+} from './therapyFamilies';
 
 export const LAB_KIT = {
   productId: 'pc4',
@@ -42,8 +46,8 @@ export const HRT_THERAPY_FAMILIES = [
 
 export type HrtTherapyFamily = (typeof HRT_THERAPY_FAMILIES)[number];
 
-export const HRT_PRODUCT_IDS = new Set(['p16', 'p23', 'p27']);
-export const HRT_SLUGS = new Set([
+export const HRT_PRODUCT_IDS: ReadonlySet<string> = new Set(['p16', 'p23', 'p27']);
+export const HRT_SLUGS: ReadonlySet<string> = new Set([
   'estradiol-patch',
   'progesterone-capsules',
   'testosterone-cream',
@@ -56,18 +60,47 @@ export const LAB_PACKAGE_PRODUCT_IDS: ReadonlySet<string> = new Set([
 ]);
 
 export const HRT_LAB_REQUIRED_COPY = 'Required for initial HRT order';
+export const HRT_LAB_PACKAGE_HEADING = 'Required HRT Lab Package';
 export const LAB_KIT_SHIPPING_INCLUDED_COPY = 'Lab Kit shipping included.';
+/** Preferred checkout line under Lab Kit. */
+export const LAB_KIT_INCLUDES_SHIPPING_COPY = 'Includes kit shipping';
+
+/** Legacy storefront / bookmark product ids that still resolve to HRT. */
+const HRT_LEGACY_PRODUCT_IDS = new Set([
+  'estrogen-transdermal-patch-16',
+  'progesterone-capsules-23',
+  'testosterone-cream-27',
+]);
 
 export function isHrtProductLine(input: {
   productId?: string | null;
   slug?: string | null;
   sku?: string | null;
+  section?: string | null;
+  category?: string | null;
 }): boolean {
   const productId = String(input.productId || '').trim();
-  const slug = String(input.slug || '').trim();
+  const slug = String(input.slug || '').trim().toLowerCase();
   const sku = String(input.sku || '').trim().toUpperCase();
-  if (HRT_PRODUCT_IDS.has(productId) || HRT_SLUGS.has(slug)) return true;
-  return sku.startsWith('MBM-HRT-');
+  const section = String(input.section || input.category || '')
+    .trim()
+    .toLowerCase();
+
+  if (HRT_PRODUCT_IDS.has(productId) || HRT_LEGACY_PRODUCT_IDS.has(productId)) {
+    return true;
+  }
+  if (HRT_SLUGS.has(slug)) return true;
+  if (sku.startsWith('MBM-HRT-')) return true;
+  // Authoritative catalog category for Women's Hormone Therapy.
+  if (section === 'womens-hormone-therapy') return true;
+
+  const family =
+    THERAPY_FAMILY_BY_PRODUCT_ID[productId] ||
+    (slug ? THERAPY_FAMILY_BY_SLUG[slug] : undefined);
+  if (family && (HRT_THERAPY_FAMILIES as readonly string[]).includes(family)) {
+    return true;
+  }
+  return false;
 }
 
 export function isLabPackageLine(input: {
@@ -103,7 +136,13 @@ export function isShippingChargeExemptLine(input: {
 }
 
 export function cartContainsHrtProduct(
-  items: Array<{ productId?: string | null; slug?: string | null; sku?: string | null }>,
+  items: Array<{
+    productId?: string | null;
+    slug?: string | null;
+    sku?: string | null;
+    section?: string | null;
+    category?: string | null;
+  }>,
 ): boolean {
   return items.some(isHrtProductLine);
 }
@@ -127,7 +166,13 @@ export function hasApprovedHrtHistory(
  * there is no separate lab-completion / lab-validity table.
  */
 export function shouldAutoAddHrtLabPackage(input: {
-  items: Array<{ productId?: string | null; slug?: string | null; sku?: string | null }>;
+  items: Array<{
+    productId?: string | null;
+    slug?: string | null;
+    sku?: string | null;
+    section?: string | null;
+    category?: string | null;
+  }>;
   approvedTherapyHistory: ApprovedTherapyHistoryRow[];
 }): boolean {
   if (!cartContainsHrtProduct(input.items)) return false;

@@ -9,6 +9,7 @@ import {
   RETURNING_HRT_LAB_STATUS_SOURCE,
   buildHrtLabPackageLines,
   cartAlreadyHasLabPackage,
+  isHrtProductLine,
   isLabKitLine,
   isShippingChargeExemptLine,
   shouldAutoAddHrtLabPackage,
@@ -259,5 +260,121 @@ describe('HRT lab package auto-add', () => {
       built.subtotalCents - built.discountCents + built.shippingCents + built.taxCents;
     expect(tagadaParity).toBe(built.totalCents);
     expect(tagadaParity).toBe(25900 - 5000 + 3000);
+  });
+});
+
+describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Day', () => {
+  const testosteroneLine = {
+    productId: 'p27',
+    productName: 'Testosterone Cream',
+    sku: 'MBM-HRT-TST-CRM-001',
+    slug: 'testosterone-cream',
+    quantity: 1,
+    unitAmountCents: 7900,
+    section: 'womens-hormone-therapy',
+  };
+
+  const estradiol129 = {
+    productId: 'p16',
+    productName: 'Estradiol Patch',
+    sku: 'MBM-HRT-EST-PAT-001',
+    slug: 'estradiol-patch',
+    quantity: 1,
+    unitAmountCents: 12900,
+    section: 'womens-hormone-therapy',
+  };
+
+  it('detects estradiol, progesterone, and testosterone as HRT (incl. category-only)', () => {
+    expect(isHrtProductLine({ productId: 'p16', slug: 'estradiol-patch' })).toBe(true);
+    expect(isHrtProductLine({ productId: 'p23', slug: 'progesterone-capsules' })).toBe(true);
+    expect(isHrtProductLine({ productId: 'p27', slug: 'testosterone-cream' })).toBe(true);
+    expect(
+      isHrtProductLine({
+        productId: 'unknown',
+        section: 'womens-hormone-therapy',
+      }),
+    ).toBe(true);
+  });
+
+  it('exact cart without promo totals $573 (543 merch+services + 30 ship)', () => {
+    const built = buildAuthoritativeOrderLines({
+      customerUserId: 'user-screenshot',
+      approvedTherapyHistory: [],
+      items: [estradiol129, testosteroneLine],
+      shippingCents: 3000,
+    });
+    expect(built.hrtLabPackageAdded).toBe(true);
+    expect(built.items.filter(i => i.sku === LAB_KIT.sku)).toHaveLength(1);
+    expect(built.items.filter(i => i.sku === LAB_REVIEW.sku)).toHaveLength(1);
+    expect(built.items.filter(i => i.sku === 'MBM-PC-IPV-SRV-001')).toHaveLength(1);
+    // 12900 + 7900 + 7500 + 20000 + 6000 = 54300
+    expect(built.subtotalCents).toBe(54300);
+    expect(built.discountCents).toBe(0);
+    expect(built.shippingCents).toBe(3000);
+    expect(built.taxCents).toBe(0);
+    expect(built.totalCents).toBe(57300);
+  });
+
+  it('exact cart with OGTBM: $100 off HRT only → $473', () => {
+    const built = buildAuthoritativeOrderLines({
+      customerUserId: 'user-screenshot-promo',
+      approvedTherapyHistory: [],
+      items: [estradiol129, testosteroneLine],
+      shippingCents: 3000,
+      promoCode: OGTBM_PROMO_CODE,
+    });
+    expect(built.discountCents).toBe(10000); // $50 Estradiol + $50 Testosterone
+    expect(built.subtotalCents).toBe(54300);
+    expect(built.totalCents).toBe(47300); // 57300 - 10000
+    expect(built.taxCents).toBe(0);
+    // Lab + IPV not discounted
+    expect(built.items.find(i => i.sku === LAB_KIT.sku)?.unitAmountCents).toBe(20000);
+    expect(built.items.find(i => i.sku === LAB_REVIEW.sku)?.unitAmountCents).toBe(6000);
+  });
+
+  it.each([
+    ['estradiol alone', [estradiol129]],
+    ['testosterone alone', [testosteroneLine]],
+    [
+      'progesterone alone',
+      [
+        {
+          productId: 'p23',
+          productName: 'Progesterone Capsules',
+          sku: 'MBM-HRT-PRG-CAP-001',
+          slug: 'progesterone-capsules',
+          quantity: 1,
+          unitAmountCents: 3900,
+          section: 'womens-hormone-therapy',
+        },
+      ],
+    ],
+    ['estradiol + testosterone', [estradiol129, testosteroneLine]],
+    [
+      'all three HRT',
+      [
+        estradiol129,
+        testosteroneLine,
+        {
+          productId: 'p23',
+          productName: 'Progesterone Capsules',
+          sku: 'MBM-HRT-PRG-CAP-001',
+          slug: 'progesterone-capsules',
+          quantity: 1,
+          unitAmountCents: 3900,
+          section: 'womens-hormone-therapy',
+        },
+      ],
+    ],
+  ])('%s adds lab package exactly once', (_label, cartItems) => {
+    const built = buildAuthoritativeOrderLines({
+      customerUserId: 'user-hrt-matrix',
+      approvedTherapyHistory: [],
+      items: cartItems,
+      shippingCents: 3000,
+    });
+    expect(built.items.filter(i => i.sku === LAB_KIT.sku)).toHaveLength(1);
+    expect(built.items.filter(i => i.sku === LAB_REVIEW.sku)).toHaveLength(1);
+    expect(built.hrtLabPackageAdded).toBe(true);
   });
 });

@@ -356,8 +356,18 @@
     "tagada_product_id": "product_71d2d139cecb",
     "tagada_variant_id": "variant_31baa3269d52",
     "tagada_price_id": "price_a02956edce74",
-    "mbm_price_cents": 5500,
-    "tagada_price_cents": 5500
+    "mbm_price_cents": 6000,
+    "tagada_price_cents": 6000
+  },
+  {
+    "mbm_sku": "MBM-PC-LAB-KIT-001",
+    "mbm_product_id": "pc4",
+    "mbm_variant_id": "lab-kit-v1",
+    "tagada_product_id": "product_b205358e0b51",
+    "tagada_variant_id": "variant_aae06bdc9f85",
+    "tagada_price_id": "price_d2dc86f6b8d0",
+    "mbm_price_cents": 20000,
+    "tagada_price_cents": 20000
   },
   {
     "mbm_sku": "MBM-RP-BPC-CAP-001",

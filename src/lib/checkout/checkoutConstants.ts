@@ -48,7 +48,8 @@ export const ACCESSORY_BUNDLE_PRODUCT_IDS = new Set(['a1']);
 export const PROVIDER_CARE_FIXED_CENTS: Record<string, number> = {
   pc1: 7500, // Initial Provider Visit
   pc2: 5500, // Follow-Up Visit
-  pc3: 5500, // Laboratory Review
+  pc3: 6000, // Laboratory Review ($60)
+  pc4: 20000, // Lab Kit ($200) — shipping included
 };
 
 /** Semaglutide / Tirzepatide medication SKUs — never receive wellness 15% member discount. */

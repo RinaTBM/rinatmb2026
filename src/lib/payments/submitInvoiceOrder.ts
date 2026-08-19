@@ -37,6 +37,8 @@ export interface SubmitInvoiceOrderRequest {
   customerName: string;
   subtotalCents: number;
   discountCents: number;
+  /** Optional promo code (e.g. OGTBM). Server re-authorizes discount. */
+  promoCode?: string | null;
   shippingCents: number;
   taxCents: number;
   providerCareTaxCents?: number;

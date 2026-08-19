@@ -55,6 +55,24 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold). Accessory/Provider Care **add-on tax rates are 0** (tax-inclusive).
 - Legacy Stripe Edge Functions remain in repo but must not be deployed for launch. **Do not re-enable Stripe.**
 
+### Promo code OGTBM (pre-production)
+
+- Code: **`OGTBM`** — **$50 off each eligible unit** (quantity-aware). Not $50 off the order. Never discounts a line below $0.
+- Authoritative math: `src/lib/promo/ogtbmPromo.ts` (+ Edge `_shared/ogtbmPromo.ts`). Applied in `buildAuthoritativeOrderLines` / `create-invoice-order`; persists `orders.promo_code` + `discount_cents`.
+- **Excluded** (structured category/SKU/productId — not display-name): accessories, dermatology (`prescription-skin-hair` / `MBM-SH-*`), all provider care (`pc*` / `MBM-PC-*` including Lab Kit + Lab Review), shipping (`MBM-SHIP-*`), memberships (`m1`/`m2` / `MBM-MEM-*`).
+- **Membership:** OGTBM must never alter combo recurring amounts (SEM Two-Day 17900 / SEM Next-Day 19900 / TIRZ Two-Day 27900 / TIRZ Next-Day 29900). Checkout UI blocks promo on membership carts; `create-kashu-checkout-session` rejects membership enrollment when `discount_cents > 0`.
+- Card path: when OGTBM applies, Edge binds discounted one-time Tagada `priceId`s on eligible variants so hosted total equals MBM `orders.total_cents`. Do not rely on Tagada dashboard promo rules for eligibility.
+
+### HRT Lab Kit + Lab Review (pre-production)
+
+- **Lab Kit** `pc4` / `MBM-PC-LAB-KIT-001` = **$200** (20000¢). Tagada: `product_b205358e0b51` / `variant_aae06bdc9f85` / `price_d2dc86f6b8d0`. **Shipping included** — do not add Two-Day/Next-Day for the kit; product is non-shippable provider-care.
+- **Lab Review** `pc3` / `MBM-PC-LAB-SRV-001` = **$60** (6000¢). Tagada: `product_71d2d139cecb` / `variant_31baa3269d52` / `price_a02956edce74` (updated from $55).
+- **Required package** = $260 once per applicable initial HRT order (not per HRT line). Auto-add via `src/lib/provider/hrtLabPackage.ts` inside `buildAuthoritativeOrderLines`.
+- Copy: “Required for initial HRT order” / “Lab Kit shipping included.” Not medication.
+- **Returning customers:** no dedicated lab-validity table. Skip auto-add when `customer_therapy_history` has any **APPROVED** HRT family (`estradiol-patch` / `progesterone-capsules` / `testosterone-cream`). Do not invent a lab-expiration window.
+- Medication shipping still follows normal MBM rules when HRT meds are in the cart; Lab Kit itself does not contribute shippable merchandise.
+- Migration: `20260819193000_orders_promo_code.sql`. Redeploy: `create-invoice-order`, `create-kashu-checkout-session`.
+
 ### Tagada / Kashu shipping + tax architecture (finalized — preserve)
 
 Permanent rules for future agents. Do not regress these:

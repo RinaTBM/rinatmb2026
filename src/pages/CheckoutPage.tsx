@@ -78,10 +78,21 @@ import {
 } from '@/lib/provider/determineProviderRequirement';
 import {
   customerCopyForRequirement,
-  isProviderVisitLine,
   visitForRequirement,
+  isProviderVisitLine,
 } from '@/lib/provider/providerVisits';
 import { isProviderGuidedPrescriptionLine } from '@/lib/provider/therapyFamilies';
+import {
+  applyOgtbmPromo,
+  isOgtbmPromoCode,
+  OGTBM_PROMO_CODE,
+} from '@/lib/promo/ogtbmPromo';
+import {
+  buildHrtLabPackageLines,
+  HRT_LAB_REQUIRED_COPY,
+  LAB_KIT_SHIPPING_INCLUDED_COPY,
+  shouldAutoAddHrtLabPackage,
+} from '@/lib/provider/hrtLabPackage';
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
@@ -107,6 +118,8 @@ export function CheckoutPage() {
     paymentAccessToken: string;
   } | null>(null);
   const [therapyHistory, setTherapyHistory] = useState<ApprovedTherapyHistoryRow[]>([]);
+  const [promoInput, setPromoInput] = useState('');
+  const [appliedPromoCode, setAppliedPromoCode] = useState<string | null>(null);
   const checkoutEnabled = isManualCheckoutEnabled();
   const hasRecurring = cartHasRecurringItems(items);
 
@@ -264,8 +277,99 @@ export function CheckoutPage() {
     )
     .reduce((sum, i) => sum + Math.round(i.price * 100) * i.quantity, 0);
   const requiredVisitCents = requiredVisit && user?.id ? requiredVisit.priceCents : 0;
-  const displaySubtotalCents = merchandiseSubtotalCents + requiredVisitCents;
+
+  const hrtLabPreview = useMemo(() => {
+    const previewItems = [
+      ...items.map(i => ({
+        productId: i.productId,
+        slug: i.slug,
+        sku: skuForVariantId(i.variantId) ?? programSkuForMembershipAppId(i.productId) ?? null,
+      })),
+    ];
+    if (
+      !user?.id ||
+      !shouldAutoAddHrtLabPackage({
+        items: previewItems,
+        approvedTherapyHistory: therapyHistory,
+      })
+    ) {
+      return { lines: [] as ReturnType<typeof buildHrtLabPackageLines>, cents: 0 };
+    }
+    const lines = buildHrtLabPackageLines({ items: previewItems });
+    return {
+      lines,
+      cents: lines.reduce((s, l) => s + l.unitAmountCents * l.quantity, 0),
+    };
+  }, [items, user?.id, therapyHistory]);
+
+  const displaySubtotalCents =
+    merchandiseSubtotalCents + requiredVisitCents + hrtLabPreview.cents;
   const subtotalCents = displaySubtotalCents;
+
+  const ogtbmPreview = useMemo(() => {
+    if (!isOgtbmPromoCode(appliedPromoCode) || hasMembership) {
+      return { discountCents: 0, eligibleUnitCount: 0 };
+    }
+    const lines = [
+      ...items
+        .filter(
+          i =>
+            !isProviderVisitLine({
+              productId: i.productId,
+              sku: skuForVariantId(i.variantId) ?? null,
+            }),
+        )
+        .map(i => ({
+          productId: i.productId,
+          sku: skuForVariantId(i.variantId) ?? programSkuForMembershipAppId(i.productId) ?? null,
+          section: i.section,
+          category: i.section,
+          purchaseType: i.purchaseType,
+          isMembership: Boolean(i.isMembership),
+          quantity: i.quantity,
+          unitAmountCents: Math.round(i.price * 100),
+        })),
+      ...(requiredVisit && user?.id
+        ? [
+            {
+              productId: requiredVisit.productId,
+              sku: requiredVisit.sku,
+              section: requiredVisit.section,
+              category: 'provider-care',
+              purchaseType: 'one_time' as const,
+              isMembership: false,
+              quantity: 1,
+              unitAmountCents: requiredVisit.priceCents,
+            },
+          ]
+        : []),
+      ...hrtLabPreview.lines.map(l => ({
+        productId: l.productId,
+        sku: l.sku,
+        section: l.section,
+        category: 'provider-care',
+        purchaseType: 'one_time' as const,
+        isMembership: false,
+        quantity: l.quantity,
+        unitAmountCents: l.unitAmountCents,
+      })),
+    ];
+    const applied = applyOgtbmPromo({ code: appliedPromoCode, lines });
+    if (!applied.ok) return { discountCents: 0, eligibleUnitCount: 0 };
+    return {
+      discountCents: applied.discountCents,
+      eligibleUnitCount: applied.eligibleUnitCount,
+    };
+  }, [
+    appliedPromoCode,
+    hasMembership,
+    items,
+    requiredVisit,
+    user?.id,
+    hrtLabPreview.lines,
+  ]);
+
+  const promoDiscountCents = ogtbmPreview.discountCents;
   const cartItemsForAuth = items
     .filter(
       i =>
@@ -327,7 +431,10 @@ export function CheckoutPage() {
         ? 0
         : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
   const displaySubtotal = displaySubtotalCents / 100;
-  const total = displaySubtotal + shipping;
+  const total = Math.max(
+    0,
+    displaySubtotal + shipping - promoDiscountCents / 100,
+  );
   const shippingCents = Math.round(shipping * 100);
 
   const membershipProgramSku = items
@@ -548,7 +655,11 @@ export function CheckoutPage() {
           customerEmail: form.email || user?.email || '',
           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || '',
           subtotalCents,
-          discountCents: Math.round(totalSavings * 100),
+          discountCents:
+            !hasMembership && isOgtbmPromoCode(appliedPromoCode)
+              ? 0
+              : Math.round(totalSavings * 100),
+          promoCode: hasMembership ? null : appliedPromoCode,
           shippingCents,
           taxCents,
           totalCents,
@@ -1205,7 +1316,72 @@ export function CheckoutPage() {
                     </span>
                   </div>
                 ) : null}
+                {hrtLabPreview.lines.length > 0 ? (
+                  <div className="space-y-2 rounded-lg border border-cream-300 bg-cream-50 p-2">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">
+                      {HRT_LAB_REQUIRED_COPY}
+                    </p>
+                    {hrtLabPreview.lines.map(line => (
+                      <div key={line.sku} className="flex gap-3">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-ink-900">{line.productName}</p>
+                          {line.shippingIncluded ? (
+                            <p className="text-xs text-ink-500">{LAB_KIT_SHIPPING_INCLUDED_COPY}</p>
+                          ) : (
+                            <p className="text-xs text-ink-500">Not a medication</p>
+                          )}
+                        </div>
+                        <span className="text-sm font-medium text-ink-900">
+                          ${(line.unitAmountCents / 100).toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </div>
+              {!hasMembershipItems ? (
+                <div className="border-t border-cream-300 pt-4">
+                  <label className="block text-xs font-medium text-ink-600 mb-1" htmlFor="promo-code">
+                    Promo code
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      id="promo-code"
+                      value={promoInput}
+                      onChange={e => setPromoInput(e.target.value)}
+                      placeholder="Enter code"
+                      className="flex-1 rounded-md border border-cream-300 bg-white px-3 py-2 text-sm"
+                      autoComplete="off"
+                    />
+                    <button
+                      type="button"
+                      className="rounded-md bg-ink-900 px-3 py-2 text-sm text-cream-50"
+                      onClick={() => {
+                        const code = promoInput.trim().toUpperCase();
+                        if (isOgtbmPromoCode(code)) {
+                          setAppliedPromoCode(OGTBM_PROMO_CODE);
+                          setError(null);
+                        } else if (code) {
+                          setAppliedPromoCode(null);
+                          setError('That promo code is not valid.');
+                        } else {
+                          setAppliedPromoCode(null);
+                        }
+                      }}
+                    >
+                      Apply
+                    </button>
+                  </div>
+                  {appliedPromoCode ? (
+                    <p className="mt-1 text-xs text-gold-700">
+                      {appliedPromoCode} applied
+                      {ogtbmPreview.eligibleUnitCount > 0
+                        ? ` — $${(promoDiscountCents / 100).toFixed(2)} off (${ogtbmPreview.eligibleUnitCount} eligible item${ogtbmPreview.eligibleUnitCount === 1 ? '' : 's'})`
+                        : ' — no eligible items in this cart'}
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
               <div className="space-y-2 border-t border-cream-300 pt-4 text-sm">
                 {!hasVariablePricing && standardSubtotal > subtotal && !hasMembershipItems && (
                   <div className="flex justify-between text-ink-500">
@@ -1217,6 +1393,12 @@ export function CheckoutPage() {
                   <div className="flex justify-between text-gold-700">
                     <span>{isActiveMember ? 'Member savings' : 'Savings'}</span>
                     <span>−${totalSavings.toFixed(2)}</span>
+                  </div>
+                )}
+                {promoDiscountCents > 0 && !hasMembershipItems && (
+                  <div className="flex justify-between text-gold-700">
+                    <span>Promo ({OGTBM_PROMO_CODE})</span>
+                    <span>−${(promoDiscountCents / 100).toFixed(2)}</span>
                   </div>
                 )}
                 {hasMembershipItems && !hasVariablePricing ? (

@@ -229,7 +229,8 @@ describe('Provider Care (tax-inclusive; no separate tax add-on)', () => {
   it('uses approved fixed price_data for Initial Visit / Follow-Up / Lab Review', () => {
     expect(PROVIDER_CARE_FIXED_CENTS.pc1).toBe(7500);
     expect(PROVIDER_CARE_FIXED_CENTS.pc2).toBe(5500);
-    expect(PROVIDER_CARE_FIXED_CENTS.pc3).toBe(5500);
+    expect(PROVIDER_CARE_FIXED_CENTS.pc3).toBe(6000);
+    expect(PROVIDER_CARE_FIXED_CENTS.pc4).toBe(20000);
     const line = expectPriceData(
       resolveProviderCareLine({ productId: 'pc1', quantity: 1, section: 'provider-care', purchaseType: 'one_time' }),
     );

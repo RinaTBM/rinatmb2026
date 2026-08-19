@@ -55,7 +55,8 @@ export type DosageForm =
   | 'Topical Solution'
   | 'Solution'
   | 'Service'
-  | 'Accessory';
+  | 'Accessory'
+  | 'Kit';
 
 export interface ProductVariant {
   id: string;
@@ -864,8 +865,26 @@ export const products: Product[] = [
     longDescription: 'Review laboratory findings and receive personalized recommendations.',
     image: 'https://images.pexels.com/photos/6129507/pexels-photo-6129507.jpeg?auto=compress&cs=tinysrgb&w=1200',
     imageAlt: 'Licensed provider reviewing laboratory results on a tablet in a professional office',
-    variants: [{ dosageForm: 'Service', strength: '1 session', size: 'Visit', price: 55 }],
-    providerDisclaimer: 'Provider Care services require scheduling and may involve a medical intake.',
+    variants: [{ dosageForm: 'Service', strength: '1 session', size: 'Visit', price: 60 }],
+    providerDisclaimer: 'Provider Care services require scheduling and may involve a medical intake. Not a medication.',
+  }),
+  mk({
+    id: 'pc4',
+    slug: 'lab-kit',
+    displayName: 'Lab Kit',
+    shortName: 'Lab Kit',
+    subtitle: 'Required specimen collection kit for initial HRT orders.',
+    category: 'provider-care',
+    goals: ['hrt-women'],
+    shortDescription:
+      'Lab specimen collection kit required for initial Women’s Hormone Therapy orders. Shipping is included in the kit price.',
+    longDescription:
+      'Lab specimen collection kit required for initial Women’s Hormone Therapy orders. Shipping is included in the kit price. This is not a medication.',
+    image: 'https://images.pexels.com/photos/6129507/pexels-photo-6129507.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    imageAlt: 'Laboratory specimen collection kit for hormone therapy intake',
+    variants: [{ dosageForm: 'Kit', strength: '1 kit', size: 'Kit', price: 200 }],
+    providerDisclaimer:
+      'Lab Kit is a required service kit for initial HRT orders — not a medication. Lab Kit shipping is included.',
   }),
 
   // ===== ACCESSORIES (preserved from website-improvements) =====

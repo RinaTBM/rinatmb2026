@@ -760,6 +760,38 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Lab review does not guarantee a prescription or a specific treatment.',
   },
 
+  'lab-kit': {
+    benefitHeadline: 'Specimen Collection Kit for Initial Hormone Therapy',
+    shortDescription:
+      'The Lab Kit is the required specimen collection kit for initial Women’s Hormone Therapy orders. Shipping is included in the kit price. This is not a medication.',
+    highlights: [
+      'Required for Initial HRT',
+      'Shipping Included',
+      'Not a Medication',
+      'Pairs with Laboratory Review',
+    ],
+    about: [
+      'Initial Women’s Hormone Therapy orders automatically include this Lab Kit plus Laboratory Review when required. Established HRT customers with approved therapy history are not charged the package again.',
+      'Lab Kit shipping is included — no separate Two-Day or Next-Day charge applies to the kit itself.',
+    ].join('\n\n'),
+    potentialBenefits: [
+      'Removes guesswork about which labs are needed to start',
+      'Keeps initial HRT checkout complete in one step',
+      'Clear separation from medication pricing',
+    ],
+    howItWorks:
+      'When an applicable HRT product enters checkout for a new HRT customer, Lab Kit ($200) and Laboratory Review ($60) are added once as the required lab package.',
+    whyPeopleChooseIt: [
+      'Required package for first HRT order',
+      'Transparent $260 combined pricing',
+      'Shipping included for the kit',
+    ],
+    whatToExpect:
+      'You receive the specimen collection kit with shipping included. Laboratory Review is a separate provider interpretation service — not a medication.',
+    importantInformation:
+      'Lab Kit and Laboratory Review are provider-care services, not medications. They are not discounted by OGTBM.',
+  },
+
   // ===== ACCESSORIES =====
   'complete-injection-starter-kit': {
     benefitHeadline: 'Everything You Need to Start Organized — In One Bundle',

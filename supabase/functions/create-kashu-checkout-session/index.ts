@@ -81,6 +81,98 @@ function shippingSkuForCents(shippingCents: number): string | null {
   return null;
 }
 
+const OGTBM_EXCLUDED_SKU_PREFIXES = ["MBM-ACC-", "MBM-SH-", "MBM-PC-", "MBM-MEM-", "MBM-SHIP-"];
+
+function isOgtbmEligibleSku(sku: string): boolean {
+  const s = sku.toUpperCase();
+  return !OGTBM_EXCLUDED_SKU_PREFIXES.some((p) => s.startsWith(p));
+}
+
+async function ensureTagadaOneTimePrice(input: {
+  apiKey: string;
+  productId: string;
+  variantId: string;
+  amountCents: number;
+}): Promise<string | null> {
+  const base = Deno.env.get("TAGADA_API_BASE")?.trim()?.replace(/\/$/, "") || "https://api.tagada.io";
+  const got = await fetch(`${base}/api/public/v1/products/${encodeURIComponent(input.productId)}`, {
+    headers: {
+      Authorization: `Bearer ${input.apiKey}`,
+      Accept: "application/json",
+    },
+  });
+  if (!got.ok) return null;
+  const product = await got.json();
+  const variants = Array.isArray(product?.variants) ? product.variants : [];
+  const v = variants.find((x: { id?: string }) => x.id === input.variantId);
+  if (!v) return null;
+  const prices = Array.isArray(v.prices) ? v.prices : [];
+  for (const prc of prices) {
+    const amount = prc?.currencyOptions?.USD?.amount;
+    const recurring = prc?.recurring === true;
+    if (!recurring && Number(amount) === input.amountCents && typeof prc.id === "string") {
+      return prc.id;
+    }
+  }
+  const nextPrices = [
+    ...prices.map((prc: Record<string, unknown>, idx: number) => ({
+      id: prc.id,
+      default: prc.default === true || idx === 0,
+      currencyOptions: prc.currencyOptions,
+      recurring: prc.recurring === true,
+      billingTiming: prc.billingTiming ?? "usage",
+      interval: prc.interval ?? null,
+      intervalCount: prc.intervalCount ?? 1,
+    })),
+    {
+      default: false,
+      currencyOptions: { USD: { amount: input.amountCents } },
+      recurring: false,
+      billingTiming: "usage",
+      interval: null,
+      intervalCount: 1,
+    },
+  ];
+  const put = await fetch(`${base}/api/public/v1/variants/${encodeURIComponent(input.variantId)}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${input.apiKey}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      updatedData: {
+        name: v.name,
+        description: v.description ?? undefined,
+        sku: v.sku,
+        active: v.active !== false,
+        default: v.default === true,
+        prices: nextPrices,
+      },
+    }),
+  });
+  if (!put.ok) return null;
+  const got2 = await fetch(`${base}/api/public/v1/products/${encodeURIComponent(input.productId)}`, {
+    headers: {
+      Authorization: `Bearer ${input.apiKey}`,
+      Accept: "application/json",
+    },
+  });
+  if (!got2.ok) return null;
+  const product2 = await got2.json();
+  const variants2 = Array.isArray(product2?.variants) ? product2.variants : [];
+  const v2 = variants2.find((x: { id?: string }) => x.id === input.variantId);
+  const prices2 = Array.isArray(v2?.prices) ? v2.prices : [];
+  for (const prc of prices2) {
+    const amount = prc?.currencyOptions?.USD?.amount;
+    const recurring = prc?.recurring === true;
+    if (!recurring && Number(amount) === input.amountCents && typeof prc.id === "string") {
+      return prc.id;
+    }
+  }
+  return null;
+}
+
 /** Base membership display amounts (customer-facing). Kept; not deleted. */
 const MEM_BASE_BY_SKU: Record<string, { basePriceId: string; baseCents: number; type: string }> = {
   "MBM-MEM-SEM-MEM-001": {
@@ -324,6 +416,7 @@ Deno.serve(async (req) => {
       string,
       {
         tagada_variant_id: string;
+        tagada_product_id?: string | null;
         tagada_price_id?: string | null;
         mbm_price_cents?: number | null;
         tagada_price_cents?: number | null;
@@ -333,6 +426,7 @@ Deno.serve(async (req) => {
         m: {
           mbm_sku: string;
           tagada_variant_id: string;
+          tagada_product_id?: string | null;
           tagada_price_id?: string | null;
           mbm_price_cents?: number | null;
           tagada_price_cents?: number | null;
@@ -478,6 +572,10 @@ Deno.serve(async (req) => {
 
     const mbmTaxCents = Number(order.tax_cents) || 0;
     const mbmTotalCents = Number(order.total_cents) || 0;
+    const mbmDiscountCents = Math.max(0, Number(order.discount_cents) || 0);
+    const mbmPromoCode = typeof order.promo_code === "string"
+      ? order.promo_code.trim().toUpperCase()
+      : "";
     // Tax-inclusive architecture: NEW orders must have tax_cents = 0.
     // Fail safe on unexpected tax (stale deploy / mixed logic) — do not redirect.
     if (mbmTaxCents > 0) {
@@ -491,9 +589,24 @@ Deno.serve(async (req) => {
         mbmTotalCents,
       }, 409);
     }
-    // Expected Tagada charge = mapped merchandise + MBM shipping line only (tax must be 0).
+    // Membership enrollment must never carry OGTBM (recurring combo amounts are fixed).
+    if (isMembershipCheckout && mbmDiscountCents > 0) {
+      return json({
+        error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+        blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+        message:
+          "Membership enrollment cannot include promotional discounts. Recurring membership amounts are fixed.",
+        publicOrderNumber,
+        mbmDiscountCents,
+        promoCode: mbmPromoCode || null,
+      }, 409);
+    }
+    // Expected Tagada charge = mapped merchandise + shipping − server OGTBM discount (tax = 0).
     const calculatedTagadaTotalCents =
-      calculatedTagadaMerchandiseCents + calculatedShippingCents + mbmTaxCents;
+      calculatedTagadaMerchandiseCents +
+      calculatedShippingCents +
+      mbmTaxCents -
+      mbmDiscountCents;
     if (calculatedTagadaTotalCents !== mbmTotalCents) {
       return json({
         error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
@@ -503,9 +616,86 @@ Deno.serve(async (req) => {
         calculatedTagadaTotalCents,
         calculatedTagadaMerchandiseCents,
         calculatedShippingCents,
+        mbmDiscountCents,
         mbmTaxCents,
         skuList,
       }, 409);
+    }
+
+    // When OGTBM applies, swap eligible Tagada lines to discounted one-time priceIds
+    // so hosted charge equals MBM total (full map cents − $50/eligible unit).
+    if (mbmPromoCode === "OGTBM" && mbmDiscountCents > 0 && !isMembershipCheckout) {
+      const tagadaApiKey = Deno.env.get("TAGADA_API_KEY")?.trim();
+      if (!tagadaApiKey) {
+        return json({
+          error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+          blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+          message: "OGTBM card checkout requires Tagada API access to bind discounted priceIds.",
+        }, 503);
+      }
+      // Rebuild items with discounted prices for eligible SKUs.
+      const discountedItems: { variantId: string; quantity: number; priceId?: string }[] = [];
+      let discountedMerch = 0;
+      for (const line of orderItems) {
+        const sku = line.sku as string | null;
+        const qty = Number(line.quantity) || 1;
+        if (!sku) continue;
+        const mapped = bySku.get(sku);
+        if (!mapped?.tagada_variant_id || !mapped.tagada_product_id) {
+          return json({
+            error: "Tagada product sync incomplete for OGTBM discount binding.",
+            missingSkus: [sku],
+          }, 409);
+        }
+        const fullUnit = Math.trunc(Number(mapped.tagada_price_cents ?? mapped.mbm_price_cents) || 0);
+        let unit = fullUnit;
+        let priceId = mapped.tagada_price_id || undefined;
+        if (isOgtbmEligibleSku(sku) && fullUnit > 0) {
+          const discountPer = Math.min(5000, fullUnit);
+          unit = fullUnit - discountPer;
+          const ensured = await ensureTagadaOneTimePrice({
+            apiKey: tagadaApiKey,
+            productId: mapped.tagada_product_id,
+            variantId: mapped.tagada_variant_id,
+            amountCents: unit,
+          });
+          if (!ensured) {
+            return json({
+              error: "Unable to bind OGTBM discounted Tagada priceId.",
+              sku,
+              amountCents: unit,
+            }, 502);
+          }
+          priceId = ensured;
+        }
+        discountedMerch += unit * qty;
+        discountedItems.push({
+          variantId: mapped.tagada_variant_id,
+          quantity: qty,
+          ...(priceId ? { priceId } : {}),
+        });
+      }
+      // Keep shipping lines already appended in tagadaItems after merchandise.
+      const shipItems = tagadaItems.slice(orderItems.length);
+      tagadaItems.length = 0;
+      tagadaItems.push(...discountedItems, ...shipItems);
+      calculatedTagadaMerchandiseCents = discountedMerch;
+      // Recheck: merch(discounted) + ship + tax must equal total (discount already in unit prices).
+      const recalculated =
+        calculatedTagadaMerchandiseCents + calculatedShippingCents + mbmTaxCents;
+      if (recalculated !== mbmTotalCents) {
+        return json({
+          error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+          blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+          publicOrderNumber,
+          mbmTotalCents,
+          calculatedTagadaTotalCents: recalculated,
+          calculatedTagadaMerchandiseCents,
+          calculatedShippingCents,
+          mbmDiscountCents,
+          note: "ogtbm_discounted_priceIds",
+        }, 409);
+      }
     }
 
     const nameParts = String(order.customer_name || "").trim().split(/\s+/);

@@ -1,6 +1,6 @@
 /**
- * Approved variant-level SKU registry (52 total).
- * 50 retail/selectable variant SKUs + 2 membership program SKUs.
+ * Approved variant-level SKU registry (53 total).
+ * 51 retail/selectable variant SKUs + 2 membership program SKUs.
  * Do not invent abbreviations or renumber sequences.
  */
 
@@ -39,6 +39,7 @@ export const VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
   'initial-provider-consultation-v1': 'MBM-PC-IPV-SRV-001',
   'follow-up-appointment-v1': 'MBM-PC-FUV-SRV-001',
   'laboratory-review-v1': 'MBM-PC-LAB-SRV-001',
+  'lab-kit-v1': 'MBM-PC-LAB-KIT-001',
   'complete-injection-starter-kit-v1': 'MBM-ACC-CIS-ACC-001',
   'premium-3d-printed-peptide-case-v1': 'MBM-ACC-PPC-ACC-001',
   'temperature-controlled-travel-case-v1': 'MBM-ACC-TTC-ACC-001',
@@ -66,7 +67,7 @@ export const MEMBERSHIP_PROGRAM_SKU_BY_APP_ID: Readonly<Record<string, string>> 
   m2: 'MBM-MEM-TIR-MEM-001',
 };
 
-export const EXPECTED_RETAIL_SKU_COUNT = 50;
+export const EXPECTED_RETAIL_SKU_COUNT = 51;
 export const EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT = 2;
 export const EXPECTED_TOTAL_SKU_COUNT =
   EXPECTED_RETAIL_SKU_COUNT + EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT;

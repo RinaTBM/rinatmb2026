@@ -262,6 +262,8 @@ Deno.serve(async (req) => {
 
     const discountCentsIn = Number(body.discountCents) || 0;
     const shippingCentsIn = Number(body.shippingCents) || 0;
+    const promoCodeIn =
+      typeof body.promoCode === "string" ? body.promoCode : null;
 
     const built = buildAuthoritativeOrderLines({
       customerUserId,
@@ -269,14 +271,16 @@ Deno.serve(async (req) => {
       approvedTherapyHistory: history,
       discountCents: discountCentsIn,
       shippingCents: shippingCentsIn,
+      promoCode: promoCodeIn,
     });
 
-    // Server-authoritative totals (provider visit reinjected / repriced).
+    // Server-authoritative totals (provider visit / HRT lab reinjected; OGTBM server-priced).
     const subtotalCents = built.subtotalCents;
     const discountCents = built.discountCents;
     const shippingCents = built.shippingCents;
     const taxCents = built.taxCents;
     const totalCents = built.totalCents;
+    const promoCode = built.promoCode;
     const items = built.items;
 
     const paymentAccessToken = createPaymentAccessToken();
@@ -322,6 +326,7 @@ Deno.serve(async (req) => {
         payment_access_token: paymentAccessToken,
         subtotal_cents: subtotalCents,
         discount_cents: discountCents,
+        promo_code: promoCode,
         shipping_cents: shippingCents,
         tax_cents: taxCents,
         total_cents: totalCents,

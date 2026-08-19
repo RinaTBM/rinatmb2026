@@ -14,7 +14,7 @@ import {
 } from './membershipSkuCrosswalk';
 
 describe('variant SKU registry', () => {
-  it('has exactly 50 retail SKUs and 2 membership program SKUs', () => {
+  it('has exactly 51 retail SKUs and 2 membership program SKUs', () => {
     expect(Object.keys(VARIANT_SKU_BY_ID)).toHaveLength(EXPECTED_RETAIL_SKU_COUNT);
     expect(Object.keys(MEMBERSHIP_PROGRAM_SKU_BY_APP_ID)).toHaveLength(
       EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT,

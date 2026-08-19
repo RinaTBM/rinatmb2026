@@ -1,17 +1,23 @@
 import { Link } from '@/router';
-import { ArrowLeft, ArrowRight, ClipboardList, FlaskConical, UserRound } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ClipboardList, FlaskConical, Package, UserRound } from 'lucide-react';
 import type { Product } from '@/data/products';
 
 const ICONS = {
   'initial-provider-consultation': UserRound,
   'follow-up-appointment': ClipboardList,
   'laboratory-review': FlaskConical,
+  'lab-kit': Package,
 } as const;
 
 /** Luxury concierge layout for /section/provider-care only. */
 export function ProviderCareSection({ products }: { products: Product[] }) {
-  // Preserve catalog order: Initial → Follow-Up → Laboratory
-  const order = ['initial-provider-consultation', 'follow-up-appointment', 'laboratory-review'];
+  // Preserve catalog order: Initial → Follow-Up → Laboratory Review → Lab Kit
+  const order = [
+    'initial-provider-consultation',
+    'follow-up-appointment',
+    'laboratory-review',
+    'lab-kit',
+  ];
   const cards = order
     .map(slug => products.find(p => p.slug === slug))
     .filter((p): p is Product => Boolean(p));
@@ -37,7 +43,7 @@ export function ProviderCareSection({ products }: { products: Product[] }) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
             {cards.map(product => {
               const Icon = ICONS[product.slug as keyof typeof ICONS] ?? UserRound;
               return (

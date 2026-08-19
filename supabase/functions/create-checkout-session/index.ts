@@ -41,16 +41,15 @@ const WELLNESS_MEMBER_DISCOUNT_PERCENT = 15;
 const AUTO_REFILL_DISCOUNT_PERCENT = 10;
 const ACCESSORY_MEMBER_DISCOUNT_PERCENT = 15;
 /** Provider Care only — never a universal cart tax. */
-const PROVIDER_CARE_TAX_RATE = 0.018;
-const PROVIDER_CARE_TAX_RATE_PERCENT = 1.8;
+/** Tax-inclusive pricing: retired customer-facing add-on rates (tax_cents = 0). */
+const PROVIDER_CARE_TAX_RATE = 0;
+const PROVIDER_CARE_TAX_RATE_PERCENT = 0;
 /**
- * INTERIM TEST/STAGING ONLY — accessory merchandise sales-tax rate.
- * Applied ONLY to accessory merchandise subtotals (not wellness, memberships,
- * Provider Care, or shipping). Pending destination-based production sales-tax
- * implementation; do NOT enable Stripe Tax yet. Not a permanent legal rate.
+ * Tax-inclusive checkout: no separate accessory sales-tax add-on.
+ * Do NOT enable Stripe Tax / Tagada automatic tax for this path.
  */
-const ACCESSORY_SALES_TAX_RATE = 0.08;
-const ACCESSORY_SALES_TAX_RATE_PERCENT = 8;
+const ACCESSORY_SALES_TAX_RATE = 0;
+const ACCESSORY_SALES_TAX_RATE_PERCENT = 0;
 
 const TWO_DAY_SHIPPING_CENTS = 3000;
 const NEXT_DAY_SHIPPING_CENTS = 5000;

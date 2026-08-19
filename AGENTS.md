@@ -2,7 +2,7 @@
 
 ## Cursor Cloud specific instructions
 
-This is a **Vite + React + TypeScript** static e-commerce frontend ("My Bare Method"). It is a single-page app with a small custom hash/path router (`src/router.tsx`); there is no separate backend server to run for local development. Supabase Edge Functions power order creation and payment-instruction retrieval. Active checkout uses **manual invoice + ACH/wire** (not Stripe). See `docs/project-status-2026.md`.
+This is a **Vite + React + TypeScript** static e-commerce frontend ("My Bare Method"). It is a single-page app with a small custom hash/path router (`src/router.tsx`); there is no separate backend server to run for local development. Supabase Edge Functions power order creation and payment-instruction retrieval. Public one-time checkout is **tax-inclusive + Tagada hosted Credit/Debit Card** (ACH/Wire remain backend/admin fallbacks only; Stripe stays disabled). See `docs/project-status-2026.md`.
 
 ### Services / commands
 
@@ -16,24 +16,28 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 
 ### Non-obvious notes
 
-- Active checkout CTA is **Submit Order & View Payment Instructions**. It calls `create-invoice-order` (not `create-checkout-session`). Stripe is retired — see `docs/stripe-legacy-inventory.md`.
+- Active checkout CTA for card: **Continue to Secure Payment** (creates invoice order then Tagada hosted session). ACH/Wire emergency/admin path still uses payment-instructions pages. Stripe is retired — see `docs/stripe-legacy-inventory.md`.
 - Without `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`, browse/cart/checkout form still work; only final order submit fails.
 - Bank ACH/wire details are **Edge Function secrets only** (`MANUAL_ACH_*` / `MANUAL_WIRE_*`). Never put them in `VITE_*` or frontend source.
 - Node 22 is used here and works with Vite 5.
 - Customer account portal (`/account/*`) uses the same browser Supabase anon client as checkout. Auth screens may show an “unavailable until configured” state when local env vars are missing; that does **not** mean Bolt/Supabase is unconfigured. Admin Google auth remains separate (`/admin/*`, `admins` / `is_admin()`). See `docs/customer-account-phase1.md`.
 
-### Checkout (manual invoice launch)
+### Checkout (tax-inclusive + card-first)
 
-- Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
-- Kashu/Tagada card payments: hosted checkout path is live on production tip `deploy/ach-launch-clean-2026` with **Phase 4 limited public rollout**. Gate: `resolveKashuCardEnabledFlag` — explicit `VITE_KASHU_CARD_ENABLED=false` kills card; `true` forces on; **undefined defaults ON in production Vite builds and OFF in dev/test** (Bolt often cannot keep `.env.production`). Prefer Tagada hosted checkout/init over Pay V2. Browser never marks paid — `tagada-webhook` is authoritative. Monitor first customer card payments closely; if parity/webhook fails, build with `VITE_KASHU_CARD_ENABLED=false` and redeploy. Card eligibility still independently blocks memberships, unsupported shipping, unmapped SKUs, and **any `tax_cents > 0`** (Tagada V1 has no MBM tax line — `TAGADA_TAX_PARITY_BLOCKER`). Checkout copy mentioning card is always shown when checkout is enabled; the Credit/Debit radio only appears when flag + eligibility pass. Reports: `docs/tagadapay-phase3-controlled-live-test.md`, `docs/tagadapay-phase4-predeploy-report.md`.
+- **Customer pricing is tax-inclusive.** Displayed retail/service prices are the customer product/service price. Do **not** add separate Sales Tax / Provider Care Tax lines at checkout. NEW orders must persist `tax_cents = 0`. Authoritative customer charge = `subtotal_cents + shipping_cents` (= `total_cents`). Historical orders may still have non-zero `tax_cents` — leave them untouched. Do not build a tax-filing engine in checkout.
+- Disclosure (concise): “Applicable taxes are included in displayed prices where required.” Do not claim tax-free / exempt / no taxes.
+- Public payment selector (eligible one-time carts): **Credit / Debit Card** only (primary/default). Hide ACH / Wire from the public storefront. Keep ACH/Wire backend + admin/manual invoice paths and payment enums (`manual_ach` / `manual_wire`). `plaid_ach` remains reserved/disabled.
+- Flow: `CheckoutPage` → `create-invoice-order` → `create-kashu-checkout-session` → `checkout.mybaremethod.com` → `tagada-webhook` → MBM paid. Browser return never marks paid.
+- Kashu/Tagada gate: `resolveKashuCardEnabledFlag` — explicit `VITE_KASHU_CARD_ENABLED=false` kills card; `true` forces on; **undefined defaults ON in production Vite builds and OFF in dev/test**. Prefer Tagada hosted checkout/init over Pay V2. If hosted init fails, show contact/retry copy — do **not** auto-fall back to public ACH/Wire.
+- Card eligibility blocks: memberships / mixed membership, unsupported shipping, unmapped SKUs, and **any unexpected `tax_cents > 0`** after tax-inclusive migration (`TAGADA_UNEXPECTED_TAX_AMOUNT` fail-safe — do not silently ignore). Do not re-enable separate MBM tax add-ons without an explicit product decision.
+- Memberships: **not** one-time hosted card. Prefer controlled “online membership enrollment is being updated / contact us” messaging until recurring card billing exists. Preserve $149 / $249, 3-month minimum, locked pricing, provider-review rules. Do not modify membership pricing here.
 - Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`.
-- Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
-- Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
-- Admin marks funds received via Orders UI / `mark-payment-received` after verification.
-- Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold).
+- Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid from the browser.
+- Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation). Admin marks funds received via Orders UI / `mark-payment-received` after verification (ACH/Wire emergency path).
+- Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold). Accessory/Provider Care **add-on tax rates are 0** (tax-inclusive).
 - Legacy Stripe Edge Functions remain in repo but must not be deployed for launch. **Do not re-enable Stripe.**
 
-### Tagada / Kashu shipping architecture (finalized — preserve)
+### Tagada / Kashu shipping + tax architecture (finalized — preserve)
 
 Permanent rules for future agents. Do not regress these:
 
@@ -45,13 +49,12 @@ Permanent rules for future agents. Do not regress these:
 - Next-Day shipping is represented by mapped MBM-SHIP-NEXT-DAY-001. ($50 / `shipping_cents=5000`, appended by `create-kashu-checkout-session`.)
 - Free/service-only shipping uses no shipping line. (`shipping_cents=0`.)
 - Allowed card-flow shipping amounts are currently $0, $30, or $50; other positive amounts must fail safely. (`TAGADA_SHIPPING_PARITY_BLOCKER`.)
-- Tagada hosted total must exactly equal MBM orders.total_cents. (Reject with `TAGADA_CHECKOUT_TOTAL_MISMATCH` before redirect.)
+- Tagada hosted total must exactly equal MBM `orders.total_cents`. (Reject with `TAGADA_CHECKOUT_TOTAL_MISMATCH` before redirect.)
 - Do not weaken webhook amount equality. (Paid amount must match MBM order total.)
-- Memberships remain ACH/Wire-only until recurring card processing is implemented separately. (`MEMBERSHIP_DEFERRED`.)
+- Tagada payment products used by MBM hosted checkout remain **`isTaxable=false`**. Do **not** enable Tagada automatic tax / TaxJar categories for checkout totals. Do not delete unused dashboard Provider Tax 1.8% / Sales Tax 8% records unless explicitly required — they may remain unused config.
+- Memberships remain outside one-time hosted card until recurring card processing is implemented separately. (`MEMBERSHIP_DEFERRED`.)
 - Do not re-enable Stripe.
-- Phase 3 controlled live card test **PASS**. Phase 4: production builds enable the card gate when `VITE_KASHU_CARD_ENABLED` is unset (or set to `true`); explicit `false` remains the emergency kill switch. Memberships remain ACH/Wire-only. If the first customer card payments fail webhook/parity, disable the flag and redeploy immediately.
-
-Tax note (related): Tagada catalog products are `isTaxable=false` for V1; MBM `tax_cents` remains authoritative. Public card UI and `create-kashu-checkout-session` must reject `tax_cents > 0` until hosted checkout can represent that exact tax (do not enable Tagada automatic tax; do not weaken webhook amount equality). Investigation: `docs/tagadapay-phase4-tax-parity-investigation.md` — Tagada init has no MBM tax amount field; dynamic tax ≠ fixed ship SKUs; taxed accessory/Provider Care carts remain ACH/Wire.
+- Phase 3 controlled live card test **PASS**. Production builds enable the card gate when `VITE_KASHU_CARD_ENABLED` is unset (or set to `true`); explicit `false` remains the emergency kill switch. If customer card payments fail webhook/parity, disable the flag and redeploy immediately.
 
 ### Bolt Database / migration safety (permanent)
 

@@ -47,7 +47,8 @@ export interface InjectedOrderLine extends RawOrderLine {
   requiredProviderVisit?: boolean;
 }
 
-const PROVIDER_CARE_TAX_RATE = 0.018;
+/** Retired add-on (tax-inclusive pricing). NEW orders must persist tax_cents = 0. */
+const PROVIDER_CARE_TAX_RATE = 0;
 
 export function stripClientProviderVisitLines(items: RawOrderLine[]): RawOrderLine[] {
   return items.filter(
@@ -183,7 +184,9 @@ export function buildAuthoritativeOrderLines(input: {
     .reduce((sum, i) => sum + i.unitAmountCents * i.quantity, 0);
   const providerCareTaxCents = Math.round(providerCareSubtotal * PROVIDER_CARE_TAX_RATE);
 
-  const accessoryRate = input.accessorySalesTaxRate ?? 0.08;
+  // Tax-inclusive checkout: no separate accessory sales-tax add-on (NEW orders tax_cents = 0).
+  const accessoryRate = 0;
+  void input.accessorySalesTaxRate;
   const accessorySubtotal = items
     .filter(i => i.section === 'accessories' || /^a\d+/i.test(i.productId))
     .reduce((sum, i) => sum + i.unitAmountCents * i.quantity, 0);

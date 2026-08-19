@@ -225,7 +225,7 @@ describe('membership / savings rules', () => {
   });
 });
 
-describe('Provider Care + 1.8%', () => {
+describe('Provider Care (tax-inclusive; no separate tax add-on)', () => {
   it('uses approved fixed price_data for Initial Visit / Follow-Up / Lab Review', () => {
     expect(PROVIDER_CARE_FIXED_CENTS.pc1).toBe(7500);
     expect(PROVIDER_CARE_FIXED_CENTS.pc2).toBe(5500);
@@ -237,23 +237,23 @@ describe('Provider Care + 1.8%', () => {
     expect(line.unitAmountCents).toBe(7500);
   });
 
-  it('$100 eligible Provider Care produces exactly $1.80', () => {
-    expect(PROVIDER_CARE_TAX_RATE).toBe(0.018);
-    expect(PROVIDER_CARE_TAX_RATE_PERCENT).toBe(1.8);
+  it('$100 eligible Provider Care produces $0 separate tax (tax-inclusive)', () => {
+    expect(PROVIDER_CARE_TAX_RATE).toBe(0);
+    expect(PROVIDER_CARE_TAX_RATE_PERCENT).toBe(0);
     const tax = authorizeProviderCareTax({ providerCareTaxableSubtotalCents: 10000 });
-    expect(tax.providerCareTaxCents).toBe(180);
+    expect(tax.providerCareTaxCents).toBe(0);
   });
 
-  it('Provider Care 1.8% is server-calculated and ignores browser tax', () => {
+  it('Provider Care tax authorize ignores browser tax and stays at 0', () => {
     const tax = authorizeProviderCareTax({
       providerCareTaxableSubtotalCents: 10000,
       clientTaxCents: 800,
       clientProviderCareTaxCents: 9999,
     });
-    expect(tax.providerCareTaxCents).toBe(180);
+    expect(tax.providerCareTaxCents).toBe(0);
   });
 
-  it('mixed cart taxes only Provider Care portion', () => {
+  it('mixed cart still isolates Provider Care taxable base but charges $0 tax', () => {
     const lines: LineResolution[] = [
       expectPriceData(
         resolveProviderCareLine({ productId: 'pc1', quantity: 1, section: 'provider-care', productName: 'Initial' }),
@@ -284,11 +284,11 @@ describe('Provider Care + 1.8%', () => {
       variantLabel: null,
     };
     expect(providerCareTaxableSubtotalCents(lines)).toBe(10000);
-    expect(authorizeProviderCareTax({ providerCareTaxableSubtotalCents: 10000 }).providerCareTaxCents).toBe(180);
+    expect(authorizeProviderCareTax({ providerCareTaxableSubtotalCents: 10000 }).providerCareTaxCents).toBe(0);
     expect(lineSubtotalCents(lines)).toBe(30000);
   });
 
-  it('wellness products, memberships, accessories, and shipping receive no Provider Care 1.8%', () => {
+  it('wellness products, memberships, accessories, and shipping receive no Provider Care tax', () => {
     const wellness = expectMapped(
       resolveProductLine(
         { productId: 'p1', quantity: 1, purchaseType: 'one_time', variantId: 'semaglutide-v1' },
@@ -340,13 +340,14 @@ describe('Provider Care + 1.8%', () => {
       authorizeProviderCareTax({
         providerCareTaxableSubtotalCents: 10000,
       }).providerCareTaxCents,
-    ).toBe(180); // still only PC base, not + shipping
+    ).toBe(0);
   });
 
-  it('old universal 8% tax logic is removed', async () => {
+  it('old universal 8% tax logic is removed; rates stay at 0', async () => {
     const constants = await import('./checkoutConstants');
     expect('CHECKOUT_TAX_RATE' in constants).toBe(false);
-    expect(constants.PROVIDER_CARE_TAX_RATE).toBe(0.018);
+    expect(constants.PROVIDER_CARE_TAX_RATE).toBe(0);
+    expect(constants.ACCESSORY_SALES_TAX_RATE).toBe(0);
     const membership = expectMapped(
       resolveMembershipLine(
         {
@@ -358,14 +359,13 @@ describe('Provider Care + 1.8%', () => {
         semaMembership,
       ),
     );
-    // Membership cart subtotal must not be taxed at 8% or 1.8%.
+    // Membership cart subtotal must not receive a separate tax add-on.
     expect(providerCareTaxableSubtotalCents([membership])).toBe(0);
     expect(authorizeProviderCareTax({ providerCareTaxableSubtotalCents: 0 }).providerCareTaxCents).toBe(0);
-    expect(Math.round(19900 * 0.08)).toBe(1592); // former universal amount — must not be charged
   });
 });
 
-describe('accessories (retail goods; sales tax pending)', () => {
+describe('accessories (retail goods; tax-inclusive)', () => {
   it('accessories remain identifiable as retail goods', () => {
     expect(isAccessoryLine({ productId: 'a2', section: 'accessories' })).toBe(true);
     expect(isAccessoryLine({ productId: 'p1', section: 'weight-management' })).toBe(false);
@@ -373,8 +373,8 @@ describe('accessories (retail goods; sales tax pending)', () => {
     expect(isAccessoryLine({ productId: 'm1', section: 'membership' })).toBe(false);
   });
 
-  it('accessory sales tax uses configurable rate on accessories only (not wellness/PC)', () => {
-    expect(ACCESSORY_SALES_TAX_RATE).toBe(0.08);
+  it('accessory sales tax rate is 0 (no separate Sales Tax line)', () => {
+    expect(ACCESSORY_SALES_TAX_RATE).toBe(0);
     const accessory = expectPriceData(
       resolveProductLine(
         {
@@ -391,8 +391,7 @@ describe('accessories (retail goods; sales tax pending)', () => {
     );
     expect(providerCareTaxableSubtotalCents([accessory])).toBe(0);
     const tax = authorizeAccessorySalesTax({ accessoryTaxableSubtotalCents: 3400 });
-    expect(tax.accessorySalesTaxCents).toBe(Math.round(3400 * 0.08));
-    // Wellness subtotal must not receive accessory sales tax.
+    expect(tax.accessorySalesTaxCents).toBe(0);
     expect(authorizeAccessorySalesTax({ accessoryTaxableSubtotalCents: 0 }).accessorySalesTaxCents).toBe(0);
   });
 
@@ -806,7 +805,7 @@ describe('order / webhook contract', () => {
     expect(requiredMetaKeys).toContain('provider_care_tax_cents');
   });
 
-  it('Stripe charge and displayed total reconcile for supported scenarios', () => {
+  it('customer charge reconciles as subtotal + shipping with tax_cents = 0', () => {
     // $100 PC + $200 wellness + Two-Day shipping when merchandise < $500
     const pcTaxable = 10000;
     const wellness = 20000;
@@ -819,9 +818,9 @@ describe('order / webhook contract', () => {
     });
     expect('error' in shipping).toBe(false);
     if ('error' in shipping) return;
-    expect(pcTax).toBe(180);
+    expect(pcTax).toBe(0);
     expect(shipping.shippingCents).toBe(3000);
     const displayedTotal = pcTaxable + wellness + shipping.shippingCents + pcTax;
-    expect(displayedTotal).toBe(10000 + 20000 + 3000 + 180);
+    expect(displayedTotal).toBe(10000 + 20000 + 3000);
   });
 });

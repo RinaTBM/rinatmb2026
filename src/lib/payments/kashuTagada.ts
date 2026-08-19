@@ -70,7 +70,7 @@ export const KASHU_PHASE1_WEBHOOK_EVENTS = [
 ] as const satisfies readonly TagadaWebhookEventType[];
 
 export const KASHU_CHECKOUT_UI_LABEL = 'Credit / Debit Card';
-export const KASHU_CHECKOUT_UI_HELP = 'Continue to our secure encrypted checkout to pay by card.';
+export const KASHU_CHECKOUT_UI_HELP = 'Pay securely through our encrypted payment checkout.';
 
 export const KASHU_CARD_SUBMIT_CTA = 'Continue to Secure Payment';
 
@@ -80,7 +80,7 @@ export const KASHU_CARD_RESULT_PENDING_COPY =
 export const KASHU_CARD_RESULT_PAID_COPY = 'Payment received. Thank you — your order is paid.';
 
 export const KASHU_CARD_RESULT_CANCEL_COPY =
-  'Payment was not completed. Your order remains unpaid. You can try card payment again or choose ACH / Wire.';
+  'Payment was not completed. Your order remains unpaid. You can try card payment again or contact us for assistance.';
 
 /**
  * Canonical MBM shipping SKUs for Tagada line-item parity.
@@ -93,6 +93,8 @@ export const MBM_SHIPPING_SKU_NEXT_DAY = 'MBM-SHIP-NEXT-DAY-001';
 export const TAGADA_SHIPPING_PARITY_BLOCKER = 'TAGADA_SHIPPING_PARITY_BLOCKER';
 export const TAGADA_PRICE_PARITY_BLOCKER = 'TAGADA_PRICE_PARITY_BLOCKER';
 export const TAGADA_TAX_PARITY_BLOCKER = 'TAGADA_TAX_PARITY_BLOCKER';
+/** Fail-safe after tax-inclusive migration: NEW orders must have tax_cents = 0. */
+export const TAGADA_UNEXPECTED_TAX_AMOUNT = 'TAGADA_UNEXPECTED_TAX_AMOUNT';
 export const TAGADA_CHECKOUT_TOTAL_MISMATCH = 'TAGADA_CHECKOUT_TOTAL_MISMATCH';
 
 /** Allowed MBM shipping cents for card checkout (MBM is source of truth). */
@@ -273,31 +275,33 @@ export type KashuCardEligibility =
         | 'empty'
         | 'membership'
         | 'shipping_parity'
-        | 'tax_parity'
+        | 'unexpected_tax'
         | 'invalid_quantity';
       message: string;
-      blockerCode?: typeof TAGADA_SHIPPING_PARITY_BLOCKER | typeof TAGADA_TAX_PARITY_BLOCKER;
+      blockerCode?:
+        | typeof TAGADA_SHIPPING_PARITY_BLOCKER
+        | typeof TAGADA_UNEXPECTED_TAX_AMOUNT
+        | typeof TAGADA_TAX_PARITY_BLOCKER;
     };
 
 /**
- * V1 card eligibility: flag on, non-empty cart, positive qty, no membership programs.
+ * Card eligibility: flag on, non-empty cart, positive qty, no membership programs.
  * Shipping must be MBM $0 / $30 / $50 only (mapped Tagada MBM-SHIP-* line items).
- * Reject unexpected positive shipping amounts.
- * Tax must be $0: Tagada hosted init has no MBM tax line; tax_cents > 0 cannot
- * reproduce exact hosted-total parity under V1 (isTaxable=false catalog).
+ * Tax-inclusive architecture: NEW orders must have tax_cents = 0.
+ * Any tax_cents > 0 is a fail-safe (stale deploy / unexpected tax) — do not charge.
  */
 export function evaluateKashuCardCartEligibility(input: {
   flagEnabled: boolean;
   items: KashuCardCartLine[];
   shippingCents: number;
-  /** MBM tax_cents (provider care + accessory). Defaults to 0 when omitted. */
+  /** MBM tax_cents. Must be 0 under tax-inclusive checkout. */
   taxCents?: number;
 }): KashuCardEligibility {
   if (!input.flagEnabled) {
     return {
       ok: false,
       reason: 'flag_off',
-      message: 'Card payment is not available yet. Please choose ACH / Bank Transfer or Domestic Wire.',
+      message: 'Card payment is not available right now. Please contact us for assistance.',
     };
   }
   if (!input.items.length) {
@@ -317,7 +321,7 @@ export function evaluateKashuCardCartEligibility(input: {
         ok: false,
         reason: 'membership',
         message:
-          'Membership programs are billed by ACH or wire for now. Remove membership items to pay by card, or choose ACH / Wire.',
+          'Online membership enrollment is being updated. Please contact us for assistance.',
       };
     }
   }
@@ -328,17 +332,17 @@ export function evaluateKashuCardCartEligibility(input: {
       reason: 'shipping_parity',
       blockerCode: TAGADA_SHIPPING_PARITY_BLOCKER,
       message:
-        'Card checkout only supports $0, $30 (Two-Day), or $50 (Next-Day) shipping. Choose ACH / Wire, or adjust shipping.',
+        'Card checkout only supports $0, $30 (Two-Day), or $50 (Next-Day) shipping. Please adjust shipping or contact us.',
     };
   }
   const taxCents = Math.max(0, Math.trunc(Number(input.taxCents ?? 0) || 0));
   if (taxCents > 0) {
     return {
       ok: false,
-      reason: 'tax_parity',
-      blockerCode: TAGADA_TAX_PARITY_BLOCKER,
+      reason: 'unexpected_tax',
+      blockerCode: TAGADA_UNEXPECTED_TAX_AMOUNT,
       message:
-        'Card checkout cannot include provider-care or sales tax yet. Choose ACH / Wire, or remove taxable items.',
+        'This order has an unexpected tax amount for card checkout. Please contact us for assistance.',
     };
   }
   return { ok: true };

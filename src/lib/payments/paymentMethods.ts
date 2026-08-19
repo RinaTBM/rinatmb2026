@@ -1,26 +1,28 @@
 /**
  * Processor-neutral payment methods for launch + future Plaid ACH + Kashu card.
- * ACH / Wire remain the primary bank methods. Card is Kashu/TagadaPay (not Stripe).
+ * Public storefront is card-first for eligible one-time carts.
+ * ACH / Wire remain backend/admin emergency fallbacks (not shown publicly).
  */
 
-import { isKashuCardEnabled, KASHU_CHECKOUT_UI_HELP, KASHU_CHECKOUT_UI_LABEL } from './kashuTagada';
+import { isKashuCardEnabled, KASHU_CHECKOUT_UI_LABEL } from './kashuTagada';
 
 export const PAYMENT_METHODS = ['manual_ach', 'manual_wire', 'plaid_ach', 'kashu_card'] as const;
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
 
-/** Always-available bank methods (never removed). */
+/** Backend/admin bank methods (never deleted; not shown on public checkout). */
 export const BANK_CHECKOUT_PAYMENT_METHODS = ['manual_ach', 'manual_wire'] as const;
 
 /**
- * Customer-selectable methods. Card appears when isKashuCardEnabled() is true
- * (explicit VITE_KASHU_CARD_ENABLED=true, or undefined in production builds).
- * ACH/Wire always included. Callers must still enforce cart eligibility for card.
+ * Public customer-selectable methods.
+ * When card flag is on: Credit/Debit Card only.
+ * When card flag is off: empty (contact / unavailable — do not expose ACH/Wire publicly).
+ * Callers must still enforce cart eligibility (memberships blocked, shipping, unexpected tax).
  */
 export function getActiveCheckoutPaymentMethods(): readonly PaymentMethod[] {
   if (isKashuCardEnabled()) {
-    return ['manual_ach', 'manual_wire', 'kashu_card'];
+    return ['kashu_card'];
   }
-  return BANK_CHECKOUT_PAYMENT_METHODS;
+  return [];
 }
 
 /** @deprecated Prefer getActiveCheckoutPaymentMethods() — kept for existing imports. */
@@ -37,14 +39,20 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
 export const PAYMENT_METHOD_HELP: Partial<Record<PaymentMethod, string>> = {
   manual_ach: 'Pay securely from your bank after submitting your order.',
   manual_wire: 'Send a domestic wire using the instructions provided after you submit your order.',
-  kashu_card: KASHU_CHECKOUT_UI_HELP,
+  kashu_card: 'Pay securely through our encrypted payment checkout.',
 };
+
+export const MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE =
+  'Online membership enrollment is being updated. Please contact us for assistance.';
+
+export const CARD_CHECKOUT_INIT_FAILED_MESSAGE =
+  "We couldn't start secure card checkout. Please try again or contact us for assistance.";
 
 export function isPaymentMethod(value: string): value is PaymentMethod {
   return (PAYMENT_METHODS as readonly string[]).includes(value);
 }
 
-/** Methods allowed on persisted orders (includes card even when UI flag is off). */
+/** Methods allowed on persisted orders (includes ACH/Wire for admin / historical). */
 export function isOrderPaymentMethod(value: string): value is PaymentMethod {
   return (
     value === 'manual_ach' ||
@@ -72,14 +80,20 @@ export function assertSelectablePaymentMethod(
   if (value === 'plaid_ach') {
     return {
       ok: false,
+      error: 'That payment method is not available. Please choose Credit / Debit Card or contact us.',
+    };
+  }
+  if (value === 'manual_ach' || value === 'manual_wire') {
+    return {
+      ok: false,
       error:
-        'That payment method is not available yet. Please choose ACH / Bank Transfer or Domestic Wire.',
+        'Bank transfer is not available for online checkout. Please choose Credit / Debit Card or contact us.',
     };
   }
   if (value === 'kashu_card' && !isKashuCardEnabled()) {
     return {
       ok: false,
-      error: 'Card payment is not available yet. Please choose ACH / Bank Transfer or Domestic Wire.',
+      error: 'Card payment is not available right now. Please contact us for assistance.',
     };
   }
   if (!isActiveCheckoutPaymentMethod(value)) {

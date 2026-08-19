@@ -312,8 +312,7 @@ describe('server-side visit injection', () => {
     expect(built.requirement.requirement).toBe('INITIAL');
     expect(built.items.some(i => i.sku === INITIAL_PROVIDER_VISIT.sku)).toBe(true);
     expect(built.totalCents).toBe(
-      29900 + INITIAL_PROVIDER_VISIT.priceCents + 3000 +
-        Math.round(INITIAL_PROVIDER_VISIT.priceCents * 0.018),
+      29900 + INITIAL_PROVIDER_VISIT.priceCents + 3000,
     );
   });
 
@@ -398,10 +397,10 @@ describe('server-side visit injection', () => {
       discountCents: 0,
     });
     // Same authoritative total regardless of payment method (ACH/Wire/future Kashu).
+    // Tax-inclusive: no separate Provider Care Tax add-on.
     expect(built.subtotalCents).toBe(20000 + 7500);
-    expect(built.totalCents).toBe(
-      27500 + 3000 + Math.round(7500 * 0.018),
-    );
+    expect(built.taxCents).toBe(0);
+    expect(built.totalCents).toBe(27500 + 3000);
   });
 });
 

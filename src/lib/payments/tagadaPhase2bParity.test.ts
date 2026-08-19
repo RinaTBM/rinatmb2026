@@ -13,6 +13,7 @@ import {
   shippingSkuForMethod,
   TAGADA_CHECKOUT_TOTAL_MISMATCH,
   TAGADA_TAX_PARITY_BLOCKER,
+  TAGADA_UNEXPECTED_TAX_AMOUNT,
 } from './kashuTagada';
 
 /** Phase 2A → 2B exact-SKU remaps (23 stale variant IDs). */
@@ -274,7 +275,7 @@ describe('Phase 2B memberships stay ACH/Wire-only + webhook amount equality inta
     ).toBe(true);
   });
 
-  it('blocks provider-visit carts when Provider Care Tax > 0 (Tagada cannot host tax line)', () => {
+  it('blocks provider-visit carts when unexpected tax_cents > 0 (fail-safe)', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
       shippingCents: 0,
@@ -283,8 +284,8 @@ describe('Phase 2B memberships stay ACH/Wire-only + webhook amount equality inta
     });
     expect(r.ok).toBe(false);
     if (!r.ok) {
-      expect(r.reason).toBe('tax_parity');
-      expect(r.blockerCode).toBe(TAGADA_TAX_PARITY_BLOCKER);
+      expect(r.reason).toBe('unexpected_tax');
+      expect(r.blockerCode).toBe(TAGADA_UNEXPECTED_TAX_AMOUNT);
     }
   });
 });

@@ -16,25 +16,31 @@ export const AUTO_REFILL_DISCOUNT_PERCENT = 10;
 export const ACCESSORY_MEMBER_DISCOUNT_PERCENT = 15;
 
 /**
- * Approved Provider Care fee/tax rate (1.8%).
- * Applies ONLY to eligible Provider Care line items — never to wellness,
- * memberships, accessories, Auto-Refill, or shipping.
+ * Customer-facing Provider Care add-on tax — RETIRED (tax-inclusive pricing).
+ * Displayed retail/service prices are treated as tax-inclusive at checkout.
+ * Keep rate at 0 so authorize/order builders persist tax_cents = 0 for NEW orders.
+ * Do NOT re-enable a separate Provider Care Tax line without an explicit product decision.
+ * Historical orders may still have non-zero tax_cents — leave them untouched.
  */
-export const PROVIDER_CARE_TAX_RATE = 0.018;
-/** Display / metadata form of the Provider Care tax rate. */
-export const PROVIDER_CARE_TAX_RATE_PERCENT = 1.8;
+export const PROVIDER_CARE_TAX_RATE = 0;
+/** Display / metadata form (retired add-on; kept for API shape stability). */
+export const PROVIDER_CARE_TAX_RATE_PERCENT = 0;
 
 /**
- * INTERIM TEST/STAGING ONLY — accessory merchandise sales-tax rate.
- * Applied ONLY to accessory merchandise subtotals.
- * Pending destination-based production sales-tax implementation;
- * do NOT enable Stripe Tax yet. Not a permanent legal rate.
- * Do NOT apply to wellness, memberships, Provider Care, or shipping.
+ * Customer-facing accessory sales-tax add-on — RETIRED (tax-inclusive pricing).
+ * Displayed retail prices are treated as tax-inclusive at checkout.
+ * Keep rate at 0 so NEW orders persist tax_cents = 0.
+ * Do NOT re-enable a separate Sales Tax line without an explicit product decision.
+ * Do NOT enable Tagada automatic tax / TaxJar for hosted checkout parity.
  */
-export const ACCESSORY_SALES_TAX_RATE = 0.08;
-export const ACCESSORY_SALES_TAX_RATE_PERCENT = 8;
-/** Stripe Tax path remains the preferred long-term accessory tax architecture. */
+export const ACCESSORY_SALES_TAX_RATE = 0;
+export const ACCESSORY_SALES_TAX_RATE_PERCENT = 0;
+/** Stripe Tax path remains disabled (Stripe checkout retired). */
 export const ACCESSORY_SALES_TAX_USES_STRIPE_TAX = false;
+
+/** Concise customer disclosure — not tax advice. */
+export const TAX_INCLUSIVE_CHECKOUT_DISCLOSURE =
+  'Applicable taxes are included in displayed prices where required.';
 
 export const ACCESSORY_BUNDLE_PRODUCT_IDS = new Set(['a1']);
 

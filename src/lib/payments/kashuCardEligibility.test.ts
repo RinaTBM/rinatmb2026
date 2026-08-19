@@ -6,7 +6,7 @@ import {
   resolveKashuCardEnabledFlag,
   shippingSkuForMethod,
   TAGADA_SHIPPING_PARITY_BLOCKER,
-  TAGADA_TAX_PARITY_BLOCKER,
+  TAGADA_UNEXPECTED_TAX_AMOUNT,
   buildTagadaCheckoutInitUrl,
   TAGADA_API_BASE_PRODUCTION,
 } from './kashuTagada';
@@ -150,7 +150,7 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
     ).toBe(true);
   });
 
-  it('blocks tax-bearing carts (Provider Care Tax / sales tax) — Tagada V1 cannot host MBM tax_cents', () => {
+  it('fail-safe: unexpected tax_cents > 0 rejects with TAGADA_UNEXPECTED_TAX_AMOUNT', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
       shippingCents: TWO_DAY_SHIPPING_CENTS,
@@ -167,12 +167,12 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
     });
     expect(r.ok).toBe(false);
     if (!r.ok) {
-      expect(r.reason).toBe('tax_parity');
-      expect(r.blockerCode).toBe(TAGADA_TAX_PARITY_BLOCKER);
+      expect(r.reason).toBe('unexpected_tax');
+      expect(r.blockerCode).toBe(TAGADA_UNEXPECTED_TAX_AMOUNT);
     }
   });
 
-  it('blocks screenshot-style Estradiol + IPV + $30 ship + $1.35 tax cart', () => {
+  it('fail-safe: Estradiol + IPV + $30 ship + unexpected tax rejects card', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
       shippingCents: 3000,
@@ -193,7 +193,7 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
       ],
     });
     expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.reason).toBe('tax_parity');
+    if (!r.ok) expect(r.reason).toBe('unexpected_tax');
   });
 
   it('rejects invalid quantities', () => {
@@ -231,10 +231,14 @@ describe('Phase 4 card flag resolveKashuCardEnabledFlag', () => {
     expect(resolveKashuCardEnabledFlag(true, false)).toBe(true);
   });
 
-  it('dev/test runtime keeps ACH/Wire active and Stripe disabled when flag unresolved', () => {
-    // Vitest runs with PROD=false and typically no VITE_KASHU_CARD_ENABLED.
-    expect(getActiveCheckoutPaymentMethods()).toEqual(['manual_ach', 'manual_wire']);
+  it('dev/test runtime hides public ACH/Wire and keeps Stripe disabled when flag unresolved', () => {
+    // Vitest runs with PROD=false and typically no VITE_KASHU_CARD_ENABLED → public methods empty.
+    expect(getActiveCheckoutPaymentMethods()).toEqual([]);
     expect(isStripeCheckoutEnabled()).toBe(false);
+  });
+
+  it('when card flag resolve is ON, public checkout exposes Credit/Debit Card only', () => {
+    expect(resolveKashuCardEnabledFlag('true', false)).toBe(true);
   });
 });
 

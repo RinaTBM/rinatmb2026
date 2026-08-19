@@ -291,14 +291,14 @@ Deno.serve(async (req) => {
 
     const mbmTaxCents = Number(order.tax_cents) || 0;
     const mbmTotalCents = Number(order.total_cents) || 0;
-    // V1: Tagada checkout/init has no MBM tax line item. Catalog is isTaxable=false.
-    // Do not pretend tax is included in hosted total — reject tax-bearing card orders.
+    // Tax-inclusive architecture: NEW orders must have tax_cents = 0.
+    // Fail safe on unexpected tax (stale deploy / mixed logic) — do not redirect.
     if (mbmTaxCents > 0) {
       return json({
-        error: "TAGADA_TAX_PARITY_BLOCKER",
-        blocker: "TAGADA_TAX_PARITY_BLOCKER",
+        error: "TAGADA_UNEXPECTED_TAX_AMOUNT",
+        blocker: "TAGADA_UNEXPECTED_TAX_AMOUNT",
         message:
-          "Card checkout cannot represent MBM tax_cents on Tagada hosted checkout (V1). Use ACH/Wire.",
+          "This order has an unexpected tax amount. Card checkout requires tax-inclusive totals (tax_cents = 0).",
         publicOrderNumber,
         mbmTaxCents,
         mbmTotalCents,

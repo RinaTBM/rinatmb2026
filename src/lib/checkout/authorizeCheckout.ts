@@ -464,9 +464,9 @@ export function cartRequiresPhysicalShipping(lines: LineResolution[]): boolean {
 }
 
 /**
- * Provider Care 1.8% — server-authoritative.
+ * Provider Care tax authorize helper — tax-inclusive checkout keeps rate at 0.
  * Does NOT apply to wellness, memberships, accessories, Auto-Refill, or shipping.
- * Ignores any client-supplied tax cents.
+ * Ignores any client-supplied tax cents. NEW orders must persist tax_cents = 0.
  */
 export function authorizeProviderCareTax(input: {
   providerCareTaxableSubtotalCents: number;
@@ -489,9 +489,9 @@ export function authorizeProviderCareTax(input: {
 }
 
 /**
- * Accessory retail sales tax — configurable interim rate (default 8%).
- * Applies ONLY to accessory merchandise. Not wellness / PC / memberships / shipping.
- * Prefer Stripe Tax when explicitly approved later.
+ * Accessory sales-tax authorize helper — tax-inclusive checkout keeps rate at 0.
+ * Applies ONLY to accessory merchandise when a rate is re-enabled. Not wellness / PC /
+ * memberships / shipping. Do NOT re-enable without an explicit product decision.
  */
 export function authorizeAccessorySalesTax(input: {
   accessoryTaxableSubtotalCents: number;

@@ -38,7 +38,9 @@ import {
 } from '@/lib/payments/paymentsEnabled';
 import {
   assertSelectablePaymentMethod,
+  CARD_CHECKOUT_INIT_FAILED_MESSAGE,
   getActiveCheckoutPaymentMethods,
+  MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE,
   PAYMENT_METHOD_HELP,
   PAYMENT_METHOD_LABELS,
   type PaymentMethod,
@@ -61,6 +63,7 @@ import {
   KASHU_CARD_SUBMIT_CTA,
   KASHU_PAYMENT_METHOD,
 } from '@/lib/payments/kashuTagada';
+import { TAX_INCLUSIVE_CHECKOUT_DISCLOSURE } from '@/lib/checkout/checkoutConstants';
 import { supabase } from '@/lib/supabaseClient';
 import {
   determineProviderRequirement,
@@ -85,7 +88,7 @@ export function CheckoutPage() {
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
   });
   const [shippingMethod, setShippingMethod] = useState<SelectableShippingMethod>('two_day');
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('manual_ach');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('kashu_card');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pendingCardOrder, setPendingCardOrder] = useState<{
@@ -298,10 +301,8 @@ export function CheckoutPage() {
     : freeShippingEligible
       ? 0
       : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
-  const providerCareTax = providerCareTaxAuth.providerCareTaxCents / 100;
-  const accessorySalesTax = accessoryTaxAuth.accessorySalesTaxCents / 100;
   const displaySubtotal = displaySubtotalCents / 100;
-  const total = displaySubtotal + shipping + providerCareTax + accessorySalesTax;
+  const total = displaySubtotal + shipping;
   const shippingCents = Math.round(shipping * 100);
 
   const taxCents =
@@ -319,16 +320,25 @@ export function CheckoutPage() {
     })),
   });
 
+  const hasMembershipItems = items.some(
+    i => i.isMembership || i.purchaseType === 'membership_program',
+  );
+
   const selectablePaymentMethods = getActiveCheckoutPaymentMethods().filter(method => {
-    if (method !== KASHU_PAYMENT_METHOD) return true;
+    if (method !== KASHU_PAYMENT_METHOD) return false;
+    if (hasMembershipItems) return false;
     return cardEligibility.ok;
   });
 
   useEffect(() => {
-    if (paymentMethod === KASHU_PAYMENT_METHOD && !cardEligibility.ok) {
-      setPaymentMethod('manual_ach');
+    if (selectablePaymentMethods.includes(KASHU_PAYMENT_METHOD)) {
+      setPaymentMethod(KASHU_PAYMENT_METHOD);
+      return;
     }
-  }, [paymentMethod, cardEligibility.ok]);
+    if (paymentMethod === KASHU_PAYMENT_METHOD && !cardEligibility.ok) {
+      // Keep method selected but submit will be blocked — no ACH fallback.
+    }
+  }, [paymentMethod, cardEligibility.ok, selectablePaymentMethods.join(',')]);
 
   const update = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
 
@@ -390,6 +400,11 @@ export function CheckoutPage() {
       return;
     }
 
+    if (hasMembershipItems) {
+      setError(MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE);
+      return;
+    }
+
     if (!guestAuthGate.ok) {
       setError(guestAuthGate.error);
       return;
@@ -443,7 +458,7 @@ export function CheckoutPage() {
         });
         if (!kashu.ok) {
           throw new Error(
-            kashu.error +
+            CARD_CHECKOUT_INIT_FAILED_MESSAGE +
               (kashu.missingSkus?.length
                 ? ` Missing SKU mapping: ${kashu.missingSkus.join(', ')}`
                 : ''),
@@ -527,7 +542,7 @@ export function CheckoutPage() {
         });
         if (!kashu.ok) {
           throw new Error(
-            kashu.error +
+            CARD_CHECKOUT_INIT_FAILED_MESSAGE +
               (kashu.missingSkus?.length
                 ? ` Missing SKU mapping: ${kashu.missingSkus.join(', ')}`
                 : '') +
@@ -809,54 +824,73 @@ export function CheckoutPage() {
                         <div className="flex items-center gap-3">
                           <Lock size={18} className="text-gold-500" />
                           <p className="text-sm text-ink-600">
-                            Select how you will pay. ACH and wire provide payment instructions after you
-                            submit. Card payments continue to our secure encrypted checkout.
+                            Pay securely by Credit / Debit Card through our encrypted payment checkout.
                           </p>
                         </div>
-                        <div className="space-y-2">
-                          {selectablePaymentMethods.map(method => (
-                            <label
-                              key={method}
-                              className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm ${
-                                paymentMethod === method ? 'border-ink-900 bg-white' : 'border-cream-300 bg-cream-50'
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="paymentMethod"
-                                className="mt-1"
-                                checked={paymentMethod === method}
-                                onChange={() => setPaymentMethod(method)}
-                              />
-                              <span>
-                                <span className="font-medium text-ink-900 block">
-                                  {PAYMENT_METHOD_LABELS[method]}
-                                  {method === 'manual_ach' ? (
-                                    <span className="ml-2 text-[10px] uppercase tracking-wide text-gold-700">
-                                      Recommended
-                                    </span>
-                                  ) : null}
+                        {hasMembershipItems ? (
+                          <p className="text-sm text-ink-700">{MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE}</p>
+                        ) : selectablePaymentMethods.length === 0 ? (
+                          <p className="text-sm text-ink-700">
+                            {!isKashuCardEnabled()
+                              ? PAYMENTS_UNAVAILABLE_MESSAGE
+                              : cardEligibility.ok
+                                ? PAYMENTS_UNAVAILABLE_MESSAGE
+                                : cardEligibility.message}
+                          </p>
+                        ) : (
+                          <div className="space-y-2">
+                            {selectablePaymentMethods.map(method => (
+                              <label
+                                key={method}
+                                className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm ${
+                                  paymentMethod === method
+                                    ? 'border-ink-900 bg-white'
+                                    : 'border-cream-300 bg-cream-50'
+                                }`}
+                              >
+                                <input
+                                  type="radio"
+                                  name="paymentMethod"
+                                  className="mt-1"
+                                  checked={paymentMethod === method}
+                                  onChange={() => setPaymentMethod(method)}
+                                />
+                                <span>
+                                  <span className="font-medium text-ink-900 block">
+                                    {PAYMENT_METHOD_LABELS[method]}
+                                  </span>
+                                  <span className="text-ink-500 text-xs">
+                                    {PAYMENT_METHOD_HELP[method]}
+                                  </span>
                                 </span>
-                                <span className="text-ink-500 text-xs">
-                                  {PAYMENT_METHOD_HELP[method]}
-                                </span>
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                        {isKashuCardEnabled() && !cardEligibility.ok && cardEligibility.reason !== 'flag_off' ? (
+                              </label>
+                            ))}
+                          </div>
+                        )}
+                        {isKashuCardEnabled() &&
+                        !hasMembershipItems &&
+                        !cardEligibility.ok &&
+                        cardEligibility.reason !== 'flag_off' &&
+                        selectablePaymentMethods.length > 0 ? (
                           <p className="text-xs text-ink-500">{cardEligibility.message}</p>
                         ) : null}
-                        <p className="text-sm text-ink-500">
-                          {paymentMethod === KASHU_PAYMENT_METHOD
-                            ? 'You will be redirected to complete card payment securely. Your order stays unpaid until payment is confirmed.'
-                            : CHECKOUT_SUBMIT_SUPPORTING_COPY}
-                        </p>
-                        {hasRecurring ? (
+                        {selectablePaymentMethods.length > 0 ? (
+                          <p className="text-sm text-ink-500">
+                            {paymentMethod === KASHU_PAYMENT_METHOD
+                              ? 'You will be redirected to complete card payment securely. Your order stays unpaid until payment is confirmed.'
+                              : CHECKOUT_SUBMIT_SUPPORTING_COPY}
+                          </p>
+                        ) : null}
+                        {hasRecurring && !hasMembershipItems ? (
                           <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 leading-relaxed space-y-2">
                             <p className="font-medium">{RECURRING_MANUAL_PAYMENT_DISCLOSURE}</p>
-                            <p>{MEMBERSHIP_MANUAL_BILLING_NOTE}</p>
                             <p>{AUTO_REFILL_MANUAL_BILLING_NOTE}</p>
+                          </div>
+                        ) : null}
+                        {hasMembershipItems ? (
+                          <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 leading-relaxed space-y-2">
+                            <p className="font-medium">{MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE}</p>
+                            <p>{MEMBERSHIP_MANUAL_BILLING_NOTE}</p>
                           </div>
                         ) : null}
                         {hasVariablePricing && (
@@ -929,9 +963,25 @@ export function CheckoutPage() {
                   {checkoutEnabled ? (
                     <button
                       type="button"
-                      disabled={!allAccepted || loading || membershipDoseBlocking || !guestAuthGate.ok}
+                      disabled={
+                        !allAccepted ||
+                        loading ||
+                        membershipDoseBlocking ||
+                        !guestAuthGate.ok ||
+                        hasMembershipItems ||
+                        selectablePaymentMethods.length === 0
+                      }
                       onClick={handleSubmitInvoiceOrder}
-                      className={`btn-primary flex-1 ${!allAccepted || loading || membershipDoseBlocking || !guestAuthGate.ok ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`btn-primary flex-1 ${
+                        !allAccepted ||
+                        loading ||
+                        membershipDoseBlocking ||
+                        !guestAuthGate.ok ||
+                        hasMembershipItems ||
+                        selectablePaymentMethods.length === 0
+                          ? 'opacity-50 cursor-not-allowed'
+                          : ''
+                      }`}
                     >
                       {loading ? (
                         <span className="flex items-center justify-center gap-2">
@@ -1074,18 +1124,7 @@ export function CheckoutPage() {
                       <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
                     </div>
                   )}
-                  {providerCareTax > 0 && (
-                    <div className="flex justify-between text-ink-600">
-                      <span>Provider Care Tax (1.8%)</span>
-                      <span>${providerCareTax.toFixed(2)}</span>
-                    </div>
-                  )}
-                  {accessorySalesTax > 0 && (
-                    <div className="flex justify-between text-ink-600">
-                      <span>Sales Tax</span>
-                      <span>${accessorySalesTax.toFixed(2)}</span>
-                    </div>
-                  )}
+                  <p className="text-[11px] text-ink-500 leading-snug">{TAX_INCLUSIVE_CHECKOUT_DISCLOSURE}</p>
                   <div className="flex justify-between border-t border-cream-300 pt-2 font-medium text-ink-900 text-base"><span>Total</span><span>${total.toFixed(2)}</span></div>
                 </>}
                 {hasVariablePricing && (

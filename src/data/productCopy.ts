@@ -1,25 +1,25 @@
 /**
  * My Bare Method customer-facing product copy.
- * Presentation style inspired by premium telehealth retail UX (benefit-forward, scannable).
- * Wording is original. Claims stay claims-safe — especially for emerging peptide/NAD+ products.
+ * Premium, benefit-forward, educational — original MBM wording.
+ * Claims stay accurate without making PDPs sound like warning labels.
  */
 
 export interface ProductCopy {
   /** Short benefit headline under the product name (~one line). */
   benefitHeadline: string;
-  /** Hero description — ~40–70 words, 2–3 sentences. */
+  /** Hero description — ~2–4 sentences. */
   shortDescription: string;
   /** 3–5 ultra-short highlight chips. */
   highlights: string[];
-  /** About This Product — ~80–150 words. */
+  /** About This Product — What It Is + context. */
   about: string;
-  /** Potential Benefits — 4–6 benefit-forward, claims-safe bullets. */
+  /** Potential Benefits — specific, scannable, claims-safe. */
   potentialBenefits: string[];
-  /** How It Works — ~75–150 words, plain-language science. */
+  /** How It Works — plain-language mechanism. */
   howItWorks: string;
-  /** Why People Choose It — 3–5 bullets. */
+  /** Why People Choose It — goal-oriented bullets. */
   whyPeopleChooseIt: string[];
-  /** What to Expect — ~60–120 words. */
+  /** What to Expect — experience without guaranteed outcomes. */
   whatToExpect: string;
   importantInformation?: string;
   reviewFlags?: string[];
@@ -42,215 +42,217 @@ export interface MembershipCopy {
 }
 
 const DEFAULT_RX_IMPORTANT =
-  'Availability is subject to provider review. Your provider will determine whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history and individual needs. Completing payment does not guarantee a prescription.';
+  'A licensed provider reviews whether this option is appropriate for you and may recommend a different treatment, dose, testing, or follow-up based on your health history. Completing payment does not guarantee a prescription.';
 
 const DEFAULT_COMPOUNDED_IMPORTANT =
-  `${DEFAULT_RX_IMPORTANT} This is a provider-directed compounded option. Exact formulation and availability are determined by the prescribing provider and dispensing pharmacy.`;
+  `${DEFAULT_RX_IMPORTANT} This is a compounded, pharmacy-prepared option directed by your prescribing provider. Exact formulation and availability are determined clinically.`;
 
 const RESEARCH_FLAG =
-  'Emerging / research-oriented peptide wellness interest — keep proposed benefits clearly separated from established clinical outcomes; medical director should confirm public framing.';
+  'Emerging / research-oriented peptide interest — medical director should confirm public benefit framing.';
 
 export const PRODUCT_COPY: Record<string, ProductCopy> = {
   // ===== WEIGHT MANAGEMENT =====
   semaglutide: {
-    benefitHeadline: 'Appetite & Metabolic Support for Your Weight-Loss Journey',
+    benefitHeadline: 'Appetite Control & Fullness Support for Weight Management',
     shortDescription:
-      'Semaglutide + B6 Injection is a provider-guided injectable option designed to support appetite control and metabolic balance as part of a structured weight-management plan. Many people explore it when they want help feeling fuller sooner and staying satisfied longer — with vitamin B6 included in this compounded preparation.',
+      'Semaglutide + B6 Injection is a compounded medication in the GLP-1 class — the same hormone-signaling family widely used in modern weight-management care. People choose it when they want help feeling fuller sooner, quieter food noise, and an easier time sticking with smaller portions, with vitamin B6 included in this preparation.',
     highlights: [
-      'Appetite Support',
-      'Feel Fuller Longer',
-      'Metabolic Support',
-      'Provider-Guided Care',
+      'GLP-1 Appetite Support',
+      'Feel Fuller Sooner',
+      'Weight-Management Focus',
       'Multiple Strengths',
+      'Dose Progression Available',
     ],
     about: [
-      'Semaglutide is a GLP-1 medication option used in provider-directed weight-management care. On My Bare Method, it is offered as a compounded injection that pairs semaglutide with vitamin B6.',
-      'This page is for the retail injectable product with selectable vial strengths. If you prefer one predictable monthly program rate instead of paying per vial strength, see Semaglutide Membership.',
-      'Treatment is personalized. Ordering begins a clinical review — it does not automatically mean a prescription will be issued.',
+      'GLP-1 (glucagon-like peptide-1) is a natural hormone signal involved in appetite and fullness. Semaglutide is a medication designed to work with that pathway so your body registers “I’ve had enough” more readily after eating.',
+      'On My Bare Method, this listing is a compounded Semaglutide + vitamin B6 injection with selectable vial strengths. It is prepared for your care plan by a pharmacy and is not sold here as a branded retail product. Your provider decides whether this option fits your history and goals.',
+      'This page is for à-la-carte retail vials. Prefer one flat monthly program rate? See Semaglutide Membership.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May help you feel full sooner during meals',
-      'May support staying satisfied longer between meals',
-      'May make it easier to reduce overall food intake as part of a supervised plan',
-      'Supports a structured, provider-guided approach to weight management',
-      'Available in multiple strengths so your clinician can match treatment to your needs',
+      'Appetite control — may help reduce constant hunger cues',
+      'Increased feelings of fullness during and after meals',
+      'Support for lower overall food intake within a structured plan',
+      'Weight-management support under clinical supervision',
+      'Strength options that allow individualized dose progression',
     ],
     howItWorks:
-      'Semaglutide works with GLP-1 receptors involved in appetite and blood-sugar regulation. In everyday terms, those pathways help your body register fullness and manage metabolic signals after eating. Many people notice they are less driven to overeat and can stick with smaller portions more comfortably. Individual responses vary. Your provider decides whether this approach fits your health history and how to advance treatment over time.',
+      'After you eat, GLP-1 pathways help tell your brain and gut that you are satisfied. Semaglutide engages those signals, so many people notice they feel full with less food and think about snacking less often. Vitamin B6 is part of this compounded formula. Responses vary — your clinician sets the starting strength and how to advance over time.',
     whyPeopleChooseIt: [
-      'Clear injectable format with labeled strength options on this page',
-      'Pairs semaglutide with vitamin B6 in a provider-directed compounded preparation',
-      'Fits customers who want medication support alongside lifestyle changes',
-      'Can be purchased à la carte or explored through Semaglutide Membership for flat monthly pricing',
+      'Want medication support for appetite when lifestyle changes alone have not been enough',
+      'Prefer a clear injectable plan with labeled strength choices',
+      'Like the option to move into Semaglutide Membership for predictable monthly pricing',
+      'Value clinical review before starting or changing doses',
     ],
     whatToExpect:
-      'Choose your preferred strength from the options below. After checkout you complete a medical intake. A licensed provider reviews your information and determines eligibility, dose, and follow-up. Use only as directed if approved. Do not change your dose on your own.',
+      'Select a preferred strength, complete checkout and medical intake, then wait for provider review. If approved, use only as directed — dose changes are clinical decisions. Results and timelines differ from person to person; no specific amount of weight loss is promised.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
-      'No guaranteed weight-loss amount.',
-      'Do not claim FDA approval for this specific compounded Semaglutide + B6 listing.',
+      'No guaranteed weight-loss amount or timeline.',
+      'Do not claim FDA approval for this compounded Semaglutide + B6 listing.',
+      'Do not use branded drug names as if MBM sells the branded product.',
     ],
   },
 
   tirzepatide: {
-    benefitHeadline: 'Dual-Pathway Appetite Support for Deeper Metabolic Goals',
+    benefitHeadline: 'Dual-Pathway Appetite & Fullness Support for Weight Goals',
     shortDescription:
-      'Tirzepatide + B6 Injection is a provider-guided injectable option that engages two related pathways involved in appetite and metabolic regulation. People often consider it when they want strong fullness support under clinical care — with vitamin B6 included in this compounded preparation.',
+      'Tirzepatide + B6 Injection works with two hormone-signaling pathways — GLP-1 and GIP — that help regulate appetite, fullness, and metabolic cues after eating. People often choose it when they want strong satiety support as part of a supervised weight-management plan, with vitamin B6 included in this compounded preparation.',
     highlights: [
-      'Dual-Pathway Support',
-      'Appetite Control',
-      'Fullness Support',
-      'Provider-Guided Care',
+      'GLP-1 + GIP Signaling',
+      'Strong Fullness Support',
+      'Appetite Control Focus',
       'Multiple Strengths',
+      'Clinical Dose Matching',
     ],
     about: [
-      'Tirzepatide acts on GLP-1 and GIP pathways involved in appetite, fullness, and blood-sugar regulation. That dual-pathway design is what sets it apart from semaglutide alone — not a promise that it is automatically “better” for everyone.',
-      'This listing is the retail injectable product. For a flat monthly program through the included dose maximum, see Tirzepatide Membership.',
-      'A licensed provider reviews whether Tirzepatide, Semaglutide, or another plan is the right fit for you.',
+      'Tirzepatide is designed to engage two related pathways involved in appetite and blood-sugar regulation — commonly called GLP-1 and GIP. In plain language, that dual approach can influence how quickly you feel satisfied and how intensely food cues show up between meals.',
+      'This listing is a compounded Tirzepatide + vitamin B6 injection with selectable vial strengths. It is not interchangeable with Semaglutide, and it is not marketed here as a branded retail product. A licensed provider decides whether Tirzepatide, Semaglutide, or another plan fits you best.',
+      'For a flat monthly program through the included maximum, see Tirzepatide Membership.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May support stronger feelings of fullness after meals for some people',
-      'May help reduce interest in large portions as part of a supervised plan',
-      'Engages two metabolic pathways (GLP-1 and GIP) under provider direction',
-      'Offers multiple vial strengths for individualized clinical titration',
-      'Pairs treatment with vitamin B6 in this compounded injectable format',
+      'Appetite support through two hormone-signaling pathways',
+      'May increase feelings of fullness after meals',
+      'May make it easier to reduce portion sizes and snacking',
+      'Weight-management support with clinical supervision',
+      'Multiple vial strengths for thoughtful dose progression',
     ],
     howItWorks:
-      'Tirzepatide works with receptors tied to appetite and blood-sugar regulation — commonly described as GLP-1 and GIP pathways. Together, those signals can influence how quickly you feel satisfied and how your body manages metabolic cues after eating. Many people experience a quieter “food noise” and an easier time with portion control, though results vary. Your provider sets expectations and adjusts treatment based on your response and safety profile.',
+      'GLP-1 and GIP signals help your body manage fullness and metabolic cues after eating. Tirzepatide works with both, which is why many people experience quieter food noise and an easier time with portions — though individual results vary. Your provider matches strength and schedule to your response and safety profile.',
     whyPeopleChooseIt: [
-      'Distinct from Semaglutide — dual-pathway option when clinically appropriate',
-      'Injectable strengths listed clearly for transparent shopping and clinical matching',
-      'Designed for customers ready for structured, provider-guided weight-management care',
-      'Membership alternative available for flat monthly pricing through the included maximum',
+      'Want a dual-pathway option when a clinician recommends it',
+      'Prefer transparent injectable strengths while shopping',
+      'Ready for structured weight-management care with follow-up',
+      'May prefer Tirzepatide Membership for flat monthly budgeting',
     ],
     whatToExpect:
-      'Select a vial strength, complete intake after order, and wait for licensed-provider review. Exact dose, schedule, and follow-up are clinical decisions. Storefront selection informs the conversation — it does not override medical judgment.',
+      'Choose a vial strength, complete intake, and await provider review. Exact dose and follow-up are clinical decisions. Storefront selection starts the conversation — it does not override medical judgment. No specific weight-loss amount is guaranteed.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
-      'Distinguish clearly from Semaglutide; not interchangeable.',
+      'Not interchangeable with Semaglutide.',
       'No guaranteed weight-loss amount.',
+      'Do not claim FDA approval for this compounded Tirzepatide + B6 listing.',
     ],
   },
 
   'fat-burner': {
-    benefitHeadline: 'A Compounded Three-Peptide Option for Body-Composition Goals',
+    benefitHeadline: 'Three Peptides Aimed at Body Composition & Metabolic Goals',
     shortDescription:
-      'Fat Burner is an AOD-9604 + MOTS-C + Tesamorelin compounded injection for provider-guided body-composition and metabolic wellness conversations. Each ingredient has areas of emerging research interest — and your clinician decides whether this blend belongs in your plan.',
+      'Fat Burner combines AOD-9604, MOTS-C, and Tesamorelin in one compounded injection for people focused on body composition and metabolic wellness. Each peptide brings a different area of research interest — and your clinician decides whether this blend belongs in your plan.',
     highlights: [
       'AOD-9604 + MOTS-C + Tesamorelin',
-      'Compounded Injection',
       'Body-Composition Focus',
-      'Provider-Guided',
-      'Emerging Research Interest',
+      'Metabolic Pathway Interest',
+      'One Compounded Vial',
+      'Clinician-Directed',
     ],
     about: [
-      'This listing is an AOD-9604 + MOTS-C + Tesamorelin compounded injection. The customer-facing name is Fat Burner; the formulation is AOD-9604 6 mg, MOTS-C 10 mg, and Tesamorelin 15 mg in a 5 mL vial (about 1.2 mg/mL, 2 mg/mL, and 3 mg/mL).',
-      'Providers may consider this option when discussing supervised body-composition or metabolic wellness goals. The nickname describes the conversation topic — it does not promise fat loss, weight loss, or metabolic improvement.',
-      'A licensed provider reviews your history and goals before anything is dispensed.',
+      'This is an AOD-9604 + MOTS-C + Tesamorelin compounded injection. The customer-facing name is Fat Burner. The vial contains AOD-9604 6 mg, MOTS-C 10 mg, and Tesamorelin 15 mg in 5 mL (about 1.2 mg/mL, 2 mg/mL, and 3 mg/mL).',
+      'AOD-9604 is a modified fragment related to growth-hormone research, commonly explored for metabolic and body-composition applications. MOTS-C is a mitochondrial-derived peptide studied in connection with cellular energy and metabolic signaling. Tesamorelin is a GHRH analog that signals the pituitary to increase the body’s own growth-hormone release — a pathway often discussed in body-composition programs.',
+      'Providers may consider combining these three areas of interest when a single compounded vial fits the care plan. Ordering starts a clinical review; it does not promise fat loss or weight loss.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May be considered in provider-guided body-composition programs',
-      'May support metabolic-wellness conversations when a clinician wants this specific three-peptide blend',
-      'Combines three ingredients with areas of emerging research interest in one compounded vial',
-      'Offers transparent formulary amounts and concentrations for informed clinical discussion',
-      'Potential benefits are individualized and not guaranteed',
+      'Body-composition support within a supervised wellness plan',
+      'Metabolic wellness conversations tied to three researched pathways',
+      'Cellular-energy pathway interest via MOTS-C research',
+      'Growth-hormone signaling interest via Tesamorelin',
+      'Transparent formulary amounts for informed clinical discussion',
     ],
     howItWorks:
-      'AOD-9604 and MOTS-C are explored in emerging metabolic and body-composition research contexts. Tesamorelin is a growth hormone-releasing factor analog discussed in related wellness settings. Combining them in one compounded vial does not create an FDA-approved weight-loss drug or prove clinical fat-loss outcomes for the blend. Your provider explains whether this approach may be appropriate and how it should be used if approved.',
+      'AOD-9604 is explored in metabolic and body-composition research. MOTS-C is studied for its relationship to mitochondrial and metabolic signaling. Tesamorelin works with the GHRH pathway so the body can increase its own growth-hormone release rather than receiving growth hormone directly. Pairing them in one vial does not create a proven fat-loss drug or guarantee results — your provider explains whether the blend may fit your goals and how to use it if approved.',
     whyPeopleChooseIt: [
-      'Want a clearly labeled AOD-9604 + MOTS-C + Tesamorelin injectable under clinical review',
-      'Prefer provider-guided body-composition care over unsupervised supplement shopping',
-      'Appreciate transparent vial strengths and concentrations on this page',
-      'Value emerging-interest framing with realistic expectations',
+      'Want one clearly labeled three-peptide injection instead of sourcing components separately',
+      'Focused on body composition rather than appetite-only GLP-1 plans',
+      'Prefer clinician oversight for emerging peptide combinations',
+      'Appreciate honest framing: interesting pathways, individualized outcomes',
     ],
     whatToExpect:
-      'One active option is listed: the AOD-9604 / MOTS-C / Tesamorelin 5 mL vial. After checkout you complete intake. A licensed provider determines eligibility and instructions. Use only as directed if approved. Do not combine with other peptide products unless your clinician specifically directs you to.',
+      'One active option is listed: the AOD-9604 / MOTS-C / Tesamorelin 5 mL vial. After checkout, complete intake for clinical review. Use only as directed if approved. Do not stack other peptides unless your clinician specifically instructs you to.',
     importantInformation: [
       DEFAULT_COMPOUNDED_IMPORTANT,
-      'This compounded blend is not FDA-approved as a weight-loss or fat-loss drug. The name “Fat Burner” is a product nickname only and does not guarantee fat burning, abdominal fat reduction, weight loss, metabolic improvement, or muscle gain.',
+      'The name “Fat Burner” is a product name only — it does not guarantee fat burning, weight loss, abdominal fat reduction, metabolic improvement, or muscle gain.',
       'This is not an oral “Fat Burner +” capsule product and does not include SLU-PP-332.',
     ].join(' '),
     reviewFlags: [
-      'MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public nickname “Fat Burner” + emerging three-peptide framing remains acceptable.',
+      'Owner pass: nickname retained; no-guaranteed-fat-loss kept in Important Information (not hero). MOTS-C framed as cellular-energy pathway interest only. MD still confirms nickname if not yet approved.',
       'Owner-approved retail $259.00 (at-cost $150.00).',
     ],
     regulatoryNotes: [
-      'Do not imply the blend is FDA-approved.',
-      'Do not claim clinically proven weight loss, fat burning, or metabolic improvement.',
+      'Do not claim clinically proven triple-peptide fat loss.',
+      'Do not imply the blend is an FDA-approved weight-loss drug.',
       'Not SLU-PP-332 / Fat Burner+ capsules.',
     ],
   },
 
   // ===== WOMEN'S HORMONE THERAPY =====
   'estradiol-patch': {
-    benefitHeadline: 'Steady Estrogen Support Through a Simple Skin Patch',
+    benefitHeadline: 'Steady Estrogen Support for Menopause & Hormone Goals',
     shortDescription:
-      'The Estradiol Patch delivers estradiol — a primary form of estrogen — through the skin as part of provider-directed hormone therapy. Many women explore this option when they want steady support without an oral tablet, personalized after clinical review.',
+      'The Estradiol Patch delivers estradiol — your body’s primary form of estrogen — through the skin as part of personalized hormone therapy. Women often discuss it when hot flashes, night sweats, sleep changes, mood shifts, or other estrogen-related symptoms are affecting daily life, and they want steady support without a daily tablet.',
     highlights: [
-      'Through-the-Skin Delivery',
-      'Steady Hormone Support',
+      'Through-the-Skin Estrogen',
+      'Steady Daily Support',
       'Multiple Patch Strengths',
-      'Provider-Personalized',
+      'Personalized Plans',
     ],
     about: [
-      'Estradiol is a form of estrogen your body already recognizes. A transdermal patch is designed to release hormone across the wear period your provider recommends.',
-      'Clinicians may discuss estrogen therapy when evaluating menopause-related changes or other hormone concerns. Whether a patch is right for you depends on your history, goals, and — when needed — labs. Hormone therapy is not one-size-fits-all.',
+      'Estradiol is a form of estrogen involved in temperature regulation, vaginal comfort, bone health, and other systems that can shift during menopause or other hormone transitions.',
+      'A transdermal patch releases hormone across the wear schedule your clinician recommends. Strength and whether to pair estrogen with progesterone are individualized — hormone therapy is never one-size-fits-all, and not everyone with these symptoms needs treatment.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May support estrogen-related goals defined with your provider',
-      'Offers a non-oral delivery method some people prefer',
-      'Designed for steady release across the prescribed wear schedule',
-      'Multiple strengths available for individualized matching',
-      'Can be part of a broader hormone plan when clinically appropriate',
+      'May help ease hot flashes and night sweats when estrogen support is appropriate',
+      'May support sleep quality when night sweats disrupt rest',
+      'May help with vaginal comfort and related estrogen-deficiency symptoms',
+      'Steady delivery without a daily oral estrogen tablet',
+      'Multiple strengths so dosing can match your plan',
     ],
     howItWorks:
-      'The patch places estradiol on the skin so it can be absorbed into circulation. That through-the-skin route bypasses the digestive tract, which is why some providers prefer it for certain patients. Your clinician chooses strength and change schedule based on your symptoms, labs when indicated, and overall plan — including whether progesterone or other therapies should be paired with estrogen.',
+      'The patch places estradiol on the skin so it can enter circulation gradually. That route skips the digestive tract, which some clinicians prefer for certain patients. Your provider chooses strength, change schedule, and whether other hormones belong in the plan based on your history, goals, and labs when needed.',
     whyPeopleChooseIt: [
-      'Convenient patch format instead of daily oral estrogen for many routines',
-      'Clear strength options listed on this page',
-      'Fits provider-guided women’s hormone therapy workflows',
-      'Easy to discuss alongside progesterone or other complementary options',
+      'Seeking relief from menopause-related symptoms under clinical care',
+      'Prefer a patch format that is easy to remember',
+      'Want clear strength options listed up front',
+      'Building a broader women’s hormone plan with follow-up',
     ],
     whatToExpect:
-      'Select a patch strength and pack size, then complete intake for provider review. If approved, apply only as directed — including site rotation and change timing. Do not share patches or adjust strength without guidance.',
+      'Select a patch strength, complete intake, and await review. If approved, apply only as directed — including site rotation and change timing. Symptom improvement varies; report new or concerning symptoms promptly.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Hormone therapy is not appropriate for everyone.',
-      'No guaranteed “hormone balancing” outcomes.',
+      'Do not diagnose the customer from storefront copy.',
     ],
   },
 
   'progesterone-capsules': {
-    benefitHeadline: 'Oral Progesterone Support as Part of Personalized Hormone Care',
+    benefitHeadline: 'Oral Progesterone for Personalized Hormone Balance',
     shortDescription:
-      'Progesterone Capsules provide an oral form of progesterone for provider-directed hormone therapy. Clinicians often discuss this option when building a personalized plan — sometimes alongside estrogen therapy — based on your history and goals.',
+      'Progesterone Capsules provide a measured oral dose of progesterone for women in provider-directed hormone therapy. Clinicians often discuss progesterone when building a menopause or hormone plan — sometimes alongside estrogen — to support sleep, cycle-related comfort, and a balanced hormone strategy tailored to you.',
     highlights: [
       'Oral Capsule Convenience',
-      'Hormone Therapy Support',
-      'Two Strength Options',
-      'Provider-Directed',
+      'Hormone Plan Building Block',
+      '100mg & 200mg Options',
+      'Individualized Timing',
     ],
     about: [
-      'Progesterone is a hormone involved in the menstrual cycle and is frequently part of menopause and hormone-therapy conversations. Capsules make dosing straightforward once a clinician has chosen a plan.',
-      'Your provider may recommend progesterone for specific clinical reasons. Capsule strength and timing are individualized — never copy someone else’s regimen.',
+      'Progesterone is a hormone involved in the menstrual cycle and is frequently part of menopause and hormone-therapy conversations. Oral capsules make dosing straightforward once your clinician chooses a plan.',
+      'Your provider may recommend progesterone for specific clinical reasons — including supporting a combined plan when estrogen is also prescribed. Strength and timing are individualized; never copy someone else’s regimen.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May support hormone-therapy goals defined with your clinician',
-      'Offers a familiar oral capsule format',
-      'Available in more than one strength for personalized matching',
-      'Can complement estrogen therapy when your provider recommends a combined plan',
-      'Fits into a monitored, provider-guided care pathway',
+      'May support sleep when evening dosing is part of your plan',
+      'May help with cycle- or menopause-related hormone goals defined with your clinician',
+      'Familiar capsule format that fits daily routines',
+      'Can complement estrogen therapy when a combined plan is recommended',
+      'Two strengths for personalized matching',
     ],
     howItWorks:
-      'Oral progesterone delivers a measured dose through the digestive system so your provider can support hormone-therapy goals with a form that is simple to take. Timing (for example, evening dosing) may matter for your plan. Effects depend on the prescribed regimen, your biology, and whether other hormones are part of treatment.',
+      'Oral progesterone delivers a measured dose through the digestive system. Timing — often evening — may matter for how you feel. Effects depend on the prescribed regimen, your biology, and whether other hormones are included.',
     whyPeopleChooseIt: [
-      'Straightforward capsule format for daily routines',
-      'Clear 100mg and 200mg options on this page',
-      'Common building block in provider-guided women’s hormone plans',
-      'Easy to coordinate with estradiol or other therapies when indicated',
+      'Building or refining a women’s hormone therapy plan',
+      'Prefer capsules over other delivery forms',
+      'Need a progesterone option that pairs cleanly with estradiol when indicated',
+      'Want transparent 100mg and 200mg choices',
     ],
     whatToExpect:
-      'Choose a capsule strength, complete intake, and await provider review. Take only as directed on your prescription label if approved. Report new or concerning symptoms to your care team promptly.',
+      'Choose a strength, complete intake, and take only as directed if approved. Share sleep, mood, or bleeding changes with your care team so the plan can be refined.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Distinguish from estradiol and testosterone.',
@@ -259,35 +261,35 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'testosterone-cream': {
-    benefitHeadline: 'Targeted Topical Testosterone, Personalized to You',
+    benefitHeadline: 'Topical Testosterone for Energy, Libido & Hormone Goals',
     shortDescription:
-      'Testosterone Cream is a topical option for provider-directed hormone therapy when clinically appropriate. Carefully dosed testosterone may be discussed as part of certain women’s hormone plans after a thorough review of goals, history, and — when needed — labs.',
+      'Testosterone Cream is a carefully dosed topical option some women discuss when low energy, reduced libido, or other hormone-related changes are part of the clinical picture. Applied to the skin in amounts set by your provider, it belongs in a monitored plan — not as a casual wellness cream.',
     highlights: [
-      'Topical Application',
-      'Personalized Dosing',
-      'Provider-Reviewed',
-      'Hormone Therapy Option',
+      'Topical Measured Dosing',
+      'Libido & Energy Conversations',
+      'Personalized Application',
+      'Monitored Hormone Care',
     ],
     about: [
-      'Testosterone is a hormone involved in energy, libido, muscle, and other body functions. While it is often associated with men’s health, clinicians may also discuss carefully dosed topical testosterone in select women’s care plans.',
-      'Because hormones affect many systems, this option requires individualized review. It is not a casual wellness cream for unsupervised use.',
+      'Testosterone is a hormone involved in desire, energy, muscle, and other body functions. While often associated with men’s health, clinicians may discuss carefully dosed topical testosterone in select women’s care plans when symptoms and labs support that conversation.',
+      'Because hormones affect many systems, this option requires individualized review. Not everyone with fatigue or low libido needs testosterone — your provider decides whether it fits.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May support hormone-related goals identified with your provider',
-      'Topical format allows measured, clinician-directed application',
-      'Can be considered when oral or other routes are less preferred',
-      'Fits into a monitored hormone-therapy plan with follow-up',
+      'May support libido goals when testosterone is clinically indicated',
+      'May help with energy-related hormone goals identified with your clinician',
+      'Topical format allows measured, clinician-set application',
+      'Fits into a monitored plan with follow-up and labs when needed',
     ],
     howItWorks:
-      'A cream delivers testosterone through the skin in amounts selected by your provider. Absorption and response vary by person, application site, and dose. Your clinician compares this route with alternatives and decides whether monitoring (including labs) is needed over time.',
+      'The cream delivers testosterone through the skin in amounts selected by your provider. Absorption and response vary by person, site, and dose. Your clinician compares this route with alternatives and decides what monitoring you need over time.',
     whyPeopleChooseIt: [
-      'Non-injection topical format',
-      'Allows precise, provider-set dosing strategies',
-      'Useful when testosterone is clinically indicated within a broader plan',
-      'Pairs with ongoing provider follow-up rather than one-size-fits-all use',
+      'Exploring hormone-related libido or energy concerns with clinical guidance',
+      'Prefer a non-injection topical format',
+      'Want precise dosing rather than one-size-fits-all products',
+      'Ready for follow-up rather than unsupervised use',
     ],
     whatToExpect:
-      'After approval, apply only to areas and schedules your provider specifies. Wash hands after use and follow any transfer-prevention guidance included with your prescription.',
+      'After approval, apply only to areas and schedules your provider specifies. Wash hands after use and follow any transfer-prevention guidance. Outcomes are individualized.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Avoid implying testosterone cream is routine for all women.',
@@ -297,474 +299,488 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== LONGEVITY & COGNITIVE =====
   'nad-plus': {
-    benefitHeadline: 'Cellular Energy Conversations, Guided by Your Provider',
+    benefitHeadline: 'Cellular Energy Pathways People Explore for Wellness & Longevity Research',
     shortDescription:
-      'NAD+ Injection is a provider-directed compounded option people explore when they are curious about cellular energy and longevity-focused wellness care. It is available only after eligibility review — with clear expectations and no hype-driven promises.',
+      'NAD+ is a coenzyme your cells already use to turn nutrients into usable energy. This compounded injectable option is for people curious about cellular-energy biology and wellness conversations around recovery interest and healthy-aging research — under clinical review, without treating those interests as guaranteed injectable outcomes.',
     highlights: [
-      'Provider-Directed',
-      'Compounded Injectable',
-      'Wellness-Focused Interest',
-      'Two Vial Options',
+      'Cellular Energy Pathways',
+      'Recovery Research Interest',
+      'Healthy-Aging Research Interest',
+      'Two Vial Sizes',
     ],
     about: [
-      'NAD+ (nicotinamide adenine dinucleotide) is a molecule found naturally in the body and frequently discussed in wellness and longevity circles. This listing offers a compounded injectable form after a licensed provider reviews your eligibility.',
-      'Common wellness interest is not the same as an established medical claim. We present NAD+ carefully: it may be considered as part of a supervised plan, not as an anti-aging cure or guaranteed energy fix.',
+      'NAD+ (nicotinamide adenine dinucleotide) is a naturally occurring coenzyme involved in cellular energy production and everyday metabolic processes. Wellness customers often ask about it in relation to cellular energy, recovery-oriented wellness interest, cellular health, metabolic wellness, and healthy-aging research.',
+      'This listing is a compounded injectable NAD+ option after eligibility review. Knowing NAD+’s biological role is not the same as proving that injections deliver energy restoration, recovery results, or healthy-aging outcomes. We do not claim NAD+ reverses aging, cures fatigue, restores mitochondria, or treats disease.',
+      'Note: the current catalog offers NAD+ Injection only (two vial sizes) — there is no separate NAD+ nasal spray listing on this storefront.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May be considered for customers exploring NAD+ under clinical guidance',
-      'Supports a structured intake and provider-review experience',
-      'Offers more than one vial size/total amount for clinical matching',
-      'Keeps expectations realistic — individual responses vary widely',
+      'Cellular-energy pathway interest grounded in NAD+’s natural biological role',
+      'Recovery-oriented wellness research interest (not a guaranteed treatment outcome)',
+      'Metabolic wellness conversations tied to NAD+’s cellular role',
+      'Healthy-aging research interest without cure or lifespan claims',
+      'Two vial totals so clinicians can match volume to the plan',
     ],
     howItWorks:
-      'In general biology, NAD+ participates in normal cellular processes related to energy metabolism. A compounded injectable delivers NAD+ under provider direction. How any one person feels afterward varies, and this page does not claim a specific clinical outcome. Your care team explains whether it belongs in your plan and what “success” should look like for you.',
+      'In normal biology, NAD+ helps cells convert food into energy and supports many cellular reactions. A compounded injectable delivers NAD+ as directed by your provider. How you feel afterward varies widely — your care team sets expectations that fit you, not a marketing timeline.',
     whyPeopleChooseIt: [
-      'Transparent vial options listed on this page',
-      'Appeals to customers interested in longevity-oriented wellness conversations',
-      'Provider gatekeeping before anything is dispensed',
-      'Clear distinction from peptide products and other longevity listings',
+      'Curious about cellular energy biology and longevity-oriented wellness with oversight',
+      'Want transparent vial options instead of vague supplement claims',
+      'Prefer clinical screening before starting injectable wellness therapies',
+      'Appreciate clear boundaries: interesting biology, individualized results',
     ],
     whatToExpect:
-      'Select a vial option, complete intake, and wait for provider review. Administration details and schedule come from your prescribing provider and pharmacy materials if approved.',
+      'Select a vial size, complete intake, and await review. Administration details come from your provider and pharmacy materials if approved. Responses differ; no energy, recovery, or anti-aging outcome is guaranteed.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [
-      'Confirm preferred public claim boundary for NAD+ with medical director.',
+      'Owner pass: recovery / healthy-aging framed as wellness/research interest, not expected injectable outcomes. MD may still confirm final claim boundary.',
     ],
     regulatoryNotes: [
-      'No anti-aging cure or guaranteed energy claims.',
-      'Compounded — do not imply FDA approval of this formulation.',
+      'No anti-aging cure, disease treatment, lifespan extension, mitochondrial restoration, or guaranteed energy/recovery claims.',
+      'Compounded injectable — do not imply FDA approval of this formulation.',
+      'Catalog has NAD+ Injection only — no nasal spray SKU.',
     ],
   },
 
   selank: {
-    benefitHeadline: 'A Calm-Focus Peptide Option — Emerging Wellness Interest',
+    benefitHeadline: 'A Neuropeptide Explored for Stress-Response & Calm-Focus Goals',
     shortDescription:
-      'Selank Injection is a provider-directed compounded peptide some people discuss when they are exploring calm, focus, or stress-related wellness goals. Uses in this area are emerging — presented carefully, and only after eligibility review.',
+      'Selank is a research-oriented neuropeptide people discuss when they want support around stress response, emotional steadiness, and calm focus. Interest comes from emerging research — not from an established U.S. anxiety or focus medication claim — and any use here requires clinical review.',
     highlights: [
-      'Calm-Focus Interest',
-      'Compounded Peptide',
-      'Provider Review Required',
-      'Distinct from Semax',
+      'Stress-Response Interest',
+      'Calm-Focus Conversations',
+      'Neuropeptide Research',
+      'Injectable Format',
     ],
     about: [
-      'Selank is a research-oriented peptide offered here as a compounded injection. It is not the same product as Semax Injection or the Selank + Semax Blend Nasal Spray.',
-      'Common wellness interest often involves calm or stress-related comfort. Proposed/emerging uses should not be confused with established treatments for anxiety disorders or other diagnoses. Your provider decides whether this option is appropriate.',
+      'Selank is a synthetic peptide related to research on neuropeptides and stress-response pathways. In wellness settings, people ask about it for calm focus, emotional regulation under pressure, and mental clarity during busy seasons.',
+      'Human evidence for these wellness uses is still developing. Selank is not presented here as an established treatment for anxiety disorders or other diagnoses, and it is not the same product as Semax or the Selank + Semax nasal blend.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May be discussed when exploring calm-focus wellness goals under supervision',
-      'Offers an injectable format for provider-directed peptide care',
-      'Keeps Selank distinct from Semax and combination nasal options',
-      'Supports a cautious, education-first shopping experience',
+      'Stress-response research interest under clinical supervision',
+      'Calm-focus wellness conversations for high-pressure routines',
+      'Emotional-regulation research interest (emerging evidence)',
+      'Dedicated Selank injectable — not a combination product',
     ],
     howItWorks:
-      'Selank is discussed in research and wellness settings for possible effects related to stress and calm-focus interests. This page does not claim a proven mechanism or guaranteed effect. If prescribed, your provider and pharmacy materials explain how to use it and what to watch for.',
+      'Researchers study Selank in connection with neuropeptide signaling that may influence how the body responds to stress. Storefront copy does not claim a proven mechanism or guaranteed calm. If prescribed, your provider and pharmacy materials explain dosing and what to watch for.',
     whyPeopleChooseIt: [
-      'Clear single-peptide Selank offering (not a blend)',
-      'Injectable route for customers whose plan calls for it',
-      'Separated from Semax so comparisons stay honest',
-      'Provider review before dispensing',
+      'Want to understand Selank before asking a clinician about it',
+      'Prefer a single-peptide option focused on calm/stress conversations',
+      'Comparing Selank vs Semax honestly before choosing',
+      'Value screening before starting research-oriented peptides',
     ],
     whatToExpect:
-      'Supplied at the strength and vial size shown. Use only if prescribed. Dosing and frequency are provider-directed — not DIY.',
+      'Supplied at the listed strength and vial size. Use only if prescribed. Dosing is clinician-directed — not DIY stacking.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
-    reviewFlags: [RESEARCH_FLAG],
+    reviewFlags: [
+      'Owner pass: headline reframed to “explored for” stress-response & calm-focus goals (less outcome-sounding). MD may still confirm.',
+    ],
     regulatoryNotes: [
-      'Emerging framing only; no FDA-approved anxiety treatment claims.',
+      'Emerging/investigational framing; no FDA-established anxiety or cognitive treatment claims.',
     ],
   },
 
   semax: {
-    benefitHeadline: 'Focus-Oriented Peptide Interest — Carefully Framed',
+    benefitHeadline: 'A Neuropeptide Explored for Focus & Cognitive Research',
     shortDescription:
-      'Semax Injection is a provider-directed compounded peptide some people explore when focus, attention, or cognitive wellness is on their mind. Interest is emerging and research-oriented — not presented as a proven treatment for ADHD, dementia, or other diagnoses.',
+      'Semax is a research-oriented neuropeptide people explore when attention, mental clarity, and cognitive performance are top of mind. Interest is emerging and research-driven — not an established U.S. treatment for ADHD, dementia, or other diagnoses — and use requires clinical review.',
     highlights: [
-      'Focus-Oriented Interest',
-      'Compounded Peptide',
-      'Provider-Guided',
-      'Distinct from Selank',
+      'Focus & Attention Interest',
+      'Mental Clarity Conversations',
+      'Cognitive Research',
+      'Injectable Format',
     ],
     about: [
-      'Semax is a research-oriented peptide available as a compounded injection after licensed-provider review. It is intentionally separate from Selank and from the Selank + Semax nasal blend.',
-      'Customers comparing peptides should know: Selank conversations often lean calm/stress wellness; Semax conversations more often lean focus/cognitive wellness. Neither is guaranteed, and neither replaces dedicated mental-health or neurological care when needed.',
+      'Semax is a synthetic peptide discussed in research settings involving neurological signaling, attention, and cognitive performance interest. Wellness customers often compare it with Selank: Selank conversations lean calm/stress; Semax conversations lean focus and clarity.',
+      'Neither peptide is guaranteed to deliver those outcomes, and neither replaces dedicated mental-health or neurological care when needed. Semax here is a dedicated injectable — separate from Selank and from the combination nasal spray.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May be discussed when exploring focus-related wellness goals under supervision',
-      'Provides a dedicated Semax injectable option (not a combo product)',
-      'Supports informed comparison with Selank without overstating evidence',
-      'Requires eligibility review before anything is dispensed',
+      'Cognitive-performance research interest under supervision',
+      'Attention and focus-oriented wellness conversations',
+      'Mental-clarity research interest (emerging evidence)',
+      'Dedicated Semax injectable for clean comparison shopping',
     ],
     howItWorks:
-      'Semax is discussed in research and wellness settings for possible focus-related interests. Storefront copy does not claim proven cognitive benefits or a specific mechanism of action. Your provider interprets whether it is suitable and how it should be used if approved.',
+      'Semax is studied in contexts involving neuropeptide signaling related to attention and cognitive performance. This page does not claim proven cognitive benefits. Your provider decides whether it fits and how it should be used if approved.',
     whyPeopleChooseIt: [
-      'Single-peptide clarity for customers who specifically want Semax',
-      'Injectable format when that route fits the clinical plan',
-      'Easy to distinguish from Selank and the nasal blend',
-      'Education-first framing that respects emerging evidence',
+      'Want plain-language education on Semax before a clinical visit',
+      'Specifically seeking focus/clarity conversations rather than calm-focus blends',
+      'Prefer injectable format when that route fits the plan',
+      'Appreciate emerging-evidence honesty',
     ],
     whatToExpect:
-      'Injectable vial at the listed strength/size. Provider determines approval and instructions. Do not combine peptide products unless your clinician specifically directs you to.',
+      'Injectable vial at the listed strength. Approval and instructions come from your clinician. Do not combine peptides unless directed.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
-    reviewFlags: [RESEARCH_FLAG],
+    reviewFlags: [
+      'Owner pass: headline reframed to “explored for” focus & cognitive research (less outcome-sounding). MD may still confirm.',
+    ],
     regulatoryNotes: [
       'No established cognitive-disease treatment claims.',
+      'Not presented as treatment for ADHD, dementia, or related diagnoses.',
     ],
   },
 
   'selank-semax-nasal-spray': {
-    benefitHeadline: 'Selank + Semax Together — A Convenient Nasal Blend',
+    benefitHeadline: 'Selank + Semax Nasal Blend Explored for Stress-Response & Cognitive Goals',
     shortDescription:
-      'This compounded nasal spray combines Selank and Semax in one provider-directed blend for customers who prefer a nose spray over injections. It is not the same as ordering each injectable separately, and wellness interests around calm or focus remain emerging — not established cures.',
+      'This compounded nasal spray pairs Selank and Semax for people who want both research interests in one needle-free format. Selank is often discussed for calm focus; Semax for attention and clarity. Combining them is a convenience choice — not a proven “better together” guarantee.',
     highlights: [
-      'Nasal Spray Convenience',
-      'Combined Blend',
-      'Provider-Directed',
-      'Non-Injection Format',
+      'Needle-Free Nasal Format',
+      'Selank + Semax Blend',
+      'Stress-Response & Cognitive Research Interest',
+      'Convenient Daily Use',
     ],
     about: [
-      'Selank + Semax Blend Nasal Spray delivers both peptides in a single compounded nasal format. People may choose it for convenience or preference — not because a blend automatically works “better” than a single agent.',
-      'Any calm-focus or cognitive wellness interests discussed with Selank or Semax individually remain emerging here as well. This product is not presented as an established treatment for anxiety, ADHD, dementia, or other diagnoses.',
+      'Selank + Semax Blend Nasal Spray delivers both research-oriented neuropeptides in one compounded spray. People may choose it when they want a combined cognitive + stress-response wellness approach without two separate injectables.',
+      'Any benefits discussed for Selank or Semax individually remain emerging here as well. This is not presented as an established treatment for anxiety, ADHD, dementia, or other diagnoses.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Offers a needle-free nasal format some customers prefer',
-      'Combines Selank and Semax when a clinician wants both in one product',
-      'Catalog strength is clearly listed (micrograms per spray)',
-      'Keeps expectations realistic for emerging peptide wellness interest',
+      'Combined stress-response and cognitive research interest in one product',
+      'Needle-free format for people who prefer not to inject',
+      'Clear microgram-per-spray labeling from the live catalog',
+      'Convenient option when a clinician wants both peptides together',
     ],
     howItWorks:
-      'You spray a measured amount into the nose as directed. The catalog lists strength as micrograms of each peptide per spray. We do not claim a proven combined clinical effect. If prescribed, your provider explains technique, frequency, and whether a combination product fits better than a single peptide.',
+      'You spray a measured amount into the nose as directed. Catalog strength is listed as micrograms of each peptide per spray. We do not claim proven combined synergy. Your provider explains technique, frequency, and whether a blend fits better than a single peptide.',
     whyPeopleChooseIt: [
-      'Convenience of one nasal product instead of two injectables',
-      'Appeals to customers who dislike needles',
-      'Transparent strength labeling from the live catalog',
-      'Still protected by provider review before dispensing',
+      'Want both calm-focus and cognitive conversations covered in one bottle',
+      'Prefer nasal delivery over injections',
+      'Shopping a combination after learning what each peptide is known for',
+      'Still want clinical review before starting',
     ],
     whatToExpect:
-      'Nasal spray bottle at the strength/size listed. Use only as prescribed. Follow pharmacy instructions for priming, storage, and dosing.',
+      'Nasal spray at the listed strength/size. Use only as prescribed. Follow pharmacy instructions for priming, storage, and dosing.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
-    reviewFlags: [RESEARCH_FLAG, 'Confirm preferred public language for combination peptide nasal products.'],
+    reviewFlags: [
+      RESEARCH_FLAG,
+      'Owner pass: headline leads with blend format / researched goals; calm focus & attention/clarity retained in hero as discussion reasons, not unqualified headline lead-ins.',
+    ],
     regulatoryNotes: [
       'Preserve catalog strength (50mcg/50mcg per spray).',
-      'No diagnosis-treatment claims for the blend.',
+      'No diagnosis-treatment claims; no proven synergy claims.',
     ],
   },
 
   tesamorelin: {
-    benefitHeadline: 'A Growth Hormone–Releasing Factor Option for Provider-Guided Care',
+    benefitHeadline: 'Targeted Growth-Hormone Signaling for Body-Composition Goals',
     shortDescription:
-      'Tesamorelin Injection is a provider-directed compounded option featuring Tesamorelin, a growth hormone–releasing factor (GHRH) analog. People explore it when they want a supervised conversation about body composition that is distinct from GLP-1 appetite medications.',
+      'Tesamorelin is a peptide that works with the body’s natural growth-hormone signaling pathway. In provider-guided wellness programs, it may be considered for individuals focused on body composition, metabolic wellness, and maintaining lean body composition as part of a personalized treatment plan.',
     highlights: [
-      'GHRH Analog',
+      'GHRH Analog Peptide',
+      'Body-Composition Focus',
+      'Growth-Hormone Signaling',
       '10mg / 2mL Vial',
       'Not a GLP-1',
-      'Provider-Directed',
-      'Compounded Injectable',
     ],
     about: [
-      'Tesamorelin is a growth hormone–releasing factor analog. It is not a GLP-1 medication and is not interchangeable with Semaglutide or Tirzepatide. This listing is a compounded lyophilized injectable totaling 10 mg in a 2 mL vial (5 mg/mL).',
-      'Tesamorelin has an FDA-approved indication related to reducing excess abdominal fat in adults with HIV-associated lipodystrophy. Outside that labeled context, broader body-composition or wellness interest is provider-guided and may be considered off-label — it is not an FDA-approved general weight-loss indication.',
-      'A licensed provider reviews whether this option fits your history and goals before anything is dispensed.',
+      'Tesamorelin is a growth hormone–releasing hormone (GHRH) analog. Rather than supplying growth hormone directly, it signals the pituitary gland to increase the body’s own growth-hormone release.',
+      'People discuss Tesamorelin when body composition — including abdominal body-composition goals — and metabolic wellness are priorities, and when a clinician believes growth-hormone signaling may belong in the plan. It is a different pathway family from GLP-1 appetite medications like Semaglutide or Tirzepatide.',
+      'This listing is a compounded injectable totaling 10 mg in a 2 mL vial (5 mg/mL). Your provider reviews whether it fits your history and goals before anything is dispensed.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May be considered in provider-guided body-composition or metabolic wellness programs when clinically appropriate',
-      'Offers a clearly labeled injectable strength and vial size for supervised care',
-      'Provides a GHRH-analog option distinct from Semaglutide and Tirzepatide',
-      'Supports an individualized plan — responses vary and outcomes are not guaranteed',
+      'Body-composition support within an individualized clinical plan',
+      'Abdominal body-composition goals discussed with your provider',
+      'Growth-hormone signaling without supplying growth hormone directly',
+      'Metabolic wellness conversations distinct from GLP-1 appetite medications',
+      'Support for maintaining lean body composition when clinically appropriate',
     ],
     howItWorks:
-      'As a growth hormone–releasing factor analog, Tesamorelin is designed to interact with pathways involved in the body’s own growth-hormone release signaling. That is a different mechanism family from GLP-1 appetite medications. How any one person responds varies. Your licensed provider decides whether this option may fit your history, goals, and safety profile — including whether any discussion is within labeled use or a carefully considered off-label wellness conversation.',
+      'As a GHRH analog, Tesamorelin interacts with pathways that encourage the pituitary to release more of the body’s own growth hormone. That signaling is why clinicians may discuss it in body-composition programs. How any one person responds varies. Your provider decides whether this option may fit — and how it should be used if approved. This page does not promise weight loss, belly-fat loss, muscle gain, or anti-aging results.',
     whyPeopleChooseIt: [
-      'Want a GHRH-analog conversation distinct from Semaglutide or Tirzepatide',
-      'Prefer transparent vial labeling (10 mg total · 5 mg/mL · 2 mL)',
-      'Value provider review before compounded options are dispensed',
-      'Appreciate clear education about labeled indication versus broader wellness interest',
+      'Focused on body composition rather than appetite-only medications',
+      'Want to understand GHRH signaling before a clinical conversation',
+      'Prefer a clearly labeled injectable strength and vial size',
+      'Value personalized review instead of unsupervised peptide shopping',
     ],
     whatToExpect:
-      'One active option is listed: 10 mg total · 5 mg/mL · 2 mL vial for subcutaneous injection as directed. After order, complete intake for licensed-provider review. Exact use instructions come from your clinician and pharmacy if approved. Do not self-adjust dosing.',
+      'One active option: 10 mg total · 5 mg/mL · 2 mL vial for injection as directed. Complete intake after order. Use instructions come from your clinician and pharmacy if approved. Do not self-adjust dosing.',
     importantInformation: [
       DEFAULT_COMPOUNDED_IMPORTANT,
-      'Tesamorelin’s FDA-approved indication relates to excess abdominal fat in adults with HIV-associated lipodystrophy. This compounded listing is not marketed as FDA-approved therapy for general weight loss, general obesity, anti-aging, guaranteed abdominal fat reduction in the general population, or guaranteed muscle growth.',
+      'This compounded Tesamorelin listing is not marketed as an FDA-approved product. Outcomes are individualized and not guaranteed.',
     ].join(' '),
     reviewFlags: [
-      'MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public framing for off-label/body-composition wellness interest beyond HIV-associated lipodystrophy labeled indication.',
+      'OWNER RULE: no HIV / HIV-associated lipodystrophy language in any customer-facing Tesamorelin copy.',
+      'OWNER RULE: do not claim FDA-approved indication on the Tesamorelin PDP; do not call the compounded MBM product FDA-approved.',
+      'MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm body-composition / GHRH public framing without labeled-indication language.',
       'Owner-approved retail $149.00 (at-cost $83.33).',
     ],
     regulatoryNotes: [
-      'Not a GLP-1; do not market as FDA-approved general weight loss.',
-      'No guaranteed belly-fat loss, anti-aging, or muscle-gain claims.',
-      'Compounded listing — do not imply FDA approval of this specific compounded product.',
+      'Customer-facing HIV references: NONE.',
+      'Compounded product called FDA-approved: NO.',
+      'Not a GLP-1; no guaranteed weight loss, belly-fat loss, muscle gain, or anti-aging claims.',
     ],
   },
 
   // ===== RECOVERY & PERFORMANCE =====
   'bpc-157-tb-500': {
-    benefitHeadline: 'Recovery-Oriented Peptide Blend — Capsule or Injection',
+    benefitHeadline: 'Recovery-Focused Peptide Blend for Mobility & Training Goals',
     shortDescription:
-      'Wolverine combines BPC-157 and TB-500 in a provider-directed compounded blend available as capsule or injection. These peptides are often discussed in recovery and performance wellness conversations — as emerging interest, not guaranteed injury healing.',
+      'Wolverine pairs BPC-157 and TB-500 — two research-oriented peptides people commonly discuss for recovery, mobility, and exercise-related wellness. Available as capsule or injection after clinical review. Popularity reflects recovery interest; it does not mean injuries are healed or tissue is regenerated as an established clinical result.',
     highlights: [
+      'BPC-157 + TB-500',
       'Capsule or Injection',
-      'Two-Peptide Blend',
-      'Recovery Wellness Interest',
-      'Provider-Guided',
+      'Recovery & Mobility Interest',
+      'Exercise-Recovery Conversations',
     ],
     about: [
-      'BPC-157 and TB-500 are research-oriented peptides frequently mentioned in training-recovery and repair-oriented wellness discussions. This My Bare Method listing offers both peptides together as a compounded blend, with strength listed simply as “Blend” because exact amounts are set by the prescribing provider and pharmacy.',
-      'Proposed/emerging uses should not be confused with established sports-medicine cures. This page does not describe FDA-approved treatment for specific injuries.',
+      'BPC-157 and TB-500 are research-oriented peptides frequently mentioned together in recovery and performance wellness conversations. Interest often centers on tissue-repair pathways, mobility, musculoskeletal comfort, and bouncing back from training stress.',
+      'Human evidence and long-term safety information for these wellness uses remain limited and emerging. This listing offers both peptides as a compounded blend — strength listed as “Blend” because exact amounts are set by your provider and pharmacy. It is not presented as FDA-established injury treatment.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May be discussed when exploring recovery-oriented wellness support under supervision',
-      'Lets your provider choose capsule or injection based on the plan',
-      'Combines two commonly paired peptides in one compounded product',
-      'Keeps healing and performance claims carefully framed as non-guaranteed',
+      'Recovery-focused research interest under clinical supervision',
+      'Mobility and musculoskeletal wellness conversations',
+      'Exercise-recovery support discussions after hard training blocks',
+      'Choice of capsule or injection to match the care plan',
     ],
     howItWorks:
-      'These peptides are researched and discussed for possible roles related to tissue comfort and recovery-oriented wellness — but the science is still developing. This page does not claim a proven healing mechanism or clinical outcome. If prescribed, your provider determines blend details and how to use the selected form.',
+      'These peptides are studied for possible roles related to tissue-repair pathways and recovery-oriented wellness. The science is still developing — this page does not claim proven healing, tendon repair, or tissue regeneration. If prescribed, your provider sets blend details and how to use the selected form.',
     whyPeopleChooseIt: [
-      'Two dosage forms on one product page for flexible clinical matching',
-      'Single checkout for a BPC-157/TB-500 blend rather than sourcing separately',
-      'Honest emerging-evidence framing for informed customers',
-      'Provider review before anything ships',
+      'Want plain-language education on what BPC-157 and TB-500 are',
+      'Looking for a recovery-oriented peptide conversation with oversight',
+      'Prefer one blend product with two delivery forms',
+      'Appreciate honest emerging-evidence framing',
     ],
     whatToExpect:
-      'Choose Capsule or Injection below. Exact blend details come from your provider and pharmacy. Do not self-direct peptide stacking or treat this as a substitute for injury evaluation.',
+      'Choose Capsule or Injection. Exact blend details come from your provider and pharmacy. Do not self-stack peptides or skip professional evaluation of injuries.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [
       RESEARCH_FLAG,
       'Catalog strength is "Blend" only — do not invent mg amounts.',
     ],
     regulatoryNotes: [
-      'No guaranteed healing or performance enhancement.',
+      'No guaranteed healing, tissue regeneration, surgical recovery acceleration, or performance enhancement.',
       'Preserve Blend strength language.',
     ],
   },
 
   // ===== SKIN & HAIR =====
   'tretinoin-cream': {
-    benefitHeadline: 'Prescription Skin Renewal for Smoother, Clearer-Looking Skin',
+    benefitHeadline: 'Prescription Retinoid for Clearer Texture & Renewed-Looking Skin',
     shortDescription:
-      'Tretinoin Cream is a prescription retinoid used to support skin renewal, help address breakouts, and improve the look of uneven texture over time. Multiple strengths let your provider match treatment to your skin — with guidance that keeps irritation in check.',
+      'Tretinoin Cream is a prescription retinoid people use to support healthier cell turnover — helping with breakouts, smoother-looking texture, uneven tone, and the look of fine lines from sun exposure over time. Multiple strengths let your clinician match treatment to your skin’s tolerance.',
     highlights: [
-      'Supports Skin Renewal',
-      'Smoother-Looking Texture',
-      'Helps Address Breakouts',
-      'Multiple Strengths Available',
+      'Cell Turnover Support',
+      'Acne & Texture Focus',
+      'Tone & Fine-Line Interest',
+      'Three Strength Options',
     ],
     about: [
-      'Tretinoin is a topical vitamin A–related medicine long used in dermatology for acne and skin-renewal goals. On this page it is offered as a cream in several strengths after provider review.',
-      'Cosmetic improvement is possible for some users, but results vary and dryness or peeling can happen — especially when starting. Your provider helps choose strength and a routine your skin can tolerate.',
+      'Tretinoin is a topical vitamin A–related medicine long used in dermatology for acne and skin-renewal goals. Cosmetic uses for texture, tone, and photoaging are common in clinical practice and may sit alongside established acne uses depending on your plan.',
+      'Results build with consistent use. Dryness, peeling, or sensitivity can happen — especially at first. Your provider helps pick a strength and routine your skin can handle.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May help improve the look of breakouts over time',
-      'May support smoother-looking skin texture with consistent use',
-      'May assist with photoaging concerns when clinically appropriate',
-      'Multiple strengths for a more personalized start',
-      'Pairs well with gentle cleansing and daily sunscreen habits',
+      'May help clear and prevent breakouts with consistent use',
+      'Supports smoother-looking skin texture through cell turnover',
+      'May improve the look of uneven tone over time',
+      'May soften the appearance of fine lines related to photoaging',
+      'Three strengths so you can start where your skin can tolerate',
     ],
     howItWorks:
-      'Tretinoin encourages skin cell turnover — in plain language, it helps newer skin come to the surface more regularly. That process may improve breakouts and the appearance of uneven texture, while also explaining why mild irritation can occur as your skin adjusts. Patience and a smart routine matter more than rushing to a higher strength.',
+      'Tretinoin encourages skin cells to turn over more regularly — newer skin comes to the surface, which can improve breakouts and texture while explaining temporary dryness. Pair with gentle cleansing and daily sunscreen. Patience beats jumping to a higher strength too soon.',
     whyPeopleChooseIt: [
-      'Trusted prescription retinoid category with clear strength choices',
-      'Addresses both acne-care and skin-renewal conversations in one product family',
-      'Provider guidance reduces the guesswork of starting too strong',
-      'Straightforward cream format for nighttime routines',
+      'Want prescription-strength retinoid care instead of guessing with cosmetics',
+      'Addressing acne and skin-renewal goals in one product family',
+      'Prefer clear strength choices with clinical guidance',
+      'Building a nighttime skincare routine that actually works',
     ],
     whatToExpect:
-      'Select a strength, complete intake, and follow approved directions — usually a thin nighttime layer plus daily sunscreen. Do not increase strength on your own if irritation appears; contact your care team.',
+      'Select a strength, complete intake, and follow approved directions — usually a thin nighttime layer plus daily SPF. If irritation appears, contact your care team rather than pushing through a stronger dose on your own.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
-      'Distinguish medical acne uses from cosmetic appearance benefits.',
+      'Distinguish medical acne uses from cosmetic appearance benefits where needed.',
       'No guaranteed wrinkle-erasure claims.',
     ],
   },
 
   'minoxidil-topical': {
-    benefitHeadline: 'Personalized Topical Hair Support Featuring Minoxidil',
+    benefitHeadline: 'Personalized Topical Hair Support Built Around Minoxidil',
     shortDescription:
-      'This compounded topical formula features minoxidil for prescription hair-care support after provider review. The exact combination is personalized by your clinician and pharmacy — we do not invent a secret ingredient list on this page.',
+      'This compounded topical features minoxidil — a medicine commonly used to support hair growth and follicle activity for thinning-hair concerns. Your clinician and pharmacy personalize the combination formula; companion ingredients are not listed as a fixed consumer recipe on this page.',
     highlights: [
-      'Features Minoxidil',
+      'Minoxidil Hair Support',
+      'Follicle Activity Focus',
       'Compounded & Personalized',
-      'Topical Hair Support',
-      'Provider-Directed',
+      'At-Home Topical Routine',
     ],
     about: [
-      'Minoxidil is a medicine commonly used in hair-care treatment plans. My Bare Method offers a compounded combination topical that includes minoxidil, with companion ingredients determined clinically rather than listed as a fixed consumer recipe.',
-      'That honesty matters: you get a personalized preparation, and your provider/pharmacy can tell you exactly what is in your bottle.',
+      'Minoxidil is widely used in hair-care plans for people concerned about thinning. My Bare Method offers a compounded combination topical that includes minoxidil, with any companion ingredients determined clinically rather than published as a fixed storefront formula.',
+      'Ask your care team for the exact ingredients in your bottle. We do not invent a secret ingredient list here.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May support hair-care goals when a topical approach is appropriate',
-      'Built around minoxidil, a familiar option in thinning-hair plans',
-      'Allows provider personalization of the compounded combination',
-      'Fits customers who want prescription guidance — not guesswork aisle products',
+      'Hair-growth support when a topical approach is appropriate',
+      'May support follicle activity as part of a thinning-hair plan',
+      'Personalized compounding instead of one-size-fits-all aisle products',
+      'Convenient at-home scalp routine with clinical follow-up available',
     ],
     howItWorks:
-      'Minoxidil is commonly used to support hair-care treatment plans applied to the scalp. Your compounded formula delivers medication as directed by your provider. We do not claim a specific amount of growth or a fixed timeline. Ask your care team what realistic expectations look like for your formula.',
+      'Minoxidil is commonly used to support hair-care treatment applied to the scalp. Your compounded formula delivers medication as directed. We do not claim a specific amount of regrowth or a fixed timeline — ask what realistic expectations look like for your formula.',
     whyPeopleChooseIt: [
-      'Prescription pathway with clinical personalization',
-      'Topical convenience for at-home routines',
-      'Transparent about what the catalog does — and does not — disclose',
-      'Provider follow-up available when you need adjustments',
+      'Want prescription guidance for thinning hair',
+      'Prefer topical care over oral options when recommended',
+      'Value personalization when combination ingredients matter',
+      'Ready for follow-up if the plan needs adjusting',
     ],
     whatToExpect:
-      'Supplied as a topical solution bottle after approval. Apply only as directed. Request your specific ingredient details from your care team if you want the full formula breakdown.',
+      'Supplied as a topical bottle after approval. Apply only as directed. Consistency matters; visible changes, if any, take time and vary by person.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [
-      'Exact combination ingredients beyond minoxidil are not defined in catalog — do not invent them.',
+      'Exact combination ingredients beyond minoxidil are not defined in catalog — do not invent them. Owner/formulary review if public ingredient list is desired.',
     ],
     regulatoryNotes: [
       'Preserve “Combination formula” strength language.',
-      'No guaranteed hair-growth claims.',
+      'No guaranteed hair-growth amount or timeline.',
     ],
   },
 
   'bimatoprost-solution': {
-    benefitHeadline: 'Prescription Support for Fuller-Looking Lashes & Brows',
+    benefitHeadline: 'Fuller-Looking Lashes & Brows With Prescription Bimatoprost',
     shortDescription:
-      'Lash/Brow Growth Serum is a prescription topical option featuring bimatoprost that people consider when they want fuller-looking eyelashes and brows under clinical guidance. Application is typically limited to the lash or brow line — this is not a general face serum.',
+      'Lash/Brow Growth Serum is a prescription topical featuring bimatoprost 0.03% (2.5 mL). Bimatoprost can influence the hair-growth cycle of lashes — and, when your clinician considers it appropriate, brows — so many people use it for fuller, longer-looking lashes with consistent, careful application.',
     highlights: [
-      'Lash & Brow Appearance',
-      'Prescription Topical',
-      'Targeted Application',
-      'Provider-Reviewed',
+      'Bimatoprost 0.03%',
+      'Lash Growth Cycle Support',
+      'Brow Conversations When Appropriate',
+      'Targeted Line Application',
     ],
     about: [
-      'The customer-facing name for this product is Lash/Brow Growth Serum. The underlying formulation is a prescription bimatoprost solution. Bimatoprost is used in clinical practice for effects related to eyelash growth when applied as directed. My Bare Method offers it as a prescription solution after provider review.',
-      'Follow application instructions carefully and share eye or medical history during intake so your clinician can screen for appropriateness.',
+      'The customer-facing name is Lash/Brow Growth Serum. The formulation is Bimatoprost Solution 0.03% / 2.5 mL. Bimatoprost is a prostaglandin analog used in clinical practice for effects related to eyelash growth when applied along the lash line as directed.',
+      'Brow-appearance use should be framed as clinician-directed and may sit outside the most common labeled lash use depending on your plan. Share eye history during intake so appropriateness can be screened.',
     ].join('\n\n'),
     potentialBenefits: [
-      'May support fuller-looking eyelashes with consistent, directed use',
-      'May be discussed for brow-appearance goals when your provider considers it appropriate',
-      'Provides a prescription pathway instead of unverified cosmetic shortcuts',
-      'Targeted line application when used as instructed',
-      'Includes clinical review before treatment begins',
+      'May support fuller, longer-looking eyelashes with consistent use',
+      'May be discussed for brow-appearance goals when clinically appropriate',
+      'Prescription pathway instead of unverified cosmetic serums',
+      'Targeted application along the lash or brow line as instructed',
     ],
     howItWorks:
-      'Bimatoprost can influence the growth cycle of eyelashes for some users, which may lead to longer or fuller-looking lashes over time with consistent use. Changes are gradual and vary by person. Your provider and pharmacy materials explain exact technique.',
+      'Bimatoprost can influence the growth phase of eyelash hairs for some users, which may lead to longer or fuller-looking lashes over weeks of consistent use. Changes are gradual and vary. Your provider and pharmacy materials explain exact technique — this is not a general face serum.',
     whyPeopleChooseIt: [
-      'Clear prescription positioning for lash and brow goals',
-      'Small bottle size listed transparently on this page',
-      'Clinical screening before use',
-      'Instructions-focused experience that protects eye safety',
+      'Want the real active (bimatoprost) behind the Lash/Brow Growth Serum name',
+      'Prefer prescription screening for eye-area products',
+      'Seeking a clearer alternative to over-the-counter lash serums',
+      'Ready to follow precise application instructions',
     ],
     whatToExpect:
-      'Solution bottle at the strength and size listed. Use the applicator method described by your pharmacy and provider, usually along the upper eyelash line or as directed for brows. Report eye irritation promptly.',
+      'Bottle at 0.03%, 2.5 mL. Use the applicator method from your pharmacy and provider. Report eye irritation promptly. Dramatic results are not guaranteed.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     reviewFlags: [
-      'Display name is Lash/Brow Growth Serum; underlying formulation remains Bimatoprost Solution (slug/SKU unchanged).',
+      'Display name remains Lash/Brow Growth Serum; formulation remains Bimatoprost Solution (slug/SKU/price unchanged).',
     ],
     regulatoryNotes: [
       'No guaranteed dramatic lash or brow results.',
-      'Preserve formulation identity as bimatoprost solution for clinical/fulfillment clarity.',
+      'Preserve slug bimatoprost-solution, SKU MBM-SH-BIM-SOL-001, price $89.',
+      'Brow use: clinician-directed; may be off-label depending on plan.',
     ],
   },
 
   // ===== PROVIDER CARE =====
   'initial-provider-consultation': {
-    benefitHeadline: 'Start With Clarity — A Personalized First Visit',
+    benefitHeadline: 'Your First Clinical Conversation — Clear Goals, Clear Next Steps',
     shortDescription:
-      'Your Initial Provider Visit is dedicated time with a licensed clinician to review goals, health history, and whether treatment options make sense for you. It is the clearest first step when you want guidance before committing to a medication or membership.',
+      'The Initial Provider Visit is dedicated time with a licensed clinician to review your goals, health history, and whether treatment options make sense for you. It is the right starting point when you want guidance before committing to a medication or membership — and it does not guarantee a prescription.',
     highlights: [
       'Personalized First Visit',
-      'Goal & History Review',
+      'Goals & History Review',
+      'Treatment Fit Assessment',
       'Clear Next Steps',
-      'No Prescription Guarantee',
     ],
     about: [
       'This is a consultation service — not a medication. You and your provider discuss what you want to work on, review relevant history, and map sensible next steps.',
-      'Those next steps might include labs, a follow-up, a product discussion, or no medication at all. Booking this visit does not guarantee that a prescription will be written.',
+      'Under current care workflows, an initial visit may be required when appropriate for a customer’s first treatment or order. Next steps might include labs, a follow-up, a product discussion, or no medication at all. Scheduling is handled through the care team’s normal process — this page does not claim automatic third-party scheduling.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Helps you start care with a clear clinical conversation',
-      'Reduces guesswork before choosing a medication or membership',
-      'Creates space to ask questions about options and expectations',
-      'May identify whether labs or follow-up should come next',
+      'Start care with a clear clinical conversation instead of guessing',
+      'Understand which options may fit before you buy a medication or membership',
+      'Ask questions about expectations, side effects, and timelines',
+      'Learn whether labs or a follow-up should come next',
     ],
     howItWorks:
-      'After purchase/scheduling guidance, you complete intake and meet with a licensed provider. Together you review goals and history. Any prescribing decision happens only if clinically appropriate — evaluation and prescribing are separate steps.',
+      'After purchase, you complete intake and meet with a licensed provider. Together you review goals and history. Prescribing happens only if clinically appropriate — evaluation and prescribing are separate steps.',
     whyPeopleChooseIt: [
-      'Ideal on-ramp for new My Bare Method customers',
-      'Useful across weight management, hormones, and other wellness goals',
-      'Sets expectations early about provider-guided care',
-      'Transparent pricing for a defined consultation session',
+      'New to My Bare Method and want a guided start',
+      'Comparing weight-management, hormone, or wellness options',
+      'Prefer clinical clarity before spending on medication',
+      'Transparent session pricing for a defined first visit',
     ],
     whatToExpect:
-      'One consultation session as listed. Bring medications, allergies, and goal priorities. Prescription fulfillment, if any, is a separate step after approval.',
+      'One consultation session ($75). Bring medications, allergies, and goal priorities. Any prescription fulfillment is a separate step after approval.',
     importantInformation:
-      'Provider Care services require scheduling and may involve medical intake. Purchasing a visit does not guarantee medication approval.',
+      'Provider Care services require scheduling and medical intake as applicable. Purchasing a visit does not guarantee medication approval.',
   },
 
   'follow-up-appointment': {
-    benefitHeadline: 'Stay On Track With a Focused Provider Check-In',
+    benefitHeadline: 'Check In, Adjust, and Keep Your Plan Working for You',
     shortDescription:
-      'A Follow-Up Visit gives you time to review progress, talk through side effects or questions, and refine your plan with a licensed provider. It is built for people already in care — or advised to return — who want thoughtful adjustments, not automatic refills.',
+      'A Follow-Up Visit gives you focused time to review progress, talk through side effects, and refine treatment with a licensed provider. It is used when ongoing review is needed — including dose changes or other qualifying follow-up — not as an automatic refill button.',
     highlights: [
-      'Progress Review',
-      'Plan Adjustments',
-      'Ask Anything',
-      'Clinician-Guided',
+      'Progress & Side-Effect Review',
+      'Dose-Change Conversations',
+      'Plan Refinement',
+      'Shared Decision-Making',
     ],
     about: [
-      'Follow-up is where good care stays personal. Bring updates on how you feel, what is working, and what is not. Your provider may continue, modify, pause, or stop a treatment based on what they learn.',
-      'This visit supports shared decision-making. It is not a guarantee of continued prescribing.',
+      'Follow-up keeps care personal. Bring updates on how you feel, what is working, and what is not. Your provider may continue, modify, pause, or stop a treatment based on what they learn.',
+      'This visit supports shared decision-making when provider review is required for a dose change or other qualifying follow-up. It does not guarantee continued prescribing.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Helps fine-tune treatment after you have real-world experience on a plan',
-      'Creates space for side-effect and lifestyle questions',
-      'Supports safer decisions before dose or formulation changes',
+      'Fine-tune treatment after real-world experience on a plan',
+      'Space to discuss side effects and lifestyle questions',
+      'Safer decisions before changing dose or formulation',
       'Keeps your care relationship active and informed',
     ],
     howItWorks:
-      'You meet with a provider who reviews your interval history and current plan. Together you decide on next steps. Medication changes still require clinical judgment and, when applicable, pharmacy coordination.',
+      'You meet with a provider who reviews your interval history and current plan. Together you decide on next steps. Medication changes still require clinical judgment and pharmacy coordination when applicable.',
     whyPeopleChooseIt: [
-      'Perfect after starting a new therapy',
-      'Helpful when goals or life circumstances change',
-      'More focused than starting from scratch with an initial visit',
-      'Clear, affordable session pricing',
+      'Starting a new therapy and want a structured check-in',
+      'Considering a dose change that requires clinical review',
+      'Goals or life circumstances have shifted',
+      'Prefer a focused session over starting from scratch',
     ],
     whatToExpect:
-      'One follow-up session. Have questions ready. If labs were ordered, results may be part of the discussion.',
+      'One follow-up session ($55). Have questions ready. Lab results may be part of the discussion if ordered.',
     importantInformation:
       'Follow-up does not guarantee continued prescribing. Recommendations depend on safety and appropriateness.',
   },
 
   'laboratory-review': {
-    benefitHeadline: 'Understand Your Labs — Then Decide What Comes Next',
+    benefitHeadline: 'Turn Lab Numbers Into a Clear, Actionable Plan',
     shortDescription:
-      'Laboratory Review is a provider visit focused on interpreting your results in plain language and recommending sensible next steps. It turns numbers into a clearer plan — without automatically promising a prescription.',
+      'Laboratory Review is a provider visit focused on interpreting your results in plain language and recommending sensible next steps. Ideal when you already have labs and want clinical context before adjusting hormones, metabolic care, or other therapies.',
     highlights: [
-      'Plain-Language Lab Review',
+      'Plain-Language Interpretation',
       'Personalized Takeaways',
       'Informed Next Steps',
-      'Provider Insight',
+      'No Automatic Prescription',
     ],
     about: [
-      'This service focuses on interpretation and guidance based on results available for review. It does not automatically include ordering labs or prescribing medication.',
-      'Bring the questions that matter most to you — energy, hormones, metabolic markers, or anything your clinician should prioritize.',
+      'This service focuses on interpretation and guidance based on results available for review. It does not automatically include ordering new labs or prescribing medication.',
+      'Bring the questions that matter — energy, hormones, metabolic markers, or anything your clinician should prioritize — so the visit matches how labs are used in the current workflow.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Helps you understand which results matter for your goals',
-      'May clarify whether more testing is needed',
-      'Supports smarter decisions about continuing or changing a plan',
-      'Reduces confusion from portal printouts without clinical context',
+      'Understand which results matter for your goals',
+      'Clarify whether more testing is needed',
+      'Make smarter decisions about continuing or changing a plan',
+      'Reduce confusion from portal printouts without clinical context',
     ],
     howItWorks:
       'Your provider reviews submitted or available results, explains plain-language takeaways, and recommends follow-up actions. Treatment changes remain separate clinical decisions.',
     whyPeopleChooseIt: [
-      'Ideal when you already have recent labs',
-      'Useful before adjusting hormone or metabolic therapies',
-      'Focused session instead of a generic consult',
+      'Already have recent labs and want expert interpretation',
+      'Preparing to adjust hormone or metabolic therapies',
+      'Prefer a focused lab session over a generic consult',
       'Transparent pricing for interpretation time',
     ],
     whatToExpect:
-      'One laboratory-review session. Ensure results are available to the care team as instructed.',
+      'One laboratory-review session ($55). Ensure results are available to the care team as instructed.',
     importantInformation:
       'Lab review does not guarantee a prescription or a specific treatment.',
   },
 
   // ===== ACCESSORIES =====
   'complete-injection-starter-kit': {
-    benefitHeadline: 'Everything You Need to Start Organized — In One Bundle',
+    benefitHeadline: 'Your Injection Day Essentials — Organized in One Bundle',
     shortDescription:
-      'The Complete Injection Starter Kit gathers core injection-day accessories into one convenient package so you can set up storage, travel, prep, and disposal without hunting down each item separately.',
+      'The Complete Injection Starter Kit gathers storage, travel, prep, and disposal accessories into one checkout so you can start an injectable routine without hunting down each item separately.',
     highlights: [
       'All-in-One Bundle',
       'Storage + Travel',
@@ -772,36 +788,35 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Routine-Ready',
     ],
     about: [
-      'This kit is designed for people who want the essentials in one checkout. According to our catalog, it includes a 3D printed peptide case, temperature-controlled travel case, discreet travel bag, reusable ice pack, wellness planner, sharps container, alcohol prep wipes, and insulin syringes.',
-      'It is a supplies bundle — not a medication. Prescription products are sold separately and still require provider review when applicable.',
+      'What it is: a supplies bundle — not a medication. Why it’s useful: new injectable routines feel easier when organization tools arrive together.',
+      'What’s included (catalog): 3D printed peptide case, temperature-controlled travel case, discreet travel bag, reusable ice pack, wellness planner, sharps container, alcohol prep wipes, and insulin syringes. How it fits your routine: use it as day-one setup; prescription products are sold separately.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Saves time versus buying each accessory individually',
+      'Saves time versus buying accessories one by one',
       'Helps new injectable routines feel organized from day one',
-      'Covers storage, travel, prep, and disposal basics in one kit',
-      'Makes a thoughtful setup gift for someone starting a supervised injectable plan',
+      'Covers storage, travel, prep, and disposal basics',
+      'Thoughtful setup gift for someone starting supervised injectable care',
     ],
     howItWorks:
-      'Each included item supports a practical piece of an injection routine — organizing vials, traveling more comfortably, prepping skin, tracking habits, or disposing of sharps safely. Use the components together or à la carte within your kit.',
+      'Each item supports a practical piece of an injection routine — organizing vials, traveling more comfortably, prepping skin, tracking habits, or disposing of sharps safely.',
     whyPeopleChooseIt: [
       'One bundle instead of eight separate decisions',
-      'Ideal “first setup” purchase for injectable wellness routines',
-      'Pairs naturally with provider-guided medication orders',
-      'Catalog-confirmed contents — no mystery extras',
+      'Ideal first-setup purchase for injectable wellness routines',
+      'Pairs naturally with medication orders',
     ],
     whatToExpect:
-      'You receive the kit components listed in the catalog description. Individual item details match the standalone accessory listings.',
+      'You receive the kit components listed in the catalog. Individual item details match the standalone accessory listings.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications and do not require a prescription.',
+      'Accessories are wellness tools and supplies — not medications.',
     reviewFlags: [
       'Kit contents taken from catalog — do not add unverified extra items.',
     ],
   },
 
   'premium-3d-printed-peptide-case': {
-    benefitHeadline: 'Keep Vials and Supplies Neat, Protected, and Ready',
+    benefitHeadline: 'Protect and Organize Vials, Syringes & Day-Of Supplies',
     shortDescription:
-      'A custom 3D-printed case with compartments designed to hold peptide vials, syringes, and related supplies so your kit stays organized at home or in a larger travel bag.',
+      'A custom 3D-printed case with compartments designed to hold peptide vials, syringes, and related supplies so your kit stays neat at home or inside a larger travel bag.',
     highlights: [
       'Organized Compartments',
       'Vial Protection',
@@ -809,25 +824,25 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Daily-Kit Ready',
     ],
     about: [
-      'This case helps small vials and injection supplies live in one protective shell instead of loose in a drawer or tote. It supports organization — it does not replace refrigeration guidance when your medication requires cold storage.',
+      'What it is: a purpose-built organizer shell. Why it’s useful: keeps fragile glass from bouncing loosely in a drawer or tote.',
+      'What’s included: one case. How it fits your routine: daily organizer or insert inside a travel bag. It does not replace refrigeration rules when cold storage is required.',
     ].join('\n\n'),
     potentialBenefits: [
       'Reduces clutter around vials and syringes',
-      'Makes grab-and-go packing simpler',
-      'Helps protect fragile glass from bouncing loosely in a bag',
-      'Pairs cleanly with other My Bare Method accessories',
+      'Simplifies grab-and-go packing',
+      'Helps protect glass from loose bag bounce',
     ],
     howItWorks:
-      'Place vials and compatible supplies into the molded compartments. Use it as your daily organizer or as an insert inside a larger travel bag.',
+      'Place vials and compatible supplies into the molded compartments.',
     whyPeopleChooseIt: [
-      'Purpose-built for peptide/injectable supply organization',
+      'Purpose-built for injectable supply organization',
       'Lightweight everyday companion',
       'Complements insulated cases rather than replacing them',
     ],
     whatToExpect:
-      'One case as listed. Follow medication storage rules from your pharmacy separately.',
+      'One case as listed. Follow pharmacy storage rules separately.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications.',
+      'Accessories are wellness tools and supplies — not medications.',
   },
 
   'temperature-controlled-travel-case': {
@@ -841,26 +856,25 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Pairs With Ice Packs',
     ],
     about: [
-      'This case is built for people who need a more protective carrier when vials should stay buffered from ambient swings. Performance depends on packing method, ice-pack use, and outdoor conditions.',
-      'We do not publish a guaranteed hold-time on this page. Your pharmacy storage instructions remain the authority for medication temperature requirements.',
+      'What it is: an insulated carrier with thermal lining. Why it’s useful: buffers vials better than a standard tote during travel.',
+      'What’s included: one insulated case. How it fits your routine: load vials, add cold packs when appropriate, keep closed in transit. No guaranteed hold-time is published — pharmacy instructions remain the authority.',
     ].join('\n\n'),
     potentialBenefits: [
       'Helps vials travel more comfortably than a standard tote',
-      'Works well with a reusable ice pack for added cold support',
+      'Works well with a reusable ice pack',
       'Useful for weekends away, flights, or long commute days',
-      'Gives peace of mind when organization and insulation both matter',
     ],
     howItWorks:
-      'Load vials using a sensible packing method, add cold packs when appropriate, and keep the case closed while in transit. Reassess packing for extreme heat or long delays.',
+      'Load vials, add cold packs when appropriate, and keep the case closed while in transit.',
     whyPeopleChooseIt: [
-      'Purpose-built insulated carrier for wellness injectables',
+      'Need better temperature buffering for injectable travel',
       'Complements — rather than replaces — pharmacy storage guidance',
-      'Popular pairing with the Complete Injection Starter Kit components',
+      'Popular pairing with starter-kit components',
     ],
     whatToExpect:
-      'One insulated case. Add cold packs as needed. No guaranteed hold-time is stated on this page.',
+      'One insulated case. Add cold packs as needed. No guaranteed hold-time on this page.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications.',
+      'Accessories are wellness tools and supplies — not medications.',
     reviewFlags: [
       'Prior catalog “up to 48 hours” claim remains removed pending owner verification.',
     ],
@@ -870,9 +884,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'discreet-travel-bag': {
-    benefitHeadline: 'Carry Your Routine Without Looking Clinical',
+    benefitHeadline: 'Carry Your Wellness Kit Without Looking Clinical',
     shortDescription:
-      'A sleek travel bag with water-resistant lining designed to hold your wellness kit discreetly — vials, cases, and day-of supplies included — whether you are commuting or heading through an airport.',
+      'A sleek travel bag with water-resistant lining designed to hold vials, cases, and day-of supplies discreetly — whether you are commuting or heading through an airport.',
     highlights: [
       'Discreet Everyday Look',
       'Water-Resistant Lining',
@@ -880,29 +894,29 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Travel Ready',
     ],
     about: [
-      'This bag is meant to carry therapy-related accessories in a low-key everyday style. Catalog materials describe a vegan-leather look with water-resistant lining. Exact dimensions are not listed, so we do not invent measurements.',
+      'What it is: a low-key everyday bag for therapy-related accessories. Why it’s useful: carries your kit without looking clinical.',
+      'What’s included: one travel bag (vegan-leather look with water-resistant lining per catalog; exact dimensions not listed). How it fits your routine: outer bag for insert cases, ice packs, and day-of supplies.',
     ].join('\n\n'),
     potentialBenefits: [
       'Keeps your routine organized while traveling',
       'Avoids an overly medical-looking bag aesthetic',
       'Works as the outer bag for insert cases and ice packs',
-      'Helps separate wellness supplies from the rest of your luggage',
     ],
     howItWorks:
-      'Pack your cases, vials (as appropriate), and day-of supplies inside. Use it as your dedicated wellness travel bag so nothing gets lost in a larger suitcase.',
+      'Pack cases, vials (as appropriate), and day-of supplies inside as your dedicated wellness travel bag.',
     whyPeopleChooseIt: [
       'Style-forward alternative to clear medical pouches',
       'Practical lining for real travel days',
       'Pairs with insulated and 3D-printed insert cases',
     ],
     whatToExpect:
-      'One travel bag as listed. Fill with the accessories and medications appropriate for your plan.',
+      'One travel bag as listed.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications.',
+      'Accessories are wellness tools and supplies — not medications.',
   },
 
   'reusable-ice-pack': {
-    benefitHeadline: 'Simple Cold Support for On-the-Go Vials',
+    benefitHeadline: 'Reusable Cold Support for On-the-Go Vials',
     shortDescription:
       'A reusable gel ice pack intended to help keep peptide vials cooler during transport when paired with an insulated case or travel bag.',
     highlights: [
@@ -912,28 +926,28 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Easy to Freeze',
     ],
     about: [
-      'This is a straightforward cold-support accessory. Freeze it ahead of travel and pack it beside vials according to your case design and pharmacy guidance. Catalog copy describes a non-toxic, long-lasting gel pack.',
+      'What it is: a reusable gel ice pack. Why it’s useful: adds cold support inside an insulated travel case.',
+      'What’s included: one pack. How it fits your routine: freeze ahead of travel and pack beside vials per your case design and pharmacy guidance.',
     ].join('\n\n'),
     potentialBenefits: [
       'Adds cold support inside an insulated travel case',
-      'Handy backup pack for weekend bags',
+      'Handy backup for weekend bags',
       'Reusable for ongoing travel routines',
     ],
     howItWorks:
-      'Freeze fully, then place in your case or bag. Avoid direct contact with materials your pharmacy says should stay dry unless protected.',
+      'Freeze fully, then place in your case or bag.',
     whyPeopleChooseIt: [
       'Inexpensive essential for temperature-sensitive travel',
       'Works with My Bare Method insulated cases',
-      'Easy to keep permanently in your kit rotation',
     ],
     whatToExpect:
       'One reusable ice pack. Freeze before use.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications.',
+      'Accessories are wellness tools and supplies — not medications.',
   },
 
   'daily-weekly-wellness-planner': {
-    benefitHeadline: 'Track Consistency, Habits, and How You Feel',
+    benefitHeadline: 'Track Habits, Consistency & How You Feel',
     shortDescription:
       'A daily and weekly planner with habit trackers and reflection space designed around wellness routines — including therapy check-ins if you like written logs.',
     highlights: [
@@ -943,28 +957,28 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Routine Support',
     ],
     about: [
-      'Consistency is easier when you can see it. This paper planner helps you map goals, habits, and notes between provider visits. It is not a medical device and does not provide clinical advice.',
+      'What it is: a paper wellness planner. Why it’s useful: consistency is easier when you can see it.',
+      'What’s included: one planner. How it fits your routine: map goals, habits, and notes between visits. Not a medical device.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Helps you stay accountable to daily and weekly wellness habits',
-      'Creates a simple log you can bring to follow-up visits',
-      'Supports reflection without needing another app',
+      'Stay accountable to daily and weekly wellness habits',
+      'Create a simple log you can bring to follow-up visits',
+      'Reflect without needing another app',
     ],
     howItWorks:
-      'Use daily/weekly spreads to plan, track, and review. Adapt sections to doses, meals, movement, mood, or whatever your routine needs.',
+      'Use daily/weekly spreads to plan, track, and review doses, meals, movement, mood, or whatever your routine needs.',
     whyPeopleChooseIt: [
-      'Analog clarity for people who prefer paper',
-      'Purpose-built wellness framing',
-      'Lightweight add-on to any care plan',
+      'Prefer paper clarity over digital clutter',
+      'Want purpose-built wellness framing',
     ],
     whatToExpect:
       'One planner as listed.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications.',
+      'Accessories are wellness tools and supplies — not medications.',
   },
 
   'sharps-container': {
-    benefitHeadline: 'Safer Disposal for Used Syringes and Needles',
+    benefitHeadline: 'Safer Home Disposal for Used Syringes & Needles',
     shortDescription:
       'An FDA-cleared sharps container for disposing of used syringes and needles at home — secure, puncture-resistant, and built for responsible end-of-use handling.',
     highlights: [
@@ -974,24 +988,24 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Kit Essential',
     ],
     about: [
-      'Used sharps do not belong in household trash bags. This container gives you a dedicated, puncture-resistant place to dispose of syringes and needles until you can follow local drop-off rules when full.',
+      'What it is: a puncture-resistant sharps disposal container. Why it’s useful: used sharps do not belong in household trash bags.',
+      'What’s included: one container. How it fits your routine: drop used syringes/needles point-first until full, then follow local drop-off rules.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Helps keep used sharps out of regular trash',
+      'Keeps used sharps out of regular trash',
       'Supports safer home injection routines',
       'Completes a responsible injectable supply kit',
     ],
     howItWorks:
-      'Drop used syringes/needles into the container point-first as directed. Fill only to the indicated line. Do not force items or empty a used container.',
+      'Drop used syringes/needles point-first. Fill only to the indicated line. Do not force items or empty a used container.',
     whyPeopleChooseIt: [
-      'Clear FDA-cleared positioning from catalog copy',
       'Essential companion to syringe purchases',
-      'Simple, durable design for everyday use',
+      'Clear FDA-cleared positioning from catalog copy',
     ],
     whatToExpect:
       'One container. Follow community guidelines for sharps drop-off when full.',
     importantInformation:
-      'Accessories are wellness tools and supplies. Follow local disposal rules when the container is full.',
+      'Accessories are wellness tools and supplies. Follow local disposal rules when full.',
     regulatoryNotes: [
       'FDA-cleared language retained from existing catalog.',
     ],
@@ -1004,11 +1018,12 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     highlights: [
       '70% Isopropyl Alcohol',
       'Individually Wrapped',
-      'Two Count Options',
+      '200 or 500 Count',
       'Everyday Kit Staple',
     ],
     about: [
-      'A quick wipe is a small step that helps injection routines feel cleaner and more consistent. These pads are built for site prep when your instructions call for it.',
+      'What it is: individually wrapped 70% IPA prep pads. Why it’s useful: a quick wipe helps injection routines feel cleaner and more consistent.',
+      'What’s included: a box at the count you select. How it fits your routine: wipe the site as directed, let dry if instructed, then inject.',
     ].join('\n\n'),
     potentialBenefits: [
       'Convenient single-use prep pads',
@@ -1016,7 +1031,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Easy to stash in a travel bag or home kit',
     ],
     howItWorks:
-      'Open a pad, wipe the site as directed, and allow skin to dry before injecting if that is part of your instructions. Discard after one use.',
+      'Open a pad, wipe the site as directed, allow skin to dry if instructed, discard after one use.',
     whyPeopleChooseIt: [
       'Clear 200 vs 500 count choices',
       'Familiar 70% IPA prep standard',
@@ -1025,7 +1040,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     whatToExpect:
       'Box of individually wrapped pads at the count you select.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications.',
+      'Accessories are wellness tools and supplies — not medications.',
   },
 
   'premium-insulin-syringes': {
@@ -1039,7 +1054,8 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Pairs With Sharps Container',
     ],
     about: [
-      'These syringes support day-to-day injectable routines when your clinician or pharmacy recommends this supply type. Needle gauge and barrel markings are not listed in the live catalog, so this page does not invent them — check packaging on arrival or ask your care team which syringe you should use.',
+      'What it is: insulin syringes for subcutaneous injectable routines when recommended. Why it’s useful: flexible pack sizes for light or frequent use.',
+      'What’s included: one pack at the count you select. Needle gauge and barrel markings are not listed in the live catalog — check packaging or ask your care team. How it fits your routine: use with alcohol wipes; dispose in a sharps container.',
     ].join('\n\n'),
     potentialBenefits: [
       'Flexible pack sizes for light or frequent use',
@@ -1047,7 +1063,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Pairs cleanly with alcohol wipes and a sharps container',
     ],
     howItWorks:
-      'Select the pack count that matches your routine, confirm package specs on arrival, and dispose of used syringes in a proper sharps container.',
+      'Select the pack count that matches your routine, confirm package specs on arrival, dispose of used syringes properly.',
     whyPeopleChooseIt: [
       'Ten pack-count options on one page',
       'Clear separation between pack size and cart quantity',
@@ -1056,7 +1072,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     whatToExpect:
       'One pack at the count selected. Confirm gauge and markings on the package before use.',
     importantInformation:
-      'Accessories are wellness tools and supplies. They are not medications. Use only the syringe type your provider or pharmacy recommends.',
+      'Accessories are wellness tools and supplies — not medications. Use only the syringe type your provider or pharmacy recommends.',
     reviewFlags: [
       'Needle gauge / unit markings not in catalog — confirm before publishing specs later.',
     ],
@@ -1068,38 +1084,38 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
 export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
   'semaglutide-membership': {
-    benefitHeadline: 'One Membership. One Predictable Monthly Price.',
+    benefitHeadline: 'One Flat Monthly Rate for Semaglutide Care',
     shortDescription:
-      'Semaglutide Membership is a flat $149/month program for provider-guided Semaglutide + B6 care within the included dose range. You get structured support, a locked rate while continuously enrolled, and clear separation between the membership program and the medication vial used for fulfillment.',
+      'Semaglutide Membership is a $149/month program for Semaglutide + B6 care within the included dose range. You enroll in a membership PROGRAM — medication fulfillment uses the matching retail vial for your approved dose. Predictable pricing; clinical review still applies.',
     highlights: [
-      '$149 Flat Monthly Rate',
-      'Provider-Guided Care',
+      '$149 / Month Flat Rate',
       'Included Dose Range',
+      '3-Month Minimum',
       'Member Product Savings',
     ],
     about: [
-      'This is a membership program purchase — not a one-off retail vial checkout. Your monthly rate stays predictable while you remain continuously enrolled and your provider-selected treatment stays within the included Semaglutide formulations.',
-      'When you join, you share a requested dose for intake. Your licensed provider still decides whether treatment is appropriate and which dose is approved. Medication fulfillment uses the matching retail Semaglutide vial SKU — we do not create separate membership-only medication SKUs.',
+      'This is a membership PROGRAM purchase — not a one-off retail vial checkout. Your monthly rate stays predictable while you remain continuously enrolled and treatment stays within included Semaglutide formulations (0.5mg, 1mg, 2.5mg, 5mg).',
+      'You share a requested dose at join. Your licensed provider still decides whether treatment is appropriate and which dose is approved. Medication fulfillment uses the matching retail Semaglutide vial SKU. Program membership and medication dose/fulfillment are related but distinct.',
     ].join('\n\n'),
     potentialBenefits: [
       'Predictable $149 monthly program pricing',
-      'Provider-directed adjustments within included Semaglutide options while enrolled',
+      'Clinical adjustments within included Semaglutide options while enrolled',
       'Locked rate while membership stays continuously active and in good standing',
       'Save 15% on other eligible wellness products and accessories per program terms',
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'You enroll in the membership PROGRAM and select a requested dose. After provider review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU for that dose. Your membership price remains flat through the included program while you stay continuously enrolled. Billing currently uses invoices with ACH/bank-transfer or domestic wire instructions each period — your bank is not automatically charged by the storefront.',
+      'Enroll in the membership PROGRAM and select a requested dose. After clinical review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU. Your membership price remains flat while you stay continuously enrolled. Credit/debit card enrollment charges the monthly membership rate on a recurring schedule while active; a 3-month minimum commitment applies. First medication shipment shipping is arranged after approval and is not part of the recurring membership price.',
     whyPeopleChooseIt: [
       'Prefer flat monthly budgeting over paying per retail vial strength',
-      'Want ongoing provider-guided Semaglutide care with a clear program maximum',
+      'Want ongoing Semaglutide care with a clear program maximum',
       'Value member savings on eligible add-on products',
-      'Like transparent requested-dose intake without confusing “auto-debit” surprises',
+      'Appreciate clear separation between program membership and medication fulfillment',
     ],
     whatToExpect:
-      'Initial term is 3 months, then month to month. Complete intake, await provider review, and pay each invoice via the instructions provided. Requested dose is not automatically the approved dose. Payment does not guarantee a prescription.',
+      'Initial term is 3 months, then month to month. Complete intake, await clinical review, and complete card enrollment for recurring membership billing. Requested dose is not automatically the approved dose. Payment does not guarantee a prescription.',
     importantInformation:
-      'Membership enrollment and payment do not guarantee a prescription. Availability depends on provider judgment, pharmacy fulfillment, and applicable requirements.',
+      'Membership enrollment and payment do not guarantee a prescription. Availability depends on clinical judgment, pharmacy fulfillment, and applicable requirements.',
     benefits: [
       'Flat $149 monthly program rate for Semaglutide membership',
       'Locked membership pricing while continuously enrolled in good standing',
@@ -1112,41 +1128,42 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     ],
     regulatoryNotes: [
       'Distinguish PROGRAM SKU vs FULFILLMENT SKU.',
-      'Do not imply automatic bank charging under current invoice ACH/Wire flow.',
+      'Membership payment copy aligned to current card recurring enrollment (copy only).',
+      'Do not alter Tagada recurring priceIds or fulfillment SKU logic.',
     ],
   },
 
   'tirzepatide-membership': {
     benefitHeadline: 'Flat Monthly Tirzepatide Care Through the Included Maximum',
     shortDescription:
-      'Tirzepatide Membership is a flat $249/month program for provider-guided Tirzepatide + B6 care through the included dose maximum (formulations through 15mg). It is built for customers who want dual-pathway medication support with predictable membership pricing — not per-vial retail checkout.',
+      'Tirzepatide Membership is a $249/month program for Tirzepatide + B6 care through the included dose maximum (formulations through 15mg). You enroll in a membership PROGRAM — medication fulfillment uses the matching retail vial for your approved dose.',
     highlights: [
-      '$249 Flat Monthly Rate',
+      '$249 / Month Flat Rate',
       'Through 15mg Maximum',
-      'Provider-Guided Care',
+      '3-Month Minimum',
       'Member Product Savings',
     ],
     about: [
-      'This membership is a program purchase with one predictable monthly rate through the included Tirzepatide maximum. It is not interchangeable with Semaglutide Membership, and 30mg is not part of this program.',
-      'You choose a requested dose when joining. A licensed provider reviews eligibility and may approve a different dose. Fulfillment uses the retail Tirzepatide vial SKU that matches the approved medication strength.',
+      'This membership is a PROGRAM purchase with one predictable monthly rate through the included Tirzepatide maximum (2.5mg, 7.5mg, 12.5mg, 15mg). It is not interchangeable with Semaglutide Membership, and 30mg is not part of this program.',
+      'You choose a requested dose when joining. A licensed provider reviews eligibility and may approve a different dose. Fulfillment uses the retail Tirzepatide vial SKU that matches the approved strength. Program membership and medication dose/fulfillment are related but distinct.',
     ].join('\n\n'),
     potentialBenefits: [
       'Predictable $249 monthly program pricing through the included maximum',
-      'Provider-directed adjustments within listed Tirzepatide formulations while enrolled',
+      'Clinical adjustments within listed Tirzepatide formulations while enrolled',
       'Locked rate while membership stays continuously active and in good standing',
       'Save 15% on other eligible wellness products and accessories per program terms',
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'Enrollment purchases the membership PROGRAM. Requested dose informs intake; approved treatment drives which retail fulfillment SKU is used. Your $249 rate remains locked while membership stays continuously active and within program rules. Each billing period currently uses an invoice with ACH/bank-transfer or domestic wire instructions — not automatic storefront bank charging.',
+      'Enrollment purchases the membership PROGRAM. Requested dose informs intake; approved treatment drives which retail fulfillment SKU is used. Your $249 rate remains locked while membership stays continuously active and within program rules. Credit/debit card enrollment charges the monthly membership rate on a recurring schedule while active; a 3-month minimum commitment applies. First medication shipment shipping is arranged after approval and is not part of the recurring membership price.',
     whyPeopleChooseIt: [
       'Want Tirzepatide’s dual-pathway option with flat monthly budgeting',
       'Prefer a clear included maximum through 15mg',
-      'Value member savings on eligible wellness products and accessories',
-      'Appreciate transparent invoice-based ACH/Wire payment instead of surprise auto-debits',
+      'Value member savings on eligible products and accessories',
+      'Appreciate clear separation between program membership and medication fulfillment',
     ],
     whatToExpect:
-      'Initial term is 3 months, then month to month. Complete intake, complete provider review, and pay each invoice using the provided bank-transfer instructions. Payment does not guarantee a prescription.',
+      'Initial term is 3 months, then month to month. Complete intake, complete clinical review, and complete card enrollment for recurring membership billing. Payment does not guarantee a prescription.',
     importantInformation:
       'Payment and enrollment do not guarantee a prescription. Tirzepatide Membership is not interchangeable with Semaglutide Membership. 30mg is not included.',
     benefits: [
@@ -1161,7 +1178,9 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     ],
     regulatoryNotes: [
       'No 30mg offering.',
-      'Do not imply automatic ACH debit under current invoice model.',
+      'Distinguish PROGRAM SKU vs FULFILLMENT SKU.',
+      'Membership payment copy aligned to current card recurring enrollment (copy only).',
+      'Do not alter Tagada recurring priceIds or fulfillment SKU logic.',
     ],
   },
 };

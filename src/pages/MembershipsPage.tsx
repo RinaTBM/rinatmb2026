@@ -12,11 +12,11 @@ import {
 
 const howItWorks = [
   { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($149/month) or Tirzepatide ($249/month) membership and your requested dose.' },
-  { icon: PackageCheck, title: 'Review and submit your order', description: 'Confirm your cart, then submit your order to receive an electronic invoice. No payment is withdrawn from your bank when you submit.' },
-  { icon: Lock, title: 'Complete payment', description: 'Pay by ACH / Bank Transfer or Domestic Wire using the secure invoice instructions. Orders remain Awaiting Payment until funds are received and verified.' },
-  { icon: ClipboardList, title: 'Complete intake', description: 'After payment is verified, complete a secure medical intake so a licensed provider can review your information.' },
+  { icon: PackageCheck, title: 'Review and submit your order', description: 'Confirm your cart, then continue to secure Credit / Debit Card enrollment. Membership stays inactive until payment and subscription are confirmed.' },
+  { icon: Lock, title: 'Complete card enrollment', description: 'Your card is charged the monthly membership rate while active. A 3-month minimum commitment applies. First medication shipping is arranged after provider approval and is not part of the recurring membership price.' },
+  { icon: ClipboardList, title: 'Complete intake', description: 'Complete a secure medical intake so a licensed provider can review your information.' },
   { icon: Stethoscope, title: 'Provider review', description: 'A licensed provider reviews your eligibility and determines the appropriate formulation, strength, and treatment plan.' },
-  { icon: ShieldCheck, title: 'Fulfillment when approved', description: 'When payment is verified and treatment is approved, your prescription is sent to the dispensing pharmacy and fulfilled according to the existing workflow.' },
+  { icon: ShieldCheck, title: 'Fulfillment when approved', description: 'When treatment is approved, your prescription is sent to the dispensing pharmacy and fulfilled according to the existing workflow. Program membership and medication fulfillment remain distinct.' },
 ];
 
 const faqs = [

@@ -25,18 +25,33 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 ### Checkout (manual invoice launch)
 
 - Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
-- Kashu/Tagada card payments: server-side hosted checkout path exists on `integration/tagadapay-hosted-checkout-2026` but **UI stays off** (`VITE_KASHU_CARD_ENABLED` unset/false) until final pre-launch gate passes. Prefer Tagada hosted checkout/init over Pay V2. Do not enable live card checkout or deploy production frontend for card without owner approval. Reports: `docs/tagadapay-phase2b-remediation-report.md`, `docs/tagadapay-phase2c-shippingrates-blocker.md`.
-- Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`. Card remains disabled.
-- **MBM is the shipping source of truth** (Two-Day `$30` / Next-Day `$50` / free per MBM rules). Card session appends mapped line items `MBM-SHIP-TWO-DAY-001` / `MBM-SHIP-NEXT-DAY-001` from `orders.shipping_cents` — do **not** infer shipping from Tagada cart subtotal.
-- **Tagada ShippingRates must remain disabled** for this architecture. Simple Checkout on `checkout.mybaremethod.com` must keep the ShippingRates island removed and store shipping rates deleted/inactive. MBM shipping is represented only via mapped line items `MBM-SHIP-TWO-DAY-001` ($30) / `MBM-SHIP-NEXT-DAY-001` ($50) appended by `create-kashu-checkout-session` from `orders.shipping_cents`. Phase 2C v4 hosted totals PASS ($149 / $169 / $595 / $75) with Tagada Shipping **$0**. Do not reintroduce store rates or the ShippingRates island. See `docs/tagadapay-phase2c-v4-validation.md`. Keep `VITE_KASHU_CARD_ENABLED` false until owner approves a controlled live test.
-- Tax: Tagada catalog products are `isTaxable=false` for V1; MBM `tax_cents` remains authoritative. Do **not** weaken webhook amount equality.
-- Memberships remain **ACH/Wire-only** until recurring card support is separately implemented (`MEMBERSHIP_DEFERRED`).
-- `VITE_KASHU_CARD_ENABLED` stays **false** until shipping parity PASS + final gate in Phase 2C report.
+- Kashu/Tagada card payments: server-side hosted checkout path exists on `integration/tagadapay-hosted-checkout-2026` but **UI stays off**. Prefer Tagada hosted checkout/init over Pay V2. Do not enable live card checkout or deploy production frontend for card without owner approval. Reports: `docs/tagadapay-phase2b-remediation-report.md`, `docs/tagadapay-phase2c-v4-validation.md`.
+- Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`.
 - Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
 - Admin marks funds received via Orders UI / `mark-payment-received` after verification.
 - Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold).
-- Legacy Stripe Edge Functions remain in repo but must not be deployed for launch.
+- Legacy Stripe Edge Functions remain in repo but must not be deployed for launch. **Do not re-enable Stripe.**
+
+### Tagada / Kashu shipping architecture (finalized — preserve)
+
+Permanent rules for future agents. Do not regress these:
+
+- **My Bare Method is the authoritative shipping source of truth.** Do not infer shipping from Tagada cart subtotal, store rates, or funnel UI.
+- **Do NOT recreate Tagada store-level Shipping Rates.**
+- **Do NOT recreate/add the ShippingRates / Shipping Method island** to the Simple Checkout funnel on `checkout.mybaremethod.com`.
+- **Hiding Tagada rates is NOT sufficient;** store shipping rates must remain fully absent/deleted (Phase 2C proved hide ≠ disable).
+- **Two-Day shipping** is represented by mapped Tagada line item **`MBM-SHIP-TWO-DAY-001`** ($30 / `shipping_cents=3000`), appended by `create-kashu-checkout-session`.
+- **Next-Day shipping** is represented by mapped Tagada line item **`MBM-SHIP-NEXT-DAY-001`** ($50 / `shipping_cents=5000`), appended by `create-kashu-checkout-session`.
+- **Free / service-only shipping** uses **no** shipping line (`shipping_cents=0`).
+- **Allowed card-flow shipping amounts** are currently **$0, $30, or $50** only; any other positive `shipping_cents` must **fail safely** (`TAGADA_SHIPPING_PARITY_BLOCKER`).
+- **Tagada hosted total must exactly equal** MBM `orders.total_cents` before redirect (`TAGADA_CHECKOUT_TOTAL_MISMATCH` on mismatch).
+- **Do not weaken webhook amount equality** (paid amount must match MBM order total).
+- **Memberships remain ACH/Wire-only** until recurring card processing is implemented separately (`MEMBERSHIP_DEFERRED`).
+- **Do not re-enable Stripe.**
+- **`VITE_KASHU_CARD_ENABLED` must remain false** until controlled live testing is complete and the owner explicitly approves enabling it.
+
+Tax note (related): Tagada catalog products are `isTaxable=false` for V1; MBM `tax_cents` remains authoritative.
 
 ### Bolt Database / migration safety (permanent)
 

@@ -133,6 +133,82 @@ Deno.serve(async (req) => {
     return json(JSON.parse(redact(JSON.stringify({ status: pl.status, data: pl.data }), secrets)));
   }
 
+  // Read-only audit helpers (Phase 2A) — no writes / no charges.
+  if (action === "list_shipping_rates") {
+    const attempts: unknown[] = [];
+    for (const [method, path, body] of [
+      ["POST", "/api/public/v1/shipping-rates/list", { storeId }],
+      ["POST", "/api/public/v1/shipping-rates/list", { storeId, page: 1, per_page: 100 }],
+      ["GET", `/api/public/v1/shipping-rates?storeId=${encodeURIComponent(storeId)}`, undefined],
+      ["POST", "/api/public/v1/stores/get", { storeId }],
+      ["GET", `/api/public/v1/stores/${encodeURIComponent(storeId)}`, undefined],
+    ] as const) {
+      const res = await tcall(base, key, method, path, body);
+      attempts.push({ method, path, status: res.status, data: res.data });
+    }
+    return json(JSON.parse(redact(JSON.stringify({ storeIdPresent: true, attempts }), secrets)));
+  }
+
+  // Phase 2C read-only: inspect Simple Checkout funnel (no writes).
+  if (action === "list_funnels") {
+    const res = await tcall(
+      base,
+      key,
+      "GET",
+      `/api/public/v1/stores/${encodeURIComponent(storeId)}/funnels`,
+    );
+    return json(JSON.parse(redact(JSON.stringify({ status: res.status, data: res.data }), secrets)));
+  }
+
+  if (action === "get_funnel") {
+    const funnelId = String(body.funnelId || "").trim();
+    if (!funnelId) return json({ error: "funnelId_required" }, 400);
+    const res = await tcall(
+      base,
+      key,
+      "GET",
+      `/api/public/v1/funnels/${encodeURIComponent(funnelId)}`,
+    );
+    return json(JSON.parse(redact(JSON.stringify({ status: res.status, data: res.data }), secrets)));
+  }
+
+  if (action === "audit_product_tax") {
+    const pl = await tcall(base, key, "POST", "/api/public/v1/products/list", {
+      storeId,
+      page: 1,
+      per_page: 200,
+      includeVariants: true,
+      includePrices: true,
+    });
+    const items = ((pl.data as { items?: unknown[] } | null)?.items || []) as Record<
+      string,
+      unknown
+    >[];
+    const summary = items.map((p) => ({
+      id: p.id,
+      name: p.name,
+      active: p.active,
+      isTaxable: p.isTaxable,
+      isShippable: p.isShippable,
+      taxCategory: p.taxCategory,
+      mappedTaxCategory: p.mappedTaxCategory,
+      variantCount: Array.isArray(p.variants) ? p.variants.length : 0,
+    }));
+    return json(
+      JSON.parse(
+        redact(
+          JSON.stringify({
+            status: pl.status,
+            productCount: summary.length,
+            taxableCount: summary.filter((p) => p.isTaxable).length,
+            products: summary,
+          }),
+          secrets,
+        ),
+      ),
+    );
+  }
+
   // ---------- GET ----------
   if (action === "get") {
     const productId = String(body.productId || "");
@@ -310,6 +386,96 @@ Deno.serve(async (req) => {
   }
 
 
+  // ---------- Phase 2B: update product tax/shipping flags ----------
+  if (action === "update_product_flags") {
+    const productId = String(body.productId || "");
+    const name = String(body.name || "");
+    if (!productId || !name) return json({ error: "productId_and_name_required" }, 400);
+    const updatedData: Record<string, unknown> = { name };
+    if (typeof body.isTaxable === "boolean") updatedData.isTaxable = body.isTaxable;
+    if (typeof body.isShippable === "boolean") updatedData.isShippable = body.isShippable;
+    if (typeof body.active === "boolean") updatedData.active = body.active;
+    if (body.clearTaxCategory === true) {
+      updatedData.taxCategory = null;
+      updatedData.mappedTaxCategoryId = null;
+    }
+    if (typeof body.description === "string") updatedData.description = body.description;
+    const res = await tcall(
+      base,
+      key,
+      "PUT",
+      `/api/public/v1/products/${encodeURIComponent(productId)}`,
+      { updatedData },
+    );
+    return json(JSON.parse(redact(JSON.stringify({ ok: res.ok, status: res.status, data: res.data }), secrets)));
+  }
+
+  // ---------- Phase 2B: update variant price to authoritative MBM cents ----------
+  if (action === "update_variant_price") {
+    const productId = String(body.productId || "");
+    const variantId = String(body.variantId || "");
+    const amountCents = Number(body.amountCents);
+    if (!productId || !variantId || !Number.isFinite(amountCents) || amountCents < 0) {
+      return json({ error: "productId_variantId_amountCents_required" }, 400);
+    }
+    const got = await tcall(base, key, "GET", `/api/public/v1/products/${encodeURIComponent(productId)}`);
+    if (!got.ok) {
+      return json({ ok: false, step: "get_product", status: got.status, data: got.data }, 502);
+    }
+    const product = got.data as Record<string, unknown>;
+    const variants = (product.variants as Record<string, unknown>[]) || [];
+    const v = variants.find((x) => x.id === variantId);
+    if (!v) return json({ ok: false, step: "variant_not_found" }, 404);
+    const prices = (v.prices as Record<string, unknown>[]) || [];
+    if (!prices.length) return json({ ok: false, step: "no_prices" }, 400);
+    const nextPrices = prices.map((prc, idx) => {
+      const currencyOptions = {
+        ...((prc.currencyOptions as Record<string, unknown>) || {}),
+        USD: {
+          ...((((prc.currencyOptions as Record<string, unknown>) || {}).USD as Record<string, unknown>) ||
+            {}),
+          amount: idx === 0 ? amountCents : (
+            ((((prc.currencyOptions as Record<string, unknown>) || {}).USD as Record<string, unknown>) ||
+              {}) as { amount?: number }
+          ).amount,
+        },
+      };
+      return {
+        id: prc.id,
+        default: prc.default === true || idx === 0,
+        currencyOptions,
+        recurring: prc.recurring === true,
+        billingTiming: prc.billingTiming ?? "usage",
+        interval: prc.interval ?? null,
+        intervalCount: prc.intervalCount ?? 1,
+      };
+    });
+    const put = await tcall(base, key, "PUT", `/api/public/v1/variants/${encodeURIComponent(variantId)}`, {
+      updatedData: {
+        name: v.name,
+        description: v.description ?? undefined,
+        sku: v.sku,
+        active: v.active !== false,
+        default: v.default === true,
+        prices: nextPrices,
+      },
+    });
+    return json(
+      JSON.parse(
+        redact(
+          JSON.stringify({
+            ok: put.ok,
+            status: put.status,
+            variantId,
+            amountCents,
+            data: put.data,
+          }),
+          secrets,
+        ),
+      ),
+    );
+  }
+
   if (action === "raw") {
     const method = String(body.method || "GET");
     const path = String(body.path || "");
@@ -320,9 +486,16 @@ Deno.serve(async (req) => {
       path.includes("/variants") ||
       path.includes("/prices") ||
       path.includes("/domains") ||
-      path.includes("/webhooks");
+      path.includes("/webhooks") ||
+      path.includes("/shipping-rates") ||
+      path.includes("/checkout-sessions") ||
+      path.includes("/funnels");
     if (!allowed) {
       return json({ error: "path_not_allowed" }, 400);
+    }
+    // Phase 2C: allow read-only checkout-session shipping inspection only.
+    if (path.includes("/checkout-sessions") && method !== "GET") {
+      return json({ error: "checkout_session_mutate_blocked" }, 400);
     }
     // Block mutating webhook/domain calls from this helper
     if ((path.includes("/domains") || path.includes("/webhooks")) && method !== "GET" && method !== "POST") {

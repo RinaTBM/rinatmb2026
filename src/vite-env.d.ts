@@ -15,6 +15,11 @@ interface ImportMetaEnv {
    * "false" disables manual checkout. Does NOT enable Stripe.
    */
   readonly VITE_PAYMENTS_ENABLED?: string;
+  /**
+   * Show Credit/Debit Card (Kashu/Tagada hosted checkout) when "true".
+   * Default/unset = hidden (ACH/Wire only). Never put Tagada secrets in VITE_*.
+   */
+  readonly VITE_KASHU_CARD_ENABLED?: string;
 }
 
 interface ImportMeta {

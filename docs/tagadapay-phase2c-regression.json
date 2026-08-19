@@ -1,0 +1,38 @@
+{
+  "price_fail": [],
+  "price_pass": 50,
+  "taxable_remaining": [],
+  "visits": [
+    {
+      "sku": "MBM-PC-FUV-SRV-001",
+      "isShippable": false,
+      "isTaxable": false
+    },
+    {
+      "sku": "MBM-PC-LAB-SRV-001",
+      "isShippable": false,
+      "isTaxable": false
+    },
+    {
+      "sku": "MBM-PC-IPV-SRV-001",
+      "isShippable": false,
+      "isTaxable": false
+    }
+  ],
+  "init_pass": 50,
+  "init_fail": 0,
+  "membership_deferred": 2,
+  "sem595_session_ok": true,
+  "sem595_total_cents": 59500,
+  "shippingrates_island_still_present": true,
+  "funnel": {
+    "id": "funnelv2_834831bf5aa7",
+    "name": "Simple Checkout",
+    "domain": "checkout.mybaremethod.com"
+  },
+  "checkout_plugin": {
+    "pluginId": "checkout-6d366d",
+    "pageId": "checkout-5596ip",
+    "deploymentId": "msm89tihce4ek"
+  }
+}

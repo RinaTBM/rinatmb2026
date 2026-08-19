@@ -25,13 +25,33 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 ### Checkout (manual invoice launch)
 
 - Payment methods: `manual_ach` (primary), `manual_wire` (secondary). `plaid_ach` is reserved/disabled until Plaid production approval.
-- Kashu/Tagada card payments: discovery docs only (not enabled). See `docs/tagada-kashu-discovery-report.md` and `docs/tagada-product-mapping-review.md`. Prefer Tagada hosted checkout/init over Pay V2 for any future Phase 1 design. Do not deploy card checkout, apply Kashu migrations, or set `VITE_KASHU_CARD_ENABLED` without owner approval.
-- Tagada credentials: keep real `TAGADA_API_KEY` (`sk_crm_…`) and `TAGADA_STORE_ID` (`store_…`) in **BSG Edge secrets**. Cursor agent env may only see Management API digests for the same names — do not treat those digests as API keys. Live discovery+sync (2026-08-11): store “My Bare Method” auth PASS; **52/52 MBM SKUs mapped** in Tagada; **`tbmgroup.site` and `checkout.mybaremethod.com` both verified+active**; Airwallex processor still **testMode=true** (do not change without Kashu). Card checkout remains disabled. MBM Tagada webhook not registered until Edge receiver + migration approved. See `docs/tagada-phase-status-domains-live.md` and `docs/kashu-sku-map-seed.json`.
+- Kashu/Tagada card payments: hosted checkout path is live on production tip `deploy/ach-launch-clean-2026` with **Phase 4 limited public rollout** (`VITE_KASHU_CARD_ENABLED=true` in production build). Prefer Tagada hosted checkout/init over Pay V2. Browser never marks paid — `tagada-webhook` is authoritative. Monitor first customer card payments closely; if parity/webhook fails, set `VITE_KASHU_CARD_ENABLED=false` and redeploy. Reports: `docs/tagadapay-phase3-controlled-live-test.md`, `docs/tagadapay-phase4-predeploy-report.md`.
+- Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`.
 - Orders are created with `payment_status = awaiting_payment` and are **never** auto-marked paid.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation).
 - Admin marks funds received via Orders UI / `mark-payment-received` after verification.
 - Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold).
-- Legacy Stripe Edge Functions remain in repo but must not be deployed for launch.
+- Legacy Stripe Edge Functions remain in repo but must not be deployed for launch. **Do not re-enable Stripe.**
+
+### Tagada / Kashu shipping architecture (finalized — preserve)
+
+Permanent rules for future agents. Do not regress these:
+
+- My Bare Method is the authoritative shipping source of truth. Do not infer shipping from Tagada cart subtotal, store rates, or funnel UI.
+- Do NOT recreate Tagada store-level Shipping Rates.
+- Do NOT recreate/add the ShippingRates / Shipping Method island to the Simple Checkout funnel. (Applies to Simple Checkout on `checkout.mybaremethod.com`.)
+- Hiding Tagada rates is NOT sufficient; store rates must remain absent. (Phase 2C proved hide ≠ disable; rates must stay deleted.)
+- Two-Day shipping is represented by mapped MBM-SHIP-TWO-DAY-001. ($30 / `shipping_cents=3000`, appended by `create-kashu-checkout-session`.)
+- Next-Day shipping is represented by mapped MBM-SHIP-NEXT-DAY-001. ($50 / `shipping_cents=5000`, appended by `create-kashu-checkout-session`.)
+- Free/service-only shipping uses no shipping line. (`shipping_cents=0`.)
+- Allowed card-flow shipping amounts are currently $0, $30, or $50; other positive amounts must fail safely. (`TAGADA_SHIPPING_PARITY_BLOCKER`.)
+- Tagada hosted total must exactly equal MBM orders.total_cents. (Reject with `TAGADA_CHECKOUT_TOTAL_MISMATCH` before redirect.)
+- Do not weaken webhook amount equality. (Paid amount must match MBM order total.)
+- Memberships remain ACH/Wire-only until recurring card processing is implemented separately. (`MEMBERSHIP_DEFERRED`.)
+- Do not re-enable Stripe.
+- Phase 3 controlled live card test **PASS**. Phase 4: `VITE_KASHU_CARD_ENABLED=true` is owner-approved for limited public one-time card checkout only. Memberships remain ACH/Wire-only. If the first customer card payments fail webhook/parity, disable the flag and redeploy immediately.
+
+Tax note (related): Tagada catalog products are `isTaxable=false` for V1; MBM `tax_cents` remains authoritative.
 
 ### Bolt Database / migration safety (permanent)
 
@@ -108,7 +128,7 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 **Historical immutable source label:** `production-source/my-bare-method-2026`  
 **Immutable pre-launch tag:** `my-bare-method-integrated-prelaunch-v1`
 
-- After production-source reconciliation (PRs #8 + #12 + #13), treat `deploy/ach-launch-clean-2026` as the branch to fast-forward from for storefront ACH/Wire launches. Kashu card UI stays off (`VITE_KASHU_CARD_ENABLED` unset/false) until Kashu assigns a final processor.
+- After production-source reconciliation (PRs #8 + #12 + #13), treat `deploy/ach-launch-clean-2026` as the production storefront tip (ACH/Wire + Phase 4 limited card). Card uses `VITE_KASHU_CARD_ENABLED=true` in `.env.production` for Bolt/`vite build` only — memberships stay ACH/Wire-only.
 - Bolt-controlled branches (for example `deploy/my-bare-method-integrated-2026`, `release/my-bare-method-final-2026`, and similar Bolt sync targets) are **disposable mirrors only**.
 - Never reconcile a source-of-truth / production-source branch by pulling a Bolt “Start repository” commit into it.
 - Never force-update historical `production-source/*` labels from Bolt.

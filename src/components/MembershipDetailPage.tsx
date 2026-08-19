@@ -241,7 +241,7 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
           {membership.whatToExpect && (
             <div className="space-y-3">
               <h2 className="font-serif text-2xl md:text-3xl text-ink-900">
-                Monthly Invoice &amp; ACH/Wire Payment
+                Monthly Card Billing &amp; Renewal
               </h2>
               {paragraphs(membership.whatToExpect).map((p, i) => (
                 <p key={i} className="text-ink-600 leading-relaxed">

@@ -53,7 +53,7 @@ const RESEARCH_FLAG =
 export const PRODUCT_COPY: Record<string, ProductCopy> = {
   // ===== WEIGHT MANAGEMENT =====
   semaglutide: {
-    benefitHeadline: 'Appetite & Metabolic Support for Your Weight-Loss Journey',
+    benefitHeadline: 'Appetite & Metabolic Support for Provider-Guided Weight Management',
     shortDescription:
       'Semaglutide + B6 Injection is a provider-guided injectable option designed to support appetite control and metabolic balance as part of a structured weight-management plan. Many people explore it when they want help feeling fuller sooner and staying satisfied longer — with vitamin B6 included in this compounded preparation.',
     highlights: [
@@ -93,7 +93,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   tirzepatide: {
-    benefitHeadline: 'Dual-Pathway Appetite Support for Deeper Metabolic Goals',
+    benefitHeadline: 'Dual-Pathway Appetite Support for Provider-Guided Metabolic Goals',
     shortDescription:
       'Tirzepatide + B6 Injection is a provider-guided injectable option that engages two related pathways involved in appetite and metabolic regulation. People often consider it when they want strong fullness support under clinical care — with vitamin B6 included in this compounded preparation.',
     highlights: [
@@ -133,46 +133,43 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'fat-burner': {
-    benefitHeadline: 'A Compounded Three-Peptide Option for Body-Composition Goals',
+    benefitHeadline: 'Provider-Guided Three-Peptide Body-Composition Support',
     shortDescription:
-      'Fat Burner is an AOD-9604 + MOTS-C + Tesamorelin compounded injection for provider-guided body-composition and metabolic wellness conversations. Each ingredient has areas of emerging research interest — and your clinician decides whether this blend belongs in your plan.',
+      'Fat Burner is a compounded injectable combining AOD-9604, MOTS-C, and Tesamorelin for provider-guided body-composition and metabolic wellness support. Your licensed clinician decides whether this blend belongs in your plan.',
     highlights: [
       'AOD-9604 + MOTS-C + Tesamorelin',
       'Compounded Injection',
       'Body-Composition Focus',
-      'Provider-Guided',
-      'Emerging Research Interest',
+      'Provider-Guided Care',
     ],
     about: [
-      'This listing is an AOD-9604 + MOTS-C + Tesamorelin compounded injection. The customer-facing name is Fat Burner; the formulation is AOD-9604 6 mg, MOTS-C 10 mg, and Tesamorelin 15 mg in a 5 mL vial (about 1.2 mg/mL, 2 mg/mL, and 3 mg/mL).',
-      'Providers may consider this option when discussing supervised body-composition or metabolic wellness goals. The nickname describes the conversation topic — it does not promise fat loss, weight loss, or metabolic improvement.',
+      'This compounded injection combines AOD-9604 6 mg, MOTS-C 10 mg, and Tesamorelin 15 mg in a 5 mL vial (about 1.2 mg/mL, 2 mg/mL, and 3 mg/mL).',
+      'Providers may consider it when discussing supervised body-composition or metabolic wellness goals. Results vary, and no fat-loss or metabolic outcome is guaranteed.',
       'A licensed provider reviews your history and goals before anything is dispensed.',
     ].join('\n\n'),
     potentialBenefits: [
       'May be considered in provider-guided body-composition programs',
-      'May support metabolic-wellness conversations when a clinician wants this specific three-peptide blend',
-      'Combines three ingredients with areas of emerging research interest in one compounded vial',
-      'Offers transparent formulary amounts and concentrations for informed clinical discussion',
-      'Potential benefits are individualized and not guaranteed',
+      'Combines three peptides in one clearly labeled compounded vial',
+      'Transparent formulary amounts and concentrations for informed clinical discussion',
+      'Supports an individualized plan — responses vary and are not guaranteed',
     ],
     howItWorks:
-      'AOD-9604 and MOTS-C are explored in emerging metabolic and body-composition research contexts. Tesamorelin is a growth hormone-releasing factor analog discussed in related wellness settings. Combining them in one compounded vial does not create an FDA-approved weight-loss drug or prove clinical fat-loss outcomes for the blend. Your provider explains whether this approach may be appropriate and how it should be used if approved.',
+      'AOD-9604, MOTS-C, and Tesamorelin are each discussed in metabolic and body-composition wellness settings. Combining them in one compounded vial does not create an FDA-approved weight-loss drug or guarantee clinical fat-loss outcomes. Your provider explains whether this approach may be appropriate and how it should be used if approved.',
     whyPeopleChooseIt: [
       'Want a clearly labeled AOD-9604 + MOTS-C + Tesamorelin injectable under clinical review',
       'Prefer provider-guided body-composition care over unsupervised supplement shopping',
       'Appreciate transparent vial strengths and concentrations on this page',
-      'Value emerging-interest framing with realistic expectations',
+      'Value realistic expectations with licensed-provider oversight',
     ],
     whatToExpect:
-      'One active option is listed: the AOD-9604 / MOTS-C / Tesamorelin 5 mL vial. After checkout you complete intake. A licensed provider determines eligibility and instructions. Use only as directed if approved. Do not combine with other peptide products unless your clinician specifically directs you to.',
+      'One option is listed: the AOD-9604 / MOTS-C / Tesamorelin 5 mL vial. After checkout you complete intake. A licensed provider determines eligibility and instructions. Use only as directed if approved. Do not combine with other peptide products unless your clinician specifically directs you to.',
     importantInformation: [
       DEFAULT_COMPOUNDED_IMPORTANT,
-      'This compounded blend is not FDA-approved as a weight-loss or fat-loss drug. The name “Fat Burner” is a product nickname only and does not guarantee fat burning, abdominal fat reduction, weight loss, metabolic improvement, or muscle gain.',
+      'This compounded blend is not FDA-approved as a weight-loss or fat-loss drug. The name “Fat Burner” does not guarantee fat burning, abdominal fat reduction, weight loss, metabolic improvement, or muscle gain.',
       'This is not an oral “Fat Burner +” capsule product and does not include SLU-PP-332.',
     ].join(' '),
     reviewFlags: [
-      'MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public nickname “Fat Burner” + emerging three-peptide framing remains acceptable.',
-      'Owner-approved retail $259.00 (at-cost $150.00).',
+      'MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public nickname “Fat Burner” + three-peptide framing remains acceptable.',
     ],
     regulatoryNotes: [
       'Do not imply the blend is FDA-approved.',
@@ -195,6 +192,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     about: [
       'Estradiol is a form of estrogen your body already recognizes. A transdermal patch is designed to release hormone across the wear period your provider recommends.',
       'Clinicians may discuss estrogen therapy when evaluating menopause-related changes or other hormone concerns. Whether a patch is right for you depends on your history, goals, and — when needed — labs. Hormone therapy is not one-size-fits-all.',
+      'Initial HRT orders require the Required HRT Lab Package ($260 total: Lab Kit $200 with Lab Kit shipping included, plus Lab Review $60). Medication shipping remains separate where applicable.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support estrogen-related goals defined with your provider',
@@ -212,7 +210,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Easy to discuss alongside progesterone or other complementary options',
     ],
     whatToExpect:
-      'Select a patch strength and pack size, then complete intake for provider review. If approved, apply only as directed — including site rotation and change timing. Do not share patches or adjust strength without guidance.',
+      'Select a patch strength and pack size, then complete intake for provider review. Initial HRT orders include the Required HRT Lab Package once when applicable. If approved, apply only as directed — including site rotation and change timing. Do not share patches or adjust strength without guidance.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Hormone therapy is not appropriate for everyone.',
@@ -233,6 +231,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     about: [
       'Progesterone is a hormone involved in the menstrual cycle and is frequently part of menopause and hormone-therapy conversations. Capsules make dosing straightforward once a clinician has chosen a plan.',
       'Your provider may recommend progesterone for specific clinical reasons. Capsule strength and timing are individualized — never copy someone else’s regimen.',
+      'Initial HRT orders require the Required HRT Lab Package ($260 total: Lab Kit $200 with Lab Kit shipping included, plus Lab Review $60). Medication shipping remains separate where applicable.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support hormone-therapy goals defined with your clinician',
@@ -250,7 +249,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Easy to coordinate with estradiol or other therapies when indicated',
     ],
     whatToExpect:
-      'Choose a capsule strength, complete intake, and await provider review. Take only as directed on your prescription label if approved. Report new or concerning symptoms to your care team promptly.',
+      'Choose a capsule strength, complete intake, and await provider review. Initial HRT orders include the Required HRT Lab Package once when applicable. Take only as directed on your prescription label if approved. Report new or concerning symptoms to your care team promptly.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Distinguish from estradiol and testosterone.',
@@ -271,6 +270,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     about: [
       'Testosterone is a hormone involved in energy, libido, muscle, and other body functions. While it is often associated with men’s health, clinicians may also discuss carefully dosed topical testosterone in select women’s care plans.',
       'Because hormones affect many systems, this option requires individualized review. It is not a casual wellness cream for unsupervised use.',
+      'Initial HRT orders require the Required HRT Lab Package ($260 total: Lab Kit $200 with Lab Kit shipping included, plus Lab Review $60). Medication shipping remains separate where applicable.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support hormone-related goals identified with your provider',
@@ -287,7 +287,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Pairs with ongoing provider follow-up rather than one-size-fits-all use',
     ],
     whatToExpect:
-      'After approval, apply only to areas and schedules your provider specifies. Wash hands after use and follow any transfer-prevention guidance included with your prescription.',
+      'Initial HRT orders include the Required HRT Lab Package once when applicable. After approval, apply only to areas and schedules your provider specifies. Wash hands after use and follow any transfer-prevention guidance included with your prescription.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Avoid implying testosterone cream is routine for all women.',
@@ -297,31 +297,31 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== LONGEVITY & COGNITIVE =====
   'nad-plus': {
-    benefitHeadline: 'Cellular Energy Conversations, Guided by Your Provider',
+    benefitHeadline: 'Provider-Guided NAD+ Wellness Support',
     shortDescription:
-      'NAD+ Injection is a provider-directed compounded option people explore when they are curious about cellular energy and longevity-focused wellness care. It is available only after eligibility review — with clear expectations and no hype-driven promises.',
+      'NAD+ Injection is a provider-directed compounded option for customers exploring cellular energy and longevity-focused wellness care. It is available only after eligibility review, with clear expectations and no hype-driven promises.',
     highlights: [
       'Provider-Directed',
       'Compounded Injectable',
-      'Wellness-Focused Interest',
+      'Cellular Energy Support',
       'Two Vial Options',
     ],
     about: [
-      'NAD+ (nicotinamide adenine dinucleotide) is a molecule found naturally in the body and frequently discussed in wellness and longevity circles. This listing offers a compounded injectable form after a licensed provider reviews your eligibility.',
-      'Common wellness interest is not the same as an established medical claim. We present NAD+ carefully: it may be considered as part of a supervised plan, not as an anti-aging cure or guaranteed energy fix.',
+      'NAD+ (nicotinamide adenine dinucleotide) is a molecule found naturally in the body and often discussed in wellness and longevity care. This listing offers a compounded injectable form after a licensed provider reviews your eligibility.',
+      'Wellness interest is not the same as an established medical claim. NAD+ may be considered as part of a supervised plan — not as an anti-aging cure or guaranteed energy fix.',
     ].join('\n\n'),
     potentialBenefits: [
       'May be considered for customers exploring NAD+ under clinical guidance',
       'Supports a structured intake and provider-review experience',
-      'Offers more than one vial size/total amount for clinical matching',
+      'Offers more than one vial size for clinical matching',
       'Keeps expectations realistic — individual responses vary widely',
     ],
     howItWorks:
-      'In general biology, NAD+ participates in normal cellular processes related to energy metabolism. A compounded injectable delivers NAD+ under provider direction. How any one person feels afterward varies, and this page does not claim a specific clinical outcome. Your care team explains whether it belongs in your plan and what “success” should look like for you.',
+      'In general biology, NAD+ participates in normal cellular processes related to energy metabolism. A compounded injectable delivers NAD+ under provider direction. How any one person feels afterward varies, and this page does not claim a specific clinical outcome. Your care team explains whether it belongs in your plan.',
     whyPeopleChooseIt: [
       'Transparent vial options listed on this page',
-      'Appeals to customers interested in longevity-oriented wellness conversations',
-      'Provider gatekeeping before anything is dispensed',
+      'Appeals to customers interested in longevity-oriented wellness care',
+      'Provider review before anything is dispensed',
       'Clear distinction from peptide products and other longevity listings',
     ],
     whatToExpect:
@@ -337,18 +337,18 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   selank: {
-    benefitHeadline: 'A Calm-Focus Peptide Option — Emerging Wellness Interest',
+    benefitHeadline: 'Provider-Guided Selank for Calm-Focus Wellness Support',
     shortDescription:
-      'Selank Injection is a provider-directed compounded peptide some people discuss when they are exploring calm, focus, or stress-related wellness goals. Uses in this area are emerging — presented carefully, and only after eligibility review.',
+      'Selank Injection is a provider-directed compounded peptide some people discuss when exploring calm, focus, or stress-related wellness goals. Evidence in this area is still developing, and use is available only after eligibility review.',
     highlights: [
-      'Calm-Focus Interest',
+      'Calm-Focus Support',
       'Compounded Peptide',
       'Provider Review Required',
       'Distinct from Semax',
     ],
     about: [
       'Selank is a research-oriented peptide offered here as a compounded injection. It is not the same product as Semax Injection or the Selank + Semax Blend Nasal Spray.',
-      'Common wellness interest often involves calm or stress-related comfort. Proposed/emerging uses should not be confused with established treatments for anxiety disorders or other diagnoses. Your provider decides whether this option is appropriate.',
+      'Wellness interest often involves calm or stress-related comfort. That interest should not be confused with established treatments for anxiety disorders or other diagnoses. Your provider decides whether this option is appropriate.',
     ].join('\n\n'),
     potentialBenefits: [
       'May be discussed when exploring calm-focus wellness goals under supervision',
@@ -369,16 +369,16 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [RESEARCH_FLAG],
     regulatoryNotes: [
-      'Emerging framing only; no FDA-approved anxiety treatment claims.',
+      'Research-oriented framing only; no FDA-approved anxiety treatment claims.',
     ],
   },
 
   semax: {
-    benefitHeadline: 'Focus-Oriented Peptide Interest — Carefully Framed',
+    benefitHeadline: 'Provider-Guided Semax for Focus-Oriented Wellness Support',
     shortDescription:
-      'Semax Injection is a provider-directed compounded peptide some people explore when focus, attention, or cognitive wellness is on their mind. Interest is emerging and research-oriented — not presented as a proven treatment for ADHD, dementia, or other diagnoses.',
+      'Semax Injection is a provider-directed compounded peptide some people explore when focus, attention, or cognitive wellness is on their mind. Interest is research-oriented — not presented as a proven treatment for ADHD, dementia, or other diagnoses.',
     highlights: [
-      'Focus-Oriented Interest',
+      'Focus-Oriented Support',
       'Compounded Peptide',
       'Provider-Guided',
       'Distinct from Selank',
@@ -399,7 +399,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Single-peptide clarity for customers who specifically want Semax',
       'Injectable format when that route fits the clinical plan',
       'Easy to distinguish from Selank and the nasal blend',
-      'Education-first framing that respects emerging evidence',
+      'Clear, realistic framing that respects developing evidence',
     ],
     whatToExpect:
       'Injectable vial at the listed strength/size. Provider determines approval and instructions. Do not combine peptide products unless your clinician specifically directs you to.',
@@ -413,7 +413,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'selank-semax-nasal-spray': {
     benefitHeadline: 'Selank + Semax Together — A Convenient Nasal Blend',
     shortDescription:
-      'This compounded nasal spray combines Selank and Semax in one provider-directed blend for customers who prefer a nose spray over injections. It is not the same as ordering each injectable separately, and wellness interests around calm or focus remain emerging — not established cures.',
+      'This compounded nasal spray combines Selank and Semax in one provider-directed blend for customers who prefer a nose spray over injections. It is a distinct formulation from ordering each injectable separately.',
     highlights: [
       'Nasal Spray Convenience',
       'Combined Blend',
@@ -422,13 +422,13 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     ],
     about: [
       'Selank + Semax Blend Nasal Spray delivers both peptides in a single compounded nasal format. People may choose it for convenience or preference — not because a blend automatically works “better” than a single agent.',
-      'Any calm-focus or cognitive wellness interests discussed with Selank or Semax individually remain emerging here as well. This product is not presented as an established treatment for anxiety, ADHD, dementia, or other diagnoses.',
+      'Any calm-focus or cognitive wellness interests discussed with Selank or Semax individually remain research-oriented here as well. This product is not presented as an established treatment for anxiety, ADHD, dementia, or other diagnoses.',
     ].join('\n\n'),
     potentialBenefits: [
       'Offers a needle-free nasal format some customers prefer',
       'Combines Selank and Semax when a clinician wants both in one product',
       'Catalog strength is clearly listed (micrograms per spray)',
-      'Keeps expectations realistic for emerging peptide wellness interest',
+      'Keeps expectations realistic for research-oriented peptide wellness support',
     ],
     howItWorks:
       'You spray a measured amount into the nose as directed. The catalog lists strength as micrograms of each peptide per spray. We do not claim a proven combined clinical effect. If prescribed, your provider explains technique, frequency, and whether a combination product fits better than a single peptide.',
@@ -449,47 +449,45 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   tesamorelin: {
-    benefitHeadline: 'A Growth Hormone–Releasing Factor Option for Provider-Guided Care',
+    benefitHeadline: 'Provider-Guided Tesamorelin for Body-Composition Support',
     shortDescription:
-      'Tesamorelin Injection is a provider-directed compounded option featuring Tesamorelin, a growth hormone–releasing factor (GHRH) analog. People explore it when they want a supervised conversation about body composition that is distinct from GLP-1 appetite medications.',
+      'Tesamorelin Injection is a provider-directed compounded option featuring Tesamorelin, a growth hormone–releasing factor (GHRH) analog. It supports supervised conversations about body composition under clinical review.',
     highlights: [
       'GHRH Analog',
       '10mg / 2mL Vial',
-      'Not a GLP-1',
       'Provider-Directed',
       'Compounded Injectable',
     ],
     about: [
-      'Tesamorelin is a growth hormone–releasing factor analog. It is not a GLP-1 medication and is not interchangeable with Semaglutide or Tirzepatide. This listing is a compounded lyophilized injectable totaling 10 mg in a 2 mL vial (5 mg/mL).',
+      'Tesamorelin is a growth hormone–releasing factor analog offered here as a compounded lyophilized injectable totaling 10 mg in a 2 mL vial (5 mg/mL).',
       'Tesamorelin has an FDA-approved indication related to reducing excess abdominal fat in adults with HIV-associated lipodystrophy. Outside that labeled context, broader body-composition or wellness interest is provider-guided and may be considered off-label — it is not an FDA-approved general weight-loss indication.',
       'A licensed provider reviews whether this option fits your history and goals before anything is dispensed.',
     ].join('\n\n'),
     potentialBenefits: [
       'May be considered in provider-guided body-composition or metabolic wellness programs when clinically appropriate',
       'Offers a clearly labeled injectable strength and vial size for supervised care',
-      'Provides a GHRH-analog option distinct from Semaglutide and Tirzepatide',
+      'Provides a GHRH-analog option for individualized clinical discussion',
       'Supports an individualized plan — responses vary and outcomes are not guaranteed',
     ],
     howItWorks:
-      'As a growth hormone–releasing factor analog, Tesamorelin is designed to interact with pathways involved in the body’s own growth-hormone release signaling. That is a different mechanism family from GLP-1 appetite medications. How any one person responds varies. Your licensed provider decides whether this option may fit your history, goals, and safety profile — including whether any discussion is within labeled use or a carefully considered off-label wellness conversation.',
+      'As a growth hormone–releasing factor analog, Tesamorelin is designed to interact with pathways involved in the body’s own growth-hormone release signaling. How any one person responds varies. Your licensed provider decides whether this option may fit your history, goals, and safety profile — including whether any discussion is within labeled use or a carefully considered off-label wellness conversation.',
     whyPeopleChooseIt: [
-      'Want a GHRH-analog conversation distinct from Semaglutide or Tirzepatide',
+      'Want a GHRH-analog option under licensed-provider review',
       'Prefer transparent vial labeling (10 mg total · 5 mg/mL · 2 mL)',
       'Value provider review before compounded options are dispensed',
       'Appreciate clear education about labeled indication versus broader wellness interest',
     ],
     whatToExpect:
-      'One active option is listed: 10 mg total · 5 mg/mL · 2 mL vial for subcutaneous injection as directed. After order, complete intake for licensed-provider review. Exact use instructions come from your clinician and pharmacy if approved. Do not self-adjust dosing.',
+      'One option is listed: 10 mg total · 5 mg/mL · 2 mL vial for subcutaneous injection as directed. After order, complete intake for licensed-provider review. Exact use instructions come from your clinician and pharmacy if approved. Do not self-adjust dosing.',
     importantInformation: [
       DEFAULT_COMPOUNDED_IMPORTANT,
       'Tesamorelin’s FDA-approved indication relates to excess abdominal fat in adults with HIV-associated lipodystrophy. This compounded listing is not marketed as FDA-approved therapy for general weight loss, general obesity, anti-aging, guaranteed abdominal fat reduction in the general population, or guaranteed muscle growth.',
     ].join(' '),
     reviewFlags: [
       'MEDICAL DIRECTOR REVIEW REQUIRED = YES — confirm public framing for off-label/body-composition wellness interest beyond HIV-associated lipodystrophy labeled indication.',
-      'Owner-approved retail $149.00 (at-cost $83.33).',
     ],
     regulatoryNotes: [
-      'Not a GLP-1; do not market as FDA-approved general weight loss.',
+      'Do not market as FDA-approved general weight loss.',
       'No guaranteed belly-fat loss, anti-aging, or muscle-gain claims.',
       'Compounded listing — do not imply FDA approval of this specific compounded product.',
     ],
@@ -499,34 +497,37 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'bpc-157-tb-500': {
     benefitHeadline: 'Recovery-Oriented Peptide Blend — Capsule or Injection',
     shortDescription:
-      'Wolverine combines BPC-157 and TB-500 in a provider-directed compounded blend available as capsule or injection. These peptides are often discussed in recovery and performance wellness conversations — as emerging interest, not guaranteed injury healing.',
+      'Wolverine combines BPC-157 and TB-500 in a provider-directed compounded blend available as capsule or injection. These peptides are often discussed in recovery and performance wellness settings — with realistic expectations and no guaranteed injury healing.',
     highlights: [
       'Capsule or Injection',
       'Two-Peptide Blend',
-      'Recovery Wellness Interest',
+      'Recovery Wellness Support',
       'Provider-Guided',
     ],
     about: [
-      'BPC-157 and TB-500 are research-oriented peptides frequently mentioned in training-recovery and repair-oriented wellness discussions. This My Bare Method listing offers both peptides together as a compounded blend, with strength listed simply as “Blend” because exact amounts are set by the prescribing provider and pharmacy.',
-      'Proposed/emerging uses should not be confused with established sports-medicine cures. This page does not describe FDA-approved treatment for specific injuries.',
+      'BPC-157 and TB-500 are research-oriented peptides frequently mentioned in training-recovery and repair-oriented wellness discussions. This listing offers both peptides together as a compounded blend, with strength listed as “Blend” because exact amounts are set by the prescribing provider and pharmacy.',
+      'Research interest should not be confused with established sports-medicine cures. This page does not describe FDA-approved treatment for specific injuries.',
     ].join('\n\n'),
     potentialBenefits: [
       'May be discussed when exploring recovery-oriented wellness support under supervision',
       'Lets your provider choose capsule or injection based on the plan',
       'Combines two commonly paired peptides in one compounded product',
-      'Keeps healing and performance claims carefully framed as non-guaranteed',
+      'Supports informed care with realistic, non-guaranteed expectations',
     ],
     howItWorks:
       'These peptides are researched and discussed for possible roles related to tissue comfort and recovery-oriented wellness — but the science is still developing. This page does not claim a proven healing mechanism or clinical outcome. If prescribed, your provider determines blend details and how to use the selected form.',
     whyPeopleChooseIt: [
       'Two dosage forms on one product page for flexible clinical matching',
       'Single checkout for a BPC-157/TB-500 blend rather than sourcing separately',
-      'Honest emerging-evidence framing for informed customers',
+      'Clear, realistic framing for informed customers',
       'Provider review before anything ships',
     ],
     whatToExpect:
       'Choose Capsule or Injection below. Exact blend details come from your provider and pharmacy. Do not self-direct peptide stacking or treat this as a substitute for injury evaluation.',
-    importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
+    importantInformation: [
+      DEFAULT_COMPOUNDED_IMPORTANT,
+      'This product does not guarantee injury healing, tissue repair, or performance enhancement.',
+    ].join(' '),
     reviewFlags: [
       RESEARCH_FLAG,
       'Catalog strength is "Blend" only — do not invent mg amounts.',
@@ -579,7 +580,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'minoxidil-topical': {
     benefitHeadline: 'Personalized Topical Hair Support Featuring Minoxidil',
     shortDescription:
-      'This compounded topical formula features minoxidil for prescription hair-care support after provider review. The exact combination is personalized by your clinician and pharmacy — we do not invent a secret ingredient list on this page.',
+      'This compounded topical formula features minoxidil and is personalized based on provider evaluation and the formulation selected for you. It supports prescription hair-care goals after clinical review.',
     highlights: [
       'Features Minoxidil',
       'Compounded & Personalized',
@@ -587,8 +588,8 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Provider-Directed',
     ],
     about: [
-      'Minoxidil is a medicine commonly used in hair-care treatment plans. My Bare Method offers a compounded combination topical that includes minoxidil, with companion ingredients determined clinically rather than listed as a fixed consumer recipe.',
-      'That honesty matters: you get a personalized preparation, and your provider/pharmacy can tell you exactly what is in your bottle.',
+      'Minoxidil is a medicine commonly used in hair-care treatment plans. My Bare Method offers a compounded combination topical that includes minoxidil, with companion ingredients determined by your clinician and pharmacy for your preparation.',
+      'You receive a personalized bottle, and your provider or pharmacy can confirm the exact ingredients in your formula.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support hair-care goals when a topical approach is appropriate',
@@ -597,18 +598,18 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Fits customers who want prescription guidance — not guesswork aisle products',
     ],
     howItWorks:
-      'Minoxidil is commonly used to support hair-care treatment plans applied to the scalp. Your compounded formula delivers medication as directed by your provider. We do not claim a specific amount of growth or a fixed timeline. Ask your care team what realistic expectations look like for your formula.',
+      'Minoxidil is commonly used to support hair-care treatment plans applied to the scalp. Your compounded formula delivers medication as directed by your provider. Results and timelines vary. Ask your care team what realistic expectations look like for your formula.',
     whyPeopleChooseIt: [
       'Prescription pathway with clinical personalization',
       'Topical convenience for at-home routines',
-      'Transparent about what the catalog does — and does not — disclose',
       'Provider follow-up available when you need adjustments',
+      'Clear positioning as a compounded, clinician-directed option',
     ],
     whatToExpect:
       'Supplied as a topical solution bottle after approval. Apply only as directed. Request your specific ingredient details from your care team if you want the full formula breakdown.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [
-      'Exact combination ingredients beyond minoxidil are not defined in catalog — do not invent them.',
+      'FORMULATION REVIEW — Exact combination ingredients beyond minoxidil are not defined in the authoritative catalog. Keep wording general; do not invent companion ingredients.',
     ],
     regulatoryNotes: [
       'Preserve “Combination formula” strength language.',
@@ -763,31 +764,31 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'lab-kit': {
     benefitHeadline: 'Specimen Collection Kit for Initial Hormone Therapy',
     shortDescription:
-      'The Lab Kit is the required specimen collection kit for initial Women’s Hormone Therapy orders. Shipping is included in the kit price. This is not a medication.',
+      'The Lab Kit is the required specimen collection kit for initial Women’s Hormone Therapy orders. Lab Kit shipping is included in the $200 kit price. This is not a medication.',
     highlights: [
       'Required for Initial HRT',
-      'Shipping Included',
+      'Lab Kit Shipping Included',
       'Not a Medication',
       'Pairs with Laboratory Review',
     ],
     about: [
-      'Initial Women’s Hormone Therapy orders automatically include this Lab Kit plus Laboratory Review when required. Established HRT customers with approved therapy history are not charged the package again.',
-      'Lab Kit shipping is included — no separate Two-Day or Next-Day charge applies to the kit itself.',
+      'Initial Women’s Hormone Therapy orders include the Required HRT Lab Package when applicable: Lab Kit ($200) plus Laboratory Review ($60) for $260 total, added once per applicable initial order.',
+      'Lab Kit shipping is included in the $200 Lab Kit price. That does not include medication shipping, which remains separate where applicable. Established HRT customers with approved therapy history are not charged the package again under current history rules.',
     ].join('\n\n'),
     potentialBenefits: [
       'Removes guesswork about which labs are needed to start',
       'Keeps initial HRT checkout complete in one step',
-      'Clear separation from medication pricing',
+      'Clear separation from medication pricing and medication shipping',
     ],
     howItWorks:
-      'When an applicable HRT product enters checkout for a new HRT customer, Lab Kit ($200) and Laboratory Review ($60) are added once as the required lab package.',
+      'When an applicable HRT product enters checkout for a new HRT customer, Lab Kit ($200) and Laboratory Review ($60) are added once as the Required HRT Lab Package.',
     whyPeopleChooseIt: [
       'Required package for first HRT order',
       'Transparent $260 combined pricing',
-      'Shipping included for the kit',
+      'Lab Kit shipping included',
     ],
     whatToExpect:
-      'You receive the specimen collection kit with shipping included. Laboratory Review is a separate provider interpretation service — not a medication.',
+      'You receive the specimen collection kit with Lab Kit shipping included. Laboratory Review is a separate provider interpretation service — not a medication. Medication shipping is separate where applicable.',
     importantInformation:
       'Lab Kit and Laboratory Review are provider-care services, not medications. They are not discounted by OGTBM.',
   },
@@ -804,7 +805,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Routine-Ready',
     ],
     about: [
-      'This kit is designed for people who want the essentials in one checkout. According to our catalog, it includes a 3D printed peptide case, temperature-controlled travel case, discreet travel bag, reusable ice pack, wellness planner, sharps container, alcohol prep wipes, and insulin syringes.',
+      'This kit gathers core injection-day accessories into one checkout: a 3D printed peptide case, temperature-controlled travel case, discreet travel bag, reusable ice pack, wellness planner, sharps container, alcohol prep wipes, and insulin syringes.',
       'It is a supplies bundle — not a medication. Prescription products are sold separately and still require provider review when applicable.',
     ].join('\n\n'),
     potentialBenefits: [
@@ -912,7 +913,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Travel Ready',
     ],
     about: [
-      'This bag is meant to carry therapy-related accessories in a low-key everyday style. Catalog materials describe a vegan-leather look with water-resistant lining. Exact dimensions are not listed, so we do not invent measurements.',
+      'This bag is meant to carry therapy-related accessories in a low-key everyday style. It features a vegan-leather look with water-resistant lining for commuting and travel.',
     ].join('\n\n'),
     potentialBenefits: [
       'Keeps your routine organized while traveling',
@@ -1111,7 +1112,8 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     ],
     about: [
       'This is a membership program purchase — not a one-off retail vial checkout. Your monthly rate stays predictable while you remain continuously enrolled and your provider-selected treatment stays within the included Semaglutide formulations.',
-      'When you join, you share a requested dose for intake. Your licensed provider still decides whether treatment is appropriate and which dose is approved. Medication fulfillment uses the matching retail Semaglutide vial SKU — we do not create separate membership-only medication SKUs.',
+      'When you join, you share a requested dose for intake. Your licensed provider still decides whether treatment is appropriate and which dose is approved. Medication fulfillment uses the matching retail Semaglutide vial SKU.',
+      'Selected shipping renews monthly with your card charge and is not included in the base $149 membership price. A one-time Initial Provider Visit ($75) may apply when required.',
     ].join('\n\n'),
     potentialBenefits: [
       'Predictable $149 monthly program pricing',
@@ -1121,15 +1123,15 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'You enroll in the membership PROGRAM and select a requested dose. After provider review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU for that dose. Your membership price remains flat through the included program while you stay continuously enrolled. Billing currently uses invoices with ACH/bank-transfer or domestic wire instructions each period — your bank is not automatically charged by the storefront.',
+      'You enroll in the membership program, select a requested dose, and choose Two-Day or Next-Day shipping. Your card is charged monthly for the $149 membership plus selected shipping ($179 or $199/month). After provider review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU. Payment does not guarantee a prescription.',
     whyPeopleChooseIt: [
       'Prefer flat monthly budgeting over paying per retail vial strength',
       'Want ongoing provider-guided Semaglutide care with a clear program maximum',
       'Value member savings on eligible add-on products',
-      'Like transparent requested-dose intake without confusing “auto-debit” surprises',
+      'Like clear due-today versus monthly renewal totals at checkout',
     ],
     whatToExpect:
-      'Initial term is 3 months, then month to month. Complete intake, await provider review, and pay each invoice via the instructions provided. Requested dose is not automatically the approved dose. Payment does not guarantee a prescription.',
+      'Initial term is 3 months, then month to month. Complete secure card checkout, complete intake, and await provider review. Requested dose is not automatically the approved dose. Selected shipping renews monthly with your card. Payment does not guarantee a prescription.',
     importantInformation:
       'Membership enrollment and payment do not guarantee a prescription. Availability depends on provider judgment, pharmacy fulfillment, and applicable requirements.',
     benefits: [
@@ -1144,7 +1146,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     ],
     regulatoryNotes: [
       'Distinguish PROGRAM SKU vs FULFILLMENT SKU.',
-      'Do not imply automatic bank charging under current invoice ACH/Wire flow.',
+      'Customer copy: card monthly billing with recurring shipping.',
     ],
   },
 
@@ -1161,6 +1163,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     about: [
       'This membership is a program purchase with one predictable monthly rate through the included Tirzepatide maximum. It is not interchangeable with Semaglutide Membership, and 30mg is not part of this program.',
       'You choose a requested dose when joining. A licensed provider reviews eligibility and may approve a different dose. Fulfillment uses the retail Tirzepatide vial SKU that matches the approved medication strength.',
+      'Selected shipping renews monthly with your card charge and is not included in the base $249 membership price. A one-time Initial Provider Visit ($75) may apply when required.',
     ].join('\n\n'),
     potentialBenefits: [
       'Predictable $249 monthly program pricing through the included maximum',
@@ -1170,15 +1173,15 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'Enrollment purchases the membership PROGRAM. Requested dose informs intake; approved treatment drives which retail fulfillment SKU is used. Your $249 rate remains locked while membership stays continuously active and within program rules. Each billing period currently uses an invoice with ACH/bank-transfer or domestic wire instructions — not automatic storefront bank charging.',
+      'Enrollment purchases the membership program. You select a requested dose and shipping. Your card is charged monthly for the $249 membership plus selected shipping ($279 or $299/month). Requested dose informs intake; approved treatment drives which retail fulfillment SKU is used. Payment does not guarantee a prescription.',
     whyPeopleChooseIt: [
       'Want Tirzepatide’s dual-pathway option with flat monthly budgeting',
       'Prefer a clear included maximum through 15mg',
       'Value member savings on eligible wellness products and accessories',
-      'Appreciate transparent invoice-based ACH/Wire payment instead of surprise auto-debits',
+      'Prefer secure monthly card billing with clear shipping renewal amounts',
     ],
     whatToExpect:
-      'Initial term is 3 months, then month to month. Complete intake, complete provider review, and pay each invoice using the provided bank-transfer instructions. Payment does not guarantee a prescription.',
+      'Initial term is 3 months, then month to month. Complete secure card checkout, complete intake, and complete provider review. Selected shipping renews monthly with your card. Payment does not guarantee a prescription.',
     importantInformation:
       'Payment and enrollment do not guarantee a prescription. Tirzepatide Membership is not interchangeable with Semaglutide Membership. 30mg is not included.',
     benefits: [
@@ -1193,7 +1196,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     ],
     regulatoryNotes: [
       'No 30mg offering.',
-      'Do not imply automatic ACH debit under current invoice model.',
+      'Customer copy: card monthly billing with recurring shipping.',
     ],
   },
 };

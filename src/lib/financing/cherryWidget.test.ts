@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   CHERRY_HOST_ELEMENT_ID,
   CHERRY_LOADER_GLOBAL,
@@ -41,10 +41,43 @@ describe('Cherry financing widget config', () => {
 });
 
 describe('ensureCherryFloatingEstimator', () => {
+  const scripts: Array<{ id: string; src: string; async: boolean; onerror: unknown }> = [];
+  let fakeWindow: { _hw?: (...args: unknown[]) => void };
+
+  beforeEach(() => {
+    __resetCherryWidgetForTests();
+    scripts.length = 0;
+    fakeWindow = {};
+
+    const head = { appendChild: (el: { id: string; src: string }) => scripts.push(el as never) };
+    const firstScript = {
+      parentNode: {
+        insertBefore: (el: { id: string; src: string }) => {
+          scripts.push(el as never);
+        },
+      },
+    };
+
+    vi.stubGlobal('window', fakeWindow);
+    vi.stubGlobal('document', {
+      getElementById: (id: string) => scripts.find(s => s.id === id) ?? null,
+      createElement: (tag: string) => {
+        if (tag !== 'script') throw new Error(`unexpected tag ${tag}`);
+        return {
+          id: '',
+          src: '',
+          async: false,
+          onerror: null as unknown,
+        };
+      },
+      getElementsByTagName: (tag: string) => (tag === 'script' ? [firstScript] : []),
+      head,
+    });
+  });
+
   afterEach(() => {
     __resetCherryWidgetForTests();
-    document.getElementById(CHERRY_LOADER_GLOBAL)?.remove();
-    delete window._hw;
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
 
@@ -52,13 +85,14 @@ describe('ensureCherryFloatingEstimator', () => {
     ensureCherryFloatingEstimator();
     ensureCherryFloatingEstimator();
 
-    const scripts = document.querySelectorAll(`#${CHERRY_LOADER_GLOBAL}`);
     expect(scripts.length).toBe(1);
-    expect((scripts[0] as HTMLScriptElement).src).toContain('files.withcherry.com/widgets/widget.js');
-    expect(typeof window._hw).toBe('function');
-    expect(Array.isArray(window._hw?.q)).toBe(true);
-    expect(window._hw?.q?.length).toBeGreaterThanOrEqual(1);
-    const firstCall = window._hw?.q?.[0] as unknown[];
+    expect(scripts[0].id).toBe(CHERRY_LOADER_GLOBAL);
+    expect(scripts[0].src).toContain('files.withcherry.com/widgets/widget.js');
+    expect(typeof fakeWindow._hw).toBe('function');
+    const q = (fakeWindow._hw as { q?: unknown[] }).q;
+    expect(Array.isArray(q)).toBe(true);
+    expect(q!.length).toBeGreaterThanOrEqual(1);
+    const firstCall = q![0] as unknown[];
     expect(firstCall[0]).toBe('init');
     expect(firstCall[2]).toEqual([CHERRY_HOST_ELEMENT_ID]);
   });

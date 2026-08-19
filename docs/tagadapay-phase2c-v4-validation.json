@@ -1,0 +1,39 @@
+{
+  "date": "2026-08-19",
+  "shippingrates_island_present": false,
+  "store_shipping_rates_active": false,
+  "tagada_extra_shipping_charge": false,
+  "ship_products_recreated": true,
+  "cases": [
+    {
+      "label": "ship30",
+      "mbm_total": 14900,
+      "hosted_total_usd": 149.0,
+      "tagada_shipping_usd": 0,
+      "parity": "PASS"
+    },
+    {
+      "label": "ship50",
+      "mbm_total": 16900,
+      "hosted_total_usd": 169.0,
+      "tagada_shipping_usd": 0,
+      "parity": "PASS"
+    },
+    {
+      "label": "free0",
+      "mbm_total": 59500,
+      "hosted_total_usd": 595.0,
+      "tagada_shipping_usd": 0,
+      "parity": "PASS"
+    },
+    {
+      "label": "ipv",
+      "mbm_total": 7500,
+      "hosted_total_usd": 75.0,
+      "tagada_shipping_usd": 0,
+      "parity": "PASS"
+    }
+  ],
+  "ready_for_controlled_live_test": true,
+  "vite_kashu_card_enabled": false
+}

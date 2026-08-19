@@ -71,35 +71,78 @@ function extractEventId(payload: Record<string, unknown>): string | null {
   return typeof id === "string" && id.trim() ? id.trim() : null;
 }
 
-function extractOrderNumber(payload: Record<string, unknown>): string | null {
-  const direct = payload.mbmOrderNumber ?? payload.mbm_order_number ?? payload.payment_reference;
-  if (typeof direct === "string" && direct.trim()) return direct.trim().toUpperCase();
-  const meta = payload.metadata;
-  if (meta && typeof meta === "object") {
-    const m = meta as Record<string, unknown>;
-    const v = m.mbmOrderNumber ?? m.mbm_order_number;
-    if (typeof v === "string" && v.trim()) return v.trim().toUpperCase();
+function asRecord(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : undefined;
+}
+
+function mbmOrderFromTags(tags: unknown): string | null {
+  if (!Array.isArray(tags)) return null;
+  for (const t of tags) {
+    if (typeof t !== "string") continue;
+    if (t.startsWith("mbmOrder:")) return t.slice("mbmOrder:".length).trim();
+    const echoed = t.match(/(?:^|:)mbmOrder:([A-Z0-9-]+)/i);
+    if (echoed?.[1]) return echoed[1];
   }
-  const tags = payload.customerTags;
-  if (Array.isArray(tags)) {
-    for (const t of tags) {
-      if (typeof t === "string" && t.startsWith("mbmOrder:")) {
-        return t.slice("mbmOrder:".length).toUpperCase();
-      }
+  return null;
+}
+
+/**
+ * Live Tagada webhooks nest the commerce body under `data` and put
+ * `mbmOrder:<ORDER>` inside `data.customer.tags` (not top-level customerTags).
+ */
+function extractOrderNumber(payload: Record<string, unknown>): string | null {
+  const data = asRecord(payload.data);
+  const keys = ["mbmOrderNumber", "mbm_order_number", "payment_reference", "externalReference"];
+  for (const layer of [payload, data, asRecord(payload.metadata), asRecord(data?.metadata)]) {
+    if (!layer) continue;
+    for (const k of keys) {
+      const v = layer[k];
+      if (typeof v === "string" && v.trim()) return v.trim().toUpperCase();
+    }
+  }
+  const tagSets = [
+    payload.customerTags,
+    asRecord(payload.customer)?.tags,
+    asRecord(data?.customer)?.tags,
+    data?.customerTags,
+  ];
+  for (const tags of tagSets) {
+    const fromTags = mbmOrderFromTags(tags);
+    if (fromTags) return fromTags.toUpperCase();
+  }
+  const orderMeta = asRecord(data?.order_metadata);
+  const qp = orderMeta?.queryParams;
+  if (typeof qp === "string" && qp.includes("mbmOrder")) {
+    try {
+      const params = new URLSearchParams(qp.startsWith("?") ? qp.slice(1) : qp);
+      const raw = params.get("customerTags") || "";
+      const fromQuery = mbmOrderFromTags(raw.split(",").map((s) => s.trim()).filter(Boolean));
+      if (fromQuery) return fromQuery.toUpperCase();
+    } catch {
+      /* ignore */
     }
   }
   return null;
 }
 
 function extractAmountCents(payload: Record<string, unknown>): number | null {
+  const data = asRecord(payload.data);
+  const order = asRecord(payload.order) ?? asRecord(data?.order);
+  const payment = asRecord(payload.payment) ?? asRecord(data?.payment);
+  // Live Tagada amounts are integer cents on data.amount / data.order.paidAmount.
   const candidates = [
     payload.amountCents,
     payload.amount_cents,
     payload.totalCents,
     payload.total_cents,
-    (payload.order as Record<string, unknown> | undefined)?.amountCents,
-    (payload.order as Record<string, unknown> | undefined)?.totalCents,
-    (payload.payment as Record<string, unknown> | undefined)?.amountCents,
+    data?.amount,
+    data?.amountCents,
+    order?.paidAmount,
+    order?.amountCents,
+    order?.totalCents,
+    payment?.amountCents,
+    payment?.amount,
+    payload.amount,
   ];
   for (const c of candidates) {
     if (typeof c === "number" && Number.isFinite(c)) return Math.trunc(c);
@@ -109,20 +152,23 @@ function extractAmountCents(payload: Record<string, unknown>): number | null {
 }
 
 function extractExternalIds(payload: Record<string, unknown>) {
-  const order = payload.order as Record<string, unknown> | undefined;
-  const payment = payload.payment as Record<string, unknown> | undefined;
+  const data = asRecord(payload.data);
+  const order = asRecord(payload.order) ?? asRecord(data?.order);
+  const payment = asRecord(payload.payment) ?? asRecord(data?.payment);
+  const asId = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null);
   return {
     externalOrderId:
-      (typeof payload.orderId === "string" && payload.orderId) ||
-      (typeof order?.id === "string" && order.id) ||
-      null,
+      asId(payload.orderId) || asId(data?.orderId) || asId(order?.id) || asId(order?.orderId) || null,
     externalPaymentId:
-      (typeof payload.paymentId === "string" && payload.paymentId) ||
-      (typeof payment?.id === "string" && payment.id) ||
+      asId(payload.paymentId) ||
+      asId(data?.paymentId) ||
+      asId(payment?.id) ||
+      asId(payment?.paymentId) ||
       null,
     externalCheckoutSessionId:
-      (typeof payload.checkoutSessionId === "string" && payload.checkoutSessionId) ||
-      (typeof payload.checkout_session_id === "string" && payload.checkout_session_id) ||
+      asId(payload.checkoutSessionId) ||
+      asId(payload.checkout_session_id) ||
+      asId(data?.checkoutSessionId) ||
       null,
   };
 }

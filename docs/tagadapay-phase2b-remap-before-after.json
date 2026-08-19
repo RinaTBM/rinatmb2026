@@ -1,0 +1,347 @@
+[
+  {
+    "mbm_sku": "MBM-WM-FB3-INJ-001",
+    "before": {
+      "tagada_product_id": "product_330a4822ca29",
+      "tagada_variant_id": "variant_ca761e048b82",
+      "tagada_price_id": "price_c5811c919cad",
+      "tagada_price_cents": 25900
+    },
+    "after": {
+      "tagada_product_id": "product_7a8f680446a9",
+      "tagada_variant_id": "variant_2c53926ab625",
+      "tagada_price_id": "price_197259afe856",
+      "tagada_price_cents": 25900
+    }
+  },
+  {
+    "mbm_sku": "MBM-PC-IPV-SRV-001",
+    "before": {
+      "tagada_product_id": "product_4d47da6193e4",
+      "tagada_variant_id": "variant_08bf53e519ce",
+      "tagada_price_id": "price_6b59dbc48752",
+      "tagada_price_cents": 7500
+    },
+    "after": {
+      "tagada_product_id": "product_0a40b08c46f5",
+      "tagada_variant_id": "variant_3b859fb20d65",
+      "tagada_price_id": "price_6163adf08816",
+      "tagada_price_cents": 7500
+    }
+  },
+  {
+    "mbm_sku": "MBM-PC-FUV-SRV-001",
+    "before": {
+      "tagada_product_id": "product_f2a71cc19cc0",
+      "tagada_variant_id": "variant_106332e60747",
+      "tagada_price_id": "price_f67f2f5fefb4",
+      "tagada_price_cents": 5500
+    },
+    "after": {
+      "tagada_product_id": "product_340add760d29",
+      "tagada_variant_id": "variant_1478c178bf74",
+      "tagada_price_id": "price_d38a8f90b0bb",
+      "tagada_price_cents": 5500
+    }
+  },
+  {
+    "mbm_sku": "MBM-PC-LAB-SRV-001",
+    "before": {
+      "tagada_product_id": "product_e4a9efa99483",
+      "tagada_variant_id": "variant_2d2333daacd2",
+      "tagada_price_id": "price_afdb5c5c92a7",
+      "tagada_price_cents": 5500
+    },
+    "after": {
+      "tagada_product_id": "product_71d2d139cecb",
+      "tagada_variant_id": "variant_31baa3269d52",
+      "tagada_price_id": "price_a02956edce74",
+      "tagada_price_cents": 5500
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-CIS-ACC-001",
+    "before": {
+      "tagada_product_id": "product_8b8dd8f3802f",
+      "tagada_variant_id": "variant_45486ee05687",
+      "tagada_price_id": "price_b76426391818",
+      "tagada_price_cents": 11900
+    },
+    "after": {
+      "tagada_product_id": "product_496499ba58ed",
+      "tagada_variant_id": "variant_25b12b9aae1b",
+      "tagada_price_id": "price_7c67e4c163f8",
+      "tagada_price_cents": 11900
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PPC-ACC-001",
+    "before": {
+      "tagada_product_id": "product_ee470f2ce9bc",
+      "tagada_variant_id": "variant_569b9e1b2e74",
+      "tagada_price_id": "price_7cc79c1620ec",
+      "tagada_price_cents": 3400
+    },
+    "after": {
+      "tagada_product_id": "product_515a80edce83",
+      "tagada_variant_id": "variant_48116800da67",
+      "tagada_price_id": "price_b8d5b04da800",
+      "tagada_price_cents": 3400
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-TTC-ACC-001",
+    "before": {
+      "tagada_product_id": "product_9a7f00fc9098",
+      "tagada_variant_id": "variant_c53ac76c9bfa",
+      "tagada_price_id": "price_807e06620427",
+      "tagada_price_cents": 5900
+    },
+    "after": {
+      "tagada_product_id": "product_e99aba156db9",
+      "tagada_variant_id": "variant_43bdcf3a4e17",
+      "tagada_price_id": "price_078d81f039fa",
+      "tagada_price_cents": 5900
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-DTB-ACC-001",
+    "before": {
+      "tagada_product_id": "product_6190db2bd0a8",
+      "tagada_variant_id": "variant_fe0decb81658",
+      "tagada_price_id": "price_f541dfe34b36",
+      "tagada_price_cents": 3900
+    },
+    "after": {
+      "tagada_product_id": "product_0954adc1cb99",
+      "tagada_variant_id": "variant_edabd42b06f8",
+      "tagada_price_id": "price_326989db73b7",
+      "tagada_price_cents": 3900
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-ICE-ACC-001",
+    "before": {
+      "tagada_product_id": "product_e7570f0548a0",
+      "tagada_variant_id": "variant_cb4e752ba2e3",
+      "tagada_price_id": "price_c3d5167749aa",
+      "tagada_price_cents": 1200
+    },
+    "after": {
+      "tagada_product_id": "product_e0a0c3d74cd9",
+      "tagada_variant_id": "variant_23e5502babe8",
+      "tagada_price_id": "price_6b9e38c8d8e3",
+      "tagada_price_cents": 1200
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-DWP-ACC-001",
+    "before": {
+      "tagada_product_id": "product_0ca7c935c5ee",
+      "tagada_variant_id": "variant_ae3738e4218b",
+      "tagada_price_id": "price_912c0af40414",
+      "tagada_price_cents": 2900
+    },
+    "after": {
+      "tagada_product_id": "product_497f6ac08a10",
+      "tagada_variant_id": "variant_27365b4b4511",
+      "tagada_price_id": "price_29fc44577ea1",
+      "tagada_price_cents": 2900
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-SHP-ACC-001",
+    "before": {
+      "tagada_product_id": "product_6304bf7994c9",
+      "tagada_variant_id": "variant_4c2b3a5c3b2c",
+      "tagada_price_id": "price_5b0b6498ab00",
+      "tagada_price_cents": 1000
+    },
+    "after": {
+      "tagada_product_id": "product_b1c5d5fe022e",
+      "tagada_variant_id": "variant_bbeb618cfa1e",
+      "tagada_price_id": "price_4f29dc5a2325",
+      "tagada_price_cents": 1000
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-APW-ACC-001",
+    "before": {
+      "tagada_product_id": "product_1bb831ec462d",
+      "tagada_variant_id": "variant_6795e334ebee",
+      "tagada_price_id": "price_f7231ae47498",
+      "tagada_price_cents": 999
+    },
+    "after": {
+      "tagada_product_id": "product_24ae07c02834",
+      "tagada_variant_id": "variant_0ed16f608286",
+      "tagada_price_id": "price_e4ddc13679be",
+      "tagada_price_cents": 999
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-APW-ACC-002",
+    "before": {
+      "tagada_product_id": "product_1bb831ec462d",
+      "tagada_variant_id": "variant_70d3e2b18ca8",
+      "tagada_price_id": "price_977dd2c534ec",
+      "tagada_price_cents": 1899
+    },
+    "after": {
+      "tagada_product_id": "product_24ae07c02834",
+      "tagada_variant_id": "variant_17a7901f4e51",
+      "tagada_price_id": "price_7746778f3c9d",
+      "tagada_price_cents": 1899
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-001",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_2b159acf7906",
+      "tagada_price_id": "price_d60a42f3ebbd",
+      "tagada_price_cents": 399
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_33d8970be874",
+      "tagada_price_id": "price_b9cbbfc7bd2f",
+      "tagada_price_cents": 499
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-002",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_c7f7483edd1b",
+      "tagada_price_id": "price_c0e8aa3ba0b3",
+      "tagada_price_cents": 699
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_c3a26084dbbf",
+      "tagada_price_id": "price_b18e090e2bf3",
+      "tagada_price_cents": 999
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-003",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_4c250a7df52c",
+      "tagada_price_id": "price_aceeb6f40768",
+      "tagada_price_cents": 949
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_a2d03ccef922",
+      "tagada_price_id": "price_2d83f6353be2",
+      "tagada_price_cents": 1499
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-004",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_99d1ccedc16d",
+      "tagada_price_id": "price_e2901d4dfc5b",
+      "tagada_price_cents": 1199
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_931b6500c36f",
+      "tagada_price_id": "price_85b01f628e31",
+      "tagada_price_cents": 1999
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-005",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_43f9b283d699",
+      "tagada_price_id": "price_6092564ab98f",
+      "tagada_price_cents": 1449
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_9a73a65a7bde",
+      "tagada_price_id": "price_aae98ee6a35b",
+      "tagada_price_cents": 2499
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-006",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_8502d80d45e7",
+      "tagada_price_id": "price_d8ffd5db3c85",
+      "tagada_price_cents": 1699
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_3e857d793904",
+      "tagada_price_id": "price_0a04d66755d7",
+      "tagada_price_cents": 2999
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-007",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_6cbe1ef35a37",
+      "tagada_price_id": "price_09776237b3a6",
+      "tagada_price_cents": 1949
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_9ef1f4034a3b",
+      "tagada_price_id": "price_1896d4a6348d",
+      "tagada_price_cents": 3499
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-008",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_16ae949928a7",
+      "tagada_price_id": "price_19273bc654db",
+      "tagada_price_cents": 2199
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_c973b7554d88",
+      "tagada_price_id": "price_a26ee5da20b9",
+      "tagada_price_cents": 3999
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-009",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_c87e576e05b8",
+      "tagada_price_id": "price_cef18e997108",
+      "tagada_price_cents": 2449
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_aeb00e63f0a9",
+      "tagada_price_id": "price_b979e04fc270",
+      "tagada_price_cents": 4499
+    }
+  },
+  {
+    "mbm_sku": "MBM-ACC-PIS-ACC-010",
+    "before": {
+      "tagada_product_id": "product_cabdbdec74c7",
+      "tagada_variant_id": "variant_9a38f195576f",
+      "tagada_price_id": "price_eab425d1bf34",
+      "tagada_price_cents": 2699
+    },
+    "after": {
+      "tagada_product_id": "product_93be4341379b",
+      "tagada_variant_id": "variant_7a4b019ebb36",
+      "tagada_price_id": "price_c23d430b2be5",
+      "tagada_price_cents": 4999
+    }
+  }
+]

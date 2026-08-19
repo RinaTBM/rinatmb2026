@@ -133,6 +133,59 @@ Deno.serve(async (req) => {
     return json(JSON.parse(redact(JSON.stringify({ status: pl.status, data: pl.data }), secrets)));
   }
 
+  // Read-only audit helpers (Phase 2A) — no writes / no charges.
+  if (action === "list_shipping_rates") {
+    const attempts: unknown[] = [];
+    for (const [method, path, body] of [
+      ["POST", "/api/public/v1/shipping-rates/list", { storeId }],
+      ["POST", "/api/public/v1/shipping-rates/list", { storeId, page: 1, per_page: 100 }],
+      ["GET", `/api/public/v1/shipping-rates?storeId=${encodeURIComponent(storeId)}`, undefined],
+      ["POST", "/api/public/v1/stores/get", { storeId }],
+      ["GET", `/api/public/v1/stores/${encodeURIComponent(storeId)}`, undefined],
+    ] as const) {
+      const res = await tcall(base, key, method, path, body);
+      attempts.push({ method, path, status: res.status, data: res.data });
+    }
+    return json(JSON.parse(redact(JSON.stringify({ storeIdPresent: true, attempts }), secrets)));
+  }
+
+  if (action === "audit_product_tax") {
+    const pl = await tcall(base, key, "POST", "/api/public/v1/products/list", {
+      storeId,
+      page: 1,
+      per_page: 200,
+      includeVariants: true,
+      includePrices: true,
+    });
+    const items = ((pl.data as { items?: unknown[] } | null)?.items || []) as Record<
+      string,
+      unknown
+    >[];
+    const summary = items.map((p) => ({
+      id: p.id,
+      name: p.name,
+      active: p.active,
+      isTaxable: p.isTaxable,
+      isShippable: p.isShippable,
+      taxCategory: p.taxCategory,
+      mappedTaxCategory: p.mappedTaxCategory,
+      variantCount: Array.isArray(p.variants) ? p.variants.length : 0,
+    }));
+    return json(
+      JSON.parse(
+        redact(
+          JSON.stringify({
+            status: pl.status,
+            productCount: summary.length,
+            taxableCount: summary.filter((p) => p.isTaxable).length,
+            products: summary,
+          }),
+          secrets,
+        ),
+      ),
+    );
+  }
+
   // ---------- GET ----------
   if (action === "get") {
     const productId = String(body.productId || "");

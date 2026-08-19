@@ -6,7 +6,7 @@ export function ShippingPolicyPage() {
       eyebrow="Legal"
       title="Shipping Policy"
       intro="My Bare Method coordinates wellness fulfillment after all required steps have been completed. Products requiring provider review cannot be shipped until the applicable intake, eligibility review, prescription, payment, and pharmacy processing are complete."
-      lastUpdated="August 10, 2026"
+      lastUpdated="August 19, 2026"
       sections={[
         {
           id: 'before-an-order-ships',
@@ -20,9 +20,13 @@ export function ShippingPolicyPage() {
                 'A detailed consultation',
                 'Laboratory testing',
                 'Prescription approval',
-                'Final product payment',
+                'Payment through secure hosted card checkout',
               ]} />
-              <p>Submitting and paying for the Initial Wellness Intake does not guarantee treatment, medication, or shipment.</p>
+              <p>
+                Submitting an order and completing payment do not guarantee treatment, medication, or shipment.
+                Processing and shipping timelines begin only after payment is received and any required provider
+                review/approval or other prerequisites are completed.
+              </p>
             </>
           ),
         },
@@ -31,7 +35,11 @@ export function ShippingPolicyPage() {
           title: 'Processing Time',
           body: (
             <>
-              <p>Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Once those steps are complete, most eligible orders are processed within approximately 1–3 business days.</p>
+              <p>
+                Processing and shipping timelines begin only after payment has been received and any required provider
+                review/approval has been completed. Once those steps are complete, most eligible orders are processed
+                within approximately 1–3 business days.
+              </p>
               <p>Processing times may be longer because of:</p>
               <LegalBulletList items={[
                 'Provider requests for additional information',
@@ -42,22 +50,76 @@ export function ShippingPolicyPage() {
                 'Holidays or severe weather',
                 'Carrier delays',
               ]} />
-              <p>Processing time is separate from shipping time.</p>
+              <p>Processing time is separate from shipping transit time.</p>
             </>
           ),
         },
         {
-          id: 'shipping-options',
-          title: 'Shipping Options',
+          id: 'one-time-shipping',
+          title: 'One-Time Order Shipping',
           body: (
             <>
-              <p>Orders of $500 or more are eligible for free shipping. When available, clients may select:</p>
+              <p>
+                For eligible one-time medication and product orders, shipping fees are fixed (not estimates):
+              </p>
               <LegalBulletList items={[
                 'Two-Day Shipping — $30',
                 'Next-Day Shipping — $50',
               ]} />
-              <p>Shipping speeds are estimates provided by the carrier and begin after payment has been received and verified, any required provider review/approval has been completed, and the order has been processed and released for shipment. Delivery dates are not guaranteed. Standard Shipping is not offered.</p>
-              <p>Certain medications may require temperature-controlled packaging or specific delivery methods. Available shipping options may vary by product, pharmacy, destination, and weather conditions.</p>
+              <p>
+                Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping. Membership
+                value is excluded from the $500 free-shipping threshold. Standard Shipping is not offered.
+              </p>
+              <p>
+                Carrier transit times begin after payment has been received, any required provider review/approval has
+                been completed, and the order has been processed and released for shipment. Delivery dates are not
+                guaranteed.
+              </p>
+              <p>
+                Certain medications may require temperature-controlled packaging or specific delivery methods.
+                Available shipping options may vary by product, pharmacy, destination, and weather conditions.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: 'membership-shipping',
+          title: 'Membership Shipping',
+          body: (
+            <>
+              <p>
+                When you join a membership, you select Two-Day or Next-Day shipping at enrollment. That selected
+                shipping is billed with each monthly membership renewal on your card:
+              </p>
+              <LegalBulletList items={[
+                'Two-Day Shipping — +$30 per month',
+                'Next-Day Shipping — +$50 per month',
+              ]} />
+              <p>
+                Shipping is not included in the base Semaglutide ($149) or Tirzepatide ($249) membership price.
+                Payment may be collected at enrollment and on each renewal, but medication fulfillment and shipment
+                still depend on applicable provider review and approval.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: 'hrt-lab-kit-shipping',
+          title: 'HRT Lab Kit Shipping',
+          body: (
+            <>
+              <p>
+                For applicable initial Women’s Hormone Therapy orders, the Required HRT Lab Package is $260 and
+                includes:
+              </p>
+              <LegalBulletList items={[
+                'Lab Kit — $200 (Lab Kit shipping included in the $200 price)',
+                'Lab Review — $60',
+              ]} />
+              <p>
+                Lab Kit shipping being included does not mean medication shipping is included. Medication and product
+                shipping remain separate where applicable.
+              </p>
             </>
           ),
         },
@@ -67,8 +129,14 @@ export function ShippingPolicyPage() {
           body: (
             <>
               <p>Clients are responsible for entering a complete and accurate shipping address.</p>
-              <p>Contact us immediately if an address needs to be corrected. We cannot guarantee that an address can be changed after an order has entered pharmacy processing or fulfillment.</p>
-              <p>Additional charges may apply when an order must be replaced or reshipped because of an incorrect or incomplete address.</p>
+              <p>
+                Contact us immediately if an address needs to be corrected. We cannot guarantee that an address can be
+                changed after an order has entered pharmacy processing or fulfillment.
+              </p>
+              <p>
+                Additional charges may apply when an order must be replaced or reshipped because of an incorrect or
+                incomplete address.
+              </p>
             </>
           ),
         },
@@ -77,8 +145,14 @@ export function ShippingPolicyPage() {
           title: 'Tracking',
           body: (
             <>
-              <p>Tracking information will be provided when available. Tracking may be sent directly by the dispensing pharmacy or fulfillment partner.</p>
-              <p>The absence of an immediate tracking update does not necessarily mean the order has not entered processing.</p>
+              <p>
+                Tracking information will be provided when available. Tracking may be sent directly by the dispensing
+                pharmacy or fulfillment partner.
+              </p>
+              <p>
+                The absence of an immediate tracking update does not necessarily mean the order has not entered
+                processing.
+              </p>
             </>
           ),
         },
@@ -95,8 +169,14 @@ export function ShippingPolicyPage() {
                 'Does not arrive within a reasonable period after shipment',
               ]} />
               <p>Include the order number, delivery address, and clear photographs when reporting damage.</p>
-              <p>My Bare Method will work with the applicable pharmacy, fulfillment partner, and carrier to investigate. Eligible damaged, incorrect, or confirmed lost shipments may be replaced at no additional product cost.</p>
-              <p>Refunds are not automatically issued for carrier delays, unsuccessful delivery attempts, incorrect addresses, refusal of delivery, or packages left unattended after confirmed delivery.</p>
+              <p>
+                My Bare Method will work with the applicable pharmacy, fulfillment partner, and carrier to investigate.
+                Eligible damaged, incorrect, or confirmed lost shipments may be replaced at no additional product cost.
+              </p>
+              <p>
+                Refunds are not automatically issued for carrier delays, unsuccessful delivery attempts, incorrect
+                addresses, refusal of delivery, or packages left unattended after confirmed delivery.
+              </p>
             </>
           ),
         },
@@ -106,7 +186,10 @@ export function ShippingPolicyPage() {
           body: (
             <>
               <p>Follow all storage directions provided by the dispensing pharmacy.</p>
-              <p>If a temperature-sensitive package arrives late or feels warm, do not automatically discard it. Contact us or the dispensing pharmacy for product-specific guidance.</p>
+              <p>
+                If a temperature-sensitive package arrives late or feels warm, do not automatically discard it. Contact
+                us or the dispensing pharmacy for product-specific guidance.
+              </p>
               <p>Do not use a product that appears damaged, contaminated, opened, or otherwise unsafe.</p>
             </>
           ),
@@ -116,8 +199,14 @@ export function ShippingPolicyPage() {
           title: 'Shipping Restrictions',
           body: (
             <>
-              <p>Products are shipped only to locations where the provider, pharmacy, and requested treatment are legally available.</p>
-              <p>Availability may vary by state. We may cancel or decline a request when fulfillment is not legally or operationally available in the client's location.</p>
+              <p>
+                Products are shipped only to locations where the provider, pharmacy, and requested treatment are
+                legally available.
+              </p>
+              <p>
+                Availability may vary by state. We may cancel or decline a request when fulfillment is not legally or
+                operationally available in the client&apos;s location.
+              </p>
             </>
           ),
         },

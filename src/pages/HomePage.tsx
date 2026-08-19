@@ -47,9 +47,9 @@ const featureCards = [
 const howItWorksSteps = [
   { icon: Activity, title: 'Choose Your Product', description: 'Browse wellness products and services by what matters to you — weight, longevity, hormones, energy, and more.' },
   { icon: PackageCheck, title: 'Review Your Order', description: 'Confirm your cart, shipping option, and totals before checkout.' },
-  { icon: Lock, title: 'Submit & Receive Invoice', description: 'Submit your order to receive an electronic invoice. No payment is withdrawn from your bank when you submit.' },
-  { icon: Truck, title: 'Pay by ACH or Wire', description: 'Complete payment by ACH / Bank Transfer or Domestic Wire using the secure instructions. Orders remain Awaiting Payment until funds are verified.' },
-  { icon: Stethoscope, title: 'Intake & Provider Review', description: 'When applicable, complete intake so a licensed provider can review and approve your personalized plan.' },
+  { icon: Lock, title: 'Pay Securely by Card', description: 'Complete payment by Credit / Debit Card through our secure hosted checkout. Your order remains unpaid until payment is confirmed.' },
+  { icon: Stethoscope, title: 'Intake & Provider Review', description: 'When applicable, complete intake so a licensed provider can review your personalized plan. Payment does not guarantee approval.' },
+  { icon: Truck, title: 'Processing After Approval', description: 'Processing and shipping timelines begin after payment is received and any required provider review/approval is complete.' },
   { icon: HeartPulse, title: 'Fulfillment & Shipping', description: 'Approved, paid orders move to fulfillment and ship in plain, temperature-controlled packaging when required.' },
 ];
 
@@ -57,10 +57,10 @@ const howItWorksSteps = [
 
 const faqs = [
   { q: 'Do I need a membership to purchase?', a: 'No. You can make a one-time purchase or choose Auto-Refill & Save (10% off eligible wellness products). Active Wellness Members save 15% on eligible wellness products and accessories. Provider care, shipping, and taxes are never discounted. Already-discounted accessory bundles do not automatically receive an additional member discount.' },
-  { q: 'Is provider approval guaranteed?', a: 'No. Provider review and approval are required for certain products. Payment and order submission do not guarantee approval. If not approved after payment has been received and verified, eligible paid amounts for the unapproved product are refunded in accordance with our Refund Policy.' },
-  { q: 'What is the 3-month commitment?', a: 'Active Wellness Memberships require a 3-month minimum commitment. Membership pricing is billed per period using invoice bank-transfer instructions until automated bank payments are enabled. After the commitment period, you may submit a cancellation request. For Auto-Refill, please submit cancellation requests at least 7 calendar days before your renewal date.' },
-  { q: 'How do I pay?', a: 'Select ACH / Bank Transfer or Domestic Wire at checkout. After submitting your order, you receive an electronic invoice and secure payment instructions. Your bank is not charged automatically when you submit your order.' },
-  { q: 'How is shipping handled?', a: 'Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Orders ship in plain, discreet packaging. Temperature-controlled shipping is used for products requiring cold chain maintenance.' },
+  { q: 'Is provider approval guaranteed?', a: 'No. Provider review and approval are required for certain products. Payment and order submission do not guarantee approval. If not approved after payment has been received, eligible paid amounts for the unapproved product are refunded in accordance with our Refund Policy.' },
+  { q: 'What is the 3-month commitment?', a: 'Active Wellness Memberships require a 3-month minimum commitment. Your card is billed monthly for membership plus selected recurring shipping. After the commitment period, you may submit a cancellation request. For Auto-Refill, please submit cancellation requests at least 7 calendar days before your renewal date.' },
+  { q: 'How do I pay?', a: 'Public checkout uses Credit / Debit Card through our secure hosted card checkout. Applicable taxes are included in displayed prices where required.' },
+  { q: 'How is shipping handled?', a: 'One-time eligible orders: Two-Day $30 or Next-Day $50. Membership shipping recurs monthly with your card charge. Processing and shipping timelines begin only after payment has been received and any required provider review/approval has been completed. Orders ship in plain, discreet packaging.' },
 ];
 
 export function HomePage() {
@@ -352,7 +352,7 @@ export function HomePage() {
               <ul className="space-y-3 mb-8">
                 {[
                   '10% off eligible wellness products',
-                  'Scheduled monthly refills — pay each invoice by ACH or wire',
+                  'Scheduled monthly refills billed each period',
                   'Manage or pause Auto-Refill anytime',
                   'No membership required',
                 ].map(f => (

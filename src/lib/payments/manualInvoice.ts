@@ -46,10 +46,10 @@ export const MANUAL_PAYMENT_STATUS_LABELS: Record<ManualPaymentStatus, string> =
   refunded: 'Refunded',
 };
 
-export const CHECKOUT_SUBMIT_CTA = 'Submit Order & View Payment Instructions';
+export const CHECKOUT_SUBMIT_CTA = 'Submit Order & Continue to Payment';
 
 export const CHECKOUT_SUBMIT_SUPPORTING_COPY =
-  "After submitting your order, you'll receive an electronic invoice and secure instructions to complete payment by ACH / bank transfer or domestic wire. No payment is withdrawn from your bank when you submit your order.";
+  'After submitting your order, you will continue to secure payment instructions to complete checkout. Your order remains unpaid until payment is confirmed.';
 
 export const INVOICE_RECEIVED_HEADLINE = 'Order received — awaiting payment';
 

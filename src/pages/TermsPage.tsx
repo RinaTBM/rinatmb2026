@@ -6,7 +6,7 @@ export function TermsPage() {
       eyebrow="Terms"
       title="Terms & Conditions"
       intro="These terms govern your use of our website and products. Please read them carefully before placing an order."
-      lastUpdated="August 10, 2026"
+      lastUpdated="August 19, 2026"
       sections={[
         {
           id: 'agreement',
@@ -80,16 +80,14 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                At checkout, you select ACH / Bank Transfer (primary) or Domestic Wire Transfer (secondary). After you
-                submit your order, you receive an electronic invoice and secure instructions to complete payment. No
-                payment is withdrawn from your bank when you submit your order.
+                Public checkout is completed by Credit / Debit Card through our secure hosted card checkout. Your order
+                remains unpaid until card payment is confirmed.
               </p>
               <LegalBulletList items={[
-                'You initiate the bank transfer using the payment instructions provided after order submission.',
-                'Orders remain Awaiting Payment until funds are received and verified by My Bare Method.',
                 'Order submission alone does not constitute payment.',
-                'Include your order or payment reference number in the bank memo/reference field when sending funds.',
-                'Processing and fulfillment do not begin solely because checkout was submitted. Processing begins after payment has been received and verified and, where applicable, required provider review has been completed.',
+                'Processing and fulfillment do not begin solely because checkout was submitted. Processing begins after payment has been received and, where applicable, required provider review has been completed.',
+                'Applicable taxes are included in displayed prices where required.',
+                'Purchase and payment do not guarantee prescription or treatment approval.',
               ]} />
             </>
           ),
@@ -100,15 +98,14 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                Certain products are available as memberships or Auto-Refill. Membership and Auto-Refill pricing is
-                billed per period. Until automated bank payments are enabled, you will receive a new invoice for each
-                billing period and payment must be completed using the provided bank-transfer instructions. Your bank
-                is not charged automatically when you submit an order.
+                Certain products are available as memberships or Auto-Refill. Memberships are billed monthly to your
+                card while active. Selected membership shipping is included in each monthly card charge. Auto-Refill
+                savings apply per eligible refill period according to the option selected at checkout.
               </p>
               <LegalBulletList items={[
-                'You may submit a cancellation request from your account or by contacting support. Requests are reviewed by our team and do not reverse a payment that has already been received, or stop an order that has already entered provider, pharmacy, or fulfillment processing.',
+                'You may submit a cancellation request from your account or by contacting support after any applicable minimum term. Requests are reviewed by our team and do not reverse a payment that has already been received, or stop an order that has already entered provider, pharmacy, or fulfillment processing.',
                 'We may change subscription or membership pricing with at least 30 days notice when required.',
-                'Unpaid periods may result in pause or suspension of benefits until payment is resolved.',
+                'Failed or past-due payments may result in pause or suspension of benefits until payment is resolved.',
               ]} />
             </>
           ),
@@ -119,18 +116,22 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                Membership plans include discounted pricing, priority support, and other benefits. Membership pricing
-                is billed per period using the payment instructions provided with each invoice.
+                Semaglutide Membership is $149/month and Tirzepatide Membership is $249/month. Selected shipping
+                recurs monthly (Two-Day +$30/month or Next-Day +$50/month). A one-time Initial Provider Visit ($75)
+                may apply on enrollment when required and does not recur. See Membership &amp; Cancellation Terms for
+                due-today versus monthly renewal examples.
               </p>
               <p>
                 <strong>3-Month Commitment:</strong> By purchasing a membership, you commit to a minimum of three (3)
-                consecutive monthly billing cycles. You may not cancel or pause your membership before the end of this
-                commitment period. After the 3-month commitment is fulfilled, your membership continues month-to-month
-                and may be cancelled at any time, taking effect at the end of the then-current billing cycle.
+                consecutive monthly billing cycles. Normal self-service cancellation is not available before the end of
+                this commitment period. After the 3-month commitment is fulfilled, your membership continues
+                month-to-month and may be cancelled according to the current cancellation process, taking effect when
+                a valid cancellation becomes effective.
               </p>
               <p>
-                Membership benefits are non-transferable and may not be shared. We reserve the right to modify membership
-                benefits with reasonable notice.
+                Pricing remains locked while your membership stays continuously active and in good standing.
+                Cancellation or lapse does not guarantee the same prior price on re-enrollment. Membership benefits are
+                non-transferable and may not be shared.
               </p>
             </>
           ),
@@ -141,16 +142,37 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                Processing and shipping timelines begin only after payment has been received and verified and any
-                required provider review/approval has been completed. Shipping times vary by carrier and destination.
-                Estimated delivery windows are provided at checkout and in your order confirmation. We are not liable
-                for carrier delays beyond our control.
+                Processing and shipping timelines begin only after payment has been received and any required provider
+                review/approval has been completed. For eligible one-time orders, Two-Day Shipping is $30 and Next-Day
+                Shipping is $50 (fixed fees). Carrier transit times vary by destination; delivery dates are not
+                guaranteed. We are not liable for carrier delays beyond our control.
               </p>
               <p>
-                Provider Care and therapy products require medical intake and provider approval before processing.
-                Fulfillment occurs only after a licensed provider approves the order. If a provider does not approve
-                the therapy after payment has been received, eligible paid amounts for the unapproved product are
-                refunded in accordance with our Refund Policy.
+                Provider Care and therapy products require medical intake and provider approval before fulfillment.
+                Fulfillment occurs only after applicable requirements are satisfied. If a provider does not approve the
+                therapy after payment has been received, eligible paid amounts for the unapproved product are refunded
+                in accordance with our Refund Policy.
+              </p>
+              <p>
+                For applicable initial Women’s Hormone Therapy orders, a Required HRT Lab Package ($260) may be added
+                once (Lab Kit $200 with Lab Kit shipping included; Lab Review $60). Medication shipping remains
+                separate where applicable.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: 'promotions',
+          title: 'Promotional Codes',
+          body: (
+            <>
+              <p>
+                When offered, promotional codes such as OGTBM provide $50 off each eligible item (not a flat $50 off
+                the entire order). Quantity applies per eligible item/unit where supported. A promo cannot reduce an
+                eligible item below $0. Promotions are generally non-stackable. Exclusions typically include
+                accessories, dermatology / prescription skin &amp; hair, Initial Provider Visit, Follow-Up Visit, Lab
+                Review, Lab Kit, other provider services, and shipping. Promotional discounts do not change ongoing
+                recurring membership renewal amounts.
               </p>
             </>
           ),

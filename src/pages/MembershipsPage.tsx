@@ -11,12 +11,12 @@ import {
 } from '@/lib/membership/requestedFormulation';
 
 const howItWorks = [
-  { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($149/month) or Tirzepatide ($249/month) membership and your requested dose.' },
-  { icon: PackageCheck, title: 'Review and submit your order', description: 'Confirm your cart, then submit your order to receive an electronic invoice. No payment is withdrawn from your bank when you submit.' },
-  { icon: Lock, title: 'Complete payment', description: 'Pay by ACH / Bank Transfer or Domestic Wire using the secure invoice instructions. Orders remain Awaiting Payment until funds are received and verified.' },
-  { icon: ClipboardList, title: 'Complete intake', description: 'After payment is verified, complete a secure medical intake so a licensed provider can review your information.' },
-  { icon: Stethoscope, title: 'Provider review', description: 'A licensed provider reviews your eligibility and determines the appropriate formulation, strength, and treatment plan.' },
-  { icon: ShieldCheck, title: 'Fulfillment when approved', description: 'When payment is verified and treatment is approved, your prescription is sent to the dispensing pharmacy and fulfilled according to the existing workflow.' },
+  { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($149/month) or Tirzepatide ($249/month) membership, your requested dose, and shipping (Two-Day or Next-Day).' },
+  { icon: PackageCheck, title: 'Review due today vs monthly', description: 'Confirm membership, selected shipping, and any one-time Initial Provider Visit ($75 when required). Due-today totals are not the ongoing monthly rate.' },
+  { icon: Lock, title: 'Pay by Credit / Debit Card', description: 'Complete enrollment through secure hosted card checkout. Your card is charged monthly for membership plus selected shipping while active.' },
+  { icon: ClipboardList, title: 'Complete intake', description: 'After payment is confirmed, complete a secure medical intake so a licensed provider can review your information.' },
+  { icon: Stethoscope, title: 'Provider review', description: 'A licensed provider reviews your eligibility and determines the appropriate formulation, strength, and treatment plan. Payment does not guarantee approval.' },
+  { icon: ShieldCheck, title: 'Fulfillment when approved', description: 'When payment is confirmed and treatment is approved, your prescription is sent to the dispensing pharmacy and fulfilled according to the existing workflow.' },
 ];
 
 const faqs = [
@@ -199,7 +199,7 @@ export function MembershipsPage() {
                 <p className="mb-2 flex items-center gap-1.5 text-xs text-gold-700">
                   <ShieldCheck size={14} /> Licensed-provider review required · enrollment does not guarantee a prescription
                 </p>
-                <p className="mb-4 text-xs text-ink-500">Shipping calculated separately after provider approval. Initial term: 3 months, then month to month.</p>
+                <p className="mb-4 text-xs text-ink-500">Selected shipping renews monthly with your card charge (+$30 Two-Day or +$50 Next-Day). Initial term: 3 months, then month to month.</p>
 
                 <div className="mb-4 rounded-xl border border-cream-300 bg-cream-50/80 p-3">
                   <MembershipRequestedDoseField

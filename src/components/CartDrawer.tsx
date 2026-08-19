@@ -78,7 +78,7 @@ export function CartDrawer() {
                               )}
                               <p className="text-gold-600 font-medium">Billed monthly · 3-month initial term</p>
                               <p>Provider review required · prescription not guaranteed</p>
-                              <p>Shipping after provider approval</p>
+                              <p>Selected shipping renews monthly with membership</p>
                               <p>Cancel anytime after the initial term (canceling ends the locked rate)</p>
                             </div>
                           ) : (
@@ -154,7 +154,7 @@ export function CartDrawer() {
                     <span className="text-ink-600">Subtotal</span>
                     <span className="font-medium text-ink-900">${subtotal.toFixed(2)}</span>
                   </div>
-                  <p className="text-xs text-ink-400">Shipping and taxes calculated at checkout. Discounts never stack.</p>
+                  <p className="text-xs text-ink-400">Shipping selected at checkout. Applicable taxes are included in displayed prices where required. Discounts never stack.</p>
                   <button onClick={() => { closeCart(); navigate('/checkout'); }} className="btn-primary w-full">
                     Checkout <ArrowRight size={16} />
                   </button>

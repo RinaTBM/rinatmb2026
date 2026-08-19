@@ -6,7 +6,7 @@ export function PrivacyPolicyPage() {
       eyebrow="Privacy"
       title="Privacy Policy"
       intro="Your privacy matters to us. This policy explains what we collect, how we use it, and the rights you have over your data."
-      lastUpdated="August 10, 2026"
+      lastUpdated="August 19, 2026"
       sections={[
         {
           id: 'information-we-collect',
@@ -17,7 +17,7 @@ export function PrivacyPolicyPage() {
               <LegalBulletList items={[
                 'Account information: name, email address, password (hashed), and phone number when you create an account.',
                 'Intake forms: medical history, current medications, symptoms, goals, and other health details submitted during provider-guided therapy intake.',
-                'Payment information: billing name and address, selected payment method (ACH / Bank Transfer or Domestic Wire), order and invoice references, and payment status. We do not collect or store customer bank login credentials or bank-account credentials through the storefront.',
+                'Payment information: billing name and address, payment method type (for example, Credit / Debit Card via our secure hosted checkout), order references, and payment status. Card details are processed by our payment processor; My Bare Method does not store full card numbers on the storefront.',
                 'Shipping information: delivery name, address, and phone number provided at checkout.',
                 'Order history: products purchased, dates, quantities, and order status.',
                 'Usage data: pages visited, time on site, and interactions collected via cookies and analytics tools.',
@@ -50,9 +50,9 @@ export function PrivacyPolicyPage() {
             <>
               <p>
                 Your data is stored on secure servers with access restricted to authorized personnel who need it to
-                perform their duties. We use encryption in transit (TLS) and at rest. Customers complete payment by
-                initiating a bank transfer using the invoice instructions we provide; My Bare Method does not store
-                customer bank login credentials or bank-account credentials collected through the website checkout.
+                perform their duties. We use encryption in transit (TLS) and at rest. Customers complete public checkout
+                through a secure hosted card payment flow. Card details are handled by our payment processor; My Bare
+                Method does not store full card numbers collected through the website checkout.
               </p>
               <p>
                 Despite our safeguards, no system is perfectly secure. In the event of a data breach affecting your
@@ -108,7 +108,7 @@ export function PrivacyPolicyPage() {
             <>
               <p>We share limited data with trusted third-party service providers to operate our business:</p>
               <LegalBulletList items={[
-                'Banking partners / financial institutions: when you initiate ACH / bank transfer or domestic wire payment, your bank processes the transfer according to its own terms and privacy practices. We receive confirmation details needed to match and verify payment to your order.',
+                'Payment processors: process card payments on our behalf under their own terms and privacy practices. We receive confirmation details needed to match payment to your order.',
                 'Shipping providers: receive your name, address, and phone number to deliver your order and provide tracking updates.',
                 'Form and intake platforms: securely store medical intake responses for provider review.',
                 'Email and SMS providers: receive your contact information to send transactional and, with consent, marketing messages.',

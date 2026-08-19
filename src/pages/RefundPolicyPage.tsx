@@ -43,9 +43,10 @@ const detailSections = [
           'Subscription and membership fees after the applicable billing period has begun and payment has been received.',
         ]} />
         <p>
-          If funds have already been received and verified, any refund that is approved under this policy follows the
-          applicable refund/cancellation rules and is returned by bank transfer or another method we specify — not to a
-          card, because card checkout is not an active payment method.
+          If funds have already been received, any refund that is approved under this policy follows the applicable
+          refund/cancellation rules and is returned to the original payment method or another method we specify.
+          Provider services, lab services, membership charges, and recurring shipping charges are not automatically
+          refundable; see the sections below and our Membership &amp; Cancellation Terms.
         </p>
       </>
     ),
@@ -89,9 +90,23 @@ const detailSections = [
       <>
         <p>
           If a licensed provider does not approve a requested therapy after medical intake, and payment for that
-          product has already been received and verified, a full refund of the applicable paid amount for that product
-          is issued. This is the primary circumstance under which a refund is available for provider-directed therapy
-          products.
+          product has already been received, a full refund of the applicable paid amount for that product is issued.
+          This is the primary circumstance under which a refund is available for provider-directed therapy products.
+          Provider visits and lab services are not automatically refundable once the applicable service period has
+          begun, except where this policy or law requires otherwise.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'membership-and-shipping-charges',
+    title: 'Membership and Recurring Shipping Charges',
+    body: (
+      <>
+        <p>
+          Membership fees and selected recurring shipping charges are generally nonrefundable once the applicable
+          billing period begins and payment has been received. Cancellation after the minimum term does not
+          retroactively refund prior membership or shipping charges except where required by law or expressly approved.
         </p>
       </>
     ),
@@ -125,7 +140,7 @@ export function RefundPolicyPage() {
             We want you to feel confident about every order. Please review our policy carefully before completing your
             purchase.
           </p>
-          <p className="text-xs text-ink-400">Last updated: August 10, 2026</p>
+          <p className="text-xs text-ink-400">Last updated: August 19, 2026</p>
         </div>
       </section>
 

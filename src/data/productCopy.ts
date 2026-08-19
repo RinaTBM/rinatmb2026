@@ -1121,15 +1121,15 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'You enroll in the membership PROGRAM and select a requested dose. After provider review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU for that dose. Your membership price remains flat through the included program while you stay continuously enrolled. Billing currently uses invoices with ACH/bank-transfer or domestic wire instructions each period — your bank is not automatically charged by the storefront.',
+      'You enroll in the membership PROGRAM, select a requested dose, and choose Two-Day or Next-Day shipping. Your card is charged monthly for the $149 membership plus selected shipping ($179 or $199/month). A one-time Initial Provider Visit ($75) may apply when required. After provider review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU. Payment does not guarantee a prescription.',
     whyPeopleChooseIt: [
       'Prefer flat monthly budgeting over paying per retail vial strength',
       'Want ongoing provider-guided Semaglutide care with a clear program maximum',
       'Value member savings on eligible add-on products',
-      'Like transparent requested-dose intake without confusing “auto-debit” surprises',
+      'Like clear due-today vs monthly renewal totals at checkout',
     ],
     whatToExpect:
-      'Initial term is 3 months, then month to month. Complete intake, await provider review, and pay each invoice via the instructions provided. Requested dose is not automatically the approved dose. Payment does not guarantee a prescription.',
+      'Initial term is 3 months, then month to month. Complete secure card checkout, complete intake, and await provider review. Requested dose is not automatically the approved dose. Selected shipping renews monthly with your card. Payment does not guarantee a prescription.',
     importantInformation:
       'Membership enrollment and payment do not guarantee a prescription. Availability depends on provider judgment, pharmacy fulfillment, and applicable requirements.',
     benefits: [
@@ -1144,7 +1144,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     ],
     regulatoryNotes: [
       'Distinguish PROGRAM SKU vs FULFILLMENT SKU.',
-      'Do not imply automatic bank charging under current invoice ACH/Wire flow.',
+      'Customer copy: card monthly billing with recurring shipping; do not imply ACH-primary public checkout.',
     ],
   },
 
@@ -1170,15 +1170,15 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'Enrollment purchases the membership PROGRAM. Requested dose informs intake; approved treatment drives which retail fulfillment SKU is used. Your $249 rate remains locked while membership stays continuously active and within program rules. Each billing period currently uses an invoice with ACH/bank-transfer or domestic wire instructions — not automatic storefront bank charging.',
+      'Enrollment purchases the membership PROGRAM. You select a requested dose and shipping. Your card is charged monthly for the $249 membership plus selected shipping ($279 or $299/month). A one-time Initial Provider Visit ($75) may apply when required. Requested dose informs intake; approved treatment drives which retail fulfillment SKU is used. Payment does not guarantee a prescription.',
     whyPeopleChooseIt: [
       'Want Tirzepatide’s dual-pathway option with flat monthly budgeting',
       'Prefer a clear included maximum through 15mg',
       'Value member savings on eligible wellness products and accessories',
-      'Appreciate transparent invoice-based ACH/Wire payment instead of surprise auto-debits',
+      'Prefer secure monthly card billing with clear shipping renewal amounts',
     ],
     whatToExpect:
-      'Initial term is 3 months, then month to month. Complete intake, complete provider review, and pay each invoice using the provided bank-transfer instructions. Payment does not guarantee a prescription.',
+      'Initial term is 3 months, then month to month. Complete secure card checkout, complete intake, and complete provider review. Selected shipping renews monthly with your card. Payment does not guarantee a prescription.',
     importantInformation:
       'Payment and enrollment do not guarantee a prescription. Tirzepatide Membership is not interchangeable with Semaglutide Membership. 30mg is not included.',
     benefits: [
@@ -1193,7 +1193,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     ],
     regulatoryNotes: [
       'No 30mg offering.',
-      'Do not imply automatic ACH debit under current invoice model.',
+      'Customer copy: card monthly billing with recurring shipping; do not imply ACH-primary public checkout.',
     ],
   },
 };

@@ -14,7 +14,6 @@ import { BestSellersPage } from '@/pages/BestSellersPage';
 import { ProductPage } from '@/pages/ProductPage';
 import { CheckoutPage } from '@/pages/CheckoutPage';
 import { OrderPaymentInstructionsPage } from '@/pages/OrderPaymentInstructionsPage';
-import { KashuCardResultPage } from '@/pages/KashuCardResultPage';
 import { SuccessPage } from '@/pages/SuccessPage';
 import { CancelPage } from '@/pages/CancelPage';
 import { TrackPage } from '@/pages/TrackPage';
@@ -88,9 +87,6 @@ function App() {
     if (path.startsWith('/order/payment/')) {
       const orderNumber = path.replace('/order/payment/', '').split('/')[0];
       return <OrderPaymentInstructionsPage publicOrderNumber={orderNumber} />;
-    }
-    if (path.startsWith('/order/card-result/')) {
-      return <KashuCardResultPage />;
     }
     if (path === '/success') return <SuccessPage />;
     if (path === '/cancel') return <CancelPage />;

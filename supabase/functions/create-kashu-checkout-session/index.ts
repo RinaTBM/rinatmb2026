@@ -40,7 +40,7 @@ function apiBase(): string {
 
 function buildInitUrl(params: {
   storeId: string;
-  items: { variantId: string; quantity: number; priceId?: string }[];
+  items: { variantId: string; quantity: number }[];
   currency: string;
   checkoutUrl: string;
   returnUrl: string;
@@ -69,16 +69,6 @@ function extractToken(redirectUrl: string): string | null {
   } catch {
     return null;
   }
-}
-
-/** MBM shipping SKUs — Tagada init has no shipping-amount field; use mapped line items. */
-const SHIP_SKU_TWO_DAY = "MBM-SHIP-TWO-DAY-001";
-const SHIP_SKU_NEXT_DAY = "MBM-SHIP-NEXT-DAY-001";
-
-function shippingSkuForCents(shippingCents: number): string | null {
-  if (shippingCents === 3000) return SHIP_SKU_TWO_DAY;
-  if (shippingCents === 5000) return SHIP_SKU_NEXT_DAY;
-  return null;
 }
 
 Deno.serve(async (req) => {
@@ -157,21 +147,8 @@ Deno.serve(async (req) => {
       }, 400);
     }
 
-    const membershipSkus = skus.filter((s: string) => String(s).startsWith("MBM-MEM-"));
-    if (membershipSkus.length) {
-      return json({
-        error:
-          "Membership programs cannot use card checkout in this phase. Please pay by ACH or wire.",
-        missingSkus: membershipSkus,
-      }, 409);
-    }
-
-    const shippingCents = Number(order.shipping_cents) || 0;
-    const shipSku = shippingCents > 0 ? shippingSkuForCents(shippingCents) : null;
-    const mapSkus = shipSku ? [...skus, shipSku] : skus;
-
     const mapRes = await fetch(
-      `${supabaseUrl}/rest/v1/kashu_sku_map?mbm_sku=in.(${mapSkus.map((s: string) => `"${s}"`).join(",")})&is_active=eq.true&select=mbm_sku,tagada_variant_id,tagada_product_id,tagada_price_id,mbm_price_cents,tagada_price_cents`,
+      `${supabaseUrl}/rest/v1/kashu_sku_map?mbm_sku=in.(${skus.map((s: string) => `"${s}"`).join(",")})&is_active=eq.true&select=mbm_sku,tagada_variant_id,tagada_product_id`,
       {
         headers: {
           Authorization: `Bearer ${serviceKey}`,
@@ -187,33 +164,17 @@ Deno.serve(async (req) => {
       }, 503);
     }
     const maps = await mapRes.json();
-    const bySku = new Map<
-      string,
-      {
-        tagada_variant_id: string;
-        tagada_price_id?: string | null;
-        mbm_price_cents?: number | null;
-        tagada_price_cents?: number | null;
-      }
-    >(
-      (Array.isArray(maps) ? maps : []).map((
-        m: {
-          mbm_sku: string;
-          tagada_variant_id: string;
-          tagada_price_id?: string | null;
-          mbm_price_cents?: number | null;
-          tagada_price_cents?: number | null;
-        },
-      ) => [m.mbm_sku, m]),
+    const bySku = new Map<string, { tagada_variant_id: string }>(
+      (Array.isArray(maps) ? maps : []).map((m: { mbm_sku: string; tagada_variant_id: string }) => [
+        m.mbm_sku,
+        m,
+      ]),
     );
 
     const missing: string[] = [];
-    const tagadaItems: { variantId: string; quantity: number; priceId?: string }[] = [];
-    const skuList: string[] = [];
-    let calculatedTagadaMerchandiseCents = 0;
+    const tagadaItems: { variantId: string; quantity: number }[] = [];
     for (const line of orderItems) {
       const sku = line.sku as string | null;
-      const qty = Number(line.quantity) || 1;
       if (!sku) {
         missing.push(String(line.product_name_snapshot || "item"));
         continue;
@@ -223,17 +184,9 @@ Deno.serve(async (req) => {
         missing.push(sku);
         continue;
       }
-      const unit = Number(mapped.tagada_price_cents ?? mapped.mbm_price_cents);
-      if (!Number.isFinite(unit)) {
-        missing.push(sku);
-        continue;
-      }
-      calculatedTagadaMerchandiseCents += Math.trunc(unit) * qty;
-      skuList.push(`${sku}×${qty}`);
       tagadaItems.push({
         variantId: mapped.tagada_variant_id,
-        quantity: qty,
-        ...(mapped.tagada_price_id ? { priceId: mapped.tagada_price_id } : {}),
+        quantity: Number(line.quantity) || 1,
       });
     }
     if (missing.length) {
@@ -241,71 +194,6 @@ Deno.serve(async (req) => {
         error:
           "Tagada product sync incomplete. Missing kashu_sku_map rows for one or more SKUs.",
         missingSkus: missing,
-      }, 409);
-    }
-
-    // MBM is shipping source of truth. Only $0 / $30 / $50 are supported for card.
-    const allowedShipping = new Set([0, 3000, 5000]);
-    if (!allowedShipping.has(shippingCents)) {
-      return json({
-        error:
-          "Unexpected MBM shipping amount for card checkout. Only $0, $30 (Two-Day), or $50 (Next-Day) are supported.",
-        blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
-        shippingCents,
-        shippingMethod: order.shipping_method,
-      }, 409);
-    }
-
-    let calculatedShippingCents = 0;
-    if (shippingCents > 0) {
-      if (!shipSku) {
-        return json({
-          error:
-            "Card checkout cannot represent this shipping method in Tagada yet. Use ACH/Wire or a $0-shipping cart.",
-          blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
-          shippingCents,
-          shippingMethod: order.shipping_method,
-        }, 409);
-      }
-      const shipMap = bySku.get(shipSku);
-      const shipPrice =
-        shipMap?.tagada_price_cents ?? shipMap?.mbm_price_cents ?? null;
-      if (!shipMap?.tagada_variant_id || shipPrice !== shippingCents) {
-        return json({
-          error:
-            "Tagada shipping line mapping missing or price mismatch. MBM shipping is authoritative; card checkout blocked until a matching Tagada shipping variant exists.",
-          blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
-          shippingSku: shipSku,
-          shippingCents,
-          mappedPriceCents: shipPrice,
-        }, 409);
-      }
-      calculatedShippingCents = shippingCents;
-      skuList.push(`${shipSku}×1`);
-      tagadaItems.push({
-        variantId: shipMap.tagada_variant_id,
-        quantity: 1,
-        ...(shipMap.tagada_price_id ? { priceId: shipMap.tagada_price_id } : {}),
-      });
-    }
-
-    const mbmTaxCents = Number(order.tax_cents) || 0;
-    const mbmTotalCents = Number(order.total_cents) || 0;
-    // V1: Tagada catalog must not add independent tax — expected Tagada charge =
-    // mapped line prices + MBM shipping line + MBM tax_cents (usually 0 when Tagada tax is off).
-    const calculatedTagadaTotalCents =
-      calculatedTagadaMerchandiseCents + calculatedShippingCents + mbmTaxCents;
-    if (calculatedTagadaTotalCents !== mbmTotalCents) {
-      return json({
-        error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
-        blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
-        publicOrderNumber,
-        mbmTotalCents,
-        calculatedTagadaTotalCents,
-        calculatedTagadaMerchandiseCents,
-        calculatedShippingCents,
-        mbmTaxCents,
-        skuList,
       }, 409);
     }
 

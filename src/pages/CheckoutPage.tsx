@@ -37,11 +37,11 @@ import {
   PAYMENTS_UNAVAILABLE_MESSAGE,
 } from '@/lib/payments/paymentsEnabled';
 import {
+  ACTIVE_CHECKOUT_PAYMENT_METHODS,
   assertSelectablePaymentMethod,
-  getActiveCheckoutPaymentMethods,
   PAYMENT_METHOD_HELP,
   PAYMENT_METHOD_LABELS,
-  type PaymentMethod,
+  type ActiveCheckoutPaymentMethod,
 } from '@/lib/payments/paymentMethods';
 import {
   CHECKOUT_SUBMIT_CTA,
@@ -54,13 +54,6 @@ import {
   RECURRING_MANUAL_PAYMENT_DISCLOSURE,
 } from '@/lib/payments/recurringCopy';
 import { submitInvoiceOrder } from '@/lib/payments/submitInvoiceOrder';
-import { createKashuCheckoutSession } from '@/lib/payments/createKashuCheckoutSession';
-import {
-  evaluateKashuCardCartEligibility,
-  isKashuCardEnabled,
-  KASHU_CARD_SUBMIT_CTA,
-  KASHU_PAYMENT_METHOD,
-} from '@/lib/payments/kashuTagada';
 import { supabase } from '@/lib/supabaseClient';
 import {
   determineProviderRequirement,
@@ -85,13 +78,9 @@ export function CheckoutPage() {
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
   });
   const [shippingMethod, setShippingMethod] = useState<SelectableShippingMethod>('two_day');
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('manual_ach');
+  const [paymentMethod, setPaymentMethod] = useState<ActiveCheckoutPaymentMethod>('manual_ach');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [pendingCardOrder, setPendingCardOrder] = useState<{
-    publicOrderNumber: string;
-    paymentAccessToken: string;
-  } | null>(null);
   const [therapyHistory, setTherapyHistory] = useState<ApprovedTherapyHistoryRow[]>([]);
   const checkoutEnabled = isManualCheckoutEnabled();
   const hasRecurring = cartHasRecurringItems(items);
@@ -302,30 +291,6 @@ export function CheckoutPage() {
   const accessorySalesTax = accessoryTaxAuth.accessorySalesTaxCents / 100;
   const displaySubtotal = displaySubtotalCents / 100;
   const total = displaySubtotal + shipping + providerCareTax + accessorySalesTax;
-  const shippingCents = Math.round(shipping * 100);
-
-  const cardEligibility = evaluateKashuCardCartEligibility({
-    flagEnabled: isKashuCardEnabled(),
-    shippingCents,
-    items: items.map(i => ({
-      isMembership: i.isMembership,
-      purchaseType: i.purchaseType,
-      quantity: i.quantity,
-      sku: i.variantId ? skuForVariantId(i.variantId) : undefined,
-      productId: i.productId,
-    })),
-  });
-
-  const selectablePaymentMethods = getActiveCheckoutPaymentMethods().filter(method => {
-    if (method !== KASHU_PAYMENT_METHOD) return true;
-    return cardEligibility.ok;
-  });
-
-  useEffect(() => {
-    if (paymentMethod === KASHU_PAYMENT_METHOD && !cardEligibility.ok) {
-      setPaymentMethod('manual_ach');
-    }
-  }, [paymentMethod, cardEligibility.ok]);
 
   const update = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
 
@@ -398,11 +363,6 @@ export function CheckoutPage() {
       return;
     }
 
-    if (methodCheck.method === KASHU_PAYMENT_METHOD && !cardEligibility.ok) {
-      setError(cardEligibility.message);
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
@@ -425,32 +385,6 @@ export function CheckoutPage() {
         providerCareTaxAuth.providerCareTaxCents + accessoryTaxAuth.accessorySalesTaxCents;
       const totalCents = Math.round(total * 100);
 
-      // Retry hosted checkout for an already-created unpaid card order (avoid duplicates).
-      if (
-        methodCheck.method === KASHU_PAYMENT_METHOD &&
-        pendingCardOrder?.publicOrderNumber &&
-        pendingCardOrder.paymentAccessToken
-      ) {
-        const kashu = await createKashuCheckoutSession({
-          supabaseUrl,
-          anonKey,
-          accessToken: session?.access_token ?? null,
-          publicOrderNumber: pendingCardOrder.publicOrderNumber,
-          paymentAccessToken: pendingCardOrder.paymentAccessToken,
-        });
-        if (!kashu.ok) {
-          throw new Error(
-            kashu.error +
-              (kashu.missingSkus?.length
-                ? ` Missing SKU mapping: ${kashu.missingSkus.join(', ')}`
-                : ''),
-          );
-        }
-        clearCart();
-        window.location.assign(kashu.redirectUrl);
-        return;
-      }
-
       const result = await submitInvoiceOrder({
         supabaseUrl,
         anonKey,
@@ -463,7 +397,7 @@ export function CheckoutPage() {
           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || '',
           subtotalCents,
           discountCents: Math.round(totalSavings * 100),
-          shippingCents,
+          shippingCents: Math.round(shipping * 100),
           taxCents,
           totalCents,
           providerCareTaxCents: providerCareTaxAuth.providerCareTaxCents,
@@ -508,33 +442,6 @@ export function CheckoutPage() {
         );
       } catch {
         /* ignore quota */
-      }
-
-      if (methodCheck.method === KASHU_PAYMENT_METHOD) {
-        setPendingCardOrder({
-          publicOrderNumber: result.publicOrderNumber,
-          paymentAccessToken: result.paymentAccessToken,
-        });
-        const kashu = await createKashuCheckoutSession({
-          supabaseUrl,
-          anonKey,
-          accessToken: session?.access_token ?? null,
-          publicOrderNumber: result.publicOrderNumber,
-          paymentAccessToken: result.paymentAccessToken,
-        });
-        if (!kashu.ok) {
-          throw new Error(
-            kashu.error +
-              (kashu.missingSkus?.length
-                ? ` Missing SKU mapping: ${kashu.missingSkus.join(', ')}`
-                : '') +
-              ` Your order ${result.publicOrderNumber} was saved unpaid — you can retry secure payment without creating a duplicate.`,
-          );
-        }
-        recordLocalSubscriptions();
-        clearCart();
-        window.location.assign(kashu.redirectUrl);
-        return;
       }
 
       recordLocalSubscriptions();
@@ -806,12 +713,12 @@ export function CheckoutPage() {
                         <div className="flex items-center gap-3">
                           <Lock size={18} className="text-gold-500" />
                           <p className="text-sm text-ink-600">
-                            Select how you will pay. ACH and wire provide payment instructions after you
-                            submit. Card payments continue to our secure encrypted checkout.
+                            Select how you will pay after submitting your order. No payment is withdrawn from your bank
+                            when you submit your order.
                           </p>
                         </div>
                         <div className="space-y-2">
-                          {selectablePaymentMethods.map(method => (
+                          {ACTIVE_CHECKOUT_PAYMENT_METHODS.map(method => (
                             <label
                               key={method}
                               className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm ${
@@ -834,21 +741,12 @@ export function CheckoutPage() {
                                     </span>
                                   ) : null}
                                 </span>
-                                <span className="text-ink-500 text-xs">
-                                  {PAYMENT_METHOD_HELP[method]}
-                                </span>
+                                <span className="text-ink-500 text-xs">{PAYMENT_METHOD_HELP[method]}</span>
                               </span>
                             </label>
                           ))}
                         </div>
-                        {isKashuCardEnabled() && !cardEligibility.ok && cardEligibility.reason !== 'flag_off' ? (
-                          <p className="text-xs text-ink-500">{cardEligibility.message}</p>
-                        ) : null}
-                        <p className="text-sm text-ink-500">
-                          {paymentMethod === KASHU_PAYMENT_METHOD
-                            ? 'You will be redirected to complete card payment securely. Your order stays unpaid until payment is confirmed.'
-                            : CHECKOUT_SUBMIT_SUPPORTING_COPY}
-                        </p>
+                        <p className="text-sm text-ink-500">{CHECKOUT_SUBMIT_SUPPORTING_COPY}</p>
                         {hasRecurring ? (
                           <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 leading-relaxed space-y-2">
                             <p className="font-medium">{RECURRING_MANUAL_PAYMENT_DISCLOSURE}</p>
@@ -932,13 +830,8 @@ export function CheckoutPage() {
                     >
                       {loading ? (
                         <span className="flex items-center justify-center gap-2">
-                          <Loader2 size={18} className="animate-spin" />{' '}
-                          {paymentMethod === KASHU_PAYMENT_METHOD
-                            ? 'Preparing secure payment…'
-                            : 'Submitting order…'}
+                          <Loader2 size={18} className="animate-spin" /> Submitting order…
                         </span>
-                      ) : paymentMethod === KASHU_PAYMENT_METHOD ? (
-                        KASHU_CARD_SUBMIT_CTA
                       ) : (
                         CHECKOUT_SUBMIT_CTA
                       )}

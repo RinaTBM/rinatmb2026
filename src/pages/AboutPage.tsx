@@ -163,8 +163,12 @@ export function AboutPage() {
                 </Link>
               </div>
               <div>
-                <p className="text-sm font-medium text-ink-400 uppercase tracking-wider mb-1">Pharmacy Partner</p>
-                <p className="text-ink-800">Ageless Pharma Rx</p>
+                <p className="text-sm font-medium text-ink-400 uppercase tracking-wider mb-1">Pharmacy Partners</p>
+                <p className="text-ink-800">Ageless Pharma Rx (503A)</p>
+                <p className="text-ink-800">ProCompounding Pharmacy (503A)</p>
+                <p className="mt-3 text-sm text-ink-600 leading-relaxed">
+                  Prescription therapies are fulfilled through U.S. compounding pharmacy partners, including Ageless Pharma Rx (503A) and ProCompounding Pharmacy (503A), as applicable. Provider review and a valid prescription are required.
+                </p>
               </div>
             </div>
           </div>

@@ -3,6 +3,10 @@ import { ArrowRight, Check, Lock, ShieldCheck } from 'lucide-react';
 import { Link } from '@/router';
 import type { Membership } from '@/data/products';
 import { paragraphs } from '@/data/productCopy';
+import {
+  PHARMACY_FULFILLMENT_COPY,
+  PHARMACY_FULFILLMENT_HEADING,
+} from '@/data/pharmacyFulfillmentCopy';
 import { useCart } from '@/context/CartContext';
 import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
 import { ProductHighlights } from '@/components/ProductDescriptionSections';
@@ -250,6 +254,17 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
               ))}
             </div>
           )}
+
+          <div className="space-y-3">
+            <h2 className="font-serif text-2xl md:text-3xl text-ink-900">
+              {PHARMACY_FULFILLMENT_HEADING}
+            </h2>
+            {paragraphs(PHARMACY_FULFILLMENT_COPY).map((p, i) => (
+              <p key={i} className="text-ink-600 leading-relaxed">
+                {p}
+              </p>
+            ))}
+          </div>
 
           <div className="space-y-3">
             <h2 className="font-serif text-2xl md:text-3xl text-ink-900">

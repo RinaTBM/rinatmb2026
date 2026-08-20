@@ -2,6 +2,10 @@ import type { ReactNode } from 'react';
 import { Check } from 'lucide-react';
 import type { Product } from '@/data/products';
 import { paragraphs } from '@/data/productCopy';
+import {
+  PHARMACY_FULFILLMENT_COPY,
+  PHARMACY_FULFILLMENT_HEADING,
+} from '@/data/pharmacyFulfillmentCopy';
 
 function Section({
   title,
@@ -149,6 +153,12 @@ export function ProductDescriptionSections({
               'Individual experiences and results vary.',
             ]}
           />
+        </Section>
+      )}
+
+      {product.requiresPrescription && (
+        <Section title={PHARMACY_FULFILLMENT_HEADING}>
+          <ParagraphBlock text={PHARMACY_FULFILLMENT_COPY} />
         </Section>
       )}
     </div>

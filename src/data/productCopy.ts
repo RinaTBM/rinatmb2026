@@ -805,7 +805,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Routine-Ready',
     ],
     about: [
-      'This kit gathers core injection-day accessories into one checkout: a 3D printed peptide case, temperature-controlled travel case, discreet travel bag, reusable ice pack, wellness planner, sharps container, alcohol prep wipes, and insulin syringes.',
+      'This kit gathers core injection-day accessories into one checkout: a Premium Protective Medication Case, temperature-controlled travel case, discreet travel bag, reusable ice pack, wellness planner, sharps container, alcohol prep wipes, and insulin syringes.',
       'It is a supplies bundle — not a medication. Prescription products are sold separately and still require provider review when applicable.',
     ].join('\n\n'),
     potentialBenefits: [
@@ -832,33 +832,33 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'premium-3d-printed-peptide-case': {
-    benefitHeadline: 'Keep Vials and Supplies Neat, Protected, and Ready',
+    benefitHeadline: 'Elevated Protection for Your Wellness Essentials',
     shortDescription:
-      'A custom 3D-printed case with compartments designed to hold peptide vials, syringes, and related supplies so your kit stays organized at home or in a larger travel bag.',
+      'A durable protective case designed to keep your wellness essentials organized, protected, and discreet at home or while traveling. Its structured construction helps protect your supplies while maintaining the clean, elevated aesthetic of My Bare Method.',
     highlights: [
-      'Organized Compartments',
-      'Vial Protection',
-      'Travel-Friendly',
-      'Daily-Kit Ready',
+      'Structured Protection',
+      'Organized Storage',
+      'Travel-Ready',
+      'Discreet Aesthetic',
     ],
     about: [
-      'This case helps small vials and injection supplies live in one protective shell instead of loose in a drawer or tote. It supports organization — it does not replace refrigeration guidance when your medication requires cold storage.',
+      'A structured, durable medication and wellness-supply case designed for organized storage and convenient travel.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Reduces clutter around vials and syringes',
-      'Makes grab-and-go packing simpler',
-      'Helps protect fragile glass from bouncing loosely in a bag',
+      'Helps keep compatible medication supplies organized and protected',
+      'Provides a more discreet, polished alternative to loose storage',
+      'Supports tidy routines at home or while traveling',
       'Pairs cleanly with other My Bare Method accessories',
     ],
     howItWorks:
-      'Place vials and compatible supplies into the molded compartments. Use it as your daily organizer or as an insert inside a larger travel bag.',
+      'Use it at home or while traveling to keep compatible wellness supplies together and easy to access.',
     whyPeopleChooseIt: [
-      'Purpose-built for peptide/injectable supply organization',
-      'Lightweight everyday companion',
-      'Complements insulated cases rather than replacing them',
+      'Elevated, structured protection for everyday organization',
+      'Discreet storage that fits the My Bare Method aesthetic',
+      'Complements insulated travel cases rather than replacing pharmacy storage guidance',
     ],
     whatToExpect:
-      'One case as listed. Follow medication storage rules from your pharmacy separately.',
+      'One case as listed. Follow medication storage rules from your pharmacy separately. This accessory is not a temperature-controlled, waterproof, or certified medical device.',
     importantInformation:
       'Accessories are wellness tools and supplies. They are not medications.',
   },

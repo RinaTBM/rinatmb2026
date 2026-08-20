@@ -89,7 +89,7 @@ const faqCategories = [
       { q: 'Do you offer telemedicine appointments?', a: 'Yes. We offer telemedicine services via Zoom. Appointments are booked directly on our website by the patient.' },
       { q: 'Which states or jurisdictions do you serve?', a: 'Our Medical Director is a licensed physician in all states, so our telemedicine services are available nationwide.' },
       { q: 'Who is your Medical Director?', a: 'Our Medical Director is Dr. Jerry J. Cattelane Jr., D.O. He provides clinical leadership and supports the provider-directed wellness programs available through My Bare Method. Treatment decisions are made by the licensed provider responsible for your care.' },
-      { q: 'Which pharmacy fulfills your prescriptions?', a: 'Provider-approved prescriptions are fulfilled through Ageless Pharma Rx, our partnered pharmacy. Fulfillment begins only after payment has been received and a licensed provider determines treatment is appropriate and any required review is complete.' },
+      { q: 'Which pharmacy fulfills your prescriptions?', a: 'Prescription therapies are fulfilled through U.S. compounding pharmacy partners, including Ageless Pharma Rx (503A) and ProCompounding Pharmacy (503A), as applicable. Provider review and a valid prescription are required. Fulfillment begins only after payment has been received and a licensed provider determines treatment is appropriate and any required review is complete.' },
     ],
   },
   {

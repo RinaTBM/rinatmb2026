@@ -17,6 +17,7 @@ import {
   VARIANT_SKU_BY_ID,
 } from './variantSkus';
 import { MEMBERSHIP_COPY, PRODUCT_COPY } from './productCopy';
+import { COMPOUNDED_FDA_FAQ, PHARMACY_503A_FAQ } from './pharmacyFulfillmentCopy';
 
 // ---------------------------------------------------------------------------
 // Public categories (5)
@@ -195,6 +196,14 @@ const providerFaqs = [
   {
     q: 'What if I am not approved?',
     a: 'If the provider determines a product is not appropriate for you, you receive a full refund.',
+  },
+  {
+    q: PHARMACY_503A_FAQ.q,
+    a: PHARMACY_503A_FAQ.a,
+  },
+  {
+    q: COMPOUNDED_FDA_FAQ.q,
+    a: COMPOUNDED_FDA_FAQ.a,
   },
 ];
 
@@ -1286,6 +1295,14 @@ export const memberships: Membership[] = [
         q: 'How is membership billed?',
         a: 'Join with Credit / Debit Card. Your card is charged monthly for the $149 membership plus selected shipping ($179 Two-Day or $199 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
       },
+      {
+        q: PHARMACY_503A_FAQ.q,
+        a: PHARMACY_503A_FAQ.a,
+      },
+      {
+        q: COMPOUNDED_FDA_FAQ.q,
+        a: COMPOUNDED_FDA_FAQ.a,
+      },
     ],
     cta: 'Join Semaglutide Membership',
     seoTitle: 'Semaglutide Membership — My Bare Method',
@@ -1356,6 +1373,14 @@ export const memberships: Membership[] = [
       {
         q: 'How is membership billed?',
         a: 'Join with Credit / Debit Card. Your card is charged monthly for the $249 membership plus selected shipping ($279 Two-Day or $299 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
+      },
+      {
+        q: PHARMACY_503A_FAQ.q,
+        a: PHARMACY_503A_FAQ.a,
+      },
+      {
+        q: COMPOUNDED_FDA_FAQ.q,
+        a: COMPOUNDED_FDA_FAQ.a,
       },
     ],
     cta: 'Join Tirzepatide Membership',

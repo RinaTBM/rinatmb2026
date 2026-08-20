@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { CANCELLATION_POLICY_COPY } from '@/lib/account/subscriptions';
+import { COMPOUNDED_FDA_FAQ, PHARMACY_503A_FAQ } from '@/data/pharmacyFulfillmentCopy';
 
 const faqCategories = [
   {
@@ -90,6 +91,8 @@ const faqCategories = [
       { q: 'Which states or jurisdictions do you serve?', a: 'Our Medical Director is a licensed physician in all states, so our telemedicine services are available nationwide.' },
       { q: 'Who is your Medical Director?', a: 'Our Medical Director is Dr. Jerry J. Cattelane Jr., D.O. He provides clinical leadership and supports the provider-directed wellness programs available through My Bare Method. Treatment decisions are made by the licensed provider responsible for your care.' },
       { q: 'Which pharmacy fulfills your prescriptions?', a: 'Prescription therapies are fulfilled through U.S. compounding pharmacy partners, including Ageless Pharma Rx (503A) and ProCompounding Pharmacy (503A), as applicable. Provider review and a valid prescription are required. Fulfillment begins only after payment has been received and a licensed provider determines treatment is appropriate and any required review is complete.' },
+      { q: PHARMACY_503A_FAQ.q, a: PHARMACY_503A_FAQ.a },
+      { q: COMPOUNDED_FDA_FAQ.q, a: COMPOUNDED_FDA_FAQ.a },
     ],
   },
   {

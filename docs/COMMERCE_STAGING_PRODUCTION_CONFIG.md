@@ -28,7 +28,7 @@ Non-secret variable **names** only. Never commit secret values.
 | `GEN_HEALTH_API_KEY` | unset | Server-only GEN key |
 | `GEN_HEALTH_WEBHOOK_SECRET` | unset | Future GEN webhook HMAC |
 | `GEN_HANDOFF_AUTOMATION_ENABLED` | `false` | Post-paid auto handoff (must stay off until explicitly approved) |
-| `GEN_API_ORDERS_ENABLED` | unset / `false` | Production Rx checkout capability: READY/ACTIVE map **and** this flag when `REQUIRE_GEN_MAPPING_FOR_RX` is on. Distinct from `GEN_HEALTH_ENABLED` and from payment-status payload flag. Keep `false` until Scriptful/GEN confirms API Orders enablement |
+| `GEN_API_ORDERS_ENABLED` | unset / `false` | Production Rx checkout capability: READY/ACTIVE map **and** this flag when `REQUIRE_GEN_MAPPING_FOR_RX` is on. Also required for `markGenOrderPaid` PATCH. Distinct from `GEN_HEALTH_ENABLED` and from payment-status payload flag. Keep `false` until Scriptful/GEN confirms API Orders enablement |
 | `GEN_API_ORDERS_PAYMENT_STATUS_ENABLED` | unset / `false` | Only set `true` after GEN enables “API Orders” for the client; otherwise create omits `payment_status` |
 | `REQUIRE_GEN_MAPPING_FOR_RX` | staging `false` / prod default true | Rx checkout fail-closed without READY/ACTIVE map |
 | `MBM_RUNTIME_ENV` | `staging` / `production` | Runtime marker for commerce policy |

@@ -13,7 +13,13 @@ import {
   labelPaymentStatus,
 } from '@/lib/orders/orderStatus';
 import { labelShippingMethod } from '@/lib/orders/shipping';
-import { resolveClinicalLinesForOrder, clinicalTimelineLabels, isTimelineStageReached } from '@/lib/commerce/clinicalNextSteps';
+import { resolveClinicalLinesForOrder } from '@/lib/commerce/clinicalNextSteps';
+import {
+  CLINICAL_JOURNEY_STAGES,
+  journeyStageFromPortal,
+  isJourneyStageReached,
+} from '@/lib/genHealth/clinicalJourney';
+import { customerActionLabel } from '@/lib/genHealth/genForms';
 import { AccountShell } from './AccountShell';
 import { OrderStatusTimeline } from './OrderStatusTimeline';
 import { useAccountNoIndex } from './useAccountNoIndex';
@@ -211,33 +217,34 @@ export function AccountOrderDetailPage({ orderId }: AccountOrderDetailPageProps)
               lines: rxLines,
             });
             if (!clinical.applicable) return null;
-            const timeline = clinicalTimelineLabels();
             return (
               <section
                 className="rounded-2xl border border-cream-300 bg-white p-6 shadow-sm"
                 aria-labelledby="clinical-next-heading"
               >
                 <h3 id="clinical-next-heading" className="font-serif text-xl text-ink-900 mb-3">
-                  Clinical next steps
+                  Your care journey
                 </h3>
                 <p className="text-xs text-ink-400 mb-4">
-                  Clinical status comes from your care workflow after payment. We do not invent
-                  medical questions or mark steps complete from this page.
+                  Status updates come from your My Bare Method care workflow after payment. We do
+                  not invent medical questions or mark steps complete from this page.
                 </p>
                 <ul className="space-y-6">
-                  {clinical.lines.map((line) => (
+                  {clinical.lines.map((line) => {
+                    const journey = journeyStageFromPortal(line.portalStage);
+                    return (
                     <li key={line.orderItemId} className="rounded-xl border border-cream-200 p-4">
                       <p className="text-sm font-medium text-ink-900 mb-1">
                         {line.productName || line.mbmSku || 'Prescription item'}
                       </p>
                       <p className="text-sm text-ink-800">{line.headline}</p>
                       <p className="text-xs text-ink-500 mt-1 mb-3">{line.body}</p>
-                      <ol className="flex flex-wrap gap-2 mb-3" aria-label="Clinical progress">
-                        {timeline.map(({ stage, label }) => {
-                          const reached = isTimelineStageReached(line.portalStage, stage);
+                      <ol className="flex flex-wrap gap-2 mb-3" aria-label="Care journey progress">
+                        {CLINICAL_JOURNEY_STAGES.map(({ id, label }) => {
+                          const reached = isJourneyStageReached(journey, id);
                           return (
                             <li
-                              key={stage}
+                              key={id}
                               className={`text-[11px] rounded-full px-2.5 py-1 border ${
                                 reached
                                   ? 'border-ink-800 bg-ink-900 text-cream-50'
@@ -256,7 +263,9 @@ export function AccountOrderDetailPage({ orderId }: AccountOrderDetailPageProps)
                               key={card.id}
                               className="rounded-lg border border-cream-200 bg-cream-50 px-3 py-2 text-left"
                             >
-                              <p className="text-sm font-medium text-ink-900">{card.title}</p>
+                              <p className="text-sm font-medium text-ink-900">
+                                {customerActionLabel(card.category) || card.title}
+                              </p>
                               <p className="text-xs text-ink-500 mt-1">{card.description}</p>
                               {card.continuationUrl ? (
                                 <a
@@ -278,7 +287,8 @@ export function AccountOrderDetailPage({ orderId }: AccountOrderDetailPageProps)
                         </p>
                       ) : null}
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
               </section>
             );

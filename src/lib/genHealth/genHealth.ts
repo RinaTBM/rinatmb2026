@@ -561,6 +561,397 @@ export async function getPrescriptionsForOrder(
   };
 }
 
+/** Alias used by Phase 12I.5 docs — same as createOrReuseGenPatient. */
+export const ensureGenPatient = createOrReuseGenPatient;
+
+/**
+ * Create GEN order without requiring nested payment_status.
+ * Two-phase external-paid flow: create unpaid → Tagada verify → markPaid.
+ * transactionId may be omitted until mark-paid if GEN allows; prefer including
+ * verified Tagada id when already known (current MBM post-paid create path).
+ */
+export async function createGenOrderUnpaid(
+  input: {
+    patientId: string;
+    clientProductId: string;
+    transactionId?: string;
+    clientReference?: string;
+    quantity?: number;
+    extra?: Record<string, unknown>;
+  },
+  deps: GenClientDeps = {},
+): Promise<GenRequestResult<GenOrderResponse>> {
+  const order: Record<string, unknown> = {
+    clientProductId: input.clientProductId,
+  };
+  if (input.transactionId) order.transactionId = input.transactionId;
+  if (input.clientReference) order.clientReference = input.clientReference;
+  if (input.quantity != null) order.quantity = input.quantity;
+  // Never send payment_status on unpaid create.
+  if (input.extra) Object.assign(order, input.extra);
+
+  const res = await genRequest<unknown>({
+    method: 'POST',
+    path: '/v2/client/orders',
+    body: {
+      patient_id: input.patientId,
+      order,
+    },
+    ...deps,
+  });
+  if (!res.ok) {
+    return {
+      ok: false,
+      correlationId: res.correlationId,
+      error: {
+        ...res.error,
+        code: res.error.code === 'GEN_CLIENT_ERROR' ? 'GEN_ORDER_CREATE_ERROR' : res.error.code,
+      },
+    };
+  }
+  const parsed = parseGenOrderResponse(res.data);
+  if (!parsed) {
+    return {
+      ok: false,
+      correlationId: res.correlationId,
+      error: {
+        code: 'GEN_ORDER_CREATE_ERROR',
+        message: 'GEN order response missing id',
+        httpStatus: res.httpStatus,
+        retryable: false,
+      },
+    };
+  }
+  return { ok: true, data: parsed, httpStatus: res.httpStatus, correlationId: res.correlationId };
+}
+
+/**
+ * PATCH GEN order to paid after verified Tagada payment.
+ * Requires GEN_API_ORDERS_ENABLED=true. No workaround when capability is off.
+ */
+export async function markGenOrderPaid(
+  input: { genOrderId: string; transactionId: string },
+  deps: GenClientDeps = {},
+): Promise<GenRequestResult<GenOrderResponse>> {
+  const tx = (input.transactionId || '').trim();
+  const oid = (input.genOrderId || '').trim();
+  if (!oid || !tx) {
+    return {
+      ok: false,
+      correlationId: createCorrelationId(),
+      error: {
+        code: 'GEN_MARK_PAID_ERROR',
+        message: 'genOrderId and transactionId are required',
+        retryable: false,
+      },
+    };
+  }
+
+  const env = deps.env ?? {};
+  const apiOrdersOn =
+    String((env as GenHealthEnv).GEN_API_ORDERS_ENABLED || '').toLowerCase() === 'true';
+  if (!apiOrdersOn) {
+    return {
+      ok: false,
+      correlationId: createCorrelationId(),
+      error: {
+        code: 'GEN_API_ORDERS_DISABLED',
+        message: 'GEN API Orders capability is not enabled for this client',
+        retryable: false,
+      },
+    };
+  }
+
+  const res = await genRequest<unknown>({
+    method: 'PATCH',
+    path: `/v2/client/orders/${encodeURIComponent(oid)}`,
+    body: {
+      payment_status: 'paid',
+      transaction_id: tx,
+    },
+    ...deps,
+  });
+
+  if (!res.ok) {
+    let code = 'GEN_MARK_PAID_ERROR';
+    if (res.error.httpStatus === 403) code = 'GEN_API_ORDERS_DISABLED';
+    else if (res.error.httpStatus === 409) {
+      // Duplicate / not pending — treat as conflict; caller may interpret already-paid.
+      code = 'GEN_CONFLICT';
+    }
+    return {
+      ok: false,
+      correlationId: res.correlationId,
+      error: { ...res.error, code },
+    };
+  }
+
+  const parsed = parseGenOrderResponse(res.data) || { id: oid, raw: res.data };
+  return { ok: true, data: parsed, httpStatus: res.httpStatus, correlationId: res.correlationId };
+}
+
+/** Pure eligibility for GEN mark-paid — Tagada remains payment authority. */
+export function assertGenMarkPaidEligible(input: {
+  mbmPaymentStatus: string | null | undefined;
+  tagadaTransactionId: string | null | undefined;
+  genOrderId: string | null | undefined;
+  genMappingReady: boolean;
+  isRx: boolean;
+  genApiOrdersEnabled: boolean;
+}): { ok: true } | { ok: false; code: string; message: string } {
+  if (!input.isRx) {
+    return { ok: false, code: 'GEN_SKIP_NON_RX', message: 'Non-Rx lines do not invoke GEN mark-paid' };
+  }
+  if (input.mbmPaymentStatus !== 'paid') {
+    return {
+      ok: false,
+      code: 'GEN_PAYMENT_NOT_PAID',
+      message: 'MBM order must be paid via verified Tagada before GEN mark-paid',
+    };
+  }
+  if (!input.tagadaTransactionId?.trim()) {
+    return {
+      ok: false,
+      code: 'GEN_MARK_PAID_ERROR',
+      message: 'Verified Tagada transaction ID required',
+    };
+  }
+  if (!input.genMappingReady) {
+    return { ok: false, code: 'GEN_MAPPING_NOT_READY', message: 'GEN mapping must be READY/ACTIVE' };
+  }
+  if (!input.genOrderId?.trim()) {
+    return { ok: false, code: 'GEN_ORDER_CREATE_ERROR', message: 'GEN order must exist before mark-paid' };
+  }
+  if (!input.genApiOrdersEnabled) {
+    return {
+      ok: false,
+      code: 'GEN_API_ORDERS_DISABLED',
+      message: 'GEN API Orders capability is not enabled',
+    };
+  }
+  return { ok: true };
+}
+
+/** GET /v2/client/products/:id/forms — GEN intake schema source of truth. */
+export async function getGenProductForms(
+  genProductId: string,
+  deps: GenClientDeps = {},
+): Promise<GenRequestResult<unknown>> {
+  const id = (genProductId || '').trim();
+  if (!id) {
+    return {
+      ok: false,
+      correlationId: createCorrelationId(),
+      error: {
+        code: 'GEN_FORM_FETCH_ERROR',
+        message: 'product id required',
+        retryable: false,
+      },
+    };
+  }
+  const res = await genRequest<unknown>({
+    method: 'GET',
+    path: `/v2/client/products/${encodeURIComponent(id)}/forms`,
+    ...deps,
+  });
+  if (!res.ok) {
+    return {
+      ok: false,
+      correlationId: res.correlationId,
+      error: {
+        ...res.error,
+        code: res.error.httpStatus === 404 ? 'GEN_FORM_FETCH_ERROR' : res.error.code || 'GEN_FORM_FETCH_ERROR',
+      },
+    };
+  }
+  return res;
+}
+
+/** POST /v2/client/orders/:id/forms/submissions — white-label form submit. */
+export async function submitGenOrderForm(
+  input: {
+    genOrderId: string;
+    formId?: string;
+    answers: Record<string, unknown>;
+  },
+  deps: GenClientDeps = {},
+): Promise<GenRequestResult<unknown>> {
+  const oid = (input.genOrderId || '').trim();
+  if (!oid) {
+    return {
+      ok: false,
+      correlationId: createCorrelationId(),
+      error: {
+        code: 'GEN_FORM_SUBMIT_ERROR',
+        message: 'genOrderId required',
+        retryable: false,
+      },
+    };
+  }
+  // Never log answers. Body forwarded to GEN only.
+  const body: Record<string, unknown> = {
+    answers: input.answers,
+  };
+  if (input.formId) body.formId = input.formId;
+
+  const res = await genRequest<unknown>({
+    method: 'POST',
+    path: `/v2/client/orders/${encodeURIComponent(oid)}/forms/submissions`,
+    body,
+    ...deps,
+  });
+  if (!res.ok) {
+    return {
+      ok: false,
+      correlationId: res.correlationId,
+      error: { ...res.error, code: 'GEN_FORM_SUBMIT_ERROR' },
+    };
+  }
+  return res;
+}
+
+/** GET /v2/client/prescriptions — patient-scoped list when supported. */
+export async function listGenPrescriptions(
+  input: { patientId?: string; orderId?: string } = {},
+  deps: GenClientDeps = {},
+): Promise<GenRequestResult<GenPrescription[]>> {
+  const qs = new URLSearchParams();
+  if (input.patientId) qs.set('patient_id', input.patientId);
+  if (input.orderId) qs.set('order_id', input.orderId);
+  const q = qs.toString();
+  const res = await genRequest<unknown>({
+    method: 'GET',
+    path: `/v2/client/prescriptions${q ? `?${q}` : ''}`,
+    ...deps,
+  });
+  if (!res.ok) {
+    return {
+      ok: false,
+      correlationId: res.correlationId,
+      error: { ...res.error, code: 'GEN_PRESCRIPTION_SYNC_ERROR' },
+    };
+  }
+  const root = asRecord(res.data);
+  const list = Array.isArray(res.data)
+    ? res.data
+    : Array.isArray(root?.prescriptions)
+      ? (root!.prescriptions as unknown[])
+      : Array.isArray(root?.data)
+        ? (root!.data as unknown[])
+        : [];
+  const prescriptions: GenPrescription[] = list.map((p) => {
+    const r = asRecord(p) || {};
+    return {
+      id: asString(r.id) ?? undefined,
+      orderId: asString(r.orderId) ?? asString(r.order_id) ?? input.orderId,
+      status: asString(r.status) ?? undefined,
+      raw: p,
+    };
+  });
+  return {
+    ok: true,
+    data: prescriptions,
+    httpStatus: res.httpStatus,
+    correlationId: res.correlationId,
+  };
+}
+
+/** Conversations list — wrapper readiness; path follows GEN V2 docs. */
+export async function listGenConversations(
+  input: { patientId?: string } = {},
+  deps: GenClientDeps = {},
+): Promise<GenRequestResult<unknown>> {
+  const qs = input.patientId ? `?patient_id=${encodeURIComponent(input.patientId)}` : '';
+  const res = await genRequest<unknown>({
+    method: 'GET',
+    path: `/v2/client/conversations${qs}`,
+    ...deps,
+  });
+  if (!res.ok) {
+    return {
+      ok: false,
+      correlationId: res.correlationId,
+      error: { ...res.error, code: 'GEN_MESSAGE_ERROR' },
+    };
+  }
+  return res;
+}
+
+export async function sendGenConversationMessage(
+  input: { conversationId: string; body: string },
+  deps: GenClientDeps = {},
+): Promise<GenRequestResult<unknown>> {
+  const cid = (input.conversationId || '').trim();
+  const body = (input.body || '').trim();
+  if (!cid || !body) {
+    return {
+      ok: false,
+      correlationId: createCorrelationId(),
+      error: {
+        code: 'GEN_MESSAGE_ERROR',
+        message: 'conversationId and body required',
+        retryable: false,
+      },
+    };
+  }
+  // Do not log message body.
+  const res = await genRequest<unknown>({
+    method: 'POST',
+    path: `/v2/client/conversations/${encodeURIComponent(cid)}/messages`,
+    body: { body },
+    ...deps,
+  });
+  if (!res.ok) {
+    return {
+      ok: false,
+      correlationId: res.correlationId,
+      error: { ...res.error, code: 'GEN_MESSAGE_ERROR' },
+    };
+  }
+  return res;
+}
+
+/** Visits wrapper readiness — list patient visits (documented GEN path). */
+export async function listGenVisits(
+  input: { patientId?: string } = {},
+  deps: GenClientDeps = {},
+): Promise<GenRequestResult<unknown>> {
+  const qs = input.patientId ? `?patient_id=${encodeURIComponent(input.patientId)}` : '';
+  return genRequest<unknown>({
+    method: 'GET',
+    path: `/v2/client/visits${qs}`,
+    ...deps,
+  });
+}
+
+/** Labs wrapper readiness — list patient labs (documented GEN path). */
+export async function listGenLabs(
+  input: { patientId?: string } = {},
+  deps: GenClientDeps = {},
+): Promise<GenRequestResult<unknown>> {
+  const qs = input.patientId ? `?patient_id=${encodeURIComponent(input.patientId)}` : '';
+  return genRequest<unknown>({
+    method: 'GET',
+    path: `/v2/client/labs${qs}`,
+    ...deps,
+  });
+}
+
+/**
+ * Upload wrapper readiness — documented pattern only.
+ * Returns deferred until GEN upload/token path is confirmed in staging.
+ */
+export function uploadsWrapperStatus(): {
+  status: 'DEFERRED';
+  reason: string;
+} {
+  return {
+    status: 'DEFERRED',
+    reason:
+      'GEN upload/token endpoints require confirmed staging docs before white-label upload UI submits files.',
+  };
+}
+
 /** Snapshot for DB persistence — no PHI beyond action metadata returned by GEN. */
 export function snapshotRequiredActions(
   actions: GenRequiredAction[] | undefined,

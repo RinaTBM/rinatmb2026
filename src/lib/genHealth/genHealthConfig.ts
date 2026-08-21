@@ -17,6 +17,12 @@ export type GenHealthEnv = {
    * GEN returns 400 unless "API Orders" is enabled for the client — default OFF.
    */
   GEN_API_ORDERS_PAYMENT_STATUS_ENABLED?: string;
+  /**
+   * When true, markGenOrderPaid (PATCH payment_status) may run.
+   * Distinct from GEN_HEALTH_ENABLED and GEN_API_ORDERS_PAYMENT_STATUS_ENABLED.
+   * Default OFF until Scriptful/GEN confirms API Orders enablement.
+   */
+  GEN_API_ORDERS_ENABLED?: string;
 };
 
 export type GenHealthConfig = {

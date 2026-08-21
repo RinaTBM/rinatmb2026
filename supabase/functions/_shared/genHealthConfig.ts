@@ -16,6 +16,8 @@ export type GenHealthEnv = {
   /** When true, post-paid automation may enqueue/execute GEN handoff. Defaults FALSE. */
   GEN_HANDOFF_AUTOMATION_ENABLED?: string;
   GEN_API_ORDERS_PAYMENT_STATUS_ENABLED?: string;
+  /** When true, PATCH mark-paid may run. Default OFF until GEN enables API Orders. */
+  GEN_API_ORDERS_ENABLED?: string;
 };
 
 export type GenHealthConfig = {
@@ -41,6 +43,9 @@ function readEnv(env?: GenHealthEnv): GenHealthEnv {
     GEN_HEALTH_API_KEY: Deno.env.get("GEN_HEALTH_API_KEY") ?? undefined,
     GEN_HEALTH_WEBHOOK_SECRET: Deno.env.get("GEN_HEALTH_WEBHOOK_SECRET") ?? undefined,
     GEN_HANDOFF_AUTOMATION_ENABLED: Deno.env.get("GEN_HANDOFF_AUTOMATION_ENABLED") ?? undefined,
+    GEN_API_ORDERS_PAYMENT_STATUS_ENABLED:
+      Deno.env.get("GEN_API_ORDERS_PAYMENT_STATUS_ENABLED") ?? undefined,
+    GEN_API_ORDERS_ENABLED: Deno.env.get("GEN_API_ORDERS_ENABLED") ?? undefined,
   };
 }
 

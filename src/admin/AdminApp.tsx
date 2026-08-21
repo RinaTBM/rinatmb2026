@@ -21,6 +21,7 @@ import {
   type CancellationRequest,
 } from '@/lib/account/subscriptions';
 import { AdminOrderDetail, AdminOrdersList } from '@/admin/AdminOrders';
+import { AdminGenMapping } from '@/admin/AdminGenMapping';
 
 const LOGO = BRAND_LOGO_SRC;
 
@@ -135,6 +136,7 @@ const SECTIONS = [
   { id: 'memberships', label: 'Memberships' },
   { id: 'categories', label: 'Categories' },
   { id: 'orders', label: 'Orders' },
+  { id: 'gen-mapping', label: 'GEN Mapping' },
   { id: 'future', label: 'Future Releases' },
   { id: 'pricing', label: 'Purchase Pricing' },
   { id: 'cancellations', label: 'Cancellation Requests' },
@@ -648,6 +650,7 @@ export function AdminApp({ route }: { route: Route }) {
             adminEmail={session.email}
           />
         )}
+        {section === 'gen-mapping' && <AdminGenMapping />}
         {section === 'cancellations' && <CancellationQueue />}
         {section === 'sync' && <StripeSync canWrite={canWrite} accessToken={session.accessToken} />}
         {section === 'sync-history' && <div><h1 className="font-serif text-3xl text-ink-900 mb-6">Sync History</h1><LogTable table="stripe_sync_log" columns={['created_at', 'environment', 'entity_type', 'entity_id', 'operation', 'stripe_object_id', 'status']} canWrite={canWrite} /></div>}

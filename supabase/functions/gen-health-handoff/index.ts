@@ -1,26 +1,27 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
 /**
- * GEN Health handoff — LOCAL SCAFFOLD ONLY (Phase 12D).
- * DO NOT DEPLOY until GEN_HEALTH_ENABLED is deliberately enabled in a later phase.
+ * GEN Health handoff — admin/service manual + gated automation (Phase 12G).
  *
- * Flow (when enabled):
- * 1. Accept MBM order id
- * 2. Confirm GEN_HEALTH_ENABLED
- * 3. Load MBM order; require payment_status=paid + Tagada transaction id
- * 4. Identify Rx order_items; resolve via gen_sku_map (ACTIVE/READY)
- * 5. Create/reuse GEN patient; create GEN order per line (Option A)
- * 6. Persist order_gen_orders; return summary
+ * Automatic GEN calls require BOTH:
+ *   GEN_HEALTH_ENABLED=true
+ *   GEN_HANDOFF_AUTOMATION_ENABLED=true
  *
- * Default: GEN_HEALTH_ENABLED=false → no outbound GEN calls.
- * Tagada webhook is NOT wired in 12D (deferred to 12E).
+ * Manual invoke (admin JWT) may execute when GEN_HEALTH_ENABLED=true even if
+ * automation is off — only for explicitly requested orderId handoff.
+ * Default automation remains OFF. Tagada webhook must NOT call this.
+ *
+ * On GEN failure after paid: preserve payment_status=paid; set GEN_RETRY_REQUIRED.
  */
 
 import {
+  canStartGenHandoff,
   createCorrelationId,
   createGenOrder,
   createOrReuseGenPatient,
   formatGenLog,
+  genFailureHandoffStatus,
+  paymentStatusAfterGenFailure,
   planGenHandoff,
   resolveGenHealthConfig,
   resolveGenProductForSku,
@@ -91,6 +92,42 @@ Deno.serve(async (req) => {
   const correlationId = createCorrelationId("handoff");
   const config = resolveGenHealthConfig();
 
+  // Admin/service authentication required for manual handoff (never public).
+  const auth = req.headers.get("Authorization") || "";
+  const jwt = auth.replace(/^Bearer\s+/i, "").trim();
+  if (!jwt) {
+    return json({ error: "admin_authorization_required", correlationId }, 401);
+  }
+
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
+  if (!supabaseUrl || !serviceKey || !anonKey) {
+    return json({ error: "server_misconfigured", correlationId }, 500);
+  }
+
+  const userRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
+    headers: { Authorization: `Bearer ${jwt}`, apikey: anonKey },
+  });
+  if (!userRes.ok) {
+    return json({ error: "invalid_admin_session", correlationId }, 401);
+  }
+  const user = await userRes.json();
+  if (!user?.id) return json({ error: "invalid_admin_session", correlationId }, 401);
+  const adminRes = await fetch(`${supabaseUrl}/rest/v1/rpc/is_admin`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+      apikey: anonKey,
+      "Content-Type": "application/json",
+    },
+    body: "{}",
+  });
+  const isAdmin = adminRes.ok ? await adminRes.json() : false;
+  if (isAdmin !== true) {
+    return json({ error: "admin_required", correlationId }, 403);
+  }
+
   if (!config.enabled) {
     console.log(formatGenLog({
       operation: "handoff",
@@ -119,7 +156,7 @@ Deno.serve(async (req) => {
     }, 500);
   }
 
-  let body: { orderId?: string };
+  let body: { orderId?: string; dryRun?: boolean; forceManual?: boolean };
   try {
     body = await req.json();
   } catch {
@@ -131,13 +168,12 @@ Deno.serve(async (req) => {
     return json({ error: "orderId_required", correlationId }, 400);
   }
 
-  const supabaseUrl = Deno.env.get("SUPABASE_URL");
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  if (!supabaseUrl || !serviceKey) {
-    return json({ error: "server_misconfigured", correlationId }, 500);
-  }
+  const dryRun = body.dryRun === true;
+  // Manual admin path may execute when automation is off IF forceManual=true.
+  // Automatic path (forceManual false) never calls GEN when automation off.
+  const allowManualExecute = body.forceManual === true;
+  const automationOn = config.handoffAutomationEnabled === true;
 
-  // Dynamic import keeps scaffold loadable in unit-test contexts that don't run Deno.serve
   const { createClient } = await import("npm:@supabase/supabase-js@2");
   const sb = createClient(supabaseUrl, serviceKey);
 
@@ -238,6 +274,58 @@ Deno.serve(async (req) => {
     return json({ ok: false, code: plan.code, message: plan.message, correlationId }, 409);
   }
 
+  // Per-item canStartGenHandoff gate (automation vs manual).
+  const gateRows = orderItems.map((i) => {
+    const link = (existingLinks || []).find(
+      (l: { order_item_id: string }) => l.order_item_id === i.id,
+    ) as { gen_order_id?: string | null } | undefined;
+    const gate = canStartGenHandoff({
+      paymentStatus: orderRow.payment_status,
+      tagadaTransactionId: tagadaTx,
+      orderItemIsRxMedication: isPrescriptionEligibleSku(i.sku),
+      mbmSku: i.sku,
+      mapping: i.sku ? mappingBySku.get(i.sku) : null,
+      existingGenOrderId: link?.gen_order_id || null,
+      genHealthEnabled: config.enabled,
+      handoffAutomationEnabled: automationOn || allowManualExecute,
+    });
+    return {
+      orderItemId: i.id,
+      mbmSku: i.sku,
+      gateCode: gate.code,
+      mayCallGen: gate.mayCallGen,
+      message: gate.message,
+    };
+  });
+
+  const anyMayCall = gateRows.some((g) => g.mayCallGen);
+  if (dryRun || (!automationOn && !allowManualExecute)) {
+    return json({
+      ok: true,
+      dryRun: dryRun || true,
+      code: automationOn ? "DRY_RUN" : "ELIGIBLE_BUT_AUTOMATION_OFF",
+      message: automationOn
+        ? "Dry run — no GEN calls."
+        : "Eligible checks returned; GEN_HANDOFF_AUTOMATION_ENABLED is false. Pass forceManual=true (admin only) to execute.",
+      correlationId,
+      automationEnabled: automationOn,
+      gates: gateRows,
+      plan: plan.items,
+      paymentStatusPreserved: paymentStatusAfterGenFailure(orderRow.payment_status),
+    });
+  }
+
+  if (!anyMayCall) {
+    return json({
+      ok: false,
+      code: "NO_ELIGIBLE_LINES",
+      message: "No order items passed canStartGenHandoff.",
+      correlationId,
+      gates: gateRows,
+      paymentStatusPreserved: "paid",
+    }, 409);
+  }
+
   // Ensure / reuse GEN patient (gated — only reached when enabled + key present)
   let genPatientId: string | null = null;
   if (orderRow.customer_user_id) {
@@ -266,7 +354,7 @@ Deno.serve(async (req) => {
       }));
       // Payment stays paid — mark retry
       await sb.from("orders").update({
-        gen_handoff_status: "RETRY_REQUIRED",
+        gen_handoff_status: genFailureHandoffStatus(),
         gen_handoff_last_error: patientRes.error.code,
         gen_handoff_updated_at: new Date().toISOString(),
       }).eq("id", orderId);
@@ -275,7 +363,7 @@ Deno.serve(async (req) => {
         code: patientRes.error.code,
         message: "GEN patient create failed; MBM payment unchanged",
         correlationId: patientRes.correlationId,
-        paymentStatusPreserved: "paid",
+        paymentStatusPreserved: paymentStatusAfterGenFailure("paid"),
       }, 502);
     }
     genPatientId = patientRes.data.id;

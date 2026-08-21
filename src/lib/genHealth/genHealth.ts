@@ -34,6 +34,19 @@ export {
 } from './genHealthConfig';
 export type { GenHealthConfig, GenHealthEnv } from './genHealthConfig';
 export type * from './genHealthTypes';
+export {
+  canStartGenHandoff,
+  paymentStatusAfterGenFailure,
+  genFailureHandoffStatus,
+} from './canStartGenHandoff';
+export type { CanStartGenHandoffInput, CanStartGenHandoffResult, GenHandoffGateCode } from './canStartGenHandoff';
+export {
+  classifyGenMatch,
+  additiveChangeRequiresNewSku,
+  formChangeRequiresNewSku,
+  proposeNextInjectionSku,
+  costAnalysisRow,
+} from './genCatalogMatching';
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 

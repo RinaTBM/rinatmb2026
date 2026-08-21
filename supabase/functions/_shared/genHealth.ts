@@ -33,6 +33,12 @@ export {
   GEN_SKU_MAP_CALLABLE_STATUSES,
 } from "./genHealthConfig.ts";
 export type { GenHealthConfig, GenHealthEnv } from "./genHealthConfig.ts";
+export {
+  canStartGenHandoff,
+  paymentStatusAfterGenFailure,
+  genFailureHandoffStatus,
+} from "./canStartGenHandoff.ts";
+
 export type * from "./genHealthTypes.ts";
 
 const DEFAULT_TIMEOUT_MS = 15_000;

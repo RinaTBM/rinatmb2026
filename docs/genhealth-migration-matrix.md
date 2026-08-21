@@ -1,9 +1,13 @@
-# GEN Health Migration Matrix — Phase 12B
+# GEN Health Migration Matrix — Phase 12B (updated Phase 12G)
 
 **Baseline branch:** `deploy/ach-launch-clean-2026`
-**Baseline SHA:** `5473777fa21c54f084ca86b330ea03f93c7152eb`
-**Generated:** 2026-08-21T06:08:05.175Z
-**Scope:** Design + local artifacts only. No Tagada / live DB / production / Edge / GEN API changes.
+**Phase 12G update:** see `docs/PHASE_12G_GEN_CATALOG_MAPPING.md`
+
+**Staging `gen_sku_map` (mxvaxkkwrbwhqasnsjpm):** 1 READY (`MBM-RP-BPC-INJ-001` / `KXMm9SsbOEYnFy9phmZn`) + 27 BLOCKED (NO_MATCH / AMBIGUOUS — no invented GEN IDs).
+**GEN Products API catalog size:** 22 (no SEM/TIR vials / HRT / NAD / Selank-Semax / skin-hair).
+**Automatic GEN handoff:** OFF
+
+---
 
 ## Principles
 

@@ -27,7 +27,9 @@ Non-secret variable **names** only. Never commit secret values.
 | `GEN_HEALTH_BASE_URL` | `https://api.gen-health.app` | GEN API base |
 | `GEN_HEALTH_API_KEY` | unset | Server-only GEN key |
 | `GEN_HEALTH_WEBHOOK_SECRET` | unset | Future GEN webhook HMAC |
-| `GEN_HANDOFF_AUTOMATION_ENABLED` | `false` | Post-paid auto handoff (must stay off until 12G+) |
+| `GEN_HANDOFF_AUTOMATION_ENABLED` | `false` | Post-paid auto handoff (must stay off until explicitly approved) |
+| `REQUIRE_GEN_MAPPING_FOR_RX` | staging `false` / prod default true | Rx checkout fail-closed without READY/ACTIVE map |
+| `MBM_RUNTIME_ENV` | `staging` / `production` | Runtime marker for commerce policy |
 
 ## Commerce safety flags (Edge)
 

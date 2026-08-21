@@ -351,7 +351,7 @@ Prefer flags + map status over destructive DB rollback.
 
 ## 16. Launch blockers
 
-1. **GEN API Orders / `payment_status=paid` not enabled** for this GEN client → clinical orders create as `pending_payment` while MBM is paid.
+1. **GEN API Orders / `payment_status=paid` not enabled** for this GEN client → clinical orders create as `pending_payment` while MBM is paid. **Confirmed Phase 12I.1** — see `docs/PHASE_12I1_GEN_EXTERNAL_PAID_RESOLUTION.md` (HTTP 400 remediation text; production Rx cutover **BLOCKED**).
 2. **Production missing** GEN schema, grants, secrets, and GEN edge functions (entire cutover package).
 3. **SEM/TIR (+ 27 Rx) BLOCKED** vs membership/storefront sellability under production fail-closed GEN guard — do not silently sell blocked Rx or promise med fulfillment.
 4. **Tagada true sandbox rail still unconfirmed** — PATH A blocked; controlled live card still needs owner approval.

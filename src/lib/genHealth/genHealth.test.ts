@@ -291,6 +291,34 @@ describe('mocked patient + order create', () => {
       expect(snap[0].raw).toBeUndefined();
     }
   });
+
+  it('includes order.payment_status only when GEN_API_ORDERS_PAYMENT_STATUS_ENABLED', async () => {
+    const fetchImpl = vi.fn(async () =>
+      new Response(
+        JSON.stringify({ id: FIXTURE_ORDER_ID, orderStatus: 'paid' }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
+      ),
+    );
+    const res = await createGenOrder(
+      {
+        patientId: FIXTURE_PATIENT_ID,
+        clientProductId: FIXTURE_PRODUCT_ID,
+        paymentStatus: 'paid',
+        transactionId: 'tx_test_tagada_2',
+      },
+      {
+        env: { ...enabledEnv, GEN_API_ORDERS_PAYMENT_STATUS_ENABLED: 'true' },
+        fetchImpl: fetchImpl as unknown as typeof fetch,
+      },
+    );
+    expect(res.ok).toBe(true);
+    const fetchCall = fetchImpl.mock.calls[0] as unknown as [unknown, { body?: string } | undefined];
+    const sent = JSON.parse(String(fetchCall[1]?.body || '{}')) as {
+      order?: { payment_status?: string; transactionId?: string };
+    };
+    expect(sent.order?.payment_status).toBe('paid');
+    expect(sent.order?.transactionId).toBe('tx_test_tagada_2');
+  });
 });
 
 describe('executeGenHandoff orchestration', () => {

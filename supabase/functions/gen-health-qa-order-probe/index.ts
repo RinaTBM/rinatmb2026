@@ -69,6 +69,23 @@ Deno.serve(async (req) => {
         hasUrl: Boolean(ar.url || ar.href || ar.continuationUrl),
       };
     });
+    const payKeys = [
+      "paymentStatus","payment_status","paymentVerificationStatus","paymentVerification",
+      "amount","balance","paymentRequired","paymentLink","paymentGateway","orderStatus","status",
+      "checkoutStatus","refundStatus","refundedAmount","receipt","quantity","orderType",
+      "clientProductId","productId","requiredActions","requirementSummary"
+    ];
+    const paymentSafe: Record<string, unknown> = {};
+    if (data) {
+      for (const k of payKeys) {
+        if (!(k in data)) continue;
+        const v = data[k];
+        if (typeof v === "string") paymentSafe[k] = v.slice(0, 120);
+        else if (typeof v === "number" || typeof v === "boolean" || v == null) paymentSafe[k] = v;
+        else if (Array.isArray(v)) paymentSafe[k] = `array:${v.length}`;
+        else if (typeof v === "object") paymentSafe[k] = Object.fromEntries(Object.entries(v as Record<string, unknown>).slice(0, 12).map(([kk,vv]) => [kk, typeof vv === "string" ? String(vv).slice(0,80) : typeof vv]));
+      }
+    }
     return json({
       ok: res.ok,
       httpStatus: res.status,
@@ -78,8 +95,179 @@ Deno.serve(async (req) => {
       orderStatus: data?.orderStatus ?? data?.status ?? null,
       requiredActionCount: safeActions.length,
       safeActions,
-      dataKeys: data ? Object.keys(data).slice(0, 40) : [],
+      dataKeys: data ? Object.keys(data).slice(0, 60) : [],
+      paymentSafe,
+      rootKeys: root ? Object.keys(root).slice(0, 20) : [],
     }, res.ok ? 200 : 400);
+  }
+
+
+  if (variant === "get_product") {
+    const correlationId = createCorrelationId("qa_prod");
+    const res = await fetch(`${config.baseUrl}/v2/client/products/${encodeURIComponent(clientProductId)}`, {
+      method: "GET",
+      headers: { Accept: "application/json", "X-API-Key": config.apiKey, "X-Correlation-Id": correlationId },
+    });
+    const textBody = await res.text();
+    let parsed: unknown = null;
+    try { parsed = textBody ? JSON.parse(textBody) : null; } catch { parsed = { unparsed: true }; }
+    const root = parsed && typeof parsed === "object" ? parsed as Record<string, unknown> : null;
+    const data = root && root.data && typeof root.data === "object" ? root.data as Record<string, unknown> : root;
+    const product = data && data.product && typeof data.product === "object"
+      ? data.product as Record<string, unknown>
+      : data;
+    const safe: Record<string, unknown> = {};
+    if (product) {
+      for (const [k,v] of Object.entries(product).slice(0, 100)) {
+        const lk = k.toLowerCase();
+        if (/(email|phone|address|token|magic|ssn|dob)/.test(lk)) continue;
+        if (typeof v === "string") safe[k] = v.slice(0, 200);
+        else if (typeof v === "number" || typeof v === "boolean" || v == null) safe[k] = v;
+        else if (Array.isArray(v)) safe[k] = `array:${v.length}`;
+        else if (typeof v === "object") {
+          const nested = v as Record<string, unknown>;
+          safe[k] = Object.fromEntries(Object.entries(nested).slice(0, 20).map(([kk,vv]) => {
+            if (typeof vv === "string") return [kk, vv.slice(0, 120)];
+            if (typeof vv === "number" || typeof vv === "boolean" || vv == null) return [kk, vv];
+            if (Array.isArray(vv)) return [kk, `array:${vv.length}`];
+            return [kk, typeof vv];
+          }));
+        } else safe[k] = typeof v;
+      }
+    }
+    return json({
+      ok: res.ok,
+      httpStatus: res.status,
+      variant,
+      correlationId,
+      productKeys: product ? Object.keys(product).slice(0,100) : [],
+      productSafe: safe,
+      rootKeys: root ? Object.keys(root).slice(0,20) : [],
+      dataKeys: data ? Object.keys(data).slice(0,40) : [],
+    }, res.ok ? 200 : 400);
+  }
+
+  if (variant === "list_products_safe") {
+    const correlationId = createCorrelationId("qa_plist");
+    const res = await fetch(`${config.baseUrl}/v2/client/products`, {
+      method: "GET",
+      headers: { Accept: "application/json", "X-API-Key": config.apiKey, "X-Correlation-Id": correlationId },
+    });
+    const textBody = await res.text();
+    let parsed: unknown = null;
+    try { parsed = textBody ? JSON.parse(textBody) : null; } catch { parsed = { unparsed: true }; }
+    const root = parsed && typeof parsed === "object" ? parsed as Record<string, unknown> : null;
+    const data = root && root.data && typeof root.data === "object" ? root.data as Record<string, unknown> : root;
+    const list = Array.isArray(data?.products) ? data!.products as unknown[]
+      : Array.isArray(data?.items) ? data!.items as unknown[]
+      : Array.isArray(root?.products) ? (root!.products as unknown[])
+      : Array.isArray(parsed) ? parsed as unknown[]
+      : [];
+    const target = clientProductId;
+    const matches = [] as Array<Record<string, unknown>>;
+    for (const item of list) {
+      const pr = item && typeof item === "object" ? item as Record<string, unknown> : {};
+      const id = String(pr.id || pr.productId || pr.clientProductId || "");
+      const cid = String(pr.clientProductId || "");
+      if (id.includes(target) || cid.includes(target) || target.includes(id) || String(pr.productName||"").toLowerCase().includes("bpc")) {
+        const safe: Record<string, unknown> = {};
+        for (const [k,v] of Object.entries(pr).slice(0, 60)) {
+          const lk = k.toLowerCase();
+          if (/(email|phone|address|token|magic)/.test(lk)) continue;
+          if (typeof v === "string") safe[k] = v.slice(0, 160);
+          else if (typeof v === "number" || typeof v === "boolean" || v == null) safe[k] = v;
+          else if (Array.isArray(v)) safe[k] = `array:${v.length}`;
+          else safe[k] = typeof v;
+        }
+        matches.push(safe);
+      }
+    }
+    return json({
+      ok: res.ok,
+      httpStatus: res.status,
+      variant,
+      correlationId,
+      listCount: list.length,
+      matchCount: matches.length,
+      matches: matches.slice(0, 5),
+      dataKeys: data ? Object.keys(data).slice(0, 30) : [],
+    }, res.ok ? 200 : 400);
+  }
+
+  if (variant === "probe_mark_paid_paths") {
+    // OPTIONS/HEAD/GET discovery only — no mutating mark-paid calls
+    const correlationId = createCorrelationId("qa_paths");
+    const orderId = String(body.genOrderId || "");
+    if (!orderId) return json({ error: "gen_order_id_required" }, 400);
+    const paths = [
+      `/v2/client/orders/${orderId}`,
+      `/v2/client/orders/${orderId}/pay`,
+      `/v2/client/orders/${orderId}/payment`,
+      `/v2/client/orders/${orderId}/mark-paid`,
+      `/v2/client/orders/${orderId}/mark_paid`,
+      `/v2/client/orders/${orderId}/actions/mark-paid`,
+      `/v2/client/orders/${orderId}/actions/pay`,
+      `/v2/client/payments`,
+      `/v2/client/orders/payment`,
+    ];
+    const results = [] as Array<Record<string, unknown>>;
+    for (const path of paths) {
+      for (const method of ["OPTIONS", "GET"]) {
+        const res = await fetch(`${config.baseUrl}${path}`, {
+          method,
+          headers: { Accept: "application/json", "X-API-Key": config.apiKey, "X-Correlation-Id": correlationId },
+        });
+        const allow = res.headers.get("allow") || res.headers.get("Access-Control-Allow-Methods") || null;
+        results.push({ method, path, status: res.status, allow, ok: res.ok });
+      }
+    }
+    return json({ ok: true, variant, correlationId, results });
+  }
+
+  if (variant === "probe_payment_field_rejection") {
+    // Re-confirm 400 on payment_status without creating a successful paid order.
+    // Uses top_patient_id shape which previously created OR rejected — prefer a dry validation
+    // by sending payment_status on a known-good nesting. If GEN creates despite rejection path,
+    // we MUST abort: only allow when response is error.
+    const correlationId = createCorrelationId("qa_payfield");
+    const payload = {
+      patient_id: patientId,
+      order: {
+        clientProductId,
+        payment_status: "paid",
+        transactionId: tx,
+      },
+    };
+    const res = await fetch(`${config.baseUrl}/v2/client/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-API-Key": config.apiKey,
+        "X-Correlation-Id": correlationId,
+      },
+      body: JSON.stringify(payload),
+    });
+    const textBody = await res.text();
+    let parsed: unknown = null;
+    try { parsed = textBody ? JSON.parse(textBody) : null; } catch { parsed = { unparsed: true }; }
+    const root = parsed && typeof parsed === "object" ? parsed as Record<string, unknown> : null;
+    const data = root && root.data && typeof root.data === "object" ? root.data as Record<string, unknown> : null;
+    const createdId = data?.orderId ?? data?.id ?? root?.orderId ?? root?.id ?? null;
+    // SAFETY: if unexpectedly created, report and do not continue probes
+    return json({
+      ok: res.ok,
+      httpStatus: res.status,
+      variant,
+      correlationId,
+      createdOrderId: createdId,
+      message: typeof root?.message === "string" ? String(root.message).slice(0, 400) : null,
+      error: typeof root?.error === "string" ? String(root.error).slice(0, 400) : (root?.error && typeof root.error === "object" ? JSON.stringify(root.error).slice(0,400) : null),
+      code: root?.code ?? null,
+      dataKeys: data ? Object.keys(data).slice(0, 20) : [],
+      paymentStatus: data?.paymentStatus ?? null,
+      orderStatus: data?.orderStatus ?? data?.status ?? null,
+    }, res.status === 400 || res.status === 403 || res.status === 422 ? 200 : (res.ok ? 200 : 400));
   }
 
   const correlationId = createCorrelationId("qa_order");

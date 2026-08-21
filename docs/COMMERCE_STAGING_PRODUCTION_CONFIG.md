@@ -68,6 +68,7 @@ Visits / labs keep existing workflows.
 | Demo webhook | `whe_755a478e5398` | KEEP FOR STAGING QA |
 | Staging-only Edge helpers | `gen-health-qa-patient`, `gen-health-qa-patient-probe`, `gen-health-qa-order-probe`, `gen-health-list-products` | STAGING-ONLY — do not deploy to production |
 | Phase 12I PATH B fixtures | `fixture_12i_tx_NOT_REAL_TAGADA_*`, `@example.com`, `PHASE_12I_FIXTURE_NOT_REAL_TAGADA_PAYMENT` | KEEP FOR STAGING QA — never treat as Tagada payment |
+| Phase 12I.1 blocker | GEN API Orders not enabled → `order.payment_status` HTTP 400; GEN order stays `pending_payment`/`unpaid` | See `docs/PHASE_12I1_GEN_EXTERNAL_PAID_RESOLUTION.md` |
 
 ## Architecture reminder
 

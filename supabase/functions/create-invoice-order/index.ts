@@ -18,6 +18,7 @@ import {
 } from "../_shared/injectProviderVisit.ts";
 import { guestPrescriptionRequiresAuth } from "../_shared/determineProviderRequirement.ts";
 import type { ApprovedTherapyHistoryRow } from "../_shared/determineProviderRequirement.ts";
+import { resolveRequireGenMappingForRx } from "../_shared/commerceEnvPolicy.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -69,6 +70,78 @@ function sanitizeCheckoutOrderError(raw: string): string {
     return CHECKOUT_ORDER_CREATE_FAILED_MESSAGE;
   }
   return text;
+}
+
+/** Conservative Rx SKU detector for production GEN mapping gate (accessories/visits/labs excluded). */
+function isPrescriptionMedicationSku(sku: string | null | undefined): boolean {
+  if (!sku?.trim()) return false;
+  const s = sku.trim().toUpperCase();
+  if (!s.startsWith("MBM-")) return false;
+  if (s.startsWith("MBM-ACC-") || s.startsWith("MBM-MEM-") || s.startsWith("MBM-SHIP-")) return false;
+  if (s.startsWith("MBM-PC-")) return false;
+  if (s.includes("IPV") || s.includes("FUV") || s.includes("LAB")) return false;
+  return true;
+}
+
+async function assertRxGenMappingsReady(input: {
+  supabaseUrl: string;
+  serviceKey: string;
+  items: Array<{ sku?: string | null }>;
+}): Promise<{ ok: true } | { ok: false; message: string; blockedSku?: string }> {
+  if (!resolveRequireGenMappingForRx()) return { ok: true };
+  const rxSkus = [
+    ...new Set(
+      input.items
+        .map((i) => (typeof i.sku === "string" ? i.sku.trim() : ""))
+        .filter((s) => isPrescriptionMedicationSku(s)),
+    ),
+  ];
+  if (rxSkus.length === 0) return { ok: true };
+
+  const inList = rxSkus.map((s) => `"${s.replace(/"/g, "")}"`).join(",");
+  const res = await fetch(
+    `${input.supabaseUrl}/rest/v1/gen_sku_map?mbm_sku=in.(${inList})&select=mbm_sku,mapping_status,active`,
+    {
+      headers: {
+        Authorization: `Bearer ${input.serviceKey}`,
+        apikey: input.serviceKey,
+      },
+    },
+  );
+  if (!res.ok) {
+    // Fail closed in production when gen_sku_map is unavailable / not migrated.
+    return {
+      ok: false,
+      message:
+        "Clinical product mapping is not available for checkout. Please contact support.",
+      blockedSku: rxSkus[0],
+    };
+  }
+  const rows = (await res.json()) as Array<{
+    mbm_sku?: string;
+    mapping_status?: string;
+    active?: boolean;
+  }>;
+  const bySku = new Map(
+    (Array.isArray(rows) ? rows : []).map((r) => [String(r.mbm_sku || "").toUpperCase(), r]),
+  );
+  for (const sku of rxSkus) {
+    const row = bySku.get(sku.toUpperCase());
+    const status = String(row?.mapping_status || "").toUpperCase();
+    const ready =
+      row &&
+      row.active !== false &&
+      (status === "READY" || status === "ACTIVE");
+    if (!ready) {
+      return {
+        ok: false,
+        message:
+          "This medication cannot be checked out until clinical product mapping is ready. Please contact support.",
+        blockedSku: sku,
+      };
+    }
+  }
+  return { ok: true };
 }
 
 async function allocatePublicOrderNumber(
@@ -262,6 +335,8 @@ Deno.serve(async (req) => {
 
     const discountCentsIn = Number(body.discountCents) || 0;
     const shippingCentsIn = Number(body.shippingCents) || 0;
+    const shippingMethodIn =
+      typeof body.shippingMethod === "string" ? body.shippingMethod : null;
     const promoCodeIn =
       typeof body.promoCode === "string" ? body.promoCode : null;
 
@@ -271,8 +346,31 @@ Deno.serve(async (req) => {
       approvedTherapyHistory: history,
       discountCents: discountCentsIn,
       shippingCents: shippingCentsIn,
+      shippingMethod: shippingMethodIn,
       promoCode: promoCodeIn,
     });
+
+    if (built.shippingError) {
+      return json({ error: built.shippingError, blocker: "SHIPPING_AUTHORITY" }, 400);
+    }
+
+    // Production Rx fail-closed: REQUIRE_GEN_MAPPING_FOR_RX (or production runtime default).
+    // Staging remains open unless the flag is explicitly true. Accessories skip this gate.
+    const genGate = await assertRxGenMappingsReady({
+      supabaseUrl,
+      serviceKey,
+      items: built.items,
+    });
+    if (!genGate.ok) {
+      return json(
+        {
+          error: genGate.message,
+          blocker: "GEN_MAPPING_REQUIRED",
+          blockedSku: genGate.blockedSku,
+        },
+        409,
+      );
+    }
 
     // Server-authoritative totals (provider visit / HRT lab reinjected; OGTBM server-priced).
     const subtotalCents = built.subtotalCents;
@@ -282,6 +380,9 @@ Deno.serve(async (req) => {
     const totalCents = built.totalCents;
     const promoCode = built.promoCode;
     const items = built.items;
+    const shippingMethod =
+      built.shippingMethod ||
+      (typeof body.shippingMethod === "string" ? body.shippingMethod : "two_day");
 
     const paymentAccessToken = createPaymentAccessToken();
     const now = new Date().toISOString();
@@ -331,7 +432,7 @@ Deno.serve(async (req) => {
         tax_cents: taxCents,
         total_cents: totalCents,
         shipping_method: shippingMethod,
-        free_shipping_eligible: Boolean(body.freeShippingEligible),
+        free_shipping_eligible: shippingMethod === "free_over_500" || shippingCents === 0,
         currency: "usd",
         requires_provider_review: requiresProviderReview,
         provider_requirement: built.requirement.requirement,

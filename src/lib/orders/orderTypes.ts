@@ -36,6 +36,8 @@ export interface OrderRecord {
   required_provider_product_id?: string | null;
   provider_visit_order_item_id?: string | null;
   provider_workflow_status?: string | null;
+  /** GEN handoff rollup (nullable until gen_health migration applied). */
+  gen_handoff_status?: string | null;
   created_at: string;
   updated_at: string;
 }

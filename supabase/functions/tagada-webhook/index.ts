@@ -10,7 +10,18 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
  *
  * Browser success redirects MUST NOT mark orders paid.
  * DO NOT deploy until TAGADA_WEBHOOK_SECRET is set and endpoint registered.
+ *
+ * Correlation order (never email-only): mbmOrder tag → external checkout/session →
+ * payment/order IDs. Helpers: _shared/tagadaWebhookCorrelation.ts
  */
+
+import {
+  evaluateDuplicatePaidEvent,
+  evaluatePaidAmountMatch,
+  extractAmountCentsFromTagadaPayload,
+  extractExternalIdsFromTagadaPayload,
+  extractOrderNumberFromTagadaPayload,
+} from "../_shared/tagadaWebhookCorrelation.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -184,103 +195,9 @@ function asRecord(value: unknown): Record<string, unknown> | undefined {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : undefined;
 }
 
-function mbmOrderFromTags(tags: unknown): string | null {
-  if (!Array.isArray(tags)) return null;
-  for (const t of tags) {
-    if (typeof t !== "string") continue;
-    if (t.startsWith("mbmOrder:")) return t.slice("mbmOrder:".length).trim();
-    const echoed = t.match(/(?:^|:)mbmOrder:([A-Z0-9-]+)/i);
-    if (echoed?.[1]) return echoed[1];
-  }
-  return null;
-}
-
-/**
- * Live Tagada webhooks nest the commerce body under `data` and put
- * `mbmOrder:<ORDER>` inside `data.customer.tags` (not top-level customerTags).
- */
-function extractOrderNumber(payload: Record<string, unknown>): string | null {
-  const data = asRecord(payload.data);
-  const keys = ["mbmOrderNumber", "mbm_order_number", "payment_reference", "externalReference"];
-  for (const layer of [payload, data, asRecord(payload.metadata), asRecord(data?.metadata)]) {
-    if (!layer) continue;
-    for (const k of keys) {
-      const v = layer[k];
-      if (typeof v === "string" && v.trim()) return v.trim().toUpperCase();
-    }
-  }
-  const tagSets = [
-    payload.customerTags,
-    asRecord(payload.customer)?.tags,
-    asRecord(data?.customer)?.tags,
-    data?.customerTags,
-  ];
-  for (const tags of tagSets) {
-    const fromTags = mbmOrderFromTags(tags);
-    if (fromTags) return fromTags.toUpperCase();
-  }
-  const orderMeta = asRecord(data?.order_metadata);
-  const qp = orderMeta?.queryParams;
-  if (typeof qp === "string" && qp.includes("mbmOrder")) {
-    try {
-      const params = new URLSearchParams(qp.startsWith("?") ? qp.slice(1) : qp);
-      const raw = params.get("customerTags") || "";
-      const fromQuery = mbmOrderFromTags(raw.split(",").map((s) => s.trim()).filter(Boolean));
-      if (fromQuery) return fromQuery.toUpperCase();
-    } catch {
-      /* ignore */
-    }
-  }
-  return null;
-}
-
-function extractAmountCents(payload: Record<string, unknown>): number | null {
-  const data = asRecord(payload.data);
-  const order = asRecord(payload.order) ?? asRecord(data?.order);
-  const payment = asRecord(payload.payment) ?? asRecord(data?.payment);
-  // Live Tagada amounts are integer cents on data.amount / data.order.paidAmount.
-  const candidates = [
-    payload.amountCents,
-    payload.amount_cents,
-    payload.totalCents,
-    payload.total_cents,
-    data?.amount,
-    data?.amountCents,
-    order?.paidAmount,
-    order?.amountCents,
-    order?.totalCents,
-    payment?.amountCents,
-    payment?.amount,
-    payload.amount,
-  ];
-  for (const c of candidates) {
-    if (typeof c === "number" && Number.isFinite(c)) return Math.trunc(c);
-    if (typeof c === "string" && c.trim() && !Number.isNaN(Number(c))) return Math.trunc(Number(c));
-  }
-  return null;
-}
-
-function extractExternalIds(payload: Record<string, unknown>) {
-  const data = asRecord(payload.data);
-  const order = asRecord(payload.order) ?? asRecord(data?.order);
-  const payment = asRecord(payload.payment) ?? asRecord(data?.payment);
-  const asId = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null);
-  return {
-    externalOrderId:
-      asId(payload.orderId) || asId(data?.orderId) || asId(order?.id) || asId(order?.orderId) || null,
-    externalPaymentId:
-      asId(payload.paymentId) ||
-      asId(data?.paymentId) ||
-      asId(payment?.id) ||
-      asId(payment?.paymentId) ||
-      null,
-    externalCheckoutSessionId:
-      asId(payload.checkoutSessionId) ||
-      asId(payload.checkout_session_id) ||
-      asId(data?.checkoutSessionId) ||
-      null,
-  };
-}
+const extractOrderNumber = extractOrderNumberFromTagadaPayload;
+const extractAmountCents = extractAmountCentsFromTagadaPayload;
+const extractExternalIds = extractExternalIdsFromTagadaPayload;
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders });
@@ -563,8 +480,80 @@ Deno.serve(async (req) => {
     return json({ ok: true, ignored: true, eventType });
   }
 
-  const orderNumber = extractOrderNumber(payload);
-  if (!orderNumber) {
+  // Correlation order (never email-only):
+  // 1) mbmOrder tag / metadata
+  // 2) external_checkout_session_id
+  // 3) external_payment_id / external_order_id already on an MBM order
+  let orderNumber = extractOrderNumber(payload);
+  const ids = extractExternalIds(payload);
+  let order: Record<string, unknown> | null = null;
+
+  if (orderNumber) {
+    const orderRes = await fetch(
+      `${supabaseUrl}/rest/v1/orders?public_order_number=eq.${encodeURIComponent(orderNumber)}&select=*&limit=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+        },
+      },
+    );
+    const orders = await orderRes.json();
+    order = Array.isArray(orders) ? orders[0] : null;
+  }
+
+  if (!order && ids.externalCheckoutSessionId) {
+    const byCs = await fetch(
+      `${supabaseUrl}/rest/v1/orders?external_checkout_session_id=eq.${encodeURIComponent(ids.externalCheckoutSessionId)}&select=*&limit=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+        },
+      },
+    );
+    const rows = await byCs.json();
+    order = Array.isArray(rows) ? rows[0] : null;
+    if (order && typeof order.public_order_number === "string") {
+      orderNumber = order.public_order_number;
+    }
+  }
+
+  if (!order && ids.externalPaymentId) {
+    const byPay = await fetch(
+      `${supabaseUrl}/rest/v1/orders?external_payment_id=eq.${encodeURIComponent(ids.externalPaymentId)}&select=*&limit=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+        },
+      },
+    );
+    const rows = await byPay.json();
+    order = Array.isArray(rows) ? rows[0] : null;
+    if (order && typeof order.public_order_number === "string") {
+      orderNumber = order.public_order_number;
+    }
+  }
+
+  if (!order && ids.externalOrderId) {
+    const byOrd = await fetch(
+      `${supabaseUrl}/rest/v1/orders?external_order_id=eq.${encodeURIComponent(ids.externalOrderId)}&select=*&limit=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+        },
+      },
+    );
+    const rows = await byOrd.json();
+    order = Array.isArray(rows) ? rows[0] : null;
+    if (order && typeof order.public_order_number === "string") {
+      orderNumber = order.public_order_number;
+    }
+  }
+
+  if (!orderNumber || !order) {
     await fetch(
       `${supabaseUrl}/rest/v1/payment_webhook_events?processor=eq.kashu_tagada&event_id=eq.${encodeURIComponent(eventId)}`,
       {
@@ -576,7 +565,8 @@ Deno.serve(async (req) => {
         },
         body: JSON.stringify({
           processing_result: "missing_order_reference",
-          error_message: "Could not resolve MBM order number from Tagada payload",
+          error_message:
+            "Could not resolve MBM order via mbmOrder tag or persisted Tagada external IDs (never email-only)",
         }),
       },
     );
@@ -584,23 +574,13 @@ Deno.serve(async (req) => {
     return json({ ok: false, error: "missing_order_reference" }, 200);
   }
 
-  const orderRes = await fetch(
-    `${supabaseUrl}/rest/v1/orders?public_order_number=eq.${encodeURIComponent(orderNumber)}&select=*&limit=1`,
-    {
-      headers: {
-        Authorization: `Bearer ${serviceKey}`,
-        apikey: serviceKey,
-      },
-    },
-  );
-  const orders = await orderRes.json();
-  const order = Array.isArray(orders) ? orders[0] : null;
-  if (!order) {
-    return json({ ok: false, error: "order_not_found", orderNumber }, 200);
-  }
-
   // Already paid + duplicate paid event → idempotent success
-  if (order.payment_status === "paid" && targetStatus === "paid") {
+  if (
+    evaluateDuplicatePaidEvent({
+      currentPaymentStatus: String(order.payment_status || ""),
+      targetStatus,
+    }) === "duplicate_already_paid"
+  ) {
     await fetch(
       `${supabaseUrl}/rest/v1/payment_webhook_events?processor=eq.kashu_tagada&event_id=eq.${encodeURIComponent(eventId)}`,
       {
@@ -622,7 +602,11 @@ Deno.serve(async (req) => {
 
   if (targetStatus === "paid") {
     const paidCents = extractAmountCents(payload);
-    if (paidCents == null || paidCents !== Number(order.total_cents)) {
+    const amountCheck = evaluatePaidAmountMatch({
+      orderTotalCents: Number(order.total_cents),
+      paidCents,
+    });
+    if (amountCheck !== "ok") {
       await fetch(`${supabaseUrl}/rest/v1/orders?id=eq.${order.id}`, {
         method: "PATCH",
         headers: {
@@ -657,7 +641,6 @@ Deno.serve(async (req) => {
       return json({ ok: false, error: "amount_mismatch", expected: order.total_cents, paid: paidCents }, 200);
     }
 
-    const ids = extractExternalIds(payload);
     const now = new Date().toISOString();
     await fetch(`${supabaseUrl}/rest/v1/orders?id=eq.${order.id}`, {
       method: "PATCH",

@@ -161,6 +161,8 @@ export interface AuthoritativeOrderBuildResult {
   shippingCents: number;
   promoCode: string | null;
   hrtLabPackageAdded: boolean;
+  shippingMethod?: string;
+  shippingError?: string;
 }
 
 /**
@@ -173,6 +175,8 @@ export function buildAuthoritativeOrderLines(input: {
   approvedTherapyHistory: ApprovedTherapyHistoryRow[];
   discountCents?: number;
   shippingCents?: number;
+  /** Customer-selected method: two_day | next_day (free_over_500 derived server-side). */
+  shippingMethod?: string | null;
   promoCode?: string | null;
   /** Optional client accessory tax; recomputed from accessory lines when possible. */
   accessorySalesTaxRate?: number;
@@ -258,7 +262,29 @@ export function buildAuthoritativeOrderLines(input: {
     }
   }
 
-  const shippingCents = Math.max(0, Number(input.shippingCents) || 0);
+  // Phase 12F: authorize shipping server-side (0 / 3000 / 5000). Never trust client cents alone.
+  const shipAuth = authorizeInvoiceShippingCents({
+    shippingMethod: input.shippingMethod,
+    clientShippingCents: Number(input.shippingCents) || 0,
+    items,
+  });
+  if (!shipAuth.ok) {
+    return {
+      items,
+      requirement,
+      subtotalCents,
+      providerCareTaxCents: 0,
+      accessorySalesTaxCents: 0,
+      taxCents: 0,
+      totalCents: 0,
+      discountCents,
+      shippingCents: 0,
+      promoCode,
+      hrtLabPackageAdded,
+      shippingError: shipAuth.error,
+    };
+  }
+  const shippingCents = shipAuth.shippingCents;
 
   const providerCareSubtotal = items
     .filter(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId))
@@ -287,5 +313,112 @@ export function buildAuthoritativeOrderLines(input: {
     shippingCents,
     promoCode,
     hrtLabPackageAdded,
+    shippingMethod: shipAuth.shippingMethod,
   };
+}
+
+const TWO_DAY_SHIPPING_CENTS = 3000;
+const NEXT_DAY_SHIPPING_CENTS = 5000;
+const FREE_SHIPPING_THRESHOLD_CENTS = 50000;
+
+/**
+ * Server-authoritative shipping for invoice orders.
+ * Matches website policy: Two-Day $30, Next-Day $50, free at $500+ eligible merchandise.
+ * Membership value does not count toward free shipping.
+ */
+export function authorizeInvoiceShippingCents(input: {
+  shippingMethod?: string | null;
+  clientShippingCents: number;
+  items: InjectedOrderLine[];
+}):
+  | { ok: true; shippingCents: number; shippingMethod: string }
+  | { ok: false; error: string } {
+  const containsMembership = input.items.some(
+    (i) =>
+      i.purchaseType === 'membership_program' ||
+      i.isMembership === true ||
+      i.productId === 'm1' ||
+      i.productId === 'm2' ||
+      (typeof i.sku === 'string' && i.sku.toUpperCase().startsWith('MBM-MEM-')),
+  );
+
+  const requiresPhysicalShipping = input.items.some((i) => {
+    if (i.section === 'provider-care' || /^pc\d+$/i.test(i.productId)) return false;
+    return true;
+  });
+
+  if (!requiresPhysicalShipping) {
+    if (Math.round(input.clientShippingCents) !== 0) {
+      return { ok: false, error: 'Physical shipping is not applicable to this order.' };
+    }
+    return { ok: true, shippingCents: 0, shippingMethod: 'none' };
+  }
+
+  // Eligible merchandise for free-ship threshold excludes membership program lines.
+  const shippableSubtotal = input.items
+    .filter((i) => {
+      if (i.purchaseType === 'membership_program' || i.isMembership) return false;
+      if (i.productId === 'm1' || i.productId === 'm2') return false;
+      if (typeof i.sku === 'string' && i.sku.toUpperCase().startsWith('MBM-MEM-')) return false;
+      if (i.section === 'provider-care' || /^pc\d+$/i.test(i.productId)) return false;
+      return true;
+    })
+    .reduce((sum, i) => sum + i.unitAmountCents * Math.max(1, i.quantity), 0);
+
+  const methodIn = (input.shippingMethod || '').trim();
+  if (methodIn === 'standard') {
+    return {
+      ok: false,
+      error:
+        'Unsupported shipping method: standard. Approved methods are two_day ($30) and next_day ($50).',
+    };
+  }
+
+  const free = shippableSubtotal >= FREE_SHIPPING_THRESHOLD_CENTS;
+  let method: string;
+  if (free) {
+    method = 'free_over_500';
+  } else if (methodIn === 'next_day') {
+    method = 'next_day';
+  } else if (methodIn === 'two_day') {
+    method = 'two_day';
+  } else if (!methodIn || methodIn === 'none') {
+    if (containsMembership) {
+      return {
+        ok: false,
+        error: 'Membership checkout requires a shipping method: two_day ($30) or next_day ($50).',
+      };
+    }
+    method = 'two_day';
+  } else if (methodIn === 'free_over_500') {
+    return {
+      ok: false,
+      error:
+        'Free shipping requires $500 or more in eligible ordinary merchandise (membership value does not count).',
+    };
+  } else if (methodIn === 'demo_store_forced_shipping') {
+    // Staging Demo-only QA method — not a customer-facing website option.
+    return {
+      ok: false,
+      error: 'Unsupported shipping method for storefront checkout.',
+    };
+  } else {
+    return { ok: false, error: `Unsupported shipping method: ${methodIn}` };
+  }
+
+  const authorized = free ? 0 : method === 'next_day' ? NEXT_DAY_SHIPPING_CENTS : TWO_DAY_SHIPPING_CENTS;
+  // Demo Tagada shipping (1156) and any non-MBM amount must never pass.
+  if (Math.round(input.clientShippingCents) === 1156) {
+    return {
+      ok: false,
+      error: 'Unsupported shipping amount. Only $0, $30 (Two-Day), or $50 (Next-Day) are authorized.',
+    };
+  }
+  if (Math.round(input.clientShippingCents) !== authorized) {
+    return {
+      ok: false,
+      error: `Shipping amount mismatch (authorized ${authorized} cents for ${method}).`,
+    };
+  }
+  return { ok: true, shippingCents: authorized, shippingMethod: method };
 }

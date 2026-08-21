@@ -84,8 +84,15 @@ export const KASHU_CARD_RESULT_PENDING_COPY =
 
 export const KASHU_CARD_RESULT_PAID_COPY = 'Payment received. Thank you — your order is paid.';
 
+/** Paid Rx / clinical path — never claims prescription approval or pharmacy ship. */
+export const KASHU_CARD_RESULT_PAID_RX_COPY =
+  'Payment received. Complete your required health information to continue. Prescription approval and pharmacy fulfillment are confirmed separately after clinical review.';
+
 export const KASHU_CARD_RESULT_CANCEL_COPY =
   'Payment was not completed. Your order remains unpaid. You can try card payment again or contact us for assistance.';
+
+export const KASHU_CARD_RESULT_FAILED_COPY =
+  'Card payment was not completed. Your order is not paid. Start a new checkout session to try again — do not reuse an expired payment link.';
 
 /**
  * Approved HTTPS hosts for Kashu/Tagada hosted checkout redirects.

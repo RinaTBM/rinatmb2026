@@ -1,18 +1,27 @@
 import { useEffect, useState } from 'react';
 import { Link, useRouter } from '@/router';
 import { Check, Clock, XCircle, ShieldCheck } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
 import {
   KASHU_CARD_RESULT_CANCEL_COPY,
+  KASHU_CARD_RESULT_FAILED_COPY,
   KASHU_CARD_RESULT_PAID_COPY,
+  KASHU_CARD_RESULT_PAID_RX_COPY,
   KASHU_CARD_RESULT_PENDING_COPY,
 } from '@/lib/payments/kashuTagada';
 
-type ViewState = 'loading' | 'paid' | 'pending' | 'failed' | 'cancelled' | 'error';
+type ViewState =
+  | 'loading'
+  | 'paid'
+  | 'pending'
+  | 'failed'
+  | 'cancelled'
+  | 'under_review'
+  | 'error';
 
 /**
  * Card payment return page.
  * Browser redirect NEVER marks an order paid — webhook is source of truth.
+ * Status is read via get-order-payment-status (token-gated), not anon RLS.
  */
 export function KashuCardResultPage() {
   const { path } = useRouter();
@@ -36,7 +45,9 @@ export function KashuCardResultPage() {
 
     if (!num || !token) {
       setState('error');
-      setMessage('Missing order reference. If you completed card payment, please contact us with your order number.');
+      setMessage(
+        'Missing order reference. If you completed card payment, please contact us with your order number.',
+      );
       return;
     }
 
@@ -48,39 +59,67 @@ export function KashuCardResultPage() {
       return;
     }
 
-    const client = createClient(supabaseUrl, anonKey);
     let cancelledFetch = false;
 
     const load = async () => {
-      const { data, error } = await client
-        .from('orders')
-        .select('payment_status, public_order_number, payment_access_token')
-        .eq('public_order_number', num.toUpperCase())
-        .maybeSingle();
-
-      if (cancelledFetch) return;
-      if (error || !data) {
+      try {
+        const res = await fetch(`${supabaseUrl}/functions/v1/get-order-payment-status`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${anonKey}`,
+            apikey: anonKey,
+          },
+          body: JSON.stringify({
+            publicOrderNumber: num.toUpperCase(),
+            paymentAccessToken: token,
+          }),
+        });
+        if (cancelledFetch) return;
+        if (res.status === 401) {
+          setState('error');
+          setMessage('Invalid payment link.');
+          return;
+        }
+        if (!res.ok) {
+          setState('pending');
+          setMessage(KASHU_CARD_RESULT_PENDING_COPY);
+          return;
+        }
+        const data = (await res.json()) as {
+          paymentStatus?: string;
+          genHandoffStatus?: string | null;
+        };
+        const ps = data.paymentStatus || '';
+        if (ps === 'paid') {
+          setState('paid');
+          // Clinical copy — does not claim prescription approval or pharmacy ship.
+          setMessage(
+            data.genHandoffStatus && data.genHandoffStatus !== 'NOT_REQUIRED'
+              ? KASHU_CARD_RESULT_PAID_RX_COPY
+              : KASHU_CARD_RESULT_PAID_COPY,
+          );
+          return;
+        }
+        if (ps === 'payment_under_review') {
+          setState('under_review');
+          setMessage(
+            'Payment is under review. Our team will confirm shortly — do not resubmit your card unless contacted.',
+          );
+          return;
+        }
+        if (ps === 'payment_failed' || ps === 'cancelled' || ps === 'failed') {
+          setState('failed');
+          setMessage(KASHU_CARD_RESULT_FAILED_COPY);
+          return;
+        }
         setState('pending');
         setMessage(KASHU_CARD_RESULT_PENDING_COPY);
-        return;
+      } catch {
+        if (cancelledFetch) return;
+        setState('pending');
+        setMessage(KASHU_CARD_RESULT_PENDING_COPY);
       }
-      if (data.payment_access_token && data.payment_access_token !== token) {
-        setState('error');
-        setMessage('Invalid payment link.');
-        return;
-      }
-      if (data.payment_status === 'paid') {
-        setState('paid');
-        setMessage(KASHU_CARD_RESULT_PAID_COPY);
-        return;
-      }
-      if (data.payment_status === 'payment_failed' || data.payment_status === 'cancelled') {
-        setState('failed');
-        setMessage(KASHU_CARD_RESULT_CANCEL_COPY);
-        return;
-      }
-      setState('pending');
-      setMessage(KASHU_CARD_RESULT_PENDING_COPY);
     };
 
     void load();
@@ -102,20 +141,24 @@ export function KashuCardResultPage() {
 
   const title =
     state === 'paid'
-      ? 'Payment received'
+      ? 'Payment Confirmed'
       : state === 'cancelled' || state === 'failed'
-        ? 'Payment not completed'
-        : state === 'error'
-          ? 'Payment status unavailable'
-          : 'Confirming payment';
+        ? 'Payment Failed'
+        : state === 'under_review'
+          ? 'Action Required'
+          : state === 'error'
+            ? 'Action Required'
+            : state === 'loading'
+              ? 'Processing Payment'
+              : 'Payment Pending';
 
   return (
     <div className="bg-cream-50 pt-28 md:pt-32 min-h-screen flex items-center">
-      <div className="container-lux max-w-lg text-center">
+      <div className="container-lux max-w-lg text-center px-4">
         <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-gold-100">
           {icon}
         </div>
-        <h1 className="font-serif text-4xl text-ink-900 mb-3">{title}</h1>
+        <h1 className="font-serif text-3xl sm:text-4xl text-ink-900 mb-3">{title}</h1>
         {orderNumber ? (
           <p className="text-sm text-ink-500 mb-4">
             Order <span className="font-mono text-ink-800">{orderNumber}</span>
@@ -126,14 +169,23 @@ export function KashuCardResultPage() {
           <div className="flex items-start gap-3">
             <ShieldCheck size={18} className="text-gold-500 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-ink-600">
-              Card payments are confirmed by our secure payment processor after checkout.
-          This page does not finalize payment by itself — confirmation comes from the
-          verified server notification.
+              Card payments are confirmed by our secure payment processor after checkout. This page
+              does not finalize payment by itself — confirmation comes from the verified server
+              notification.
             </p>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link to="/track" className="btn-primary">
+          {state === 'failed' || state === 'cancelled' ? (
+            <Link to="/checkout" className="btn-primary">
+              Return to checkout
+            </Link>
+          ) : (
+            <Link to="/account/orders" className="btn-primary">
+              View your orders
+            </Link>
+          )}
+          <Link to="/track" className="btn-outline">
             Track Your Order
           </Link>
           <Link to="/" className="btn-outline">

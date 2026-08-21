@@ -13,6 +13,7 @@ import {
   labelPaymentStatus,
 } from '@/lib/orders/orderStatus';
 import { labelShippingMethod } from '@/lib/orders/shipping';
+import { resolveClinicalNextSteps } from '@/lib/commerce/clinicalNextSteps';
 import { AccountShell } from './AccountShell';
 import { OrderStatusTimeline } from './OrderStatusTimeline';
 import { useAccountNoIndex } from './useAccountNoIndex';
@@ -165,6 +166,56 @@ export function AccountOrderDetailPage({ orderId }: AccountOrderDetailPageProps)
               </ul>
             </div>
           </section>
+
+          {(() => {
+            const hasRx = order.items.some((item) => {
+              const sku = (item.sku || '').toUpperCase();
+              return (
+                sku.startsWith('MBM-WM-') ||
+                sku.startsWith('MBM-HRT-') ||
+                sku.startsWith('MBM-LON-') ||
+                sku.startsWith('MBM-RP-') ||
+                sku.startsWith('MBM-SH-')
+              );
+            });
+            const clinical = resolveClinicalNextSteps({
+              paymentStatus: order.payment_status,
+              genHandoffStatus: order.gen_handoff_status,
+              hasRxLine: hasRx,
+              // GEN requiredActions UI behind flag — never invent questions.
+              genUiEnabled: import.meta.env.VITE_GEN_CLINICAL_UI_ENABLED === 'true',
+            });
+            if (clinical.phase === 'not_applicable') return null;
+            return (
+              <section
+                className="rounded-2xl border border-cream-300 bg-white p-6 shadow-sm"
+                aria-labelledby="clinical-next-heading"
+              >
+                <h3 id="clinical-next-heading" className="font-serif text-xl text-ink-900 mb-3">
+                  Clinical next steps
+                </h3>
+                <p className="text-sm text-ink-600 mb-4">{clinical.headline}</p>
+                {clinical.cards.length ? (
+                  <ul className="space-y-3">
+                    {clinical.cards.map((card) => (
+                      <li
+                        key={card.id}
+                        className="rounded-xl border border-cream-200 bg-cream-50 px-4 py-3 text-left"
+                      >
+                        <p className="text-sm font-medium text-ink-900">{card.title}</p>
+                        <p className="text-xs text-ink-500 mt-1">{card.description}</p>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-xs text-ink-400">
+                    We will never invent medical questions here. Required clinical steps come from
+                    your verified care workflow after payment.
+                  </p>
+                )}
+              </section>
+            );
+          })()}
 
           <section className="rounded-2xl border border-cream-300 bg-white p-6 shadow-sm" aria-labelledby="fulfillment-heading">
             <h3 id="fulfillment-heading" className="font-serif text-xl text-ink-900 mb-4">

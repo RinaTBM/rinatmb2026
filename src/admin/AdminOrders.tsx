@@ -29,17 +29,25 @@ import { TRACKING_CARRIERS } from '@/lib/orders/tracking';
 import { nextAdminStatusAction } from '@/lib/orders/webhookOrder';
 import { PAYMENT_METHOD_LABELS, type PaymentMethod } from '@/lib/payments/paymentMethods';
 import { isPaymentReceived } from '@/lib/payments/fulfillmentGuards';
+import { adminClinicalBadge, adminPaymentBadge } from '@/lib/orders/adminStatusBadges';
 import {
   FOLLOW_UP_PROVIDER_VISIT,
   INITIAL_PROVIDER_VISIT,
 } from '@/lib/provider/providerVisits';
 import { resolveTherapyFamily, THERAPY_FAMILIES } from '@/lib/provider/therapyFamilies';
-function Badge({ tone, children }: { tone: 'green' | 'gray' | 'gold' | 'red'; children: ReactNode }) {
+function Badge({
+  tone,
+  children,
+}: {
+  tone: 'green' | 'gray' | 'gold' | 'red' | 'blue';
+  children: ReactNode;
+}) {
   const map = {
     green: 'bg-green-100 text-green-800',
     gray: 'bg-cream-200 text-ink-600',
     gold: 'bg-gold-100 text-gold-700',
     red: 'bg-red-100 text-red-700',
+    blue: 'bg-sky-100 text-sky-800',
   } as const;
   return <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${map[tone]}`}>{children}</span>;
 }
@@ -117,11 +125,26 @@ export function AdminOrdersList({ canWrite }: { canWrite: boolean }) {
                   <div className="text-right space-y-1">
                     <p className="text-sm font-medium text-ink-900">{formatCents(order.total_cents)}</p>
                     <div className="flex flex-wrap gap-1 justify-end">
-                      <Badge tone="gray">{labelPaymentStatus(order.payment_status)}</Badge>
-                      <Badge tone={actionRequired ? 'red' : 'gold'}>
-                        {labelOrderStatus(order.order_status)}
-                      </Badge>
-                      {actionRequired ? <Badge tone="red">Action Required</Badge> : null}
+                      {(() => {
+                        const pay = adminPaymentBadge(order.payment_status);
+                        const clinical = adminClinicalBadge({
+                          paymentStatus: order.payment_status,
+                          genHandoffStatus: (order as { gen_handoff_status?: string | null })
+                            .gen_handoff_status,
+                          orderStatus: order.order_status,
+                          requiresProviderReview: order.requires_provider_review,
+                        });
+                        return (
+                          <>
+                            <Badge tone={pay.tone}>{pay.label}</Badge>
+                            {clinical ? <Badge tone={clinical.tone}>{clinical.label}</Badge> : null}
+                            <Badge tone={actionRequired ? 'red' : 'gold'}>
+                              {labelOrderStatus(order.order_status)}
+                            </Badge>
+                            {actionRequired ? <Badge tone="red">Action Required</Badge> : null}
+                          </>
+                        );
+                      })()}
                     </div>
                     <button
                       className="btn-outline !py-1 !px-3 text-xs mt-2"

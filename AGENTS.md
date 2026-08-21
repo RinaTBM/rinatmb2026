@@ -162,6 +162,15 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - Fulfillment: final shipping paths need paid + (NONE or COMPLETED workflow + APPROVED history). `provider_review_in_progress` still only needs paid.
 - Do not call CrossTx APIs; do not enable Kashu card; do not treat payment as therapy approval.
 
+### Tagada / GEN commerce hardening (Phase 12F.1)
+
+- Config table (names only): `docs/COMMERCE_STAGING_PRODUCTION_CONFIG.md`. Checkpoint notes: `docs/PHASE_12F1_COMMERCE_CHECKPOINT.md`.
+- **Shipping:** server-authorized cents are only `0` / `3000` / `5000`. Demo Tagada `1156` and `demo_store_forced_shipping` are rejected. Do not reintroduce Demo shipping hacks into production paths.
+- **Rx GEN guard:** `REQUIRE_GEN_MAPPING_FOR_RX` + `MBM_RUNTIME_ENV`. Production defaults fail-closed for Rx without READY/ACTIVE `gen_sku_map`; staging defaults open. Accessories skip GEN mapping. Wired in `create-invoice-order`.
+- **Paid authority:** browser / `get-order-payment-status` never marks paid; only `tagada-webhook` does. Correlation never uses email alone.
+- **GEN:** `GEN_HEALTH_ENABLED` and `GEN_HANDOFF_AUTOMATION_ENABLED` default **false**. No automatic GEN handoff from Tagada webhook. Membership rebill never creates GEN medication orders. Migration `20260821120000_gen_health_v2.sql` is additive — do **not** apply to production in this phase.
+- Staging QA SKU `MBM-QA-TAGADA-DEMO-001` is DB-only — not a storefront catalog SKU. Do not promote Demo store / webhook / QA order artifacts to production.
+
 ### GitHub source of truth vs Bolt (permanent)
 
 **Current ACH/Wire production tip (post-reconcile):** `deploy/ach-launch-clean-2026`  

@@ -34,6 +34,25 @@ describe('approved checkout shipping methods', () => {
     expect('error' in r).toBe(true);
   });
 
+  it('rejects Demo Tagada shipping 1156 (never production MBM shipping)', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: 1156,
+      shippableSubtotalCents: 0,
+      requiresPhysicalShipping: true,
+      containsMembership: false,
+    });
+    expect('error' in r).toBe(true);
+    const demoMethod = authorizeShippingCents({
+      shippingMethod: 'demo_store_forced_shipping' as 'two_day',
+      clientShippingCents: 1156,
+      shippableSubtotalCents: 0,
+      requiresPhysicalShipping: true,
+      containsMembership: false,
+    });
+    expect('error' in demoMethod).toBe(true);
+  });
+
   it('membership shipping metadata matches charged shipping', () => {
     // Free-shipping subtotal is ordinary merchandise only (0 for membership-only carts).
     const two = authorizeShippingCents({

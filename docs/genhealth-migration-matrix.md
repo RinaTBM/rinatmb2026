@@ -2,7 +2,7 @@
 
 **Baseline branch:** `deploy/ach-launch-clean-2026`
 **Phase 12G update:** see `docs/PHASE_12G_GEN_CATALOG_MAPPING.md`
-**Phase 12I.2 update:** see `docs/PHASE_12I2_REMAINING_GEN_MAPPING.md` (full pricing matrix + readiness; API Orders still off)
+**Phase 12I.2 update:** see `docs/PHASE_12I2_28_SKU_FORMULARY_PRICING_MATRIX.md` (+ `.json`) for the definitive 28-SKU formulary/pricing matrix. Also `docs/PHASE_12I2_REMAINING_GEN_MAPPING.md`.
 
 **Staging `gen_sku_map` (mxvaxkkwrbwhqasnsjpm):** 1 READY (`MBM-RP-BPC-INJ-001` / `KXMm9SsbOEYnFy9phmZn`) + 27 BLOCKED (NO_MATCH / AMBIGUOUS — no invented GEN IDs).
 **GEN Products API catalog size:** 22 (no SEM/TIR vials / HRT / NAD / Selank-Semax / skin-hair) — reconfirmed Phase 12I.2.

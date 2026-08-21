@@ -33,7 +33,9 @@
 |---|---|---|---|---|
 | $199.00 | $175.50 | $204.75 | $234.00 | $82.00 |
 
-Full 28-SKU matrix with at-cost / +50 / +75 / +100 / readiness: **`docs/PHASE_12I2_REMAINING_GEN_MAPPING.md`**.
+Full 28-SKU definitive formulary + pricing matrix (all required columns, markups, website actions): **`docs/PHASE_12I2_28_SKU_FORMULARY_PRICING_MATRIX.md`** (+ `.json`).
+
+Prior remaining-mapping notes: `docs/PHASE_12I2_REMAINING_GEN_MAPPING.md`.
 
 ## Semaglutide / Tirzepatide
 

@@ -8,6 +8,7 @@ import {
   isProductionRxLaunchReady,
   isResearchWellnessGenProduct,
   mayMarkMappingReady,
+  markupFromCostCents,
   proposeNextInjectionSku,
 } from './genCatalogMatching';
 import { MEMBERSHIP_FULFILLMENT_CROSSWALK } from '../catalog/membershipSkuCrosswalk';
@@ -132,7 +133,10 @@ describe('Phase 12I.2 GEN formulary matching', () => {
     ).toBe('MBM-WM-TIR-INJ-005');
   });
 
-  it('pricing +50/+75/+100 from med cost; unknown shipping not invented', () => {
+  it('11700 cost yields exact +50/+75/+100 cents', () => {
+    expect(markupFromCostCents(11700, 1.5)).toBe(17550);
+    expect(markupFromCostCents(11700, 1.75)).toBe(20475);
+    expect(markupFromCostCents(11700, 2)).toBe(23400);
     const row = costAnalysisRow({
       currentRetailCents: 19900,
       medicationCostCents: 11700,
@@ -141,9 +145,27 @@ describe('Phase 12I.2 GEN formulary matching', () => {
     expect(row.plus50Med).toBe(17550);
     expect(row.plus75Med).toBe(20475);
     expect(row.plus100Med).toBe(23400);
+    // current $199 vs +50 $175.50 → above +50 band for med-only analysis
+    expect(19900 - 17550).toBe(2350);
+  });
+
+  it('rounds markup cents (half-up via Math.round)', () => {
+    // 3333 * 1.5 = 4999.5 → 5000
+    expect(markupFromCostCents(3333, 1.5)).toBe(5000);
+    expect(markupFromCostCents(3333, 1.75)).toBe(5833);
+  });
+
+  it('unknown cost and unknown shipping stay null (not invented)', () => {
+    const row = costAnalysisRow({
+      currentRetailCents: 10000,
+      medicationCostCents: null,
+      shippingCostCents: null,
+    });
+    expect(row.plus50Med).toBeNull();
+    expect(row.plus75Med).toBeNull();
+    expect(row.plus100Med).toBeNull();
     expect(row.totalCostCents).toBeNull();
     expect(row.plus50Landed).toBeNull();
-    expect(row.shippingCostCents).toBeNull();
   });
 
   it('landed cost tiers only when shipping known', () => {

@@ -155,12 +155,19 @@ export function resolveProductEligibility(input: ProductEligibilityInput): Produ
  * - production → true by default (Rx fail-closed without READY/ACTIVE GEN map)
  * - staging/dev → false by default (commerce testing during migration)
  * Explicit REQUIRE_GEN_MAPPING_FOR_RX always wins at the env layer.
+ *
+ * When requireGenMappingForRx is true, production Rx also requires
+ * genApiOrdersEnabled (resolveGenApiOrdersEnabled). Accessories bypass both.
+ * Frontend CTA disable is UX only — this server gate is authoritative.
  */
 export function assertCartEligibleForCheckout(input: {
   lines: ProductEligibilityInput[];
   requireGenMappingForRx?: boolean;
+  /** From resolveGenApiOrdersEnabled — never trust browser override. */
+  genApiOrdersEnabled?: boolean;
 }): { ok: true } | { ok: false; message: string; blockedSku?: string } {
   const requireGen = input.requireGenMappingForRx === true;
+  const apiOrders = input.genApiOrdersEnabled === true;
   for (const line of input.lines) {
     const el = resolveProductEligibility(line);
     if (!el.tagadaCheckoutAllowed && line.hasActiveTagadaMapping === false) {
@@ -170,17 +177,23 @@ export function assertCartEligibleForCheckout(input: {
         blockedSku: line.mbmSku || undefined,
       };
     }
-    if (
-      requireGen &&
-      el.commerceType === 'RX_MEDICATION' &&
-      !el.genHandoffAllowed
-    ) {
-      return {
-        ok: false,
-        message:
-          'This medication cannot be checked out until clinical product mapping is ready. Please contact support.',
-        blockedSku: line.mbmSku || undefined,
-      };
+    if (requireGen && el.commerceType === 'RX_MEDICATION') {
+      if (!el.genHandoffAllowed) {
+        return {
+          ok: false,
+          message:
+            'This medication cannot be checked out until clinical product mapping is ready. Please contact support.',
+          blockedSku: line.mbmSku || undefined,
+        };
+      }
+      if (!apiOrders) {
+        return {
+          ok: false,
+          message:
+            'This medication is temporarily unavailable for checkout. Please contact support.',
+          blockedSku: line.mbmSku || undefined,
+        };
+      }
     }
   }
   return { ok: true };

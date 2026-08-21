@@ -199,6 +199,30 @@ export function markupFromCostCents(costCents: number, multiplier: number): numb
   return Math.round(costCents * multiplier);
 }
 
+export type OwnerPriceBand =
+  | 'BELOW +50'
+  | 'BETWEEN +50 AND +75'
+  | 'BETWEEN +75 AND +100'
+  | 'ABOVE +100'
+  | 'UNKNOWN';
+
+/** Classify current retail vs medication cost markups. Never invent missing costs. */
+export function classifyOwnerPriceBand(input: {
+  currentRetailCents: number | null | undefined;
+  medicationCostCents: number | null | undefined;
+}): OwnerPriceBand {
+  const retail = input.currentRetailCents;
+  const cost = input.medicationCostCents;
+  if (retail == null || cost == null || cost <= 0) return 'UNKNOWN';
+  const plus50 = markupFromCostCents(cost, 1.5);
+  const plus75 = markupFromCostCents(cost, 1.75);
+  const plus100 = markupFromCostCents(cost, 2);
+  if (retail < plus50) return 'BELOW +50';
+  if (retail <= plus75) return 'BETWEEN +50 AND +75';
+  if (retail <= plus100) return 'BETWEEN +75 AND +100';
+  return 'ABOVE +100';
+}
+
 export function costAnalysisRow(input: {
   currentRetailCents: number;
   medicationCostCents: number | null;
@@ -215,6 +239,7 @@ export function costAnalysisRow(input: {
   plus100Landed: number | null;
   currentGrossOverMed: number | null;
   currentGrossOverLanded: number | null;
+  priceBand: OwnerPriceBand;
 } {
   const med = input.medicationCostCents;
   const ship = input.shippingCostCents;
@@ -233,6 +258,10 @@ export function costAnalysisRow(input: {
     plus100Landed: plus(landed, 2),
     currentGrossOverMed: med == null ? null : input.currentRetailCents - med,
     currentGrossOverLanded: landed == null ? null : input.currentRetailCents - landed,
+    priceBand: classifyOwnerPriceBand({
+      currentRetailCents: input.currentRetailCents,
+      medicationCostCents: med,
+    }),
   };
 }
 

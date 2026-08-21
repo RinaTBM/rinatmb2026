@@ -28,6 +28,7 @@ Non-secret variable **names** only. Never commit secret values.
 | `GEN_HEALTH_API_KEY` | unset | Server-only GEN key |
 | `GEN_HEALTH_WEBHOOK_SECRET` | unset | Future GEN webhook HMAC |
 | `GEN_HANDOFF_AUTOMATION_ENABLED` | `false` | Post-paid auto handoff (must stay off until explicitly approved) |
+| `GEN_API_ORDERS_ENABLED` | unset / `false` | Production Rx checkout capability: READY/ACTIVE map **and** this flag when `REQUIRE_GEN_MAPPING_FOR_RX` is on. Distinct from `GEN_HEALTH_ENABLED` and from payment-status payload flag. Keep `false` until Scriptful/GEN confirms API Orders enablement |
 | `GEN_API_ORDERS_PAYMENT_STATUS_ENABLED` | unset / `false` | Only set `true` after GEN enables “API Orders” for the client; otherwise create omits `payment_status` |
 | `REQUIRE_GEN_MAPPING_FOR_RX` | staging `false` / prod default true | Rx checkout fail-closed without READY/ACTIVE map |
 | `MBM_RUNTIME_ENV` | `staging` / `production` | Runtime marker for commerce policy |
@@ -37,11 +38,21 @@ Non-secret variable **names** only. Never commit secret values.
 | Variable | Staging | Production | Purpose |
 |---|---|---|---|
 | `REQUIRE_GEN_MAPPING_FOR_RX` | unset → **false** | unset → **true** (fail-closed) | Block Rx checkout without READY/ACTIVE `gen_sku_map` |
+| `GEN_API_ORDERS_ENABLED` | unset → **false** | unset → **false** until GEN enables API Orders | When mapping guard is on, also require API Orders capability for Rx |
 | `MBM_RUNTIME_ENV` | `staging` (recommended) | `production` (recommended) | Explicit runtime marker (preferred over URL heuristics) |
 
 `REQUIRE_GEN_MAPPING_FOR_RX` always wins when set (`true` / `false`).  
+When that guard is on, production Rx also requires `GEN_API_ORDERS_ENABLED=true` (default false).  
 Accessories / non-Rx still sell without GEN mapping.  
 Visits / labs keep existing workflows.
+
+Do not conflate:
+
+- `GEN_HEALTH_ENABLED` — GEN HTTP integration present
+- `GEN_API_ORDERS_ENABLED` — client may use API Orders / external-paid checkout path
+- `GEN_API_ORDERS_PAYMENT_STATUS_ENABLED` — may send nested `order.payment_status="paid"`
+
+Website catalog alignment (Phase 12I.3): `docs/PHASE_12I3_WEBSITE_CATALOG_ALIGNMENT.md`.
 
 ## Frontend (public)
 
@@ -51,6 +62,7 @@ Visits / labs keep existing workflows.
 | `VITE_SUPABASE_ANON_KEY` | Anon key only |
 | `VITE_KASHU_CARD_ENABLED` | Card gate; unset defaults ON |
 | `VITE_GEN_CLINICAL_UI_ENABLED` | Portal clinical next-steps shell only — **not** a GEN API secret |
+| `VITE_GEN_API_ORDERS_ENABLED` | UX-only storefront mirror (`Coming soon` vs Available). **Never** trusted by server guards |
 
 ## Shipping (authoritative MBM cents)
 

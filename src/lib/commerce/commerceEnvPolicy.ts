@@ -5,6 +5,11 @@
 
 export type CommerceEnvLike = {
   REQUIRE_GEN_MAPPING_FOR_RX?: string;
+  /**
+   * When true, production Rx checkout may proceed for READY/ACTIVE GEN-mapped SKUs.
+   * Distinct from GEN_HEALTH_ENABLED and GEN_API_ORDERS_PAYMENT_STATUS_ENABLED.
+   */
+  GEN_API_ORDERS_ENABLED?: string;
   /** Preferred runtime marker: production | staging | development */
   MBM_RUNTIME_ENV?: string;
   APP_ENV?: string;
@@ -56,6 +61,21 @@ export function resolveRequireGenMappingForRx(env: CommerceEnvLike = {}): boolea
   if (truthy(raw)) return true;
   if (falsy(raw)) return false;
   return isProductionCommerceRuntime(env);
+}
+
+/**
+ * GEN API Orders / external-paid capability for this client.
+ * Default false until Scriptful/GEN confirms enablement.
+ *
+ * Distinct from:
+ * - GEN_HEALTH_ENABLED — GEN API integration exists
+ * - GEN_API_ORDERS_PAYMENT_STATUS_ENABLED — may send order.payment_status="paid"
+ *
+ * Production Rx checkout (when REQUIRE_GEN_MAPPING_FOR_RX is on) requires this true
+ * in addition to READY/ACTIVE gen_sku_map.
+ */
+export function resolveGenApiOrdersEnabled(env: CommerceEnvLike = {}): boolean {
+  return truthy(env.GEN_API_ORDERS_ENABLED);
 }
 
 /** Known MBM-authorized card/invoice shipping amounts (cents). Demo 1156 is never included. */

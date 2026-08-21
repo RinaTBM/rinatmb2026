@@ -19,6 +19,12 @@ import {
   type PurchaseOptionKind,
 } from '@/lib/pricing/purchaseOptions';
 import { loadPurchaseDiscountSettings } from '@/lib/pricing/settings';
+import { skuForVariantId } from '@/data/variantSkus';
+import {
+  resolveClientGenApiOrdersEnabledForUx,
+  resolveStorefrontRxAvailability,
+} from '@/lib/commerce/rxCatalogReadiness';
+import { RxAvailabilityBanner } from '@/components/RxAvailabilityBanner';
 
 /** Router — accessories get a simplified ecommerce page; wellness keeps existing purchase logic. */
 export function ProductPage({ slug }: { slug: string }) {
@@ -96,8 +102,20 @@ function WellnessProductPage({ slug }: { slug: string }) {
   const isProgramMembership = selected?.kind === 'membership_program';
   const containFit = false;
 
+  const variantSku = skuForVariantId(variant.id);
+  const rxAvailability = resolveStorefrontRxAvailability({
+    mbmSku: variantSku,
+    // UX-only mirror — server GEN_API_ORDERS_ENABLED remains authoritative.
+    genApiOrdersEnabled: resolveClientGenApiOrdersEnabledForUx(),
+  });
+  const purchaseBlocked =
+    !!rxAvailability &&
+    !rxAvailability.productionPurchasable &&
+    selected?.kind !== 'membership_program';
+
   const handlePrimaryAction = () => {
     if (!selected) return;
+    if (purchaseBlocked) return;
 
     if (selected.kind === 'membership_program' && selected.program) {
       const membership = getMembership(selected.program.membershipSlug);
@@ -244,6 +262,15 @@ function WellnessProductPage({ slug }: { slug: string }) {
               <p className="text-xl md:text-2xl text-ink-700 mb-3 leading-snug">{product.benefitHeadline}</p>
               <p className="text-ink-600 leading-relaxed mb-5">{product.shortDescription}</p>
               <ProductHighlights highlights={product.highlights} />
+
+              {rxAvailability && rxAvailability.customerFacingStatus !== 'AVAILABLE' ? (
+                <div className="mb-6">
+                  <RxAvailabilityBanner
+                    status={rxAvailability.customerFacingStatus}
+                    message={rxAvailability.customerMessage}
+                  />
+                </div>
+              ) : null}
 
               <div className="mb-6">
                 <p className="text-sm font-medium text-ink-900 mb-2">
@@ -417,13 +444,22 @@ function WellnessProductPage({ slug }: { slug: string }) {
                 <div className="flex items-center gap-3 pt-2">
                   {!isProgramMembership && (
                     <div className="flex items-center gap-2 rounded-full border border-ink-200 px-3 py-1.5">
-                      <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="text-ink-500 hover:text-ink-900" aria-label="Decrease quantity"><Minus size={16} /></button>
+                      <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="text-ink-500 hover:text-ink-900" aria-label="Decrease quantity" disabled={purchaseBlocked}><Minus size={16} /></button>
                       <span className="w-6 text-center text-sm font-medium">{quantity}</span>
-                      <button onClick={() => setQuantity(q => q + 1)} className="text-ink-500 hover:text-ink-900" aria-label="Increase quantity"><Plus size={16} /></button>
+                      <button onClick={() => setQuantity(q => q + 1)} className="text-ink-500 hover:text-ink-900" aria-label="Increase quantity" disabled={purchaseBlocked}><Plus size={16} /></button>
                     </div>
                   )}
-                  <button onClick={handlePrimaryAction} className="btn-primary flex-1 text-base py-4">
-                    {primaryLabel()}
+                  <button
+                    onClick={handlePrimaryAction}
+                    className="btn-primary flex-1 text-base py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={purchaseBlocked}
+                    aria-disabled={purchaseBlocked}
+                  >
+                    {purchaseBlocked
+                      ? rxAvailability?.customerFacingStatus === 'COMING_SOON'
+                        ? 'Coming soon'
+                        : 'Temporarily unavailable'
+                      : primaryLabel()}
                   </button>
                 </div>
 

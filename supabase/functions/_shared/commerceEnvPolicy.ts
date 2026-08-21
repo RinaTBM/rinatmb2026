@@ -4,6 +4,11 @@
 
 export type CommerceEnvLike = {
   REQUIRE_GEN_MAPPING_FOR_RX?: string;
+  /**
+   * When true, production Rx checkout may proceed for READY/ACTIVE GEN-mapped SKUs.
+   * Distinct from GEN_HEALTH_ENABLED and GEN_API_ORDERS_PAYMENT_STATUS_ENABLED.
+   */
+  GEN_API_ORDERS_ENABLED?: string;
   MBM_RUNTIME_ENV?: string;
   APP_ENV?: string;
   ENVIRONMENT?: string;
@@ -30,6 +35,7 @@ function readEnv(env?: CommerceEnvLike): CommerceEnvLike {
   if (env) return env;
   return {
     REQUIRE_GEN_MAPPING_FOR_RX: Deno.env.get("REQUIRE_GEN_MAPPING_FOR_RX") ?? undefined,
+    GEN_API_ORDERS_ENABLED: Deno.env.get("GEN_API_ORDERS_ENABLED") ?? undefined,
     MBM_RUNTIME_ENV: Deno.env.get("MBM_RUNTIME_ENV") ?? undefined,
     APP_ENV: Deno.env.get("APP_ENV") ?? undefined,
     ENVIRONMENT: Deno.env.get("ENVIRONMENT") ?? undefined,
@@ -62,6 +68,16 @@ export function resolveRequireGenMappingForRx(env?: CommerceEnvLike): boolean {
   if (truthy(raw)) return true;
   if (falsy(raw)) return false;
   return isProductionCommerceRuntime(e);
+}
+
+/**
+ * GEN API Orders / external-paid capability for this client.
+ * Default false until Scriptful/GEN confirms enablement.
+ * Distinct from GEN_HEALTH_ENABLED and GEN_API_ORDERS_PAYMENT_STATUS_ENABLED.
+ */
+export function resolveGenApiOrdersEnabled(env?: CommerceEnvLike): boolean {
+  const e = readEnv(env);
+  return truthy(e.GEN_API_ORDERS_ENABLED);
 }
 
 export const AUTHORIZED_MBM_SHIPPING_CENTS = Object.freeze([0, 3000, 5000] as const);

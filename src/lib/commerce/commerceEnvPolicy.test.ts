@@ -3,6 +3,7 @@ import {
   AUTHORIZED_MBM_SHIPPING_CENTS,
   isAuthorizedMbmShippingCents,
   isProductionCommerceRuntime,
+  resolveGenApiOrdersEnabled,
   resolveRequireGenMappingForRx,
 } from './commerceEnvPolicy';
 
@@ -58,5 +59,12 @@ describe('commerceEnvPolicy', () => {
         SUPABASE_URL: 'https://bsgtuuzwgeetsjjdrtrm.supabase.co',
       }),
     ).toBe(false);
+  });
+
+  it('GEN_API_ORDERS_ENABLED defaults false until explicitly enabled', () => {
+    expect(resolveGenApiOrdersEnabled({})).toBe(false);
+    expect(resolveGenApiOrdersEnabled({ GEN_API_ORDERS_ENABLED: 'true' })).toBe(true);
+    expect(resolveGenApiOrdersEnabled({ GEN_API_ORDERS_ENABLED: '1' })).toBe(true);
+    expect(resolveGenApiOrdersEnabled({ GEN_API_ORDERS_ENABLED: 'false' })).toBe(false);
   });
 });

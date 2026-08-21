@@ -86,8 +86,20 @@ describe('productEligibility', () => {
       ...rx,
       genMappingStatus: 'READY' as const,
     };
+    // READY map alone is not enough — API Orders required when production guard is on.
     expect(
-      assertCartEligibleForCheckout({ lines: [readyRx], requireGenMappingForRx: requireGen }).ok,
+      assertCartEligibleForCheckout({
+        lines: [readyRx],
+        requireGenMappingForRx: requireGen,
+        genApiOrdersEnabled: false,
+      }).ok,
+    ).toBe(false);
+    expect(
+      assertCartEligibleForCheckout({
+        lines: [readyRx],
+        requireGenMappingForRx: requireGen,
+        genApiOrdersEnabled: true,
+      }).ok,
     ).toBe(true);
   });
 

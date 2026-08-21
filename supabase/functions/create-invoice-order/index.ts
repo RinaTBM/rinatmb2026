@@ -18,7 +18,7 @@ import {
 } from "../_shared/injectProviderVisit.ts";
 import { guestPrescriptionRequiresAuth } from "../_shared/determineProviderRequirement.ts";
 import type { ApprovedTherapyHistoryRow } from "../_shared/determineProviderRequirement.ts";
-import { resolveRequireGenMappingForRx } from "../_shared/commerceEnvPolicy.ts";
+import { resolveRequireGenMappingForRx, resolveGenApiOrdersEnabled } from "../_shared/commerceEnvPolicy.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -97,6 +97,16 @@ async function assertRxGenMappingsReady(input: {
     ),
   ];
   if (rxSkus.length === 0) return { ok: true };
+
+  // Production Rx also requires GEN API Orders capability (distinct from mapping READY).
+  if (!resolveGenApiOrdersEnabled()) {
+    return {
+      ok: false,
+      message:
+        "This medication is temporarily unavailable for checkout. Please contact support.",
+      blockedSku: rxSkus[0],
+    };
+  }
 
   const inList = rxSkus.map((s) => `"${s.replace(/"/g, "")}"`).join(",");
   const res = await fetch(

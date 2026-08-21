@@ -2,11 +2,12 @@
 
 **Baseline branch:** `deploy/ach-launch-clean-2026`
 **Phase 12G update:** see `docs/PHASE_12G_GEN_CATALOG_MAPPING.md`
+**Phase 12I.2 update:** see `docs/PHASE_12I2_REMAINING_GEN_MAPPING.md` (full pricing matrix + readiness; API Orders still off)
 
 **Staging `gen_sku_map` (mxvaxkkwrbwhqasnsjpm):** 1 READY (`MBM-RP-BPC-INJ-001` / `KXMm9SsbOEYnFy9phmZn`) + 27 BLOCKED (NO_MATCH / AMBIGUOUS — no invented GEN IDs).
-**GEN Products API catalog size:** 22 (no SEM/TIR vials / HRT / NAD / Selank-Semax / skin-hair).
+**GEN Products API catalog size:** 22 (no SEM/TIR vials / HRT / NAD / Selank-Semax / skin-hair) — reconfirmed Phase 12I.2.
 **Automatic GEN handoff:** OFF
-
+**API Orders / external-paid:** NOT ENABLED — production Rx cutover BLOCKED until support enablement.
 ---
 
 ## Principles

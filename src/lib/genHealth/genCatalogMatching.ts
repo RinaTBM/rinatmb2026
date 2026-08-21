@@ -218,8 +218,8 @@ export function costAnalysisRow(input: {
 } {
   const med = input.medicationCostCents;
   const ship = input.shippingCostCents;
-  const landed =
-    med != null && ship != null ? med + ship : med != null && ship == null ? null : null;
+  // Never invent shipping — landed tiers only when ship is known.
+  const landed = med != null && ship != null ? med + ship : null;
   const plus = (c: number | null, m: number) => (c == null ? null : markupFromCostCents(c, m));
   return {
     medicationCostCents: med,
@@ -234,4 +234,98 @@ export function costAnalysisRow(input: {
     currentGrossOverMed: med == null ? null : input.currentRetailCents - med,
     currentGrossOverLanded: landed == null ? null : input.currentRetailCents - landed,
   };
+}
+
+/** Storefront Rx classification for Phase 12I.2 (independent of Tagada). */
+export type WebsiteRxReadiness =
+  | 'READY'
+  | 'GEN_BLOCKED'
+  | 'NEW_SKU_REQUIRED'
+  | 'DEPRECATED'
+  | 'HIDDEN';
+
+/**
+ * GEN products that are not part of the normal MBM sellable Rx catalog.
+ * Candidates only — never auto-activate for website sale.
+ */
+export function isResearchWellnessGenProduct(nameOrDescription: string | null | undefined): boolean {
+  const n = normalizeFormulationText(nameOrDescription || '');
+  if (!n) return false;
+  const researchTokens = [
+    'EPITALON',
+    'EPITHALON',
+    'GHK CU',
+    'GHK-CU',
+    'ELITE BODY RECOMP',
+    'ELITE REGENESIS',
+    'ADD SYNC',
+    'RESEARCH',
+  ];
+  return researchTokens.some((t) => n.includes(t.replace(/-/g, ' ')) || n.includes(t));
+}
+
+export function classifyWebsiteRxReadiness(input: {
+  mappingStatus?: string | null;
+  matchType?: GenMatchType | null;
+  requiresNewSku?: boolean;
+  isVisible?: boolean;
+  status?: string | null;
+}): WebsiteRxReadiness {
+  if (input.status === 'deprecated') return 'DEPRECATED';
+  if (input.isVisible === false || input.status === 'future') return 'HIDDEN';
+  const map = (input.mappingStatus || '').toUpperCase();
+  if (map === 'READY' || map === 'ACTIVE') return 'READY';
+  if (input.requiresNewSku) return 'NEW_SKU_REQUIRED';
+  return 'GEN_BLOCKED';
+}
+
+/**
+ * READY/ACTIVE GEN map is necessary but not sufficient for production Rx cutover
+ * while GEN API Orders / external-paid remains disabled.
+ */
+export function isProductionRxLaunchReady(input: {
+  mappingStatus?: string | null;
+  genApiOrdersEnabled?: boolean;
+}): {
+  mappingReady: boolean;
+  apiOrdersEnabled: boolean;
+  productionRxLaunchReady: boolean;
+  code: 'GEN_MAPPING_READY' | 'GEN_MAPPING_NOT_READY' | 'GEN_API_ORDERS_NOT_ENABLED';
+} {
+  const mappingReady = ['READY', 'ACTIVE'].includes((input.mappingStatus || '').toUpperCase());
+  const apiOrdersEnabled = input.genApiOrdersEnabled === true;
+  if (!mappingReady) {
+    return {
+      mappingReady: false,
+      apiOrdersEnabled,
+      productionRxLaunchReady: false,
+      code: 'GEN_MAPPING_NOT_READY',
+    };
+  }
+  if (!apiOrdersEnabled) {
+    return {
+      mappingReady: true,
+      apiOrdersEnabled: false,
+      productionRxLaunchReady: false,
+      code: 'GEN_API_ORDERS_NOT_ENABLED',
+    };
+  }
+  return {
+    mappingReady: true,
+    apiOrdersEnabled: true,
+    productionRxLaunchReady: true,
+    code: 'GEN_MAPPING_READY',
+  };
+}
+
+/** Ambiguous rows must never be treated as READY without owner validation. */
+export function mayMarkMappingReady(input: {
+  matchType: GenMatchType;
+  ownerVerified?: boolean;
+}): boolean {
+  if (input.matchType === 'AMBIGUOUS' || input.matchType === 'NO_MATCH') return false;
+  if (input.matchType === 'DEPRECATED') return false;
+  if (input.matchType === 'VERIFIED_REPLACEMENT') return input.ownerVerified === true;
+  // EXACT still requires ownerVerified before READY activation in staging workflows
+  return input.ownerVerified === true;
 }

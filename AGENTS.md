@@ -164,7 +164,7 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 
 ### Tagada / GEN commerce hardening (Phase 12F.1 / 12G / 12H / 12I / 12I.1)
 
-- Config table (names only): `docs/COMMERCE_STAGING_PRODUCTION_CONFIG.md`. Checkpoint notes: `docs/PHASE_12F1_COMMERCE_CHECKPOINT.md`. GEN mapping: `docs/PHASE_12G_GEN_CATALOG_MAPPING.md`. Clinical sync: `docs/PHASE_12H_GEN_CLINICAL_STATUS_SYNC.md`. Staging E2E + cutover plan: `docs/PHASE_12I_STAGING_E2E_AND_PRODUCTION_CUTOVER.md`. External-paid / API Orders: `docs/PHASE_12I1_GEN_EXTERNAL_PAID_RESOLUTION.md`.
+- Config table (names only): `docs/COMMERCE_STAGING_PRODUCTION_CONFIG.md`. Checkpoint notes: `docs/PHASE_12F1_COMMERCE_CHECKPOINT.md`. GEN mapping: `docs/PHASE_12G_GEN_CATALOG_MAPPING.md`. Remaining formulary audit: `docs/PHASE_12I2_REMAINING_GEN_MAPPING.md`. Clinical sync: `docs/PHASE_12H_GEN_CLINICAL_STATUS_SYNC.md`. Staging E2E + cutover plan: `docs/PHASE_12I_STAGING_E2E_AND_PRODUCTION_CUTOVER.md`. External-paid / API Orders: `docs/PHASE_12I1_GEN_EXTERNAL_PAID_RESOLUTION.md`.
 - **Shipping:** server-authorized cents are only `0` / `3000` / `5000`. Demo Tagada `1156` and `demo_store_forced_shipping` are rejected. Do not reintroduce Demo shipping hacks into production paths.
 - **Rx GEN guard:** `REQUIRE_GEN_MAPPING_FOR_RX` + `MBM_RUNTIME_ENV`. Production defaults fail-closed for Rx without READY/ACTIVE `gen_sku_map`; staging defaults open. Accessories skip GEN mapping. Wired in `create-invoice-order`.
 - **Paid authority:** browser / `get-order-payment-status` never marks paid; only `tagada-webhook` does. Correlation never uses email alone.
@@ -176,7 +176,7 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - GEN Products API uses header `x-api-key` (not Bearer) for `/v2/client/products`.
 - **Cloud env gotcha:** some agent env vars named `STAGING_URL` / `SUPABASE_URL` may still point at production (`bsgtuuzwgeetsjjdrtrm`). For staging GEN ops always use project ref `mxvaxkkwrbwhqasnsjpm` explicitly (`https://mxvaxkkwrbwhqasnsjpm.supabase.co`). Never deploy GEN functions or migrations to production from Phase 12I / 12I.1.
 - **Tagada sandbox caution:** prior CRM `testMode=true` + 4242 still hit live rails. Do not retry PATH A card flows until a true non-live sandbox rail is authoritatively confirmed.
-- **Cutover:** keep `GEN_HANDOFF_AUTOMATION_ENABLED=false` on first production deploy. Seed only BPC READY; remaining Rx BLOCKED. SEM/TIR membership med-fulfillment promises while maps are BLOCKED are a launch blocker. **Production Rx cutover remains BLOCKED** until GEN API Orders / external-paid is enabled and staging GEN orders no longer stick at `pending_payment`/`unpaid` after paid handoff.
+- **Cutover:** keep `GEN_HANDOFF_AUTOMATION_ENABLED=false` on first production deploy. Seed only BPC READY; remaining Rx BLOCKED (12I.2 reconfirmed — GEN catalog still 22 products, no SEM/TIR/HRT/NAD/skin-hair). SEM/TIR membership med-fulfillment promises while maps are BLOCKED are a launch blocker. **Production Rx cutover remains BLOCKED** until GEN API Orders / external-paid is enabled and staging GEN orders no longer stick at `pending_payment`/`unpaid` after paid handoff. Ambiguous GEN candidates must never be marked READY without owner validation.
 
 ### GitHub source of truth vs Bolt (permanent)
 

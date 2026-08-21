@@ -172,12 +172,38 @@ export async function genRequest<T = unknown>(
 
     if (!res.ok) {
       const cls = classifyGenHttpError(httpStatus);
+      // Extract only safe, non-PHI error codes/messages from GEN error JSON.
+      let safeDetail: string | undefined;
+      const collect = (node: unknown, depth = 0): void => {
+        if (safeDetail || depth > 3 || node == null) return;
+        if (typeof node === 'string') {
+          const c = node.trim();
+          if (c && c.length < 240 && !(/@|street|dob|ssn/i.test(c) && c.length > 80)) {
+            safeDetail = c;
+          }
+          return;
+        }
+        if (Array.isArray(node)) {
+          for (const item of node.slice(0, 5)) collect(item, depth + 1);
+          return;
+        }
+        if (typeof node === 'object') {
+          const pr = node as Record<string, unknown>;
+          for (const key of ['code', 'error', 'errorCode', 'message', 'msg', 'detail', 'title', 'remediation']) {
+            if (key in pr) collect(pr[key], depth + 1);
+            if (safeDetail) return;
+          }
+        }
+      };
+      collect(parsed);
       return {
         ok: false,
         correlationId,
         error: {
           code: cls.code,
-          message: `GEN request failed with HTTP ${httpStatus}`,
+          message: safeDetail
+            ? `GEN request failed with HTTP ${httpStatus}: ${safeDetail}`
+            : `GEN request failed with HTTP ${httpStatus}`,
           httpStatus,
           retryable: cls.retryable,
         },
@@ -277,26 +303,79 @@ export function parseGenPatientResponse(raw: unknown): GenPatientResponse | null
 export function parseGenOrderResponse(raw: unknown): GenOrderResponse | null {
   const r = asRecord(raw);
   if (!r) return null;
+  const data = asRecord(r.data);
+  const nestedOrder =
+    asRecord(r.order) ||
+    asRecord(data?.order) ||
+    null;
   const id =
     asString(r.id) ||
     asString(r.orderId) ||
-    asString(r.order_id);
+    asString(r.order_id) ||
+    asString(data?.orderId) ||
+    asString(data?.id) ||
+    asString(data?.order_id) ||
+    asString(nestedOrder?.id) ||
+    asString(nestedOrder?.orderId) ||
+    asString(nestedOrder?.order_id);
   if (!id) return null;
   const orderStatus =
     asString(r.orderStatus) ||
     asString(r.order_status) ||
     asString(r.status) ||
+    asString(data?.orderStatus) ||
+    asString(data?.status) ||
+    asString(nestedOrder?.orderStatus) ||
+    asString(nestedOrder?.status) ||
     undefined;
-  const actionsRaw = r.requiredActions ?? r.required_actions;
+  const actionsRaw =
+    r.requiredActions ??
+    r.required_actions ??
+    data?.requiredActions ??
+    data?.required_actions ??
+    nestedOrder?.requiredActions ??
+    nestedOrder?.required_actions;
+  const continuationFromEnvelope =
+    asString(data?.magicLink) ||
+    asString(r.magicLink) ||
+    asString(nestedOrder?.magicLink) ||
+    undefined;
+  // Never persist magic-login tokens / email-bearing one-time links in MBM DB.
+  const safeContinuation =
+    continuationFromEnvelope &&
+    !/magic-login|token=/i.test(continuationFromEnvelope)
+      ? continuationFromEnvelope
+      : undefined;
   const requiredActions: GenRequiredAction[] | undefined = Array.isArray(actionsRaw)
-    ? actionsRaw.map((a) => {
+    ? actionsRaw.map((a, idx) => {
+        if (typeof a === 'string') {
+          const token = a.trim();
+          return {
+            id: `gen-action-${token || idx}`,
+            type: token,
+            title: token,
+            url: safeContinuation,
+          };
+        }
         const ar = asRecord(a) || {};
+        const rawUrl =
+          asString(ar.url) ??
+          asString(ar.href) ??
+          asString(ar.continuationUrl) ??
+          safeContinuation;
+        const url =
+          rawUrl && !/magic-login|token=/i.test(rawUrl) ? rawUrl : undefined;
         return {
           id: asString(ar.id) ?? undefined,
-          type: asString(ar.type) ?? undefined,
-          title: asString(ar.title) ?? asString(ar.name) ?? undefined,
+          type: asString(ar.type) ?? asString(ar.actionType) ?? undefined,
+          title:
+            asString(ar.title) ??
+            asString(ar.name) ??
+            asString(ar.label) ??
+            asString(ar.type) ??
+            undefined,
           status: asString(ar.status) ?? undefined,
-          url: asString(ar.url) ?? asString(ar.href) ?? undefined,
+          url,
           raw: a,
         };
       })
@@ -375,20 +454,32 @@ export async function createGenOrder(
       },
     };
   }
-  const body: Record<string, unknown> = {
-    patientId: input.patientId,
+  // GEN V2 order create shape (confirmed via staging 400 remediation + probe):
+  // { patient_id, order: { clientProductId, transactionId, ... } }
+  // Nested patientId alone is rejected. payment_status requires GEN "API Orders"
+  // enablement — omit unless GEN_API_ORDERS_PAYMENT_STATUS_ENABLED=true.
+  const order: Record<string, unknown> = {
     clientProductId: input.clientProductId,
-    payment_status: 'paid',
     transactionId: input.transactionId,
   };
-  if (input.clientReference) body.clientReference = input.clientReference;
-  if (input.quantity != null) body.quantity = input.quantity;
-  if (input.extra) Object.assign(body, input.extra);
+  if (input.clientReference) order.clientReference = input.clientReference;
+  if (input.quantity != null) order.quantity = input.quantity;
+
+  const env = deps.env;
+  const allowPaymentStatus =
+    String(env?.GEN_API_ORDERS_PAYMENT_STATUS_ENABLED || '').toLowerCase() === 'true';
+  if (allowPaymentStatus) {
+    order.payment_status = 'paid';
+  }
+  if (input.extra) Object.assign(order, input.extra);
 
   const res = await genRequest<unknown>({
     method: 'POST',
     path: '/v2/client/orders',
-    body,
+    body: {
+      patient_id: input.patientId,
+      order,
+    },
     ...deps,
   });
   if (!res.ok) return res;

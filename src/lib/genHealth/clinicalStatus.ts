@@ -53,6 +53,7 @@ const CLINICAL_STATUS_MAP: Record<string, GenHandoffStatus> = {
   patient_created: 'GEN_PATIENT_CREATED',
   order_pending: 'GEN_ORDER_PENDING',
   pending: 'GEN_ORDER_PENDING',
+  pending_payment: 'GEN_ORDER_PENDING',
   created: 'GEN_ORDER_CREATED',
   order_created: 'GEN_ORDER_CREATED',
   action_required: 'GEN_ACTION_REQUIRED',
@@ -110,6 +111,7 @@ export function categorizeRequiredActionType(typeOrTitle: string | null | undefi
   if (!s) return 'OTHER';
   if (/(form|intake|questionnaire|assessment)/.test(s)) return 'FORM';
   if (/(upload|document|photo|id_doc|file)/.test(s)) return 'UPLOAD';
+  if (/(patient_continuation|continuation|continue)/.test(s)) return 'OTHER';
   if (/(identity|kyc|verify.?id|id.?verif)/.test(s)) return 'IDENTITY';
   if (/(lab|blood|specimen)/.test(s)) return 'LAB';
   if (/(visit|consult|appointment|telehealth|provider.?visit)/.test(s)) return 'VISIT';
@@ -145,7 +147,12 @@ export function normalizeRequiredAction(raw: GenRequiredAction | Record<string, 
   const type = a.type;
   const title = a.title || a.name || a.label || type || 'Required step';
   const category = categorizeRequiredActionType(`${type || ''} ${title}`);
-  const continuationUrl = a.url || a.href || a.continuationUrl || undefined;
+  const rawContinuation = a.url || a.href || a.continuationUrl || undefined;
+  // Never expose GEN magic-login / token URLs to portal or admin clients.
+  const continuationUrl =
+    rawContinuation && !/magic-login|token=/i.test(rawContinuation)
+      ? rawContinuation
+      : undefined;
   return {
     id: a.id,
     type,

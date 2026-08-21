@@ -254,18 +254,35 @@ Deno.serve(async (req) => {
     }
 
     const patch = sync.patch;
-    const handoffStatus = patch.clinicalStatus === "GEN_ACTION_REQUIRED"
+    const existingActions = Array.isArray(link.required_actions_json)
+      ? (link.required_actions_json as unknown[])
+      : [];
+    // GET /orders/:id may omit requiredActions even when create returned them.
+    // Never wipe a non-empty local snapshot with an empty GET result.
+    const incomingActions = patch.requiredActionsJson || [];
+    const actionsToStore = incomingActions.length > 0 ? incomingActions : existingActions;
+    let clinicalStatus = patch.clinicalStatus;
+    if (
+      actionsToStore.length > 0 &&
+      (clinicalStatus === "GEN_ORDER_PENDING" ||
+        clinicalStatus === "GEN_ORDER_CREATED" ||
+        clinicalStatus === "GEN_UNKNOWN" ||
+        clinicalStatus === "GEN_NOT_STARTED")
+    ) {
+      clinicalStatus = "GEN_ACTION_REQUIRED";
+    }
+    const handoffStatus = clinicalStatus === "GEN_ACTION_REQUIRED"
       ? "ACTION_REQUIRED"
-      : patch.clinicalStatus === "GEN_DENIED"
+      : clinicalStatus === "GEN_DENIED"
       ? "BLOCKED"
-      : patch.clinicalStatus === "GEN_RETRY_REQUIRED" || patch.clinicalStatus === "GEN_ERROR"
+      : clinicalStatus === "GEN_RETRY_REQUIRED" || clinicalStatus === "GEN_ERROR"
       ? "RETRY_REQUIRED"
       : "SYNCED";
 
     await sb.from("order_gen_orders").update({
       gen_order_status: patch.genOrderStatus,
-      clinical_status: patch.clinicalStatus,
-      required_actions_json: patch.requiredActionsJson,
+      clinical_status: clinicalStatus,
+      required_actions_json: actionsToStore,
       last_synced_at: patch.lastSyncedAt,
       gen_prescription_id: patch.genPrescriptionId ?? null,
       prescription_status: patch.prescriptionStatus ?? null,
@@ -296,9 +313,9 @@ Deno.serve(async (req) => {
       orderItemId,
       genOrderId,
       ok: true,
-      clinicalStatus: patch.clinicalStatus,
+      clinicalStatus,
       genOrderStatus: patch.genOrderStatus,
-      requiredActionCount: patch.requiredActionsJson.length,
+      requiredActionCount: actionsToStore.length,
       pharmacyStatus: patch.pharmacyStatus ?? null,
       prescriptionStatus: patch.prescriptionStatus ?? null,
       lastSyncedAt: patch.lastSyncedAt,

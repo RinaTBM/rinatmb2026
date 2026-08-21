@@ -12,6 +12,11 @@ export type GenHealthEnv = {
   GEN_HEALTH_WEBHOOK_SECRET?: string;
   /** When true, post-paid automation may enqueue/execute GEN handoff. Defaults FALSE. */
   GEN_HANDOFF_AUTOMATION_ENABLED?: string;
+  /**
+   * When true, createGenOrder may send order.payment_status="paid".
+   * GEN returns 400 unless "API Orders" is enabled for the client — default OFF.
+   */
+  GEN_API_ORDERS_PAYMENT_STATUS_ENABLED?: string;
 };
 
 export type GenHealthConfig = {

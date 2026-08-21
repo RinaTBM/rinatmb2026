@@ -28,6 +28,7 @@ Non-secret variable **names** only. Never commit secret values.
 | `GEN_HEALTH_API_KEY` | unset | Server-only GEN key |
 | `GEN_HEALTH_WEBHOOK_SECRET` | unset | Future GEN webhook HMAC |
 | `GEN_HANDOFF_AUTOMATION_ENABLED` | `false` | Post-paid auto handoff (must stay off until explicitly approved) |
+| `GEN_API_ORDERS_PAYMENT_STATUS_ENABLED` | unset / `false` | Only set `true` after GEN enables “API Orders” for the client; otherwise create omits `payment_status` |
 | `REQUIRE_GEN_MAPPING_FOR_RX` | staging `false` / prod default true | Rx checkout fail-closed without READY/ACTIVE map |
 | `MBM_RUNTIME_ENV` | `staging` / `production` | Runtime marker for commerce policy |
 
@@ -65,10 +66,14 @@ Visits / labs keep existing workflows.
 | QA SKU | `MBM-QA-TAGADA-DEMO-001` | KEEP FOR STAGING QA (DB map only — not storefront catalog) |
 | QA order | `MBM-QA-12E7D-001` | KEEP FOR STAGING QA |
 | Demo webhook | `whe_755a478e5398` | KEEP FOR STAGING QA |
-| Staging-only Edge helpers | `gen-health-qa-patient`, `gen-health-qa-patient-probe` | STAGING-ONLY — do not deploy to production |
+| Staging-only Edge helpers | `gen-health-qa-patient`, `gen-health-qa-patient-probe`, `gen-health-qa-order-probe`, `gen-health-list-products` | STAGING-ONLY — do not deploy to production |
+| Phase 12I PATH B fixtures | `fixture_12i_tx_NOT_REAL_TAGADA_*`, `@example.com`, `PHASE_12I_FIXTURE_NOT_REAL_TAGADA_PAYMENT` | KEEP FOR STAGING QA — never treat as Tagada payment |
 
 ## Architecture reminder
 
 - **MBM** = commerce / order / storefront authority  
 - **Tagada** = payment authority (webhook marks paid)  
 - **GEN Health** = clinical / provider / pharmacy authority (handoff automation off)
+- Cutover plan: `docs/PHASE_12I_STAGING_E2E_AND_PRODUCTION_CUTOVER.md`
+- GEN create shape: `{ patient_id, order: { clientProductId, transactionId } }`; omit `payment_status` unless API Orders enabled
+- Never persist GEN magic-login / token URLs

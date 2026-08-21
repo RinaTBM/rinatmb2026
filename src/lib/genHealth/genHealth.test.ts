@@ -273,6 +273,16 @@ describe('mocked patient + order create', () => {
       { env: enabledEnv, fetchImpl: fetchImpl as unknown as typeof fetch },
     );
     expect(res.ok).toBe(true);
+    const fetchCall = fetchImpl.mock.calls[0] as unknown as [unknown, { body?: string } | undefined];
+    const sent = JSON.parse(String(fetchCall[1]?.body || '{}')) as {
+      patient_id?: string;
+      order?: { clientProductId?: string; transactionId?: string; payment_status?: string };
+    };
+    expect(sent.patient_id).toBe(FIXTURE_PATIENT_ID);
+    expect(sent.order?.clientProductId).toBe(FIXTURE_PRODUCT_ID);
+    expect(sent.order?.transactionId).toBe('tx_test_tagada_1');
+    // payment_status omitted unless GEN_API_ORDERS_PAYMENT_STATUS_ENABLED
+    expect(sent.order?.payment_status).toBeUndefined();
     if (res.ok) {
       expect(res.data.id).toBe(FIXTURE_ORDER_ID);
       const snap = snapshotRequiredActions(res.data.requiredActions);

@@ -24,6 +24,31 @@ import type {
   GenSkuMapping,
   GenSkuResolveResult,
 } from './genHealthTypes';
+import {
+  normalizeGenClinicalStatus,
+  normalizePharmacyShipmentStatus,
+} from './clinicalStatus';
+export {
+  normalizeGenClinicalStatus,
+  normalizeRequiredAction,
+  normalizeRequiredActionsList,
+  categorizeRequiredActionType,
+  normalizePharmacyShipmentStatus,
+  buildSafeCustomerClinicalLine,
+  portalStageFromClinical,
+  portalStageCopy,
+  customerMayMarkRequiredActionCompleteLocally,
+  browserMayWriteClinicalStatus,
+  adminGenStatusRefreshRequiresAuth,
+  customerClinicalStatusReadsLocalStateOnly,
+} from './clinicalStatus';
+export type {
+  RequiredActionCategory,
+  NormalizedRequiredAction,
+  PharmacyShipmentStatus,
+  PortalClinicalStage,
+  SafeCustomerClinicalLine,
+} from './clinicalStatus';
 
 export {
   assertGenHealthCallable,
@@ -279,32 +304,6 @@ export function parseGenOrderResponse(raw: unknown): GenOrderResponse | null {
   return { id, orderStatus, requiredActions, raw };
 }
 
-/**
- * Normalize opaque GEN orderStatus strings into internal handoff statuses.
- * Unknown values → GEN_UNKNOWN (do not auto-fulfill).
- */
-export function normalizeGenClinicalStatus(raw: string | null | undefined): GenHandoffStatus {
-  if (!raw) return 'GEN_UNKNOWN';
-  const s = raw.trim().toLowerCase().replace(/[\s-]+/g, '_');
-  const map: Record<string, GenHandoffStatus> = {
-    action_required: 'GEN_ACTION_REQUIRED',
-    required_actions: 'GEN_ACTION_REQUIRED',
-    provider_review: 'GEN_PROVIDER_REVIEW',
-    in_review: 'GEN_PROVIDER_REVIEW',
-    approved: 'GEN_APPROVED',
-    denied: 'GEN_DENIED',
-    rejected: 'GEN_DENIED',
-    pharmacy: 'GEN_PHARMACY',
-    fulfilling: 'GEN_PHARMACY',
-    shipped: 'GEN_SHIPPED',
-    complete: 'GEN_COMPLETE',
-    completed: 'GEN_COMPLETE',
-    created: 'GEN_ORDER_CREATED',
-    pending: 'GEN_ORDER_PENDING',
-  };
-  return map[s] ?? 'GEN_UNKNOWN';
-}
-
 export type GenClientDeps = {
   env?: GenHealthEnv;
   config?: GenHealthConfig;
@@ -491,18 +490,97 @@ export type GenOrderSyncPatch = {
   clinicalStatus: GenHandoffStatus;
   requiredActionsJson: GenRequiredAction[];
   lastSyncedAt: string;
+  /** Safe prescription id/status when exposed by GEN order/prescription GET. */
+  genPrescriptionId?: string | null;
+  prescriptionStatus?: string | null;
+  lastPrescriptionSyncAt?: string | null;
+  /** Pharmacy/shipment normalization — only when GEN exposes it. */
+  pharmacyStatus?: string | null;
+  trackingNumber?: string | null;
 };
+
+function extractPharmacyAndPrescriptionFromOrder(order: GenOrderResponse): {
+  genPrescriptionId: string | null;
+  prescriptionStatus: string | null;
+  pharmacyStatusRaw: string | null;
+  trackingNumber: string | null;
+} {
+  const raw = (order.raw && typeof order.raw === 'object' ? order.raw : {}) as Record<
+    string,
+    unknown
+  >;
+  const pickStr = (...vals: unknown[]): string | null => {
+    for (const v of vals) {
+      if (typeof v === 'string' && v.trim()) return v.trim();
+    }
+    return null;
+  };
+  const rx =
+    (raw.prescription && typeof raw.prescription === 'object'
+      ? (raw.prescription as Record<string, unknown>)
+      : null) ||
+    (Array.isArray(raw.prescriptions) && raw.prescriptions[0] && typeof raw.prescriptions[0] === 'object'
+      ? (raw.prescriptions[0] as Record<string, unknown>)
+      : null);
+  const ship =
+    (raw.shipment && typeof raw.shipment === 'object'
+      ? (raw.shipment as Record<string, unknown>)
+      : null) ||
+    (raw.shipping && typeof raw.shipping === 'object'
+      ? (raw.shipping as Record<string, unknown>)
+      : null) ||
+    (raw.pharmacy && typeof raw.pharmacy === 'object'
+      ? (raw.pharmacy as Record<string, unknown>)
+      : null);
+  return {
+    genPrescriptionId: pickStr(rx?.id, raw.prescriptionId, raw.prescription_id, raw.genPrescriptionId),
+    prescriptionStatus: pickStr(rx?.status, raw.prescriptionStatus, raw.prescription_status),
+    pharmacyStatusRaw: pickStr(
+      ship?.status,
+      raw.pharmacyStatus,
+      raw.pharmacy_status,
+      raw.fulfillmentStatus,
+      raw.fulfillment_status,
+      raw.shippingStatus,
+      raw.shipping_status,
+    ),
+    trackingNumber: pickStr(
+      ship?.trackingNumber,
+      ship?.tracking_number,
+      raw.trackingNumber,
+      raw.tracking_number,
+    ),
+  };
+}
 
 export function buildGenOrderSyncPatch(
   order: GenOrderResponse,
   syncedAt: string = new Date().toISOString(),
 ): GenOrderSyncPatch {
+  const extra = extractPharmacyAndPrescriptionFromOrder(order);
+  const clinicalStatus = normalizeGenClinicalStatus(order.orderStatus);
+  // Prefer explicit pharmacy/shipment fields; fall back to clinical when clearly shipped/pharmacy.
+  let pharmacyStatus: string | null = null;
+  if (extra.pharmacyStatusRaw) {
+    pharmacyStatus = normalizePharmacyShipmentStatus(extra.pharmacyStatusRaw);
+  } else if (clinicalStatus === 'GEN_SHIPPED') {
+    pharmacyStatus = 'SHIPPED';
+  } else if (clinicalStatus === 'GEN_COMPLETE') {
+    pharmacyStatus = 'DELIVERED';
+  } else if (clinicalStatus === 'GEN_PHARMACY') {
+    pharmacyStatus = 'PHARMACY_PROCESSING';
+  }
   return {
     genOrderId: order.id,
     genOrderStatus: order.orderStatus ?? null,
-    clinicalStatus: normalizeGenClinicalStatus(order.orderStatus),
+    clinicalStatus,
     requiredActionsJson: snapshotRequiredActions(order.requiredActions),
     lastSyncedAt: syncedAt,
+    genPrescriptionId: extra.genPrescriptionId,
+    prescriptionStatus: extra.prescriptionStatus,
+    lastPrescriptionSyncAt: extra.genPrescriptionId || extra.prescriptionStatus ? syncedAt : null,
+    pharmacyStatus,
+    trackingNumber: extra.trackingNumber,
   };
 }
 

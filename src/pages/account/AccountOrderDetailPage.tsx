@@ -13,10 +13,25 @@ import {
   labelPaymentStatus,
 } from '@/lib/orders/orderStatus';
 import { labelShippingMethod } from '@/lib/orders/shipping';
-import { resolveClinicalNextSteps } from '@/lib/commerce/clinicalNextSteps';
+import { resolveClinicalLinesForOrder, clinicalTimelineLabels, isTimelineStageReached } from '@/lib/commerce/clinicalNextSteps';
 import { AccountShell } from './AccountShell';
 import { OrderStatusTimeline } from './OrderStatusTimeline';
 import { useAccountNoIndex } from './useAccountNoIndex';
+
+function isPortalRxSku(sku: string | null | undefined): boolean {
+  if (!sku?.trim()) return false;
+  const s = sku.trim().toUpperCase();
+  if (s.includes('IPV') || s.includes('FUV') || s.includes('LAB') || s.includes('VISIT')) return false;
+  if (s.includes('CASE') || s.includes('ACCESSORY') || s.includes('SERUM')) return false;
+  if (s.includes('MEMBER') || s.includes('SUBSCR')) return false;
+  return (
+    s.startsWith('MBM-WM-') ||
+    s.startsWith('MBM-HRT-') ||
+    s.startsWith('MBM-LON-') ||
+    s.startsWith('MBM-RP-') ||
+    s.startsWith('MBM-SH-')
+  );
+}
 
 type AccountOrderDetailPageProps = {
   orderId: string;
@@ -168,24 +183,35 @@ export function AccountOrderDetailPage({ orderId }: AccountOrderDetailPageProps)
           </section>
 
           {(() => {
-            const hasRx = order.items.some((item) => {
-              const sku = (item.sku || '').toUpperCase();
-              return (
-                sku.startsWith('MBM-WM-') ||
-                sku.startsWith('MBM-HRT-') ||
-                sku.startsWith('MBM-LON-') ||
-                sku.startsWith('MBM-RP-') ||
-                sku.startsWith('MBM-SH-')
-              );
-            });
-            const clinical = resolveClinicalNextSteps({
+            const genUiEnabled = import.meta.env.VITE_GEN_CLINICAL_UI_ENABLED === 'true';
+            const genByItem = new Map(
+              (order.gen_orders || []).map((g) => [g.order_item_id, g]),
+            );
+            const rxLines = order.items
+              .filter((item) => isPortalRxSku(item.fulfillment_sku || item.sku))
+              .map((item) => {
+                const g = genByItem.get(item.id);
+                const actions = Array.isArray(g?.required_actions_json)
+                  ? (g!.required_actions_json as Array<Record<string, unknown>>)
+                  : [];
+                return {
+                  orderItemId: item.id,
+                  mbmSku: item.fulfillment_sku || item.sku,
+                  productName: item.product_name_snapshot,
+                  clinicalStatus: g?.clinical_status ?? order.gen_handoff_status ?? null,
+                  requiredActions: actions,
+                  pharmacyStatus: g?.pharmacy_status ?? null,
+                  trackingNumber: g?.tracking_number ?? null,
+                };
+              });
+            if (rxLines.length === 0) return null;
+            const clinical = resolveClinicalLinesForOrder({
               paymentStatus: order.payment_status,
-              genHandoffStatus: order.gen_handoff_status,
-              hasRxLine: hasRx,
-              // GEN requiredActions UI behind flag — never invent questions.
-              genUiEnabled: import.meta.env.VITE_GEN_CLINICAL_UI_ENABLED === 'true',
+              genUiEnabled,
+              lines: rxLines,
             });
-            if (clinical.phase === 'not_applicable') return null;
+            if (!clinical.applicable) return null;
+            const timeline = clinicalTimelineLabels();
             return (
               <section
                 className="rounded-2xl border border-cream-300 bg-white p-6 shadow-sm"
@@ -194,25 +220,66 @@ export function AccountOrderDetailPage({ orderId }: AccountOrderDetailPageProps)
                 <h3 id="clinical-next-heading" className="font-serif text-xl text-ink-900 mb-3">
                   Clinical next steps
                 </h3>
-                <p className="text-sm text-ink-600 mb-4">{clinical.headline}</p>
-                {clinical.cards.length ? (
-                  <ul className="space-y-3">
-                    {clinical.cards.map((card) => (
-                      <li
-                        key={card.id}
-                        className="rounded-xl border border-cream-200 bg-cream-50 px-4 py-3 text-left"
-                      >
-                        <p className="text-sm font-medium text-ink-900">{card.title}</p>
-                        <p className="text-xs text-ink-500 mt-1">{card.description}</p>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-xs text-ink-400">
-                    We will never invent medical questions here. Required clinical steps come from
-                    your verified care workflow after payment.
-                  </p>
-                )}
+                <p className="text-xs text-ink-400 mb-4">
+                  Clinical status comes from your care workflow after payment. We do not invent
+                  medical questions or mark steps complete from this page.
+                </p>
+                <ul className="space-y-6">
+                  {clinical.lines.map((line) => (
+                    <li key={line.orderItemId} className="rounded-xl border border-cream-200 p-4">
+                      <p className="text-sm font-medium text-ink-900 mb-1">
+                        {line.productName || line.mbmSku || 'Prescription item'}
+                      </p>
+                      <p className="text-sm text-ink-800">{line.headline}</p>
+                      <p className="text-xs text-ink-500 mt-1 mb-3">{line.body}</p>
+                      <ol className="flex flex-wrap gap-2 mb-3" aria-label="Clinical progress">
+                        {timeline.map(({ stage, label }) => {
+                          const reached = isTimelineStageReached(line.portalStage, stage);
+                          return (
+                            <li
+                              key={stage}
+                              className={`text-[11px] rounded-full px-2.5 py-1 border ${
+                                reached
+                                  ? 'border-ink-800 bg-ink-900 text-cream-50'
+                                  : 'border-cream-300 text-ink-400'
+                              }`}
+                            >
+                              {label}
+                            </li>
+                          );
+                        })}
+                      </ol>
+                      {line.requiredActions.length ? (
+                        <ul className="space-y-2">
+                          {line.requiredActions.map((card) => (
+                            <li
+                              key={card.id}
+                              className="rounded-lg border border-cream-200 bg-cream-50 px-3 py-2 text-left"
+                            >
+                              <p className="text-sm font-medium text-ink-900">{card.title}</p>
+                              <p className="text-xs text-ink-500 mt-1">{card.description}</p>
+                              {card.continuationUrl ? (
+                                <a
+                                  href={card.continuationUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex mt-2 text-xs font-medium text-ink-900 underline underline-offset-2"
+                                >
+                                  Continue
+                                </a>
+                              ) : null}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      {line.trackingNumber ? (
+                        <p className="text-xs text-ink-600 mt-3">
+                          Tracking: {line.trackingNumber}
+                        </p>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
               </section>
             );
           })()}

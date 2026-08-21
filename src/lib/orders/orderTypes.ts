@@ -38,6 +38,8 @@ export interface OrderRecord {
   provider_workflow_status?: string | null;
   /** GEN handoff rollup (nullable until gen_health migration applied). */
   gen_handoff_status?: string | null;
+  /** Tagada / external payment id when present on orders row. */
+  external_payment_id?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -111,10 +113,39 @@ export interface OrderAdminNoteRecord {
   created_at: string;
 }
 
+/** Per-line GEN clinical link (order_gen_orders). Customer-safe select-own via RLS. */
+export interface OrderGenOrderRecord {
+  id: string;
+  order_id: string;
+  order_item_id: string;
+  mbm_sku: string;
+  gen_patient_id?: string | null;
+  gen_order_id?: string | null;
+  gen_client_product_id?: string | null;
+  tagada_transaction_id?: string | null;
+  gen_order_status?: string | null;
+  required_actions_json?: unknown;
+  clinical_status?: string | null;
+  handoff_status?: string | null;
+  attempt_count?: number | null;
+  last_error_code?: string | null;
+  last_error_message_safe?: string | null;
+  last_synced_at?: string | null;
+  gen_prescription_id?: string | null;
+  prescription_status?: string | null;
+  last_prescription_sync_at?: string | null;
+  pharmacy_status?: string | null;
+  tracking_number?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface OrderWithDetails extends OrderRecord {
   items: OrderItemRecord[];
   fulfillment: OrderFulfillmentRecord | null;
   status_events: OrderStatusEventRecord[];
+  /** Per-line GEN clinical rows when loaded (Phase 12H). */
+  gen_orders?: OrderGenOrderRecord[];
 }
 
 /** Snapshot line from checkout — preserved for history. */

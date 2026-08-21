@@ -3,6 +3,7 @@ import type {
   CustomerTherapyHistoryRecord,
   OrderAdminNoteRecord,
   OrderFulfillmentRecord,
+  OrderGenOrderRecord,
   OrderItemRecord,
   OrderRecord,
   OrderStatusEventRecord,
@@ -62,7 +63,7 @@ export async function getCustomerOrderDetail(
   if (error) return { order: null, error: error.message };
   if (!order) return { order: null, error: null };
 
-  const [itemsRes, fulfillRes, eventsRes] = await Promise.all([
+  const [itemsRes, fulfillRes, eventsRes, genRes] = await Promise.all([
     client.from('order_items').select('*').eq('order_id', orderId),
     client.from('order_fulfillment').select('*').eq('order_id', orderId).maybeSingle(),
     client
@@ -71,11 +72,14 @@ export async function getCustomerOrderDetail(
       .eq('order_id', orderId)
       .eq('customer_visible', true)
       .order('event_at', { ascending: true }),
+    client.from('order_gen_orders').select('*').eq('order_id', orderId),
   ]);
 
   if (itemsRes.error) return { order: null, error: itemsRes.error.message };
   if (fulfillRes.error) return { order: null, error: fulfillRes.error.message };
   if (eventsRes.error) return { order: null, error: eventsRes.error.message };
+  // GEN table may be absent pre-migration — treat as empty, not hard fail.
+  const genOrders = genRes.error ? [] : ((genRes.data ?? []) as OrderGenOrderRecord[]);
 
   return {
     order: {
@@ -85,6 +89,7 @@ export async function getCustomerOrderDetail(
       status_events: filterCustomerVisibleEvents(
         (eventsRes.data ?? []) as OrderStatusEventRecord[],
       ),
+      gen_orders: genOrders,
     },
     error: null,
   };
@@ -135,7 +140,7 @@ export async function getAdminOrderDetail(
   if (error) return { order: null, adminNotes: [], error: error.message };
   if (!order) return { order: null, adminNotes: [], error: null };
 
-  const [itemsRes, fulfillRes, eventsRes, notesRes] = await Promise.all([
+  const [itemsRes, fulfillRes, eventsRes, notesRes, genRes] = await Promise.all([
     client.from('order_items').select('*').eq('order_id', orderId),
     client.from('order_fulfillment').select('*').eq('order_id', orderId).maybeSingle(),
     client
@@ -148,6 +153,7 @@ export async function getAdminOrderDetail(
       .select('*')
       .eq('order_id', orderId)
       .order('created_at', { ascending: false }),
+    client.from('order_gen_orders').select('*').eq('order_id', orderId),
   ]);
 
   const err =
@@ -157,6 +163,7 @@ export async function getAdminOrderDetail(
     notesRes.error?.message ||
     null;
   if (err) return { order: null, adminNotes: [], error: err };
+  const genOrders = genRes.error ? [] : ((genRes.data ?? []) as OrderGenOrderRecord[]);
 
   return {
     order: {
@@ -164,6 +171,7 @@ export async function getAdminOrderDetail(
       items: (itemsRes.data ?? []) as OrderItemRecord[],
       fulfillment: (fulfillRes.data as OrderFulfillmentRecord | null) ?? null,
       status_events: (eventsRes.data ?? []) as OrderStatusEventRecord[],
+      gen_orders: genOrders,
     },
     adminNotes: (notesRes.data ?? []) as OrderAdminNoteRecord[],
     error: null,

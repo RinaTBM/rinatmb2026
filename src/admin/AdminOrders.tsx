@@ -191,6 +191,7 @@ export function AdminOrderDetail({
   const [approvalVariantId, setApprovalVariantId] = useState('');
   const [approvalSku, setApprovalSku] = useState('');
   const [approvalNotes, setApprovalNotes] = useState('');
+  const [genBusy, setGenBusy] = useState(false);
 
   const load = async () => {
     if (!supabase || !canWrite) {
@@ -348,6 +349,30 @@ export function AdminOrderDetail({
     }
   };
 
+  const refreshGenStatus = async (mode: 'refresh' | 'retry', orderGenOrderId?: string) => {
+    if (!supabase || !order) return;
+    setGenBusy(true);
+    setMsg(null);
+    const { data, error } = await supabase.functions.invoke('gen-health-sync', {
+      body: {
+        orderId: order.id,
+        orderGenOrderId,
+        mode,
+      },
+    });
+    setGenBusy(false);
+    if (error) {
+      setMsg(error.message || 'GEN sync failed');
+      return;
+    }
+    if (data && typeof data === 'object' && 'error' in data && data.error) {
+      setMsg(String((data as { error: string }).error));
+      return;
+    }
+    setMsg(mode === 'retry' ? 'GEN retry requested.' : 'GEN status refreshed.');
+    await load();
+  };
+
   if (!order) {
     return (
       <div>
@@ -446,6 +471,170 @@ export function AdminOrderDetail({
               </li>
             ))}
           </ul>
+        </section>
+
+        <section className="card-lux p-5 space-y-4 text-sm lg:col-span-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="font-serif text-xl text-ink-900">GEN clinical</h2>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                className="btn-outline !py-1 !px-3 text-xs"
+                disabled={genBusy || busy || !canWrite}
+                onClick={() => void refreshGenStatus('refresh')}
+              >
+                Refresh GEN status
+              </button>
+              <button
+                type="button"
+                className="btn-outline !py-1 !px-3 text-xs"
+                disabled={genBusy || busy || !canWrite}
+                onClick={() => void refreshGenStatus('retry')}
+              >
+                Retry GEN sync
+              </button>
+            </div>
+          </div>
+          <p className="text-xs text-ink-500">
+            GEN is clinical source of truth. Payment authority remains Tagada. No Mark Approved /
+            Mark Shipped clinical overrides here.
+          </p>
+          <dl className="grid gap-2 sm:grid-cols-2 text-xs">
+            <div>
+              <dt className="text-ink-400">MBM payment status</dt>
+              <dd>{labelPaymentStatus(order.payment_status)}</dd>
+            </div>
+            <div>
+              <dt className="text-ink-400">Order rollup handoff</dt>
+              <dd>{order.gen_handoff_status || '—'}</dd>
+            </div>
+            <div>
+              <dt className="text-ink-400">Tagada transaction</dt>
+              <dd className="break-all">
+                {order.external_payment_id ||
+                  (order.gen_orders || []).find((g) => g.tagada_transaction_id)
+                    ?.tagada_transaction_id ||
+                  '—'}
+              </dd>
+            </div>
+          </dl>
+          {(order.gen_orders || []).length === 0 ? (
+            <p className="text-xs text-ink-500">
+              No GEN clinical rows for this order yet (handoff not started or non-Rx only).
+            </p>
+          ) : (
+            <ul className="space-y-4">
+              {(order.gen_orders || []).map((g) => {
+                const item = order.items.find((i) => i.id === g.order_item_id);
+                const actions = Array.isArray(g.required_actions_json)
+                  ? (g.required_actions_json as Array<{ id?: string; type?: string; title?: string; status?: string }>)
+                  : [];
+                const denied = (g.clinical_status || '').toUpperCase() === 'GEN_DENIED';
+                return (
+                  <li key={g.id} className="rounded-xl border border-cream-300 bg-cream-50 p-3 space-y-2">
+                    <p className="font-medium text-ink-900">
+                      {item?.product_name_snapshot || g.mbm_sku}
+                      {denied ? (
+                        <span className="ml-2">
+                          <Badge tone="red">follow-up / refund review</Badge>
+                        </span>
+                      ) : null}
+                    </p>
+                    <dl className="grid gap-1 sm:grid-cols-2 text-xs">
+                      <div>
+                        <dt className="text-ink-400">GEN patient ID</dt>
+                        <dd className="break-all">{g.gen_patient_id || '—'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-ink-400">GEN order ID</dt>
+                        <dd className="break-all">{g.gen_order_id || '—'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-ink-400">clientProductId</dt>
+                        <dd className="break-all">{g.gen_client_product_id || '—'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-ink-400">Raw GEN status</dt>
+                        <dd>{g.gen_order_status || '—'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-ink-400">Normalized clinical</dt>
+                        <dd>{g.clinical_status || '—'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-ink-400">Handoff / retries</dt>
+                        <dd>
+                          {g.handoff_status || '—'} · attempts {g.attempt_count ?? 0}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-ink-400">Prescription</dt>
+                        <dd>
+                          {g.prescription_status || '—'}
+                          {g.gen_prescription_id ? ` (${g.gen_prescription_id})` : ''}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-ink-400">Pharmacy</dt>
+                        <dd>
+                          {g.pharmacy_status || '—'}
+                          {g.tracking_number ? ` · track ${g.tracking_number}` : ''}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-ink-400">Last sync</dt>
+                        <dd>
+                          {g.last_synced_at
+                            ? new Date(g.last_synced_at).toLocaleString()
+                            : '—'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-ink-400">Last safe error</dt>
+                        <dd>
+                          {g.last_error_code
+                            ? `${g.last_error_code}${
+                                g.last_error_message_safe ? `: ${g.last_error_message_safe}` : ''
+                              }`
+                            : '—'}
+                        </dd>
+                      </div>
+                    </dl>
+                    {actions.length ? (
+                      <div>
+                        <p className="text-xs text-ink-400 mb-1">requiredActions</p>
+                        <ul className="text-xs space-y-1">
+                          {actions.map((a, idx) => (
+                            <li key={a.id || `ra-${idx}`}>
+                              {[a.type, a.title, a.status].filter(Boolean).join(' · ') || 'action'}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <button
+                        type="button"
+                        className="btn-outline !py-1 !px-2 text-[11px]"
+                        disabled={genBusy || !canWrite}
+                        onClick={() => void refreshGenStatus('refresh', g.id)}
+                      >
+                        Refresh line
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-outline !py-1 !px-2 text-[11px]"
+                        disabled={genBusy || !canWrite}
+                        onClick={() => void refreshGenStatus('retry', g.id)}
+                      >
+                        Retry line
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </section>
 
         <section className="card-lux p-5 space-y-2 text-sm">

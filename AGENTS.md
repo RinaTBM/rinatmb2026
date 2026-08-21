@@ -162,16 +162,17 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - Fulfillment: final shipping paths need paid + (NONE or COMPLETED workflow + APPROVED history). `provider_review_in_progress` still only needs paid.
 - Do not call CrossTx APIs; do not enable Kashu card; do not treat payment as therapy approval.
 
-### Tagada / GEN commerce hardening (Phase 12F.1 / 12G)
+### Tagada / GEN commerce hardening (Phase 12F.1 / 12G / 12H)
 
-- Config table (names only): `docs/COMMERCE_STAGING_PRODUCTION_CONFIG.md`. Checkpoint notes: `docs/PHASE_12F1_COMMERCE_CHECKPOINT.md`. GEN mapping: `docs/PHASE_12G_GEN_CATALOG_MAPPING.md`.
+- Config table (names only): `docs/COMMERCE_STAGING_PRODUCTION_CONFIG.md`. Checkpoint notes: `docs/PHASE_12F1_COMMERCE_CHECKPOINT.md`. GEN mapping: `docs/PHASE_12G_GEN_CATALOG_MAPPING.md`. Clinical sync: `docs/PHASE_12H_GEN_CLINICAL_STATUS_SYNC.md`.
 - **Shipping:** server-authorized cents are only `0` / `3000` / `5000`. Demo Tagada `1156` and `demo_store_forced_shipping` are rejected. Do not reintroduce Demo shipping hacks into production paths.
 - **Rx GEN guard:** `REQUIRE_GEN_MAPPING_FOR_RX` + `MBM_RUNTIME_ENV`. Production defaults fail-closed for Rx without READY/ACTIVE `gen_sku_map`; staging defaults open. Accessories skip GEN mapping. Wired in `create-invoice-order`.
 - **Paid authority:** browser / `get-order-payment-status` never marks paid; only `tagada-webhook` does. Correlation never uses email alone.
-- **GEN:** `GEN_HEALTH_ENABLED` and `GEN_HANDOFF_AUTOMATION_ENABLED` default **false**. Post-paid gate: `canStartGenHandoff`. Manual handoff via admin-authenticated `gen-health-handoff` only (`forceManual=true` when automation off). Tagada webhook must not auto-call GEN. Membership rebill never creates GEN medication orders. Staging map: BPC READY; other Rx BLOCKED until verified. Migration `20260821120000_gen_health_v2.sql` is additive — do **not** apply to production without approval.
+- **GEN:** `GEN_HEALTH_ENABLED` and `GEN_HANDOFF_AUTOMATION_ENABLED` default **false**. Post-paid gate: `canStartGenHandoff`. Manual handoff via admin-authenticated `gen-health-handoff` only (`forceManual=true` when automation off). Tagada webhook must not auto-call GEN. Membership rebill never creates GEN medication orders. Staging map: BPC READY; other Rx BLOCKED until verified. Migration `20260821120000_gen_health_v2.sql` (+ optional `20260821160000_gen_clinical_status_sync_12h.sql`) is additive — do **not** apply to production without approval.
+- **GEN clinical sync (12H):** Admin refresh via `gen-health-sync` (JWT + `is_admin`). Customer-safe read via `get-order-clinical-status` or RLS `order_gen_orders` select-own. Browser never writes clinical status / never locally marks requiredActions complete. GEN webhook remains fail-closed until signature spec is documented. Unknown GEN statuses → `GEN_UNKNOWN` (never auto-fulfill). Payment stays `paid` on GEN sync failure (`GEN_RETRY_REQUIRED`).
 - Staging QA SKU `MBM-QA-TAGADA-DEMO-001` is DB-only — not a storefront catalog SKU. Do not promote Demo store / webhook / QA order artifacts to production.
 - GEN Products API uses header `x-api-key` (not Bearer) for `/v2/client/products`. Staging helper: `gen-health-list-products` (do not deploy to production).
-
+- **Cloud env gotcha:** some agent env vars named `STAGING_URL` / `SUPABASE_URL` may still point at production (`bsgtuuzwgeetsjjdrtrm`). For staging GEN ops always use project ref `mxvaxkkwrbwhqasnsjpm` explicitly (`https://mxvaxkkwrbwhqasnsjpm.supabase.co`). Never deploy GEN functions or migrations to production from Phase 12H.
 ### GitHub source of truth vs Bolt (permanent)
 
 **Current ACH/Wire production tip (post-reconcile):** `deploy/ach-launch-clean-2026`  

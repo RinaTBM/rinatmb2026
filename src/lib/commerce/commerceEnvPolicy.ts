@@ -10,6 +10,12 @@ export type CommerceEnvLike = {
    * Distinct from GEN_HEALTH_ENABLED and GEN_API_ORDERS_PAYMENT_STATUS_ENABLED.
    */
   GEN_API_ORDERS_ENABLED?: string;
+  /**
+   * Phase 12J.0 — temporary single-SKU production checkout allowlist.
+   * Exactly one MBM SKU (e.g. MBM-RP-BPC-INJ-001). Empty/unset = no override.
+   * Does NOT enable GEN handoff. Does NOT enable other Rx. Remove after live test.
+   */
+  PRODUCTION_CHECKOUT_TEST_SKU?: string;
   /** Preferred runtime marker: production | staging | development */
   MBM_RUNTIME_ENV?: string;
   APP_ENV?: string;
@@ -76,6 +82,47 @@ export function resolveRequireGenMappingForRx(env: CommerceEnvLike = {}): boolea
  */
 export function resolveGenApiOrdersEnabled(env: CommerceEnvLike = {}): boolean {
   return truthy(env.GEN_API_ORDERS_ENABLED);
+}
+
+/**
+ * Temporary production live-test allowlist: exactly one SKU string, or null.
+ * Rejects comma/space-separated multi-SKU values (fail closed — no broad unlock).
+ */
+export function resolveProductionCheckoutTestSku(env: CommerceEnvLike = {}): string | null {
+  const raw = (env.PRODUCTION_CHECKOUT_TEST_SKU || '').trim().toUpperCase();
+  if (!raw) return null;
+  if (/[\s,]/.test(raw)) return null;
+  if (!raw.startsWith('MBM-')) return null;
+  // Never allowlist memberships, shipping, labs, visits, or accessories via this gate.
+  if (
+    raw.startsWith('MBM-MEM-') ||
+    raw.startsWith('MBM-SHIP-') ||
+    raw.startsWith('MBM-ACC-') ||
+    raw.startsWith('MBM-PC-')
+  ) {
+    return null;
+  }
+  return raw;
+}
+
+/**
+ * True when the cart's prescription medication SKUs are exactly the single allowlisted test SKU.
+ * Accessories / shipping may also be present; any other Rx SKU fails closed.
+ */
+export function isProductionCheckoutTestSkuCart(
+  rxSkus: readonly string[],
+  env: CommerceEnvLike = {},
+): boolean {
+  const allowed = resolveProductionCheckoutTestSku(env);
+  if (!allowed) return false;
+  const unique = [
+    ...new Set(
+      rxSkus
+        .map((s) => (typeof s === 'string' ? s.trim().toUpperCase() : ''))
+        .filter(Boolean),
+    ),
+  ];
+  return unique.length === 1 && unique[0] === allowed;
 }
 
 /** Known MBM-authorized card/invoice shipping amounts (cents). Demo 1156 is never included. */

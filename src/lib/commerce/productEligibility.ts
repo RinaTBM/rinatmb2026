@@ -158,6 +158,10 @@ export function resolveProductEligibility(input: ProductEligibilityInput): Produ
  *
  * When requireGenMappingForRx is true, production Rx also requires
  * genApiOrdersEnabled (resolveGenApiOrdersEnabled). Accessories bypass both.
+ *
+ * Phase 12J.0: productionCheckoutTestSku (from resolveProductionCheckoutTestSku)
+ * allows exactly one allowlisted Rx SKU to bypass GEN map + API Orders gates
+ * for payment-only live validation. Does not enable GEN handoff.
  * Frontend CTA disable is UX only — this server gate is authoritative.
  */
 export function assertCartEligibleForCheckout(input: {
@@ -165,9 +169,28 @@ export function assertCartEligibleForCheckout(input: {
   requireGenMappingForRx?: boolean;
   /** From resolveGenApiOrdersEnabled — never trust browser override. */
   genApiOrdersEnabled?: boolean;
+  /**
+   * From resolveProductionCheckoutTestSku — exact one SKU or null/undefined.
+   * When the cart's only Rx SKU matches, GEN map + API Orders gates are skipped.
+   */
+  productionCheckoutTestSku?: string | null;
 }): { ok: true } | { ok: false; message: string; blockedSku?: string } {
   const requireGen = input.requireGenMappingForRx === true;
   const apiOrders = input.genApiOrdersEnabled === true;
+  const allowSku = (input.productionCheckoutTestSku || '').trim().toUpperCase() || null;
+
+  const rxSkus = input.lines
+    .map((line) => {
+      const el = resolveProductEligibility(line);
+      if (el.commerceType !== 'RX_MEDICATION') return '';
+      return (line.mbmSku || '').trim().toUpperCase();
+    })
+    .filter(Boolean);
+  const testCart =
+    !!allowSku &&
+    [...new Set(rxSkus)].length === 1 &&
+    [...new Set(rxSkus)][0] === allowSku;
+
   for (const line of input.lines) {
     const el = resolveProductEligibility(line);
     if (!el.tagadaCheckoutAllowed && line.hasActiveTagadaMapping === false) {
@@ -178,6 +201,10 @@ export function assertCartEligibleForCheckout(input: {
       };
     }
     if (requireGen && el.commerceType === 'RX_MEDICATION') {
+      if (testCart) {
+        // Payment-only allowlist: Tagada still required above; GEN/API Orders deferred.
+        continue;
+      }
       if (!el.genHandoffAllowed) {
         return {
           ok: false,

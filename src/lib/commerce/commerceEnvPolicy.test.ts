@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
   AUTHORIZED_MBM_SHIPPING_CENTS,
   isAuthorizedMbmShippingCents,
+  isProductionCheckoutTestSkuCart,
   isProductionCommerceRuntime,
   resolveGenApiOrdersEnabled,
+  resolveProductionCheckoutTestSku,
   resolveRequireGenMappingForRx,
 } from './commerceEnvPolicy';
 
@@ -66,5 +68,42 @@ describe('commerceEnvPolicy', () => {
     expect(resolveGenApiOrdersEnabled({ GEN_API_ORDERS_ENABLED: 'true' })).toBe(true);
     expect(resolveGenApiOrdersEnabled({ GEN_API_ORDERS_ENABLED: '1' })).toBe(true);
     expect(resolveGenApiOrdersEnabled({ GEN_API_ORDERS_ENABLED: 'false' })).toBe(false);
+  });
+
+  it('PRODUCTION_CHECKOUT_TEST_SKU resolves exactly one Rx SKU or null', () => {
+    expect(resolveProductionCheckoutTestSku({})).toBeNull();
+    expect(
+      resolveProductionCheckoutTestSku({ PRODUCTION_CHECKOUT_TEST_SKU: 'MBM-RP-BPC-INJ-001' }),
+    ).toBe('MBM-RP-BPC-INJ-001');
+    expect(
+      resolveProductionCheckoutTestSku({
+        PRODUCTION_CHECKOUT_TEST_SKU: 'mbm-rp-bpc-inj-001',
+      }),
+    ).toBe('MBM-RP-BPC-INJ-001');
+    // Multi-SKU / junk rejected (fail closed)
+    expect(
+      resolveProductionCheckoutTestSku({
+        PRODUCTION_CHECKOUT_TEST_SKU: 'MBM-RP-BPC-INJ-001,MBM-WM-SEM-INJ-001',
+      }),
+    ).toBeNull();
+    expect(
+      resolveProductionCheckoutTestSku({ PRODUCTION_CHECKOUT_TEST_SKU: 'MBM-MEM-SEM-MEM-001' }),
+    ).toBeNull();
+    expect(
+      resolveProductionCheckoutTestSku({ PRODUCTION_CHECKOUT_TEST_SKU: 'MBM-ACC-ICE-ACC-001' }),
+    ).toBeNull();
+  });
+
+  it('isProductionCheckoutTestSkuCart requires exact single allowlisted Rx', () => {
+    const env = { PRODUCTION_CHECKOUT_TEST_SKU: 'MBM-RP-BPC-INJ-001' };
+    expect(isProductionCheckoutTestSkuCart(['MBM-RP-BPC-INJ-001'], env)).toBe(true);
+    expect(isProductionCheckoutTestSkuCart(['MBM-RP-BPC-INJ-001', 'MBM-RP-BPC-INJ-001'], env)).toBe(
+      true,
+    );
+    expect(
+      isProductionCheckoutTestSkuCart(['MBM-RP-BPC-INJ-001', 'MBM-WM-SEM-INJ-001'], env),
+    ).toBe(false);
+    expect(isProductionCheckoutTestSkuCart(['MBM-WM-SEM-INJ-001'], env)).toBe(false);
+    expect(isProductionCheckoutTestSkuCart(['MBM-RP-BPC-INJ-001'], {})).toBe(false);
   });
 });

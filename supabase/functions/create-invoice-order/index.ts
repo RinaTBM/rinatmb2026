@@ -18,7 +18,11 @@ import {
 } from "../_shared/injectProviderVisit.ts";
 import { guestPrescriptionRequiresAuth } from "../_shared/determineProviderRequirement.ts";
 import type { ApprovedTherapyHistoryRow } from "../_shared/determineProviderRequirement.ts";
-import { resolveRequireGenMappingForRx, resolveGenApiOrdersEnabled } from "../_shared/commerceEnvPolicy.ts";
+import {
+  resolveRequireGenMappingForRx,
+  resolveGenApiOrdersEnabled,
+  isProductionCheckoutTestSkuCart,
+} from "../_shared/commerceEnvPolicy.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -97,6 +101,12 @@ async function assertRxGenMappingsReady(input: {
     ),
   ];
   if (rxSkus.length === 0) return { ok: true };
+
+  // Phase 12J.0 — payment-only single-SKU allowlist (GEN schema / API Orders may remain deferred).
+  // Does not enable GEN handoff. Any other Rx SKU still fails closed below.
+  if (isProductionCheckoutTestSkuCart(rxSkus)) {
+    return { ok: true };
+  }
 
   // Production Rx also requires GEN API Orders capability (distinct from mapping READY).
   if (!resolveGenApiOrdersEnabled()) {

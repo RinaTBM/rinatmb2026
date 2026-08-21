@@ -39,10 +39,11 @@ Non-secret variable **names** only. Never commit secret values.
 |---|---|---|---|
 | `REQUIRE_GEN_MAPPING_FOR_RX` | unset → **false** | unset → **true** (fail-closed) | Block Rx checkout without READY/ACTIVE `gen_sku_map` |
 | `GEN_API_ORDERS_ENABLED` | unset → **false** | unset → **false** until GEN enables API Orders | When mapping guard is on, also require API Orders capability for Rx |
+| `PRODUCTION_CHECKOUT_TEST_SKU` | unset | unset (set only for controlled 12J.0 live test) | Exact one MBM Rx SKU (e.g. `MBM-RP-BPC-INJ-001`). Temporarily bypasses GEN map + API Orders gates for **that SKU only** (payment validation). Does **not** enable GEN handoff or other Rx. Remove after test. |
 | `MBM_RUNTIME_ENV` | `staging` (recommended) | `production` (recommended) | Explicit runtime marker (preferred over URL heuristics) |
 
 `REQUIRE_GEN_MAPPING_FOR_RX` always wins when set (`true` / `false`).  
-When that guard is on, production Rx also requires `GEN_API_ORDERS_ENABLED=true` (default false).  
+When that guard is on, production Rx also requires `GEN_API_ORDERS_ENABLED=true` (default false), **unless** the cart is exactly the single `PRODUCTION_CHECKOUT_TEST_SKU` allowlist (Phase 12J.0 payment-only).  
 Accessories / non-Rx still sell without GEN mapping.  
 Visits / labs keep existing workflows.
 

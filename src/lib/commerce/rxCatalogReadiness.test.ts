@@ -150,6 +150,48 @@ describe('Phase 12I.3 rx catalog readiness', () => {
     ).toBe(true);
   });
 
+  it('PRODUCTION_CHECKOUT_TEST_SKU allowlists only BPC; SEM still blocked', () => {
+    const bpc = {
+      mbmSku: 'MBM-RP-BPC-INJ-001',
+      hasActiveTagadaMapping: true,
+      genMappingStatus: 'MISSING' as const,
+    };
+    const sem = {
+      mbmSku: 'MBM-WM-SEM-INJ-001',
+      hasActiveTagadaMapping: true,
+      genMappingStatus: 'READY' as const,
+    };
+    const ship = {
+      mbmSku: 'MBM-SHIP-TWO-DAY-001',
+      hasActiveTagadaMapping: true,
+      genMappingStatus: 'EXCLUDED' as const,
+    };
+    expect(
+      assertCartEligibleForCheckout({
+        lines: [bpc, ship],
+        requireGenMappingForRx: true,
+        genApiOrdersEnabled: false,
+        productionCheckoutTestSku: 'MBM-RP-BPC-INJ-001',
+      }).ok,
+    ).toBe(true);
+    expect(
+      assertCartEligibleForCheckout({
+        lines: [sem],
+        requireGenMappingForRx: true,
+        genApiOrdersEnabled: false,
+        productionCheckoutTestSku: 'MBM-RP-BPC-INJ-001',
+      }).ok,
+    ).toBe(false);
+    expect(
+      assertCartEligibleForCheckout({
+        lines: [bpc, sem],
+        requireGenMappingForRx: true,
+        genApiOrdersEnabled: false,
+        productionCheckoutTestSku: 'MBM-RP-BPC-INJ-001',
+      }).ok,
+    ).toBe(false);
+  });
+
   it('unknown cost displays TBD / UNKNOWN band', () => {
     const row = costAnalysisRow({
       currentRetailCents: 19900,

@@ -1,7 +1,8 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
 /**
- * Create a manual invoice order (ACH / wire / future kashu_card shell).
+ * Create a manual invoice order (ACH / wire / kashu_card / gen_whop unpaid shell).
+ * gen_whop does not charge — session create is gated by GEN_WHOP_CHECKOUT_ENABLED.
  * Does NOT call Stripe. Does NOT mark payment as paid.
  * Bank instructions come from Edge Function secrets only (never VITE_*).
  *
@@ -30,7 +31,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
-type PaymentMethod = "manual_ach" | "manual_wire" | "kashu_card";
+type PaymentMethod = "manual_ach" | "manual_wire" | "kashu_card" | "gen_whop";
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -191,6 +192,15 @@ async function allocatePublicOrderNumber(
 }
 
 function bankInstructionsFromEnv(method: PaymentMethod) {
+  if (method === "gen_whop") {
+    return {
+      method,
+      configured: true,
+      hostedCheckout: true,
+      additionalInstructions:
+        "You will be redirected to our secure clinical checkout (Whop) to complete payment. Browser return does not confirm payment.",
+    };
+  }
   if (method === "kashu_card") {
     return {
       method,
@@ -301,10 +311,12 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json();
     const paymentMethod = body.paymentMethod as string;
+    // gen_whop creates an unpaid order only; session create is gated by GEN_WHOP_CHECKOUT_ENABLED.
     if (
       paymentMethod !== "manual_ach" &&
       paymentMethod !== "manual_wire" &&
-      paymentMethod !== "kashu_card"
+      paymentMethod !== "kashu_card" &&
+      paymentMethod !== "gen_whop"
     ) {
       return json({
         error: "Please select ACH / Bank Transfer, Domestic Wire Transfer, or Credit / Debit Card.",
@@ -441,7 +453,12 @@ Deno.serve(async (req) => {
         order_status: "order_received",
         payment_status: "awaiting_payment",
         payment_method: paymentMethod,
-        payment_processor: paymentMethod === "kashu_card" ? "kashu_tagada" : "manual",
+        payment_processor:
+          paymentMethod === "kashu_card"
+            ? "kashu_tagada"
+            : paymentMethod === "gen_whop"
+              ? "gen_whop"
+              : "manual",
         payment_reference: paymentReference,
         invoice_number: invoiceNumber,
         payment_access_token: paymentAccessToken,

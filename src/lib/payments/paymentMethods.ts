@@ -6,8 +6,17 @@
 
 import { isKashuCardEnabled, KASHU_CHECKOUT_UI_LABEL } from './kashuTagada';
 
-export const PAYMENT_METHODS = ['manual_ach', 'manual_wire', 'plaid_ach', 'kashu_card'] as const;
+export const PAYMENT_METHODS = [
+  'manual_ach',
+  'manual_wire',
+  'plaid_ach',
+  'kashu_card',
+  'gen_whop',
+] as const;
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
+
+/** GEN Hosted Checkout → Whop (not a public radio option; selected by routing when enabled). */
+export const GEN_WHOP_PAYMENT_METHOD = 'gen_whop' as const;
 
 /** Backend/admin bank methods (never deleted; not shown on public checkout). */
 export const BANK_CHECKOUT_PAYMENT_METHODS = ['manual_ach', 'manual_wire'] as const;
@@ -34,12 +43,14 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   manual_wire: 'Domestic Wire Transfer',
   plaid_ach: 'Bank payment (coming soon)',
   kashu_card: KASHU_CHECKOUT_UI_LABEL,
+  gen_whop: 'Secure checkout',
 };
 
 export const PAYMENT_METHOD_HELP: Partial<Record<PaymentMethod, string>> = {
   manual_ach: 'Pay securely from your bank after submitting your order.',
   manual_wire: 'Send a domestic wire using the instructions provided after you submit your order.',
   kashu_card: 'Pay securely through our encrypted payment checkout.',
+  gen_whop: 'Pay securely through our encrypted clinical checkout.',
 };
 
 export const MEMBERSHIP_CHECKOUT_UNAVAILABLE_MESSAGE =
@@ -58,7 +69,8 @@ export function isOrderPaymentMethod(value: string): value is PaymentMethod {
     value === 'manual_ach' ||
     value === 'manual_wire' ||
     value === 'kashu_card' ||
-    value === 'plaid_ach'
+    value === 'plaid_ach' ||
+    value === 'gen_whop'
   );
 }
 

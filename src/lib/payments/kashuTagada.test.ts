@@ -25,9 +25,16 @@ import { isStripeCheckoutEnabled } from './paymentsEnabled';
 
 describe('Kashu / TagadaPay payment method', () => {
   it('includes kashu_card in the processor-neutral enum without removing ACH/Wire/Plaid', () => {
-    expect(PAYMENT_METHODS).toEqual(['manual_ach', 'manual_wire', 'plaid_ach', 'kashu_card']);
+    expect(PAYMENT_METHODS).toEqual([
+      'manual_ach',
+      'manual_wire',
+      'plaid_ach',
+      'kashu_card',
+      'gen_whop',
+    ]);
     expect(PAYMENT_METHODS).toContain('manual_ach');
     expect(PAYMENT_METHODS).toContain('manual_wire');
+    expect(PAYMENT_METHODS).toContain('gen_whop');
   });
 
   it('defaults card ON when env unset; ACH/Wire stay in enum but are not publicly selectable', () => {

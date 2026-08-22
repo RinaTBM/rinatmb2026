@@ -28,7 +28,13 @@ import { adminCanManageOrders } from '../orders/orderStatus';
 
 describe('payment methods', () => {
   it('exposes processor-neutral methods including future plaid_ach; ACH/Wire stay in enum', () => {
-    expect(PAYMENT_METHODS).toEqual(['manual_ach', 'manual_wire', 'plaid_ach', 'kashu_card']);
+    expect(PAYMENT_METHODS).toEqual([
+      'manual_ach',
+      'manual_wire',
+      'plaid_ach',
+      'kashu_card',
+      'gen_whop',
+    ]);
     expect(isPlaidAchEnabled()).toBe(false);
     // Public storefront: card-first; ACH/Wire hidden.
     expect(isActiveCheckoutPaymentMethod('kashu_card')).toBe(true);

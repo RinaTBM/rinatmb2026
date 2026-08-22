@@ -63,6 +63,16 @@ import {
 import { submitInvoiceOrder } from '@/lib/payments/submitInvoiceOrder';
 import { createKashuCheckoutSession } from '@/lib/payments/createKashuCheckoutSession';
 import {
+  createGenWhopCheckoutSession,
+  navigateToWhopHostedCheckout,
+} from '@/lib/payments/createGenWhopCheckoutSession';
+import {
+  cartMayAttemptGenWhopCheckout,
+  GEN_WHOP_CHECKOUT_INIT_FAILED_MESSAGE,
+  resolveViteGenWhopCheckoutEnabled,
+} from '@/lib/payments/genWhopCheckout';
+import { GEN_WHOP_PAYMENT_METHOD } from '@/lib/payments/paymentMethods';
+import {
   evaluateKashuCardCartEligibility,
   isKashuCardEnabled,
   KASHU_CARD_SUBMIT_CTA,
@@ -116,6 +126,10 @@ export function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pendingCardOrder, setPendingCardOrder] = useState<{
+    publicOrderNumber: string;
+    paymentAccessToken: string;
+  } | null>(null);
+  const [pendingGenWhopOrder, setPendingGenWhopOrder] = useState<{
     publicOrderNumber: string;
     paymentAccessToken: string;
   } | null>(null);
@@ -585,10 +599,30 @@ export function CheckoutPage() {
       return;
     }
 
-    const methodCheck = assertSelectablePaymentMethod(paymentMethod);
-    if (!methodCheck.ok) {
-      setError(methodCheck.error);
-      return;
+    const genWhopHeuristicLines = cartLinesForProvider
+      .filter(line => line.sku)
+      .map(line => ({
+        mbmSku: String(line.sku),
+        quantity: line.quantity,
+        purchaseType: line.purchaseType,
+        unitAmountCents: line.unitAmountCents,
+      }));
+    const attemptGenWhop =
+      resolveViteGenWhopCheckoutEnabled({
+        VITE_GEN_WHOP_CHECKOUT_ENABLED: import.meta.env.VITE_GEN_WHOP_CHECKOUT_ENABLED,
+      }) && cartMayAttemptGenWhopCheckout(genWhopHeuristicLines);
+
+    // GEN/Whop is not a public radio option — routing selects it when flags + cart allow.
+    // Default (flags off): preserve Tagada/Kashu path unchanged.
+    let methodCheck: { ok: true; method: PaymentMethod } | { ok: false; error: string };
+    if (attemptGenWhop) {
+      methodCheck = { ok: true, method: GEN_WHOP_PAYMENT_METHOD };
+    } else {
+      methodCheck = assertSelectablePaymentMethod(paymentMethod);
+      if (!methodCheck.ok) {
+        setError(methodCheck.error);
+        return;
+      }
     }
 
     if (methodCheck.method === KASHU_PAYMENT_METHOD && !cardEligibility.ok) {
@@ -617,6 +651,32 @@ export function CheckoutPage() {
       const taxCents =
         providerCareTaxAuth.providerCareTaxCents + accessoryTaxAuth.accessorySalesTaxCents;
       const totalCents = Math.round(total * 100);
+
+      // Retry GEN/Whop hosted checkout for an already-created unpaid order.
+      if (
+        methodCheck.method === GEN_WHOP_PAYMENT_METHOD &&
+        pendingGenWhopOrder?.publicOrderNumber &&
+        pendingGenWhopOrder.paymentAccessToken
+      ) {
+        const gen = await createGenWhopCheckoutSession({
+          supabaseUrl,
+          anonKey,
+          accessToken: session?.access_token ?? null,
+          publicOrderNumber: pendingGenWhopOrder.publicOrderNumber,
+          paymentAccessToken: pendingGenWhopOrder.paymentAccessToken,
+        });
+        if (!gen.ok) {
+          throw new Error(
+            GEN_WHOP_CHECKOUT_INIT_FAILED_MESSAGE + (gen.error ? ` ${gen.error}` : ''),
+          );
+        }
+        clearCart();
+        const nav = navigateToWhopHostedCheckout(gen.redirectUrl);
+        if (!nav.ok) {
+          throw new Error(nav.error || GEN_WHOP_CHECKOUT_INIT_FAILED_MESSAGE);
+        }
+        return;
+      }
 
       // Retry hosted checkout for an already-created unpaid card order (avoid duplicates).
       if (
@@ -714,6 +774,36 @@ export function CheckoutPage() {
         );
       } catch {
         /* ignore quota */
+      }
+
+      if (methodCheck.method === GEN_WHOP_PAYMENT_METHOD) {
+        setPendingGenWhopOrder({
+          publicOrderNumber: result.publicOrderNumber,
+          paymentAccessToken: result.paymentAccessToken,
+        });
+        const gen = await createGenWhopCheckoutSession({
+          supabaseUrl,
+          anonKey,
+          accessToken: session?.access_token ?? null,
+          publicOrderNumber: result.publicOrderNumber,
+          paymentAccessToken: result.paymentAccessToken,
+        });
+        if (!gen.ok) {
+          // Do not invent Tagada fallback for a gen_whop order (wrong payment_method).
+          // Flags/maps must be correct before cutover; customer can retry or contact support.
+          throw new Error(
+            GEN_WHOP_CHECKOUT_INIT_FAILED_MESSAGE +
+              (gen.error ? ` ${gen.error}` : '') +
+              ` Your order ${result.publicOrderNumber} was saved unpaid — you can retry secure payment without creating a duplicate.`,
+          );
+        }
+        recordLocalSubscriptions({ activateMemberships: false });
+        clearCart();
+        const nav = navigateToWhopHostedCheckout(gen.redirectUrl);
+        if (!nav.ok) {
+          throw new Error(nav.error || GEN_WHOP_CHECKOUT_INIT_FAILED_MESSAGE);
+        }
+        return;
       }
 
       if (methodCheck.method === KASHU_PAYMENT_METHOD) {

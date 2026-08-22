@@ -328,9 +328,9 @@ Deno.serve(async (req) => {
     if (!customerEmail.includes("@")) return json({ error: "A valid email is required." }, 400);
     if (!customerName) return json({ error: "Customer name is required." }, 400);
 
-    const shippingMethod = String(body.shippingMethod ?? "");
+    const requestedShippingMethod = String(body.shippingMethod ?? "");
     const allowedShipping = new Set(["two_day", "next_day", "free_over_500", "none"]);
-    if (!allowedShipping.has(shippingMethod) || shippingMethod === "standard") {
+    if (!allowedShipping.has(requestedShippingMethod) || requestedShippingMethod === "standard") {
       return json({ error: "Invalid shipping method. Choose Two-Day or Next-Day shipping." }, 400);
     }
 

@@ -141,7 +141,7 @@ Deno.serve(async (req) => {
     }
 
     const itemsRes = await fetch(
-      `${supabaseUrl}/rest/v1/order_items?order_id=eq.${order.id}&select=sku,quantity,unit_amount_cents,purchase_type,product_name_snapshot`,
+      `${supabaseUrl}/rest/v1/order_items?order_id=eq.${order.id}&select=sku,quantity,unit_price_cents,product_name_snapshot,product_id`,
       { headers: dbHeaders },
     );
     if (!itemsRes.ok) return json({ error: "Unable to load order items.", correlationId }, 500);
@@ -155,13 +155,15 @@ Deno.serve(async (req) => {
       .map((i: {
         sku: string;
         quantity: number;
-        unit_amount_cents?: number | null;
-        purchase_type?: string | null;
+        unit_price_cents?: number | null;
+        product_id?: string | null;
       }) => ({
         mbmSku: String(i.sku),
         quantity: Number(i.quantity) || 1,
-        unitAmountCents: i.unit_amount_cents ?? null,
-        purchaseType: i.purchase_type ?? "one_time",
+        unitAmountCents: i.unit_price_cents ?? null,
+        // order_items has no purchase_type column on staging/prod — default one_time;
+        // membership/auto-refill are identified by SKU prefix in policy.
+        purchaseType: "one_time",
       }));
 
     const productSkus = [

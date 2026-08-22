@@ -202,3 +202,9 @@ create policy gen_checkout_sessions_admin_select on public.gen_checkout_sessions
 -- ---------------------------------------------------------------------------
 comment on column public.gen_whop_checkout_map.checkout_enabled is
   'Must stay false until GEN_WHOP_CHECKOUT_ENABLED is approved AND row is owner-verified. SEM/TIRZ: do not enable from BPC one-time test.';
+
+-- Service role needs explicit grants (RLS bypass alone is insufficient without GRANT).
+grant select, insert, update, delete on table public.gen_whop_checkout_map to service_role;
+grant select, insert, update, delete on table public.gen_checkout_sessions to service_role;
+grant select on table public.gen_whop_checkout_map to authenticated;
+grant select on table public.gen_checkout_sessions to authenticated;

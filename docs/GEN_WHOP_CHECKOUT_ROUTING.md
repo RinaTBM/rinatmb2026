@@ -116,10 +116,17 @@ Read-only status:
 
 1. Whop payment succeeds in My Bare Method company `biz_UaG5nUeGhOa8NG`
 2. GEN creates clinical order / exposes payment state
-3. New Edge reconcile or webhook updates `gen_checkout_sessions` → `succeeded` with `whop_payment_id` + `gen_order_id`
-4. Only then set `orders.payment_status=paid` (same discipline as `tagada-webhook`)
+3. Edge `reconcile-gen-whop-checkout` (idempotent) evaluates authoritative Whop (+ optional GEN) evidence → updates `gen_checkout_sessions` → only then may set `orders.payment_status=paid` with `paid_marked_by=gen_whop_reconcile`
+4. Browser return / `browserClaimPaid` is **ignored** as payment authority
 
 Do **not** treat browser redirect or a failed Whop test attempt as paid.
+
+### Reconcile states
+
+`created | redirect_issued | pending | processing | succeeded | paid | failed | expired | cancelled | unknown`
+
+Pure rules: `src/lib/payments/genWhopReconcile.ts` (amount/currency/product/config match; refuses ambiguous payments).
+
 
 ## Feature flags
 

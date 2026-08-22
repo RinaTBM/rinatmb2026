@@ -55,11 +55,13 @@ describe('tax-inclusive checkout model', () => {
           section: 'accessories',
         },
       ],
-      shippingCents: 0,
+      shippingMethod: 'two_day',
+      shippingCents: TWO_DAY_SHIPPING_CENTS,
     });
     expect(built.taxCents).toBe(0);
     expect(built.subtotalCents).toBe(2900);
-    expect(built.totalCents).toBe(2900);
+    expect(built.shippingCents).toBe(3000);
+    expect(built.totalCents).toBe(5900);
   });
 
   it('keeps provider visit $75 with tax_cents = 0', () => {
@@ -89,6 +91,7 @@ describe('tax-inclusive checkout model', () => {
           section: 'accessories',
         },
       ],
+      shippingMethod: 'two_day',
       shippingCents: TWO_DAY_SHIPPING_CENTS,
     });
     expect(built.taxCents).toBe(0);
@@ -110,6 +113,7 @@ describe('tax-inclusive checkout model', () => {
           section: 'accessories',
         },
       ],
+      shippingMethod: 'next_day',
       shippingCents: NEXT_DAY_SHIPPING_CENTS,
     });
     expect(built.taxCents).toBe(0);

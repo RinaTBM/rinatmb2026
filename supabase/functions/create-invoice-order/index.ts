@@ -329,9 +329,9 @@ Deno.serve(async (req) => {
     if (!customerName) return json({ error: "Customer name is required." }, 400);
 
     const requestedShippingMethod = String(body.shippingMethod ?? "");
-    const allowedShipping = new Set(["two_day", "next_day", "free_over_500", "none"]);
+    const allowedShipping = new Set(["two_day", "next_day", "free_over_500", "included", "none"]);
     if (!allowedShipping.has(requestedShippingMethod) || requestedShippingMethod === "standard") {
-      return json({ error: "Invalid shipping method. Choose Two-Day or Next-Day shipping." }, 400);
+      return json({ error: "Invalid shipping method." }, 400);
     }
 
     const rawItems: RawOrderLine[] = Array.isArray(body.items) ? body.items : [];

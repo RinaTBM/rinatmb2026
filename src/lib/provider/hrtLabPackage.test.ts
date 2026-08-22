@@ -63,7 +63,7 @@ describe('HRT lab package auto-add', () => {
       customerUserId: 'user-hrt-new',
       approvedTherapyHistory: [],
       items: [estradiolLine],
-      shippingCents: 3000,
+      shippingCents: 0,
     });
     expect(built.hrtLabPackageAdded).toBe(true);
     const kits = built.items.filter(i => i.sku === LAB_KIT.sku);
@@ -81,7 +81,7 @@ describe('HRT lab package auto-add', () => {
       customerUserId: 'user-hrt-multi',
       approvedTherapyHistory: [],
       items: [estradiolLine, progesteroneLine],
-      shippingCents: 3000,
+      shippingCents: 0,
     });
     expect(built.items.filter(i => i.sku === LAB_KIT.sku)).toHaveLength(1);
     expect(built.items.filter(i => i.sku === LAB_REVIEW.sku)).toHaveLength(1);
@@ -184,7 +184,7 @@ describe('HRT lab package auto-add', () => {
         },
       ],
       items: [estradiolLine],
-      shippingCents: 3000,
+      shippingCents: 0,
     });
     expect(built.hrtLabPackageAdded).toBe(false);
     expect(built.items.some(i => i.sku === LAB_KIT.sku)).toBe(false);
@@ -196,7 +196,7 @@ describe('HRT lab package auto-add', () => {
       customerUserId: 'user-hrt-promo',
       approvedTherapyHistory: [],
       items: [estradiolLine],
-      shippingCents: 3000,
+      shippingCents: 0,
       promoCode: OGTBM_PROMO_CODE,
     });
     expect(built.promoCode).toBe(OGTBM_PROMO_CODE);
@@ -210,7 +210,7 @@ describe('HRT lab package auto-add', () => {
       LAB_KIT.priceCents +
       LAB_REVIEW.priceCents;
     expect(built.subtotalCents).toBe(merch);
-    expect(built.totalCents).toBe(merch - 5000 + 3000);
+    expect(built.totalCents).toBe(merch - 5000);
     expect(built.taxCents).toBe(0);
   });
 
@@ -251,7 +251,7 @@ describe('HRT lab package auto-add', () => {
           unitAmountCents: 25900,
         },
       ],
-      shippingCents: 3000,
+      shippingCents: 0,
       promoCode: OGTBM_PROMO_CODE,
     });
     expect(built.discountCents).toBe(5000);
@@ -259,11 +259,11 @@ describe('HRT lab package auto-add', () => {
     const tagadaParity =
       built.subtotalCents - built.discountCents + built.shippingCents + built.taxCents;
     expect(tagadaParity).toBe(built.totalCents);
-    expect(tagadaParity).toBe(25900 - 5000 + 3000);
+    expect(tagadaParity).toBe(25900 - 5000);
   });
 });
 
-describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Day', () => {
+describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package (shipping included)', () => {
   const testosteroneLine = {
     productId: 'p27',
     productName: 'Testosterone Cream',
@@ -296,12 +296,12 @@ describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Da
     ).toBe(true);
   });
 
-  it('exact cart without promo totals $573 (543 merch+services + 30 ship)', () => {
+  it('exact cart without promo totals $543 (543 merch+services + $0 included ship)', () => {
     const built = buildAuthoritativeOrderLines({
       customerUserId: 'user-screenshot',
       approvedTherapyHistory: [],
       items: [estradiol129, testosteroneLine],
-      shippingCents: 3000,
+      shippingCents: 0,
     });
     expect(built.hrtLabPackageAdded).toBe(true);
     expect(built.items.filter(i => i.sku === LAB_KIT.sku)).toHaveLength(1);
@@ -310,22 +310,22 @@ describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Da
     // 12900 + 7900 + 7500 + 20000 + 6000 = 54300
     expect(built.subtotalCents).toBe(54300);
     expect(built.discountCents).toBe(0);
-    expect(built.shippingCents).toBe(3000);
+    expect(built.shippingCents).toBe(0);
     expect(built.taxCents).toBe(0);
-    expect(built.totalCents).toBe(57300);
+    expect(built.totalCents).toBe(54300);
   });
 
-  it('exact cart with OGTBM: $100 off HRT only → $473', () => {
+  it('exact cart with OGTBM: $100 off HRT only → $443', () => {
     const built = buildAuthoritativeOrderLines({
       customerUserId: 'user-screenshot-promo',
       approvedTherapyHistory: [],
       items: [estradiol129, testosteroneLine],
-      shippingCents: 3000,
+      shippingCents: 0,
       promoCode: OGTBM_PROMO_CODE,
     });
     expect(built.discountCents).toBe(10000); // $50 Estradiol + $50 Testosterone
     expect(built.subtotalCents).toBe(54300);
-    expect(built.totalCents).toBe(47300); // 57300 - 10000
+    expect(built.totalCents).toBe(44300); // 54300 - 10000
     expect(built.taxCents).toBe(0);
     // Lab + IPV not discounted
     expect(built.items.find(i => i.sku === LAB_KIT.sku)?.unitAmountCents).toBe(20000);
@@ -371,7 +371,7 @@ describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Da
       customerUserId: 'user-hrt-matrix',
       approvedTherapyHistory: [],
       items: cartItems,
-      shippingCents: 3000,
+      shippingCents: 0,
     });
     expect(built.items.filter(i => i.sku === LAB_KIT.sku)).toHaveLength(1);
     expect(built.items.filter(i => i.sku === LAB_REVIEW.sku)).toHaveLength(1);

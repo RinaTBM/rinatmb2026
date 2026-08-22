@@ -328,11 +328,13 @@ describe('Provider Care (tax-inclusive; no separate tax add-on)', () => {
     ).toBe(0);
 
     // Shipping is outside Provider Care taxable base by construction.
+    // Billable shipping requires accessories (or membership); Rx-only is included/$0.
     const ship = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: TWO_DAY_SHIPPING_CENTS,
-      shippableSubtotalCents: 19900,
+      shippableSubtotalCents: 3400,
       requiresPhysicalShipping: true,
+      containsAccessories: true,
     });
     expect('error' in ship).toBe(false);
     if ('error' in ship) return;
@@ -417,12 +419,70 @@ describe('accessories (retail goods; tax-inclusive)', () => {
 });
 
 describe('shipping authorization', () => {
-  it('merchandise $500+ qualifies for free shipping', () => {
+  it('one-time medication shipping is included at $0 (no Two-Day/Next-Day)', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: 0,
+      shippableSubtotalCents: 0,
+      requiresPhysicalShipping: true,
+      containsAccessories: false,
+    });
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(r.shippingCents).toBe(0);
+    expect(r.shippingMethod).toBe('included');
+  });
+
+  it('BPC $199 + IPV $75 → total $274 with medication shipping $0', () => {
+    const bpcCents = 19900;
+    const ipvCents = 7500;
+    const ship = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: 0,
+      shippableSubtotalCents: 0,
+      requiresPhysicalShipping: true,
+      containsAccessories: false,
+      containsMembership: false,
+    });
+    expect('error' in ship).toBe(false);
+    if ('error' in ship) return;
+    expect(ship.shippingCents).toBe(0);
+    expect(ship.shippingMethod).toBe('included');
+    const total = bpcCents + ipvCents + ship.shippingCents;
+    expect(total).toBe(27400);
+  });
+
+  it('BPC $199 without visit → total $199 with medication shipping $0', () => {
+    const ship = authorizeShippingCents({
+      shippingMethod: 'included',
+      clientShippingCents: 0,
+      shippableSubtotalCents: 0,
+      requiresPhysicalShipping: true,
+    });
+    expect('error' in ship).toBe(false);
+    if ('error' in ship) return;
+    expect(ship.shippingCents).toBe(0);
+    expect(19900 + ship.shippingCents).toBe(19900);
+  });
+
+  it('rejects client-injected medication shipping charge', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: 3000,
+      shippableSubtotalCents: 19900,
+      requiresPhysicalShipping: true,
+      containsAccessories: false,
+    });
+    expect('error' in r).toBe(true);
+  });
+
+  it('accessory merchandise $500+ qualifies for free shipping', () => {
     const r = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: 0,
       shippableSubtotalCents: FREE_SHIPPING_THRESHOLD_CENTS,
       requiresPhysicalShipping: true,
+      containsAccessories: true,
     });
     expect('error' in r).toBe(false);
     if ('error' in r) return;
@@ -430,18 +490,35 @@ describe('shipping authorization', () => {
     expect(r.shippingMethod).toBe('free_over_500');
   });
 
-  it('Two-Day charges $30 and Next-Day charges $50', () => {
+  it('Rx merchandise $500+ does not unlock free_over_500 (shipping already included)', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: 0,
+      shippableSubtotalCents: FREE_SHIPPING_THRESHOLD_CENTS,
+      requiresPhysicalShipping: true,
+      containsAccessories: false,
+    });
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(r.shippingMethod).toBe('included');
+    expect(r.shippingCents).toBe(0);
+    expect(r.freeShippingEligible).toBe(false);
+  });
+
+  it('accessory Two-Day charges $30 and Next-Day charges $50', () => {
     const two = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: TWO_DAY_SHIPPING_CENTS,
-      shippableSubtotalCents: 19900,
+      shippableSubtotalCents: 3900,
       requiresPhysicalShipping: true,
+      containsAccessories: true,
     });
     const next = authorizeShippingCents({
       shippingMethod: 'next_day',
       clientShippingCents: NEXT_DAY_SHIPPING_CENTS,
-      shippableSubtotalCents: 19900,
+      shippableSubtotalCents: 3900,
       requiresPhysicalShipping: true,
+      containsAccessories: true,
     });
     expect('error' in two).toBe(false);
     expect('error' in next).toBe(false);
@@ -450,12 +527,29 @@ describe('shipping authorization', () => {
     expect(next.shippingCents).toBe(5000);
   });
 
-  it('browser cannot submit an arbitrary shipping charge', () => {
+  it('mixed Rx + accessory: only accessory shipping is charged', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'two_day',
+      clientShippingCents: TWO_DAY_SHIPPING_CENTS,
+      shippableSubtotalCents: 3400, // accessory only toward threshold
+      requiresPhysicalShipping: true,
+      containsAccessories: true,
+      containsMembership: false,
+    });
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(r.shippingCents).toBe(3000);
+    // Medication $199 does not add a second shipping line.
+    expect(19900 + 3400 + r.shippingCents).toBe(19900 + 3400 + 3000);
+  });
+
+  it('browser cannot submit an arbitrary shipping charge on accessory carts', () => {
     const r = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: 695,
-      shippableSubtotalCents: 19900,
+      shippableSubtotalCents: 3900,
       requiresPhysicalShipping: true,
+      containsAccessories: true,
     });
     expect('error' in r).toBe(true);
   });
@@ -478,7 +572,7 @@ describe('shipping authorization', () => {
     expect(r.shippingMethod).toBe('none');
   });
 
-  it('mixed cart shipping uses shippable merchandise only (not Provider Care)', () => {
+  it('mixed cart with accessory $500+ uses accessory subtotal for free shipping (not Provider Care)', () => {
     const lines: LineResolution[] = [
       {
         kind: 'price_data',
@@ -492,24 +586,25 @@ describe('shipping authorization', () => {
         variantLabel: null,
       },
       {
-        kind: 'mapped_price',
-        stripePriceId: 'price_x',
-        quantity: 1,
+        kind: 'price_data',
         unitAmountCents: 50000,
+        quantity: 1,
+        name: 'Accessory',
         recurring: false,
-        source: 'catalog_variants',
-        productId: 'p9',
-        productName: 'Wellness',
+        reason: 'accessory_standard',
+        productId: 'a2',
+        productName: 'Accessory',
         variantLabel: null,
       },
     ];
-    expect(shippableMerchandiseSubtotalCents(lines)).toBe(50000);
+    expect(freeShippingEligibleMerchandiseSubtotalCents(lines)).toBe(50000);
     expect(cartRequiresPhysicalShipping(lines)).toBe(true);
     const r = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: 0,
-      shippableSubtotalCents: shippableMerchandiseSubtotalCents(lines),
+      shippableSubtotalCents: freeShippingEligibleMerchandiseSubtotalCents(lines),
       requiresPhysicalShipping: true,
+      containsAccessories: true,
     });
     expect('error' in r).toBe(false);
     if ('error' in r) return;
@@ -532,6 +627,7 @@ describe('shipping authorization', () => {
       clientShippingCents: 0,
       shippableSubtotalCents: 14900,
       requiresPhysicalShipping: true,
+      containsMembership: true,
     });
     expect('error' in r).toBe(true);
     if (!('error' in r)) return;
@@ -654,13 +750,14 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     expect(NEXT_DAY_SHIPPING_CENTS).toBe(5000);
   });
 
-  it('$500+ eligible ordinary merchandise can still receive free shipping', () => {
+  it('$500+ accessory merchandise can still receive free shipping', () => {
     const r = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: 0,
       shippableSubtotalCents: FREE_SHIPPING_THRESHOLD_CENTS,
       requiresPhysicalShipping: true,
       containsMembership: false,
+      containsAccessories: true,
     });
     expect('error' in r).toBe(false);
     if ('error' in r) return;
@@ -681,44 +778,46 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
         tirzMembership,
       ),
     );
-    const ordinary: LineResolution = {
-      kind: 'mapped_price',
-      stripePriceId: 'price_x',
+    const accessory: LineResolution = {
+      kind: 'price_data',
+      unitAmountCents: 40000, // $400 accessory
       quantity: 1,
-      unitAmountCents: 40000, // $400 ordinary
+      name: 'Accessory',
       recurring: false,
-      source: 'catalog_variants',
-      productId: 'p9',
-      productName: 'Wellness',
+      reason: 'accessory_standard',
+      productId: 'a2',
+      productName: 'Accessory',
       variantLabel: null,
     };
-    // $400 ordinary + $249 membership = $649 shippable, but free-shipping base is only $400.
-    expect(shippableMerchandiseSubtotalCents([ordinary, membership])).toBe(40000 + 24900);
-    expect(freeShippingEligibleMerchandiseSubtotalCents([ordinary, membership])).toBe(40000);
+    // $400 accessory + $249 membership — free-shipping base is only $400 accessory.
+    expect(shippableMerchandiseSubtotalCents([accessory, membership])).toBe(40000 + 24900);
+    expect(freeShippingEligibleMerchandiseSubtotalCents([accessory, membership])).toBe(40000);
 
     const r = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: TWO_DAY_SHIPPING_CENTS,
-      shippableSubtotalCents: freeShippingEligibleMerchandiseSubtotalCents([ordinary, membership]),
+      shippableSubtotalCents: freeShippingEligibleMerchandiseSubtotalCents([accessory, membership]),
       requiresPhysicalShipping: true,
       containsMembership: true,
+      containsAccessories: true,
     });
     expect('error' in r).toBe(false);
     if ('error' in r) return;
     expect(r.freeShippingEligible).toBe(false);
     expect(r.shippingCents).toBe(3000);
 
-    // With $500 ordinary + membership, free shipping remains available from ordinary alone.
-    const ordinary500: LineResolution = { ...ordinary, unitAmountCents: 50000 };
+    // With $500 accessory + membership, free shipping remains available from accessories alone.
+    const accessory500: LineResolution = { ...accessory, unitAmountCents: 50000 };
     const free = authorizeShippingCents({
       shippingMethod: 'two_day',
       clientShippingCents: 0,
       shippableSubtotalCents: freeShippingEligibleMerchandiseSubtotalCents([
-        ordinary500,
+        accessory500,
         membership,
       ]),
       requiresPhysicalShipping: true,
       containsMembership: true,
+      containsAccessories: true,
     });
     expect('error' in free).toBe(false);
     if ('error' in free) return;
@@ -807,21 +906,23 @@ describe('order / webhook contract', () => {
   });
 
   it('customer charge reconciles as subtotal + shipping with tax_cents = 0', () => {
-    // $100 PC + $200 wellness + Two-Day shipping when merchandise < $500
+    // $100 PC + $200 medication — medication shipping included ($0)
     const pcTaxable = 10000;
-    const wellness = 20000;
+    const medication = 20000;
     const pcTax = authorizeProviderCareTax({ providerCareTaxableSubtotalCents: pcTaxable }).providerCareTaxCents;
     const shipping = authorizeShippingCents({
       shippingMethod: 'two_day',
-      clientShippingCents: 3000,
-      shippableSubtotalCents: wellness,
+      clientShippingCents: 0,
+      shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
+      containsAccessories: false,
     });
     expect('error' in shipping).toBe(false);
     if ('error' in shipping) return;
     expect(pcTax).toBe(0);
-    expect(shipping.shippingCents).toBe(3000);
-    const displayedTotal = pcTaxable + wellness + shipping.shippingCents + pcTax;
-    expect(displayedTotal).toBe(10000 + 20000 + 3000);
+    expect(shipping.shippingCents).toBe(0);
+    expect(shipping.shippingMethod).toBe('included');
+    const displayedTotal = pcTaxable + medication + shipping.shippingCents + pcTax;
+    expect(displayedTotal).toBe(10000 + 20000);
   });
 });

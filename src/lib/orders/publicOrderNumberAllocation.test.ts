@@ -129,6 +129,7 @@ describe('checkout rules preserved alongside order-number fix', () => {
           section: 'accessories',
         },
       ],
+      shippingMethod: 'two_day',
       shippingCents: TWO_DAY_SHIPPING_CENTS,
     });
     expect(accessory.taxCents).toBe(0);
@@ -147,6 +148,7 @@ describe('checkout rules preserved alongside order-number fix', () => {
           section: 'accessories',
         },
       ],
+      shippingMethod: 'next_day',
       shippingCents: NEXT_DAY_SHIPPING_CENTS,
     });
     expect(nextDay.totalCents).toBe(7900);
@@ -160,13 +162,15 @@ describe('checkout rules preserved alongside order-number fix', () => {
           productName: 'Planner',
           sku: 'MBM-ACC-PLN-ACC-001',
           quantity: 1,
-          unitAmountCents: 2900,
+          unitAmountCents: 50000,
           section: 'accessories',
         },
       ],
+      shippingMethod: 'two_day',
       shippingCents: 0,
     });
-    expect(freeShip.totalCents).toBe(2900);
+    expect(freeShip.shippingCents).toBe(0);
+    expect(freeShip.totalCents).toBe(50000);
   });
 
   it('SEM membership card recurring allowed; ACH/Wire hidden; Stripe off', () => {

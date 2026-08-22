@@ -16,8 +16,10 @@ import {
   authorizeAccessorySalesTax,
   authorizeProviderCareTax,
   cartAccessorySubtotalCents,
+  cartContainsAccessoriesFromItems,
   cartFreeShippingMerchandiseSubtotalCents,
   cartProviderCareSubtotalCents,
+  cartRequiresBillableShippingFromItems,
   cartRequiresPhysicalShippingFromItems,
 } from '@/lib/checkout/authorizeCheckout';
 import { getMembership } from '@/data/products';
@@ -415,7 +417,9 @@ export function CheckoutPage() {
     });
   }
   const requiresPhysicalShipping = cartRequiresPhysicalShippingFromItems(cartItemsForAuth);
-  // $500 free-shipping threshold uses ordinary merchandise ONLY — never membership value.
+  const containsAccessories = cartContainsAccessoriesFromItems(cartItemsForAuth);
+  const requiresBillableShipping = cartRequiresBillableShippingFromItems(cartItemsForAuth);
+  // $500 free-shipping threshold uses accessory merchandise ONLY — never Rx / membership value.
   const freeShippingMerchandiseSubtotalCents =
     cartFreeShippingMerchandiseSubtotalCents(cartItemsForAuth);
   const providerCareTaxableCents = cartProviderCareSubtotalCents(cartItemsForAuth);
@@ -427,27 +431,32 @@ export function CheckoutPage() {
     accessoryTaxableSubtotalCents: accessoryTaxableCents,
   });
   const freeShippingEligible =
-    requiresPhysicalShipping &&
+    requiresBillableShipping &&
     !hasMembership &&
+    containsAccessories &&
     isFreeShippingEligible(freeShippingMerchandiseSubtotalCents);
   const resolvedShippingMethod: ShippingMethod = !requiresPhysicalShipping
     ? 'none'
-    : freeShippingEligible
-      ? 'free_over_500'
-      : shippingMethod;
+    : !requiresBillableShipping
+      ? 'included'
+      : freeShippingEligible
+        ? 'free_over_500'
+        : shippingMethod;
   // Membership: collect Two-Day ($30) / Next-Day ($50); shipping is included in combo monthly rebill.
-  // Never free-ship membership enrollment via the $500 merchandise threshold.
-  // One-time carts: $500 free-shipping threshold uses ordinary merchandise ONLY.
+  // One-time Rx: pharmacy shipping included in retail ($0) — never charge Two-Day/Next-Day.
+  // Accessories: billable Two-Day/Next-Day (USPS Priority Mail fulfillment); $500 free on accessory merch.
   const shipping = !requiresPhysicalShipping
     ? 0
-    : hasMembership
-      ? shippingCentsForMethod(
-          resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day',
-          0,
-        ) / 100
-      : freeShippingEligible
-        ? 0
-        : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
+    : !requiresBillableShipping
+      ? 0
+      : hasMembership
+        ? shippingCentsForMethod(
+            resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day',
+            0,
+          ) / 100
+        : freeShippingEligible
+          ? 0
+          : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
   const displaySubtotal = displaySubtotalCents / 100;
   const total = Math.max(
     0,
@@ -999,49 +1008,69 @@ export function CheckoutPage() {
                 {requiresPhysicalShipping ? (
                   <div>
                     <h2 className="font-serif text-2xl text-ink-900 mb-4">Shipping Method</h2>
-                    {hasMembership && (
-                      <div className="mb-3 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                        <p className="font-medium">Shipping collected today</p>
-                        <p className="mt-1 text-xs leading-relaxed">{MEMBERSHIP_CARD_SHIPPING_NOTE}</p>
-                      </div>
-                    )}
-                    {freeShippingEligible ? (
+                    {!requiresBillableShipping ? (
                       <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                        Orders of $500 or more in eligible ordinary merchandise qualify for free shipping.
-                        Membership medication value does not count toward this threshold.
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'two_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
-                          <span className="flex items-center gap-3">
-                            <input
-                              type="radio"
-                              name="shippingMethod"
-                              checked={shippingMethod === 'two_day'}
-                              onChange={() => setShippingMethod('two_day')}
-                            />
-                            Two-Day Shipping
-                          </span>
-                          <span className="font-medium text-ink-900">$30</span>
-                        </label>
-                        <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'next_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
-                          <span className="flex items-center gap-3">
-                            <input
-                              type="radio"
-                              name="shippingMethod"
-                              checked={shippingMethod === 'next_day'}
-                              onChange={() => setShippingMethod('next_day')}
-                            />
-                            Next-Day Shipping
-                          </span>
-                          <span className="font-medium text-ink-900">$50</span>
-                        </label>
-                        <p className="text-xs text-ink-500">
-                          {hasMembership
-                            ? 'Membership value is excluded from the $500 free-shipping merchandise threshold. Medication ships after required provider review and approval.'
-                            : 'Orders of $500 or more in merchandise are eligible for free shipping. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'}
+                        <p className="font-medium">Shipping included</p>
+                        <p className="mt-1 text-xs leading-relaxed">
+                          Medication shipping is included in the retail price. No separate pharmacy
+                          shipping charge applies. Processing and shipping timelines begin only after
+                          payment has been received and any required provider review/approval has been
+                          completed.
                         </p>
                       </div>
+                    ) : (
+                      <>
+                        {hasMembership && (
+                          <div className="mb-3 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm text-gold-800">
+                            <p className="font-medium">Shipping collected today</p>
+                            <p className="mt-1 text-xs leading-relaxed">{MEMBERSHIP_CARD_SHIPPING_NOTE}</p>
+                          </div>
+                        )}
+                        {containsAccessories && !hasMembership && (
+                          <div className="mb-3 rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-600">
+                            Accessories ship separately via USPS Priority Mail. Medication (if any) does
+                            not add a pharmacy shipping charge.
+                          </div>
+                        )}
+                        {freeShippingEligible ? (
+                          <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
+                            Orders of $500 or more in accessories qualify for free shipping. Medication
+                            value does not count toward this threshold.
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'two_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
+                              <span className="flex items-center gap-3">
+                                <input
+                                  type="radio"
+                                  name="shippingMethod"
+                                  checked={shippingMethod === 'two_day'}
+                                  onChange={() => setShippingMethod('two_day')}
+                                />
+                                Two-Day Shipping
+                              </span>
+                              <span className="font-medium text-ink-900">$30</span>
+                            </label>
+                            <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'next_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
+                              <span className="flex items-center gap-3">
+                                <input
+                                  type="radio"
+                                  name="shippingMethod"
+                                  checked={shippingMethod === 'next_day'}
+                                  onChange={() => setShippingMethod('next_day')}
+                                />
+                                Next-Day Shipping
+                              </span>
+                              <span className="font-medium text-ink-900">$50</span>
+                            </label>
+                            <p className="text-xs text-ink-500">
+                              {hasMembership
+                                ? 'Membership value is excluded from the $500 free-shipping merchandise threshold. Medication ships after required provider review and approval.'
+                                : 'Accessory orders of $500 or more qualify for free shipping. Medication shipping is included in retail and is never charged separately.'}
+                            </p>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 ) : (
@@ -1582,7 +1611,13 @@ export function CheckoutPage() {
                         {requiresPhysicalShipping && (
                           <div className="flex justify-between text-ink-600">
                             <span>{labelShippingMethod(resolvedShippingMethod)}</span>
-                            <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                            <span>
+                              {resolvedShippingMethod === 'included'
+                                ? 'Included'
+                                : shipping === 0
+                                  ? 'Free'
+                                  : `$${shipping.toFixed(2)}`}
+                            </span>
                           </div>
                         )}
                         <p className="text-[11px] text-ink-500 leading-snug">

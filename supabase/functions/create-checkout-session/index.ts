@@ -70,7 +70,7 @@ const MEMBERSHIP_FIXED_CENTS: Record<string, number> = {
   [TIRZEPATIDE_MEMBERSHIP_APP_ID]: TIRZEPATIDE_MEMBERSHIP_CENTS,
 };
 
-type ShippingMethod = "two_day" | "next_day" | "free_over_500" | "none";
+type ShippingMethod = "two_day" | "next_day" | "free_over_500" | "included" | "none";
 
 const GETTING_STARTED_FORMULATION = "getting_started";
 const GETTING_STARTED_LABEL = "Getting Started / Not Sure";
@@ -428,10 +428,11 @@ function isMembershipResolvedLine(line: LineResolution): boolean {
 function authorizeShippingCents(input: {
   shippingMethod?: string;
   clientShippingCents?: number;
-  /** Ordinary merchandise only — membership value must never be included. */
+  /** Accessory merchandise only — Rx / membership value must never be included. */
   shippableSubtotalCents: number;
   requiresPhysicalShipping: boolean;
   containsMembership?: boolean;
+  containsAccessories?: boolean;
 }): { shippingMethod: ShippingMethod; shippingCents: number; freeShippingEligible: boolean } | { error: string } {
   if (!input.requiresPhysicalShipping) {
     if (
@@ -450,6 +451,17 @@ function authorizeShippingCents(input: {
     };
   }
 
+  // One-time Rx: pharmacy shipping included in retail — never charge Two-Day/Next-Day.
+  if (!input.containsMembership && !input.containsAccessories) {
+    if (
+      typeof input.clientShippingCents === "number" &&
+      Math.round(input.clientShippingCents) !== 0
+    ) {
+      return { error: "Shipping amount mismatch (authorized 0 cents for included)." };
+    }
+    return { shippingMethod: "included", shippingCents: 0, freeShippingEligible: false };
+  }
+
   const free = input.shippableSubtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS;
   let method: ShippingMethod;
 
@@ -459,7 +471,11 @@ function authorizeShippingCents(input: {
     method = "next_day";
   } else if (input.shippingMethod === "two_day") {
     method = "two_day";
-  } else if (!input.shippingMethod || input.shippingMethod === "none") {
+  } else if (
+    !input.shippingMethod ||
+    input.shippingMethod === "none" ||
+    input.shippingMethod === "included"
+  ) {
     if (input.containsMembership) {
       return {
         error:
@@ -470,13 +486,13 @@ function authorizeShippingCents(input: {
   } else if (input.shippingMethod === "free_over_500") {
     return {
       error:
-        "Free shipping requires $500 or more in eligible ordinary merchandise (membership value does not count).",
+        "Free shipping requires $500 or more in accessory merchandise (medication value does not count).",
     };
   } else {
     return { error: `Unsupported shipping method: ${input.shippingMethod}` };
   }
 
-  const authorized = free
+  const authorized = method === "free_over_500"
     ? 0
     : method === "next_day"
     ? NEXT_DAY_SHIPPING_CENTS
@@ -491,14 +507,20 @@ function authorizeShippingCents(input: {
     };
   }
 
-  return { shippingMethod: method, shippingCents: authorized, freeShippingEligible: free };
+  return {
+    shippingMethod: method,
+    shippingCents: authorized,
+    freeShippingEligible: method === "free_over_500",
+  };
 }
 
 function shippingDisplayName(method: ShippingMethod): string {
   if (method === "free_over_500") return "Free Shipping ($500+)";
   if (method === "next_day") return "Next-Day Shipping";
+  if (method === "two_day") return "Two-Day Shipping";
+  if (method === "included") return "Shipping included";
   if (method === "none") return "No shipping";
-  return "Two-Day Shipping";
+  return "Shipping";
 }
 
 function jsonError(message: string, status = 400): Response {
@@ -673,10 +695,10 @@ Deno.serve(async (req: Request) => {
       if (!isMembershipResolvedLine(line)) return sum;
       return sum + line.unitAmountCents * line.quantity;
     }, 0);
-    // $500 free-shipping threshold: ordinary merchandise only (never membership value).
-    const freeShippingMerchandiseSubtotal =
-      authorizedSubtotal - providerCareTaxableSubtotal - membershipSubtotal;
+    // $500 free-shipping threshold: accessory merchandise only (never Rx / membership).
+    const freeShippingMerchandiseSubtotal = accessoryTaxableSubtotal;
     const containsMembership = membershipSubtotal > 0;
+    const containsAccessories = accessoryTaxableSubtotal > 0;
     const requiresPhysicalShipping = resolved.some((line) => !isProviderCareResolvedLine(line));
 
     const shippingAuth = authorizeShippingCents({
@@ -685,6 +707,7 @@ Deno.serve(async (req: Request) => {
       shippableSubtotalCents: freeShippingMerchandiseSubtotal,
       requiresPhysicalShipping,
       containsMembership,
+      containsAccessories,
     });
     if ("error" in shippingAuth) return jsonError(shippingAuth.error);
 

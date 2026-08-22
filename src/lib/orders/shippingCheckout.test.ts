@@ -41,6 +41,7 @@ describe('approved checkout shipping methods', () => {
       shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
       containsMembership: false,
+      containsAccessories: true,
     });
     expect('error' in r).toBe(true);
     const demoMethod = authorizeShippingCents({
@@ -49,6 +50,7 @@ describe('approved checkout shipping methods', () => {
       shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
       containsMembership: false,
+      containsAccessories: true,
     });
     expect('error' in demoMethod).toBe(true);
   });

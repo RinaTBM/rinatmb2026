@@ -321,10 +321,19 @@ const TWO_DAY_SHIPPING_CENTS = 3000;
 const NEXT_DAY_SHIPPING_CENTS = 5000;
 const FREE_SHIPPING_THRESHOLD_CENTS = 50000;
 
+function isAccessoryInvoiceLine(i: InjectedOrderLine): boolean {
+  if (i.section === 'accessories') return true;
+  if (/^a\d+$/i.test(i.productId)) return true;
+  if (typeof i.sku === 'string' && i.sku.toUpperCase().startsWith('MBM-ACC-')) return true;
+  return false;
+}
+
 /**
  * Server-authoritative shipping for invoice orders.
- * Matches website policy: Two-Day $30, Next-Day $50, free at $500+ eligible merchandise.
- * Membership value does not count toward free shipping.
+ * - One-time Rx: shipping included in retail (`included`, $0) — no Two-Day/Next-Day pharmacy line.
+ * - Accessories: Two-Day $30 / Next-Day $50 (existing Tagada), free at $500+ accessory merchandise.
+ * - Membership: Two-Day / Next-Day required (combo pricing).
+ * Provider Care never generates physical shipping.
  */
 export function authorizeInvoiceShippingCents(input: {
   shippingMethod?: string | null;
@@ -342,6 +351,8 @@ export function authorizeInvoiceShippingCents(input: {
       (typeof i.sku === 'string' && i.sku.toUpperCase().startsWith('MBM-MEM-')),
   );
 
+  const containsAccessories = input.items.some(isAccessoryInvoiceLine);
+
   const requiresPhysicalShipping = input.items.some((i) => {
     if (i.section === 'provider-care' || /^pc\d+$/i.test(i.productId)) return false;
     return true;
@@ -354,17 +365,6 @@ export function authorizeInvoiceShippingCents(input: {
     return { ok: true, shippingCents: 0, shippingMethod: 'none' };
   }
 
-  // Eligible merchandise for free-ship threshold excludes membership program lines.
-  const shippableSubtotal = input.items
-    .filter((i) => {
-      if (i.purchaseType === 'membership_program' || i.isMembership) return false;
-      if (i.productId === 'm1' || i.productId === 'm2') return false;
-      if (typeof i.sku === 'string' && i.sku.toUpperCase().startsWith('MBM-MEM-')) return false;
-      if (i.section === 'provider-care' || /^pc\d+$/i.test(i.productId)) return false;
-      return true;
-    })
-    .reduce((sum, i) => sum + i.unitAmountCents * Math.max(1, i.quantity), 0);
-
   const methodIn = (input.shippingMethod || '').trim();
   if (methodIn === 'standard') {
     return {
@@ -374,7 +374,23 @@ export function authorizeInvoiceShippingCents(input: {
     };
   }
 
-  const free = shippableSubtotal >= FREE_SHIPPING_THRESHOLD_CENTS;
+  // One-time medication (± visit): pharmacy shipping included in retail — never inject MBM-SHIP.
+  if (!containsMembership && !containsAccessories) {
+    if (Math.round(input.clientShippingCents) !== 0) {
+      return {
+        ok: false,
+        error: 'Shipping amount mismatch (authorized 0 cents for included).',
+      };
+    }
+    return { ok: true, shippingCents: 0, shippingMethod: 'included' };
+  }
+
+  // Accessory free-ship threshold — accessory merchandise only (never Rx / membership).
+  const accessorySubtotal = input.items
+    .filter(isAccessoryInvoiceLine)
+    .reduce((sum, i) => sum + i.unitAmountCents * Math.max(1, i.quantity), 0);
+
+  const free = accessorySubtotal >= FREE_SHIPPING_THRESHOLD_CENTS;
   let method: string;
   if (free) {
     method = 'free_over_500';
@@ -382,7 +398,7 @@ export function authorizeInvoiceShippingCents(input: {
     method = 'next_day';
   } else if (methodIn === 'two_day') {
     method = 'two_day';
-  } else if (!methodIn || methodIn === 'none') {
+  } else if (!methodIn || methodIn === 'none' || methodIn === 'included') {
     if (containsMembership) {
       return {
         ok: false,
@@ -394,7 +410,7 @@ export function authorizeInvoiceShippingCents(input: {
     return {
       ok: false,
       error:
-        'Free shipping requires $500 or more in eligible ordinary merchandise (membership value does not count).',
+        'Free shipping requires $500 or more in accessory merchandise (medication value does not count).',
     };
   } else if (methodIn === 'demo_store_forced_shipping') {
     // Staging Demo-only QA method — not a customer-facing website option.
@@ -406,7 +422,8 @@ export function authorizeInvoiceShippingCents(input: {
     return { ok: false, error: `Unsupported shipping method: ${methodIn}` };
   }
 
-  const authorized = free ? 0 : method === 'next_day' ? NEXT_DAY_SHIPPING_CENTS : TWO_DAY_SHIPPING_CENTS;
+  const authorized =
+    method === 'free_over_500' ? 0 : method === 'next_day' ? NEXT_DAY_SHIPPING_CENTS : TWO_DAY_SHIPPING_CENTS;
   // Demo Tagada shipping (1156) and any non-MBM amount must never pass.
   if (Math.round(input.clientShippingCents) === 1156) {
     return {

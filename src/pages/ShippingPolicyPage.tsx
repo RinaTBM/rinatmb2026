@@ -60,15 +60,21 @@ export function ShippingPolicyPage() {
           body: (
             <>
               <p>
-                For eligible one-time medication and product orders, shipping fees are fixed (not estimates):
+                Medication and prescription product prices include pharmacy shipping. No separate Two-Day,
+                Next-Day, or pharmacy shipping charge is added for medication fulfillment.
+              </p>
+              <p>
+                Accessories are fulfilled separately by My Bare Method and may include a shipping charge
+                (USPS Priority Mail fulfillment). Fixed accessory shipping options:
               </p>
               <LegalBulletList items={[
                 'Two-Day Shipping — $30',
                 'Next-Day Shipping — $50',
               ]} />
               <p>
-                Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping. Membership
-                value is excluded from the $500 free-shipping threshold. Standard Shipping is not offered.
+                Accessory orders of $500 or more may qualify for free shipping. Medication value does not
+                count toward that threshold. Mixed carts charge shipping only for accessory fulfillment —
+                medication never adds a separate pharmacy shipping line. Standard Shipping is not offered.
               </p>
               <p>
                 Carrier transit times begin after payment has been received, any required provider review/approval has
@@ -117,8 +123,9 @@ export function ShippingPolicyPage() {
                 'Lab Review — $60',
               ]} />
               <p>
-                Lab Kit shipping being included does not mean medication shipping is included. Medication and product
-                shipping remain separate where applicable.
+                Lab Kit shipping being included does not change medication shipping policy. One-time medication
+                shipping is included in the medication retail price. Accessories may still incur a separate
+                shipping charge when present.
               </p>
             </>
           ),

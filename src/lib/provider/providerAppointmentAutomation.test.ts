@@ -307,12 +307,12 @@ describe('server-side visit injection', () => {
           section: 'weight-management',
         },
       ],
-      shippingCents: 3000,
+      shippingCents: 0,
     });
     expect(built.requirement.requirement).toBe('INITIAL');
     expect(built.items.some(i => i.sku === INITIAL_PROVIDER_VISIT.sku)).toBe(true);
     expect(built.totalCents).toBe(
-      29900 + INITIAL_PROVIDER_VISIT.priceCents + 3000,
+      29900 + INITIAL_PROVIDER_VISIT.priceCents,
     );
   });
 
@@ -393,14 +393,16 @@ describe('server-side visit injection', () => {
           section: 'weight-management',
         },
       ],
-      shippingCents: 3000,
+      shippingCents: 0,
       discountCents: 0,
     });
     // Same authoritative total regardless of payment method (ACH/Wire/future Kashu).
     // Tax-inclusive: no separate Provider Care Tax add-on.
+    // Medication shipping included in retail ($0).
     expect(built.subtotalCents).toBe(20000 + 7500);
     expect(built.taxCents).toBe(0);
-    expect(built.totalCents).toBe(27500 + 3000);
+    expect(built.totalCents).toBe(27500);
+    expect(built.shippingCents).toBe(0);
   });
 });
 

@@ -126,6 +126,20 @@ describe('evaluateGenWhopCheckoutCart', () => {
       cartMayAttemptGenWhopCheckout([{ mbmSku: 'MBM-MEM-SEM-MEM-001', quantity: 1 }]),
     ).toBe(false);
   });
+
+  it('GEN BPC mapped amount stays $199 (no medication shipping added)', () => {
+    expect(bpcMap.retailAmountCents).toBe(19900);
+    const r = evaluateGenWhopCheckoutCart({
+      featureEnabled: true,
+      lines: [{ mbmSku: 'MBM-RP-BPC-INJ-001', quantity: 1, purchaseType: 'one_time' }],
+      mapsBySku: { 'MBM-RP-BPC-INJ-001': bpcMap },
+    });
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.route).toBe('gen_whop');
+      expect(r.lines[0]?.map.retailAmountCents).toBe(19900);
+    }
+  });
 });
 
 describe('isApprovedWhopCheckoutRedirectUrl', () => {

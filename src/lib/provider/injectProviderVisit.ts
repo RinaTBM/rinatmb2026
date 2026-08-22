@@ -23,6 +23,12 @@ import {
 } from './hrtLabPackage';
 import { applyOgtbmPromo, isOgtbmPromoCode } from '@/lib/promo/ogtbmPromo';
 import { PROVIDER_CARE_FIXED_CENTS } from '@/lib/checkout/checkoutConstants';
+import {
+  authorizeShippingCents,
+  isAccessoryLine,
+  isProgramMembership,
+  isProviderCareLine,
+} from '@/lib/checkout/authorizeCheckout';
 
 export interface RawOrderLine {
   productId?: string;
@@ -156,6 +162,8 @@ export interface AuthoritativeOrderBuildResult {
   shippingCents: number;
   promoCode: string | null;
   hrtLabPackageAdded: boolean;
+  shippingMethod?: string;
+  shippingError?: string;
 }
 
 /**
@@ -168,6 +176,8 @@ export function buildAuthoritativeOrderLines(input: {
   approvedTherapyHistory: ApprovedTherapyHistoryRow[];
   discountCents?: number;
   shippingCents?: number;
+  /** Customer-selected method: two_day | next_day | included (free_over_500 derived server-side). */
+  shippingMethod?: string | null;
   promoCode?: string | null;
   /** Optional client accessory tax; recomputed from accessory lines when possible. */
   accessorySalesTaxRate?: number;
@@ -253,7 +263,50 @@ export function buildAuthoritativeOrderLines(input: {
     }
   }
 
-  const shippingCents = Math.max(0, Number(input.shippingCents) || 0);
+  // Authorize shipping server-side. One-time Rx → included/$0; accessories/membership → $0/$30/$50.
+  const containsMembership = items.some((i) =>
+    isProgramMembership({
+      productId: i.productId,
+      purchaseType: typeof i.purchaseType === 'string' ? (i.purchaseType as 'membership_program') : undefined,
+      subscription: Boolean(i.subscription),
+    }),
+  );
+  const containsAccessories = items.some((i) =>
+    isAccessoryLine({ productId: i.productId, section: i.section }),
+  );
+  const requiresPhysicalShipping = items.some(
+    (i) => !isProviderCareLine({ productId: i.productId, section: i.section }),
+  );
+  const accessorySubtotalForFreeShip = items
+    .filter((i) => isAccessoryLine({ productId: i.productId, section: i.section }))
+    .reduce((sum, i) => sum + i.unitAmountCents * Math.max(1, i.quantity), 0);
+
+  const shipAuth = authorizeShippingCents({
+    shippingMethod: input.shippingMethod ?? undefined,
+    clientShippingCents: Number(input.shippingCents) || 0,
+    shippableSubtotalCents: accessorySubtotalForFreeShip,
+    requiresPhysicalShipping,
+    containsMembership,
+    containsAccessories,
+  });
+  if ('error' in shipAuth) {
+    return {
+      items,
+      requirement,
+      subtotalCents,
+      providerCareTaxCents: 0,
+      accessorySalesTaxCents: 0,
+      taxCents: 0,
+      totalCents: 0,
+      discountCents,
+      shippingCents: 0,
+      promoCode,
+      hrtLabPackageAdded,
+      shippingError: shipAuth.error,
+    };
+  }
+  const shippingCents = shipAuth.shippingCents;
+  const shippingMethod = shipAuth.shippingMethod;
 
   const providerCareSubtotal = items
     .filter(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId))
@@ -280,6 +333,7 @@ export function buildAuthoritativeOrderLines(input: {
     totalCents,
     discountCents,
     shippingCents,
+    shippingMethod,
     promoCode,
     hrtLabPackageAdded,
   };

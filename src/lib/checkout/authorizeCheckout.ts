@@ -427,11 +427,12 @@ export function isMembershipResolvedLine(line: LineResolution): boolean {
 }
 
 /**
- * Ordinary one-time (and Auto-Refill) shippable merchandise used for the $500
- * free-shipping threshold. Memberships and Provider Care are excluded.
+ * Accessory merchandise used for the $500 free-shipping threshold.
+ * Rx / medication value never counts (pharmacy shipping is included in retail).
+ * Memberships and Provider Care are excluded.
  */
 export function isFreeShippingEligibleMerchandiseLine(line: LineResolution): boolean {
-  return isShippableResolvedLine(line) && !isMembershipResolvedLine(line);
+  return isAccessoryResolvedLine(line);
 }
 
 export function lineSubtotalCents(lines: LineResolution[]): number {
@@ -453,7 +454,7 @@ export function shippableMerchandiseSubtotalCents(lines: LineResolution[]): numb
 
 /**
  * Subtotal for $500 free-shipping eligibility only.
- * Membership medication value must never count toward this threshold.
+ * Accessory merchandise only — Rx and membership value never count.
  */
 export function freeShippingEligibleMerchandiseSubtotalCents(lines: LineResolution[]): number {
   return lineSubtotalCents(lines.filter(isFreeShippingEligibleMerchandiseLine));
@@ -516,12 +517,17 @@ export function authorizeShippingCents(input: {
   clientShippingCents?: number;
   /**
    * Subtotal used ONLY for the $500 free-shipping threshold.
-   * Must be ordinary eligible merchandise — never membership medication value.
+   * Must be accessory merchandise only — never Rx or membership value.
    */
   shippableSubtotalCents: number;
   requiresPhysicalShipping: boolean;
   /** When true, membership medication is in the cart (still ships; never free by itself). */
   containsMembership?: boolean;
+  /**
+   * When true, cart has accessory lines. Only accessory fulfillment (or membership)
+   * may generate a billable shipping charge. Rx-only carts use method `included` at $0.
+   */
+  containsAccessories?: boolean;
 }): {
   shippingMethod: ShippingMethod;
   shippingCents: number;
@@ -550,7 +556,26 @@ export function authorizeShippingCents(input: {
     };
   }
 
-  // Free shipping is based solely on ordinary merchandise — membership value excluded.
+  // One-time Rx / medication (± provider visit): pharmacy shipping is included in retail.
+  // Do not charge Two-Day / Next-Day / pharmacy shipping SKUs for medication fulfillment.
+  if (!input.containsMembership && !input.containsAccessories) {
+    const authorized = 0;
+    if (
+      typeof input.clientShippingCents === 'number' &&
+      Math.round(input.clientShippingCents) !== authorized
+    ) {
+      return {
+        error: `Shipping amount mismatch (authorized ${authorized} cents for included).`,
+      };
+    }
+    return {
+      shippingMethod: 'included',
+      shippingCents: 0,
+      freeShippingEligible: false,
+    };
+  }
+
+  // Free shipping is based solely on accessory merchandise — Rx / membership value excluded.
   const free = isFreeShippingEligible(input.shippableSubtotalCents);
   let method: ShippingMethod;
 
@@ -562,7 +587,8 @@ export function authorizeShippingCents(input: {
     method = 'two_day';
   } else if (
     !input.shippingMethod ||
-    input.shippingMethod === 'none'
+    input.shippingMethod === 'none' ||
+    input.shippingMethod === 'included'
   ) {
     // Membership medication carts without free shipping must use paid Two-Day / Next-Day.
     if (input.containsMembership) {
@@ -575,17 +601,18 @@ export function authorizeShippingCents(input: {
   } else if (input.shippingMethod === 'free_over_500') {
     return {
       error:
-        'Free shipping requires $500 or more in eligible ordinary merchandise (membership value does not count).',
+        'Free shipping requires $500 or more in accessory merchandise (medication value does not count).',
     };
   } else {
     return { error: `Unsupported shipping method: ${input.shippingMethod}` };
   }
 
-  const authorized = free
-    ? 0
-    : method === 'next_day'
-      ? NEXT_DAY_SHIPPING_CENTS
-      : TWO_DAY_SHIPPING_CENTS;
+  const authorized =
+    method === 'free_over_500'
+      ? 0
+      : method === 'next_day'
+        ? NEXT_DAY_SHIPPING_CENTS
+        : TWO_DAY_SHIPPING_CENTS;
 
   if (
     typeof input.clientShippingCents === 'number' &&
@@ -599,7 +626,7 @@ export function authorizeShippingCents(input: {
   return {
     shippingMethod: method,
     shippingCents: authorized,
-    freeShippingEligible: free,
+    freeShippingEligible: method === 'free_over_500',
   };
 }
 
@@ -607,6 +634,7 @@ export function shippingDisplayName(method: ShippingMethod): string {
   if (method === 'free_over_500') return 'Free Shipping ($500+)';
   if (method === 'next_day') return 'Next-Day Shipping';
   if (method === 'two_day') return 'Two-Day Shipping';
+  if (method === 'included') return 'Shipping included';
   if (method === 'none') return 'No shipping';
   return 'Shipping';
 }
@@ -647,8 +675,8 @@ export function cartShippableSubtotalCents(
 }
 
 /**
- * Ordinary merchandise cents for the $500 free-shipping threshold.
- * Memberships (m1/m2 / membership_program) never contribute.
+ * Accessory merchandise cents for the $500 free-shipping threshold.
+ * Rx / memberships never contribute (medication shipping is included in retail).
  */
 export function cartFreeShippingMerchandiseSubtotalCents(
   items: Array<
@@ -658,7 +686,7 @@ export function cartFreeShippingMerchandiseSubtotalCents(
   >,
 ): number {
   return items.reduce((sum, item) => {
-    if (isProviderCareLine(item) || isProgramMembership(item)) return sum;
+    if (!isAccessoryLine(item)) return sum;
     return sum + cartLineCents(item);
   }, 0);
 }
@@ -669,10 +697,27 @@ export function cartContainsMembership(
   return items.some(isProgramMembership);
 }
 
+export function cartContainsAccessoriesFromItems(
+  items: Array<Pick<CheckoutCartItem, 'productId' | 'section'>>,
+): boolean {
+  return items.some(isAccessoryLine);
+}
+
+/** True when any non–Provider Care line needs a shipping address (Rx, accessory, membership). */
 export function cartRequiresPhysicalShippingFromItems(
   items: Array<Pick<CheckoutCartItem, 'productId' | 'section'>>,
 ): boolean {
   return items.some((item) => !isProviderCareLine(item));
+}
+
+/**
+ * True when checkout may charge a separate shipping line.
+ * Membership and accessory fulfillment only — never one-time Rx alone.
+ */
+export function cartRequiresBillableShippingFromItems(
+  items: Array<Pick<CheckoutCartItem, 'productId' | 'section' | 'purchaseType' | 'subscription'>>,
+): boolean {
+  return cartContainsMembership(items) || cartContainsAccessoriesFromItems(items);
 }
 
 // Re-export shipping constants used by checkout tests/callers.

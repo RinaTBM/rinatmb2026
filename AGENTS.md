@@ -47,14 +47,22 @@ There is a single service (the Vite frontend). Standard commands live in `packag
   - Tirzepatide membership included formulations through **15mg**; **30mg excluded**. Requested dose is subject to provider approval (not guaranteed).
   - Public membership checkout: Credit/Debit Card only (ACH/Wire hidden). Mixed SEM+TIRZ or membership+ordinary merchandise carts fail safely.
   - **Required provider visit exception:** membership + Initial Provider Visit (`MBM-PC-IPV-SRV-001`, $75 one-time) is allowed in one Tagada hosted checkout. IPV never recurs.
-  - **Combo enrollment shipping:** customer selects Two-Day `$30` or Next-Day `$50`. Storefront still breaks out Membership + Shipping. Due today = combo monthly + IPV; renews = combo monthly. Persist `base_membership_amount_cents`, `shipping_cents`, `selected_shipping_method`, `monthly_amount_cents` (combo), `tagada_price_id` (combo). Ordinary one-time product carts still append `MBM-SHIP-TWO-DAY-001` / `MBM-SHIP-NEXT-DAY-001`. Do **not** recreate Tagada store Shipping Rates.
+  - **Combo enrollment shipping:** customer selects Two-Day `$30` or Next-Day `$50`. Storefront still breaks out Membership + Shipping. Due today = combo monthly + IPV; renews = combo monthly. Persist `base_membership_amount_cents`, `shipping_cents`, `selected_shipping_method`, `monthly_amount_cents` (combo), `tagada_price_id` (combo). **Accessory** one-time carts append `MBM-SHIP-TWO-DAY-001` / `MBM-SHIP-NEXT-DAY-001` when shipping > 0. **One-time Rx / medication carts do not** — pharmacy shipping is included in retail (`shipping_method=included`, `shipping_cents=0`). Do **not** recreate Tagada store Shipping Rates.
   - Migrations: `20260819140000_customer_memberships.sql`, `20260819190000_membership_combo_shipping_fields.sql`. Redeploy Edge after apply: `create-kashu-checkout-session`, `tagada-webhook` (and `cancel-membership-subscription` if changed).
   - After membership combo shipping cutover: redeploy **`create-kashu-checkout-session`** + **`tagada-webhook`**.
 - Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`.
 - Public `public_order_number` values are allocated server-side via Postgres `generate_public_order_number()` (`nextval` on `order_number_seq`). If the sequence drifts behind existing `MBM-YYYY-######` rows, insert can hit `orders_public_order_number_key` — repair with migration `20260819120000_repair_public_order_number_allocator.sql` (collision-skipping allocator + sequence resync). `create-invoice-order` also retries allocation on 23505 and never returns raw Postgres errors to customers.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation). Admin marks funds received via Orders UI / `mark-payment-received` after verification (ACH/Wire emergency path).
-- Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold). Accessory/Provider Care **add-on tax rates are 0** (tax-inclusive).
+- Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, **one-time Rx shipping included ($0 / `included`)**, accessory/membership Two-Day $30 / Next-Day $50, $500 free-shipping threshold is **accessory merchandise only**). Accessory/Provider Care **add-on tax rates are 0** (tax-inclusive).
 - Legacy Stripe Edge Functions remain in repo but must not be deployed for launch. **Do not re-enable Stripe.**
+
+### One-time medication shipping (WHOP-2B.1 — preserve)
+
+- Medication retail prices **include** pharmacy shipping. Do **not** inject Two-Day / Next-Day / `MBM-SHIP-*` on one-time Rx (± IPV) carts.
+- Authoritative paths: `authorizeShippingCents` (`src/lib/checkout/authorizeCheckout.ts`), `authorizeInvoiceShippingCents` (`supabase/functions/_shared/injectProviderVisit.ts`), CheckoutPage display, `create-invoice-order` / `create-checkout-session` mirrors.
+- Method persisted: `included` with `shipping_cents=0`. Display: “Shipping included”.
+- **Accessories** remain the exception: billable shipping via existing Tagada Two-Day/Next-Day SKUs (USPS Priority Mail fulfillment). Mixed carts: only accessory fulfillment generates shipping; medication contributes $0.
+- Provider visit fees unchanged. Membership combo Two-Day/Next-Day unchanged. Do not change medication retail or GEN mapped amounts for this policy.
 
 ### Promo code OGTBM (pre-production)
 
@@ -71,7 +79,7 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - **Required package** = $260 once per applicable initial HRT order (not per HRT line). Auto-add via `src/lib/provider/hrtLabPackage.ts` inside `buildAuthoritativeOrderLines`.
 - Copy: “Required for initial HRT order” / “Lab Kit shipping included.” Not medication.
 - **Returning customers:** no dedicated lab-validity table. Skip auto-add when `customer_therapy_history` has any **APPROVED** HRT family (`estradiol-patch` / `progesterone-capsules` / `testosterone-cream`). Do not invent a lab-expiration window.
-- Medication shipping still follows normal MBM rules when HRT meds are in the cart; Lab Kit itself does not contribute shippable merchandise.
+- Medication shipping for one-time HRT meds is **included in retail** (`included` / $0). Lab Kit itself does not contribute shippable merchandise. Accessory lines in the same cart may still generate billable shipping.
 - Migration: `20260819193000_orders_promo_code.sql`. Redeploy: `create-invoice-order`, `create-kashu-checkout-session`.
 
 ### Tagada / Kashu shipping + tax architecture (finalized — preserve)
@@ -82,10 +90,11 @@ Permanent rules for future agents. Do not regress these:
 - Do NOT recreate Tagada store-level Shipping Rates.
 - Do NOT recreate/add the ShippingRates / Shipping Method island to the Simple Checkout funnel. (Applies to Simple Checkout on `checkout.mybaremethod.com`.)
 - Hiding Tagada rates is NOT sufficient; store rates must remain absent. (Phase 2C proved hide ≠ disable; rates must stay deleted.)
-- Two-Day shipping is represented by mapped MBM-SHIP-TWO-DAY-001. ($30 / `shipping_cents=3000`, appended by `create-kashu-checkout-session` for **one-time product carts only**.)
-- Next-Day shipping is represented by mapped MBM-SHIP-NEXT-DAY-001. ($50 / `shipping_cents=5000`, appended by `create-kashu-checkout-session` for **one-time product carts only**.)
+- Two-Day shipping is represented by mapped MBM-SHIP-TWO-DAY-001. ($30 / `shipping_cents=3000`, appended by `create-kashu-checkout-session` for **accessory / membership-adjacent one-time carts with billable shipping** — never for one-time Rx-only.)
+- Next-Day shipping is represented by mapped MBM-SHIP-NEXT-DAY-001. ($50 / `shipping_cents=5000`, same rule as Two-Day.)
 - Membership enrollment does **not** append MBM-SHIP lines — shipping is inside the combo recurring `priceId`.
-- Free/service-only shipping uses no shipping line. (`shipping_cents=0`.)
+- One-time Rx (± provider visit): `shipping_method=included`, `shipping_cents=0` — no MBM-SHIP line.
+- Free/service-only / included shipping uses no shipping line. (`shipping_cents=0`.)
 - Allowed card-flow shipping amounts are currently $0, $30, or $50; other positive amounts must fail safely. (`TAGADA_SHIPPING_PARITY_BLOCKER`.)
 - Tagada hosted total must exactly equal MBM `orders.total_cents`. (Reject with `TAGADA_CHECKOUT_TOTAL_MISMATCH` before redirect.)
 - Do not weaken webhook amount equality. (Paid amount must match MBM order total.)

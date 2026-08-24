@@ -254,6 +254,7 @@ Full recon: `docs/MBM_CURRENT_LIVE_FORMULARY_RECONCILIATION.md`
 - 7 unresolved frozen as `CURRENT_LIVE_FORMULARY_PENDING` (remain CURRENT_LIVE; do not block verified catalog)  
 - Safe execution set: `docs/MBM_SAFE_EXECUTION_SET.md`  
 - GEN protection gate: `docs/MBM_GEN_PROTECTION_AND_CLEANUP_GATE.md`  
+- **Final integrity gate:** `docs/MBM_FINAL_INTEGRITY_GATE.md` — Wolverine count resolved (1 product / 2 variants); NAD+ + Tretinoin strength conflicts pending owner  
 - Launch map unchanged (17 / 16 / 32 / 65)
 
 ## FINAL REPORT

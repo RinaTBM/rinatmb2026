@@ -34,7 +34,7 @@ Website products with verified SELECTED FORMULARY identity (safe to proceed late
 | Minoxidil Combination Topical Formula | r129 FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 % → **$79** | Vios | Owner-locked |
 | Estradiol Patch | rows 26,27,28,29 | Valiant | SELECTED patch ladder covers website 0.025/0.05/0.1 (plus SELECTED 0.0375). Cost+shipping complete. |
 | Progesterone Capsules | rows 41,42,43,44,45,46,47,48,49 | Vios | Website 100mg/200mg map into SELECTED IR family. Cost+shipping complete. |
-| Wolverine: BPC-157/TB-500 | rows 103,104 | Greenwich Pharmacy | Website single SKU (capsule+injection). Architecture splits inj r103 / cap r104. Cost+shipping complete. |
+| Wolverine: BPC-157/TB-500 | rows 103 (inj), 104 (cap) | Greenwich Pharmacy | **ONE** website product / **TWO** dosage-form variants (integrity gate corrected architecture representation) |
 
 **Count:** 4
 
@@ -67,12 +67,14 @@ Remain **CURRENT_LIVE** on the website. **Not** authorized for new formulary pai
 
 ---
 
-## CURRENT_LIVE strength gaps (reported — not added to frozen 7)
+## CURRENT_LIVE strength pending (MBM-FINAL-INTEGRITY-GATE)
 
-| Product | Website | SELECTED | Note |
-|---|---|---|---|
-| NAD+ Injection | 100mg/mL · 500mg/5mL and 100mg/mL · 1000mg/10mL | r83 NAD+ 200mg/ml St Luke (architecture uses as CURRENT_LIVE mapping) | Do not expand frozen-7 set. REPORT for owner: strength basis differs. Not authorized for silent substitution. Remains CURRENT_LIVE. Not blocking verified catalog. |
-| Tretinoin Cream | 0.025% / 0.05% / 0.1% · 20g | r126 TRETINOIN 0.15%; r127 HA/Niacinamide/Tretinoin 0.5/4/0.025% | Do not expand frozen-7 set. REPORT for owner: website strengths not exact SELECTED match. Remains CURRENT_LIVE. Not blocking verified catalog. |
+Both are **FORMULATION_STRENGTH_CONFLICT**. Owner decision required. Not added to frozen-7 pharmacy queue. Full detail: [`MBM_FINAL_INTEGRITY_GATE.md`](./MBM_FINAL_INTEGRITY_GATE.md).
+
+| Product | Classification | Website | SELECTED | Status |
+|---|---|---|---|---|
+| NAD+ Injection | FORMULATION_STRENGTH_CONFLICT | **100mg/mL** · 5mL/$199 · 10mL/$229 | r83 **200mg/ml** inj only · St Luke · $139 (nasal excluded) | CURRENT_LIVE_STRENGTH_PENDING |
+| Tretinoin Cream | FORMULATION_STRENGTH_CONFLICT | **0.025/0.05/0.1%** · 20g | r126 **0.15%** 30g $79 · r127 combo $129 (not plain substitute) | CURRENT_LIVE_STRENGTH_PENDING |
 
 ---
 
@@ -207,11 +209,10 @@ Pharmacy for all 16: **Dirx-Hub**.
 
 ## Discrepancies reported (launch map NOT changed)
 
-- Architecture products[] CURRENT_LIVE count = 18 because Wolverine is split into bpc-tb-inj + bpc-tb-cap; locked launch map CURRENT_LIVE = 17 (Wolverine = 1 website SKU). TOTAL remains 65. Do not change launch map.
-- Architecture final_report may still show stale LIVE_NOW/TOTAL_PATIENT_FACING from binary era — superseded by 17/16/32/65.
-- NAD+ and Tretinoin CURRENT_LIVE have website vs SELECTED strength gaps (reported; not added to frozen-7 pharmacy queue).
-- website-current-minoxidil-topical architecture placeholder still has empty formulary_rows; lock lives in recon/amendment docs (row 129).
-- No TIR B12/Glycine dose-group Client Products exist yet in GEN REUSE_REPAIR (only SEM dose groups + TIR membership). CUTOVER_READY refers to SELECTED formulary identity; GEN create for TIR dose groups is later work — not this phase.
+- ~~Architecture Wolverine split~~ → **RESOLVED** in MBM-FINAL-INTEGRITY-GATE: ONE product / TWO variants; architecture CURRENT_LIVE objects = 17; TOTAL = 65.
+- NAD+ and Tretinoin: **FORMULATION_STRENGTH_CONFLICT** / `CURRENT_LIVE_STRENGTH_PENDING` — owner A/B/C choices in `MBM_FINAL_INTEGRITY_GATE.md`.
+- website-current-minoxidil-topical architecture placeholder may still lack formulary_rows; lock lives in recon/amendment (row 129).
+- No TIR B12/Glycine dose-group GEN CPs yet → `CREATE_REQUIRED_AT_EXECUTION` (8).
 
 ---
 
@@ -220,17 +221,21 @@ Pharmacy for all 16: **Dirx-Hub**.
 - **CURRENT_LIVE TOTAL:** 17
 - **VERIFIED_CURRENT_LIVE:** 4
 - **CURRENT_LIVE_FORMULARY_PENDING:** 7
+- **CURRENT_LIVE_STRENGTH_PENDING:** 2 (NAD+, Tretinoin)
 - **CUTOVER_READY:** 16
 - **CUTOVER_BLOCKED:** 0
 - **SEM CUTOVER PRODUCTS VERIFIED:** 8
 - **TIR CUTOVER PRODUCTS VERIFIED:** 8
+- **TIR GEN CREATE_REQUIRED:** 8
 - **MEMBERSHIP_READY:** 2 (SEM $149: YES · TIR $275: YES)
 - **FUTURE_HIDDEN_READY:** 28
 - **FUTURE_HIDDEN_PENDING:** 4
 
 - **MINOXIDIL:** Finasteride/Minoxidil 0.1%/5% · Vios · $79 · GEN ACTION LATER = **SAFE_TO_REPAIR**
 
-- **UNRESOLVED CURRENT-LIVE:** Fat Burner · Testosterone Cream · Selank Injection · Semax Injection · Selank+Semax Nasal · Tesamorelin · Lash/Brow
+- **UNRESOLVED CURRENT-LIVE (formulary pending):** Fat Burner · Testosterone Cream · Selank Injection · Semax Injection · Selank+Semax Nasal · Tesamorelin · Lash/Brow
+
+- **FINAL_EXECUTION_PLAN_READY:** NO — blockers: NAD+ + Tretinoin strength conflicts (see `MBM_FINAL_INTEGRITY_GATE.md`)
 
 - **LAUNCH MAP CHANGED:** NO
 - **GEN MODIFIED:** NO

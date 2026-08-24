@@ -49,7 +49,10 @@
     "launch_model": "3-STATE",
     "prior_binary_live_future": "SUPERSEDED",
     "formulary_recon_1_at": "2026-08-24T21:40:56Z",
-    "formulary_amendment_1_at": "2026-08-24T21:48:00Z"
+    "formulary_amendment_1_at": "2026-08-24T21:48:00Z",
+    "final_integrity_gate": "docs/MBM_FINAL_INTEGRITY_GATE.md",
+    "wolverine_representation": "ONE_PRODUCT_TWO_VARIANTS",
+    "current_live_patient_facing_count": 17
   },
   "sem_tiers_owner_defined": {
     "Starting / Low": [
@@ -259,7 +262,10 @@
     "PT_141_NASAL": "FUTURE_HIDDEN",
     "SCREAM_CREAM": "FUTURE_HIDDEN",
     "B6_PRODUCTS": "CURRENT_LIVE UNTIL CUTOVER",
-    "B12_GLYCINE_DOSE_GROUPS": "LAUNCH_WITH_WEBSITE_CUTOVER"
+    "B12_GLYCINE_DOSE_GROUPS": "LAUNCH_WITH_WEBSITE_CUTOVER",
+    "CURRENT_LIVE_PATIENT_FACING": 17,
+    "WOLVERINE_REPRESENTATION": "ONE_PRODUCT_TWO_VARIANTS",
+    "architecture_products_current_live_objects": 17
   },
   "gen_classification": {
     "KEEP_EXACT": [],
@@ -5235,11 +5241,46 @@
       "checkout_off": true
     },
     {
-      "id": "bpc-tb-inj",
-      "display_name": "BPC-157 / TB-500 Injection",
+      "id": "bpc-157-tb-500",
+      "display_name": "Wolverine: BPC-157/TB-500",
       "category": "RECOVERY & PERFORMANCE",
-      "form": "Injection",
-      "formulation": "BPC-157/TB500 3mg/3mg/mL",
+      "form": "Capsule | Injection",
+      "formulation": "BPC-157/TB-500 blend \u2014 ONE patient-facing website product with two dosage-form variants",
+      "website_slug": "bpc-157-tb-500",
+      "patient_facing_product_count": 1,
+      "variant_count": 2,
+      "variants": [
+        {
+          "dosage_form": "Capsule",
+          "website_strength": "Blend",
+          "website_price": 99,
+          "formulary_route": {
+            "excel_row": 104,
+            "exact": "BPC-157/TB500 capsules 500MCG/500MCG",
+            "strength": "500mcg/500mcg",
+            "package": "1EA",
+            "pharmacy": "Greenwich Pharmacy",
+            "cost": 3.2,
+            "shipping": 25,
+            "one_time_x9": 29
+          }
+        },
+        {
+          "dosage_form": "Injection",
+          "website_strength": "Blend",
+          "website_price": 199,
+          "formulary_route": {
+            "excel_row": 103,
+            "exact": "BPC-157/TB500 3mg/3mg/mL",
+            "strength": "3mg/3mg/mL",
+            "package": "5ML",
+            "pharmacy": "Greenwich Pharmacy",
+            "cost": 77,
+            "shipping": 25,
+            "one_time_x9": 159
+          }
+        }
+      ],
       "formulary_rows": [
         {
           "excel_row": 103,
@@ -5253,37 +5294,7 @@
           "cost": 77,
           "shipping": 25,
           "one_time_x9": 159
-        }
-      ],
-      "pharmacy": "Greenwich Pharmacy",
-      "gen_match": {
-        "classification": "REUSE_RENAME",
-        "gen_id": "MXsSZY2GpiCByJUQer1p",
-        "gen_name": "BPC-157 + GHK-Cu + KPV + TB-500 Comprehensive Recovery Protocol",
-        "gen_price": 189,
-        "note": "Near-name GEN candidate \u2014 rename/repair only after owner approval.",
-        "gen_id_raw": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p"
-      },
-      "one_time_price": 159,
-      "one_time_price_high": 159,
-      "price_display": "$159",
-      "membership": null,
-      "multi_month": null,
-      "notes": "Website LIVE Wolverine injection variant.",
-      "show_patient": true,
-      "launch_state": "CURRENT_LIVE",
-      "currently_on_website": true,
-      "website_off": false,
-      "checkout_off": false,
-      "supports_website_product": true
-    },
-    {
-      "id": "bpc-tb-cap",
-      "display_name": "BPC-157 / TB-500 Capsules",
-      "category": "RECOVERY & PERFORMANCE",
-      "form": "Capsule",
-      "formulation": "BPC-157/TB500 500mcg/500mcg capsules",
-      "formulary_rows": [
+        },
         {
           "excel_row": 104,
           "exact": "BPC-157/TB500 capsules 500MCG/500MCG",
@@ -5300,25 +5311,42 @@
       ],
       "pharmacy": "Greenwich Pharmacy",
       "gen_match": {
-        "classification": "REUSE_RENAME",
-        "gen_id": "KXMm9SsbOEYnFy9phmZn",
-        "gen_name": "BPC-157",
-        "gen_price": 199,
-        "note": "Near-name GEN candidate \u2014 rename/repair only after owner approval.",
-        "gen_id_raw": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_KXMm9SsbOEYnFy9phmZn"
+        "classification": "REPRESENTATION_CORRECTED",
+        "note": "Website authority = one slug bpc-157-tb-500 with capsule+injection variants. Prior architecture split into two CURRENT_LIVE products inflated count to 18; corrected to 1 patient-facing product.",
+        "prior_ids_merged": [
+          "bpc-tb-inj",
+          "bpc-tb-cap"
+        ],
+        "candidates": [
+          {
+            "classification": "REUSE_RENAME",
+            "gen_id": "MXsSZY2GpiCByJUQer1p",
+            "gen_name": "BPC-157 + GHK-Cu + KPV + TB-500 Comprehensive Recovery Protocol",
+            "gen_price": 189,
+            "note": "Near-name GEN candidate \u2014 rename/repair only after owner approval.",
+            "gen_id_raw": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p"
+          },
+          {
+            "classification": "REUSE_RENAME",
+            "gen_id": "KXMm9SsbOEYnFy9phmZn",
+            "gen_name": "BPC-157",
+            "gen_price": 199,
+            "note": "Near-name GEN candidate \u2014 rename/repair only after owner approval.",
+            "gen_id_raw": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_KXMm9SsbOEYnFy9phmZn"
+          }
+        ]
       },
       "one_time_price": 29,
-      "one_time_price_high": 29,
-      "price_display": "$29",
+      "one_time_price_high": 159,
+      "price_display": "Capsule from architecture $29 / Injection $159 (website list $99 / $199 until cutover pricing)",
       "membership": null,
       "multi_month": null,
-      "notes": "Website LIVE capsule variant. Keep separate from injection.",
+      "notes": "MBM-FINAL-INTEGRITY-GATE: ONE website product (slug bpc-157-tb-500) with TWO dosage-form variants. Do not count as two CURRENT_LIVE patient-facing products. Locked CURRENT_LIVE=17 remains valid.",
       "show_patient": true,
       "launch_state": "CURRENT_LIVE",
       "currently_on_website": true,
       "website_off": false,
-      "checkout_off": false,
-      "supports_website_product": true
+      "checkout_off": false
     },
     {
       "id": "tretinoin-cream",
@@ -7869,6 +7897,7 @@
   },
   "statusNotes": {
     "formularyAmendment": "MBM-FORMULARY-AMENDMENT-1: Minoxidil LOCKED Fin/Minox 0.1%/5% Vios $79; 7 CURRENT_LIVE still FORMULARY_ADDITION_REQUIRED / REQUEST_FROM_PHARMACY. See docs/MBM_FORMULARY_AMENDMENT_QUEUE.md",
-    "catalogReadyGate": "MBM-CATALOG-READY-GATE-1: Minoxidil owner-accepted lock; 7 CURRENT_LIVE_FORMULARY_PENDING frozen; see docs/MBM_SAFE_EXECUTION_SET.md and docs/MBM_GEN_PROTECTION_AND_CLEANUP_GATE.md"
+    "catalogReadyGate": "MBM-CATALOG-READY-GATE-1: Minoxidil owner-accepted lock; 7 CURRENT_LIVE_FORMULARY_PENDING frozen; see docs/MBM_SAFE_EXECUTION_SET.md and docs/MBM_GEN_PROTECTION_AND_CLEANUP_GATE.md",
+    "finalIntegrityGate": "MBM-FINAL-INTEGRITY-GATE: Wolverine merged to 1 patient-facing product with 2 variants; NAD+ and Tretinoin classified FORMULATION_STRENGTH_CONFLICT; TIR cutover GEN = CREATE_REQUIRED_AT_EXECUTION. See docs/MBM_FINAL_INTEGRITY_GATE.md"
   }
 }

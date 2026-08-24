@@ -40,6 +40,7 @@ Details: `docs/MBM_CURRENT_LIVE_FORMULARY_RECONCILIATION.md`
 - **Minoxidil Combination:** RESOLVED → Finasteride/Minoxidil **0.1%/5%** Vios · **$79** (owner-accepted lock)
 - **7 products:** frozen `CURRENT_LIVE_FORMULARY_PENDING` → pharmacy requests (`docs/MBM_FORMULARY_AMENDMENT_QUEUE.md`)
 - **Safe execution set:** `docs/MBM_SAFE_EXECUTION_SET.md` (MBM-CATALOG-READY-GATE-1)
+- **Final integrity gate:** `docs/MBM_FINAL_INTEGRITY_GATE.md` — Wolverine = 1 product / 2 variants (architecture count corrected to 17); NAD+ + Tretinoin = `FORMULATION_STRENGTH_CONFLICT`
 - Launch map unchanged
 
 **Full 3-state launch table:** `docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md`
@@ -805,6 +806,12 @@ B12 and Glycine stay distinct underneath. Do not map one to the other without ex
 - **Note:** Distinct blend.
 
 ### BPC-157 / TB-500 Injection
+
+> **SUPERSEDED representation (MBM-FINAL-INTEGRITY-GATE):** Website Wolverine is **ONE** patient-facing product (`bpc-157-tb-500`) with **TWO** dosage-form variants (Capsule + Injection). Do not count injection and capsules as two CURRENT_LIVE patient-facing products. See merged architecture object `bpc-157-tb-500` and `docs/MBM_FINAL_INTEGRITY_GATE.md`.
+
+### BPC-157 / TB-500 Capsules
+
+> **SUPERSEDED representation** — merged into Wolverine one-product / two-variant model (integrity gate).
 
 - **LIVE / FUTURE:** LIVE NOW
 - **Form:** Injection

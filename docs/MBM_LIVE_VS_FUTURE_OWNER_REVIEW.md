@@ -248,6 +248,14 @@ Launch states above are **unchanged**. Status only:
 Amendment queue: `docs/MBM_FORMULARY_AMENDMENT_QUEUE.md`  
 Full recon: `docs/MBM_CURRENT_LIVE_FORMULARY_RECONCILIATION.md`
 
+### Catalog ready gate (MBM-CATALOG-READY-GATE-1)
+
+- Minoxidil lock **owner-accepted** — do not reopen unless formulary data changes  
+- 7 unresolved frozen as `CURRENT_LIVE_FORMULARY_PENDING` (remain CURRENT_LIVE; do not block verified catalog)  
+- Safe execution set: `docs/MBM_SAFE_EXECUTION_SET.md`  
+- GEN protection gate: `docs/MBM_GEN_PROTECTION_AND_CLEANUP_GATE.md`  
+- Launch map unchanged (17 / 16 / 32 / 65)
+
 ## FINAL REPORT
 
 - **CURRENT_LIVE:** 17 (15 website medications + 2 memberships)

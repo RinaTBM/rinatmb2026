@@ -17,7 +17,9 @@
       "TOTAL": 65
     },
     "amendment_queue": "docs/MBM_FORMULARY_AMENDMENT_QUEUE.md",
-    "amended_at": "2026-08-24T21:48:00Z"
+    "amended_at": "2026-08-24T21:48:00Z",
+    "catalog_ready_gate": "docs/MBM_SAFE_EXECUTION_SET.md",
+    "minoxidil_owner_accepted": true
   },
   "products": [
     {
@@ -102,7 +104,8 @@
       ],
       "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
       "action_required": "REQUEST_FROM_PHARMACY",
-      "owner_decision_applied": "KEEP website AOD+MOTS+Tesamorelin WITHOUT Ipamorelin. Do not adopt Ipamorelin quad."
+      "owner_decision_applied": "KEEP website AOD+MOTS+Tesamorelin WITHOUT Ipamorelin. Do not adopt Ipamorelin quad.",
+      "freeze_status": "CURRENT_LIVE_FORMULARY_PENDING"
     },
     {
       "id": "testosterone-cream",
@@ -177,7 +180,8 @@
       ],
       "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
       "action_required": "REQUEST_FROM_PHARMACY",
-      "owner_decision_applied": "KEEP dedicated Testosterone Cream 5mg/g. Do not substitute Custom HRT Cream."
+      "owner_decision_applied": "KEEP dedicated Testosterone Cream 5mg/g. Do not substitute Custom HRT Cream.",
+      "freeze_status": "CURRENT_LIVE_FORMULARY_PENDING"
     },
     {
       "id": "selank-injection",
@@ -233,7 +237,8 @@
       ],
       "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
       "action_required": "REQUEST_FROM_PHARMACY",
-      "owner_decision_applied": "KEEP Selank Injection. Do not substitute nasal spray."
+      "owner_decision_applied": "KEEP Selank Injection. Do not substitute nasal spray.",
+      "freeze_status": "CURRENT_LIVE_FORMULARY_PENDING"
     },
     {
       "id": "semax-injection",
@@ -289,7 +294,8 @@
       ],
       "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
       "action_required": "REQUEST_FROM_PHARMACY",
-      "owner_decision_applied": "KEEP Semax Injection. Do not substitute nasal spray."
+      "owner_decision_applied": "KEEP Semax Injection. Do not substitute nasal spray.",
+      "freeze_status": "CURRENT_LIVE_FORMULARY_PENDING"
     },
     {
       "id": "selank-semax-nasal",
@@ -348,7 +354,8 @@
       ],
       "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
       "action_required": "REQUEST_FROM_PHARMACY",
-      "owner_decision_applied": "KEEP combined Selank+Semax nasal. Two independent nasal SKUs do not satisfy."
+      "owner_decision_applied": "KEEP combined Selank+Semax nasal. Two independent nasal SKUs do not satisfy.",
+      "freeze_status": "CURRENT_LIVE_FORMULARY_PENDING"
     },
     {
       "id": "tesamorelin",
@@ -427,7 +434,8 @@
       ],
       "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
       "action_required": "REQUEST_FROM_PHARMACY",
-      "owner_decision_applied": "KEEP plain Tesamorelin. Do not adopt MOTS-c/Tesamorelin blend."
+      "owner_decision_applied": "KEEP plain Tesamorelin. Do not adopt MOTS-c/Tesamorelin blend.",
+      "freeze_status": "CURRENT_LIVE_FORMULARY_PENDING"
     },
     {
       "id": "minoxidil-combination",
@@ -649,7 +657,9 @@
         }
       },
       "owner_decision_applied": "LOCK Finasteride/Minoxidil 0.1%/5% Vios $79 (VERIFIED_SELECTED_FORMULARY_MATCH)",
-      "action_required": "READY_FOR_PAIRING_WHEN_AUTHORIZED"
+      "action_required": "READY_FOR_PAIRING_WHEN_AUTHORIZED",
+      "owner_accepted_lock": true,
+      "do_not_reopen_unless_formulary_data_changes": true
     },
     {
       "id": "lash-brow",
@@ -691,7 +701,8 @@
       "protect_from_deactivation": [],
       "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
       "action_required": "REQUEST_FROM_PHARMACY",
-      "owner_decision_applied": "Website active is Bimatoprost 0.03%/2.5mL. FUTURE ADDITIONS TBD is not approved. REQUEST_FROM_PHARMACY."
+      "owner_decision_applied": "Website active is Bimatoprost 0.03%/2.5mL. FUTURE ADDITIONS TBD is not approved. REQUEST_FROM_PHARMACY.",
+      "freeze_status": "CURRENT_LIVE_FORMULARY_PENDING"
     }
   ],
   "classification_counts": {
@@ -862,5 +873,8 @@
       }
     }
   },
-  "amendment_queue_ref": "docs/MBM_FORMULARY_AMENDMENT_QUEUE.md"
+  "amendment_queue_ref": "docs/MBM_FORMULARY_AMENDMENT_QUEUE.md",
+  "statusNotes": {
+    "catalogReadyGate": "MBM-CATALOG-READY-GATE-1: Minoxidil owner-accepted lock; 7 CURRENT_LIVE_FORMULARY_PENDING frozen; see docs/MBM_SAFE_EXECUTION_SET.md and docs/MBM_GEN_PROTECTION_AND_CLEANUP_GATE.md"
+  }
 }

@@ -7,6 +7,7 @@
 **Launch map:** UNCHANGED (CURRENT_LIVE 17 / CUTOVER 16 / FUTURE 32 / TOTAL 65)  
 **Authority:** SELECTED FORMULARY for medication identity · website catalog for what is offered today  
 
+**Catalog ready gate:** [`MBM_SAFE_EXECUTION_SET.md`](./MBM_SAFE_EXECUTION_SET.md) — Minoxidil owner-accepted; 7 frozen as `CURRENT_LIVE_FORMULARY_PENDING`  
 **Amendment queue:** [`MBM_FORMULARY_AMENDMENT_QUEUE.md`](./MBM_FORMULARY_AMENDMENT_QUEUE.md) + [`.json`](./MBM_FORMULARY_AMENDMENT_QUEUE.json)
 
 ---

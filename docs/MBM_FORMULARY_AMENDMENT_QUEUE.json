@@ -23,7 +23,9 @@
     "gen_writes": 0,
     "website_modified": false,
     "cutover": "OFF",
-    "protected_gen_objects_continued": 13
+    "protected_gen_objects_continued": 13,
+    "catalog_ready_gate": "docs/MBM_SAFE_EXECUTION_SET.md",
+    "minoxidil_owner_accepted": true
   },
   "minoxidil_resolved": {
     "current_product": "Minoxidil Combination Topical Formula",
@@ -447,5 +449,8 @@
     "GEN_WRITES": 0,
     "WEBSITE_MODIFIED": "NO",
     "CUTOVER": "OFF"
+  },
+  "statusNotes": {
+    "catalogReadyGate": "MBM-CATALOG-READY-GATE-1: Minoxidil owner-accepted lock; 7 CURRENT_LIVE_FORMULARY_PENDING frozen; see docs/MBM_SAFE_EXECUTION_SET.md and docs/MBM_GEN_PROTECTION_AND_CLEANUP_GATE.md"
   }
 }

@@ -1,3 +1,5 @@
+> **SUPERSEDED by GEN-CATALOG-1H** — use `docs/GEN_FINAL_MBM_RETAIL_PRICING.md` (includes $X9 rounding).
+
 # GEN Retail Pricing Rule (GEN-CATALOG-1G)
 
 **READ-ONLY — no GEN writes.**

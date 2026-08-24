@@ -6,11 +6,20 @@
 
 ## Owner retail pricing rule (LOCKED)
 
-**retail = medicationCost × 1.75 + pharmacyShippingInternal**
+**Authoritative for GEN-CATALOG-2 and website catalog sync:** `docs/GEN_FINAL_MBM_RETAIL_PRICING.md`
 
-- Customer medication shipping charge = $0 (shipping baked into retail per READ ME - RULES).
-- Workbook SELECTED FORMULARY column "Cost +75%" = landedCost × 1.75 (i.e. (cost+shipping)×1.75). Owner rule differs: cost×1.75+shipping only.
-- Full formula table: `docs/GEN_RETAIL_PRICING_RULE.md`
+```
+raw_retail = (pharmacy_medication_cost × 1.75) + pharmacy_shipping
+final_retail = nearest whole-dollar ending in 9 (equidistant → ROUND UP)
+```
+
+**NOT** `(at_cost + shipping) × 1.75`
+
+- Customer medication shipping included in retail — do not add again at checkout
+- Website/GEN prices are reference only
+- Multiple cost bases → MULTIPLE_COST_BASIS_REVIEW (no silent choice)
+- 1H summary: PRODUCTS_PRICED=70, LIVE_NOW ready=8/16, FUTURE ready=37/111, MULTI review=25, MISSING_COST=57
+
 
 ---
 
@@ -263,31 +272,14 @@ Umbrellas marked **SPLIT_REQUIRED** (do not write as one product):
 
 ---
 
-## Final retail-price discrepancy table (14 LIVE_NOW + Mid B12)
+## Final retail-price table
 
-**Pricing rule:** `retail = medicationCost × 1.75 + pharmacyShippingInternal`
+Superseded by **GEN-CATALOG-1H** authoritative table:
 
-Prior workbook/GEN list prices are shown for comparison; **formula retail is the owner target**.
+- `docs/GEN_FINAL_MBM_RETAIL_PRICING.md`
+- `docs/GEN_FINAL_MBM_RETAIL_PRICING.json`
 
-| Product | Cost basis (med @ cost + ship) | Formula retail | Prior proposed | Current GEN | Website $ | Flags |
-|---|---|---:|---:|---:|---:|---|
-| AOD-9604 / MOTS-C / Tesamorelin Injection | $102.0 + $20.0 | **$198.5** (≈$198) | 219.0 | 219.0 | 259.0 |  |
-| AOD-9604 Injection | $1.75 + $20.0 | **$23.06** (≈$23) | 179.0 | 179.0 | None | COST_LOOKS_PER_UNIT |
-| BPC-157 / TB-500 Capsules | $3.2 + $25.0 | **$30.6** (≈$31) | 169.0 | 169.0 | 99.0 | COST_LOOKS_PER_UNIT |
-| BPC-157 Injection | $1.8+$20.0→$23.15; $77.0+$25.0→$159.75; $77.0+$25.0→$159.75; $77.0+$25.0→$159.75; +1 more | **$23.15–$159.75** (per fill) | 199.0 | 199.0 | 199.0 | BLEND_FORMULARY_UNDER_PLAIN_BPC_PRODUCT, COST_LOOKS_PER_UNIT, NEEDS_PACKAGE_COST_CONFIRMATION |
-| BPC-157 — Unspecified | $77.0 + $25.0 | **$159.75** (≈$160) | 189.0 | 189.0 | None |  |
-| GHK-Cu / Minoxidil Topical Combo | $36.75 + $2.0 | **$66.31** (≈$66) | 149.0 | 149.0 | 129.0 |  |
-| Semaglutide Injection — 3-Month (B12) | $50.0 + $30.0 | **$117.5** (≈$118) | 799.0 | 799.0 | None | THREE_MONTH_COST_LOOKS_UNDERSTATED |
-| Semaglutide Injection — Any Dose (B12) | $50.0+$5.0→$92.5; $55.0+$5.0→$101.25; $58.0+$5.0→$106.5; $60.0+$5.0→$110.0; +1 more | **$92.5–$118.75** (per fill) | 189.0 | 189.0 | 149.0 |  |
-| Semaglutide Injection — Any Dose (Glycine) | $50.0+$5.0→$92.5; $55.0+$5.0→$101.25; $58.0+$5.0→$106.5; $60.0+$5.0→$110.0; +1 more | **$92.5–$118.75** (per fill) | 149.0 | 149.0 | 149.0 |  |
-| Semaglutide Injection — High (B12) | $60.0+$5.0→$110.0; $65.0+$5.0→$118.75 | **$110.0–$118.75** (per fill) | 199.0 | 199.0 | None |  |
-| Semaglutide Injection — High (Glycine) | $60.0+$5.0→$110.0; $65.0+$5.0→$118.75 | **$110.0–$118.75** (per fill) | 129.0 | 129.0 | None |  |
-| Semaglutide Injection — Mid (Glycine) | $58.0 + $5.0 | **$106.5** (≈$106) | 109.0 | 109.0 | None |  |
-| Semaglutide Injection — Starting / Low (B12) | $50.0+$5.0→$92.5; $55.0+$5.0→$101.25 | **$92.5–$101.25** (per fill) | None | None | None |  |
-| Semaglutide Injection — Starting / Low (Glycine) | $50.0+$5.0→$92.5; $55.0+$5.0→$101.25 | **$92.5–$101.25** (per fill) | 119.0 | 119.0 | None |  |
-| Semaglutide Injection — Mid (B12) | $58.0 + $5.0 | **$106.5** (≈$106) | None | None | None |  |
-
-See `docs/GEN_RETAIL_PRICING_RULE.md` for full medication names and notes.
+Website/GEN columns are comparison only. Formula + $X9 rounding is pricing authority.
 
 
 ---
@@ -401,5 +393,5 @@ Do **not** write umbrella. Distinct patient-facing products:
 **GEN WRITES:** 0  
 **GEN/WHOP CUTOVER:** OFF  
 
-**STOP FOR FINAL PRICE + EXECUTION REVIEW.**  
+**STOP FOR FINAL OWNER REVIEW (GEN-CATALOG-1H pricing).**  
 Do **not** run GEN-CATALOG-2 until this gate is cleared.

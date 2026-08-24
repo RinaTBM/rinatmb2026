@@ -1,41 +1,50 @@
 {
   "version": "gen-catalog-1h-final-mbm-retail-pricing",
-  "generated_at": "2026-08-24T07:09:42Z",
+  "generated_at": "2026-08-24T07:31:34Z",
   "mode": "READ_ONLY",
-  "phase": "GEN-CATALOG-1H",
+  "phase": "GEN-CATALOG-1I-PRICING-AMENDMENT",
   "supersedes": [
     "docs/GEN_RETAIL_PRICING_RULE.md",
     "prior workbook/GEN/website comparison-as-authority logic"
   ],
   "authoritativePricingRule": {
-    "raw_retail": "(at_cost \u00d7 1.75) + pharmacy_shipping",
-    "not": "(at_cost + shipping) \u00d7 1.75",
-    "rounding": "Nearest whole-dollar price ending in 9; if equidistant, ROUND UP",
-    "examples": [
-      {
-        "raw": 173.5,
-        "final": 169
+    "version": "1I-AMENDMENT",
+    "hierarchy": {
+      "STANDARD_ONE_TIME": {
+        "raw": "(at_cost \u00d7 1.75) + pharmacy_shipping",
+        "final": "nearest $X9 (equidistant \u2192 ROUND UP)"
       },
-      {
-        "raw": 214.75,
-        "final": 219
+      "THREE_MONTH": {
+        "raw": "((monthly_at_cost \u00d7 1.75) + monthly_pharmacy_shipping) \u00d7 3",
+        "final": "nearest $X9 (equidistant \u2192 ROUND UP)",
+        "not": "Do NOT use single-month total as 3-month price; do NOT use one shipping unless verified 3-month fulfillment differs"
       },
-      {
-        "raw": 174.0,
-        "final": 179
-      }
-    ],
-    "customerMedicationShipping": "INCLUDED in retail; do NOT add pharmacy shipping again at website checkout",
-    "accessoryShipping": "SEPARATE",
-    "providerVisitFees": "SEPARATE",
-    "taxes": "SEPARATE \u2014 not part of this calculation",
-    "currentWebsitePrice": "reference/comparison only \u2014 NOT authority",
-    "currentGenPrice": "reference/comparison only \u2014 NOT authority",
-    "pricingAuthority": "Newest verified formulary medication cost + pharmacy shipping",
-    "multiplePairings": "Calculate each verified pairing; do not silently choose. Single distinct (cost,ship) \u2192 authoritative. Else MULTIPLE_COST_BASIS_REVIEW. CHEAPEST label is pharmacy selection, not retail authority across different costs.",
-    "semTir": "Each approved B12/Glycine tier priced from its exact formulary cost(s); keep B12 and Glycine separate",
-    "grossProfit": "FINAL_RETAIL - AT_COST - PHARMACY_SHIPPING",
-    "grossMarginPct": "GROSS_PROFIT / FINAL_RETAIL"
+      "SIX_MONTH": {
+        "raw": "((monthly_at_cost \u00d7 1.75) + monthly_pharmacy_shipping) \u00d7 6",
+        "final": "nearest $X9 (equidistant \u2192 ROUND UP)"
+      },
+      "SEM_ANY_DOSE_MEMBERSHIP": {
+        "productName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "ownerTargetMonthly": 149,
+        "pricingModel": "OWNER_SET_OVERRIDE \u2014 not automatic 1.75 formula",
+        "doNotChangeWithoutOwnerApproval": true
+      },
+      "TIR_ANY_DOSE_MEMBERSHIP": {
+        "productName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "ownerTargetMonthly": 275,
+        "pricingModel": "OWNER_SET_OVERRIDE \u2014 not automatic 1.75 formula",
+        "doNotChangeWithoutOwnerApproval": true
+      },
+      "oneTimeVsMembership": "Separate purchase/pricing models \u2014 do not overwrite one-time with membership"
+    },
+    "rounding": "Nearest whole-dollar ending in 9; equidistant \u2192 ROUND UP",
+    "customerMedicationShipping": "INCLUDED in one-time and multi-month retail; do not add pharmacy shipping again at checkout",
+    "membershipOverrides": {
+      "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP": 149,
+      "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP": 275
+    },
+    "oneTimeVsMembership": "Separate models \u2014 do not overwrite one-time cost-plus with membership price",
+    "supersedesPrior": "Prior Any Dose max $X9 one-time rule remains for ONE-TIME Any Dose SKUs; membership is separate owner-set price"
   },
   "pricingRows": [
     {
@@ -7480,5 +7489,241 @@
     "PRICE_CHANGES_REQUIRED_NOTE": "Authoritative single-basis products where final $X9 differs from current GEN and/or website, or GEN price unset"
   },
   "stopGate": "FINAL_OWNER_REVIEW",
-  "nextPhase": "DO_NOT_RUN_GEN_CATALOG_2_UNTIL_OWNER_CLEARS_PRICE_REVIEW"
+  "nextPhase": "DO_NOT_RUN_GEN_CATALOG_2_UNTIL_OWNER_CLEARS_PRICE_REVIEW",
+  "membershipEconomics_1i": {
+    "sem": {
+      "target": 149,
+      "classification": {
+        "status": "ECONOMICALLY_WORKABLE",
+        "reason": "All eligible doses GP>0 and lowest GM 53.02% \u2265 25%",
+        "highestMonthlyLandedCost": 70.0,
+        "lowestGP": 79.0,
+        "lowestGM": 53.02,
+        "highestCostDose": {
+          "formulation": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "additive": "B12",
+          "atCost": 65.0,
+          "shipping": 5.0,
+          "landed": 70.0
+        },
+        "lowestMarginDose": {
+          "formulation": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "additive": "B12",
+          "gp": 79.0,
+          "gm": 53.02,
+          "landed": 70.0
+        }
+      },
+      "doseCount": 10
+    },
+    "tir": {
+      "target": 275,
+      "classification": {
+        "status": "ECONOMICALLY_WORKABLE",
+        "reason": "All eligible doses GP>0 and lowest GM 61.82% \u2265 25%",
+        "highestMonthlyLandedCost": 105.0,
+        "lowestGP": 170.0,
+        "lowestGM": 61.82,
+        "highestCostDose": {
+          "formulation": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "additive": "B12",
+          "atCost": 100.0,
+          "shipping": 5.0,
+          "landed": 105.0
+        },
+        "lowestMarginDose": {
+          "formulation": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "additive": "B12",
+          "gp": 170.0,
+          "gm": 61.82,
+          "landed": 105.0
+        }
+      },
+      "doseCount": 12
+    }
+  },
+  "multiMonthRecalc_1i": {
+    "threeMonth": [
+      {
+        "key": "sem-glycine-3month",
+        "product": "Semaglutide Injection \u2014 3-Month (Glycine)",
+        "launchBucket": "LIVE_NOW",
+        "rawBases": [],
+        "recalculated": []
+      },
+      {
+        "key": "sem-b12-3month",
+        "product": "Semaglutide Injection \u2014 3-Month (B12)",
+        "launchBucket": "LIVE_NOW",
+        "rawBases": [
+          {
+            "medication": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) (3 VIALS))",
+            "cost": 50.0,
+            "ship": 30.0,
+            "claims3Vials": true
+          }
+        ],
+        "recalculated": [
+          {
+            "formulation": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) (3 VIALS))",
+            "pharmacy": "Dirx-Hub",
+            "monthlyAtCost": null,
+            "monthlyShipping": 30.0,
+            "threeMonthRaw": null,
+            "threeMonthFinalX9": null,
+            "note": "Row claims 3 VIALS with embedded cost \u2014 NOT used as monthly. Need separate monthly vial cost. Stated row cost=$50.0.",
+            "statedRowCost": 50.0
+          },
+          {
+            "formulation": "SEM+B12 escalation 4\u21926\u219210mg (Dirx-Hub)",
+            "pharmacy": "Dirx-Hub",
+            "monthlyAtCost": null,
+            "monthlyShipping": null,
+            "threeMonthRaw_ownerTimes3Using10mgMonthly": 356.25,
+            "threeMonthFinalX9_ownerTimes3Using10mgMonthly": 359,
+            "threeMonthRaw_escalationSumDistinctVials": 335.25,
+            "threeMonthFinalX9_escalationSumDistinctVials": 339,
+            "note": "Owner \u00d73 rule using 10mg monthly ($65+$5) as proxy. Product name is escalation 4\u21926\u219210mg \u2014 alternate evidence-based total = sum of three distinct vial monthlies. Broken SELECTED row ($50 for 3 vials) discarded.",
+            "preferredForOwnerReview": "escalationSumDistinctVials_if_bundle_is_4_6_10_else_times3_10mg"
+          }
+        ]
+      },
+      {
+        "key": "sem-other-glp1weightlossplansemaglutideanydose3mon",
+        "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide (Any Dose) \u2013 3 Month Supply",
+        "launchBucket": "FUTURE_HIDDEN",
+        "rawBases": [],
+        "recalculated": []
+      },
+      {
+        "key": "sem-other-glp1weightlossplansemaglutidehighdose3mo",
+        "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide (High Dose) \u2013 3 Month Supply",
+        "launchBucket": "FUTURE_HIDDEN",
+        "rawBases": [],
+        "recalculated": []
+      },
+      {
+        "key": "sem-other-glp1weightlossplansemaglutidemiddose3mon",
+        "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide (Mid Dose) \u2013 3 Month Supply",
+        "launchBucket": "FUTURE_HIDDEN",
+        "rawBases": [],
+        "recalculated": []
+      },
+      {
+        "key": "sem-other-glp1weightlossplansemaglutidestartingdos",
+        "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide (Starting Dose) \u2013 3 Month Supply",
+        "launchBucket": "FUTURE_HIDDEN",
+        "rawBases": [],
+        "recalculated": []
+      },
+      {
+        "key": "sem-other-glp1weightlossplansemaglutide3monthescal",
+        "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide 3-Month Escalation Bundle (Low: 1\u21922\u21924mg)",
+        "launchBucket": "FUTURE_HIDDEN",
+        "rawBases": [],
+        "recalculated": []
+      },
+      {
+        "key": "tir-glycine-3month",
+        "product": "Tirzepatide Injection \u2014 3-Month (Glycine)",
+        "launchBucket": "FUTURE_HIDDEN",
+        "rawBases": [
+          {
+            "medication": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) (3 PACK))",
+            "cost": 225.0,
+            "ship": 30.0,
+            "claims3Vials": false
+          }
+        ],
+        "recalculated": [
+          {
+            "formulation": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) (3 PACK))",
+            "pharmacy": "Dirx-Hub",
+            "statedRowCost": 225.0,
+            "statedRowShipping": 30.0,
+            "interpretation": "Formulary name claims 3 PACK \u2014 do NOT apply owner \u00d73 on top of stated row cost without confirming whether $225 is monthly or already 3-month pharmacy cost",
+            "ifStatedCostIsAlready3MonthTotal_rawAsIs": null,
+            "ownerTimes3Using30mgMonthly_raw": 540.0,
+            "ownerTimes3Using30mgMonthly_finalX9": 539,
+            "threeMonthFinalX9": null,
+            "note": "Unresolved package interpretation; owner \u00d73 proxy from highest TIR monthly (30mg $100+$5) = $356.25 \u2192 $359 shown for review only",
+            "costBasisStatus": "PACKAGE_QUANTITY_UNKNOWN"
+          }
+        ]
+      },
+      {
+        "key": "tir-b12-3month",
+        "product": "Tirzepatide Injection \u2014 3-Month (B12)",
+        "launchBucket": "FUTURE_HIDDEN",
+        "rawBases": [],
+        "recalculated": []
+      },
+      {
+        "key": "review-sildenafil3month",
+        "product": "Sildenafil (3 Month)",
+        "launchBucket": "FUTURE_HIDDEN",
+        "rawBases": [
+          {
+            "medication": "Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2%",
+            "cost": 45.0,
+            "ship": 30.0,
+            "claims3Vials": false
+          }
+        ],
+        "recalculated": [
+          {
+            "formulation": "Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2%",
+            "pharmacy": "St Luke",
+            "monthlyAtCost": 45.0,
+            "monthlyShipping": 30.0,
+            "threeMonthRaw": 326.25,
+            "threeMonthFinalX9": 329,
+            "oldWrongSingleMonthAsTotal": 109,
+            "note": "Using row cost as monthly_at_cost under owner \u00d73 rule",
+            "costBasisWarning": "DEFERRED product / Scream Cream formulary mispair per owner Decision #7/#8/#9 \u2014 do not use for LIVE write",
+            "deferred": true
+          }
+        ]
+      }
+    ],
+    "sixMonth": [
+      {
+        "key": "sem-other-semaglutideb126months",
+        "product": "Semaglutide/B12 (6 Months)",
+        "launchBucket": "FUTURE_HIDDEN",
+        "recalculated": [
+          {
+            "formulation": "SEMAGLUTIDE/B12 0.6 MG/ 500 MCG/ML (2 ML)",
+            "pharmacy": "Optimal Balance Pharmacy",
+            "monthlyAtCost": 62.0,
+            "monthlyShipping": 20.0,
+            "sixMonthRaw": 771.0,
+            "sixMonthFinalX9": 769,
+            "costBasisWarning": "Confirm source cost is monthly complete dispense before applying \u00d76"
+          }
+        ]
+      },
+      {
+        "key": "review-sildenafil6month",
+        "product": "Sildenafil (6 Month)",
+        "launchBucket": "FUTURE_HIDDEN",
+        "recalculated": [
+          {
+            "formulation": "Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2%",
+            "pharmacy": "St Luke",
+            "monthlyAtCost": 45.0,
+            "monthlyShipping": 30.0,
+            "sixMonthRaw": 652.5,
+            "sixMonthFinalX9": 649,
+            "costBasisWarning": "DEFERRED product / Scream Cream formulary mispair per owner Decision #7/#8/#9 \u2014 do not use for LIVE write",
+            "deferred": true
+          }
+        ]
+      }
+    ]
+  }
 }

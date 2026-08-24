@@ -1,6 +1,6 @@
 {
   "version": "gen-catalog-1g-final-locked-execution-plan",
-  "generated_at": "2026-08-24T07:09:42Z",
+  "generated_at": "2026-08-24T07:31:34Z",
   "mode": "READ_ONLY",
   "phase": "GEN-CATALOG-1G",
   "locked": true,
@@ -4151,7 +4151,7 @@
     "1H_FUTURE_HIDDEN_PRICING_READY": 37,
     "1H_AUTHORITATIVE_SINGLE_BASIS_PRODUCTS": 45
   },
-  "stopGate": "COST_BASIS_UNRESOLVED_LIVE_BLOCKED",
+  "stopGate": "OWNER_ECONOMIC_REVIEW_MEMBERSHIP_AND_MULTI_MONTH",
   "nextPhase": "DO_NOT_RUN_GEN_CATALOG_2_UNTIL_EVERY_LIVE_NOW_HAS_VERIFIED_COMPLETE_COST",
   "pricingRule": {
     "rule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
@@ -4161,34 +4161,43 @@
     "sourceDoc": "docs/GEN_RETAIL_PRICING_RULE.json"
   },
   "authoritativePricingRule": {
-    "raw_retail": "(at_cost \u00d7 1.75) + pharmacy_shipping",
-    "not": "(at_cost + shipping) \u00d7 1.75",
-    "rounding": "Nearest whole-dollar price ending in 9; if equidistant, ROUND UP",
-    "examples": [
-      {
-        "raw": 173.5,
-        "final": 169
+    "version": "1I-AMENDMENT",
+    "hierarchy": {
+      "STANDARD_ONE_TIME": {
+        "raw": "(at_cost \u00d7 1.75) + pharmacy_shipping",
+        "final": "nearest $X9 (equidistant \u2192 ROUND UP)"
       },
-      {
-        "raw": 214.75,
-        "final": 219
+      "THREE_MONTH": {
+        "raw": "((monthly_at_cost \u00d7 1.75) + monthly_pharmacy_shipping) \u00d7 3",
+        "final": "nearest $X9 (equidistant \u2192 ROUND UP)",
+        "not": "Do NOT use single-month total as 3-month price; do NOT use one shipping unless verified 3-month fulfillment differs"
       },
-      {
-        "raw": 174.0,
-        "final": 179
-      }
-    ],
-    "customerMedicationShipping": "INCLUDED in retail; do NOT add pharmacy shipping again at website checkout",
-    "accessoryShipping": "SEPARATE",
-    "providerVisitFees": "SEPARATE",
-    "taxes": "SEPARATE \u2014 not part of this calculation",
-    "currentWebsitePrice": "reference/comparison only \u2014 NOT authority",
-    "currentGenPrice": "reference/comparison only \u2014 NOT authority",
-    "pricingAuthority": "Newest verified formulary medication cost + pharmacy shipping",
-    "multiplePairings": "Calculate each verified pairing; do not silently choose. Single distinct (cost,ship) \u2192 authoritative. Else MULTIPLE_COST_BASIS_REVIEW. CHEAPEST label is pharmacy selection, not retail authority across different costs.",
-    "semTir": "Each approved B12/Glycine tier priced from its exact formulary cost(s); keep B12 and Glycine separate",
-    "grossProfit": "FINAL_RETAIL - AT_COST - PHARMACY_SHIPPING",
-    "grossMarginPct": "GROSS_PROFIT / FINAL_RETAIL"
+      "SIX_MONTH": {
+        "raw": "((monthly_at_cost \u00d7 1.75) + monthly_pharmacy_shipping) \u00d7 6",
+        "final": "nearest $X9 (equidistant \u2192 ROUND UP)"
+      },
+      "SEM_ANY_DOSE_MEMBERSHIP": {
+        "productName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "ownerTargetMonthly": 149,
+        "pricingModel": "OWNER_SET_OVERRIDE \u2014 not automatic 1.75 formula",
+        "doNotChangeWithoutOwnerApproval": true
+      },
+      "TIR_ANY_DOSE_MEMBERSHIP": {
+        "productName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "ownerTargetMonthly": 275,
+        "pricingModel": "OWNER_SET_OVERRIDE \u2014 not automatic 1.75 formula",
+        "doNotChangeWithoutOwnerApproval": true
+      },
+      "oneTimeVsMembership": "Separate purchase/pricing models \u2014 do not overwrite one-time with membership"
+    },
+    "rounding": "Nearest whole-dollar ending in 9; equidistant \u2192 ROUND UP",
+    "customerMedicationShipping": "INCLUDED in one-time and multi-month retail; do not add pharmacy shipping again at checkout",
+    "membershipOverrides": {
+      "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP": 149,
+      "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP": 275
+    },
+    "oneTimeVsMembership": "Separate models \u2014 do not overwrite one-time cost-plus with membership price",
+    "supersedesPrior": "Prior Any Dose max $X9 one-time rule remains for ONE-TIME Any Dose SKUs; membership is separate owner-set price"
   },
   "pricingPhase": "GEN-CATALOG-1H",
   "pricingAuthorityDoc": "docs/GEN_FINAL_MBM_RETAIL_PRICING.md",
@@ -4242,5 +4251,36 @@
       "LIVE_WRITE_GATE": "BLOCKED \u2014 not every LIVE_NOW medication has verified COMPLETE DISPENSE/PACKAGE cost basis"
     },
     "liveWriteBlocked": true
+  },
+  "pricingAmendment_1i": {
+    "docMd": "docs/GEN_FINAL_MBM_RETAIL_PRICING.md",
+    "docJson": "docs/GEN_PRICING_AMENDMENT_1I.json",
+    "finalReport": {
+      "SEM_MEMBERSHIP_TARGET": 149,
+      "SEM_HIGHEST_MONTHLY_LANDED_COST": 70.0,
+      "SEM_LOWEST_GP": 79.0,
+      "SEM_LOWEST_GM_PCT": 53.02,
+      "SEM_149_ECONOMIC_STATUS": "ECONOMICALLY_WORKABLE",
+      "TIRZ_MEMBERSHIP_TARGET": 275,
+      "TIRZ_HIGHEST_MONTHLY_LANDED_COST": 105.0,
+      "TIRZ_LOWEST_GP": 170.0,
+      "TIRZ_LOWEST_GM_PCT": 61.82,
+      "TIRZ_275_ECONOMIC_STATUS": "ECONOMICALLY_WORKABLE",
+      "THREE_MONTH_PRODUCTS_RECALCULATED": 10,
+      "SIX_MONTH_PRODUCTS_RECALCULATED": 2,
+      "STANDARD_PRICING_RULE_LOCKED": "YES",
+      "MULTI_MONTH_PRICING_RULE_LOCKED": "YES",
+      "MEMBERSHIP_OVERRIDE_RULE_LOCKED": "YES",
+      "GEN_MODIFIED": "NO",
+      "GEN_WRITES": 0,
+      "WEBSITE_MODIFIED": "NO",
+      "GEN_WHOP_CUTOVER": "OFF",
+      "THREE_MONTH_NOTE": "SEM 3-Month B12: discarded broken $50/3-vial row; owner \u00d73 on 10mg monthly \u2192 raw $356.25 \u2192 $359; escalation-sum alternate 4+6+10 \u2192 raw $335.25 \u2192 $339. TIR 3-Month: 3 PACK row interpretation unresolved.",
+      "generated_at": "2026-08-24T07:31:34Z"
+    },
+    "membershipEconomics": {
+      "semStatus": "ECONOMICALLY_WORKABLE",
+      "tirStatus": "ECONOMICALLY_WORKABLE"
+    }
   }
 }

@@ -1,430 +1,200 @@
-# GEN Final MBM Retail Pricing (GEN-CATALOG-1H)
+# GEN Final MBM Retail Pricing (GEN-CATALOG-1H + 1I Amendment)
 
-**READ-ONLY — no GEN writes. STOP FOR FINAL OWNER REVIEW.**
-**Generated:** 2026-08-24T07:09:42Z
-
-This supersedes prior retail-price comparison logic and `docs/GEN_RETAIL_PRICING_RULE.md` rounding (nearest dollar).
+**READ-ONLY — no GEN writes. STOP FOR OWNER ECONOMIC REVIEW.**
+**Updated:** 2026-08-24T07:31:34Z
 
 ---
 
-## Authoritative pricing rule (LOCKED for GEN-CATALOG-2 + website sync)
+## Authoritative pricing hierarchy (LOCKED)
 
+### Standard one-time / one-month dispense
 ```
-raw_retail = (pharmacy_medication_cost × 1.75) + pharmacy_shipping
-final_retail = round_to_nearest_whole_dollar_ending_in_9(raw_retail)
-             # if equidistant between lower and upper *9 → ROUND UP
+monthly_raw_retail = (at_cost × 1.75) + pharmacy_shipping
+final_retail = nearest $X9 (equidistant → ROUND UP)
 ```
 
-**NOT** `(at_cost + shipping) × 1.75`
+### 3-month supply
+```
+three_month_raw_retail = ((monthly_at_cost × 1.75) + monthly_pharmacy_shipping) × 3
+final_3_month_retail = nearest $X9 (equidistant → ROUND UP)
+```
 
-- Customer-facing medication shipping: **INCLUDED** in retail — do **not** add pharmacy shipping again at website checkout
-- Accessory shipping: **SEPARATE**
-- Provider visit fees: **SEPARATE**
-- Taxes: **SEPARATE** (not part of this calculation)
-- Current website price / current GEN price: **reference only — NOT authority**
-- Pricing authority: **newest verified formulary cost + shipping**
-- Multiple eligible cost bases: calculate each; **do not silently choose** → `MULTIPLE_COST_BASIS_REVIEW` unless a single distinct (cost, ship) basis exists
-- SEM/TIR: each B12/Glycine tier uses its exact formulary cost(s); keep additives **separate**
+Do **not** treat a single month’s at-cost as the entire 3-month cost.
+Do **not** use `(at_cost × 1.75) + one shipping` as the 3-month total unless verified 3-month fulfillment data says otherwise.
 
-Examples: raw $173.50 → **$169**; raw $214.75 → **$219**; raw $174.00 (equidistant) → **$179**
+### 6-month supply
+```
+six_month_raw_retail = ((monthly_at_cost × 1.75) + monthly_pharmacy_shipping) × 6
+final_6_month_retail = nearest $X9 (equidistant → ROUND UP)
+```
 
-Gross profit = FINAL − AT-COST − SHIPPING; Gross margin % = GP / FINAL
+### Membership overrides (owner-set — not 1.75 formula)
+
+| Patient-facing membership | Monthly price |
+|---|---:|
+| **SEMAGLUTIDE COMPOUND — ANY DOSE MEMBERSHIP** | **$149** |
+| **TIRZEPATIDE COMPOUND — ANY DOSE MEMBERSHIP** | **$275** |
+
+Do **not** change $149 / $275 without owner approval.
+Do **not** overwrite one-time cost-plus pricing with membership pricing — separate models.
+
+Internal B12 vs Glycine formularies remain distinct (no cross-pair). One patient-facing membership may route to the correct approved dose/additive underneath; if GEN cannot multi-pair under one client product, flag separate membership SKUs.
+
+**GEN limitation flag:** `POSSIBLE_SEPARATE_MEMBERSHIP_SKUS_IF_GEN_CANNOT_MULTI_PAIR_B12_AND_GLYCINE_UNDER_ONE_CLIENT_PRODUCT`
+
+---
+
+## Semaglutide membership economic validation ($149)
+
+| Dose | Additive | Formulation | Pharmacy | At-cost | Ship | Landed | Rev $149 | GP | GM% |
+|---|---|---|---|---:|---:|---:|---:|---:|---:|
+| 10mg/0.5mg/mL | B12 | SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65.0 | 5.0 | 70.0 | 149 | 79.0 | 53.02 |
+| 10mg/0.5mg/mL | Glycine | SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65.0 | 5.0 | 70.0 | 149 | 79.0 | 53.02 |
+| 6mg/0.5mg/mL | B12 | SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60.0 | 5.0 | 65.0 | 149 | 84.0 | 56.38 |
+| 6mg/0.5mg/mL | Glycine | SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60.0 | 5.0 | 65.0 | 149 | 84.0 | 56.38 |
+| 4mg/0.5mg/mL | B12 | SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 58.0 | 5.0 | 63.0 | 149 | 86.0 | 57.72 |
+| 4mg/0.5mg/mL | Glycine | SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 58.0 | 5.0 | 63.0 | 149 | 86.0 | 57.72 |
+| 2mg/0.5mg/mL | B12 | SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55.0 | 5.0 | 60.0 | 149 | 89.0 | 59.73 |
+| 2mg/0.5mg/mL | Glycine | SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55.0 | 5.0 | 60.0 | 149 | 89.0 | 59.73 |
+| 1mg/0.5mg/mL | B12 | SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50.0 | 5.0 | 55.0 | 149 | 94.0 | 63.09 |
+| 1mg/0.5mg/mL | Glycine | SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50.0 | 5.0 | 55.0 | 149 | 94.0 | 63.09 |
+
+- **Highest cost dose:** {'formulation': 'SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)', 'strength': '10mg/0.5mg/mL', 'additive': 'B12', 'atCost': 65.0, 'shipping': 5.0, 'landed': 70.0}
+- **Lowest margin dose:** {'formulation': 'SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)', 'strength': '10mg/0.5mg/mL', 'additive': 'B12', 'gp': 79.0, 'gm': 53.02, 'landed': 70.0}
+- **Status:** **ECONOMICALLY_WORKABLE** — All eligible doses GP>0 and lowest GM 53.02% ≥ 25%
+
+---
+
+## Tirzepatide membership economic validation ($275)
+
+| Dose | Additive | Formulation | Pharmacy | At-cost | Ship | Landed | Rev $275 | GP | GM% |
+|---|---|---|---|---:|---:|---:|---:|---:|---:|
+| 30mg/0.5mg/mL | B12 | TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 100.0 | 5.0 | 105.0 | 275 | 170.0 | 61.82 |
+| 30mg/0.5mg/mL | Glycine | TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 100.0 | 5.0 | 105.0 | 275 | 170.0 | 61.82 |
+| 25mg/0.5mg/mL | B12 | TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 95.0 | 5.0 | 100.0 | 275 | 175.0 | 63.64 |
+| 25mg/0.5mg/mL | Glycine | TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 95.0 | 5.0 | 100.0 | 275 | 175.0 | 63.64 |
+| 20mg/0.5mg/mL | B12 | TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 90.0 | 5.0 | 95.0 | 275 | 180.0 | 65.45 |
+| 20mg/0.5mg/mL | Glycine | TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 90.0 | 5.0 | 95.0 | 275 | 180.0 | 65.45 |
+| 15mg/0.5mg/mL | B12 | TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 85.0 | 5.0 | 90.0 | 275 | 185.0 | 67.27 |
+| 15mg/0.5mg/mL | Glycine | TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 85.0 | 5.0 | 90.0 | 275 | 185.0 | 67.27 |
+| 10mg/0.5mg/mL | B12 | TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 75.0 | 5.0 | 80.0 | 275 | 195.0 | 70.91 |
+| 10mg/0.5mg/mL | Glycine | TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 75.0 | 5.0 | 80.0 | 275 | 195.0 | 70.91 |
+| 5mg/0.5mg/mL | B12 | TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 65.0 | 5.0 | 70.0 | 275 | 205.0 | 74.55 |
+| 5mg/0.5mg/mL | Glycine | TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 65.0 | 5.0 | 70.0 | 275 | 205.0 | 74.55 |
+
+- **Highest cost dose:** {'formulation': 'TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)', 'strength': '30mg/0.5mg/mL', 'additive': 'B12', 'atCost': 100.0, 'shipping': 5.0, 'landed': 105.0}
+- **Lowest margin dose:** {'formulation': 'TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)', 'strength': '30mg/0.5mg/mL', 'additive': 'B12', 'gp': 170.0, 'gm': 61.82, 'landed': 105.0}
+- **Status:** **ECONOMICALLY_WORKABLE** — All eligible doses GP>0 and lowest GM 61.82% ≥ 25%
+
+---
+
+## 3-month products recalculated
+
+### Semaglutide Injection — 3-Month (Glycine) (`sem-glycine-3month`)
+- No verified monthly cost basis — cannot apply ×3 yet
+
+### Semaglutide Injection — 3-Month (B12) (`sem-b12-3month`)
+- Formulation: SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) (3 VIALS))
+  - monthlyShipping: 30.0
+  - statedRowCost: 50.0
+  - note: Row claims 3 VIALS with embedded cost — NOT used as monthly. Need separate monthly vial cost. Stated row cost=$50.0.
+- Formulation: SEM+B12 escalation 4→6→10mg (Dirx-Hub)
+  - threeMonthRaw_ownerTimes3Using10mgMonthly: 356.25
+  - threeMonthFinalX9_ownerTimes3Using10mgMonthly: 359
+  - threeMonthRaw_escalationSumDistinctVials: 335.25
+  - threeMonthFinalX9_escalationSumDistinctVials: 339
+  - note: Owner ×3 rule using 10mg monthly ($65+$5) as proxy. Product name is escalation 4→6→10mg — alternate evidence-based total = sum of three distinct vial monthlies. Broken SELECTED row ($50 for 3 vials) discarded.
+
+### Semaglutide Weight Loss Plan – Semaglutide (Any Dose) – 3 Month Supply (`sem-other-glp1weightlossplansemaglutideanydose3mon`)
+- No verified monthly cost basis — cannot apply ×3 yet
+
+### Semaglutide Weight Loss Plan – Semaglutide (High Dose) – 3 Month Supply (`sem-other-glp1weightlossplansemaglutidehighdose3mo`)
+- No verified monthly cost basis — cannot apply ×3 yet
+
+### Semaglutide Weight Loss Plan – Semaglutide (Mid Dose) – 3 Month Supply (`sem-other-glp1weightlossplansemaglutidemiddose3mon`)
+- No verified monthly cost basis — cannot apply ×3 yet
+
+### Semaglutide Weight Loss Plan – Semaglutide (Starting Dose) – 3 Month Supply (`sem-other-glp1weightlossplansemaglutidestartingdos`)
+- No verified monthly cost basis — cannot apply ×3 yet
+
+### Semaglutide Weight Loss Plan – Semaglutide 3-Month Escalation Bundle (Low: 1→2→4mg) (`sem-other-glp1weightlossplansemaglutide3monthescal`)
+- No verified monthly cost basis — cannot apply ×3 yet
+
+### Tirzepatide Injection — 3-Month (Glycine) (`tir-glycine-3month`)
+- Formulation: TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) (3 PACK))
+  - ownerTimes3Using30mgMonthly_raw: 540.0
+  - ownerTimes3Using30mgMonthly_finalX9: 539
+  - statedRowCost: 225.0
+  - costBasisStatus: PACKAGE_QUANTITY_UNKNOWN
+  - note: Unresolved package interpretation; owner ×3 proxy from highest TIR monthly (30mg $100+$5) = $356.25 → $359 shown for review only
+  - interpretation: Formulary name claims 3 PACK — do NOT apply owner ×3 on top of stated row cost without confirming whether $225 is monthly or already 3-month pharmacy cost
+
+### Tirzepatide Injection — 3-Month (B12) (`tir-b12-3month`)
+- No verified monthly cost basis — cannot apply ×3 yet
+
+### Sildenafil (3 Month) (`review-sildenafil3month`)
+- Formulation: Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2%
+  - monthlyAtCost: 45.0
+  - monthlyShipping: 30.0
+  - threeMonthRaw: 326.25
+  - threeMonthFinalX9: 329
+  - note: Using row cost as monthly_at_cost under owner ×3 rule
+  - deferred: True
+  - costBasisWarning: DEFERRED product / Scream Cream formulary mispair per owner Decision #7/#8/#9 — do not use for LIVE write
+
+## 6-month products recalculated
+
+### Semaglutide/B12 (6 Months) (`sem-other-semaglutideb126months`)
+- Formulation: SEMAGLUTIDE/B12 0.6 MG/ 500 MCG/ML (2 ML)
+  - monthlyAtCost: 62.0
+  - monthlyShipping: 20.0
+  - sixMonthRaw: 771.0
+  - sixMonthFinalX9: 769
+  - costBasisWarning: Confirm source cost is monthly complete dispense before applying ×6
+
+### Sildenafil (6 Month) (`review-sildenafil6month`)
+- Formulation: Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2%
+  - monthlyAtCost: 45.0
+  - monthlyShipping: 30.0
+  - sixMonthRaw: 652.5
+  - sixMonthFinalX9: 649
+  - costBasisWarning: DEFERRED product / Scream Cream formulary mispair per owner Decision #7/#8/#9 — do not use for LIVE write
+  - deferred: True
 
 ---
 
 ## Final report
 
 | Metric | Value |
-|---|---:|
-| PRODUCTS_PRICED | 70 |
-| PRICING_ROWS_WITH_FINAL_X9 | 134 |
-| PRODUCTS_TOTAL | 127 |
-| PRICE_CHANGES_REQUIRED | 44 |
-| MULTIPLE_COST_BASIS_REVIEW | 25 |
-| MISSING_COST | 57 |
-| MISSING_SHIPPING | 0 |
-| LIVE_NOW_TOTAL | 16 |
-| LIVE_NOW_PRICING_READY | 8 |
-| FUTURE_HIDDEN_TOTAL | 111 |
-| FUTURE_HIDDEN_PRICING_READY | 37 |
-| AUTHORITATIVE_SINGLE_BASIS_PRODUCTS | 45 |
+|---|---|
+| SEM_MEMBERSHIP_TARGET | 149 |
+| SEM_HIGHEST_MONTHLY_LANDED_COST | 70.0 |
+| SEM_LOWEST_GP | 79.0 |
+| SEM_LOWEST_GM_PCT | 53.02 |
+| SEM_149_ECONOMIC_STATUS | ECONOMICALLY_WORKABLE |
+| TIRZ_MEMBERSHIP_TARGET | 275 |
+| TIRZ_HIGHEST_MONTHLY_LANDED_COST | 105.0 |
+| TIRZ_LOWEST_GP | 170.0 |
+| TIRZ_LOWEST_GM_PCT | 61.82 |
+| TIRZ_275_ECONOMIC_STATUS | ECONOMICALLY_WORKABLE |
+| THREE_MONTH_PRODUCTS_RECALCULATED | 10 |
+| SIX_MONTH_PRODUCTS_RECALCULATED | 2 |
+| STANDARD_PRICING_RULE_LOCKED | YES |
+| MULTI_MONTH_PRICING_RULE_LOCKED | YES |
+| MEMBERSHIP_OVERRIDE_RULE_LOCKED | YES |
 | GEN_MODIFIED | NO |
 | GEN_WRITES | 0 |
 | WEBSITE_MODIFIED | NO |
 | GEN_WHOP_CUTOVER | OFF |
+| THREE_MONTH_NOTE | SEM 3-Month B12: discarded broken $50/3-vial row; owner ×3 on 10mg monthly → raw $356.25 → $359; escalation-sum alternate 4+6+10 → raw $335.25 → $339. TIR 3-Month: 3 PACK row interpretation unresolved. |
+| generated_at | 2026-08-24T07:31:34Z |
+
+**STOP FOR OWNER ECONOMIC REVIEW.** No GEN-CATALOG-2 / no GEN writes.
 
 ---
 
-## LIVE_NOW pricing rows
+## Prior one-time $X9 tables
 
-| PRODUCT | FORMULATION | PHARMACY | AT-COST | SHIP | RAW RETAIL | FINAL $X9 | GEN $ | WEB $ | CHANGE? | MATCH | GP | GM% |
-|---|---|---|---:|---:|---:|---:|---:|---:|:---:|---|---:|---:|
-| Semaglutide Injection — Starting / Low (Glycine) | SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50 | 5 | 92.5 | **89** | 119 | — | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_DIFFERS | 34 | 38.2 |
-| Semaglutide Injection — Starting / Low (Glycine) | SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55 | 5 | 101.25 | **99** | 119 | — | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_DIFFERS | 39 | 39.39 |
-| Semaglutide Injection — Mid (Glycine) | SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 58 | 5 | 106.5 | **109** | 109 | — |  | MATCHES_REFERENCE | 46 | 42.2 |
-| Semaglutide Injection — High (Glycine) | SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60 | 5 | 110 | **109** | 129 | — | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_DIFFERS | 44 | 40.37 |
-| Semaglutide Injection — High (Glycine) | SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 129 | — | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_DIFFERS | 49 | 41.18 |
-| Semaglutide Injection — Any Dose (Glycine) | SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50 | 5 | 92.5 | **89** | 149 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 34 | 38.2 |
-| Semaglutide Injection — Any Dose (Glycine) | SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55 | 5 | 101.25 | **99** | 149 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 39 | 39.39 |
-| Semaglutide Injection — Any Dose (Glycine) | SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 58 | 5 | 106.5 | **109** | 149 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 46 | 42.2 |
-| Semaglutide Injection — Any Dose (Glycine) | SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60 | 5 | 110 | **109** | 149 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 44 | 40.37 |
-| Semaglutide Injection — Any Dose (Glycine) | SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 149 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 49 | 41.18 |
-| Semaglutide Injection — 3-Month (Glycine) | — | — | — | — | — | **—** | — | — |  | MISSING_COST | — | — |
-| Semaglutide Injection — Starting / Low (B12) | SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50 | 5 | 92.5 | **89** | — | — | YES | MULTIPLE_COST_BASIS_REVIEW|PRICED_NO_REFERENCE | 34 | 38.2 |
-| Semaglutide Injection — Starting / Low (B12) | SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55 | 5 | 101.25 | **99** | — | — | YES | MULTIPLE_COST_BASIS_REVIEW|PRICED_NO_REFERENCE | 39 | 39.39 |
-| Semaglutide Injection — Mid (B12) | SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 58 | 5 | 106.5 | **109** | — | — |  | PRICED_NO_REFERENCE | 46 | 42.2 |
-| Semaglutide Injection — High (B12) | SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60 | 5 | 110 | **109** | 199 | — | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_DIFFERS | 44 | 40.37 |
-| Semaglutide Injection — High (B12) | SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 199 | — | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_DIFFERS | 49 | 41.18 |
-| Semaglutide Injection — Any Dose (B12) | SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50 | 5 | 92.5 | **89** | 189 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 34 | 38.2 |
-| Semaglutide Injection — Any Dose (B12) | SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55 | 5 | 101.25 | **99** | 189 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 39 | 39.39 |
-| Semaglutide Injection — Any Dose (B12) | SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 58 | 5 | 106.5 | **109** | 189 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 46 | 42.2 |
-| Semaglutide Injection — Any Dose (B12) | SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60 | 5 | 110 | **109** | 189 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 44 | 40.37 |
-| Semaglutide Injection — Any Dose (B12) | SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 189 | 149 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 49 | 41.18 |
-| Semaglutide Injection — 3-Month (B12) | SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) (3 VIALS)) | Dirx-Hub | 50 | 30 | 117.5 | **119** | 799 | — | YES | GEN_DIFFERS | 39 | 32.77 |
-| AOD-9604 Injection | AOD 9604 300 MCG | Optimal Balance Pharmacy | 1.75 | 20 | 23.0625 | **19** | 179 | — | YES | GEN_DIFFERS | -2.75 | -14.47 |
-| AOD-9604 / MOTS-C / Tesamorelin Injection | AOD 9604/ MOTS-C/ TESAMORELIN/ IPAMORELIN 1.2 MG/ 2 MG/ 2MG/ 2MG/ML (5 ML) | Optimal Balance Pharmacy | 102 | 20 | 198.5 | **199** | 219 | 259 | YES | GEN_AND_WEBSITE_DIFFERS | 77 | 38.69 |
-| BPC-157 Injection | BPC-157 500 MCG | Optimal Balance Pharmacy | 1.8 | 20 | 23.15 | **19** | 199 | 199 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | -2.8 | -14.74 |
-| BPC-157 Injection | BPC-157/TB-500/GHK-CU 3/3/10MG/ML | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 199 | 199 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 57 | 35.85 |
-| BPC-157 Injection | BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 199 | 199 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 57 | 35.85 |
-| BPC-157 Injection | BPC-157/KPV/TB500 3mg/3mg/3mg/mL | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 199 | 199 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 57 | 35.85 |
-| BPC-157 Injection | BPC-157/TB500 3mg/3mg/mL | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 199 | 199 | YES | MULTIPLE_COST_BASIS_REVIEW|GEN_AND_WEBSITE_DIFFERS | 57 | 35.85 |
-| BPC-157 — Unspecified | BPC-157/TB-500/GHK-CU 3/3/10MG/ML (5ml) | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 189 | — | YES | GEN_DIFFERS | 57 | 35.85 |
-| BPC-157 / TB-500 Capsules | BPC-157/TB500 capsules 500MCG/500MCG | Greenwich Pharmacy | 3.2 | 25 | 30.6 | **29** | 169 | 99 | YES | GEN_AND_WEBSITE_DIFFERS | 0.8 | 2.76 |
-| GHK-Cu / Minoxidil Topical Combo | Minoxidil 2.5mg/GHK-Cu 5mg/Apigenin 50mg/Fisetin 50mg | Epiq Scripts | 36.75 | 2 | 66.3125 | **69** | 149 | 129 | YES | GEN_AND_WEBSITE_DIFFERS | 30.25 | 43.84 |
-
-### LIVE_NOW product readiness
-
-| Product | Status | Bases |
-|---|---|---:|
-| Semaglutide Injection — Starting / Low (Glycine) | MULTIPLE_COST_BASIS_REVIEW | 2 |
-| Semaglutide Injection — Mid (Glycine) | READY | 1 |
-| Semaglutide Injection — High (Glycine) | MULTIPLE_COST_BASIS_REVIEW | 2 |
-| Semaglutide Injection — Any Dose (Glycine) | MULTIPLE_COST_BASIS_REVIEW | 5 |
-| Semaglutide Injection — 3-Month (Glycine) | MISSING_COST | 0 |
-| Semaglutide Injection — Starting / Low (B12) | MULTIPLE_COST_BASIS_REVIEW | 2 |
-| Semaglutide Injection — Mid (B12) | READY | 1 |
-| Semaglutide Injection — High (B12) | MULTIPLE_COST_BASIS_REVIEW | 2 |
-| Semaglutide Injection — Any Dose (B12) | MULTIPLE_COST_BASIS_REVIEW | 5 |
-| Semaglutide Injection — 3-Month (B12) | READY | 1 |
-| AOD-9604 Injection | READY | 1 |
-| AOD-9604 / MOTS-C / Tesamorelin Injection | READY | 1 |
-| BPC-157 Injection | MULTIPLE_COST_BASIS_REVIEW | 5 |
-| BPC-157 — Unspecified | READY | 1 |
-| BPC-157 / TB-500 Capsules | READY | 1 |
-| GHK-Cu / Minoxidil Topical Combo | READY | 1 |
-
----
-
-## MULTIPLE_COST_BASIS_REVIEW products
-
-**Count:** 25
-
-### Semaglutide Injection — Starting / Low (Glycine) (`sem-glycine-starting`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50 | 5 | 92.5 | **89** | 34 | 38.2 |
-| SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55 | 5 | 101.25 | **99** | 39 | 39.39 |
-
-### Semaglutide Injection — High (Glycine) (`sem-glycine-high`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60 | 5 | 110 | **109** | 44 | 40.37 |
-| SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 49 | 41.18 |
-
-### Semaglutide Injection — Any Dose (Glycine) (`sem-glycine-any`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50 | 5 | 92.5 | **89** | 34 | 38.2 |
-| SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55 | 5 | 101.25 | **99** | 39 | 39.39 |
-| SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 58 | 5 | 106.5 | **109** | 46 | 42.2 |
-| SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60 | 5 | 110 | **109** | 44 | 40.37 |
-| SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 49 | 41.18 |
-
-### Semaglutide Injection — Starting / Low (B12) (`sem-b12-starting`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50 | 5 | 92.5 | **89** | 34 | 38.2 |
-| SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55 | 5 | 101.25 | **99** | 39 | 39.39 |
-
-### Semaglutide Injection — High (B12) (`sem-b12-high`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60 | 5 | 110 | **109** | 44 | 40.37 |
-| SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 49 | 41.18 |
-
-### Semaglutide Injection — Any Dose (B12) (`sem-b12-any`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50 | 5 | 92.5 | **89** | 34 | 38.2 |
-| SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 55 | 5 | 101.25 | **99** | 39 | 39.39 |
-| SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 58 | 5 | 106.5 | **109** | 46 | 42.2 |
-| SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 60 | 5 | 110 | **109** | 44 | 40.37 |
-| SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 49 | 41.18 |
-
-### Tirzepatide Injection — Starting / Low (Glycine) (`tir-glycine-starting`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 49 | 41.18 |
-| TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 75 | 5 | 136.25 | **139** | 59 | 42.45 |
-| TIRZEPATIDE 0.5mg 30 count | Valiant | 35 | 30 | 91.25 | **89** | 24 | 26.97 |
-
-### Tirzepatide Injection — Mid (Glycine) (`tir-glycine-mid`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 85 | 5 | 153.75 | **149** | 59 | 39.6 |
-| TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 90 | 5 | 162.5 | **159** | 64 | 40.25 |
-
-### Tirzepatide Injection — High (Glycine) (`tir-glycine-high`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 95 | 5 | 171.25 | **169** | 69 | 40.83 |
-| TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 100 | 5 | 180 | **179** | 74 | 41.34 |
-
-### Tirzepatide Injection — Any Dose (Glycine) (`tir-glycine-any`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 49 | 41.18 |
-| TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 75 | 5 | 136.25 | **139** | 59 | 42.45 |
-| TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 85 | 5 | 153.75 | **149** | 59 | 39.6 |
-| TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 90 | 5 | 162.5 | **159** | 64 | 40.25 |
-| TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 95 | 5 | 171.25 | **169** | 69 | 40.83 |
-| TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 100 | 5 | 180 | **179** | 74 | 41.34 |
-
-### Tirzepatide Injection — Starting / Low (B12) (`tir-b12-starting`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 49 | 41.18 |
-| TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 75 | 5 | 136.25 | **139** | 59 | 42.45 |
-
-### Tirzepatide Injection — Mid (B12) (`tir-b12-mid`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 85 | 5 | 153.75 | **149** | 59 | 39.6 |
-| TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 90 | 5 | 162.5 | **159** | 64 | 40.25 |
-
-### Tirzepatide Injection — High (B12) (`tir-b12-high`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 95 | 5 | 171.25 | **169** | 69 | 40.83 |
-| TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 100 | 5 | 180 | **179** | 74 | 41.34 |
-
-### Tirzepatide Injection — Any Dose (B12) (`tir-b12-any`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | 49 | 41.18 |
-| TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 75 | 5 | 136.25 | **139** | 59 | 42.45 |
-| TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 85 | 5 | 153.75 | **149** | 59 | 39.6 |
-| TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 90 | 5 | 162.5 | **159** | 64 | 40.25 |
-| TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 95 | 5 | 171.25 | **169** | 69 | 40.83 |
-| TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 100 | 5 | 180 | **179** | 74 | 41.34 |
-
-### BPC-157 Injection (`bpc157-injection`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| BPC-157 500 MCG | Optimal Balance Pharmacy | 1.8 | 20 | 23.15 | **19** | -2.8 | -14.74 |
-| BPC-157/TB-500/GHK-CU 3/3/10MG/ML | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 57 | 35.85 |
-| BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 57 | 35.85 |
-| BPC-157/KPV/TB500 3mg/3mg/3mg/mL | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 57 | 35.85 |
-| BPC-157/TB500 3mg/3mg/mL | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 57 | 35.85 |
-
-### Tesamorelin / Ipamorelin Injection (`tesa-ipa-injection`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| CJC-1295/ IPAMORELIN 2 MG/ 2MG/ML (5 ML) | Optimal Balance Pharmacy | 97 | 20 | 189.75 | **189** | 72 | 38.1 |
-| Tesamorelin/Ipamorelin 3mg/2mg/mL (5ml) | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 57 | 35.85 |
-
-### Dihexa — Unspecified (`other-dihexa-unspecified`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| Dihexa capsules 5mg | Greenwich Pharmacy | 2.6 | 25 | 29.55 | **29** | 1.4 | 4.83 |
-| Dihexa/Tesofensine capsules 5mg/500mcg | Greenwich Pharmacy | 3.2 | 25 | 30.6 | **29** | 0.8 | 2.76 |
-
-### Sildenafil — Unspecified (`sildenafil-unspecified`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| SILDENAFIL 100 mg | VitaScripts Pharmacy | 0.5 | 15 | 15.875 | **19** | 3.5 | 18.42 |
-| SILDENAFIL/ TADALAFIL 50 MG/ 10 MG | Optimal Balance Pharmacy | 1.56 | 20 | 22.73 | **19** | -2.56 | -13.47 |
-
-### Tadalafil — Unspecified (`tadalafil-unspecified`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TADALAFIL 10 mg | VitaScripts Pharmacy | 0.5 | 15 | 15.875 | **19** | 3.5 | 18.42 |
-| Tadalafil 5mg/Vardenafil HCl 5mg/Vit D3 2000IU/Vit K2 1mg (GUM) | Epiq Scripts | 26.25 | 2 | 47.9375 | **49** | 20.75 | 42.35 |
-
-### Tretinoin / Skin — Unspecified (`tretinoin-unspecified`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TRETINOIN 0.15% | Vios | 25.5 | 30 | 74.625 | **79** | 23.5 | 29.75 |
-| HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025% | Vios | 54 | 30 | 124.5 | **129** | 45 | 34.88 |
-| FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.25/5/0.01 % | Vios | 35 | 30 | 91.25 | **89** | 24 | 26.97 |
-| FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.25/5/0.03 % | Vios | 35 | 30 | 91.25 | **89** | 24 | 26.97 |
-| FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.5/5/0.01 % | Vios | 35 | 30 | 91.25 | **89** | 24 | 26.97 |
-
-### Testosterone / HRT — Injection (`hrt-testosteronehrt-injection-`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML) | Optimal Balance Pharmacy | 23.75 | 20 | 61.5625 | **59** | 15.25 | 25.85 |
-| TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML) | Optimal Balance Pharmacy | 23.75 | 20 | 61.5625 | **59** | 15.25 | 25.85 |
-| TESTOSTERONE CYPIONATE (GRAPESEED OIL) 200 MG/ML (5 ML) | Optimal Balance Pharmacy | 25.5 | 20 | 64.625 | **69** | 23.5 | 34.06 |
-| TESTOSTERONE CYPIONATE (MCT OIL) 200 MG/ML (5 ML) | Optimal Balance Pharmacy | 35 | 20 | 81.25 | **79** | 24 | 30.38 |
-| TESTOSTERONE CYPIONATE INJECTION (CS) 200MG/ML 200MG/ML (10ML) | Optimal Balance Pharmacy | 37 | 20 | 84.75 | **89** | 32 | 35.96 |
-
-### MOTS-C Injection (`motsc-injection`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| MOTS-C 2mg/mL (5ml) | Greenwich Pharmacy | 62 | 25 | 133.5 | **129** | 42 | 32.56 |
-| MOTS-C 2mg/mL | Greenwich Pharmacy | 62 | 25 | 133.5 | **129** | 42 | 32.56 |
-| MOTS-C/Tesamorelin 2mg/3mg/mL | Greenwich Pharmacy | 79 | 25 | 163.25 | **159** | 55 | 34.59 |
-
-### PT-141 (Bremelanotide) Nasal Spray (`pt141-nasal`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| PT-141 (Bremelanotide) 1mg | St Luke | 3 | 30 | 35.25 | **39** | 6 | 15.38 |
-| BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML | Vios | 62 | 30 | 138.5 | **139** | 47 | 33.81 |
-| BREMELANOTIDE (PT-141) (PER ML) 5MG/ML | Vios | 62 | 30 | 138.5 | **139** | 47 | 33.81 |
-
-### Thymosin Alpha-1 Injection (`thymosin-a1-injection`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| Thymosin A-1 5mg/mL (5ml) | Greenwich Pharmacy | 77 | 30 | 164.75 | **169** | 62 | 36.69 |
-| THYMOSIN ALPHA-1 3 MG/ML (5 ML) | Optimal Balance Pharmacy | 82 | 20 | 163.5 | **159** | 57 | 35.85 |
-
-### Estradiol / HRT — Vaginal Cream (`hrt-estradiolhrt-vaginalcream-`)
-| FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GP | GM% |
-|---|---|---:|---:|---:|---:|---:|---:|
-| ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count | Valiant | 50 | 30 | 117.5 | **119** | 39 | 32.77 |
-| ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count | Valiant | 55 | 30 | 126.25 | **129** | 44 | 34.11 |
-| ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count | Valiant | 60 | 30 | 135 | **139** | 49 | 35.25 |
-| ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count | Valiant | 70 | 30 | 152.5 | **149** | 49 | 32.89 |
-| HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) | St Luke | 25 | 30 | 73.75 | **69** | 14 | 20.29 |
-| HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) | St Luke | 28 | 30 | 79 | **79** | 21 | 26.58 |
-| HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) | St Luke | 35 | 30 | 91.25 | **89** | 24 | 26.97 |
-| HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) | St Luke | 40 | 30 | 100 | **99** | 29 | 29.29 |
-| Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient | St Luke | 1 | 30 | 31.75 | **29** | -2 | -6.9 |
-| Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients | St Luke | 1.5 | 30 | 32.625 | **29** | -2.5 | -8.62 |
-| Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients | St Luke | 2 | 30 | 33.5 | **29** | -3 | -10.34 |
-| ESTRADIOL 0.5MG TABLET 0.5MG | Optimal Balance Pharmacy | 0.48 | 20 | 20.84 | **19** | -1.48 | -7.79 |
-| ESTRADIOL 1 MG TABLET 1 MG | Optimal Balance Pharmacy | 0.48 | 20 | 20.84 | **19** | -1.48 | -7.79 |
-| ESTRADIOL 2 MG TABLET 2 MG | Optimal Balance Pharmacy | 0.48 | 20 | 20.84 | **19** | -1.48 | -7.79 |
-| ESTRADIOL CYPIONATE (MCT OIL) 10 MG/ML | Vios | 32 | 30 | 86 | **89** | 27 | 30.34 |
-
----
-
-## MISSING_COST products
-
-**Count:** 57
-
-- Semaglutide Injection — 3-Month (Glycine) (LIVE_NOW)
-- Semaglutide Oral / Sublingual — Starting / Low (FUTURE_HIDDEN)
-- Semaglutide Injection — Any Dose (L-Carnitine) (FUTURE_HIDDEN)
-- Semaglutide Weight Loss Plan – Semaglutide (Any Dose) (FUTURE_HIDDEN)
-- Semaglutide Weight Loss Plan – Semaglutide (Any Dose) – 3 Month Supply (FUTURE_HIDDEN)
-- Semaglutide Weight Loss Plan – Semaglutide (High Dose / Maintenance) (FUTURE_HIDDEN)
-- Semaglutide Weight Loss Plan – Semaglutide (High Dose) – 3 Month Supply (FUTURE_HIDDEN)
-- Semaglutide Weight Loss Plan – Semaglutide (Low Dose) (FUTURE_HIDDEN)
-- Semaglutide Weight Loss Plan – Semaglutide (Mid Dose) (FUTURE_HIDDEN)
-- Semaglutide Weight Loss Plan – Semaglutide (Mid Dose) – 3 Month Supply (FUTURE_HIDDEN)
-- Semaglutide Weight Loss Plan – Semaglutide (Starting Dose) – 3 Month Supply (FUTURE_HIDDEN)
-- Semaglutide Injection — High (L-Carnitine) (FUTURE_HIDDEN)
-- Semaglutide Injection — Mid (L-Carnitine) (FUTURE_HIDDEN)
-- Semaglutide + Ondansetron (Nausea Support) (FUTURE_HIDDEN)
-- Semaglutide Weight Loss Plan – Semaglutide 3-Month Escalation Bundle (Low: 1→2→4mg) (FUTURE_HIDDEN)
-- Semaglutide Oral / Sublingual — High (FUTURE_HIDDEN)
-- Semaglutide Oral / Sublingual — Mid (FUTURE_HIDDEN)
-- Lean & Ready – Semaglutide + BPC-157 + AOD-9604 Plan (FUTURE_HIDDEN)
-- Orforglipron (Oral) — Any Dose (FUTURE_HIDDEN)
-- Orforglipron (Oral) — High (FUTURE_HIDDEN)
-- Orforglipron (Oral) — Mid (FUTURE_HIDDEN)
-- Orforglipron (Oral) — Starting / Low (FUTURE_HIDDEN)
-- Ozempic (Semaglutide) (FUTURE_HIDDEN)
-- The Ultimate Semaglutide Stack (FUTURE_HIDDEN)
-- Tirzepatide Injection — 3-Month (B12) (FUTURE_HIDDEN)
-- Tirzepatide + Ondansetron (Nausea Support) (FUTURE_HIDDEN)
-- Accelerate & Thrive (FUTURE_HIDDEN)
-- Ivermectin — Capsule (FUTURE_HIDDEN)
-- Ivermectin — Topical (FUTURE_HIDDEN)
-- BPC-157 — Unspecified (FUTURE_HIDDEN)
-- Testosterone / HRT — Unspecified (FUTURE_HIDDEN)
-- GHK-Cu Injection (FUTURE_HIDDEN)
-- Minoxidil / Hair — Unspecified (FUTURE_HIDDEN)
-- Hair Loss – Dutasteride (Oral) (FUTURE_HIDDEN)
-- Finasteride / Hair — Capsule (FUTURE_HIDDEN)
-- Finasteride / Hair — Topical (FUTURE_HIDDEN)
-- GHK-Cu — Unspecified (FUTURE_HIDDEN)
-- Minoxidil / Hair — Capsule (FUTURE_HIDDEN)
-- HRT Other — Unspecified (FUTURE_HIDDEN)
-- IGF-1 LR3 — Unspecified (FUTURE_HIDDEN)
-- Testosterone / HRT — Cream (FUTURE_HIDDEN)
-- Testosterone / HRT — Troche (FUTURE_HIDDEN)
-- HRT Other — Capsule (FUTURE_HIDDEN)
-- Sermorelin — Injection (FUTURE_HIDDEN)
-- Sermorelin — Troche (FUTURE_HIDDEN)
-- Selank — Unspecified (FUTURE_HIDDEN)
-- Pinealon — Unspecified (FUTURE_HIDDEN)
-- Retatrutide — Unspecified (FUTURE_HIDDEN)
-- TB-500 / Blends — Unspecified (FUTURE_HIDDEN)
-- Glutathione — Capsule (FUTURE_HIDDEN)
-- Glutathione — Topical (FUTURE_HIDDEN)
-- NAD+ — Topical (FUTURE_HIDDEN)
-- Progesterone / HRT — Cream (FUTURE_HIDDEN)
-- Progesterone / HRT — Unspecified (FUTURE_HIDDEN)
-- Scream Cream (FUTURE_HIDDEN)
-- Oxytocin — Unspecified (FUTURE_HIDDEN)
-- Oxytocin — Nasal Spray (FUTURE_HIDDEN)
-
----
-
-## FUTURE_HIDDEN — authoritative single-basis (pricing ready)
-
-| PRODUCT | FORMULATION | PHARMACY | AT-COST | SHIP | RAW | FINAL $X9 | GEN $ | CHANGE? | GP | GM% |
-|---|---|---|---:|---:|---:|---:|---:|:---:|---:|---:|
-| Semaglutide Injection — Starting / Low (L-Carnitine) | SEMAGLUTIDE/L-CARNITINE (2ML) 2mg/100mg/ml | Vios | 50 | 30 | 117.5 | **119** | — |  | 39 | 32.77 |
-| Semaglutide/B12 (6 Months) | SEMAGLUTIDE/B12 0.6 MG/ 500 MCG/ML (2 ML) | Optimal Balance Pharmacy | 62 | 20 | 128.5 | **129** | — |  | 47 | 36.43 |
-| Semaglutide/B12/Glycine | SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50 | 5 | 92.5 | **89** | — |  | 34 | 38.2 |
-| Tirzepatide Injection — 3-Month (Glycine) | TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) (3 PACK)) | Dirx-Hub | 225 | 30 | 423.75 | **419** | — |  | 164 | 39.14 |
-| Tirzepatide Injection — B12+Glycine (ambiguous) | TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 65 | 5 | 118.75 | **119** | — |  | 49 | 41.18 |
-| Tirzepatide Injection — Starting / Low (L-Carnitine) | TIRZEPATIDE/L-CARNITINE (1ML) 10mg/100mg/ml | Vios | 70 | 30 | 152.5 | **149** | — |  | 49 | 32.89 |
-| Tirzepatide Injection — Starting / Low (Niacinamide) | TIRZEPATIDE/NIACINAMIDE (68MG/8MG/4ML) 17mg/2mg/ml | Vios | 180 | 30 | 345 | **349** | — |  | 139 | 39.83 |
-| 5-Amino Injectable | 5-Amino capsules 50mg | Greenwich Pharmacy | 2.6 | 25 | 29.55 | **29** | — |  | 1.4 | 4.83 |
-| 5-Amino-1MQ Injection | 5-AMINO-1MQ 5 MG/ML (5 ML) | Optimal Balance Pharmacy | 77 | 20 | 154.75 | **159** | — |  | 62 | 38.99 |
-| BPC-157 — Unspecified | BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL (5ml) | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | 189 | YES | 57 | 35.85 |
-| DSIP Injection | DSIP 1mg/mL (5ml) | Greenwich Pharmacy | 62 | 25 | 133.5 | **129** | — |  | 42 | 32.56 |
-| CJC-1295 / Ipamorelin Injection | DSIP/BPC/CJC 1mg/2mg/2mg (5ml) | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | — |  | 57 | 35.85 |
-| Epithalon Injection | Epithalon 2mg/mL (5ml) | Greenwich Pharmacy | 62 | 25 | 133.5 | **129** | — |  | 42 | 32.56 |
-| Finasteride / Hair — Unspecified | FINASTERIDE 1 mg | VitaScripts Pharmacy | 0.5 | 15 | 15.875 | **19** | — |  | 3.5 | 18.42 |
-| GHK-Cu / Epithalon Injection | GHK-CU/ EPITHALON 10 MG/ 2 MG/ML (5 ML) | Optimal Balance Pharmacy | 82 | 20 | 163.5 | **159** | — |  | 57 | 35.85 |
-| Minoxidil / Hair — Topical | MINOXIDIL 2% | Vios | 1.28 | 30 | 32.24 | **29** | — |  | -2.28 | -7.86 |
-| IGF-1 LR3 — Unspecified | IGF-LR3 200mcg/mL (5ml) | Greenwich Pharmacy | 62 | 25 | 133.5 | **129** | — |  | 42 | 32.56 |
-| Ivermectin — Capsule | Ivermectin 18mg | St Luke | 2 | 30 | 33.5 | **29** | — |  | -3 | -10.34 |
-| Liraglutide — Unspecified | LIRAGLUTIDE 6mg 5ml | Valiant | 100 | 30 | 205 | **209** | — |  | 79 | 37.8 |
-| LL-37 Injection | LL-37 2MG/ML (5ml) | Greenwich Pharmacy | 62 | 25 | 133.5 | **129** | — |  | 42 | 32.56 |
-| NAD+ Nasal Spray | NAD+ 50mg/ml | St Luke | 30 | 30 | 82.5 | **79** | — |  | 19 | 24.05 |
-| NAD+ (Injectable) | NAD+ 50mg/ml | St Luke | 30 | 30 | 82.5 | **79** | — |  | 19 | 24.05 |
-| NAD+ Injection | NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml | St Luke | 64 | 30 | 142 | **139** | — |  | 45 | 32.37 |
-| NAD+ — Topical | METHYLENE BLUE ANTI-AGING (30 ML) | Optimal Balance Pharmacy | 52 | 20 | 111 | **109** | — |  | 37 | 33.94 |
-| Selank — Unspecified | Pinealon/PE22-28/Selank 2MG/2MG/ML (5ml) | Greenwich Pharmacy | 77 | 25 | 159.75 | **159** | — |  | 57 | 35.85 |
-| Pregnyl - HCG (Merck) | HCG LYO (PREGNYL) 10,000 IU | Optimal Balance Pharmacy | 40.8 | 20 | 91.4 | **89** | — |  | 28.2 | 31.69 |
-| Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone | SCREAM CREAM (THEOPHYLLINE/L-ARGININE/SILDENAFIL/TESTOSTERONE 30MG/60MG/20MG/11MG/GM (3%/6%/2%/1.1%) | Vios | 55.25 | 30 | 126.6875 | **129** | — |  | 43.75 | 33.91 |
-| Semax — Unspecified | Semax 2.5mg/mL Nasal Spray | Greenwich Pharmacy | 60 | 25 | 130 | **129** | — |  | 44 | 34.11 |
-| Sermorelin — Troche | SERMORELIN ACETATE (TROCHE) 1 MG | Vios | 0.85 | 30 | 31.4875 | **29** | — |  | -1.85 | -6.38 |
-| Sildenafil (3 Month) | Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2% | St Luke | 45 | 30 | 108.75 | **109** | — |  | 34 | 31.19 |
-| Sildenafil (6 Month) | Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2% | St Luke | 45 | 30 | 108.75 | **109** | — |  | 34 | 31.19 |
-| SS-31 (Elamipretide) Mitochondrial Protection Protocol | ELAMIPRETIDE (SS-31) 15 MG/ML (5 ML) | Optimal Balance Pharmacy | 82 | 20 | 163.5 | **159** | — |  | 57 | 35.85 |
-| TB-500 / Blends — Unspecified | TB-500 3MG/ML (5ml) | Greenwich Pharmacy | 62 | 25 | 133.5 | **129** | — |  | 42 | 32.56 |
-| Oxytocin — Capsule | Bella Lipo (Bupropion HCl/Caffeine/Oxytocin/Topiramate/Naltrexone HCl/Methylcobalamin) 65mg/20mg/100IU/15mg/8mg/1mg | St Luke | 1.5 | 30 | 32.625 | **29** | — |  | -2.5 | -8.62 |
-| Trimix T106 (Papaverine +Phentolamine +PGE) | SB4 TRIMIX PGE, Papaverine, Phentolamine  40mcg/30mg/3mg 2.5ml | Valiant | 85 | 30 | 178.75 | **179** | — |  | 64 | 35.75 |
-| Vardenafil — Unspecified | VARDENAFIL 20 MG | Optimal Balance Pharmacy | 3.95 | 20 | 26.9125 | **29** | — |  | 5.05 | 17.41 |
-| Glutathione — Injection | Glutathione 200mg/ml | St Luke | 15 | 30 | 56.25 | **59** | — |  | 14 | 23.73 |
-
-FUTURE_HIDDEN multi/missing details: see JSON (`pricingRows` / `productMeta`). Total FUTURE_HIDDEN products: 111; pricing ready: 37.
-
----
-
-## Status gates
-
-- **GEN MODIFIED:** NO
-- **GEN WRITES:** 0
-- **WEBSITE MODIFIED:** NO
-- **GEN/WHOP CUTOVER:** OFF
-
-**STOP FOR FINAL OWNER REVIEW.** Do not run GEN-CATALOG-2 until cleared.
+Full per-product one-time formulary pricing rows remain in `docs/GEN_FINAL_MBM_RETAIL_PRICING.json` (`pricingRows`).
+Cost-basis statuses remain in `docs/GEN_FINAL_COST_BASIS_REVIEW.md`.
+This amendment adds multi-month ×3/×6 rules and membership economic validation without changing the core one-time formula.

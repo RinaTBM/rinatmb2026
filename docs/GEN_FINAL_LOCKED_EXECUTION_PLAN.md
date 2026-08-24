@@ -6,19 +6,19 @@
 
 ## Owner retail pricing rule (LOCKED)
 
-**Authoritative for GEN-CATALOG-2 and website catalog sync:** `docs/GEN_FINAL_MBM_RETAIL_PRICING.md`
+**Authority:** `docs/GEN_FINAL_MBM_RETAIL_PRICING.md` + `docs/GEN_PRICING_AMENDMENT_1I.json`
 
 ```
-raw_retail = (pharmacy_medication_cost × 1.75) + pharmacy_shipping
-final_retail = nearest whole-dollar ending in 9 (equidistant → ROUND UP)
+ONE-TIME:     (at_cost × 1.75) + shipping            → nearest $X9
+3-MONTH:      ((monthly_cost × 1.75) + ship) × 3     → nearest $X9
+6-MONTH:      ((monthly_cost × 1.75) + ship) × 6     → nearest $X9
+SEM MEMBERSHIP Any Dose:  $149/mo (owner-set)
+TIR MEMBERSHIP Any Dose:  $275/mo (owner-set)
 ```
 
-**NOT** `(at_cost + shipping) × 1.75`
+Membership economic status: SEM **ECONOMICALLY_WORKABLE** · TIR **ECONOMICALLY_WORKABLE**
 
-- Customer medication shipping included in retail — do not add again at checkout
-- Website/GEN prices are reference only
-- Multiple cost bases → MULTIPLE_COST_BASIS_REVIEW (no silent choice)
-- 1H summary: PRODUCTS_PRICED=70, LIVE_NOW ready=8/16, FUTURE ready=37/111, MULTI review=25, MISSING_COST=57
+Cost basis gate still applies for LIVE writes (`docs/GEN_FINAL_COST_BASIS_REVIEW.md`).
 
 
 ---
@@ -395,5 +395,5 @@ Do **not** write umbrella. Distinct patient-facing products:
 
 **Cost basis (GEN-CATALOG-1I):** see `docs/GEN_FINAL_COST_BASIS_REVIEW.md`. LIVE verified 7/16. **LIVE write BLOCKED** until all LIVE_NOW have verified complete dispense/package cost.
 
-**STOP.** Do not run GEN-CATALOG-2.  
+**STOP FOR OWNER ECONOMIC REVIEW.** Do not run GEN-CATALOG-2.  
 Do **not** run GEN-CATALOG-2 until this gate is cleared.

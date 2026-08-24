@@ -1,6 +1,6 @@
 {
   "version": "gen-catalog-1i-final-cost-basis-review",
-  "generated_at": "2026-08-24T07:19:01Z",
+  "generated_at": "2026-08-24T07:31:34Z",
   "mode": "READ_ONLY",
   "phase": "GEN-CATALOG-1I",
   "pricingFormulaLocked": {
@@ -3341,5 +3341,13 @@
     "WEBSITE_MODIFIED": "NO",
     "GEN_WHOP_CUTOVER": "OFF",
     "LIVE_WRITE_GATE": "BLOCKED \u2014 not every LIVE_NOW medication has verified COMPLETE DISPENSE/PACKAGE cost basis"
+  },
+  "pricingAmendment_1i": {
+    "applied": true,
+    "threeMonthRule": "((monthly_at_cost \u00d7 1.75) + monthly_shipping) \u00d7 3 \u2192 $X9",
+    "sixMonthRule": "((monthly_at_cost \u00d7 1.75) + monthly_shipping) \u00d7 6 \u2192 $X9",
+    "semMembership": 149,
+    "tirMembership": 275,
+    "doc": "docs/GEN_PRICING_AMENDMENT_1I.json"
   }
 }

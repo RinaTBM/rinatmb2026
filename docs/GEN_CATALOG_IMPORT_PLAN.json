@@ -1,0 +1,377 @@
+{
+  "version": "gen-catalog-1-v1",
+  "generated_at": "2026-08-24T03:20:00Z",
+  "mode": "READ_ONLY",
+  "branch": "cursor/gen-catalog-1-import-plan-945c",
+  "production_website_modified": false,
+  "gen_modified": false,
+  "gen_whop_cutover": "OFF",
+  "products_created": 0,
+  "products_updated": 0,
+  "products_deactivated": 0,
+  "blockers": [
+    {
+      "id": "MASTER_WORKBOOK_REQUIRED",
+      "file": "MyBareMethod_FINAL_GEN_Smart_Product_Upload_2026-08-23.xlsx",
+      "status": "MISSING",
+      "blocks": ["phase_3_mapping", "phase_4_formulary_pairings", "phase_5_future_products_rows"]
+    },
+    {
+      "id": "GEN_API_KEY_INVALID",
+      "status": "STAGING_GET_401",
+      "observed_at": "2026-08-24",
+      "blocks": ["live_inventory_refresh", "product_detail", "forms", "excluded_states"]
+    },
+    {
+      "id": "CREATE_PATCH_BODY_SCHEMA_UNKNOWN",
+      "status": "NO_PUBLIC_OPENAPI",
+      "notes": "Owner lists POST/PATCH endpoints; request bodies not in repo; not exercised"
+    }
+  ],
+  "schema_audit": {
+    "auth": "x-api-key header required for /v2/client/products",
+    "endpoints": {
+      "list_products": { "method": "GET", "path": "/v2/client/products", "classification": "SUPPORTED" },
+      "get_product_detail": { "method": "GET", "path": "/v2/client/products/:id", "classification": "SUPPORTED" },
+      "list_product_forms": { "method": "GET", "path": "/v2/client/products/:id/forms", "classification": "SUPPORTED" },
+      "create_client_product": {
+        "method": "POST",
+        "path": "/v2/client/products",
+        "endpoint_classification": "SUPPORTED",
+        "request_body_schema": "UNKNOWN",
+        "exercised": false
+      },
+      "update_client_product": {
+        "method": "PATCH",
+        "path": "/v2/client/products/:id",
+        "endpoint_classification": "SUPPORTED",
+        "request_body_schema": "UNKNOWN",
+        "exercised": false
+      },
+      "deactivate_client_product": {
+        "method": "DELETE",
+        "endpoint_classification": "SUPPORTED",
+        "exercised": false
+      }
+    },
+    "answers": {
+      "gen_create_product_endpoint": "SUPPORTED",
+      "gen_update_product_endpoint": "SUPPORTED",
+      "multi_formulary_product": "UNKNOWN",
+      "draft_hidden_product": "SUPPORTED",
+      "draft_hidden_evidence": "All 22 cached products have storefrontEligible=false and pricing.amount=0",
+      "formulary_pairing_in_create_patch": "UNKNOWN"
+    },
+    "list_response_fields_observed": [
+      "productId",
+      "clientProductId",
+      "name",
+      "displayName",
+      "description",
+      "type",
+      "pricing.amount",
+      "pricing.currency",
+      "storefrontEligible",
+      "requiresSyncVisit",
+      "categories",
+      "displayCategoryIds",
+      "primaryCategory",
+      "panels",
+      "imageUrl",
+      "displayImageUrl",
+      "displayImageBackgroundColor",
+      "checkoutLinks",
+      "sourceProductId",
+      "productRelationship"
+    ],
+    "fields_not_observed_on_list": [
+      "assessmentPrice",
+      "shipping",
+      "quantity",
+      "supplyDuration",
+      "subscriptionSettings",
+      "includedVisits",
+      "forms",
+      "formularyMedicationIds",
+      "excludedStates",
+      "activeFlagDistinctFromStorefrontEligible"
+    ]
+  },
+  "current_gen_inventory": {
+    "source": "cached_prior_staging_list",
+    "live_refresh": "FAILED_401_INVALID_API_KEY",
+    "count": 22,
+    "products": [
+      {
+        "productId": "t1JOySXRCJBAeXbkEXW4",
+        "name": "Add Sync",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": true,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "PRIG7DYPNNgco3lGf1zx",
+        "name": "AOD-9604",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "yearpPaLo5H0k0FU5Ej8",
+        "name": "AOD-9604 / MOTS-C / Tesamorelin Metabolic Triple Protocol",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "7Kix55LA15U0lNvY9QXI",
+        "name": "AOD-9604/MOTS-C",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "KXMm9SsbOEYnFy9phmZn",
+        "name": "BPC-157",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": [],
+        "historicalMbmNote": "Prior READY map for MBM-RP-BPC-INJ-001; re-check against final workbook"
+      },
+      {
+        "productId": "MXsSZY2GpiCByJUQer1p",
+        "name": "BPC-157 + GHK-Cu + KPV + TB-500 Comprehensive Recovery Protocol",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "Kju2P3fGsc0mbI1UGVeF",
+        "name": "BPC-157 + KPV + TB-500 Anti-Inflammatory Recovery Protocol",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "kAekLzXT2Wl2MDSBxjls",
+        "name": "BPC-157 + TB-500 + GHK-Cu Recovery & Anti-Aging Protocol",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "afROXeaudxZUdh0Y1Qfc",
+        "name": "BPC-157 Gut & Recovery Protocol (Oral Capsules)",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "TQBv1oBNGfwIGY8ypl86",
+        "name": "BPC-157 Recovery Protocol (Injectable)",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "NTN40APqv0NQokAGmuyg",
+        "name": "BPC-157 Recovery Protocol (Oral Capsule)",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "zpQmWLDx6QxyDz5N8IaI",
+        "name": "BPC-157/GHK-U/KPV/TB500",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "lkpQbjBhhWMeLUszAvbh",
+        "name": "BPC-157/GHK/TB500",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "26RwCZyLvfqRYRY7AG6T",
+        "name": "BPC-157/KPV/TB500",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "iJtyig611AZEDBGdvRd9",
+        "name": "BPC-157/TB500",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "Zd3nud61fajtnKM8EHae",
+        "name": "Elite Body Recomp",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": [],
+        "warning": "Description mentions Tirzepatide+Sermorelin — not a substitute for MBM Tirzepatide vial SKUs"
+      },
+      {
+        "productId": "lT5iApLmX80qlBQTr4qE",
+        "name": "Elite Regenesis",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "gpwERWfomPpuJyY9oB8V",
+        "name": "Epitalon Longevity & Anti-Aging Protocol",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "489YrehNXRlL77fYPkOn",
+        "name": "GHK-Cu",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "qQKHHjPkPzs5D35Wgh2x",
+        "name": "GHK-Cu + Epitalon Anti-Aging Protocol",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "2CVlt0n5ITgHB1cYxoNY",
+        "name": "GHK-Cu Anti-Aging & Skin Health Protocol (Injectable)",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      },
+      {
+        "productId": "Yq6xdybfGS55O4kUDVI8",
+        "name": "GHK-Cu/Epithalon",
+        "storefrontEligible": false,
+        "pricingAmount": 0,
+        "requiresSyncVisit": false,
+        "pairedFormularyIds": null,
+        "forms": null,
+        "categories": []
+      }
+    ]
+  },
+  "master_workbook_mapping": {
+    "status": "MASTER_WORKBOOK_REQUIRED",
+    "workbook": "MyBareMethod_FINAL_GEN_Smart_Product_Upload_2026-08-23.xlsx",
+    "totals": {
+      "TOTAL_MASTER_PRODUCTS": null,
+      "EXISTING_EXACT": null,
+      "EXISTING_NEEDS_UPDATE": null,
+      "CREATE_NEW": null,
+      "FUTURE_CREATE_HIDDEN": null,
+      "REVIEW_REQUIRED": null,
+      "DO_NOT_ADD": null
+    },
+    "reserved_rules": {
+      "metformin": "DO_NOT_ADD",
+      "website_live_only_if_mbm_active": true,
+      "medication_shipping_included_in_retail": true,
+      "accessories_outside_gen_medication_routing": true,
+      "semaglutide_parent_structure_required": true,
+      "tirzepatide_parent_structure_required": true
+    },
+    "rows": []
+  },
+  "formulary_pairing_plan": {
+    "status": "BLOCKED",
+    "historical_candidates": [
+      {
+        "mbmSku": "MBM-RP-BPC-INJ-001",
+        "genProductId": "KXMm9SsbOEYnFy9phmZn",
+        "formulation": "BPC-157 / TB500 3 MG / 3 MG/ML (5 ML)",
+        "pharmacy": "Optimal Balance Pharmacy",
+        "pharmacyCost": 117.0,
+        "pharmacyShipping": null,
+        "landedCost": null,
+        "status": "REVIEW_REQUIRED_RECHECK_WORKBOOK"
+      }
+    ]
+  },
+  "future_products_policy": {
+    "prepare_in_gen_allowed": true,
+    "storefrontEligible": false,
+    "mbm_website_active": false,
+    "checkout_enabled": false,
+    "production_routing": false,
+    "rows": []
+  },
+  "semaglutide_structure": "REVIEW",
+  "tirzepatide_structure": "REVIEW",
+  "metformin": "DO_NOT_ADD"
+}

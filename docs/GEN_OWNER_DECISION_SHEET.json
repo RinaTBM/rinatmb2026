@@ -295,7 +295,10 @@
       "duplicateOfTrueReview": false,
       "duplicateTrueReviewNames": [],
       "masterProducts": [],
-      "key": "sem-b12-mid"
+      "key": "sem-b12-mid",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "GEN-CATALOG-1F: retain Mid B12 CP; B12 ladder Starting/Low, Mid, High, Any Dose, 3-Month as applicable"
     },
     {
       "number": 2,
@@ -1052,5 +1055,24 @@
     "GEN_MODIFIED": "NO",
     "GEN_WHOP_CUTOVER": "OFF",
     "PRODUCTION_WEBSITE_MODIFIED": "NO"
-  }
+  },
+  "cleanupOwnerStatus_1f": {
+    "status": "APPROVED",
+    "writeExecuted": false,
+    "items": [
+      "Add Sync \u2192 DEACTIVATE",
+      "Metformin (Metabolic / Weight Support) \u2192 DEACTIVATE (DO NOT ADD)",
+      "Metformin / Topiramate \u2192 DEACTIVATE (DO NOT ADD)",
+      "BPC-157 (Copy 1) \u2192 MERGE into BPC-157 Injection KXMm9SsbOEYnFy9phmZn then deactivate duplicate"
+    ]
+  },
+  "structuralApprovals_1f": {
+    "tirzepatideB12GlycineSeparateLadders": "APPROVED",
+    "ambiguousTirLabelsRemainOwnerReview": [
+      "Tirzepatide/B12/Glycine",
+      "Tirzepatide/Glycine/B12"
+    ],
+    "note": "Owner called this Decision #10; sheet Decision #10 is Sildenafil Unspecified and remains unresolved"
+  },
+  "phase": "GEN-CATALOG-1F-partial-approvals-recorded"
 }

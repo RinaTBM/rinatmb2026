@@ -395,5 +395,7 @@ Do **not** write umbrella. Distinct patient-facing products:
 
 **Cost basis (GEN-CATALOG-1I):** see `docs/GEN_FINAL_COST_BASIS_REVIEW.md`. LIVE verified 7/16. **LIVE write BLOCKED** until all LIVE_NOW have verified complete dispense/package cost.
 
-**STOP FOR OWNER ECONOMIC REVIEW.** Do not run GEN-CATALOG-2.  
+**GEN-CATALOG-1J live write gate:** `docs/GEN_FINAL_LIVE_WRITE_GATE.md` — LIVE ready 11/16; deferred 4; owner choice 1. Deferred products do not block future catalog architecture.
+
+**STOP FOR OWNER REVIEW.** Do not run GEN-CATALOG-2.  
 Do **not** run GEN-CATALOG-2 until this gate is cleared.

@@ -4151,8 +4151,8 @@
     "1H_FUTURE_HIDDEN_PRICING_READY": 37,
     "1H_AUTHORITATIVE_SINGLE_BASIS_PRODUCTS": 45
   },
-  "stopGate": "OWNER_ECONOMIC_REVIEW_MEMBERSHIP_AND_MULTI_MONTH",
-  "nextPhase": "DO_NOT_RUN_GEN_CATALOG_2_UNTIL_EVERY_LIVE_NOW_HAS_VERIFIED_COMPLETE_COST",
+  "stopGate": "OWNER_REVIEW_1J_LIVE_WRITE_GATE",
+  "nextPhase": "DO_NOT_RUN_GEN_CATALOG_2",
   "pricingRule": {
     "rule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
     "customerShipping": "Customer medication shipping charge = $0 (shipping baked into retail per READ ME - RULES).",
@@ -4281,6 +4281,39 @@
     "membershipEconomics": {
       "semStatus": "ECONOMICALLY_WORKABLE",
       "tirStatus": "ECONOMICALLY_WORKABLE"
+    }
+  },
+  "liveWriteGate_1j": {
+    "doc": "docs/GEN_FINAL_LIVE_WRITE_GATE.md",
+    "json": "docs/GEN_FINAL_LIVE_WRITE_GATE.json",
+    "finalReport": {
+      "LIVE_PRODUCTS_TOTAL": 16,
+      "LIVE_READY_FOR_GEN_WRITE": 11,
+      "LIVE_DEFERRED": 4,
+      "OWNER_CHOICE_REQUIRED": 1,
+      "MEMBERSHIPS_READY": 2,
+      "AOD_9604": "DEFERRED_COST_UNKNOWN",
+      "BPC_TB_CAPSULES": "DEFERRED_COST_UNKNOWN",
+      "BPC_157_INJECTION": "DEFERRED_COST_UNKNOWN",
+      "BPC_UNSPECIFIED": "READY_FOR_GEN_WRITE (renamed to exact blend identity)",
+      "SEM_START_LOW_B12": "READY \u2014 TIER_MAX 2mg \u2192 $99",
+      "SEM_START_LOW_GLYCINE": "READY \u2014 TIER_MAX 2mg \u2192 $99",
+      "SEM_MID_B12": "READY \u2014 $109",
+      "SEM_MID_GLYCINE": "READY \u2014 $109",
+      "SEM_HIGH_B12": "READY \u2014 TIER_MAX 10mg \u2192 $119",
+      "SEM_HIGH_GLYCINE": "READY \u2014 TIER_MAX 10mg \u2192 $119",
+      "SEM_ANY_DOSE_B12": "READY one-time $119; membership $149 LOCKED",
+      "SEM_ANY_DOSE_GLYCINE": "READY one-time $119; membership $149 LOCKED",
+      "SEM_3_MONTH": "OWNER_CHOICE \u2014 escalation $339 vs same-dose\u00d73 $359 (B12); Glycine 3-month DEFERRED_FORMULARY",
+      "SEM_MEMBERSHIP": "$149 \u2014 LOCKED",
+      "TIRZ_MEMBERSHIP": "$275 \u2014 LOCKED",
+      "MULTIPLE_COST_BASIS_REMAINING": 17,
+      "MISSING_LIVE_COST_REMAINING": 4,
+      "AGENTS_MD_PRICING_RULE_MERGED": "YES",
+      "GEN_MODIFIED": "NO",
+      "GEN_WRITES": 0,
+      "WEBSITE_MODIFIED": "NO",
+      "GEN_WHOP_CUTOVER": "OFF"
     }
   }
 }

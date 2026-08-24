@@ -1,0 +1,484 @@
+{
+  "version": "gen-catalog-1f-owner-approval-plan",
+  "generated_at": "2026-08-24T06:53:00Z",
+  "mode": "READ_ONLY",
+  "phase": "GEN-CATALOG-1F",
+  "sources": [
+    "docs/GEN_OWNER_DECISION_SHEET.md",
+    "docs/GEN_OWNER_DECISION_SHEET.json",
+    "docs/GEN_OWNER_APPROVAL_REPORT.md",
+    "docs/GEN_CLIENT_PRODUCT_BLUEPRINT.md"
+  ],
+  "numberingClarification": "Owner message \"DECISION #10 \u2014 TIRZEPATIDE STRUCTURE\" refers to the Tirzepatide B12 vs Glycine KEEP SEPARATE structural policy (from GEN-CATALOG-1D). In docs/GEN_OWNER_DECISION_SHEET.md, Decision #10 is \"Sildenafil \u2014 Unspecified\" (still unresolved). Decision #12 covers Tirzepatide/B12/Glycine and Tirzepatide/Glycine/B12 ambiguous labels and remains owner review.",
+  "cleanupApprovals": [
+    {
+      "item": "Add Sync",
+      "action": "DEACTIVATE",
+      "status": "APPROVED",
+      "writeExecuted": false
+    },
+    {
+      "item": "Metformin (Metabolic / Weight Support)",
+      "action": "DEACTIVATE",
+      "status": "APPROVED",
+      "ownerRule": "DO NOT ADD METFORMIN",
+      "writeExecuted": false
+    },
+    {
+      "item": "Metformin / Topiramate",
+      "action": "DEACTIVATE",
+      "status": "APPROVED",
+      "ownerRule": "DO NOT ADD METFORMIN",
+      "writeExecuted": false
+    },
+    {
+      "item": "BPC-157 (Copy 1)",
+      "action": "MERGE_THEN_DEACTIVATE",
+      "mergeInto": {
+        "name": "BPC-157 Injection",
+        "productId": "KXMm9SsbOEYnFy9phmZn"
+      },
+      "status": "APPROVED",
+      "writeExecuted": false
+    }
+  ],
+  "approvedDecisions": [
+    {
+      "decisionNumber": 1,
+      "product": "Semaglutide Injection \u2014 Mid (B12)",
+      "ownerChoice": "A",
+      "ownerInstruction": "APPROVE creation/retention of a separate Mid B12 client product so the B12 ladder contains Starting/Low, Mid, High, Any Dose and 3-Month as applicable.",
+      "status": "APPROVED"
+    }
+  ],
+  "structuralApprovals": [
+    {
+      "label": "TIRZEPATIDE STRUCTURE (owner called this Decision #10)",
+      "sheetDecisionNumber": null,
+      "note": "Sheet Decision #10 is actually \"Sildenafil \u2014 Unspecified\" and remains UNRESOLVED. Owner approval applies to Tirzepatide B12 vs Glycine ladder separation (1D KEEP SEPARATE policy), NOT to sheet Decision #10.",
+      "ownerInstruction": "APPROVE keeping B12 and Glycine as separate product/dose ladders. Do not combine them.",
+      "explicitlyNotResolved": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12"
+      ],
+      "mapsToSheetDecision": 12,
+      "mapsToSheetDecisionStatus": "REMAINS_OWNER_REVIEW",
+      "status": "APPROVED_STRUCTURAL_POLICY"
+    }
+  ],
+  "unresolvedDecisions": [
+    {
+      "decisionNumber": 2,
+      "productFamily": "Recovery & Performance",
+      "product": "5-Amino Injectable",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "5-Amino Injectable"
+      ],
+      "proposedProducts": [
+        "5-Amino Injectable"
+      ],
+      "exactOptionA": "Keep injectable 5-Amino-1MQ product; pair only to injectable formulary once confirmed.",
+      "exactOptionB": "Reclassify as capsule product and use capsule formulary only if that is the intended offer.",
+      "formularyOptionA": "Injectable 5-Amino-1MQ formulary (confirm exact row)",
+      "formularyOptionB": "Capsule proposal: 5-Amino capsules 50mg",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: Injectable 5-Amino-1MQ formulary (confirm exact row) | B: Capsule proposal: 5-Amino capsules 50mg || Review `5-Amino Injectable`: cand1=5-Amino capsules 50mg @ Greenwich Pharmacy (50mg, form=None, pkg=1EA, cost=2.6, ship=25, landed=27.6)",
+      "whyDecisionExists": "Name is injectable; workbook proposal is capsule.",
+      "cursorStructuralRecommendation": "A \u2014 do not pair injectable-named product to capsule row.",
+      "masterProducts": [
+        "5-Amino Injectable"
+      ],
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "5-Amino Injectable"
+      ],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 3,
+      "productFamily": "Other",
+      "product": "Accelerate & Thrive",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Accelerate & Thrive"
+      ],
+      "proposedProducts": [
+        "Accelerate & Thrive"
+      ],
+      "exactOptionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "exactOptionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: Split into distinct CPs (see masters in JSON) | B: Keep catch-all (not recommended)",
+      "whyDecisionExists": "Over-collapsed catch-all (31 masters; signals=['combo', 'kisspeptin']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "cursorStructuralRecommendation": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "masterProducts": [
+        "Accelerate & Thrive",
+        "ARA-290 Neuroprotection & Nerve Repair Protocol",
+        "BAM-15 Mitochondrial Uncoupler Protocol",
+        "Elite Body Recomp",
+        "Elite Regenesis",
+        "Kisspeptin-10",
+        "KPV Anti-Inflammatory Gut & Systemic Protocol",
+        "Lean & Energized",
+        "Lean & Ready",
+        "Lean & Timeless",
+        "Melanotan 2 Tanning & Sexual Health Protocol",
+        "PE-22-28",
+        "PE-22-28 Antidepressant & Cognitive Protocol",
+        "Peak Performance",
+        "Peptides \u2013 Kisspeptin-10",
+        "Performance \u2013 Oxandrolone (High Dose)",
+        "Performance \u2013 Oxandrolone (Low Dose)",
+        "Performance \u2013 Stanozolol",
+        "Power & Recovery",
+        "Sculpt & Perform",
+        "Slim & Sensational",
+        "Slim & Timeless",
+        "SLU-PP-332 Metabolic & Exercise Mimetic Protocol",
+        "The Ultimate Protocol",
+        "Thyroid Support (BioThyroid)",
+        "Total Transformation",
+        "Vitality & Longevity",
+        "Wellness \u2013 Low-Dose Naltrexone (LDN) Starter",
+        "Wellness \u2013 Low-Dose Naltrexone (LDN) Therapeutic",
+        "Wellness \u2013 MIC-B12 (Lipotropic / Fat Burn)",
+        "Wellness \u2013 MIC-B12 (Lipotropic / Fat Burn)"
+      ],
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 4,
+      "productFamily": "Women's Hormone Therapy",
+      "product": "HRT Other \u2014 Unspecified",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "None matched"
+      ],
+      "proposedProducts": [
+        "HRT Other \u2014 Unspecified"
+      ],
+      "exactOptionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "exactOptionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: Split into distinct CPs (see masters in JSON) | B: Keep catch-all (not recommended)",
+      "whyDecisionExists": "Over-collapsed catch-all (16 masters; signals=['anastrozole', 'clomiphene', 'combo', 'enclomiphene', 'gonadorelin', 'hcg', 'kisspeptin', 'tamoxifen']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "cursorStructuralRecommendation": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "masterProducts": [
+        "Hormone + Intimacy",
+        "Kisspeptin-10 Reproductive Hormone Protocol",
+        "Men's Hormones \u2013 Fertility (Clomiphene)",
+        "Men's Hormones \u2013 Fertility (HCG)",
+        "Men's Hormones \u2013 Gonadorelin",
+        "Men's Hormones \u2013 PCT / Estrogen Blocker (Tamoxifen)",
+        "Men's Hormones (TRT) \u2013 Estrogen Management (Anastrozole)",
+        "Men's Hormones (TRT) \u2013 Fertility / HPTA Support (Enclomiphene)",
+        "Mens HRT/TRT In-Clinic Approval",
+        "Mens TRT/HRT 1 Month Plan",
+        "Mens TRT/HRT 3 Month Plan",
+        "Mens TRT/HRT 6 Month Plan",
+        "Womens HRT GFE In-Clinic Approval",
+        "Womens TRT/HRT 1 Month Plan",
+        "Womens TRT/HRT 3 Month Plan",
+        "Womens TRT/HRT 6 Month Plan"
+      ],
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 5,
+      "productFamily": "Prescription Skin & Hair",
+      "product": "Minoxidil / Hair \u2014 Unspecified",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)"
+      ],
+      "proposedProducts": [
+        "Minoxidil / Hair \u2014 Unspecified"
+      ],
+      "exactOptionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "exactOptionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: Split into distinct CPs (see masters in JSON) | B: Keep catch-all (not recommended)",
+      "whyDecisionExists": "Over-collapsed catch-all (1 masters; signals=['combo', 'finasteride', 'minoxidil']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "cursorStructuralRecommendation": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "masterProducts": [
+        "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)"
+      ],
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 6,
+      "productFamily": "Longevity & Cognitive Health",
+      "product": "NAD+ (Injectable)",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "NAD+ (Injectable)"
+      ],
+      "proposedProducts": [
+        "NAD+ (Injectable)"
+      ],
+      "exactOptionA": "NAD+ Injection = injection formulary only.",
+      "exactOptionB": "NAD+ Nasal Spray = separate product; do not cross-pair.",
+      "formularyOptionA": "Confirm injectable NAD+ formulary",
+      "formularyOptionB": "Nasal proposal: NAD+ 50mg/ml",
+      "priceCostDifference": "Landed A=60 vs B=75",
+      "formularyPharmacyDifference": "A: Confirm injectable NAD+ formulary | B: Nasal proposal: NAD+ 50mg/ml || Review `NAD+ (Injectable)`: cand1=NAD+ 50mg/ml @ St Luke (50mg/ml, form=Nasal Spray, pkg=15ml, cost=30, ship=30, landed=60); cand2=NAD+ 200mg/ml @ St Luke (200mg/ml, form=Nasal Spray, pkg=15ml, cost=45, ship=30, landed=75)",
+      "whyDecisionExists": "Injectable NAD+ row carries nasal spray form/proposal.",
+      "cursorStructuralRecommendation": "Use both as separate products (split by delivery form).",
+      "masterProducts": [
+        "NAD+ (Injectable)"
+      ],
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "NAD+ (Injectable)"
+      ],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 7,
+      "productFamily": "Sexual Wellness",
+      "product": "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone"
+      ],
+      "proposedProducts": [
+        "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone"
+      ],
+      "exactOptionA": "Approve one exact cream formulary under one FUTURE_HIDDEN Scream Cream product.",
+      "exactOptionB": "Defer Scream Cream until exact formulation is confirmed.",
+      "formularyOptionA": "Sildenafil/Testosterone 120mg/22mg",
+      "formularyOptionB": "Alternate cream variants / defer",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: Sildenafil/Testosterone 120mg/22mg | B: Alternate cream variants / defer || Review `Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone`: cand1=Sildenafil/Testosterone 120mg/22mg @ St Luke (120mg/22mg, form=Troche, pkg=Each, cost=2.75, ship=30, landed=32.75)",
+      "whyDecisionExists": "Exact Scream Cream composition/pharmacy still needs owner confirmation (variants exist).",
+      "cursorStructuralRecommendation": "None \u2014 not enough evidence (no clinical call).",
+      "masterProducts": [
+        "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone"
+      ],
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone"
+      ],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 8,
+      "productFamily": "Sexual Wellness",
+      "product": "Sildenafil (3 Month)",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Sildenafil (3 Month)"
+      ],
+      "proposedProducts": [
+        "Sildenafil (3 Month)"
+      ],
+      "exactOptionA": "Pair only to Sildenafil tablet/capsule formulary; keep Scream Cream separate.",
+      "exactOptionB": "Rename these offers to Scream Cream programs if cream is truly intended.",
+      "formularyOptionA": "SILDENAFIL tablet/capsule formulary (e.g. VitaScripts 100 mg)",
+      "formularyOptionB": "Sildenafil/Testosterone 120mg/22mg",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: SILDENAFIL tablet/capsule formulary (e.g. VitaScripts 100 mg) | B: Sildenafil/Testosterone 120mg/22mg || Review `Sildenafil (3 Month)`: cand1=Sildenafil/Testosterone 120mg/22mg @ St Luke (120mg/22mg, form=Troche, pkg=Each, cost=2.75, ship=30, landed=32.75)",
+      "whyDecisionExists": "Sildenafil-named product proposed to Scream Cream formulary.",
+      "cursorStructuralRecommendation": "A \u2014 no silent Scream Cream substitution under Sildenafil name.",
+      "masterProducts": [
+        "Sildenafil (3 Month)"
+      ],
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "Sildenafil (3 Month)"
+      ],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 9,
+      "productFamily": "Sexual Wellness",
+      "product": "Sildenafil (6 Month)",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Sildenafil (6 Month)"
+      ],
+      "proposedProducts": [
+        "Sildenafil (6 Month)"
+      ],
+      "exactOptionA": "Pair only to Sildenafil tablet/capsule formulary; keep Scream Cream separate.",
+      "exactOptionB": "Rename these offers to Scream Cream programs if cream is truly intended.",
+      "formularyOptionA": "SILDENAFIL tablet/capsule formulary (e.g. VitaScripts 100 mg)",
+      "formularyOptionB": "Sildenafil/Testosterone 120mg/22mg",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: SILDENAFIL tablet/capsule formulary (e.g. VitaScripts 100 mg) | B: Sildenafil/Testosterone 120mg/22mg || Review `Sildenafil (6 Month)`: cand1=Sildenafil/Testosterone 120mg/22mg @ St Luke (120mg/22mg, form=Troche, pkg=Each, cost=2.75, ship=30, landed=32.75)",
+      "whyDecisionExists": "Sildenafil-named product proposed to Scream Cream formulary.",
+      "cursorStructuralRecommendation": "A \u2014 no silent Scream Cream substitution under Sildenafil name.",
+      "masterProducts": [
+        "Sildenafil (6 Month)"
+      ],
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "Sildenafil (6 Month)"
+      ],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 10,
+      "productFamily": "Sexual Wellness",
+      "product": "Sildenafil \u2014 Unspecified",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "ED \u2013 Caffeine / Sildenafil (Performance Boost)"
+      ],
+      "proposedProducts": [
+        "Sildenafil \u2014 Unspecified"
+      ],
+      "exactOptionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "exactOptionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: Split into distinct CPs (see masters in JSON) | B: Keep catch-all (not recommended)",
+      "whyDecisionExists": "Over-collapsed catch-all (5 masters; signals=['combo', 'sildenafil', 'tadalafil']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "cursorStructuralRecommendation": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "masterProducts": [
+        "ED \u2013 Caffeine / Sildenafil (Performance Boost)",
+        "ED \u2013 Sildenafil (On-Demand)",
+        "ED \u2013 Sildenafil / Tadalafil Combo",
+        "Sildenafil",
+        "Tadalafil+Sildenafil"
+      ],
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 11,
+      "productFamily": "Sexual Wellness",
+      "product": "Tadalafil \u2014 Unspecified",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "ED \u2013 Tadalafil (Daily / Low Dose)"
+      ],
+      "proposedProducts": [
+        "Tadalafil \u2014 Unspecified"
+      ],
+      "exactOptionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "exactOptionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: Split into distinct CPs (see masters in JSON) | B: Keep catch-all (not recommended)",
+      "whyDecisionExists": "Over-collapsed catch-all (4 masters; signals=['combo', 'tadalafil', 'vardenafil']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "cursorStructuralRecommendation": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "masterProducts": [
+        "ED \u2013 Tadalafil (Daily / Low Dose)",
+        "ED \u2013 Tadalafil (On-Demand / High Dose)",
+        "Tadalafil",
+        "Vardenafil+Tadalafil+Apormorphine"
+      ],
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 12,
+      "productFamily": "Weight Management",
+      "product": "Tirzepatide Injection \u2014 B12+Glycine (ambiguous)",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "None matched"
+      ],
+      "proposedProducts": [
+        "Tirzepatide Injection \u2014 B12+Glycine (ambiguous)"
+      ],
+      "exactOptionA": "Treat as Glycine-ladder products (rename) and attach Glycine vials only.",
+      "exactOptionB": "Split into separate B12 and Glycine Tirzepatide products, or reject both labels until clarified.",
+      "formularyOptionA": "TIRZEPATIDE + GLYCINE vials (Dirx-Hub)",
+      "formularyOptionB": "Separate B12 + Glycine ladders (or reject)",
+      "priceCostDifference": "Landed A=70 vs B=70",
+      "formularyPharmacyDifference": "A: TIRZEPATIDE + GLYCINE vials (Dirx-Hub) | B: Separate B12 + Glycine ladders (or reject) || Review `Tirzepatide/B12/Glycine`: cand1=TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL) @ Dirx-Hub (5mg/0.5mg/mL, form=Vial, pkg=2mL, cost=65, ship=5, landed=70); cand2=TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL) @ Dirx-Hub (5mg/0.5mg/mL, form=Vial, pkg=2mL, cost=65, ship=5, landed=70) || Review `Tirzepatide/Glycine/B12`: cand1=TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL) @ Dirx-Hub (5mg/0.5mg/mL, form=Vial, pkg=2mL, cost=65, ship=5, landed=70); cand2=TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL) @ Dirx-Hub (5mg/0.5mg/mL, form=Vial, pkg=2mL, cost=65, ship=5, landed=70)",
+      "whyDecisionExists": "Labels claim both B12 and Glycine, but proposed/selected context is Glycine-only. Silent choice would mis-label additive.",
+      "cursorStructuralRecommendation": "None \u2014 not enough evidence (no clinical call).",
+      "masterProducts": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12"
+      ],
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12"
+      ],
+      "status": "UNRESOLVED"
+    },
+    {
+      "decisionNumber": 13,
+      "productFamily": "Prescription Skin & Hair",
+      "product": "Tretinoin / Skin \u2014 Unspecified",
+      "liveOrFuture": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Finasteride, Tretinoin, Fluocinolone, VitaminE"
+      ],
+      "proposedProducts": [
+        "Tretinoin / Skin \u2014 Unspecified"
+      ],
+      "exactOptionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "exactOptionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceCostDifference": "\u2014",
+      "formularyPharmacyDifference": "A: Split into distinct CPs (see masters in JSON) | B: Keep catch-all (not recommended)",
+      "whyDecisionExists": "Over-collapsed catch-all (3 masters; signals=['combo', 'finasteride', 'minoxidil', 'spray', 'tretinoin']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "cursorStructuralRecommendation": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "masterProducts": [
+        "Finasteride, Tretinoin, Fluocinolone, VitaminE",
+        "Hair Loss - Minoxdil/Tretinoin/Fluocinolone/Finasteride Spray",
+        "Hair Loss \u2013 Triple Combo (Finasteride/Minoxidil/Tretinoin)"
+      ],
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "status": "UNRESOLVED"
+    }
+  ],
+  "summary": {
+    "OWNER_DECISIONS_APPROVED": 1,
+    "OWNER_DECISIONS_APPROVED_DETAIL": [
+      "#1 Semaglutide Mid (B12) \u2192 Option A"
+    ],
+    "STRUCTURAL_POLICIES_APPROVED": 1,
+    "STRUCTURAL_POLICIES_APPROVED_DETAIL": [
+      "Tirzepatide B12 and Glycine remain separate product/dose ladders (do not combine)"
+    ],
+    "OWNER_DECISIONS_REMAINING": 12,
+    "OWNER_DECISIONS_REMAINING_NUMBERS": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "CLEANUP_APPROVED": 4,
+    "TRUE_UNIQUE_DECISIONS_REMAINING": 12,
+    "AMBIGUOUS_TIR_LABELS_STATUS": "REMAINS_OWNER_REVIEW",
+    "GEN_MODIFIED": "NO",
+    "GEN_WRITES": 0,
+    "GEN_WHOP_CUTOVER": "OFF",
+    "PRODUCTION_WEBSITE_MODIFIED": "NO",
+    "NEXT": "STOP \u2014 do not run GEN-CATALOG-2"
+  }
+}

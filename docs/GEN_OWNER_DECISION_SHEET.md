@@ -79,7 +79,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **RECOMMENDED STRUCTURAL CHOICE:** A — keeps dose-ladder symmetry with live Glycine Mid; supported by selected Mid B12 vial coverage.
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1F)** — retain Mid B12 CP; B12 ladder = Starting/Low, Mid, High, Any Dose, 3-Month as applicable
 - [ ] B
 - [ ] OTHER
 
@@ -526,8 +526,10 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 Confirm primary BPC: **BPC-157 Injection** / `KXMm9SsbOEYnFy9phmZn`
 
 **Owner cleanup approval:**
-- [ ] Approve cleanup list (still no GEN writes)
+- [x] Approve cleanup list (still no GEN writes) — **APPROVED (GEN-CATALOG-1F)**
 - [ ] Hold
+
+**Structural policy recorded (GEN-CATALOG-1F):** Tirzepatide B12 and Glycine remain **separate** product/dose ladders (do not combine). Ambiguous labels `Tirzepatide/B12/Glycine` and `Tirzepatide/Glycine/B12` (**Decision #12**) remain owner review. Sheet Decision #10 (Sildenafil — Unspecified) is **not** covered by that structural approval.
 
 ---
 

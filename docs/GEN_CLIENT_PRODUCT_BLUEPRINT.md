@@ -7,6 +7,8 @@
 
 Machine-readable: `docs/GEN_CLIENT_PRODUCT_BLUEPRINT.json`
 
+> **GEN-CATALOG-1D:** Owner approval + sanity check → `docs/GEN_OWNER_APPROVAL_REPORT.md`
+
 ---
 
 ## Final summary

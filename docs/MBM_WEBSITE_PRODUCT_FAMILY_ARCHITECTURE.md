@@ -494,6 +494,12 @@ _Summary:_ 1 variants — see JSON for full routing rows.
 
 ---
 
+
+
+### Routing completion gate (MBM-GEN-ROUTING-COMPLETION-GATE-1)
+
+Updated routing + execution queues (read-only): `docs/MBM_WEBSITE_TO_GEN_ROUTING_MATRIX.md` · `docs/MBM_GEN_ROUTING_EXECUTION_QUEUE.md`
+
 **STOP FOR OWNER REVIEW.**
 
 Do not execute website changes yet. Do not execute GEN changes yet. Do not create new pairings yet. Do not start GEN-CATALOG-2B.

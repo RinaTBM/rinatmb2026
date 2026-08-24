@@ -1,5 +1,10 @@
 # GEN Catalog Import Plan (GEN-CATALOG-1B)
 
+> **GEN-CATALOG-1C update:** Stop treating 253 master rows as 253 patient-facing GEN products.
+> Use `docs/GEN_CLIENT_PRODUCT_BLUEPRINT.md` (+ `.json`) as the client-product architecture + owner decision queue.
+> This import plan remains the prior row-level classification archive.
+
+
 **Mode:** READ-ONLY — no POST / PATCH / DELETE
 **Phase:** GEN-CATALOG-1B — Normalize existing GEN products + resolve review queue
 **Branch:** `cursor/gen-catalog-1-import-plan-945c`

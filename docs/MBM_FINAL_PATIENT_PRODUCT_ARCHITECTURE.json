@@ -47,7 +47,8 @@
     "live_future_owner_approval": "PENDING",
     "live_map_lock_at": "2026-08-24T21:31:06Z",
     "launch_model": "3-STATE",
-    "prior_binary_live_future": "SUPERSEDED"
+    "prior_binary_live_future": "SUPERSEDED",
+    "formulary_recon_1_at": "2026-08-24T21:40:56Z"
   },
   "sem_tiers_owner_defined": {
     "Starting / Low": [
@@ -6105,7 +6106,8 @@
       "formulary_status": "FORMULARY_RECONCILIATION_REQUIRED",
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "No exact SELECTED match \u2014 do not invent; keep offered",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
     },
     {
       "id": "website-current-testosterone-cream",
@@ -6135,7 +6137,8 @@
       "formulary_status": "FORMULARY_RECONCILIATION_REQUIRED",
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "Keep as Testosterone Cream CURRENT_LIVE \u2014 Custom HRT Cream moved to FUTURE_HIDDEN",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
     },
     {
       "id": "website-current-selank",
@@ -6165,7 +6168,8 @@
       "formulary_status": "FORMULARY_RECONCILIATION_REQUIRED",
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "SELECTED has Selank Nasal Spray only (FUTURE_HIDDEN) \u2014 no injection row",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
     },
     {
       "id": "website-current-semax",
@@ -6195,7 +6199,8 @@
       "formulary_status": "FORMULARY_RECONCILIATION_REQUIRED",
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "SELECTED has Semax Nasal Spray only (FUTURE_HIDDEN) \u2014 no injection row",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
     },
     {
       "id": "website-current-selank-semax-nasal-spray",
@@ -6225,7 +6230,8 @@
       "formulary_status": "FORMULARY_RECONCILIATION_REQUIRED",
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "No SELECTED blend row (separate nasal sprays are FUTURE_HIDDEN)",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
     },
     {
       "id": "website-current-tesamorelin",
@@ -6255,7 +6261,8 @@
       "formulary_status": "FORMULARY_RECONCILIATION_REQUIRED",
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "No plain Tesamorelin in SELECTED (MOTS-c/Tesamorelin blend is FUTURE_HIDDEN)",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "FORMULATION_CONFLICT"
     },
     {
       "id": "website-current-minoxidil-topical",
@@ -6285,7 +6292,8 @@
       "formulary_status": "FORMULARY_RECONCILIATION_REQUIRED",
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "Not Minoxidil Solution (now FUTURE_HIDDEN). Closer to FUTURE Finasteride/Minoxidil topicals",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "MULTIPLE_VALID_OPTIONS"
     },
     {
       "id": "website-current-bimatoprost-solution",
@@ -6315,7 +6323,8 @@
       "formulary_status": "FORMULARY_RECONCILIATION_REQUIRED",
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "Architecture placeholder FUTURE_HIDDEN until source match \u2014 website stays CURRENT_LIVE",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
     }
   ],
   "owner_decisions": {
@@ -6552,7 +6561,10 @@
         "architecture_ids": [],
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
-        "checkout_until_cutover": "ON"
+        "checkout_until_cutover": "ON",
+        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
+        "owner_decision_needed": true
       },
       {
         "product": "Estradiol Patch",
@@ -6610,7 +6622,10 @@
         "architecture_ids": [],
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
-        "checkout_until_cutover": "ON"
+        "checkout_until_cutover": "ON",
+        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
+        "owner_decision_needed": true
       },
       {
         "product": "NAD+ Injection",
@@ -6648,7 +6663,10 @@
         "architecture_ids": [],
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
-        "checkout_until_cutover": "ON"
+        "checkout_until_cutover": "ON",
+        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
+        "owner_decision_needed": true
       },
       {
         "product": "Semax Injection",
@@ -6666,7 +6684,10 @@
         "architecture_ids": [],
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
-        "checkout_until_cutover": "ON"
+        "checkout_until_cutover": "ON",
+        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
+        "owner_decision_needed": true
       },
       {
         "product": "Selank + Semax Blend Nasal Spray",
@@ -6684,7 +6705,10 @@
         "architecture_ids": [],
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
-        "checkout_until_cutover": "ON"
+        "checkout_until_cutover": "ON",
+        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
+        "owner_decision_needed": true
       },
       {
         "product": "Tesamorelin Injection",
@@ -6702,7 +6726,10 @@
         "architecture_ids": [],
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
-        "checkout_until_cutover": "ON"
+        "checkout_until_cutover": "ON",
+        "formulary_reconciliation_status": "FORMULATION_CONFLICT",
+        "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
+        "owner_decision_needed": true
       },
       {
         "product": "Wolverine: BPC-157/TB-500",
@@ -6761,7 +6788,10 @@
         "architecture_ids": [],
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
-        "checkout_until_cutover": "ON"
+        "checkout_until_cutover": "ON",
+        "formulary_reconciliation_status": "MULTIPLE_VALID_OPTIONS",
+        "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
+        "owner_decision_needed": true
       },
       {
         "product": "Lash/Brow Growth Serum",
@@ -6781,7 +6811,10 @@
         ],
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
-        "checkout_until_cutover": "ON"
+        "checkout_until_cutover": "ON",
+        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
+        "owner_decision_needed": true
       },
       {
         "product": "Semaglutide Membership / SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
@@ -7604,6 +7637,152 @@
         "gen_status": "NEW_REQUIRED",
         "formulary_status": "FUTURE / not for immediate cutover",
         "cutover_action": "KEEP_HIDDEN"
+      }
+    ]
+  },
+  "formulary_reconciliation_1": {
+    "generated_at": "2026-08-24T21:40:56Z",
+    "status": "OWNER_REVIEW",
+    "launch_map_changed": false,
+    "report": "docs/MBM_CURRENT_LIVE_FORMULARY_RECONCILIATION.md",
+    "final_report": {
+      "CURRENT_LIVE_RECONCILIATION_PRODUCTS": 8,
+      "EXACT_FORMULARY_MATCH": 0,
+      "VERIFIED_RENAME_MATCH": 0,
+      "VERIFIED_STRUCTURE_CHANGE": 0,
+      "MULTIPLE_VALID_OPTIONS": 1,
+      "NO_SELECTED_FORMULARY_MATCH": 6,
+      "FORMULATION_CONFLICT": 1,
+      "READY_WITHOUT_OWNER_DECISION": 0,
+      "OWNER_DECISIONS_REQUIRED": 8,
+      "MISSING_FORMULARY_PRODUCTS": [
+        "AOD-9604 + MOTS-C + Tesamorelin triple (website Fat Burner identity)",
+        "Testosterone Cream 5mg/g (dedicated)",
+        "Selank Injection",
+        "Semax Injection",
+        "Selank + Semax combined Nasal Spray",
+        "Plain Tesamorelin Injection",
+        "Bimatoprost / Lash-Brow solution in SELECTED"
+      ],
+      "FAT_BURNER": "NO_SELECTED_FORMULARY_MATCH",
+      "TESTOSTERONE_CREAM": "NO_SELECTED_FORMULARY_MATCH",
+      "SELANK_INJECTION": "NO_SELECTED_FORMULARY_MATCH",
+      "SEMAX_INJECTION": "NO_SELECTED_FORMULARY_MATCH",
+      "SELANK_SEMAX_NASAL": "NO_SELECTED_FORMULARY_MATCH",
+      "TESAMORELIN": "FORMULATION_CONFLICT",
+      "MINOXIDIL_COMBINATION": "MULTIPLE_VALID_OPTIONS",
+      "LASH_BROW": "NO_SELECTED_FORMULARY_MATCH",
+      "GEN_OBJECTS_PROTECTED_FROM_DEACTIVATION": 13,
+      "LAUNCH_MAP_CHANGED": "NO",
+      "GEN_MODIFIED": "NO",
+      "GEN_WRITES": 0,
+      "WEBSITE_MODIFIED": "NO",
+      "GEN_WHOP_CUTOVER": "OFF"
+    },
+    "protected_gen_objects": [
+      {
+        "gen_id": "7Kix55LA15U0lNvY9QXI",
+        "gen_name": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "REUSE_RENAME",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Fat Burner"
+      },
+      {
+        "gen_id": "yearpPaLo5H0k0FU5Ej8",
+        "gen_name": "AOD-9604 / MOTS-C / Tesamorelin Metabolic Triple Protocol",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Fat Burner"
+      },
+      {
+        "gen_id": "PRIG7DYPNNgco3lGf1zx",
+        "gen_name": "AOD-9604",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Fat Burner"
+      },
+      {
+        "gen_id": "Gn4XaP00anr4q9oheSTe",
+        "gen_name": "Men's Hormones (TRT) \u2013 Testosterone Cream",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Testosterone Cream"
+      },
+      {
+        "gen_id": "Ukctbyh5Yrek3SnGSYA3",
+        "gen_name": "Selank Anxiolytic & Cognitive Protocol",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Selank Injection"
+      },
+      {
+        "gen_id": "YTHcdrlRICMpt56hdxeJ",
+        "gen_name": "Semax Nootropic & Neuroprotective Protocol",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Semax Injection"
+      },
+      {
+        "gen_id": "LWkYtwm66dIeLuDSvSfi",
+        "gen_name": "Semax / Selank Neuro & Cognitive Protocol",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "REUSE_RENAME",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Selank + Semax Blend Nasal Spray"
+      },
+      {
+        "gen_id": "2cYxVfvwpWyyrANZx06G",
+        "gen_name": "Peptides \u2013 Tesamorelin (Growth Hormone)",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Tesamorelin Injection"
+      },
+      {
+        "gen_id": "xSlOHrUWKRkKvzCGcsYc",
+        "gen_name": "Tesamorelin Growth Hormone Protocol",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Tesamorelin Injection"
+      },
+      {
+        "gen_id": "BboYS4a2Uj7APetrFo6W",
+        "gen_name": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "REUSE_RENAME",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Minoxidil Combination Topical Formula"
+      },
+      {
+        "gen_id": "7sX9dhAxA6i21Jg1swrK",
+        "gen_name": "Hair Loss \u2013 Triple Combo (Finasteride/Minoxidil/Tretinoin)",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Minoxidil Combination Topical Formula"
+      },
+      {
+        "gen_id": "Raw7mUkuzzhVdAo88jpL",
+        "gen_name": "Hair Loss \u2013 Minoxidil (Topical)",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Minoxidil Combination Topical Formula"
+      },
+      {
+        "gen_id": "xKwPWxhRXlcoUonBXpg9",
+        "gen_name": "Hair Loss - Minoxdil/Tretinoin/Fluocinolone/Finasteride Spray",
+        "was_in_153_deactivate_candidates": false,
+        "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+        "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+        "supports_website_product": "Minoxidil Combination Topical Formula"
       }
     ]
   }

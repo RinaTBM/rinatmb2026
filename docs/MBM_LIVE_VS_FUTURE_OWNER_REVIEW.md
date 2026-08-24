@@ -227,6 +227,26 @@ Explicitly remain FUTURE (do not activate):
 
 ---
 
+
+---
+
+## Formulary reconciliation status (MBM-FORMULARY-RECON-1)
+
+Launch states above are **unchanged**. Status only:
+
+| Product | Classification | Owner decision? |
+|---|---|---|
+| Fat Burner | NO_SELECTED_FORMULARY_MATCH | YES |
+| Testosterone Cream | NO_SELECTED_FORMULARY_MATCH | YES |
+| Selank Injection | NO_SELECTED_FORMULARY_MATCH | YES |
+| Semax Injection | NO_SELECTED_FORMULARY_MATCH | YES |
+| Selank + Semax Blend Nasal Spray | NO_SELECTED_FORMULARY_MATCH | YES |
+| Tesamorelin Injection | FORMULATION_CONFLICT | YES |
+| Minoxidil Combination Topical Formula | MULTIPLE_VALID_OPTIONS | YES |
+| Lash/Brow Growth Serum | NO_SELECTED_FORMULARY_MATCH | YES |
+
+Full report: `docs/MBM_CURRENT_LIVE_FORMULARY_RECONCILIATION.md`
+
 ## FINAL REPORT
 
 - **CURRENT_LIVE:** 17 (15 website medications + 2 memberships)

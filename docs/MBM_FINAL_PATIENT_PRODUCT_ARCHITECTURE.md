@@ -18,6 +18,22 @@
 | Custom HRT Cream / BPC-TB-GHK / Minoxidil Solution | **FUTURE_HIDDEN** |
 | PT-141 Nasal / Scream Cream | **FUTURE_HIDDEN** |
 
+
+### Formulary reconciliation (MBM-FORMULARY-RECON-1) — 2026-08-24T21:40:56Z
+
+8 CURRENT_LIVE products previously `FORMULARY_RECONCILIATION_REQUIRED` were reviewed against SELECTED FORMULARY.
+
+| Result | Count |
+|---|---:|
+| EXACT_FORMULARY_MATCH | 0 |
+| MULTIPLE_VALID_OPTIONS | 1 (Minoxidil Combination) |
+| FORMULATION_CONFLICT | 1 (Tesamorelin) |
+| NO_SELECTED_FORMULARY_MATCH | 6 |
+| Owner decisions required | 8 |
+| Launch map changed | **NO** |
+
+Details: `docs/MBM_CURRENT_LIVE_FORMULARY_RECONCILIATION.md`
+
 **Full 3-state launch table:** `docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md`
 
 | State | Count |

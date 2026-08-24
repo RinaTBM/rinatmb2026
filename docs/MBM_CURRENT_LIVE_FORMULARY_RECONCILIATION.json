@@ -1,0 +1,782 @@
+{
+  "meta": {
+    "generated_at": "2026-08-24T21:40:56Z",
+    "phase": "MBM-FORMULARY-RECON-1",
+    "mode": "READ-ONLY",
+    "launch_map_changed": false,
+    "gen_modified": false,
+    "gen_writes": 0,
+    "website_modified": false,
+    "gen_whop_cutover": "OFF",
+    "workbook": "MyBareMethod_FINAL_GEN.xlsx",
+    "website_source": "src/data/products.ts",
+    "locked_launch_architecture": {
+      "CURRENT_LIVE": 17,
+      "LAUNCH_WITH_WEBSITE_CUTOVER": 16,
+      "FUTURE_HIDDEN": 32,
+      "TOTAL": 65
+    }
+  },
+  "products": [
+    {
+      "id": "fat-burner",
+      "product": "Fat Burner",
+      "website": {
+        "display_name": "Fat Burner",
+        "slug": "fat-burner",
+        "description": "AOD-9604 + MOTS-C + Tesamorelin compounded injection",
+        "form": "Injection",
+        "active_ingredients": [
+          "AOD-9604",
+          "MOTS-C",
+          "Tesamorelin"
+        ],
+        "formulation": "AOD-9604 6mg (1.2mg/mL) / MOTS-C 10mg (2mg/mL) / Tesamorelin 15mg (3mg/mL) in 5mL",
+        "price": 259,
+        "internal_notes": "Owner-approved retail $259 (at-cost $150). SKU MBM-WM-FB3-INJ-001. Not SLU-PP-332. No Ipamorelin."
+      },
+      "selected_formulary_match": null,
+      "selected_related_but_not_match": [
+        {
+          "excel_row": 112,
+          "exact": "MOTS-C 2mg/mL",
+          "note": "MOTS-C only \u2014 missing AOD-9604 and Tesamorelin"
+        },
+        {
+          "excel_row": 113,
+          "exact": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+          "note": "Missing AOD-9604; different ratios vs website 2mg/mL MOTS-C + 3mg/mL Tesamorelin in different total amounts"
+        }
+      ],
+      "pharmacy": null,
+      "gen_match": {
+        "candidates": [
+          {
+            "gen_id": "7Kix55LA15U0lNvY9QXI",
+            "gen_name": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+            "gen_price": 199,
+            "pairing": "AOD 9604 only @ Optimal Balance \u2014 NOT full triple",
+            "classification_bucket": "REUSE_RENAME"
+          },
+          {
+            "gen_id": "yearpPaLo5H0k0FU5Ej8",
+            "gen_name": "AOD-9604 / MOTS-C / Tesamorelin Metabolic Triple Protocol",
+            "gen_price": 219,
+            "pairing": "AOD 9604 / MOTS-C / Tesamorelin / Ipamorelin @ Optimal Balance \u2014 includes Ipamorelin (NOT on website)",
+            "classification_bucket": "AMBIGUOUS_DO_NOT_TOUCH"
+          }
+        ],
+        "note": "GEN/SMART often points at Ipamorelin quad. Website Fat Burner is 3-ingredient WITHOUT Ipamorelin. Do not auto-map."
+      },
+      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "current_price": 259,
+      "new_price": null,
+      "pricing": null,
+      "owner_decision_needed": true,
+      "owner_decision": "Provide/select a SELECTED FORMULARY row for AOD-9604 + MOTS-C + Tesamorelin (no Ipamorelin) matching website 1.2/2/3 mg/mL in 5mL \u2014 or change website formulation/name to an existing SELECTED identity.",
+      "missing": "SELECTED FORMULARY has no AOD-9604 and no AOD+MOTS-C+Tesamorelin triple. Do not invent from GEN Ipamorelin quad.",
+      "protect_from_deactivation": [
+        {
+          "gen_id": "7Kix55LA15U0lNvY9QXI",
+          "gen_name": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "REUSE_RENAME",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        },
+        {
+          "gen_id": "yearpPaLo5H0k0FU5Ej8",
+          "gen_name": "AOD-9604 / MOTS-C / Tesamorelin Metabolic Triple Protocol",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        },
+        {
+          "gen_id": "PRIG7DYPNNgco3lGf1zx",
+          "gen_name": "AOD-9604",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        }
+      ]
+    },
+    {
+      "id": "testosterone-cream",
+      "product": "Testosterone Cream",
+      "website": {
+        "display_name": "Testosterone Cream",
+        "slug": "testosterone-cream",
+        "description": "Topical testosterone cream for provider-directed hormone therapy",
+        "form": "Cream",
+        "active_ingredients": [
+          "Testosterone"
+        ],
+        "formulation": "5mg/g \u00b7 30g",
+        "price": 79
+      },
+      "selected_formulary_match": null,
+      "selected_related_but_not_match": [
+        {
+          "excel_rows": [
+            68,
+            69,
+            70,
+            71
+          ],
+          "exact": "HRT Cream - 1\u20134 Ingredients (\u2026/Testosterone)",
+          "pharmacy": "St Luke",
+          "cost_range": "25\u201340 + ship 30",
+          "note": "Customizable HRT cream CAN include testosterone as one ingredient, but is NOT a locked Testosterone 5mg/g product. Owner forbade substituting Custom HRT Cream."
+        },
+        {
+          "note": "SELECTED Testosterone Cypionate injections exist \u2014 wrong form (injection \u2260 cream)."
+        },
+        {
+          "note": "Sildenafil/Testosterone troche exists \u2014 wrong form."
+        }
+      ],
+      "pharmacy": null,
+      "gen_match": {
+        "candidates": [
+          {
+            "gen_id": "Gn4XaP00anr4q9oheSTe",
+            "gen_name": "Men's Hormones (TRT) \u2013 Testosterone Cream",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "AMBIGUOUS_DO_NOT_TOUCH"
+          },
+          {
+            "gen_id": "RWtVLDbXlP7rsR31FXmH",
+            "gen_name": "Men's Hormones \u2013 Nandrolone / Testosterone Cream",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "REUSE_RENAME",
+            "note": "Contains Nandrolone \u2014 not a match"
+          }
+        ]
+      },
+      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "current_price": 79,
+      "new_price": null,
+      "pricing": null,
+      "owner_decision_needed": true,
+      "owner_decision": "Add exact Testosterone Cream (strength/package, e.g. 5mg/g 30g) to SELECTED FORMULARY, or explicitly approve mapping to St Luke 1-ingredient HRT cream with a defined testosterone strength.",
+      "missing": "No SELECTED row for Testosterone-only cream at 5mg/g. Custom HRT Cream must not be silently substituted.",
+      "protect_from_deactivation": [
+        {
+          "gen_id": "Gn4XaP00anr4q9oheSTe",
+          "gen_name": "Men's Hormones (TRT) \u2013 Testosterone Cream",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        }
+      ]
+    },
+    {
+      "id": "selank-injection",
+      "product": "Selank Injection",
+      "website": {
+        "display_name": "Selank Injection",
+        "slug": "selank",
+        "form": "Injection",
+        "active_ingredients": [
+          "Selank"
+        ],
+        "formulation": "5mg/mL \u00b7 2mL",
+        "price": 129
+      },
+      "selected_formulary_match": null,
+      "selected_related_but_not_match": [
+        {
+          "excel_row": 119,
+          "exact": "Selank 2.5mg/mL Nasal Spray",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 60,
+          "ship": 25,
+          "note": "NASAL only \u2014 must not map to injection."
+        }
+      ],
+      "pharmacy": null,
+      "gen_match": {
+        "candidates": [
+          {
+            "gen_id": "Ukctbyh5Yrek3SnGSYA3",
+            "gen_name": "Selank Anxiolytic & Cognitive Protocol",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "AMBIGUOUS_DO_NOT_TOUCH"
+          }
+        ]
+      },
+      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "current_price": 129,
+      "new_price": null,
+      "pricing": null,
+      "owner_decision_needed": true,
+      "owner_decision": "Add SELECTED injectable Selank (form + strength + package + pharmacy + cost), or change website product to Selank Nasal Spray (FUTURE_HIDDEN architecture exists).",
+      "missing": "SELECTED has Selank Nasal Spray only. No injectable Selank row.",
+      "protect_from_deactivation": [
+        {
+          "gen_id": "Ukctbyh5Yrek3SnGSYA3",
+          "gen_name": "Selank Anxiolytic & Cognitive Protocol",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        }
+      ]
+    },
+    {
+      "id": "semax-injection",
+      "product": "Semax Injection",
+      "website": {
+        "display_name": "Semax Injection",
+        "slug": "semax",
+        "form": "Injection",
+        "active_ingredients": [
+          "Semax"
+        ],
+        "formulation": "5mg/mL \u00b7 2mL",
+        "price": 129
+      },
+      "selected_formulary_match": null,
+      "selected_related_but_not_match": [
+        {
+          "excel_row": 118,
+          "exact": "Semax 2.5mg/mL Nasal Spray",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 60,
+          "ship": 25,
+          "note": "NASAL only \u2014 must not map to injection."
+        }
+      ],
+      "pharmacy": null,
+      "gen_match": {
+        "candidates": [
+          {
+            "gen_id": "YTHcdrlRICMpt56hdxeJ",
+            "gen_name": "Semax Nootropic & Neuroprotective Protocol",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "AMBIGUOUS_DO_NOT_TOUCH"
+          }
+        ]
+      },
+      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "current_price": 129,
+      "new_price": null,
+      "pricing": null,
+      "owner_decision_needed": true,
+      "owner_decision": "Add SELECTED injectable Semax, or change website product to Semax Nasal Spray.",
+      "missing": "SELECTED has Semax Nasal Spray only. No injectable Semax row.",
+      "protect_from_deactivation": [
+        {
+          "gen_id": "YTHcdrlRICMpt56hdxeJ",
+          "gen_name": "Semax Nootropic & Neuroprotective Protocol",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        }
+      ]
+    },
+    {
+      "id": "selank-semax-nasal",
+      "product": "Selank + Semax Blend Nasal Spray",
+      "website": {
+        "display_name": "Selank + Semax Blend Nasal Spray",
+        "slug": "selank-semax-nasal-spray",
+        "form": "Nasal Spray",
+        "active_ingredients": [
+          "Selank",
+          "Semax"
+        ],
+        "formulation": "50mcg/50mcg per spray \u00b7 10mL",
+        "price": 169
+      },
+      "selected_formulary_match": null,
+      "selected_related_but_not_match": [
+        {
+          "excel_row": 118,
+          "exact": "Semax 2.5mg/mL Nasal Spray",
+          "note": "Semax alone \u2014 not a blend"
+        },
+        {
+          "excel_row": 119,
+          "exact": "Selank 2.5mg/mL Nasal Spray",
+          "note": "Selank alone \u2014 not a blend"
+        }
+      ],
+      "pharmacy": null,
+      "gen_match": {
+        "candidates": [
+          {
+            "gen_id": "LWkYtwm66dIeLuDSvSfi",
+            "gen_name": "Semax / Selank Neuro & Cognitive Protocol",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "REUSE_RENAME"
+          }
+        ]
+      },
+      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "current_price": 169,
+      "new_price": null,
+      "pricing": null,
+      "owner_decision_needed": true,
+      "owner_decision": "Add a SELECTED combined Selank+Semax nasal formulation, or replace website blend with two separate nasal products / remove blend SKU.",
+      "missing": "No combined Selank+Semax nasal row in SELECTED. Separate nasal rows cannot satisfy this product.",
+      "protect_from_deactivation": [
+        {
+          "gen_id": "LWkYtwm66dIeLuDSvSfi",
+          "gen_name": "Semax / Selank Neuro & Cognitive Protocol",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "REUSE_RENAME",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        }
+      ]
+    },
+    {
+      "id": "tesamorelin",
+      "product": "Tesamorelin Injection",
+      "website": {
+        "display_name": "Tesamorelin Injection",
+        "slug": "tesamorelin",
+        "form": "Injection",
+        "active_ingredients": [
+          "Tesamorelin"
+        ],
+        "formulation": "Lyophilized Tesamorelin 10mg total \u00b7 5mg/mL \u00b7 2mL vial",
+        "price": 149,
+        "internal_notes": "Owner-approved retail $149 (at-cost $83.33). SKU MBM-LON-TESA-INJ-001. PLAIN Tesamorelin \u2014 not a blend."
+      },
+      "selected_formulary_match": null,
+      "selected_related_but_not_match": [
+        {
+          "excel_row": 113,
+          "exact": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 79,
+          "ship": 25,
+          "note": "BLEND containing Tesamorelin \u2014 not plain Tesamorelin. Do not map without renaming patient-facing product."
+        }
+      ],
+      "pharmacy": null,
+      "gen_match": {
+        "candidates": [
+          {
+            "gen_id": "2cYxVfvwpWyyrANZx06G",
+            "gen_name": "Peptides \u2013 Tesamorelin (Growth Hormone)",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "AMBIGUOUS_DO_NOT_TOUCH"
+          },
+          {
+            "gen_id": "xSlOHrUWKRkKvzCGcsYc",
+            "gen_name": "Tesamorelin Growth Hormone Protocol",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "AMBIGUOUS_DO_NOT_TOUCH"
+          },
+          {
+            "gen_id": "qMhf4cGNtrnNbBd5tHbD",
+            "gen_name": "Tesamorelin/Ipamorelin",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+            "note": "Blend with Ipamorelin \u2014 not plain"
+          }
+        ]
+      },
+      "classification": "FORMULATION_CONFLICT",
+      "current_price": 149,
+      "new_price": null,
+      "pricing": null,
+      "owner_decision_needed": true,
+      "owner_decision": "Either (A) add plain Tesamorelin to SELECTED, or (B) rename website product to MOTS-c / Tesamorelin blend and accept SELECTED r113 (would become VERIFIED_RENAME_MATCH / STRUCTURE_CHANGE after approval).",
+      "missing": "SELECTED has no plain Tesamorelin. Only MOTS-C/Tesamorelin blend.",
+      "protect_from_deactivation": [
+        {
+          "gen_id": "2cYxVfvwpWyyrANZx06G",
+          "gen_name": "Peptides \u2013 Tesamorelin (Growth Hormone)",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        },
+        {
+          "gen_id": "xSlOHrUWKRkKvzCGcsYc",
+          "gen_name": "Tesamorelin Growth Hormone Protocol",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        }
+      ]
+    },
+    {
+      "id": "minoxidil-combination",
+      "product": "Minoxidil Combination Topical Formula",
+      "website": {
+        "display_name": "Minoxidil Combination Topical Formula",
+        "slug": "minoxidil-topical",
+        "description": "Compounded topical featuring minoxidil; exact formula personalized by provider/pharmacy",
+        "form": "Topical Solution",
+        "active_ingredients": [
+          "Minoxidil",
+          "(other actives unspecified on storefront)"
+        ],
+        "formulation": "Combination formula (unspecified on website)",
+        "price": 129
+      },
+      "selected_formulary_match": null,
+      "multiple_valid_options": [
+        {
+          "exact": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+          "strength": "0.1/5 %",
+          "form": "Foam/Topical",
+          "pharmacy": "Vios",
+          "excel_row": 129,
+          "cost": 30,
+          "ship": 30,
+          "pricing": {
+            "at_cost": 30,
+            "shipping": 30,
+            "raw_retail": 82.5,
+            "final_x9": 79
+          },
+          "current_website_price": 129,
+          "price_change": -50
+        },
+        {
+          "exact": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/7 %",
+          "strength": "0.1/7 %",
+          "form": "Foam/Topical",
+          "pharmacy": "Vios",
+          "excel_row": 130,
+          "cost": 30,
+          "ship": 30,
+          "pricing": {
+            "at_cost": 30,
+            "shipping": 30,
+            "raw_retail": 82.5,
+            "final_x9": 79
+          },
+          "current_website_price": 129,
+          "price_change": -50
+        },
+        {
+          "exact": "FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.25/5/0.01 %",
+          "strength": "0.25/5/0.01 %",
+          "form": "Foam/Topical",
+          "pharmacy": "Vios",
+          "excel_row": 134,
+          "cost": 35,
+          "ship": 30,
+          "pricing": {
+            "at_cost": 35,
+            "shipping": 30,
+            "raw_retail": 91.25,
+            "final_x9": 89
+          },
+          "current_website_price": 129,
+          "price_change": -40
+        },
+        {
+          "exact": "FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.25/5/0.03 %",
+          "strength": "0.25/5/0.03 %",
+          "form": "Foam/Topical",
+          "pharmacy": "Vios",
+          "excel_row": 135,
+          "cost": 35,
+          "ship": 30,
+          "pricing": {
+            "at_cost": 35,
+            "shipping": 30,
+            "raw_retail": 91.25,
+            "final_x9": 89
+          },
+          "current_website_price": 129,
+          "price_change": -40
+        },
+        {
+          "exact": "FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.5/5/0.01 %",
+          "strength": "0.5/5/0.01 %",
+          "form": "Foam/Topical",
+          "pharmacy": "Vios",
+          "excel_row": 136,
+          "cost": 35,
+          "ship": 30,
+          "pricing": {
+            "at_cost": 35,
+            "shipping": 30,
+            "raw_retail": 91.25,
+            "final_x9": 89
+          },
+          "current_website_price": 129,
+          "price_change": -40
+        }
+      ],
+      "excluded_non_matches": [
+        {
+          "exact": "MINOXIDIL 2% / 7% / 10% / 15%",
+          "reason": "Plain minoxidil \u2014 not combination"
+        },
+        {
+          "gen_name": "GHK-Cu / Minoxidil Topical Combo",
+          "gen_id": "489YrehNXRlL77fYPkOn",
+          "reason": "GEN title suggests combo but formulary pairing is GHK-CU only @ Greenwich \u2014 do not reuse as Minoxidil combination match"
+        }
+      ],
+      "pharmacy": "Vios (all combination options)",
+      "gen_match": {
+        "candidates": [
+          {
+            "gen_id": "BboYS4a2Uj7APetrFo6W",
+            "gen_name": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "REUSE_RENAME"
+          },
+          {
+            "gen_id": "7sX9dhAxA6i21Jg1swrK",
+            "gen_name": "Hair Loss \u2013 Triple Combo (Finasteride/Minoxidil/Tretinoin)",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "AMBIGUOUS_DO_NOT_TOUCH"
+          },
+          {
+            "gen_id": "Raw7mUkuzzhVdAo88jpL",
+            "gen_name": "Hair Loss \u2013 Minoxidil (Topical)",
+            "gen_price": 0,
+            "pairing": "none",
+            "classification_bucket": "AMBIGUOUS_DO_NOT_TOUCH"
+          },
+          {
+            "gen_id": "489YrehNXRlL77fYPkOn",
+            "gen_name": "GHK-Cu / Minoxidil Topical Combo",
+            "gen_price": 69,
+            "pairing": "GHK-CU only \u2014 NOT a valid minoxidil combo match",
+            "classification_bucket": "REUSE_RENAME"
+          }
+        ]
+      },
+      "classification": "MULTIPLE_VALID_OPTIONS",
+      "current_price": 129,
+      "new_price": "Depends on owner choice (see options)",
+      "pricing": null,
+      "owner_decision_needed": true,
+      "owner_decision": "Choose which SELECTED combination formula the website product represents (or split into multiple storefront SKUs).",
+      "missing": null,
+      "protect_from_deactivation": [
+        {
+          "gen_id": "BboYS4a2Uj7APetrFo6W",
+          "gen_name": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "REUSE_RENAME",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        },
+        {
+          "gen_id": "7sX9dhAxA6i21Jg1swrK",
+          "gen_name": "Hair Loss \u2013 Triple Combo (Finasteride/Minoxidil/Tretinoin)",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        },
+        {
+          "gen_id": "Raw7mUkuzzhVdAo88jpL",
+          "gen_name": "Hair Loss \u2013 Minoxidil (Topical)",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        },
+        {
+          "gen_id": "xKwPWxhRXlcoUonBXpg9",
+          "gen_name": "Hair Loss - Minoxdil/Tretinoin/Fluocinolone/Finasteride Spray",
+          "was_in_153_deactivate_candidates": false,
+          "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+          "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
+        }
+      ]
+    },
+    {
+      "id": "lash-brow",
+      "product": "Lash/Brow Growth Serum",
+      "website": {
+        "display_name": "Lash/Brow Growth Serum",
+        "slug": "bimatoprost-solution",
+        "subtitle": "Prescription bimatoprost solution",
+        "form": "Solution",
+        "active_ingredients": [
+          "Bimatoprost"
+        ],
+        "formulation": "Bimatoprost 0.03% \u00b7 2.5mL",
+        "price": 89,
+        "internal_notes": "Display name Lash/Brow Growth Serum; underlying formulation Bimatoprost. SKU MBM-SH-BIM-SOL-001."
+      },
+      "selected_formulary_match": null,
+      "selected_related_but_not_match": [
+        {
+          "source": "FUTURE ADDITIONS",
+          "product": "Bimatoprost",
+          "status": "FUTURE - TBD",
+          "exact": "No matching Bimatoprost entry confirmed in supplied formulary",
+          "note": "FUTURE ADDITIONS is NOT SELECTED. Do not promote into SELECTED."
+        }
+      ],
+      "pharmacy": null,
+      "gen_match": {
+        "candidates": [],
+        "note": "No clear GEN client product named Bimatoprost / Lash/Brow found in current GEN pull."
+      },
+      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "current_price": 89,
+      "new_price": null,
+      "pricing": null,
+      "owner_decision_needed": true,
+      "owner_decision": "Source and add Bimatoprost (or exact lash/brow active) into SELECTED FORMULARY with pharmacy/cost, or retire/replace the website product after cutover planning.",
+      "missing": "SELECTED FORMULARY has zero Bimatoprost rows. FUTURE ADDITIONS explicitly says source match needed.",
+      "protect_from_deactivation": []
+    }
+  ],
+  "classification_counts": {
+    "NO_SELECTED_FORMULARY_MATCH": 6,
+    "FORMULATION_CONFLICT": 1,
+    "MULTIPLE_VALID_OPTIONS": 1
+  },
+  "final_report": {
+    "CURRENT_LIVE_RECONCILIATION_PRODUCTS": 8,
+    "EXACT_FORMULARY_MATCH": 0,
+    "VERIFIED_RENAME_MATCH": 0,
+    "VERIFIED_STRUCTURE_CHANGE": 0,
+    "MULTIPLE_VALID_OPTIONS": 1,
+    "NO_SELECTED_FORMULARY_MATCH": 6,
+    "FORMULATION_CONFLICT": 1,
+    "READY_WITHOUT_OWNER_DECISION": 0,
+    "OWNER_DECISIONS_REQUIRED": 8,
+    "MISSING_FORMULARY_PRODUCTS": [
+      "AOD-9604 + MOTS-C + Tesamorelin triple (website Fat Burner identity)",
+      "Testosterone Cream 5mg/g (dedicated)",
+      "Selank Injection",
+      "Semax Injection",
+      "Selank + Semax combined Nasal Spray",
+      "Plain Tesamorelin Injection",
+      "Bimatoprost / Lash-Brow solution in SELECTED"
+    ],
+    "FAT_BURNER": "NO_SELECTED_FORMULARY_MATCH",
+    "TESTOSTERONE_CREAM": "NO_SELECTED_FORMULARY_MATCH",
+    "SELANK_INJECTION": "NO_SELECTED_FORMULARY_MATCH",
+    "SEMAX_INJECTION": "NO_SELECTED_FORMULARY_MATCH",
+    "SELANK_SEMAX_NASAL": "NO_SELECTED_FORMULARY_MATCH",
+    "TESAMORELIN": "FORMULATION_CONFLICT",
+    "MINOXIDIL_COMBINATION": "MULTIPLE_VALID_OPTIONS",
+    "LASH_BROW": "NO_SELECTED_FORMULARY_MATCH",
+    "GEN_OBJECTS_PROTECTED_FROM_DEACTIVATION": 13,
+    "LAUNCH_MAP_CHANGED": "NO",
+    "GEN_MODIFIED": "NO",
+    "GEN_WRITES": 0,
+    "WEBSITE_MODIFIED": "NO",
+    "GEN_WHOP_CUTOVER": "OFF"
+  },
+  "protected_gen_objects": [
+    {
+      "gen_id": "7Kix55LA15U0lNvY9QXI",
+      "gen_name": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "REUSE_RENAME",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Fat Burner"
+    },
+    {
+      "gen_id": "yearpPaLo5H0k0FU5Ej8",
+      "gen_name": "AOD-9604 / MOTS-C / Tesamorelin Metabolic Triple Protocol",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Fat Burner"
+    },
+    {
+      "gen_id": "PRIG7DYPNNgco3lGf1zx",
+      "gen_name": "AOD-9604",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Fat Burner"
+    },
+    {
+      "gen_id": "Gn4XaP00anr4q9oheSTe",
+      "gen_name": "Men's Hormones (TRT) \u2013 Testosterone Cream",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Testosterone Cream"
+    },
+    {
+      "gen_id": "Ukctbyh5Yrek3SnGSYA3",
+      "gen_name": "Selank Anxiolytic & Cognitive Protocol",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Selank Injection"
+    },
+    {
+      "gen_id": "YTHcdrlRICMpt56hdxeJ",
+      "gen_name": "Semax Nootropic & Neuroprotective Protocol",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Semax Injection"
+    },
+    {
+      "gen_id": "LWkYtwm66dIeLuDSvSfi",
+      "gen_name": "Semax / Selank Neuro & Cognitive Protocol",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "REUSE_RENAME",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Selank + Semax Blend Nasal Spray"
+    },
+    {
+      "gen_id": "2cYxVfvwpWyyrANZx06G",
+      "gen_name": "Peptides \u2013 Tesamorelin (Growth Hormone)",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Tesamorelin Injection"
+    },
+    {
+      "gen_id": "xSlOHrUWKRkKvzCGcsYc",
+      "gen_name": "Tesamorelin Growth Hormone Protocol",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Tesamorelin Injection"
+    },
+    {
+      "gen_id": "BboYS4a2Uj7APetrFo6W",
+      "gen_name": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "REUSE_RENAME",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Minoxidil Combination Topical Formula"
+    },
+    {
+      "gen_id": "7sX9dhAxA6i21Jg1swrK",
+      "gen_name": "Hair Loss \u2013 Triple Combo (Finasteride/Minoxidil/Tretinoin)",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Minoxidil Combination Topical Formula"
+    },
+    {
+      "gen_id": "Raw7mUkuzzhVdAo88jpL",
+      "gen_name": "Hair Loss \u2013 Minoxidil (Topical)",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Minoxidil Combination Topical Formula"
+    },
+    {
+      "gen_id": "xKwPWxhRXlcoUonBXpg9",
+      "gen_name": "Hair Loss - Minoxdil/Tretinoin/Fluocinolone/Finasteride Spray",
+      "was_in_153_deactivate_candidates": false,
+      "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
+      "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
+      "supports_website_product": "Minoxidil Combination Topical Formula"
+    }
+  ]
+}

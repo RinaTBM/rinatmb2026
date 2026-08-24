@@ -4,6 +4,14 @@
 **Generated:** 2026-08-24T06:59:21Z
 **Status:** LOCKED for final price + execution review
 
+## Owner retail pricing rule (LOCKED)
+
+**retail = medicationCost × 1.75 + pharmacyShippingInternal**
+
+- Customer medication shipping charge = $0 (shipping baked into retail per READ ME - RULES).
+- Workbook SELECTED FORMULARY column "Cost +75%" = landedCost × 1.75 (i.e. (cost+shipping)×1.75). Owner rule differs: cost×1.75+shipping only.
+- Full formula table: `docs/GEN_RETAIL_PRICING_RULE.md`
+
 ---
 
 ## Final owner decisions (all 13 resolved)
@@ -255,28 +263,32 @@ Umbrellas marked **SPLIT_REQUIRED** (do not write as one product):
 
 ---
 
-## Final retail-price discrepancy table (14 LIVE_NOW)
+## Final retail-price discrepancy table (14 LIVE_NOW + Mid B12)
 
-Proposed retail = workbook Current GEN Price when present; else non-zero GEN amount. **No new retail invented.**
+**Pricing rule:** `retail = medicationCost × 1.75 + pharmacyShippingInternal`
 
-| Display name | Current website | Website $ (parsed) | Current GEN $ | Proposed MBM retail | Δ / flag | Notes |
-|---|---|---:|---:|---:|---|---|
-| AOD-9604 / MOTS-C / Tesamorelin Injection | Fat Burner ($259) | 259.0 | 219.0 | 219.0 | -40.0 | Proposed $219.0 vs Fat Burner $259 |
-| AOD-9604 Injection | No standalone AOD SKU (Fat Burner is the triple) | None | 179.0 | 179.0 | None | Standalone AOD $179 ≠ Fat Burner $259 |
-| BPC-157 / TB-500 Capsules | Wolverine: BPC-157/TB-500 Capsule ($99) | 99.0 | 169.0 | 169.0 | 70.0 | Proposed $169.0 vs website capsule $99 |
-| BPC-157 Injection | Closest Wolverine injection $199 (blend — not plain BPC) | 199.0 | 199.0 | 199.0 | None | Price $199 matches Wolverine inj; formulation differs (plain BPC vs blend) |
-| BPC-157 — Unspecified | Closest Wolverine / multi-peptide blend listings | None | 189.0 | 189.0 | FLAGGED (see notes) | Blend $189.0 vs Wolverine inj $199 |
-| GHK-Cu / Minoxidil Topical Combo | Minoxidil Combination Topical Formula ($129) — not exact match | 129.0 | 149.0 | 149.0 | 20.0 | Proposed $149.0 vs website $129 |
-| Semaglutide Injection — 3-Month (B12) | No dedicated 3-month SKU in current products.ts catalog | None | 799.0 | 799.0 | None | GEN/workbook $799 bundle — confirm website offer |
-| Semaglutide Injection — Any Dose (B12) | Semaglutide Membership ($149/mo) — no separate B12 membership SKU | 149.0 | 189.0 | 189.0 | 40.0 | Proposed $189.0 vs membership $149 |
-| Semaglutide Injection — Any Dose (Glycine) | Semaglutide Membership ($149/mo) | 149.0 | 149.0 | 149.0 | None | Membership program formulation moving toward Glycine Any Dose vs historical +B6 copy |
-| Semaglutide Injection — High (B12) | Semaglutide + B6 Injection (high vial SKUs) | None | 199.0 | 199.0 | FLAGGED (see notes) | Dose-tier $199.0 ≠ website +B6 vial prices [119, 139, 189.02, 329] |
-| Semaglutide Injection — High (Glycine) | Semaglutide + B6 Injection (high vial SKUs) | None | 129.0 | 129.0 | FLAGGED (see notes) | Dose-tier $129.0 ≠ website +B6 vial prices [119, 139, 189.02, 329] |
-| Semaglutide Injection — Mid (Glycine) | Semaglutide + B6 Injection (mid vial SKUs) | None | 109.0 | 109.0 | FLAGGED (see notes) | Dose-tier $109.0 ≠ website +B6 vial prices [119, 139, 189.02, 329] |
-| Semaglutide Injection — Starting / Low (B12) | Semaglutide + B6 Injection (starting vial SKUs) | None | None | None | None | Website +B6 vs GEN B12; GEN amount unset/0 |
-| Semaglutide Injection — Starting / Low (Glycine) | Semaglutide + B6 Injection (starting/low vial SKUs) | None | 119.0 | 119.0 | None | Website still lists Semaglutide + B6; GEN ladder is Glycine |
+Prior workbook/GEN list prices are shown for comparison; **formula retail is the owner target**.
 
-**Price flags in live 14:** 8
+| Product | Cost basis (med @ cost + ship) | Formula retail | Prior proposed | Current GEN | Website $ | Flags |
+|---|---|---:|---:|---:|---:|---|
+| AOD-9604 / MOTS-C / Tesamorelin Injection | $102.0 + $20.0 | **$198.5** (≈$198) | 219.0 | 219.0 | 259.0 |  |
+| AOD-9604 Injection | $1.75 + $20.0 | **$23.06** (≈$23) | 179.0 | 179.0 | None | COST_LOOKS_PER_UNIT |
+| BPC-157 / TB-500 Capsules | $3.2 + $25.0 | **$30.6** (≈$31) | 169.0 | 169.0 | 99.0 | COST_LOOKS_PER_UNIT |
+| BPC-157 Injection | $1.8+$20.0→$23.15; $77.0+$25.0→$159.75; $77.0+$25.0→$159.75; $77.0+$25.0→$159.75; +1 more | **$23.15–$159.75** (per fill) | 199.0 | 199.0 | 199.0 | BLEND_FORMULARY_UNDER_PLAIN_BPC_PRODUCT, COST_LOOKS_PER_UNIT, NEEDS_PACKAGE_COST_CONFIRMATION |
+| BPC-157 — Unspecified | $77.0 + $25.0 | **$159.75** (≈$160) | 189.0 | 189.0 | None |  |
+| GHK-Cu / Minoxidil Topical Combo | $36.75 + $2.0 | **$66.31** (≈$66) | 149.0 | 149.0 | 129.0 |  |
+| Semaglutide Injection — 3-Month (B12) | $50.0 + $30.0 | **$117.5** (≈$118) | 799.0 | 799.0 | None | THREE_MONTH_COST_LOOKS_UNDERSTATED |
+| Semaglutide Injection — Any Dose (B12) | $50.0+$5.0→$92.5; $55.0+$5.0→$101.25; $58.0+$5.0→$106.5; $60.0+$5.0→$110.0; +1 more | **$92.5–$118.75** (per fill) | 189.0 | 189.0 | 149.0 |  |
+| Semaglutide Injection — Any Dose (Glycine) | $50.0+$5.0→$92.5; $55.0+$5.0→$101.25; $58.0+$5.0→$106.5; $60.0+$5.0→$110.0; +1 more | **$92.5–$118.75** (per fill) | 149.0 | 149.0 | 149.0 |  |
+| Semaglutide Injection — High (B12) | $60.0+$5.0→$110.0; $65.0+$5.0→$118.75 | **$110.0–$118.75** (per fill) | 199.0 | 199.0 | None |  |
+| Semaglutide Injection — High (Glycine) | $60.0+$5.0→$110.0; $65.0+$5.0→$118.75 | **$110.0–$118.75** (per fill) | 129.0 | 129.0 | None |  |
+| Semaglutide Injection — Mid (Glycine) | $58.0 + $5.0 | **$106.5** (≈$106) | 109.0 | 109.0 | None |  |
+| Semaglutide Injection — Starting / Low (B12) | $50.0+$5.0→$92.5; $55.0+$5.0→$101.25 | **$92.5–$101.25** (per fill) | None | None | None |  |
+| Semaglutide Injection — Starting / Low (Glycine) | $50.0+$5.0→$92.5; $55.0+$5.0→$101.25 | **$92.5–$101.25** (per fill) | 119.0 | 119.0 | None |  |
+| Semaglutide Injection — Mid (B12) | $58.0 + $5.0 | **$106.5** (≈$106) | None | None | None |  |
+
+See `docs/GEN_RETAIL_PRICING_RULE.md` for full medication names and notes.
+
 
 ---
 

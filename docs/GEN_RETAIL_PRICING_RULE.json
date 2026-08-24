@@ -1,0 +1,670 @@
+{
+  "version": "gen-catalog-1g-retail-pricing-rule",
+  "generated_at": "2026-08-24T07:05:53Z",
+  "mode": "READ_ONLY",
+  "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+  "customerShipping": "Customer medication shipping charge = $0 (shipping baked into retail per READ ME - RULES).",
+  "workbookCostPlus75Note": "Workbook SELECTED FORMULARY column \"Cost +75%\" = landedCost \u00d7 1.75 (i.e. (cost+shipping)\u00d71.75). Owner rule differs: cost\u00d71.75+shipping only.",
+  "roundingPolicy": "Show exact (2 decimals). GEN write candidate may use nearest dollar (proposedRetailRounded) after owner confirms.",
+  "multiVialPolicy": "Dose-tier / Any Dose products with multiple vial strengths: price each fill as cost\u00d71.75+shipping for that vial; do not force one flat CP price.",
+  "liveNowIncludingMidB12": [
+    {
+      "displayName": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+      "blueprintKey": "aod-mots-tesa-blend-injection",
+      "websiteName": "Fat Burner ($259)",
+      "websitePriceParsed": 259.0,
+      "genClientProductId": "7Kix55LA15U0lNvY9QXI",
+      "currentGenPrice": 219.0,
+      "previousProposedRetail_workbookOrGen": 219.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "AOD 9604/ MOTS-C/ TESAMORELIN/ IPAMORELIN 1.2 MG/ 2 MG/ 2MG/ 2MG/ML (5 ML)",
+          "pharmacy": "Optimal Balance Pharmacy",
+          "medicationCost": 102.0,
+          "shipping": 20.0,
+          "landedCost": 122,
+          "formulaRetailExact": 198.5,
+          "formulaRetailRounded": 198,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 198.5,
+      "formulaRetailMax": 198.5,
+      "proposedRetailExact": 198.5,
+      "proposedRetailRounded": 198,
+      "proposedRetailNote": "SINGLE_FORMULA",
+      "deltaFormulaVsPreviousProposed": -20.5,
+      "deltaRoundedVsWebsite": -61.0,
+      "deltaRoundedVsCurrentGen": -21.0,
+      "flags": [],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "AOD-9604 Injection",
+      "blueprintKey": "aod9604-injection",
+      "websiteName": "No standalone AOD SKU (Fat Burner is the triple)",
+      "websitePriceParsed": null,
+      "genClientProductId": "PRIG7DYPNNgco3lGf1zx",
+      "currentGenPrice": 179.0,
+      "previousProposedRetail_workbookOrGen": 179.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "AOD 9604 300 MCG",
+          "pharmacy": "Optimal Balance Pharmacy",
+          "medicationCost": 1.75,
+          "shipping": 20.0,
+          "landedCost": 21.75,
+          "formulaRetailExact": 23.06,
+          "formulaRetailRounded": 23,
+          "perUnitCostSuspect": true
+        }
+      ],
+      "formulaRetailMin": 23.06,
+      "formulaRetailMax": 23.06,
+      "proposedRetailExact": 23.06,
+      "proposedRetailRounded": 23,
+      "proposedRetailNote": "SINGLE_FORMULA",
+      "deltaFormulaVsPreviousProposed": -155.94,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": -156.0,
+      "flags": [
+        "COST_LOOKS_PER_UNIT"
+      ],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "BPC-157 / TB-500 Capsules",
+      "blueprintKey": "bpc157-capsule",
+      "websiteName": "Wolverine: BPC-157/TB-500 Capsule ($99)",
+      "websitePriceParsed": 99.0,
+      "genClientProductId": "iJtyig611AZEDBGdvRd9",
+      "currentGenPrice": 169.0,
+      "previousProposedRetail_workbookOrGen": 169.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "BPC-157/TB500 capsules 500MCG/500MCG",
+          "pharmacy": "Greenwich Pharmacy",
+          "medicationCost": 3.2,
+          "shipping": 25.0,
+          "landedCost": 28.2,
+          "formulaRetailExact": 30.6,
+          "formulaRetailRounded": 31,
+          "perUnitCostSuspect": true
+        }
+      ],
+      "formulaRetailMin": 30.6,
+      "formulaRetailMax": 30.6,
+      "proposedRetailExact": 30.6,
+      "proposedRetailRounded": 31,
+      "proposedRetailNote": "SINGLE_FORMULA",
+      "deltaFormulaVsPreviousProposed": -138.4,
+      "deltaRoundedVsWebsite": -68.0,
+      "deltaRoundedVsCurrentGen": -138.0,
+      "flags": [
+        "COST_LOOKS_PER_UNIT"
+      ],
+      "action": "KEEP"
+    },
+    {
+      "displayName": "BPC-157 Injection",
+      "blueprintKey": "bpc157-injection",
+      "websiteName": "Closest Wolverine injection $199 (blend \u2014 not plain BPC)",
+      "websitePriceParsed": 199.0,
+      "genClientProductId": "KXMm9SsbOEYnFy9phmZn",
+      "currentGenPrice": 199.0,
+      "previousProposedRetail_workbookOrGen": 199.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "BPC-157 500 MCG",
+          "pharmacy": "Optimal Balance Pharmacy",
+          "medicationCost": 1.8,
+          "shipping": 20.0,
+          "landedCost": 21.8,
+          "formulaRetailExact": 23.15,
+          "formulaRetailRounded": 23,
+          "perUnitCostSuspect": true
+        },
+        {
+          "medication": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML",
+          "pharmacy": "Greenwich Pharmacy",
+          "medicationCost": 77.0,
+          "shipping": 25.0,
+          "landedCost": 102,
+          "formulaRetailExact": 159.75,
+          "formulaRetailRounded": 160,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL",
+          "pharmacy": "Greenwich Pharmacy",
+          "medicationCost": 77.0,
+          "shipping": 25.0,
+          "landedCost": 102,
+          "formulaRetailExact": 159.75,
+          "formulaRetailRounded": 160,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL",
+          "pharmacy": "Greenwich Pharmacy",
+          "medicationCost": 77.0,
+          "shipping": 25.0,
+          "landedCost": 102,
+          "formulaRetailExact": 159.75,
+          "formulaRetailRounded": 160,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "BPC-157/TB500 3mg/3mg/mL",
+          "pharmacy": "Greenwich Pharmacy",
+          "medicationCost": 77.0,
+          "shipping": 25.0,
+          "landedCost": 102,
+          "formulaRetailExact": 159.75,
+          "formulaRetailRounded": 160,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 23.15,
+      "formulaRetailMax": 159.75,
+      "proposedRetailExact": null,
+      "proposedRetailRounded": null,
+      "proposedRetailNote": "MULTI_BAND_23.15-159.75; plain BPC cost looks per-unit \u2014 owner must confirm package cost before write",
+      "deltaFormulaVsPreviousProposed": null,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": null,
+      "flags": [
+        "BLEND_FORMULARY_UNDER_PLAIN_BPC_PRODUCT",
+        "COST_LOOKS_PER_UNIT",
+        "NEEDS_PACKAGE_COST_CONFIRMATION"
+      ],
+      "action": "MERGE"
+    },
+    {
+      "displayName": "BPC-157 \u2014 Unspecified",
+      "blueprintKey": "bpc-blend-bpc157tb500ghkcu3310mgml5ml",
+      "websiteName": "Closest Wolverine / multi-peptide blend listings",
+      "websitePriceParsed": null,
+      "genClientProductId": null,
+      "currentGenPrice": 189.0,
+      "previousProposedRetail_workbookOrGen": 189.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML (5ml)",
+          "pharmacy": "Greenwich Pharmacy",
+          "medicationCost": 77.0,
+          "shipping": 25.0,
+          "landedCost": 102,
+          "formulaRetailExact": 159.75,
+          "formulaRetailRounded": 160,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 159.75,
+      "formulaRetailMax": 159.75,
+      "proposedRetailExact": 159.75,
+      "proposedRetailRounded": 160,
+      "proposedRetailNote": "SINGLE_FORMULA",
+      "deltaFormulaVsPreviousProposed": -29.25,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": -29.0,
+      "flags": [],
+      "action": "CREATE"
+    },
+    {
+      "displayName": "GHK-Cu / Minoxidil Topical Combo",
+      "blueprintKey": "ghk-minoxidil-topical-combo",
+      "websiteName": "Minoxidil Combination Topical Formula ($129) \u2014 not exact match",
+      "websitePriceParsed": 129.0,
+      "genClientProductId": "489YrehNXRlL77fYPkOn",
+      "currentGenPrice": 149.0,
+      "previousProposedRetail_workbookOrGen": 149.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "Minoxidil 2.5mg/GHK-Cu 5mg/Apigenin 50mg/Fisetin 50mg",
+          "pharmacy": "Epiq Scripts",
+          "medicationCost": 36.75,
+          "shipping": 2.0,
+          "landedCost": 38.75,
+          "formulaRetailExact": 66.31,
+          "formulaRetailRounded": 66,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 66.31,
+      "formulaRetailMax": 66.31,
+      "proposedRetailExact": 66.31,
+      "proposedRetailRounded": 66,
+      "proposedRetailNote": "SINGLE_FORMULA",
+      "deltaFormulaVsPreviousProposed": -82.69,
+      "deltaRoundedVsWebsite": -63.0,
+      "deltaRoundedVsCurrentGen": -83.0,
+      "flags": [],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 3-Month (B12)",
+      "blueprintKey": "sem-b12-3month",
+      "websiteName": "No dedicated 3-month SKU in current products.ts catalog",
+      "websitePriceParsed": null,
+      "genClientProductId": "sN2ggSXRJINjElMYTQjf",
+      "currentGenPrice": 799.0,
+      "previousProposedRetail_workbookOrGen": 799.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) (3 VIALS))",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 50.0,
+          "shipping": 30.0,
+          "landedCost": 80,
+          "formulaRetailExact": 117.5,
+          "formulaRetailRounded": 118,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 117.5,
+      "formulaRetailMax": 117.5,
+      "proposedRetailExact": 117.5,
+      "proposedRetailRounded": 118,
+      "proposedRetailNote": "SINGLE_FORMULA",
+      "deltaFormulaVsPreviousProposed": -681.5,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": -681.0,
+      "flags": [
+        "THREE_MONTH_COST_LOOKS_UNDERSTATED"
+      ],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Any Dose (B12)",
+      "blueprintKey": "sem-b12-any",
+      "websiteName": "Semaglutide Membership ($149/mo) \u2014 no separate B12 membership SKU",
+      "websitePriceParsed": 149.0,
+      "genClientProductId": "MkDIUw0NcJB7YL2pNzYW",
+      "currentGenPrice": 189.0,
+      "previousProposedRetail_workbookOrGen": 189.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 50.0,
+          "shipping": 5.0,
+          "landedCost": 55,
+          "formulaRetailExact": 92.5,
+          "formulaRetailRounded": 92,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 55.0,
+          "shipping": 5.0,
+          "landedCost": 60,
+          "formulaRetailExact": 101.25,
+          "formulaRetailRounded": 101,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 58.0,
+          "shipping": 5.0,
+          "landedCost": 63,
+          "formulaRetailExact": 106.5,
+          "formulaRetailRounded": 106,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 60.0,
+          "shipping": 5.0,
+          "landedCost": 65,
+          "formulaRetailExact": 110.0,
+          "formulaRetailRounded": 110,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 65.0,
+          "shipping": 5.0,
+          "landedCost": 70,
+          "formulaRetailExact": 118.75,
+          "formulaRetailRounded": 119,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 92.5,
+      "formulaRetailMax": 118.75,
+      "proposedRetailExact": null,
+      "proposedRetailRounded": null,
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+      "deltaFormulaVsPreviousProposed": null,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": null,
+      "flags": [],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+      "blueprintKey": "sem-glycine-any",
+      "websiteName": "Semaglutide Membership ($149/mo)",
+      "websitePriceParsed": 149.0,
+      "genClientProductId": "wQK2JsFnh7oFBf3Lag4n",
+      "currentGenPrice": 149.0,
+      "previousProposedRetail_workbookOrGen": 149.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 50.0,
+          "shipping": 5.0,
+          "landedCost": 55,
+          "formulaRetailExact": 92.5,
+          "formulaRetailRounded": 92,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 55.0,
+          "shipping": 5.0,
+          "landedCost": 60,
+          "formulaRetailExact": 101.25,
+          "formulaRetailRounded": 101,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 58.0,
+          "shipping": 5.0,
+          "landedCost": 63,
+          "formulaRetailExact": 106.5,
+          "formulaRetailRounded": 106,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 60.0,
+          "shipping": 5.0,
+          "landedCost": 65,
+          "formulaRetailExact": 110.0,
+          "formulaRetailRounded": 110,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 65.0,
+          "shipping": 5.0,
+          "landedCost": 70,
+          "formulaRetailExact": 118.75,
+          "formulaRetailRounded": 119,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 92.5,
+      "formulaRetailMax": 118.75,
+      "proposedRetailExact": null,
+      "proposedRetailRounded": null,
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+      "deltaFormulaVsPreviousProposed": null,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": null,
+      "flags": [],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 High (B12)",
+      "blueprintKey": "sem-b12-high",
+      "websiteName": "Semaglutide + B6 Injection (high vial SKUs)",
+      "websitePriceParsed": null,
+      "genClientProductId": "34I2X8MpVZf3AQTff3bo",
+      "currentGenPrice": 199.0,
+      "previousProposedRetail_workbookOrGen": 199.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 60.0,
+          "shipping": 5.0,
+          "landedCost": 65,
+          "formulaRetailExact": 110.0,
+          "formulaRetailRounded": 110,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 65.0,
+          "shipping": 5.0,
+          "landedCost": 70,
+          "formulaRetailExact": 118.75,
+          "formulaRetailRounded": 119,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 110.0,
+      "formulaRetailMax": 118.75,
+      "proposedRetailExact": null,
+      "proposedRetailRounded": null,
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+      "deltaFormulaVsPreviousProposed": null,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": null,
+      "flags": [],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 High (Glycine)",
+      "blueprintKey": "sem-glycine-high",
+      "websiteName": "Semaglutide + B6 Injection (high vial SKUs)",
+      "websitePriceParsed": null,
+      "genClientProductId": "sssEk3FDY4LFbQYGQsLx",
+      "currentGenPrice": 129.0,
+      "previousProposedRetail_workbookOrGen": 129.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 60.0,
+          "shipping": 5.0,
+          "landedCost": 65,
+          "formulaRetailExact": 110.0,
+          "formulaRetailRounded": 110,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 65.0,
+          "shipping": 5.0,
+          "landedCost": 70,
+          "formulaRetailExact": 118.75,
+          "formulaRetailRounded": 119,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 110.0,
+      "formulaRetailMax": 118.75,
+      "proposedRetailExact": null,
+      "proposedRetailRounded": null,
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+      "deltaFormulaVsPreviousProposed": null,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": null,
+      "flags": [],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Mid (Glycine)",
+      "blueprintKey": "sem-glycine-mid",
+      "websiteName": "Semaglutide + B6 Injection (mid vial SKUs)",
+      "websitePriceParsed": null,
+      "genClientProductId": "CjqOUbPuGPZzxephqRou",
+      "currentGenPrice": 109.0,
+      "previousProposedRetail_workbookOrGen": 109.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 58.0,
+          "shipping": 5.0,
+          "landedCost": 63,
+          "formulaRetailExact": 106.5,
+          "formulaRetailRounded": 106,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 106.5,
+      "formulaRetailMax": 106.5,
+      "proposedRetailExact": 106.5,
+      "proposedRetailRounded": 106,
+      "proposedRetailNote": "SINGLE_FORMULA",
+      "deltaFormulaVsPreviousProposed": -2.5,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": -3.0,
+      "flags": [],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Starting / Low (B12)",
+      "blueprintKey": "sem-b12-starting",
+      "websiteName": "Semaglutide + B6 Injection (starting vial SKUs)",
+      "websitePriceParsed": null,
+      "genClientProductId": "SkqQHmsc0WdsbK9vmV1y",
+      "currentGenPrice": null,
+      "previousProposedRetail_workbookOrGen": null,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 50.0,
+          "shipping": 5.0,
+          "landedCost": 55,
+          "formulaRetailExact": 92.5,
+          "formulaRetailRounded": 92,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 55.0,
+          "shipping": 5.0,
+          "landedCost": 60,
+          "formulaRetailExact": 101.25,
+          "formulaRetailRounded": 101,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 92.5,
+      "formulaRetailMax": 101.25,
+      "proposedRetailExact": null,
+      "proposedRetailRounded": null,
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+      "deltaFormulaVsPreviousProposed": null,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": null,
+      "flags": [],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+      "blueprintKey": "sem-glycine-starting",
+      "websiteName": "Semaglutide + B6 Injection (starting/low vial SKUs)",
+      "websitePriceParsed": null,
+      "genClientProductId": "tk2GW39OGr7JX4MCCoJP",
+      "currentGenPrice": 119.0,
+      "previousProposedRetail_workbookOrGen": 119.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 50.0,
+          "shipping": 5.0,
+          "landedCost": 55,
+          "formulaRetailExact": 92.5,
+          "formulaRetailRounded": 92,
+          "perUnitCostSuspect": false
+        },
+        {
+          "medication": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 55.0,
+          "shipping": 5.0,
+          "landedCost": 60,
+          "formulaRetailExact": 101.25,
+          "formulaRetailRounded": 101,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 92.5,
+      "formulaRetailMax": 101.25,
+      "proposedRetailExact": null,
+      "proposedRetailRounded": null,
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+      "deltaFormulaVsPreviousProposed": null,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": null,
+      "flags": [],
+      "action": "UPDATE"
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Mid (B12)",
+      "blueprintKey": "sem-b12-mid",
+      "websiteName": null,
+      "websitePriceParsed": null,
+      "genClientProductId": null,
+      "currentGenPrice": null,
+      "previousProposedRetail_workbookOrGen": null,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "formularyCostRows": [
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "pharmacy": "Dirx-Hub",
+          "medicationCost": 58.0,
+          "shipping": 5.0,
+          "landedCost": 63,
+          "formulaRetailExact": 106.5,
+          "formulaRetailRounded": 106,
+          "perUnitCostSuspect": false
+        }
+      ],
+      "formulaRetailMin": 106.5,
+      "formulaRetailMax": 106.5,
+      "proposedRetailExact": 106.5,
+      "proposedRetailRounded": 106,
+      "proposedRetailNote": "SINGLE_FORMULA",
+      "deltaFormulaVsPreviousProposed": null,
+      "deltaRoundedVsWebsite": null,
+      "deltaRoundedVsCurrentGen": null,
+      "flags": [],
+      "action": null
+    }
+  ],
+  "summary": {
+    "productsPriced": 15,
+    "singleFormulaProducts": 8,
+    "perFillBandProducts": 7,
+    "flaggedProducts": 4,
+    "GEN_MODIFIED": "NO",
+    "GEN_WRITES": 0
+  }
+}

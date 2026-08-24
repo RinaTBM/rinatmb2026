@@ -9,7 +9,7 @@
       "genClientProductId": "7Kix55LA15U0lNvY9QXI",
       "genMatchedName": "AOD-9604/MOTS-C",
       "currentGenPrice": 219.0,
-      "proposedRetailPrice": 219.0,
+      "proposedRetailPrice": 198.5,
       "deliveryForm": "Injection",
       "formulation": "AOD-9604",
       "formularyPairings": 3,
@@ -20,8 +20,14 @@
       "materialChange": "Closest website Fat Burner $259 vs workbook Triple $219 / GEN matched AOD-9604/MOTS-C amount 0",
       "priceFlag": true,
       "priceFlagNotes": [
-        "Proposed $219.0 vs Fat Burner $259"
-      ]
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $198.5 (rounded $198)",
+        "Prior proposed was 219.0",
+        "Website $259.0"
+      ],
+      "previousProposedRetail_beforeFormula": 219.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 198,
+      "pricingFlags": []
     },
     {
       "displayName": "AOD-9604 Injection",
@@ -29,7 +35,7 @@
       "genClientProductId": "PRIG7DYPNNgco3lGf1zx",
       "genMatchedName": "AOD-9604",
       "currentGenPrice": 179.0,
-      "proposedRetailPrice": 179.0,
+      "proposedRetailPrice": 23.06,
       "deliveryForm": "Injection",
       "formulation": "AOD-9604",
       "formularyPairings": 2,
@@ -38,8 +44,17 @@
       ],
       "action": "UPDATE",
       "materialChange": "Standalone AOD $179 \u2260 Fat Burner $259",
-      "priceFlag": false,
-      "priceFlagNotes": []
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $23.06 (rounded $23)",
+        "Prior proposed was 179.0"
+      ],
+      "previousProposedRetail_beforeFormula": 179.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 23,
+      "pricingFlags": [
+        "COST_LOOKS_PER_UNIT"
+      ]
     },
     {
       "displayName": "BPC-157 / TB-500 Capsules",
@@ -47,7 +62,7 @@
       "genClientProductId": "iJtyig611AZEDBGdvRd9",
       "genMatchedName": "BPC-157/TB500",
       "currentGenPrice": 169.0,
-      "proposedRetailPrice": 169.0,
+      "proposedRetailPrice": 30.6,
       "deliveryForm": "Capsule",
       "formulation": "BPC-157",
       "formularyPairings": 4,
@@ -58,7 +73,15 @@
       "materialChange": "GEN/workbook $169 vs website capsule $99",
       "priceFlag": true,
       "priceFlagNotes": [
-        "Proposed $169.0 vs website capsule $99"
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $30.6 (rounded $31)",
+        "Prior proposed was 169.0",
+        "Website $99.0"
+      ],
+      "previousProposedRetail_beforeFormula": 169.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 31,
+      "pricingFlags": [
+        "COST_LOOKS_PER_UNIT"
       ]
     },
     {
@@ -77,8 +100,23 @@
       ],
       "action": "MERGE",
       "materialChange": "Price $199 matches Wolverine inj; formulation differs (plain BPC vs blend)",
-      "priceFlag": false,
-      "priceFlagNotes": []
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "MULTI_BAND_23.15-159.75; plain BPC cost looks per-unit \u2014 owner must confirm package cost before write",
+        "Formula band $23.15\u2013$159.75"
+      ],
+      "previousProposedRetail_beforeFormula": 199.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        23.15,
+        159.75
+      ],
+      "proposedRetailNote": "MULTI_BAND_23.15-159.75; plain BPC cost looks per-unit \u2014 owner must confirm package cost before write",
+      "pricingFlags": [
+        "BLEND_FORMULARY_UNDER_PLAIN_BPC_PRODUCT",
+        "COST_LOOKS_PER_UNIT",
+        "NEEDS_PACKAGE_COST_CONFIRMATION"
+      ]
     },
     {
       "displayName": "BPC-157 \u2014 Unspecified",
@@ -86,7 +124,7 @@
       "genClientProductId": null,
       "genMatchedName": "BPC-157 + GHK-Cu + KPV + TB-500 Comprehensive Recovery Protocol",
       "currentGenPrice": 189.0,
-      "proposedRetailPrice": 189.0,
+      "proposedRetailPrice": 159.75,
       "deliveryForm": "Unspecified",
       "formulation": "BPC/TB/GHK/KPV blend",
       "formularyPairings": 4,
@@ -97,8 +135,13 @@
       "materialChange": "Rename Unspecified; workbook live $189 vs Wolverine inj $199",
       "priceFlag": true,
       "priceFlagNotes": [
-        "Blend $189.0 vs Wolverine inj $199"
-      ]
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $159.75 (rounded $160)",
+        "Prior proposed was 189.0"
+      ],
+      "previousProposedRetail_beforeFormula": 189.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 160,
+      "pricingFlags": []
     },
     {
       "displayName": "GHK-Cu / Minoxidil Topical Combo",
@@ -106,7 +149,7 @@
       "genClientProductId": "489YrehNXRlL77fYPkOn",
       "genMatchedName": "GHK-Cu",
       "currentGenPrice": 149.0,
-      "proposedRetailPrice": 149.0,
+      "proposedRetailPrice": 66.31,
       "deliveryForm": "Topical",
       "formulation": "Minoxidil/GHK-Cu combo (workbook proposal)",
       "formularyPairings": 1,
@@ -117,8 +160,14 @@
       "materialChange": "GEN/workbook $149 vs website minoxidil combo $129",
       "priceFlag": true,
       "priceFlagNotes": [
-        "Proposed $149.0 vs website $129"
-      ]
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $66.31 (rounded $66)",
+        "Prior proposed was 149.0",
+        "Website $129.0"
+      ],
+      "previousProposedRetail_beforeFormula": 149.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 66,
+      "pricingFlags": []
     },
     {
       "displayName": "Semaglutide Injection \u2014 3-Month (B12)",
@@ -126,7 +175,7 @@
       "genClientProductId": "sN2ggSXRJINjElMYTQjf",
       "genMatchedName": "GLP-1 Weight Loss Plan \u2013 Semaglutide 3-Month Escalation Bundle (High: 4\u21926\u219210mg)",
       "currentGenPrice": 799.0,
-      "proposedRetailPrice": 799.0,
+      "proposedRetailPrice": 117.5,
       "deliveryForm": "Injection",
       "formulation": "B12",
       "formularyPairings": 2,
@@ -135,8 +184,17 @@
       ],
       "action": "UPDATE",
       "materialChange": "GEN/workbook $799 bundle \u2014 confirm website offer",
-      "priceFlag": false,
-      "priceFlagNotes": []
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $117.5 (rounded $118)",
+        "Prior proposed was 799.0"
+      ],
+      "previousProposedRetail_beforeFormula": 799.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 118,
+      "pricingFlags": [
+        "THREE_MONTH_COST_LOOKS_UNDERSTATED"
+      ]
     },
     {
       "displayName": "Semaglutide Injection \u2014 Any Dose (B12)",
@@ -155,8 +213,17 @@
       "materialChange": "GEN Any Dose B12 $189 vs membership $149",
       "priceFlag": true,
       "priceFlagNotes": [
-        "Proposed $189.0 vs membership $149"
-      ]
+        "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+        "Formula band $92.5\u2013$118.75"
+      ],
+      "previousProposedRetail_beforeFormula": 189.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        92.5,
+        118.75
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+      "pricingFlags": []
     },
     {
       "displayName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
@@ -173,8 +240,19 @@
       ],
       "action": "UPDATE",
       "materialChange": "Membership program formulation moving toward Glycine Any Dose vs historical +B6 copy",
-      "priceFlag": false,
-      "priceFlagNotes": []
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+        "Formula band $92.5\u2013$118.75"
+      ],
+      "previousProposedRetail_beforeFormula": 149.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        92.5,
+        118.75
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+      "pricingFlags": []
     },
     {
       "displayName": "Semaglutide Injection \u2014 High (B12)",
@@ -193,8 +271,17 @@
       "materialChange": "Website +B6 vs GEN B12",
       "priceFlag": true,
       "priceFlagNotes": [
-        "Dose-tier $199.0 \u2260 website +B6 vial prices [119, 139, 189.02, 329]"
-      ]
+        "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+        "Formula band $110.0\u2013$118.75"
+      ],
+      "previousProposedRetail_beforeFormula": 199.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        110.0,
+        118.75
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+      "pricingFlags": []
     },
     {
       "displayName": "Semaglutide Injection \u2014 High (Glycine)",
@@ -213,8 +300,17 @@
       "materialChange": "Website +B6 vs GEN Glycine mismatch",
       "priceFlag": true,
       "priceFlagNotes": [
-        "Dose-tier $129.0 \u2260 website +B6 vial prices [119, 139, 189.02, 329]"
-      ]
+        "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+        "Formula band $110.0\u2013$118.75"
+      ],
+      "previousProposedRetail_beforeFormula": 129.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        110.0,
+        118.75
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+      "pricingFlags": []
     },
     {
       "displayName": "Semaglutide Injection \u2014 Mid (Glycine)",
@@ -222,7 +318,7 @@
       "genClientProductId": "CjqOUbPuGPZzxephqRou",
       "genMatchedName": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (Mid Dose)",
       "currentGenPrice": 109.0,
-      "proposedRetailPrice": 109.0,
+      "proposedRetailPrice": 106.5,
       "deliveryForm": "Injection",
       "formulation": "Glycine",
       "formularyPairings": 1,
@@ -233,8 +329,13 @@
       "materialChange": "Website +B6 vs GEN Glycine mismatch",
       "priceFlag": true,
       "priceFlagNotes": [
-        "Dose-tier $109.0 \u2260 website +B6 vial prices [119, 139, 189.02, 329]"
-      ]
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $106.5 (rounded $106)",
+        "Prior proposed was 109.0"
+      ],
+      "previousProposedRetail_beforeFormula": 109.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 106,
+      "pricingFlags": []
     },
     {
       "displayName": "Semaglutide Injection \u2014 Starting / Low (B12)",
@@ -251,8 +352,19 @@
       ],
       "action": "UPDATE",
       "materialChange": "Website +B6 vs GEN B12; GEN amount unset/0",
-      "priceFlag": false,
-      "priceFlagNotes": []
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+        "Formula band $92.5\u2013$101.25"
+      ],
+      "previousProposedRetail_beforeFormula": null,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        92.5,
+        101.25
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+      "pricingFlags": []
     },
     {
       "displayName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
@@ -269,8 +381,19 @@
       ],
       "action": "UPDATE",
       "materialChange": "Website still lists Semaglutide + B6; GEN ladder is Glycine",
-      "priceFlag": false,
-      "priceFlagNotes": []
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+        "Formula band $92.5\u2013$101.25"
+      ],
+      "previousProposedRetail_beforeFormula": 119.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        92.5,
+        101.25
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+      "pricingFlags": []
     }
   ],
   "ownerDecisions13": [
@@ -1112,5 +1235,10 @@
     ],
     "note": "Owner called this Decision #10; sheet Decision #10 is Sildenafil Unspecified and remains unresolved"
   },
-  "phase": "GEN-CATALOG-1G-ALL-DECISIONS-RESOLVED"
+  "phase": "GEN-CATALOG-1G-ALL-DECISIONS-RESOLVED",
+  "pricingRule_1g": {
+    "rule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+    "note": "Workbook SELECTED FORMULARY column \"Cost +75%\" = landedCost \u00d7 1.75 (i.e. (cost+shipping)\u00d71.75). Owner rule differs: cost\u00d71.75+shipping only.",
+    "appliedAt": "2026-08-24T07:05:53Z"
+  }
 }

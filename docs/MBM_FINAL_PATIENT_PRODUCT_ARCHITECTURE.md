@@ -805,39 +805,26 @@ B12 and Glycine stay distinct underneath. Do not map one to the other without ex
   - Row 102: BPC-157/KPV/TB500 3mg/3mg/3mg/mL · 3mg/3mg/3mg/mL · cost $77+25 → $159
 - **Note:** Distinct blend.
 
-### BPC-157 / TB-500 Injection
+### Wolverine: BPC-157/TB-500 (ONE product / TWO variants)
 
-> **SUPERSEDED representation (MBM-FINAL-INTEGRITY-GATE):** Website Wolverine is **ONE** patient-facing product (`bpc-157-tb-500`) with **TWO** dosage-form variants (Capsule + Injection). Do not count injection and capsules as two CURRENT_LIVE patient-facing products. See merged architecture object `bpc-157-tb-500` and `docs/MBM_FINAL_INTEGRITY_GATE.md`.
+> **MBM-FINAL-INTEGRITY-GATE:** Website authority = single slug `bpc-157-tb-500` with Capsule + Injection variants. Do **not** count as two CURRENT_LIVE patient-facing products. Locked CURRENT_LIVE = **17** remains valid. Prior split `bpc-tb-inj` / `bpc-tb-cap` objects were a representation error and have been merged in JSON.
 
-### BPC-157 / TB-500 Capsules
+- **Launch state:** CURRENT_LIVE  
+- **Variants / formulary routes:**
+  - Capsule → SELECTED r104 `BPC-157/TB500 capsules 500MCG/500MCG` · Greenwich · $3.20+$25 → **$29** (website list $99)
+  - Injection → SELECTED r103 `BPC-157/TB500 3mg/3mg/mL` · 5ML · Greenwich · $77+$25 → **$159** (website list $199)
 
-> **SUPERSEDED representation** — merged into Wolverine one-product / two-variant model (integrity gate).
+### BPC-157 / TB-500 / GHK-Cu Injection (FUTURE — distinct blend; unchanged)
 
-- **LIVE / FUTURE:** LIVE NOW
-- **Form:** Injection
-- **Formulation:** BPC-157/TB500 3mg/3mg/mL
-- **Pharmacy:** Greenwich Pharmacy
-- **One-time price:** $159
-- **Membership:** —
-- **3/6 month:** — (separate purchase models only when launched)
-- **GEN match:** REUSE_RENAME · BPC-157 + GHK-Cu + KPV + TB-500 Comprehensive Recovery Protocol · `f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p`
-- **Formulary rows under it (1):**
-  - Row 103: BPC-157/TB500 3mg/3mg/mL · 3mg/3mg/mL · cost $77+25 → $159
-- **Note:** Website LIVE Wolverine injection variant.
+_(Prior separate “BPC-157 / TB-500 Injection” and “BPC-157 / TB-500 Capsules” CURRENT_LIVE sections below are historical prose; superseded by Wolverine one-product model above.)_
 
-### BPC-157 / TB-500 Capsules
+### BPC-157 / TB-500 Injection (HISTORICAL — superseded)
 
-- **LIVE / FUTURE:** LIVE NOW
-- **Form:** Capsule
-- **Formulation:** BPC-157/TB500 500mcg/500mcg capsules
-- **Pharmacy:** Greenwich Pharmacy
-- **One-time price:** $29
-- **Membership:** —
-- **3/6 month:** — (separate purchase models only when launched)
-- **GEN match:** REUSE_RENAME · BPC-157 · `f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_KXMm9SsbOEYnFy9phmZn`
-- **Formulary rows under it (1):**
-  - Row 104: BPC-157/TB500 capsules 500MCG/500MCG · 500mcg/500mcg · cost $3.2+25 → $29
-- **Note:** Website LIVE capsule variant. Keep separate from injection.
+> Superseded — see Wolverine one-product model.
+
+### BPC-157 / TB-500 Capsules (HISTORICAL — superseded)
+
+> Superseded — see Wolverine one-product model.
 
 ## PRESCRIPTION SKIN & HAIR
 

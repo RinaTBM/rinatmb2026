@@ -230,22 +230,23 @@ Explicitly remain FUTURE (do not activate):
 
 ---
 
-## Formulary reconciliation status (MBM-FORMULARY-RECON-1)
+## Formulary reconciliation status (MBM-FORMULARY-RECON-1 → MBM-FORMULARY-AMENDMENT-1)
 
 Launch states above are **unchanged**. Status only:
 
 | Product | Classification | Owner decision? |
 |---|---|---|
-| Fat Burner | NO_SELECTED_FORMULARY_MATCH | YES |
-| Testosterone Cream | NO_SELECTED_FORMULARY_MATCH | YES |
-| Selank Injection | NO_SELECTED_FORMULARY_MATCH | YES |
-| Semax Injection | NO_SELECTED_FORMULARY_MATCH | YES |
-| Selank + Semax Blend Nasal Spray | NO_SELECTED_FORMULARY_MATCH | YES |
-| Tesamorelin Injection | FORMULATION_CONFLICT | YES |
-| Minoxidil Combination Topical Formula | MULTIPLE_VALID_OPTIONS | YES |
-| Lash/Brow Growth Serum | NO_SELECTED_FORMULARY_MATCH | YES |
+| Fat Burner | FORMULARY_ADDITION_REQUIRED | YES — REQUEST_FROM_PHARMACY |
+| Testosterone Cream | FORMULARY_ADDITION_REQUIRED | YES — REQUEST_FROM_PHARMACY |
+| Selank Injection | FORMULARY_ADDITION_REQUIRED | YES — REQUEST_FROM_PHARMACY |
+| Semax Injection | FORMULARY_ADDITION_REQUIRED | YES — REQUEST_FROM_PHARMACY |
+| Selank + Semax Blend Nasal Spray | FORMULARY_ADDITION_REQUIRED | YES — REQUEST_FROM_PHARMACY |
+| Tesamorelin Injection | FORMULARY_ADDITION_REQUIRED | YES — REQUEST_FROM_PHARMACY |
+| Minoxidil Combination Topical Formula | VERIFIED_SELECTED_FORMULARY_MATCH (0.1%/5% Vios $79) | NO — locked |
+| Lash/Brow Growth Serum | FORMULARY_ADDITION_REQUIRED | YES — REQUEST_FROM_PHARMACY |
 
-Full report: `docs/MBM_CURRENT_LIVE_FORMULARY_RECONCILIATION.md`
+Amendment queue: `docs/MBM_FORMULARY_AMENDMENT_QUEUE.md`  
+Full recon: `docs/MBM_CURRENT_LIVE_FORMULARY_RECONCILIATION.md`
 
 ## FINAL REPORT
 

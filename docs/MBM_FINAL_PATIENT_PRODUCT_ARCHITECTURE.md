@@ -34,6 +34,13 @@
 
 Details: `docs/MBM_CURRENT_LIVE_FORMULARY_RECONCILIATION.md`
 
+
+### Formulary amendment queue (MBM-FORMULARY-AMENDMENT-1) — 2026-08-24T21:48:00Z
+
+- **Minoxidil Combination:** RESOLVED → Finasteride/Minoxidil **0.1%/5%** Vios · **$79**
+- **7 products:** FORMULARY_ADDITION_REQUIRED / not found in available sources → pharmacy requests (`docs/MBM_FORMULARY_AMENDMENT_QUEUE.md`)
+- Launch map unchanged
+
 **Full 3-state launch table:** `docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md`
 
 | State | Count |

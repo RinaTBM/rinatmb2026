@@ -1243,5 +1243,8 @@
     "GEN_WRITES": 0,
     "WEBSITE_MODIFIED": "NO",
     "GEN_WHOP_CUTOVER": "OFF"
+  },
+  "statusNotes": {
+    "formularyAmendment": "MBM-FORMULARY-AMENDMENT-1: Minoxidil LOCKED Fin/Minox 0.1%/5% Vios $79; 7 CURRENT_LIVE still FORMULARY_ADDITION_REQUIRED / REQUEST_FROM_PHARMACY. See docs/MBM_FORMULARY_AMENDMENT_QUEUE.md"
   }
 }

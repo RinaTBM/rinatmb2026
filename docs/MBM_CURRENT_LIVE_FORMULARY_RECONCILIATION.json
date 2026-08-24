@@ -1,7 +1,7 @@
 {
   "meta": {
     "generated_at": "2026-08-24T21:40:56Z",
-    "phase": "MBM-FORMULARY-RECON-1",
+    "phase": "MBM-FORMULARY-RECON-1 \u2192 MBM-FORMULARY-AMENDMENT-1",
     "mode": "READ-ONLY",
     "launch_map_changed": false,
     "gen_modified": false,
@@ -15,7 +15,9 @@
       "LAUNCH_WITH_WEBSITE_CUTOVER": 16,
       "FUTURE_HIDDEN": 32,
       "TOTAL": 65
-    }
+    },
+    "amendment_queue": "docs/MBM_FORMULARY_AMENDMENT_QUEUE.md",
+    "amended_at": "2026-08-24T21:48:00Z"
   },
   "products": [
     {
@@ -68,12 +70,12 @@
         ],
         "note": "GEN/SMART often points at Ipamorelin quad. Website Fat Burner is 3-ingredient WITHOUT Ipamorelin. Do not auto-map."
       },
-      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "classification": "FORMULARY_ADDITION_REQUIRED",
       "current_price": 259,
       "new_price": null,
       "pricing": null,
-      "owner_decision_needed": true,
-      "owner_decision": "Provide/select a SELECTED FORMULARY row for AOD-9604 + MOTS-C + Tesamorelin (no Ipamorelin) matching website 1.2/2/3 mg/mL in 5mL \u2014 or change website formulation/name to an existing SELECTED identity.",
+      "owner_decision_needed": false,
+      "owner_decision": "KEEP website AOD+MOTS+Tesamorelin WITHOUT Ipamorelin. Do not adopt Ipamorelin quad.",
       "missing": "SELECTED FORMULARY has no AOD-9604 and no AOD+MOTS-C+Tesamorelin triple. Do not invent from GEN Ipamorelin quad.",
       "protect_from_deactivation": [
         {
@@ -97,7 +99,10 @@
           "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
           "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
         }
-      ]
+      ],
+      "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
+      "action_required": "REQUEST_FROM_PHARMACY",
+      "owner_decision_applied": "KEEP website AOD+MOTS+Tesamorelin WITHOUT Ipamorelin. Do not adopt Ipamorelin quad."
     },
     {
       "id": "testosterone-cream",
@@ -154,12 +159,12 @@
           }
         ]
       },
-      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "classification": "FORMULARY_ADDITION_REQUIRED",
       "current_price": 79,
       "new_price": null,
       "pricing": null,
-      "owner_decision_needed": true,
-      "owner_decision": "Add exact Testosterone Cream (strength/package, e.g. 5mg/g 30g) to SELECTED FORMULARY, or explicitly approve mapping to St Luke 1-ingredient HRT cream with a defined testosterone strength.",
+      "owner_decision_needed": false,
+      "owner_decision": "KEEP dedicated Testosterone Cream 5mg/g. Do not substitute Custom HRT Cream.",
       "missing": "No SELECTED row for Testosterone-only cream at 5mg/g. Custom HRT Cream must not be silently substituted.",
       "protect_from_deactivation": [
         {
@@ -169,7 +174,10 @@
           "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
           "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
         }
-      ]
+      ],
+      "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
+      "action_required": "REQUEST_FROM_PHARMACY",
+      "owner_decision_applied": "KEEP dedicated Testosterone Cream 5mg/g. Do not substitute Custom HRT Cream."
     },
     {
       "id": "selank-injection",
@@ -207,12 +215,12 @@
           }
         ]
       },
-      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "classification": "FORMULARY_ADDITION_REQUIRED",
       "current_price": 129,
       "new_price": null,
       "pricing": null,
-      "owner_decision_needed": true,
-      "owner_decision": "Add SELECTED injectable Selank (form + strength + package + pharmacy + cost), or change website product to Selank Nasal Spray (FUTURE_HIDDEN architecture exists).",
+      "owner_decision_needed": false,
+      "owner_decision": "KEEP Selank Injection. Do not substitute nasal spray.",
       "missing": "SELECTED has Selank Nasal Spray only. No injectable Selank row.",
       "protect_from_deactivation": [
         {
@@ -222,7 +230,10 @@
           "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
           "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
         }
-      ]
+      ],
+      "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
+      "action_required": "REQUEST_FROM_PHARMACY",
+      "owner_decision_applied": "KEEP Selank Injection. Do not substitute nasal spray."
     },
     {
       "id": "semax-injection",
@@ -260,12 +271,12 @@
           }
         ]
       },
-      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "classification": "FORMULARY_ADDITION_REQUIRED",
       "current_price": 129,
       "new_price": null,
       "pricing": null,
-      "owner_decision_needed": true,
-      "owner_decision": "Add SELECTED injectable Semax, or change website product to Semax Nasal Spray.",
+      "owner_decision_needed": false,
+      "owner_decision": "KEEP Semax Injection. Do not substitute nasal spray.",
       "missing": "SELECTED has Semax Nasal Spray only. No injectable Semax row.",
       "protect_from_deactivation": [
         {
@@ -275,7 +286,10 @@
           "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
           "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
         }
-      ]
+      ],
+      "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
+      "action_required": "REQUEST_FROM_PHARMACY",
+      "owner_decision_applied": "KEEP Semax Injection. Do not substitute nasal spray."
     },
     {
       "id": "selank-semax-nasal",
@@ -316,12 +330,12 @@
           }
         ]
       },
-      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "classification": "FORMULARY_ADDITION_REQUIRED",
       "current_price": 169,
       "new_price": null,
       "pricing": null,
-      "owner_decision_needed": true,
-      "owner_decision": "Add a SELECTED combined Selank+Semax nasal formulation, or replace website blend with two separate nasal products / remove blend SKU.",
+      "owner_decision_needed": false,
+      "owner_decision": "KEEP combined Selank+Semax nasal. Two independent nasal SKUs do not satisfy.",
       "missing": "No combined Selank+Semax nasal row in SELECTED. Separate nasal rows cannot satisfy this product.",
       "protect_from_deactivation": [
         {
@@ -331,7 +345,10 @@
           "prior_bucket": "REUSE_RENAME",
           "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
         }
-      ]
+      ],
+      "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
+      "action_required": "REQUEST_FROM_PHARMACY",
+      "owner_decision_applied": "KEEP combined Selank+Semax nasal. Two independent nasal SKUs do not satisfy."
     },
     {
       "id": "tesamorelin",
@@ -385,12 +402,12 @@
           }
         ]
       },
-      "classification": "FORMULATION_CONFLICT",
+      "classification": "FORMULARY_ADDITION_REQUIRED",
       "current_price": 149,
       "new_price": null,
       "pricing": null,
-      "owner_decision_needed": true,
-      "owner_decision": "Either (A) add plain Tesamorelin to SELECTED, or (B) rename website product to MOTS-c / Tesamorelin blend and accept SELECTED r113 (would become VERIFIED_RENAME_MATCH / STRUCTURE_CHANGE after approval).",
+      "owner_decision_needed": false,
+      "owner_decision": "KEEP plain Tesamorelin. Do not adopt MOTS-c/Tesamorelin blend.",
       "missing": "SELECTED has no plain Tesamorelin. Only MOTS-C/Tesamorelin blend.",
       "protect_from_deactivation": [
         {
@@ -407,7 +424,10 @@
           "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
           "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
         }
-      ]
+      ],
+      "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
+      "action_required": "REQUEST_FROM_PHARMACY",
+      "owner_decision_applied": "KEEP plain Tesamorelin. Do not adopt MOTS-c/Tesamorelin blend."
     },
     {
       "id": "minoxidil-combination",
@@ -556,12 +576,19 @@
           }
         ]
       },
-      "classification": "MULTIPLE_VALID_OPTIONS",
+      "classification": "VERIFIED_SELECTED_FORMULARY_MATCH",
       "current_price": 129,
-      "new_price": "Depends on owner choice (see options)",
-      "pricing": null,
-      "owner_decision_needed": true,
-      "owner_decision": "Choose which SELECTED combination formula the website product represents (or split into multiple storefront SKUs).",
+      "new_price": 79,
+      "pricing": {
+        "at_cost": 30,
+        "shipping": 30,
+        "raw_retail": 82.5,
+        "final_x9": 79,
+        "current_website_price": 129,
+        "price_change": -50
+      },
+      "owner_decision_needed": false,
+      "owner_decision": "LOCKED \u2014 Finasteride/Minoxidil 0.1%/5% Vios @ $79 (MBM-FORMULARY-AMENDMENT-1)",
       "missing": null,
       "protect_from_deactivation": [
         {
@@ -592,7 +619,37 @@
           "prior_bucket": "AMBIGUOUS_DO_NOT_TOUCH",
           "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION"
         }
-      ]
+      ],
+      "status": "RESOLVED",
+      "locked_formulation": {
+        "current_product": "Minoxidil Combination Topical Formula",
+        "resolved": true,
+        "classification": "VERIFIED_SELECTED_FORMULARY_MATCH",
+        "locked_formulation": "Finasteride / Minoxidil 0.1% / 5%",
+        "pharmacy": "Vios",
+        "excel_row": 129,
+        "exact": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+        "at_cost": 30,
+        "shipping": 30,
+        "raw_retail": 82.5,
+        "final_x9": 79,
+        "current_website_price": 129,
+        "website_copy_verification": {
+          "promises_tretinoin": false,
+          "promises_specific_finasteride_strength": false,
+          "promises_specific_minoxidil_strength": false,
+          "promises_other_named_actives": false,
+          "compatible_with_owner_lock": true,
+          "evidence": [
+            "products.ts strength = \"Combination formula\"",
+            "productCopy: companion ingredients \"determined by your clinician and pharmacy\"",
+            "reviewFlags: do not invent companion ingredients"
+          ],
+          "note": "Website copy is intentionally non-specific; locking Fin/Minox 0.1%/5% does not contradict published promises. Cutover may tighten storefront wording to disclose Finasteride/Minoxidil 0.1%/5%."
+        }
+      },
+      "owner_decision_applied": "LOCK Finasteride/Minoxidil 0.1%/5% Vios $79 (VERIFIED_SELECTED_FORMULARY_MATCH)",
+      "action_required": "READY_FOR_PAIRING_WHEN_AUTHORIZED"
     },
     {
       "id": "lash-brow",
@@ -624,54 +681,48 @@
         "candidates": [],
         "note": "No clear GEN client product named Bimatoprost / Lash/Brow found in current GEN pull."
       },
-      "classification": "NO_SELECTED_FORMULARY_MATCH",
+      "classification": "FORMULARY_ADDITION_REQUIRED",
       "current_price": 89,
       "new_price": null,
       "pricing": null,
-      "owner_decision_needed": true,
-      "owner_decision": "Source and add Bimatoprost (or exact lash/brow active) into SELECTED FORMULARY with pharmacy/cost, or retire/replace the website product after cutover planning.",
+      "owner_decision_needed": false,
+      "owner_decision": "Website active is Bimatoprost 0.03%/2.5mL. FUTURE ADDITIONS TBD is not approved. REQUEST_FROM_PHARMACY.",
       "missing": "SELECTED FORMULARY has zero Bimatoprost rows. FUTURE ADDITIONS explicitly says source match needed.",
-      "protect_from_deactivation": []
+      "protect_from_deactivation": [],
+      "match_status": "MISSING_FROM_AVAILABLE_FORMULARIES",
+      "action_required": "REQUEST_FROM_PHARMACY",
+      "owner_decision_applied": "Website active is Bimatoprost 0.03%/2.5mL. FUTURE ADDITIONS TBD is not approved. REQUEST_FROM_PHARMACY."
     }
   ],
   "classification_counts": {
     "NO_SELECTED_FORMULARY_MATCH": 6,
     "FORMULATION_CONFLICT": 1,
-    "MULTIPLE_VALID_OPTIONS": 1
+    "VERIFIED_SELECTED_FORMULARY_MATCH": 1
   },
   "final_report": {
-    "CURRENT_LIVE_RECONCILIATION_PRODUCTS": 8,
-    "EXACT_FORMULARY_MATCH": 0,
+    "CURRENT_LIVE_RECONCILIATION_STARTING": 8,
+    "MINOXIDIL_RESOLVED": "YES",
+    "FORMULARY_ADDITIONS_REQUIRED": 7,
+    "FOUND_EXACT_OUTSIDE_SELECTED": 0,
+    "FOUND_BUT_ECONOMICS_INCOMPLETE": 0,
+    "NOT_FOUND_IN_AVAILABLE_SOURCES": 7,
+    "PHARMACY_INFORMATION_REQUESTS_REQUIRED": 7,
+    "EXACT_FORMULARY_MATCH": 1,
+    "VERIFIED_SELECTED_FORMULARY_MATCH": 1,
     "VERIFIED_RENAME_MATCH": 0,
     "VERIFIED_STRUCTURE_CHANGE": 0,
-    "MULTIPLE_VALID_OPTIONS": 1,
-    "NO_SELECTED_FORMULARY_MATCH": 6,
-    "FORMULATION_CONFLICT": 1,
-    "READY_WITHOUT_OWNER_DECISION": 0,
-    "OWNER_DECISIONS_REQUIRED": 8,
-    "MISSING_FORMULARY_PRODUCTS": [
-      "AOD-9604 + MOTS-C + Tesamorelin triple (website Fat Burner identity)",
-      "Testosterone Cream 5mg/g (dedicated)",
-      "Selank Injection",
-      "Semax Injection",
-      "Selank + Semax combined Nasal Spray",
-      "Plain Tesamorelin Injection",
-      "Bimatoprost / Lash-Brow solution in SELECTED"
-    ],
-    "FAT_BURNER": "NO_SELECTED_FORMULARY_MATCH",
-    "TESTOSTERONE_CREAM": "NO_SELECTED_FORMULARY_MATCH",
-    "SELANK_INJECTION": "NO_SELECTED_FORMULARY_MATCH",
-    "SEMAX_INJECTION": "NO_SELECTED_FORMULARY_MATCH",
-    "SELANK_SEMAX_NASAL": "NO_SELECTED_FORMULARY_MATCH",
-    "TESAMORELIN": "FORMULATION_CONFLICT",
-    "MINOXIDIL_COMBINATION": "MULTIPLE_VALID_OPTIONS",
-    "LASH_BROW": "NO_SELECTED_FORMULARY_MATCH",
-    "GEN_OBJECTS_PROTECTED_FROM_DEACTIVATION": 13,
-    "LAUNCH_MAP_CHANGED": "NO",
-    "GEN_MODIFIED": "NO",
+    "MULTIPLE_VALID_OPTIONS": 0,
+    "NO_SELECTED_FORMULARY_MATCH": 0,
+    "FORMULATION_CONFLICT": 0,
+    "FORMULARY_ADDITION_REQUIRED": 7,
+    "CURRENT_LIVE_FULLY_RECONCILED": false,
+    "LAUNCH_MAP_CHANGED": false,
+    "GEN_MODIFIED": false,
     "GEN_WRITES": 0,
-    "WEBSITE_MODIFIED": "NO",
-    "GEN_WHOP_CUTOVER": "OFF"
+    "WEBSITE_MODIFIED": false,
+    "CUTOVER": "OFF",
+    "GEN_OBJECTS_PROTECTED": 13,
+    "amendment_doc": "docs/MBM_FORMULARY_AMENDMENT_QUEUE.md"
   },
   "protected_gen_objects": [
     {
@@ -778,5 +829,38 @@
       "flag": "PROTECT_FROM_DEACTIVATION_PENDING_RECONCILIATION",
       "supports_website_product": "Minoxidil Combination Topical Formula"
     }
-  ]
+  ],
+  "minoxidil_amendment": {
+    "updated_at": "2026-08-24T21:48:00Z",
+    "resolved": true,
+    "classification": "VERIFIED_SELECTED_FORMULARY_MATCH",
+    "locked": {
+      "current_product": "Minoxidil Combination Topical Formula",
+      "resolved": true,
+      "classification": "VERIFIED_SELECTED_FORMULARY_MATCH",
+      "locked_formulation": "Finasteride / Minoxidil 0.1% / 5%",
+      "pharmacy": "Vios",
+      "excel_row": 129,
+      "exact": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+      "at_cost": 30,
+      "shipping": 30,
+      "raw_retail": 82.5,
+      "final_x9": 79,
+      "current_website_price": 129,
+      "website_copy_verification": {
+        "promises_tretinoin": false,
+        "promises_specific_finasteride_strength": false,
+        "promises_specific_minoxidil_strength": false,
+        "promises_other_named_actives": false,
+        "compatible_with_owner_lock": true,
+        "evidence": [
+          "products.ts strength = \"Combination formula\"",
+          "productCopy: companion ingredients \"determined by your clinician and pharmacy\"",
+          "reviewFlags: do not invent companion ingredients"
+        ],
+        "note": "Website copy is intentionally non-specific; locking Fin/Minox 0.1%/5% does not contradict published promises. Cutover may tighten storefront wording to disclose Finasteride/Minoxidil 0.1%/5%."
+      }
+    }
+  },
+  "amendment_queue_ref": "docs/MBM_FORMULARY_AMENDMENT_QUEUE.md"
 }

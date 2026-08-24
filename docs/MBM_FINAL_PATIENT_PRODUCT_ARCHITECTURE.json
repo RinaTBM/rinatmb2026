@@ -48,7 +48,8 @@
     "live_map_lock_at": "2026-08-24T21:31:06Z",
     "launch_model": "3-STATE",
     "prior_binary_live_future": "SUPERSEDED",
-    "formulary_recon_1_at": "2026-08-24T21:40:56Z"
+    "formulary_recon_1_at": "2026-08-24T21:40:56Z",
+    "formulary_amendment_1_at": "2026-08-24T21:48:00Z"
   },
   "sem_tiers_owner_defined": {
     "Starting / Low": [
@@ -6046,7 +6047,9 @@
       "formulary_status": "NO_SELECTED_MATCH \u2014 B6 not in SELECTED; target is B12/Glycine ladders",
       "cutover_action": "REPLACE_B6",
       "new_architecture_target": "Replace at cutover with 8 SEM dose-group products (B12 + Glycine): Starting/Low, Mid, High, Any Dose",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "FORMULARY_ADDITION_REQUIRED",
+      "amendment_status": "FORMULARY_ADDITION_REQUIRED"
     },
     {
       "id": "website-current-tirzepatide",
@@ -6076,7 +6079,9 @@
       "formulary_status": "NO_SELECTED_MATCH \u2014 B6 not in SELECTED; target is B12/Glycine ladders",
       "cutover_action": "REPLACE_B6",
       "new_architecture_target": "Replace at cutover with 8 TIR dose-group products (B12 + Glycine); tiers APPROVED 5+10 / 15+20 / 25+30 / Any",
-      "source": "website_catalog_src_data_products_ts"
+      "source": "website_catalog_src_data_products_ts",
+      "formulary_reconciliation_status": "FORMULARY_ADDITION_REQUIRED",
+      "amendment_status": "FORMULARY_ADDITION_REQUIRED"
     },
     {
       "id": "website-current-fat-burner",
@@ -6107,7 +6112,8 @@
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "No exact SELECTED match \u2014 do not invent; keep offered",
       "source": "website_catalog_src_data_products_ts",
-      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+      "amendment_status": "FORMULARY_ADDITION_REQUIRED"
     },
     {
       "id": "website-current-testosterone-cream",
@@ -6138,7 +6144,8 @@
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "Keep as Testosterone Cream CURRENT_LIVE \u2014 Custom HRT Cream moved to FUTURE_HIDDEN",
       "source": "website_catalog_src_data_products_ts",
-      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+      "amendment_status": "FORMULARY_ADDITION_REQUIRED"
     },
     {
       "id": "website-current-selank",
@@ -6169,7 +6176,8 @@
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "SELECTED has Selank Nasal Spray only (FUTURE_HIDDEN) \u2014 no injection row",
       "source": "website_catalog_src_data_products_ts",
-      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+      "amendment_status": "FORMULARY_ADDITION_REQUIRED"
     },
     {
       "id": "website-current-semax",
@@ -6200,7 +6208,8 @@
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "SELECTED has Semax Nasal Spray only (FUTURE_HIDDEN) \u2014 no injection row",
       "source": "website_catalog_src_data_products_ts",
-      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+      "amendment_status": "FORMULARY_ADDITION_REQUIRED"
     },
     {
       "id": "website-current-selank-semax-nasal-spray",
@@ -6231,7 +6240,8 @@
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "No SELECTED blend row (separate nasal sprays are FUTURE_HIDDEN)",
       "source": "website_catalog_src_data_products_ts",
-      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+      "amendment_status": "FORMULARY_ADDITION_REQUIRED"
     },
     {
       "id": "website-current-tesamorelin",
@@ -6262,7 +6272,8 @@
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "No plain Tesamorelin in SELECTED (MOTS-c/Tesamorelin blend is FUTURE_HIDDEN)",
       "source": "website_catalog_src_data_products_ts",
-      "formulary_reconciliation_status": "FORMULATION_CONFLICT"
+      "formulary_reconciliation_status": "FORMULATION_CONFLICT",
+      "amendment_status": "FORMULARY_ADDITION_REQUIRED"
     },
     {
       "id": "website-current-minoxidil-topical",
@@ -6293,7 +6304,8 @@
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "Not Minoxidil Solution (now FUTURE_HIDDEN). Closer to FUTURE Finasteride/Minoxidil topicals",
       "source": "website_catalog_src_data_products_ts",
-      "formulary_reconciliation_status": "MULTIPLE_VALID_OPTIONS"
+      "formulary_reconciliation_status": "VERIFIED_SELECTED_FORMULARY_MATCH",
+      "formulary_locked_retail": 79
     },
     {
       "id": "website-current-bimatoprost-solution",
@@ -6324,7 +6336,8 @@
       "cutover_action": "FORMULARY_RECONCILIATION_REQUIRED",
       "new_architecture_target": "Architecture placeholder FUTURE_HIDDEN until source match \u2014 website stays CURRENT_LIVE",
       "source": "website_catalog_src_data_products_ts",
-      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH"
+      "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+      "amendment_status": "FORMULARY_ADDITION_REQUIRED"
     }
   ],
   "owner_decisions": {
@@ -6562,9 +6575,10 @@
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
         "checkout_until_cutover": "ON",
-        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_status": "FORMULARY_ADDITION_REQUIRED",
         "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
-        "owner_decision_needed": true
+        "owner_decision_needed": true,
+        "amendment_action": "REQUEST_FROM_PHARMACY"
       },
       {
         "product": "Estradiol Patch",
@@ -6623,9 +6637,10 @@
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
         "checkout_until_cutover": "ON",
-        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_status": "FORMULARY_ADDITION_REQUIRED",
         "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
-        "owner_decision_needed": true
+        "owner_decision_needed": true,
+        "amendment_action": "REQUEST_FROM_PHARMACY"
       },
       {
         "product": "NAD+ Injection",
@@ -6664,9 +6679,10 @@
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
         "checkout_until_cutover": "ON",
-        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_status": "FORMULARY_ADDITION_REQUIRED",
         "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
-        "owner_decision_needed": true
+        "owner_decision_needed": true,
+        "amendment_action": "REQUEST_FROM_PHARMACY"
       },
       {
         "product": "Semax Injection",
@@ -6685,9 +6701,10 @@
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
         "checkout_until_cutover": "ON",
-        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_status": "FORMULARY_ADDITION_REQUIRED",
         "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
-        "owner_decision_needed": true
+        "owner_decision_needed": true,
+        "amendment_action": "REQUEST_FROM_PHARMACY"
       },
       {
         "product": "Selank + Semax Blend Nasal Spray",
@@ -6706,9 +6723,10 @@
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
         "checkout_until_cutover": "ON",
-        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_status": "FORMULARY_ADDITION_REQUIRED",
         "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
-        "owner_decision_needed": true
+        "owner_decision_needed": true,
+        "amendment_action": "REQUEST_FROM_PHARMACY"
       },
       {
         "product": "Tesamorelin Injection",
@@ -6727,9 +6745,10 @@
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
         "checkout_until_cutover": "ON",
-        "formulary_reconciliation_status": "FORMULATION_CONFLICT",
+        "formulary_reconciliation_status": "FORMULARY_ADDITION_REQUIRED",
         "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
-        "owner_decision_needed": true
+        "owner_decision_needed": true,
+        "amendment_action": "REQUEST_FROM_PHARMACY"
       },
       {
         "product": "Wolverine: BPC-157/TB-500",
@@ -6789,9 +6808,14 @@
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
         "checkout_until_cutover": "ON",
-        "formulary_reconciliation_status": "MULTIPLE_VALID_OPTIONS",
+        "formulary_reconciliation_status": "VERIFIED_SELECTED_FORMULARY_MATCH",
         "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
-        "owner_decision_needed": true
+        "owner_decision_needed": false,
+        "formulary_locked": {
+          "exact": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+          "pharmacy": "Vios",
+          "retail_x9": 79
+        }
       },
       {
         "product": "Lash/Brow Growth Serum",
@@ -6812,9 +6836,10 @@
         "show_patient_until_cutover": true,
         "website_until_cutover": "ON",
         "checkout_until_cutover": "ON",
-        "formulary_reconciliation_status": "NO_SELECTED_FORMULARY_MATCH",
+        "formulary_reconciliation_status": "FORMULARY_ADDITION_REQUIRED",
         "formulary_reconciliation_phase": "MBM-FORMULARY-RECON-1",
-        "owner_decision_needed": true
+        "owner_decision_needed": true,
+        "amendment_action": "REQUEST_FROM_PHARMACY"
       },
       {
         "product": "Semaglutide Membership / SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
@@ -7785,5 +7810,64 @@
         "supports_website_product": "Minoxidil Combination Topical Formula"
       }
     ]
+  },
+  "formulary_amendment_1": {
+    "generated_at": "2026-08-24T21:48:00Z",
+    "minoxidil_resolved": true,
+    "minoxidil_lock": {
+      "current_product": "Minoxidil Combination Topical Formula",
+      "resolved": true,
+      "classification": "VERIFIED_SELECTED_FORMULARY_MATCH",
+      "locked_formulation": "Finasteride / Minoxidil 0.1% / 5%",
+      "pharmacy": "Vios",
+      "excel_row": 129,
+      "exact": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+      "at_cost": 30,
+      "shipping": 30,
+      "raw_retail": 82.5,
+      "final_x9": 79,
+      "current_website_price": 129,
+      "website_copy_verification": {
+        "promises_tretinoin": false,
+        "promises_specific_finasteride_strength": false,
+        "promises_specific_minoxidil_strength": false,
+        "promises_other_named_actives": false,
+        "compatible_with_owner_lock": true,
+        "evidence": [
+          "products.ts strength = \"Combination formula\"",
+          "productCopy: companion ingredients \"determined by your clinician and pharmacy\"",
+          "reviewFlags: do not invent companion ingredients"
+        ],
+        "note": "Website copy is intentionally non-specific; locking Fin/Minox 0.1%/5% does not contradict published promises. Cutover may tighten storefront wording to disclose Finasteride/Minoxidil 0.1%/5%."
+      }
+    },
+    "amendment_queue": "docs/MBM_FORMULARY_AMENDMENT_QUEUE.md",
+    "launch_map_changed": false,
+    "final_report": {
+      "CURRENT_LIVE_RECONCILIATION_STARTING": 8,
+      "MINOXIDIL_RESOLVED": "YES",
+      "FORMULARY_ADDITIONS_REQUIRED": 7,
+      "FOUND_EXACT_OUTSIDE_SELECTED": 0,
+      "FOUND_BUT_ECONOMICS_INCOMPLETE": 0,
+      "NOT_FOUND_IN_AVAILABLE_SOURCES": 7,
+      "PHARMACY_INFORMATION_REQUESTS_REQUIRED": 7,
+      "FAT_BURNER": "FORMULARY_ADDITION_REQUIRED \u2014 MISSING_FROM_AVAILABLE_FORMULARIES \u2014 REQUEST_FROM_PHARMACY",
+      "TESTOSTERONE_CREAM": "FORMULARY_ADDITION_REQUIRED \u2014 MISSING_FROM_AVAILABLE_FORMULARIES \u2014 REQUEST_FROM_PHARMACY",
+      "SELANK_INJECTION": "FORMULARY_ADDITION_REQUIRED \u2014 MISSING_FROM_AVAILABLE_FORMULARIES \u2014 REQUEST_FROM_PHARMACY",
+      "SEMAX_INJECTION": "FORMULARY_ADDITION_REQUIRED \u2014 MISSING_FROM_AVAILABLE_FORMULARIES \u2014 REQUEST_FROM_PHARMACY",
+      "SELANK_SEMAX_NASAL": "FORMULARY_ADDITION_REQUIRED \u2014 MISSING_FROM_AVAILABLE_FORMULARIES \u2014 REQUEST_FROM_PHARMACY",
+      "TESAMORELIN": "FORMULARY_ADDITION_REQUIRED \u2014 MISSING_FROM_AVAILABLE_FORMULARIES \u2014 REQUEST_FROM_PHARMACY",
+      "LASH_BROW": "FORMULARY_ADDITION_REQUIRED \u2014 MISSING_FROM_AVAILABLE_FORMULARIES \u2014 REQUEST_FROM_PHARMACY",
+      "MINOXIDIL": "VERIFIED_SELECTED_FORMULARY_MATCH \u2014 Finasteride/Minoxidil 0.1%/5% Vios \u2014 $79",
+      "CURRENT_LIVE_FULLY_RECONCILED": "NO",
+      "LAUNCH_MAP_CHANGED": "NO",
+      "GEN_MODIFIED": "NO",
+      "GEN_WRITES": 0,
+      "WEBSITE_MODIFIED": "NO",
+      "CUTOVER": "OFF"
+    }
+  },
+  "statusNotes": {
+    "formularyAmendment": "MBM-FORMULARY-AMENDMENT-1: Minoxidil LOCKED Fin/Minox 0.1%/5% Vios $79; 7 CURRENT_LIVE still FORMULARY_ADDITION_REQUIRED / REQUEST_FROM_PHARMACY. See docs/MBM_FORMULARY_AMENDMENT_QUEUE.md"
   }
 }

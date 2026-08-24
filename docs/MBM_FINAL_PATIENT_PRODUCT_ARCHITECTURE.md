@@ -1,10 +1,23 @@
 # My Bare Method — Final Patient-Facing Product Architecture
 
-**Generated:** 2026-08-24T18:06:19Z  
-**Phase:** GEN-CATALOG-ARCHITECTURE-LOCK  
+**Generated:** 2026-08-24T18:06:19Z · **Owner-review-2 update:** 2026-08-24T21:12:57Z  
+**Phase:** GEN-CATALOG-ARCHITECTURE-LOCK + MBM-ARCHITECTURE-OWNER-REVIEW-2  
 **Mode:** READ-ONLY planning — **no GEN writes, no website writes, no pairing checklist, GEN/Whop cutover OFF**  
 **Authority:** SELECTED FORMULARY for exact medications · Owner rules for SEM/TIR dose groups & memberships  
-**Stop:** Owner approval required before any execution. **Do not start GEN-CATALOG-2B.**
+
+### Owner decisions (locked this review)
+
+| Item | Status |
+|---|---|
+| TIR tiers 5+10 / 15+20 / 25+30 / Any Dose (B12 & Glycine separate) | **APPROVED** |
+| SEM membership $149 · one website offer | **APPROVED** |
+| TIR membership $275 · one website offer | **APPROVED** |
+| Membership backend split if GEN requires | **APPROVED IF REQUIRED BY GEN** |
+| B6 → B12/Glycine (website not modified yet) | **APPROVED** |
+| LIVE/FUTURE map (27 / 29) | **PENDING** — see `docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md` |
+| POSSIBLE_FALSE_LIVE flagged | **19** products |
+
+**Stop:** LIVE/FUTURE still needs your approval before execution. **Do not start GEN-CATALOG-2B.**
 
 ---
 
@@ -73,13 +86,13 @@
 
 ## Decisions needed from you before execution
 
-1. **Approve or revise TIR tier boundaries** (proposal below).
-2. **Acknowledge membership backend split flags** (`SEM_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT`, `TIR_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT`). Website may still show one membership offer.
+1. ~~Approve or revise TIR tier boundaries~~ **DONE — APPROVED**
+2. ~~Acknowledge membership backend split flags~~ **DONE — approved if GEN requires (backend-only)** (`SEM_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT`, `TIR_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT`). Website may still show one membership offer.
 3. **Confirm LIVE NOW vs FUTURE HIDDEN** rows in the category sections.
-4. **Confirm B6 replacement** — website Semaglutide/Tirzepatide + B6 are legacy vs SELECTED B12/Glycine.
+4. ~~Confirm B6 replacement~~ **DONE — approved; website not modified yet** — website Semaglutide/Tirzepatide + B6 are legacy vs SELECTED B12/Glycine.
 5. **No GEN writes / no website writes / no pairing checklist** until you approve this architecture.
 
-### TIR tier proposal (needs your approval)
+### TIR tier proposal (**APPROVED**)
 
 Approved vial ladder: **5 / 10 / 15 / 20 / 25 / 30 mg** (each as B12 and as Glycine).
 
@@ -90,9 +103,7 @@ Approved vial ladder: **5 / 10 / 15 / 20 / 25 / 30 mg** (each as B12 and as Glyc
 | High | 25mg + 30mg |
 | Any Dose | full ladder 5 / 10 / 15 / 20 / 25 / 30mg |
 
-**Why this grouping:** Same shape as your locked SEM groups (lower pair / middle band / upper pair / full ladder).
-
-**Alternate (closer to SEM’s single Mid vial):** Starting/Low = 5+10 · Mid = **15 only** · High = 20+25+30 · Any Dose = full ladder.
+**Status:** Owner approved this grouping (not the alternate).
 
 Explicitly **excluded:** Tirzepatide/B12/Glycine · Tirzepatide/Glycine/B12 · 3-PACK cost rows.
 
@@ -1079,34 +1090,27 @@ Full ID lists are in the JSON. **No deactivations performed.**
 ## FINAL REPORT
 
 - **TOTAL PATIENT-FACING PRODUCTS:** 56
-- **LIVE NOW:** 27
-- **FUTURE HIDDEN:** 29
+- **LIVE NOW (proposed):** 27
+- **FUTURE HIDDEN (proposed):** 29
+- **POSSIBLE_FALSE_LIVE:** 19 — see `docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md`
 
 - **SEM B12 PRODUCTS:** 4
 - **SEM GLYCINE PRODUCTS:** 4
-- **SEM MEMBERSHIP:** SEMAGLUTIDE COMPOUND — ANY DOSE MEMBERSHIP @ $149/mo
-- **SEM MEMBERSHIP BACKEND STRUCTURE:** SEM_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT
+- **SEM MEMBERSHIP:** $149/mo **APPROVED** (one website offer)
+- **SEM MEMBERSHIP BACKEND STRUCTURE:** `SEM_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT` — **APPROVED IF REQUIRED BY GEN**
 
 - **TIR B12 PRODUCTS:** 4
 - **TIR GLYCINE PRODUCTS:** 4
-- **TIR MEMBERSHIP:** TIRZEPATIDE COMPOUND — ANY DOSE MEMBERSHIP @ $275/mo
-- **TIR MEMBERSHIP BACKEND STRUCTURE:** TIR_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT
+- **TIR MEMBERSHIP:** $275/mo **APPROVED** (one website offer)
+- **TIR MEMBERSHIP BACKEND STRUCTURE:** `TIR_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT` — **APPROVED IF REQUIRED BY GEN**
 
-- **TIR TIER PROPOSAL:**
-  - Starting / Low → 5mg + 10mg
-  - Mid → 15mg + 20mg
-  - High → 25mg + 30mg
-  - Any Dose → 5 / 10 / 15 / 20 / 25 / 30mg
+- **TIR TIER PROPOSAL:** **APPROVED** — Starting/Low 5+10 · Mid 15+20 · High 25+30 · Any Dose full ladder
 
-- **LEGACY B6 PRODUCTS TO REPLACE:** website Semaglutide+B6, Tirzepatide+B6 (+ membership copy); GEN B6-named count = 0
-- **GEN KEEP EXACT:** 0
-- **GEN REUSE/REPAIR:** 32
-- **GEN DEACTIVATE CANDIDATES:** 153 _(candidates only — not deactivated)_
-- **GEN AMBIGUOUS:** 70
+- **B6 → B12/GLYCINE:** **APPROVED** (website not modified yet)
+- **LIVE/FUTURE OWNER APPROVAL:** **PENDING**
 
-- **FORMULARY ROWS UNASSIGNED:** 0 (+ 11 duplicate Longevity/B12 copies)
-- **FORMULARY ROWS ASSIGNED MORE THAN ONCE:** 0 true conflicts / 22 intentional overlaps
-- **FORMULARY CONFLICTS:** 5 (see list above)
+- **PT-141 NASAL:** FUTURE HIDDEN (do not activate)
+- **SCREAM CREAM:** FUTURE HIDDEN (do not activate)
 
 - **GEN MODIFIED:** NO
 - **GEN WRITES:** 0
@@ -1115,6 +1119,6 @@ Full ID lists are in the JSON. **No deactivations performed.**
 
 ---
 
-**STOP FOR OWNER APPROVAL.**
+**STOP FOR OWNER REVIEW of LIVE/FUTURE map.**
 
 No pairing checklist produced. No GEN-CATALOG-2B started.

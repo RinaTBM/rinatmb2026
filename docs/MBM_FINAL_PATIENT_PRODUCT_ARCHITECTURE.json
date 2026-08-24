@@ -42,7 +42,9 @@
     "gen_whop_cutover": "OFF",
     "stop_for": "OWNER APPROVAL",
     "do_not_start": "GEN-CATALOG-2B",
-    "no_pairing_checklist": true
+    "no_pairing_checklist": true,
+    "owner_review_2_at": "2026-08-24T21:12:57Z",
+    "live_future_owner_approval": "PENDING"
   },
   "sem_tiers_owner_defined": {
     "Starting / Low": [
@@ -65,7 +67,7 @@
     ]
   },
   "tir_tier_proposal": {
-    "status": "AWAITING_OWNER_APPROVAL",
+    "status": "APPROVED",
     "ladder_mg": [
       5,
       10,
@@ -118,6 +120,28 @@
         25,
         30
       ]
+    },
+    "approved_grouping": {
+      "Starting / Low": [
+        5,
+        10
+      ],
+      "Mid": [
+        15,
+        20
+      ],
+      "High": [
+        25,
+        30
+      ],
+      "Any Dose": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ]
     }
   },
   "membership_backend": {
@@ -138,11 +162,11 @@
     "FUTURE_HIDDEN": 29,
     "SEM_B12_PRODUCTS": 4,
     "SEM_GLYCINE_PRODUCTS": 4,
-    "SEM_MEMBERSHIP": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP @ $149/mo",
+    "SEM_MEMBERSHIP": "$149 APPROVED",
     "SEM_MEMBERSHIP_BACKEND_STRUCTURE": "SEM_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT",
     "TIR_B12_PRODUCTS": 4,
     "TIR_GLYCINE_PRODUCTS": 4,
-    "TIR_MEMBERSHIP": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP @ $275/mo",
+    "TIR_MEMBERSHIP": "$275 APPROVED",
     "TIR_MEMBERSHIP_BACKEND_STRUCTURE": "TIR_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT",
     "TIR_TIER_PROPOSAL": {
       "Starting / Low": [
@@ -209,7 +233,12 @@
     "GEN_MODIFIED": "NO",
     "GEN_WRITES": 0,
     "WEBSITE_MODIFIED": "NO",
-    "GEN_WHOP_CUTOVER": "OFF"
+    "GEN_WHOP_CUTOVER": "OFF",
+    "LIVE_FUTURE_OWNER_APPROVAL": "PENDING",
+    "TIR_TIERS": "APPROVED",
+    "POSSIBLE_FALSE_LIVE": 19,
+    "MEMBERSHIP_BACKEND_SPLIT": "APPROVED IF REQUIRED BY GEN",
+    "B6_TO_B12_GLYCINE": "APPROVED"
   },
   "gen_classification": {
     "KEEP_EXACT": [],
@@ -2452,7 +2481,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Owner-defined dose group. Approved vials: 1mg, 2mg.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive."
     },
     {
       "id": "sem-b12-mid",
@@ -2491,7 +2522,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Owner-defined dose group. Approved vials: 4mg.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive."
     },
     {
       "id": "sem-b12-high",
@@ -2543,7 +2576,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Owner-defined dose group. Approved vials: 6mg, 10mg.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive."
     },
     {
       "id": "sem-b12-any-dose",
@@ -2634,7 +2669,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Owner-defined dose group. Approved vials: 1mg, 2mg, 4mg, 6mg, 10mg.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive."
     },
     {
       "id": "sem-glycine-starting-low",
@@ -2686,7 +2723,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Owner-defined dose group. Approved vials: 1mg, 2mg.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive."
     },
     {
       "id": "sem-glycine-mid",
@@ -2725,7 +2764,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Owner-defined dose group. Approved vials: 4mg.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive."
     },
     {
       "id": "sem-glycine-high",
@@ -2777,7 +2818,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Owner-defined dose group. Approved vials: 6mg, 10mg.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive."
     },
     {
       "id": "sem-glycine-any-dose",
@@ -2868,7 +2911,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Owner-defined dose group. Approved vials: 1mg, 2mg, 4mg, 6mg, 10mg.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive."
     },
     {
       "id": "sem-membership",
@@ -2896,7 +2941,8 @@
       },
       "multi_month": null,
       "notes": "Owner-defined. Website may show ONE offer; GEN fulfillment likely needs split CPs.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": false
     },
     {
       "id": "sem-b12-3month",
@@ -3040,9 +3086,12 @@
       "price_display": "from $119",
       "membership": null,
       "multi_month": null,
-      "notes": "PROPOSED tier (awaiting owner approval). Vials: 5mg, 10mg.",
+      "notes": "TIR tiers OWNER-APPROVED. Vials: 5mg, 10mg.",
       "show_patient": true,
-      "requires_owner_tier_approval": true
+      "requires_owner_tier_approval": false,
+      "tir_tiers_approved": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE inferred from website Tirzepatide family presence."
     },
     {
       "id": "tir-b12-mid",
@@ -3092,9 +3141,12 @@
       "price_display": "from $149",
       "membership": null,
       "multi_month": null,
-      "notes": "PROPOSED tier (awaiting owner approval). Vials: 15mg, 20mg.",
+      "notes": "TIR tiers OWNER-APPROVED. Vials: 15mg, 20mg.",
       "show_patient": true,
-      "requires_owner_tier_approval": true
+      "requires_owner_tier_approval": false,
+      "tir_tiers_approved": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE inferred from website Tirzepatide family presence."
     },
     {
       "id": "tir-b12-high",
@@ -3144,9 +3196,12 @@
       "price_display": "from $169",
       "membership": null,
       "multi_month": null,
-      "notes": "PROPOSED tier (awaiting owner approval). Vials: 25mg, 30mg.",
+      "notes": "TIR tiers OWNER-APPROVED. Vials: 25mg, 30mg.",
       "show_patient": true,
-      "requires_owner_tier_approval": true
+      "requires_owner_tier_approval": false,
+      "tir_tiers_approved": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE inferred from website Tirzepatide family presence."
     },
     {
       "id": "tir-b12-any-dose",
@@ -3248,9 +3303,12 @@
       "price_display": "from $119",
       "membership": null,
       "multi_month": null,
-      "notes": "PROPOSED tier (awaiting owner approval). Vials: 5mg, 10mg, 15mg, 20mg, 25mg, 30mg.",
+      "notes": "TIR tiers OWNER-APPROVED. Vials: 5mg, 10mg, 15mg, 20mg, 25mg, 30mg.",
       "show_patient": true,
-      "requires_owner_tier_approval": true
+      "requires_owner_tier_approval": false,
+      "tir_tiers_approved": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE inferred from website Tirzepatide family presence."
     },
     {
       "id": "tir-glycine-starting-low",
@@ -3300,9 +3358,12 @@
       "price_display": "from $119",
       "membership": null,
       "multi_month": null,
-      "notes": "PROPOSED tier (awaiting owner approval). Vials: 5mg, 10mg.",
+      "notes": "TIR tiers OWNER-APPROVED. Vials: 5mg, 10mg.",
       "show_patient": true,
-      "requires_owner_tier_approval": true
+      "requires_owner_tier_approval": false,
+      "tir_tiers_approved": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE inferred from website Tirzepatide family presence."
     },
     {
       "id": "tir-glycine-mid",
@@ -3352,9 +3413,12 @@
       "price_display": "from $149",
       "membership": null,
       "multi_month": null,
-      "notes": "PROPOSED tier (awaiting owner approval). Vials: 15mg, 20mg.",
+      "notes": "TIR tiers OWNER-APPROVED. Vials: 15mg, 20mg.",
       "show_patient": true,
-      "requires_owner_tier_approval": true
+      "requires_owner_tier_approval": false,
+      "tir_tiers_approved": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE inferred from website Tirzepatide family presence."
     },
     {
       "id": "tir-glycine-high",
@@ -3404,9 +3468,12 @@
       "price_display": "from $169",
       "membership": null,
       "multi_month": null,
-      "notes": "PROPOSED tier (awaiting owner approval). Vials: 25mg, 30mg.",
+      "notes": "TIR tiers OWNER-APPROVED. Vials: 25mg, 30mg.",
       "show_patient": true,
-      "requires_owner_tier_approval": true
+      "requires_owner_tier_approval": false,
+      "tir_tiers_approved": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE inferred from website Tirzepatide family presence."
     },
     {
       "id": "tir-glycine-any-dose",
@@ -3508,9 +3575,12 @@
       "price_display": "from $119",
       "membership": null,
       "multi_month": null,
-      "notes": "PROPOSED tier (awaiting owner approval). Vials: 5mg, 10mg, 15mg, 20mg, 25mg, 30mg.",
+      "notes": "TIR tiers OWNER-APPROVED. Vials: 5mg, 10mg, 15mg, 20mg, 25mg, 30mg.",
       "show_patient": true,
-      "requires_owner_tier_approval": true
+      "requires_owner_tier_approval": false,
+      "tir_tiers_approved": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Not a current website-named product. LIVE inferred from website Tirzepatide family presence."
     },
     {
       "id": "tir-membership",
@@ -3539,7 +3609,8 @@
       },
       "multi_month": null,
       "notes": "Owner-defined $275. Website $249 conflict noted only.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": false
     },
     {
       "id": "estradiol-patch",
@@ -3617,7 +3688,8 @@
       "membership": null,
       "multi_month": null,
       "notes": "Website LIVE. Keep patch separate from other estradiol forms.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": false
     },
     {
       "id": "estradiol-tablet",
@@ -3903,7 +3975,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Website LIVE testosterone cream intent maps to this customizable cream family. Identical cream rows appear under Estradiol/Progesterone/Testosterone workbook labels \u2014 assigned once here to all matching excel rows.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Website does not sell \u201cCustom HRT Cream\u201d; it sells Testosterone Cream. LIVE classification over-broadened a formulary cream family."
     },
     {
       "id": "hrt-custom-troche",
@@ -4189,7 +4263,8 @@
       "membership": null,
       "multi_month": null,
       "notes": "Website LIVE progesterone capsules \u2192 IR family.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": false
     },
     {
       "id": "progesterone-sr",
@@ -4527,7 +4602,8 @@
       "membership": null,
       "multi_month": null,
       "notes": "Website LIVE.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": false
     },
     {
       "id": "nad-nasal",
@@ -4968,7 +5044,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Website LIVE recovery blend family. GEN 2A product exists.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Exact BPC/TB/GHK blend is not a current website product. LIVE over-attributed from recovery category presence / GEN 2A write."
     },
     {
       "id": "bpc-ghk-kpv-tb",
@@ -5085,7 +5163,8 @@
       "membership": null,
       "multi_month": null,
       "notes": "Website LIVE Wolverine injection variant.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": false
     },
     {
       "id": "bpc-tb-cap",
@@ -5124,7 +5203,8 @@
       "membership": null,
       "multi_month": null,
       "notes": "Website LIVE capsule variant. Keep separate from injection.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": false
     },
     {
       "id": "tretinoin-cream",
@@ -5176,7 +5256,8 @@
       "membership": null,
       "multi_month": null,
       "notes": "Website LIVE. Owner may later split combo cream.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": false
     },
     {
       "id": "minoxidil-cream",
@@ -5280,7 +5361,9 @@
       "membership": null,
       "multi_month": null,
       "notes": "Website LIVE topical minoxidil family \u2014 plain solution row.",
-      "show_patient": true
+      "show_patient": true,
+      "possible_false_live": true,
+      "possible_false_live_reason": "Plain Minoxidil 2% Solution is not what the website currently sells."
     },
     {
       "id": "fin-minox",
@@ -5781,5 +5864,82 @@
       "notes": "Owner wishlist. Do not substitute. No SELECTED row.",
       "show_patient": false
     }
-  ]
+  ],
+  "owner_decisions": {
+    "updated_at": "2026-08-24T21:12:57Z",
+    "tir_tiers": {
+      "status": "APPROVED",
+      "grouping": {
+        "Starting / Low": [
+          5,
+          10
+        ],
+        "Mid": [
+          15,
+          20
+        ],
+        "High": [
+          25,
+          30
+        ],
+        "Any Dose": [
+          5,
+          10,
+          15,
+          20,
+          25,
+          30
+        ]
+      },
+      "note": "Apply separately to Tirzepatide + B12 and Tirzepatide + Glycine. Do not combine."
+    },
+    "membership": {
+      "sem_price": 149,
+      "tir_price": 275,
+      "status": "APPROVED",
+      "backend_split": "APPROVED IF REQUIRED BY GEN",
+      "website_presentation": "ONE SEM offer + ONE TIR offer \u2014 do not auto-expose separate B12/Glycine membership products"
+    },
+    "b6_replacement": {
+      "status": "APPROVED",
+      "target": [
+        "Vitamin B12",
+        "Glycine"
+      ],
+      "website_modified": false,
+      "note": "Do not modify website yet."
+    },
+    "live_future_map": {
+      "status": "PENDING",
+      "proposed_live": 27,
+      "proposed_future": 29
+    }
+  },
+  "owner_review_2": {
+    "generated_at": "2026-08-24T21:12:57Z",
+    "live_future_approval": "PENDING",
+    "possible_false_live_ids": [
+      "bpc-tb-ghk",
+      "hrt-custom-cream",
+      "minoxidil-solution",
+      "sem-b12-any-dose",
+      "sem-b12-high",
+      "sem-b12-mid",
+      "sem-b12-starting-low",
+      "sem-glycine-any-dose",
+      "sem-glycine-high",
+      "sem-glycine-mid",
+      "sem-glycine-starting-low",
+      "tir-b12-any-dose",
+      "tir-b12-high",
+      "tir-b12-mid",
+      "tir-b12-starting-low",
+      "tir-glycine-any-dose",
+      "tir-glycine-high",
+      "tir-glycine-mid",
+      "tir-glycine-starting-low"
+    ],
+    "possible_false_live_count": 19,
+    "review_doc": "docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md"
+  }
 }

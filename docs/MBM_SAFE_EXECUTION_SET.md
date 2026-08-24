@@ -245,6 +245,14 @@ Pharmacy for all 16: **Dirx-Hub**.
 
 ---
 
+
+
+### Website product family architecture (MBM-WEBSITE-PRODUCT-ARCHITECTURE-LOCK)
+
+- One clean product page + variants → exact GEN routing
+- Docs: `docs/MBM_WEBSITE_PRODUCT_FAMILY_ARCHITECTURE.md` · `docs/MBM_WEBSITE_TO_GEN_ROUTING_MATRIX.md`
+- Design only — website/GEN not modified
+
 **STOP FOR OWNER REVIEW.**
 
 Do not start GEN-CATALOG-2B. Do not generate an execution script. Do not generate a pairing checklist.

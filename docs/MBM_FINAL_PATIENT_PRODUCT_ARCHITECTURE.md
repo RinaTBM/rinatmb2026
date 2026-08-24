@@ -1144,6 +1144,14 @@ Full ID lists are in the JSON. **No deactivations performed.**
 
 ---
 
+
+
+### Website product family architecture (MBM-WEBSITE-PRODUCT-ARCHITECTURE-LOCK)
+
+- One clean product page + variants → exact GEN routing
+- Docs: `docs/MBM_WEBSITE_PRODUCT_FAMILY_ARCHITECTURE.md` · `docs/MBM_WEBSITE_TO_GEN_ROUTING_MATRIX.md`
+- Design only — website/GEN not modified
+
 **STOP FOR OWNER REVIEW.**
 
 No pairing checklist produced. No GEN-CATALOG-2B started.

@@ -1,154 +1,176 @@
-# MBM LIVE vs FUTURE — Owner Review
+# MBM Launch-State Map — Owner Review (3-State Model)
 
-**Generated:** 2026-08-24T21:12:57Z  
-**Phase:** MBM-ARCHITECTURE-OWNER-REVIEW-2  
+**Generated:** 2026-08-24T21:31:06Z  
+**Phase:** MBM-LIVE-MAP-LOCK  
 **Mode:** READ-ONLY — no GEN writes, no website writes, no pairing changes, GEN/Whop cutover OFF  
-**LIVE/FUTURE map approval:** **PENDING**  
-**Do not start GEN-CATALOG-2B.**
+**Prior binary LIVE/FUTURE:** **SUPERSEDED** by 3-state model below.
 
-Website comparison source: `src/data/products.ts` (visible + active medication products + active memberships). Workbook “LIVE WEBSITE” SMART rows were **not** used as proof of launch.
+Website authority: `src/data/products.ts` (visible + active medications + active memberships).
 
 ---
 
-## Owner decisions already locked
+## 3-state model
 
-| Decision | Status |
+| State | Meaning |
 |---|---|
-| TIR tiers (5+10 / 15+20 / 25+30 / full Any Dose), separate B12 & Glycine | **APPROVED** |
-| SEM membership $149 — one website offer | **APPROVED** |
-| TIR membership $275 — one website offer | **APPROVED** |
-| Membership backend B12/Glycine split if GEN requires | **APPROVED IF REQUIRED BY GEN** (backend-only; do not auto-expose on website) |
-| B6 → B12/Glycine replacement (website not modified yet) | **APPROVED** |
-| LIVE/FUTURE map (27 / 29) | **PENDING** — this document |
+| **CURRENT_LIVE** | Actually offered on MyBareMethod.com today. Keep offering even if formulary mapping is incomplete. |
+| **LAUNCH_WITH_WEBSITE_CUTOVER** | Not on website today. Owner-approved replacement architecture for the upcoming catalog cutover. `showPatient=false` / website OFF / checkout OFF until cutover. |
+| **FUTURE_HIDDEN** | Prepared or wishlist only. Not for immediate website cutover. |
 
 ---
 
-## Table 1 — Proposed LIVE NOW only (27)
+## Locked decisions
 
-| # | PATIENT-FACING PRODUCT | CATEGORY | FORM | FORMULATION / ADDITIVE | PRICE | WHY CLASSIFIED LIVE | CURRENTLY ON WEBSITE? | CURRENT WEBSITE NAME | GEN STATUS | OWNER RECOMMENDATION |
-|---:|---|---|---|---|---|---|---|---|---|---|
-| 1 | Semaglutide Injection — Starting / Low (B12) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Semaglutide + Vitamin B12 | from $89 | Website currently sells Semaglutide (as +B6). Architecture proposes dose-group + additive products as the LIVE replacement set. | NO | Semaglutide + B6 Injection (single product; strengths 0.5/1/2.5/5mg — not matching SELECTED ladder) | REUSE_REPAIR | REVIEW — keep as intended LIVE replacement, or demote Glycine / some tiers to FUTURE until website can present formulation + dose-group UX |
-| 2 | Semaglutide Injection — Mid (B12) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Semaglutide + Vitamin B12 | $109 | Website currently sells Semaglutide (as +B6). Architecture proposes dose-group + additive products as the LIVE replacement set. | NO | Semaglutide + B6 Injection (single product; strengths 0.5/1/2.5/5mg — not matching SELECTED ladder) | REUSE_REPAIR | REVIEW — keep as intended LIVE replacement, or demote Glycine / some tiers to FUTURE until website can present formulation + dose-group UX |
-| 3 | Semaglutide Injection — High (B12) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Semaglutide + Vitamin B12 | from $109 | Website currently sells Semaglutide (as +B6). Architecture proposes dose-group + additive products as the LIVE replacement set. | NO | Semaglutide + B6 Injection (single product; strengths 0.5/1/2.5/5mg — not matching SELECTED ladder) | REUSE_REPAIR | REVIEW — keep as intended LIVE replacement, or demote Glycine / some tiers to FUTURE until website can present formulation + dose-group UX |
-| 4 | Semaglutide Injection — Any Dose (B12) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Semaglutide + Vitamin B12 | from $89 | Website currently sells Semaglutide (as +B6). Architecture proposes dose-group + additive products as the LIVE replacement set. | NO | Semaglutide + B6 Injection (single product; strengths 0.5/1/2.5/5mg — not matching SELECTED ladder) | REUSE_REPAIR | REVIEW — keep as intended LIVE replacement, or demote Glycine / some tiers to FUTURE until website can present formulation + dose-group UX |
-| 5 | Semaglutide Injection — Starting / Low (Glycine) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Semaglutide + Glycine | from $89 | Website currently sells Semaglutide (as +B6). Architecture proposes dose-group + additive products as the LIVE replacement set. | NO | Semaglutide + B6 Injection (single product; strengths 0.5/1/2.5/5mg — not matching SELECTED ladder) | REUSE_REPAIR | REVIEW — keep as intended LIVE replacement, or demote Glycine / some tiers to FUTURE until website can present formulation + dose-group UX |
-| 6 | Semaglutide Injection — Mid (Glycine) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Semaglutide + Glycine | $109 | Website currently sells Semaglutide (as +B6). Architecture proposes dose-group + additive products as the LIVE replacement set. | NO | Semaglutide + B6 Injection (single product; strengths 0.5/1/2.5/5mg — not matching SELECTED ladder) | REUSE_REPAIR | REVIEW — keep as intended LIVE replacement, or demote Glycine / some tiers to FUTURE until website can present formulation + dose-group UX |
-| 7 | Semaglutide Injection — High (Glycine) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Semaglutide + Glycine | from $109 | Website currently sells Semaglutide (as +B6). Architecture proposes dose-group + additive products as the LIVE replacement set. | NO | Semaglutide + B6 Injection (single product; strengths 0.5/1/2.5/5mg — not matching SELECTED ladder) | REUSE_REPAIR | REVIEW — keep as intended LIVE replacement, or demote Glycine / some tiers to FUTURE until website can present formulation + dose-group UX |
-| 8 | Semaglutide Injection — Any Dose (Glycine) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Semaglutide + Glycine | from $89 | Website currently sells Semaglutide (as +B6). Architecture proposes dose-group + additive products as the LIVE replacement set. | NO | Semaglutide + B6 Injection (single product; strengths 0.5/1/2.5/5mg — not matching SELECTED ladder) | REUSE_REPAIR | REVIEW — keep as intended LIVE replacement, or demote Glycine / some tiers to FUTURE until website can present formulation + dose-group UX |
-| 9 | SEMAGLUTIDE COMPOUND — ANY DOSE MEMBERSHIP | WEIGHT MANAGEMENT | Membership | B12 ladder OR Glycine ladder (explicit selection) | $149/mo | Website already offers Semaglutide Membership at $149/mo (active + visible). | YES | Semaglutide Membership ($149/mo; currently includes Semaglutide + B6) | REUSE_REPAIR | KEEP membership offer on website; later RENAME/copy update for B12/Glycine fulfillment under the hood |
-| 10 | Tirzepatide Injection — Starting / Low (B12) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Tirzepatide + Vitamin B12 | from $119 | Website currently sells Tirzepatide (as +B6). Architecture proposes dose-group + additive products; TIR tiers now owner-approved. | NO | Tirzepatide + B6 Injection (single product; strengths 2.5/7.5/12.5/15mg — not matching SELECTED 5–30 ladder) | NEW_REQUIRED | REVIEW — same as SEM: intended LIVE replacement set, but not currently launched as named products |
-| 11 | Tirzepatide Injection — Mid (B12) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Tirzepatide + Vitamin B12 | from $149 | Website currently sells Tirzepatide (as +B6). Architecture proposes dose-group + additive products; TIR tiers now owner-approved. | NO | Tirzepatide + B6 Injection (single product; strengths 2.5/7.5/12.5/15mg — not matching SELECTED 5–30 ladder) | NEW_REQUIRED | REVIEW — same as SEM: intended LIVE replacement set, but not currently launched as named products |
-| 12 | Tirzepatide Injection — High (B12) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Tirzepatide + Vitamin B12 | from $169 | Website currently sells Tirzepatide (as +B6). Architecture proposes dose-group + additive products; TIR tiers now owner-approved. | NO | Tirzepatide + B6 Injection (single product; strengths 2.5/7.5/12.5/15mg — not matching SELECTED 5–30 ladder) | NEW_REQUIRED | REVIEW — same as SEM: intended LIVE replacement set, but not currently launched as named products |
-| 13 | Tirzepatide Injection — Any Dose (B12) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Tirzepatide + Vitamin B12 | from $119 | Website currently sells Tirzepatide (as +B6). Architecture proposes dose-group + additive products; TIR tiers now owner-approved. | NO | Tirzepatide + B6 Injection (single product; strengths 2.5/7.5/12.5/15mg — not matching SELECTED 5–30 ladder) | NEW_REQUIRED | REVIEW — same as SEM: intended LIVE replacement set, but not currently launched as named products |
-| 14 | Tirzepatide Injection — Starting / Low (Glycine) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Tirzepatide + Glycine | from $119 | Website currently sells Tirzepatide (as +B6). Architecture proposes dose-group + additive products; TIR tiers now owner-approved. | NO | Tirzepatide + B6 Injection (single product; strengths 2.5/7.5/12.5/15mg — not matching SELECTED 5–30 ladder) | NEW_REQUIRED | REVIEW — same as SEM: intended LIVE replacement set, but not currently launched as named products |
-| 15 | Tirzepatide Injection — Mid (Glycine) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Tirzepatide + Glycine | from $149 | Website currently sells Tirzepatide (as +B6). Architecture proposes dose-group + additive products; TIR tiers now owner-approved. | NO | Tirzepatide + B6 Injection (single product; strengths 2.5/7.5/12.5/15mg — not matching SELECTED 5–30 ladder) | NEW_REQUIRED | REVIEW — same as SEM: intended LIVE replacement set, but not currently launched as named products |
-| 16 | Tirzepatide Injection — High (Glycine) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Tirzepatide + Glycine | from $169 | Website currently sells Tirzepatide (as +B6). Architecture proposes dose-group + additive products; TIR tiers now owner-approved. | NO | Tirzepatide + B6 Injection (single product; strengths 2.5/7.5/12.5/15mg — not matching SELECTED 5–30 ladder) | NEW_REQUIRED | REVIEW — same as SEM: intended LIVE replacement set, but not currently launched as named products |
-| 17 | Tirzepatide Injection — Any Dose (Glycine) **POSSIBLE_FALSE_LIVE** | WEIGHT MANAGEMENT | Injection / Vial | Tirzepatide + Glycine | from $119 | Website currently sells Tirzepatide (as +B6). Architecture proposes dose-group + additive products; TIR tiers now owner-approved. | NO | Tirzepatide + B6 Injection (single product; strengths 2.5/7.5/12.5/15mg — not matching SELECTED 5–30 ladder) | NEW_REQUIRED | REVIEW — same as SEM: intended LIVE replacement set, but not currently launched as named products |
-| 18 | TIRZEPATIDE COMPOUND — ANY DOSE MEMBERSHIP | WEIGHT MANAGEMENT | Membership | B12 ladder OR Glycine ladder (explicit selection) | $275/mo | Website already offers Tirzepatide Membership (active + visible), but at $249 vs owner-approved $275. | YES | Tirzepatide Membership ($249/mo; includes Tirzepatide + B6 through 15mg) | REUSE_REPAIR | KEEP one website membership offer; MEMBERSHIP PRICE UPDATE $249→$275 later; B6 copy later |
-| 19 | Estradiol Patch | WOMEN'S HORMONE THERAPY | Patch | Estradiol transdermal patch ladder | from $119 | Website active product: Estradiol Patch. | YES | Estradiol Patch ($129–$149) | REUSE_RENAME | KEEP name; REPRICE to architecture $X9 ladder when executing website update |
-| 20 | Custom HRT Cream **POSSIBLE_FALSE_LIVE** | WOMEN'S HORMONE THERAPY | Cream | Customizable HRT cream (1–4 ingredients) | from $69 | Mapped from website Testosterone Cream / HRT cream family — but architecture product is broader Custom HRT Cream. | NO | Closest website: Testosterone Cream ($79, 5mg/g) — not labeled Custom HRT Cream | REUSE_RENAME | REVIEW — either FUTURE HIDDEN Custom HRT Cream + keep Testosterone Cream as its own LIVE product, or RENAME website cream into custom HRT later |
-| 21 | Progesterone Capsules (Immediate Release) | WOMEN'S HORMONE THERAPY | Capsule | Progesterone IR oral capsules | $29 | Website active product: Progesterone Capsules (100mg/200mg). | YES | Progesterone Capsules ($39 / $59) | REUSE_RENAME | RENAME to clarify IR if needed; REPRICE; keep LIVE |
-| 22 | NAD+ Injection | LONGEVITY & COGNITIVE HEALTH | Injection | NAD+ 200mg/ml injectable | $139 | Website active product: NAD+ Injection. | YES | NAD+ Injection ($199 / $229; 100mg/mL 5mL & 10mL) — formulary row is different (200mg/ml 5ml vial) | REUSE_REPAIR | KEEP name; REPRICE / STRUCTURE CHANGE when pairing exact SELECTED vial |
-| 23 | BPC-157 / TB-500 / GHK-Cu Injection **POSSIBLE_FALSE_LIVE** | RECOVERY & PERFORMANCE | Injection | BPC-157/TB-500/GHK-CU 3/3/10MG/ML | $159 | Recovery family is on website (Wolverine), and GEN 2A has this blend — but website product is not specifically GHK triple. | NO | Closest: Wolverine: BPC-157/TB-500 (Capsule $99 / Injection $199) — not GHK-Cu triple | REUSE_REPAIR | REVIEW — likely FUTURE HIDDEN until website offers this exact blend; do not treat as currently launched |
-| 24 | BPC-157 / TB-500 Injection | RECOVERY & PERFORMANCE | Injection | BPC-157/TB500 3mg/3mg/mL | $159 | Website Wolverine includes Injection variant. | YES | Wolverine: BPC-157/TB-500 — Injection variant ($199) | REUSE_RENAME | STRUCTURE CHANGE — website is one product with 2 forms; architecture splits capsule vs injection (+ separate blends) |
-| 25 | BPC-157 / TB-500 Capsules | RECOVERY & PERFORMANCE | Capsule | BPC-157/TB500 500mcg/500mcg capsules | $29 | Website Wolverine includes Capsule variant. | YES | Wolverine: BPC-157/TB-500 — Capsule variant ($99) | REUSE_RENAME | STRUCTURE CHANGE + REPRICE ($99 website vs $29 architecture starting) |
-| 26 | Tretinoin Cream | PRESCRIPTION SKIN & HAIR | Cream | Tretinoin cream (± hyaluronic/niacinamide combo) | from $79 | Website active product: Tretinoin Cream. | YES | Tretinoin Cream ($79 / $89 / $109) | REUSE_RENAME | KEEP; confirm strengths vs SELECTED (0.15% and combo) — may need STRUCTURE CHANGE |
-| 27 | Minoxidil Solution **POSSIBLE_FALSE_LIVE** | PRESCRIPTION SKIN & HAIR | Solution | Minoxidil 2% solution | $29 | Website has a minoxidil topical product — but it is a Combination Formula at $129, not plain 2% solution. | NO | Closest: Minoxidil Combination Topical Formula ($129) | REUSE_RENAME | REVIEW — likely FUTURE or map website combo to Finasteride/Minoxidil FUTURE products instead |
-
-**POSSIBLE_FALSE_LIVE count:** 19 of 27
-
-### Why these were flagged
-
-These products were marked LIVE because a related website family exists (or a GEN write exists), **not** because the exact patient-facing product is already launched on the storefront:
-
-- **Semaglutide Injection — Starting / Low (B12)** — Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive.
-- **Semaglutide Injection — Mid (B12)** — Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive.
-- **Semaglutide Injection — High (B12)** — Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive.
-- **Semaglutide Injection — Any Dose (B12)** — Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive.
-- **Semaglutide Injection — Starting / Low (Glycine)** — Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive.
-- **Semaglutide Injection — Mid (Glycine)** — Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive.
-- **Semaglutide Injection — High (Glycine)** — Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive.
-- **Semaglutide Injection — Any Dose (Glycine)** — Not a current website-named product. LIVE was inferred from website Semaglutide family presence, not from an existing storefront SKU for this dose-group/additive.
-- **Tirzepatide Injection — Starting / Low (B12)** — Not a current website-named product. LIVE inferred from website Tirzepatide family presence.
-- **Tirzepatide Injection — Mid (B12)** — Not a current website-named product. LIVE inferred from website Tirzepatide family presence.
-- **Tirzepatide Injection — High (B12)** — Not a current website-named product. LIVE inferred from website Tirzepatide family presence.
-- **Tirzepatide Injection — Any Dose (B12)** — Not a current website-named product. LIVE inferred from website Tirzepatide family presence.
-- **Tirzepatide Injection — Starting / Low (Glycine)** — Not a current website-named product. LIVE inferred from website Tirzepatide family presence.
-- **Tirzepatide Injection — Mid (Glycine)** — Not a current website-named product. LIVE inferred from website Tirzepatide family presence.
-- **Tirzepatide Injection — High (Glycine)** — Not a current website-named product. LIVE inferred from website Tirzepatide family presence.
-- **Tirzepatide Injection — Any Dose (Glycine)** — Not a current website-named product. LIVE inferred from website Tirzepatide family presence.
-- **Custom HRT Cream** — Website does not sell “Custom HRT Cream”; it sells Testosterone Cream. LIVE classification over-broadened a formulary cream family.
-- **BPC-157 / TB-500 / GHK-Cu Injection** — Exact BPC/TB/GHK blend is not a current website product. LIVE over-attributed from recovery category presence / GEN 2A write.
-- **Minoxidil Solution** — Plain Minoxidil 2% Solution is not what the website currently sells.
+| Item | Status |
+|---|---|
+| TIR tiers | APPROVED |
+| SEM membership $149 · one website offer | CURRENT_LIVE APPROVED |
+| TIR membership website $249 → cutover $275 · one website offer | CURRENT_LIVE; price change at cutover |
+| Membership backend B12/Glycine split | APPROVED IF REQUIRED BY GEN |
+| B6 → B12/Glycine | APPROVED at website cutover; B6 stays CURRENT_LIVE until then |
+| Custom HRT Cream / BPC-TB-GHK / Minoxidil Solution | **FUTURE_HIDDEN** |
+| PT-141 Nasal / Scream Cream | **FUTURE_HIDDEN** (do not activate) |
 
 ---
 
-## Table 2 — Current website → new architecture
+## Final launch-state table
 
-Starts from what patients can buy today (15 medication products + 2 active memberships).
-
-| CURRENT WEBSITE PRODUCT | CURRENT PRICE | CURRENT FORMULATION | MATCHING NEW ARCHITECTURE PRODUCT | ACTION |
-|---|---|---|---|---|
-| Semaglutide + B6 Injection | $119–$329 (0.5/1/2.5/5mg) | Semaglutide + B6 | Semaglutide Injection — Starting/Low, Mid, High, Any Dose (B12) AND (Glycine) — 8 products | **REPLACE B6 WITH B12/GLYCINE** |
-| Tirzepatide + B6 Injection | $189–$429 (2.5/7.5/12.5/15mg) | Tirzepatide + B6 | Tirzepatide Injection — Starting/Low, Mid, High, Any Dose (B12) AND (Glycine) — 8 products (tiers APPROVED) | **REPLACE B6 WITH B12/GLYCINE** |
-| Semaglutide Membership | $149/mo | Includes Semaglutide + B6 | SEMAGLUTIDE COMPOUND — ANY DOSE MEMBERSHIP ($149) | **KEEP** |
-| Tirzepatide Membership | $249/mo | Includes Tirzepatide + B6 through 15mg | TIRZEPATIDE COMPOUND — ANY DOSE MEMBERSHIP ($275) | **MEMBERSHIP PRICE UPDATE** |
-| Fat Burner | $259 | AOD-9604 + MOTS-C + Tesamorelin 5mL | No exact SELECTED match (closest FUTURE: MOTS-c / Tesamorelin blend — different) | **REVIEW** |
-| Estradiol Patch | $129–$149 | 0.025 / 0.05 / 0.1 mg twice weekly | Estradiol Patch (from $119; includes 0.0375mg/hr row) | **REPRICE** |
-| Progesterone Capsules | $39 / $59 | 100mg / 200mg | Progesterone Capsules (Immediate Release) ($29 architecture starting) | **REPRICE** |
-| Testosterone Cream | $79 · 5mg/g · 30g | Testosterone cream | Custom HRT Cream (from $69) — imperfect match | **REVIEW** |
-| NAD+ Injection | $199 / $229 | 100mg/mL · 500mg (5mL) & 1000mg (10mL) | NAD+ Injection ($139) — SELECTED: 200mg/ml 5ml vial (1000mg) | **REPRICE** |
-| Selank Injection | $129 · 5mg/mL · 2mL | Selank injection | Selank Nasal Spray (FUTURE HIDDEN) — form mismatch | **REVIEW** |
-| Semax Injection | $129 · 5mg/mL · 2mL | Semax injection | Semax Nasal Spray (FUTURE HIDDEN) — form mismatch | **REVIEW** |
-| Selank + Semax Blend Nasal Spray | $169 | 50mcg/50mcg per spray · 10mL | No blend row in SELECTED (separate Semax Nasal + Selank Nasal are FUTURE) | **REVIEW** |
-| Tesamorelin Injection | $149 · 10mg / 2mL | Tesamorelin 5mg/mL | No plain Tesamorelin in SELECTED (MOTS-c/Tesamorelin blend is FUTURE) | **REVIEW** |
-| Wolverine: BPC-157/TB-500 | Capsule $99 / Injection $199 | BPC-157/TB-500 blend (two forms) | BPC-157 / TB-500 Capsules + BPC-157 / TB-500 Injection (+ separate FUTURE blends) | **STRUCTURE CHANGE** |
-| Tretinoin Cream | $79 / $89 / $109 | 0.025% / 0.05% / 0.1% · 20g | Tretinoin Cream (from $79; SELECTED 0.15% + hyaluronic combo) | **REVIEW** |
-| Minoxidil Combination Topical Formula | $129 | Combination formula (provider/pharmacy determined) | Not equal to Minoxidil Solution $29; closer to FUTURE Finasteride/Minoxidil topicals | **REVIEW** |
-| Lash/Brow Growth Serum | $89 · 0.03% · 2.5mL | Bimatoprost solution | Lash/Brow Growth Serum (Bimatoprost) — FUTURE HIDDEN (source match needed) | **REVIEW** |
-
-### Notes behind the actions
-
-- **Semaglutide + B6 Injection:** Also STRUCTURE CHANGE (one website product → dose-group + additive architecture) + REPRICE to $X9 ladder
-- **Tirzepatide + B6 Injection:** Also STRUCTURE CHANGE + REPRICE; strength ladder changes to 5–30mg
-- **Semaglutide Membership:** Price already matches. Later copy/fulfillment update for B12/Glycine under one website offer. Backend split OK.
-- **Tirzepatide Membership:** $249 → $275. Keep ONE website offer. Later B6→B12/Glycine copy. Backend split OK.
-- **Fat Burner:** Website LIVE with no plain SELECTED Fat Burner / AOD triple row. Do not silently map to MOTS-c/Tesamorelin.
-- **Estradiol Patch:** KEEP name. SELECTED adds 0.0375 — possible STRUCTURE CHANGE for variants.
-- **Progesterone Capsules:** KEEP/RENAME (IR). SR remains FUTURE HIDDEN.
-- **Testosterone Cream:** Architecture collapsed customizable HRT cream family; website is testosterone-specific. May need dedicated Testosterone Cream LIVE product.
-- **NAD+ Injection:** KEEP name; confirm exact vial match — may also be STRUCTURE CHANGE.
-- **Selank Injection:** SELECTED has nasal only. Website injection has no SELECTED injection row.
-- **Semax Injection:** SELECTED has nasal only.
-- **Selank + Semax Blend Nasal Spray:** Do not invent a blend client product from separate nasal rows.
-- **Tesamorelin Injection:** Do not substitute blend for plain Tesamorelin.
-- **Wolverine: BPC-157/TB-500:** Split forms; REPRICE; RENAME from Wolverine optional. GHK triple should not be assumed LIVE.
-- **Tretinoin Cream:** KEEP name likely; strengths/package differ from SELECTED — confirm before REPRICE.
-- **Minoxidil Combination Topical Formula:** Do not silently replace combo with plain 2% solution.
-- **Lash/Brow Growth Serum:** Website LIVE but formulary source unmatched. Architecture correctly keeps FUTURE until sourced. Website may stay until then.
-
-### Website action tally
-
-- Current website medication products: **15**
-- Current website active memberships: **2**
-- Matching / mappable to new architecture (incl. imperfect): **14**
-- Requiring B6 replacement: **2**
-- Requiring price change (REPRICE or membership price update, or notes call out REPRICE): **8**
-
-By action label:
-
-- KEEP: 1
-- MEMBERSHIP PRICE UPDATE: 1
-- REPLACE B6 WITH B12/GLYCINE: 2
-- REPRICE: 3
-- REVIEW: 9
-- STRUCTURE CHANGE: 1
-
-Website products with **no clean SELECTED match** (stay REVIEW until you decide): Fat Burner, Selank Injection, Semax Injection, Selank+Semax Blend Nasal, Tesamorelin Injection, Lash/Brow Growth Serum.
+| PRODUCT | CURRENT WEBSITE? | LAUNCH STATE | CURRENT PRICE | NEW PRICE | CURRENT FORMULATION | TARGET FORMULATION | GEN STATUS | FORMULARY STATUS | CUTOVER ACTION |
+|---|---|---|---|---|---|---|---|---|---|
+| Semaglutide + B6 Injection | YES | **CURRENT_LIVE** | $119–$329 (0.5/1/2.5/5mg) | Cutover → SEM B12/Glycine dose-group $X9 ladder (from $89) | Semaglutide + B6 | Replace at cutover with 8 SEM dose-group products (B12 + Glycine): Starting/Low, Mid, High, Any Dose | Legacy B6 website SKU; dose-group GEN products exist for cutover | NO_SELECTED_MATCH — B6 not in SELECTED; target is B12/Glycine ladders | **REPLACE_B6** |
+| Tirzepatide + B6 Injection | YES | **CURRENT_LIVE** | $189–$429 (2.5/7.5/12.5/15mg) | Cutover → TIR B12/Glycine dose-group $X9 ladder (from $119) | Tirzepatide + B6 | Replace at cutover with 8 TIR dose-group products (B12 + Glycine); tiers APPROVED 5+10 / 15+20 / 25+30 / Any | — | NO_SELECTED_MATCH — B6 not in SELECTED; target is B12/Glycine ladders | **REPLACE_B6** |
+| Fat Burner | YES | **CURRENT_LIVE** | $259 | $259 | AOD-9604 + MOTS-C + Tesamorelin (5mL) | No exact SELECTED match — do not invent; keep offered | — | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Estradiol Patch | YES | **CURRENT_LIVE** | $129–$149 | from $119 | 0.025 / 0.05 / 0.1 mg twice weekly | Estradiol Patch | REUSE_RENAME | SELECTED_MATCH — Valiant patch ladder (includes 0.0375mg/hr) | **REPRICE** |
+| Progesterone Capsules | YES | **CURRENT_LIVE** | $39 / $59 (100mg / 200mg) | $29 | Progesterone oral capsules | Progesterone Capsules (Immediate Release) | REUSE_RENAME | SELECTED_MATCH — IR ladder (broader than website 100/200) | **REPRICE** |
+| Testosterone Cream | YES | **CURRENT_LIVE** | $79 · 5mg/g · 30g | $79 · 5mg/g · 30g | Testosterone cream | Keep as Testosterone Cream CURRENT_LIVE — Custom HRT Cream moved to FUTURE_HIDDEN | — | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| NAD+ Injection | YES | **CURRENT_LIVE** | $199 / $229 (100mg/mL 5mL & 10mL) | $139 | NAD+ injection | NAD+ Injection — SELECTED 200mg/ml 5ml vial (1000mg) | REUSE_REPAIR | PARTIAL_MATCH — ingredient matches; strength/package differ from website variants | **REPRICE** |
+| Selank Injection | YES | **CURRENT_LIVE** | $129 · 5mg/mL · 2mL | $129 · 5mg/mL · 2mL | Selank injection | SELECTED has Selank Nasal Spray only (FUTURE_HIDDEN) — no injection row | — | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Semax Injection | YES | **CURRENT_LIVE** | $129 · 5mg/mL · 2mL | $129 · 5mg/mL · 2mL | Semax injection | SELECTED has Semax Nasal Spray only (FUTURE_HIDDEN) — no injection row | — | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Selank + Semax Blend Nasal Spray | YES | **CURRENT_LIVE** | $169 · 50mcg/50mcg · 10mL | $169 · 50mcg/50mcg · 10mL | Selank + Semax blend nasal spray | No SELECTED blend row (separate nasal sprays are FUTURE_HIDDEN) | — | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Tesamorelin Injection | YES | **CURRENT_LIVE** | $149 · 10mg / 2mL (5mg/mL) | $149 · 10mg / 2mL (5mg/mL) | Tesamorelin injection | No plain Tesamorelin in SELECTED (MOTS-c/Tesamorelin blend is FUTURE_HIDDEN) | — | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Wolverine: BPC-157/TB-500 | YES | **CURRENT_LIVE** | Capsule $99 / Injection $199 | Inj $159 / Cap $29 | BPC-157/TB-500 blend (capsule + injection) | BPC-157 / TB-500 Capsules + BPC-157 / TB-500 Injection (architecture split); GHK triple stays FUTURE_HIDDEN | — | SELECTED_MATCH — plain BPC/TB capsule + injection rows exist | **STRUCTURE_CHANGE** |
+| Tretinoin Cream | YES | **CURRENT_LIVE** | $79 / $89 / $109 (0.025/0.05/0.1% · 20g) | from $79 | Tretinoin cream | Tretinoin Cream — SELECTED has 0.15% + hyaluronic/niacinamide combo | — | PARTIAL_MATCH — strength/package differ from website | **REPRICE** |
+| Minoxidil Combination Topical Formula | YES | **CURRENT_LIVE** | $129 | $129 | Combination formula (provider/pharmacy determined) | Not Minoxidil Solution (now FUTURE_HIDDEN). Closer to FUTURE Finasteride/Minoxidil topicals | — | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Lash/Brow Growth Serum | YES | **CURRENT_LIVE** | $89 · 0.03% · 2.5mL | $89 · 0.03% · 2.5mL | Bimatoprost solution | Architecture placeholder FUTURE_HIDDEN until source match — website stays CURRENT_LIVE | — | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| SEMAGLUTIDE COMPOUND — ANY DOSE MEMBERSHIP | YES | **CURRENT_LIVE** | $149/mo (website) | $149/mo | Includes Semaglutide + B6 Injection | Any Dose Semaglutide — B12 OR Glycine fulfillment (patient/provider selects) | REUSE_REPAIR | MEMBERSHIP — owner-approved; backend split allowed | **KEEP** |
+| TIRZEPATIDE COMPOUND — ANY DOSE MEMBERSHIP | YES | **CURRENT_LIVE** | $249/mo (website) | $275/mo (cutover) | Includes Tirzepatide + B6 Injection through 15mg | Any Dose Tirzepatide — B12 OR Glycine fulfillment (patient/provider selects) | REUSE_REPAIR | MEMBERSHIP — owner-approved; backend split allowed | **REPRICE** |
+| | | | | | | | | | |
+| Semaglutide Injection — Starting / Low (B12) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $89 | — | Semaglutide + Vitamin B12 | REUSE_REPAIR | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Semaglutide Injection — Mid (B12) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | $109 | — | Semaglutide + Vitamin B12 | REUSE_REPAIR | SELECTED attached (1 rows) | **REPLACE_B6** |
+| Semaglutide Injection — High (B12) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $109 | — | Semaglutide + Vitamin B12 | REUSE_REPAIR | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Semaglutide Injection — Any Dose (B12) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $89 | — | Semaglutide + Vitamin B12 | REUSE_REPAIR | SELECTED attached (5 rows) | **REPLACE_B6** |
+| Semaglutide Injection — Starting / Low (Glycine) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $89 | — | Semaglutide + Glycine | REUSE_REPAIR | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Semaglutide Injection — Mid (Glycine) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | $109 | — | Semaglutide + Glycine | REUSE_REPAIR | SELECTED attached (1 rows) | **REPLACE_B6** |
+| Semaglutide Injection — High (Glycine) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $109 | — | Semaglutide + Glycine | REUSE_REPAIR | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Semaglutide Injection — Any Dose (Glycine) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $89 | — | Semaglutide + Glycine | REUSE_REPAIR | SELECTED attached (5 rows) | **REPLACE_B6** |
+| Tirzepatide Injection — Starting / Low (B12) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $119 | — | Tirzepatide + Vitamin B12 | NEW_REQUIRED | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Tirzepatide Injection — Mid (B12) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $149 | — | Tirzepatide + Vitamin B12 | NEW_REQUIRED | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Tirzepatide Injection — High (B12) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $169 | — | Tirzepatide + Vitamin B12 | NEW_REQUIRED | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Tirzepatide Injection — Any Dose (B12) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $119 | — | Tirzepatide + Vitamin B12 | NEW_REQUIRED | SELECTED attached (6 rows) | **REPLACE_B6** |
+| Tirzepatide Injection — Starting / Low (Glycine) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $119 | — | Tirzepatide + Glycine | NEW_REQUIRED | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Tirzepatide Injection — Mid (Glycine) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $149 | — | Tirzepatide + Glycine | NEW_REQUIRED | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Tirzepatide Injection — High (Glycine) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $169 | — | Tirzepatide + Glycine | NEW_REQUIRED | SELECTED attached (2 rows) | **REPLACE_B6** |
+| Tirzepatide Injection — Any Dose (Glycine) | NO | **LAUNCH_WITH_WEBSITE_CUTOVER** | — (not on website) | from $119 | — | Tirzepatide + Glycine | NEW_REQUIRED | SELECTED attached (6 rows) | **REPLACE_B6** |
+| | | | | | | | | | |
+| Semaglutide Injection — 3-Month (B12) | NO | FUTURE_HIDDEN | — | example @4mg → $329 (×3 rule) | — | Semaglutide + Vitamin B12 | REUSE_REPAIR | SELECTED (5 rows) — hidden | KEEP_HIDDEN |
+| Estradiol Tablet | NO | FUTURE_HIDDEN | — | $19 | — | Estradiol oral tablet ladder | REUSE_RENAME | SELECTED (3 rows) — hidden | KEEP_HIDDEN |
+| Estradiol Cypionate Injection | NO | FUTURE_HIDDEN | — | $89 | — | Estradiol Cypionate (MCT Oil) 10 mg/mL | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| Custom HRT Cream | NO | FUTURE_HIDDEN | — | from $69 | — | Customizable HRT cream (1–4 ingredients) | REUSE_RENAME | SELECTED (12 rows) — hidden | KEEP_HIDDEN |
+| Custom Hormone Troche | NO | FUTURE_HIDDEN | — | $29 | — | Customizable hormone troche (1–3 ingredients) | REUSE_RENAME | SELECTED (9 rows) — hidden | KEEP_HIDDEN |
+| Progesterone Capsules (Sustained Release) | NO | FUTURE_HIDDEN | — | $19 | — | Progesterone SR oral capsules | REUSE_RENAME | SELECTED (11 rows) — hidden | KEEP_HIDDEN |
+| Testosterone Cypionate Injection | NO | FUTURE_HIDDEN | — | from $59 | — | Testosterone Cypionate injection ladder | REUSE_RENAME | SELECTED (5 rows) — hidden | KEEP_HIDDEN |
+| Sildenafil / Testosterone Troche | NO | FUTURE_HIDDEN | — | $39 | — | Sildenafil 120mg / Testosterone 22mg | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| NAD+ Nasal Spray | NO | FUTURE_HIDDEN | — | from $79 | — | NAD+ nasal spray 50mg/ml & 200mg/ml | REUSE_RENAME | SELECTED (4 rows) — hidden | KEEP_HIDDEN |
+| Glutathione Injection | NO | FUTURE_HIDDEN | — | from $59 | — | Glutathione 200mg/ml (10ml vial) | REUSE_RENAME | SELECTED (2 rows) — hidden | KEEP_HIDDEN |
+| Semax Nasal Spray | NO | FUTURE_HIDDEN | — | $129 | — | Semax 2.5mg/mL nasal spray | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| Selank Nasal Spray | NO | FUTURE_HIDDEN | — | $129 | — | Selank 2.5mg/mL nasal spray | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| Thymosin Alpha-1 Injection | NO | FUTURE_HIDDEN | — | $159 | — | Thymosin Alpha-1 3 mg/mL (5 mL) | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| Methylene Blue Capsules | NO | FUTURE_HIDDEN | — | $19 | — | Methylene Blue oral 5–25 mg | NEW_REQUIRED | SELECTED (4 rows) — hidden | KEEP_HIDDEN |
+| Dihexa Capsules | NO | FUTURE_HIDDEN | — | $29 | — | Dihexa 5mg | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| Dihexa / Tesofensine Capsules | NO | FUTURE_HIDDEN | — | $29 | — | Dihexa 5mg / Tesofensine 500mcg | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| BPC-157 / TB-500 / GHK-Cu Injection | NO | FUTURE_HIDDEN | — | $159 | — | BPC-157/TB-500/GHK-CU 3/3/10MG/ML | REUSE_REPAIR | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| BPC-157 / GHK-Cu / KPV / TB-500 Injection | NO | FUTURE_HIDDEN | — | $159 | — | BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| BPC-157 / KPV / TB-500 Injection | NO | FUTURE_HIDDEN | — | $159 | — | BPC-157/KPV/TB500 3mg/3mg/3mg/mL | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| Minoxidil Cream | NO | FUTURE_HIDDEN | — | $89 | — | Minoxidil cream 7–15% | REUSE_RENAME | SELECTED (3 rows) — hidden | KEEP_HIDDEN |
+| Minoxidil Solution | NO | FUTURE_HIDDEN | — | $29 | — | Minoxidil 2% solution | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| Finasteride / Minoxidil Topical | NO | FUTURE_HIDDEN | — | $79 | — | Finasteride/Minoxidil topical | REUSE_RENAME | SELECTED (2 rows) — hidden | KEEP_HIDDEN |
+| Finasteride / Minoxidil / Tretinoin Topical | NO | FUTURE_HIDDEN | — | $89 | — | Finasteride/Minoxidil/Tretinoin topical | REUSE_RENAME | SELECTED (3 rows) — hidden | KEEP_HIDDEN |
+| PT-141 Injection | NO | FUTURE_HIDDEN | — | $129 | — | PT-141 2mg/mL | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| PT-141 (Bremelanotide) Nasal Spray | NO | FUTURE_HIDDEN | — | $139 | — | Bremelanotide nasal 5 & 10 mg/mL | REUSE_RENAME | SELECTED (2 rows) — hidden | KEEP_HIDDEN |
+| GHK-Cu Cream | NO | FUTURE_HIDDEN | — | from $109 | — | GHK-Cu cream ladder (+ CoQ10 variant) | REUSE_RENAME | SELECTED (7 rows) — hidden | KEEP_HIDDEN |
+| MOTS-c Injection | NO | FUTURE_HIDDEN | — | $129 | — | MOTS-C 2mg/mL | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| MOTS-c / Tesamorelin Injection | NO | FUTURE_HIDDEN | — | $159 | — | MOTS-C/Tesamorelin 2mg/3mg/mL | REUSE_RENAME | SELECTED (1 rows) — hidden | KEEP_HIDDEN |
+| Oxytocin Nasal Spray | NO | FUTURE_HIDDEN | — | TBD | — | Oxytocin 100 IU/ml | NEW_REQUIRED | FUTURE / not for immediate cutover | KEEP_HIDDEN |
+| Sexual Wellness Compound Capsules | NO | FUTURE_HIDDEN | — | TBD | — | Flibanserin / Oxytocin / Tyrosine | NEW_REQUIRED | FUTURE / not for immediate cutover | KEEP_HIDDEN |
+| Lash/Brow Growth Serum (Bimatoprost) | NO | FUTURE_HIDDEN | — | TBD | — | Bimatoprost — SOURCE MATCH NEEDED | NEW_REQUIRED | FUTURE / not for immediate cutover | KEEP_HIDDEN |
+| Scream Cream | NO | FUTURE_HIDDEN | — | TBD | — | TBD — SOURCE MATCH NEEDED | NEW_REQUIRED | FUTURE / not for immediate cutover | KEEP_HIDDEN |
 
 ---
 
-## FUTURE HIDDEN sanity check (29)
+## CURRENT_LIVE detail (website authority)
+
+| CURRENT WEBSITE NAME | CURRENT PRICE | CURRENT FORMULATION | NEW ARCHITECTURE TARGET | FORMULARY STATUS | PLANNED CUTOVER ACTION |
+|---|---|---|---|---|---|
+| Semaglutide + B6 Injection | $119–$329 (0.5/1/2.5/5mg) | Semaglutide + B6 | Replace at cutover with 8 SEM dose-group products (B12 + Glycine): Starting/Low, Mid, High, Any Dose | NO_SELECTED_MATCH — B6 not in SELECTED; target is B12/Glycine ladders | **REPLACE_B6** |
+| Tirzepatide + B6 Injection | $189–$429 (2.5/7.5/12.5/15mg) | Tirzepatide + B6 | Replace at cutover with 8 TIR dose-group products (B12 + Glycine); tiers APPROVED 5+10 / 15+20 / 25+30 / Any | NO_SELECTED_MATCH — B6 not in SELECTED; target is B12/Glycine ladders | **REPLACE_B6** |
+| Fat Burner | $259 | AOD-9604 + MOTS-C + Tesamorelin (5mL) | No exact SELECTED match — do not invent; keep offered | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Estradiol Patch | $129–$149 | 0.025 / 0.05 / 0.1 mg twice weekly | Estradiol Patch | SELECTED_MATCH — Valiant patch ladder (includes 0.0375mg/hr) | **REPRICE** |
+| Progesterone Capsules | $39 / $59 (100mg / 200mg) | Progesterone oral capsules | Progesterone Capsules (Immediate Release) | SELECTED_MATCH — IR ladder (broader than website 100/200) | **REPRICE** |
+| Testosterone Cream | $79 · 5mg/g · 30g | Testosterone cream | Keep as Testosterone Cream CURRENT_LIVE — Custom HRT Cream moved to FUTURE_HIDDEN | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| NAD+ Injection | $199 / $229 (100mg/mL 5mL & 10mL) | NAD+ injection | NAD+ Injection — SELECTED 200mg/ml 5ml vial (1000mg) | PARTIAL_MATCH — ingredient matches; strength/package differ from website variants | **REPRICE** |
+| Selank Injection | $129 · 5mg/mL · 2mL | Selank injection | SELECTED has Selank Nasal Spray only (FUTURE_HIDDEN) — no injection row | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Semax Injection | $129 · 5mg/mL · 2mL | Semax injection | SELECTED has Semax Nasal Spray only (FUTURE_HIDDEN) — no injection row | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Selank + Semax Blend Nasal Spray | $169 · 50mcg/50mcg · 10mL | Selank + Semax blend nasal spray | No SELECTED blend row (separate nasal sprays are FUTURE_HIDDEN) | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Tesamorelin Injection | $149 · 10mg / 2mL (5mg/mL) | Tesamorelin injection | No plain Tesamorelin in SELECTED (MOTS-c/Tesamorelin blend is FUTURE_HIDDEN) | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Wolverine: BPC-157/TB-500 | Capsule $99 / Injection $199 | BPC-157/TB-500 blend (capsule + injection) | BPC-157 / TB-500 Capsules + BPC-157 / TB-500 Injection (architecture split); GHK triple stays FUTURE_HIDDEN | SELECTED_MATCH — plain BPC/TB capsule + injection rows exist | **STRUCTURE_CHANGE** |
+| Tretinoin Cream | $79 / $89 / $109 (0.025/0.05/0.1% · 20g) | Tretinoin cream | Tretinoin Cream — SELECTED has 0.15% + hyaluronic/niacinamide combo | PARTIAL_MATCH — strength/package differ from website | **REPRICE** |
+| Minoxidil Combination Topical Formula | $129 | Combination formula (provider/pharmacy determined) | Not Minoxidil Solution (now FUTURE_HIDDEN). Closer to FUTURE Finasteride/Minoxidil topicals | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| Lash/Brow Growth Serum | $89 · 0.03% · 2.5mL | Bimatoprost solution | Architecture placeholder FUTURE_HIDDEN until source match — website stays CURRENT_LIVE | FORMULARY_RECONCILIATION_REQUIRED | **FORMULARY_RECONCILIATION_REQUIRED** |
+| SEMAGLUTIDE COMPOUND — ANY DOSE MEMBERSHIP (website: Semaglutide Membership) | $149/mo | Includes Semaglutide + B6 Injection | Any Dose Semaglutide — B12 OR Glycine fulfillment (patient/provider selects) | MEMBERSHIP — owner-approved; backend split allowed | **KEEP** |
+| TIRZEPATIDE COMPOUND — ANY DOSE MEMBERSHIP (website: Tirzepatide Membership) | $249/mo | Includes Tirzepatide + B6 Injection through 15mg | Any Dose Tirzepatide — B12 OR Glycine fulfillment (patient/provider selects) | MEMBERSHIP — owner-approved; backend split allowed | **REPRICE** |
+
+**FORMULARY_RECONCILIATION_REQUIRED (8):**
+
+- Fat Burner — CURRENT_LIVE. Closest FUTURE architecture is MOTS-c/Tesamorelin blend — different; do not silent-map.
+- Testosterone Cream — Website product remains. Do not collapse into Custom HRT Cream for launch. Exact SELECTED testosterone-only cream row not isolated from custom HRT cream family.
+- Selank Injection — CURRENT_LIVE. Do not invent injection formulary match. Do not remove from website.
+- Semax Injection — CURRENT_LIVE. Do not invent injection formulary match.
+- Selank + Semax Blend Nasal Spray — CURRENT_LIVE. Do not invent blend from separate rows.
+- Tesamorelin Injection — CURRENT_LIVE. Do not substitute blend for plain Tesamorelin.
+- Minoxidil Combination Topical Formula — CURRENT_LIVE. Do not silent-replace with plain 2% solution.
+- Lash/Brow Growth Serum — CURRENT_LIVE on website. FUTURE ADDITIONS says source match needed. Do not invent formulary.
+
+These stay **CURRENT_LIVE**. Do not remove them. Do not invent formulary matches.
+
+---
+
+## LAUNCH_WITH_WEBSITE_CUTOVER (16)
+
+Not exposed until website catalog cutover. Replaces legacy B6 structure.
+
+| Additive | Products |
+|---|---|
+| Semaglutide + Vitamin B12 | Starting/Low · Mid · High · Any Dose |
+| Semaglutide + Glycine | Starting/Low · Mid · High · Any Dose |
+| Tirzepatide + Vitamin B12 | Starting/Low · Mid · High · Any Dose (tiers APPROVED) |
+| Tirzepatide + Glycine | Starting/Low · Mid · High · Any Dose (tiers APPROVED) |
+
+Until cutover: `showPatient=false` · website OFF · checkout OFF.
+
+---
+
+## FUTURE_HIDDEN
+
+Moved this phase from prior POSSIBLE_FALSE_LIVE:
+
+- Custom HRT Cream
+- BPC-157 / TB-500 / GHK-Cu Injection
+- Minoxidil Solution
+
+Explicitly remain FUTURE (do not activate):
+
+- PT-141 (Bremelanotide) Nasal Spray
+- Scream Cream
 
 ### WEIGHT MANAGEMENT
 
@@ -158,6 +180,7 @@ Website products with **no clean SELECTED match** (stay REVIEW until you decide)
 
 - Estradiol Tablet
 - Estradiol Cypionate Injection
+- Custom HRT Cream
 - Custom Hormone Troche
 - Progesterone Capsules (Sustained Release)
 - Testosterone Cypionate Injection
@@ -176,12 +199,14 @@ Website products with **no clean SELECTED match** (stay REVIEW until you decide)
 
 ### RECOVERY & PERFORMANCE
 
+- BPC-157 / TB-500 / GHK-Cu Injection
 - BPC-157 / GHK-Cu / KPV / TB-500 Injection
 - BPC-157 / KPV / TB-500 Injection
 
 ### PRESCRIPTION SKIN & HAIR
 
 - Minoxidil Cream
+- Minoxidil Solution
 - Finasteride / Minoxidil Topical
 - Finasteride / Minoxidil / Tretinoin Topical
 - Lash/Brow Growth Serum (Bimatoprost)
@@ -200,57 +225,37 @@ Website products with **no clean SELECTED match** (stay REVIEW until you decide)
 - MOTS-c Injection
 - MOTS-c / Tesamorelin Injection
 
-_Counted FUTURE HIDDEN: 29_
-
-### Explicit confirmations (do not activate)
-
-| Product | Status | Activate? |
-|---|---|---|
-| PT-141 Nasal Spray (`PT-141 (Bremelanotide) Nasal Spray`) | **FUTURE HIDDEN** | **NO** |
-| Scream Cream | **FUTURE HIDDEN** | **NO** |
-
----
-
-## Reconcile the 56
-
-| Check | Value |
-|---|---|
-| TOTAL ARCHITECTURE PRODUCTS | 56 |
-| PROPOSED LIVE | 27 |
-| PROPOSED FUTURE | 29 |
-| LIVE + FUTURE | 56 |
-| Equals 56? | YES |
-| POSSIBLE_FALSE_LIVE | 19 |
-
-No product was classified LIVE solely because a workbook SMART “LIVE WEBSITE” row existed. LIVE was based on intended website catalog presence / replacement intent — and that is exactly why several SEM/TIR dose-group SKUs and a few others are now flagged **POSSIBLE_FALSE_LIVE** for your decision.
-
 ---
 
 ## FINAL REPORT
 
-- **TOTAL ARCHITECTURE PRODUCTS:** 56
-- **PROPOSED LIVE:** 27
-- **PROPOSED FUTURE:** 29
-- **CURRENT WEBSITE MEDICATION PRODUCTS:** 15
-- **CURRENT WEBSITE MATCHING NEW ARCHITECTURE:** 14
-- **CURRENT WEBSITE REQUIRING REPLACEMENT:** 2
-- **CURRENT WEBSITE REQUIRING PRICE CHANGE:** 8
-- **POSSIBLE FALSE LIVE:** 19
-- **PT 141 NASAL:** FUTURE HIDDEN
-- **SCREAM CREAM:** FUTURE HIDDEN
-- **TIR TIERS:** APPROVED
-- **SEM MEMBERSHIP:** $149 APPROVED
-- **TIR MEMBERSHIP:** $275 APPROVED
-- **MEMBERSHIP BACKEND SPLIT:** APPROVED IF REQUIRED BY GEN
-- **B6 TO B12 GLYCINE:** APPROVED
-- **LIVE FUTURE OWNER APPROVAL:** PENDING
+- **CURRENT_LIVE:** 17 (15 website medications + 2 memberships)
+- **LAUNCH_WITH_WEBSITE_CUTOVER:** 16
+- **FUTURE_HIDDEN:** 32
+- **TOTAL:** 65
+
+- **CURRENT WEBSITE PRODUCTS NEEDING FORMULARY RECONCILIATION:** 8
+
+- **SEM/TIR DOSE-GROUP CUTOVER PRODUCTS:** 16
+- **CUSTOM HRT CREAM:** FUTURE_HIDDEN
+- **BPC/TB/GHK:** FUTURE_HIDDEN
+- **MINOXIDIL SOLUTION:** FUTURE_HIDDEN
+- **PT-141 NASAL:** FUTURE_HIDDEN
+- **SCREAM CREAM:** FUTURE_HIDDEN
+
+- **SEM MEMBERSHIP:** CURRENT_LIVE — $149
+- **TIR MEMBERSHIP:** CURRENT_LIVE — website currently $249; CUTOVER PRICE — $275
+
+- **B6 PRODUCTS:** CURRENT_LIVE UNTIL CUTOVER
+- **B12/GLYCINE DOSE GROUPS:** LAUNCH_WITH_WEBSITE_CUTOVER
+
 - **GEN MODIFIED:** NO
 - **GEN WRITES:** 0
 - **WEBSITE MODIFIED:** NO
-- **GEN WHOP CUTOVER:** OFF
+- **GEN/WHOP CUTOVER:** OFF
 
 ---
 
 **STOP FOR OWNER REVIEW.**
 
-No GEN execution checklist. No pairing checklist. No GEN-CATALOG-2B.
+No pairing checklist. No GEN-CATALOG-2B.

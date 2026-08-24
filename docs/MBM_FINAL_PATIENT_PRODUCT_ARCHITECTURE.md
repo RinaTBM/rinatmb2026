@@ -1,27 +1,39 @@
 # My Bare Method — Final Patient-Facing Product Architecture
 
-**Generated:** 2026-08-24T18:06:19Z · **Owner-review-2 update:** 2026-08-24T21:12:57Z  
-**Phase:** GEN-CATALOG-ARCHITECTURE-LOCK + MBM-ARCHITECTURE-OWNER-REVIEW-2  
-**Mode:** READ-ONLY planning — **no GEN writes, no website writes, no pairing checklist, GEN/Whop cutover OFF**  
-**Authority:** SELECTED FORMULARY for exact medications · Owner rules for SEM/TIR dose groups & memberships  
+**Generated:** 2026-08-24T18:06:19Z · **Live-map-lock update:** 2026-08-24T21:31:06Z  
+**Phase:** GEN-CATALOG-ARCHITECTURE-LOCK → MBM-LIVE-MAP-LOCK  
+**Mode:** READ-ONLY — **no GEN writes, no website writes, no pairing checklist, GEN/Whop cutover OFF**  
+**Launch model:** **3-STATE** — `CURRENT_LIVE` · `LAUNCH_WITH_WEBSITE_CUTOVER` · `FUTURE_HIDDEN`  
+**(Prior binary LIVE/FUTURE superseded.)**
 
-### Owner decisions (locked this review)
+### Owner decisions locked
 
 | Item | Status |
 |---|---|
-| TIR tiers 5+10 / 15+20 / 25+30 / Any Dose (B12 & Glycine separate) | **APPROVED** |
-| SEM membership $149 · one website offer | **APPROVED** |
-| TIR membership $275 · one website offer | **APPROVED** |
+| TIR tiers 5+10 / 15+20 / 25+30 / Any Dose | **APPROVED** |
+| SEM membership $149 · one website offer | **CURRENT_LIVE** |
+| TIR membership · website $249 → cutover **$275** · one website offer | **CURRENT_LIVE** |
 | Membership backend split if GEN requires | **APPROVED IF REQUIRED BY GEN** |
-| B6 → B12/Glycine (website not modified yet) | **APPROVED** |
-| LIVE/FUTURE map (27 / 29) | **PENDING** — see `docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md` |
-| POSSIBLE_FALSE_LIVE flagged | **19** products |
+| B6 → B12/Glycine | **APPROVED at website cutover** (B6 remains CURRENT_LIVE until then) |
+| Custom HRT Cream / BPC-TB-GHK / Minoxidil Solution | **FUTURE_HIDDEN** |
+| PT-141 Nasal / Scream Cream | **FUTURE_HIDDEN** |
 
-**Stop:** LIVE/FUTURE still needs your approval before execution. **Do not start GEN-CATALOG-2B.**
+**Full 3-state launch table:** `docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md`
+
+| State | Count |
+|---|---:|
+| CURRENT_LIVE | 17 |
+| LAUNCH_WITH_WEBSITE_CUTOVER | 16 |
+| FUTURE_HIDDEN | 32 |
+| **TOTAL** | **65** |
+
+**Stop:** Owner review of 3-state map. **Do not start GEN-CATALOG-2B.**
 
 ---
 
-## Owner snapshot (all patient-facing products)
+## Owner snapshot (architecture products — see 3-state launch table for website authority)
+
+> **Use `docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md` for CURRENT_LIVE website authority.** The table below is the architecture product list; launch states are stamped in JSON (`launch_state`).
 
 | PATIENT-FACING PRODUCT | LIVE/FUTURE | FORMULATION | FORM | PRICE | FORMULARY ROW COUNT | GEN STATUS |
 |---|---|---|---|---|---:|---|
@@ -1089,28 +1101,23 @@ Full ID lists are in the JSON. **No deactivations performed.**
 
 ## FINAL REPORT
 
-- **TOTAL PATIENT-FACING PRODUCTS:** 56
-- **LIVE NOW (proposed):** 27
-- **FUTURE HIDDEN (proposed):** 29
-- **POSSIBLE_FALSE_LIVE:** 19 — see `docs/MBM_LIVE_VS_FUTURE_OWNER_REVIEW.md`
+- **CURRENT_LIVE:** 17 (15 website medications + 2 memberships)
+- **LAUNCH_WITH_WEBSITE_CUTOVER:** 16
+- **FUTURE_HIDDEN:** 32
+- **TOTAL:** 65
 
-- **SEM B12 PRODUCTS:** 4
-- **SEM GLYCINE PRODUCTS:** 4
-- **SEM MEMBERSHIP:** $149/mo **APPROVED** (one website offer)
-- **SEM MEMBERSHIP BACKEND STRUCTURE:** `SEM_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT` — **APPROVED IF REQUIRED BY GEN**
+- **CURRENT WEBSITE PRODUCTS NEEDING FORMULARY RECONCILIATION:** 8
+- **SEM/TIR DOSE-GROUP CUTOVER PRODUCTS:** 16
+- **CUSTOM HRT CREAM:** FUTURE_HIDDEN
+- **BPC/TB/GHK:** FUTURE_HIDDEN
+- **MINOXIDIL SOLUTION:** FUTURE_HIDDEN
+- **PT-141 NASAL:** FUTURE_HIDDEN
+- **SCREAM CREAM:** FUTURE_HIDDEN
 
-- **TIR B12 PRODUCTS:** 4
-- **TIR GLYCINE PRODUCTS:** 4
-- **TIR MEMBERSHIP:** $275/mo **APPROVED** (one website offer)
-- **TIR MEMBERSHIP BACKEND STRUCTURE:** `TIR_MEMBERSHIP_STRUCTURE_REQUIRES_SPLIT` — **APPROVED IF REQUIRED BY GEN**
-
-- **TIR TIER PROPOSAL:** **APPROVED** — Starting/Low 5+10 · Mid 15+20 · High 25+30 · Any Dose full ladder
-
-- **B6 → B12/GLYCINE:** **APPROVED** (website not modified yet)
-- **LIVE/FUTURE OWNER APPROVAL:** **PENDING**
-
-- **PT-141 NASAL:** FUTURE HIDDEN (do not activate)
-- **SCREAM CREAM:** FUTURE HIDDEN (do not activate)
+- **SEM MEMBERSHIP:** CURRENT_LIVE — $149
+- **TIR MEMBERSHIP:** CURRENT_LIVE — website currently $249; CUTOVER PRICE — $275
+- **B6 PRODUCTS:** CURRENT_LIVE UNTIL CUTOVER
+- **B12/GLYCINE DOSE GROUPS:** LAUNCH_WITH_WEBSITE_CUTOVER
 
 - **GEN MODIFIED:** NO
 - **GEN WRITES:** 0
@@ -1119,6 +1126,6 @@ Full ID lists are in the JSON. **No deactivations performed.**
 
 ---
 
-**STOP FOR OWNER REVIEW of LIVE/FUTURE map.**
+**STOP FOR OWNER REVIEW.**
 
 No pairing checklist produced. No GEN-CATALOG-2B started.

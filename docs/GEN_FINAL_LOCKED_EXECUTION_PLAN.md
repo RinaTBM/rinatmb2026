@@ -393,5 +393,7 @@ Do **not** write umbrella. Distinct patient-facing products:
 **GEN WRITES:** 0  
 **GEN/WHOP CUTOVER:** OFF  
 
-**STOP FOR FINAL OWNER REVIEW (GEN-CATALOG-1H pricing).**  
+**Cost basis (GEN-CATALOG-1I):** see `docs/GEN_FINAL_COST_BASIS_REVIEW.md`. LIVE verified 7/16. **LIVE write BLOCKED** until all LIVE_NOW have verified complete dispense/package cost.
+
+**STOP.** Do not run GEN-CATALOG-2.  
 Do **not** run GEN-CATALOG-2 until this gate is cleared.

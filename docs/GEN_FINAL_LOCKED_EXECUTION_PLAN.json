@@ -4151,8 +4151,8 @@
     "1H_FUTURE_HIDDEN_PRICING_READY": 37,
     "1H_AUTHORITATIVE_SINGLE_BASIS_PRODUCTS": 45
   },
-  "stopGate": "FINAL_OWNER_REVIEW_PRICING_1H",
-  "nextPhase": "DO_NOT_RUN_GEN_CATALOG_2_UNTIL_PRICE_AND_EXECUTION_REVIEW_CLEARED",
+  "stopGate": "COST_BASIS_UNRESOLVED_LIVE_BLOCKED",
+  "nextPhase": "DO_NOT_RUN_GEN_CATALOG_2_UNTIL_EVERY_LIVE_NOW_HAS_VERIFIED_COMPLETE_COST",
   "pricingRule": {
     "rule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
     "customerShipping": "Customer medication shipping charge = $0 (shipping baked into retail per READ ME - RULES).",
@@ -4211,5 +4211,36 @@
     "WEBSITE_MODIFIED": "NO",
     "GEN_WHOP_CUTOVER": "OFF",
     "PRICE_CHANGES_REQUIRED_NOTE": "Authoritative single-basis products where final $X9 differs from current GEN and/or website, or GEN price unset"
+  },
+  "costBasisReview_1i": {
+    "doc": "docs/GEN_FINAL_COST_BASIS_REVIEW.md",
+    "json": "docs/GEN_FINAL_COST_BASIS_REVIEW.json",
+    "gate": {
+      "LIVE_PRODUCTS_TOTAL": 16,
+      "LIVE_COMPLETE_COST_VERIFIED": 7,
+      "LIVE_COST_BASIS_UNRESOLVED": 9,
+      "MULTIPLE_COST_BASIS_BEFORE": 25,
+      "MULTIPLE_COST_BASIS_RESOLVED": 4,
+      "MULTIPLE_COST_BASIS_REMAINING": 21,
+      "MISSING_COST_BEFORE": 57,
+      "MISSING_COST_RESOLVED": 0,
+      "MISSING_COST_REMAINING": 57,
+      "AOD_9604_COST_BASIS": "PACKAGE_QUANTITY_UNKNOWN (PER_UNIT $1.75; no course qty)",
+      "BPC_TB_CAPSULE_COST_BASIS": "PACKAGE_QUANTITY_UNKNOWN (PER_CAPSULE $3.20 Package=1EA; capsule count unknown)",
+      "BPC_157_INJECTION_COST_BASIS": "UNRESOLVED \u2014 plain BPC PER_UNIT $1.80 qty unknown; blend 5mL @ $77 are COMPLETE but different formulations (MULTIPLE_VALID_FORMULARIES)",
+      "SEM_3_MONTH_B12_COST_BASIS": "PACKAGE_QUANTITY_UNKNOWN \u2014 name claims 3 vials but cost $50 < single 10mg vial $65 (inconsistent)",
+      "SEM_START_LOW_READY": "NO \u2014 MULTIPLE_VALID_FORMULARIES (1mg & 2mg each VERIFIED per-vial; no single controlling retail)",
+      "SEM_MID_READY": "YES \u2014 VERIFIED_COMPLETE_COST (4mg vial) for B12 and Glycine",
+      "SEM_HIGH_READY": "NO \u2014 MULTIPLE_VALID_FORMULARIES (6mg & 10mg each VERIFIED per-vial)",
+      "SEM_ANY_DOSE_READY": "YES \u2014 ANY_DOSE_MAX_COST_BASIS (10mg vial $65+$5 \u2192 $119) for B12 and Glycine",
+      "SEM_3_MONTH_READY": "NO \u2014 B12 package cost inconsistent; Glycine 3-month MISSING",
+      "PRICING_FORMULA_CHANGED": "NO",
+      "GEN_MODIFIED": "NO",
+      "GEN_WRITES": 0,
+      "WEBSITE_MODIFIED": "NO",
+      "GEN_WHOP_CUTOVER": "OFF",
+      "LIVE_WRITE_GATE": "BLOCKED \u2014 not every LIVE_NOW medication has verified COMPLETE DISPENSE/PACKAGE cost basis"
+    },
+    "liveWriteBlocked": true
   }
 }

@@ -2,228 +2,233 @@
 
 **Mode:** READ-ONLY — no POST / PATCH / DELETE  
 **Branch:** `cursor/gen-catalog-1-import-plan-945c`  
-**Generated:** 2026-08-24  
+**Generated:** 2026-08-24T03:45:00Z  
+**Workbook:** `MyBareMethod_FINAL_GEN_Smart_Product_Upload_2026-08-23.xlsx`  
 **Production website modified:** NO  
 **GEN modified:** NO  
 **GEN/Whop cutover:** OFF  
 
-Machine-readable twin: `docs/GEN_CATALOG_IMPORT_PLAN.json`
+Machine-readable twin: `docs/GEN_CATALOG_IMPORT_PLAN.json` (full 253 rows).
 
 ---
 
-## Blockers (must clear before any import execution)
-
-| Blocker | Status | Impact |
-|---|---|---|
-| Master workbook `MyBareMethod_FINAL_GEN_Smart_Product_Upload_2026-08-23.xlsx` | **MISSING** from workspace | Phases 3–5 cannot classify master rows or propose exact formulary pairings |
-| Live GEN Products API (`GET /v2/client/products`) | Staging Edge returned **401 Invalid API key** (2026-08-24) | Fresh inventory / product-detail / forms / excluded-states GETs blocked |
-| Public OpenAPI for create/update bodies | **Not found** (`api.gen-health.app/openapi.json` → 404) | Exact POST/PATCH request schemas remain **UNKNOWN** until owner docs or a successful OPTIONS/schema dump |
-
-**Do not treat this document as an executable import script.**
-
----
-
-## Phase 1 — Schema audit (read-only)
-
-### Endpoints (owner-listed / repo-confirmed)
-
-| Capability | Endpoint | Evidence | Classification |
-|---|---|---|---|
-| List products | `GET /v2/client/products` | Prior successful staging GETs (cached); auth `x-api-key` | **SUPPORTED** |
-| Get product detail | `GET /v2/client/products/:id` | Repo docs + staging helper tries this path | **SUPPORTED** (live refresh blocked by key) |
-| List product forms | `GET /v2/client/products/:id/forms` | Wrapper in `src/lib/genHealth/genHealth.ts` | **SUPPORTED** |
-| Create client product/package | `POST /v2/client/products` (owner-listed) | Owner statement; **not exercised**; body schema not in repo | Endpoint **SUPPORTED** / body schema **UNKNOWN** |
-| Update client product/package | `PATCH /v2/client/products/:id` (owner-listed) | Owner statement; **not exercised** | Endpoint **SUPPORTED** / body schema **UNKNOWN** |
-| Deactivate | `DELETE …` (owner-listed) | Owner statement; **not called** | Endpoint **SUPPORTED** (unused this phase) |
-| Categories / consult products / state codes / excluded states / multi-product forms | Owner-listed GETs | Not re-fetched this phase (key failure) | **SUPPORTED** (claimed) / payloads **UNKNOWN** until live GET |
-
-Auth for Products API: header **`x-api-key`** (Bearer alone returns “API key required” — prior probe). Never print key values.
-
-### Fields observed on list GET (cached)
-
-From prior successful `GET /v2/client/products?limit=500` (22 products):
-
-| Field | Observed | Notes |
-|---|---|---|
-| `productId` | yes | GEN product id |
-| `clientProductId` | yes | Client-scoped composite id |
-| `name` | yes | Display / internal name |
-| `displayName` | yes | Often empty string |
-| `description` | yes | Free text |
-| `type` | yes (richer preview) | e.g. `product` |
-| `pricing.amount` | yes | All cached rows were **0** |
-| `pricing.currency` | yes | `USD` |
-| `storefrontEligible` | yes | All cached rows were **false** |
-| `requiresSyncVisit` | yes | Only “Add Sync” true in cache |
-| `categories` / `displayCategoryIds` / `primaryCategory` | yes | Empty / null in cache |
-| `panels` | yes (preview) | Empty in sample |
-| `imageUrl` / `displayImageUrl` / `displayImageBackgroundColor` | yes (preview) | null in sample |
-| `checkoutLinks` | yes (preview) | productFirst / intakeFirst / assessmentFirst GEN-hosted URLs |
-| `sourceProductId` / `productRelationship` | yes (preview) | present |
-| `requiresLab` / `requiresLabs` | documented on BPC detail historically | Not in list projection |
-| **assessment price** | **not in list** | UNKNOWN whether separate from `pricing` |
-| **shipping** | **not in list** | MBM rule: medication shipping included in retail — do not invent GEN shipping fields |
-| **quantity / supply duration / subscription** | **not in list** | UNKNOWN |
-| **included visits** | partial via `requiresSyncVisit` | UNKNOWN beyond flag |
-| **forms** | separate GET `/forms` | Not embedded in list |
-| **formulary / medication IDs** | **not in list** | UNKNOWN on create/patch without detail schema |
-| **excluded states** | separate GET/PATCH (owner-listed) | Not fetched this phase |
-| **active / inactive** | **not clearly exposed** on list | UNKNOWN vs `storefrontEligible` alone |
-
-### Schema questions (owner checklist)
-
-| Question | Answer |
-|---|---|
-| Exact POST create request schema | **UNKNOWN** — endpoint claimed; body not documented in-repo; not probed with mutating calls |
-| Exact PATCH update request schema | **UNKNOWN** |
-| One client product → multiple formulary meds/strengths? | **UNKNOWN** — protocol names imply multi-compound packages; list API does not expose medication arrays |
-| Draft / hidden product possible? | **LIKELY SUPPORTED** via `storefrontEligible=false` (all 22 cached products hidden + `pricing.amount=0`) |
-| Forms attachable on create vs follow-up? | **UNKNOWN** — forms fetched via separate GET today |
-| Formulary pairings on create/update vs other endpoint? | **UNKNOWN** — no pairing field in list; prior medication path probes (`/v2/client/medications`, `/pairings`) returned 404 |
-
-**MBM policy notes for future create payloads (not applied):**
-
-- Medication retail includes pharmacy shipping — do not add a separate medication shipping charge on MBM checkout.
-- Accessories stay outside GEN medication routing.
-- Future / non–website-live products: GEN `storefrontEligible=false`, MBM hidden/off, `checkout_enabled=false`, no production routing.
-- Metformin: **DO NOT ADD**.
-
----
-
-## Phase 2 — Current GEN inventory (cached; live refresh failed)
-
-**Source:** `/tmp/12i/products.json` / prior Phase 12G–12I staging list (22 products).  
-**Live attempt 2026-08-24:** staging `gen-health-list-products` → GEN `401 Invalid API key`.  
-**Paired formulary IDs / forms / excluded states:** not available without successful detail/forms GETs.
-
-| productId | name | storefrontEligible | pricing.amount | requiresSyncVisit | categories | formulary IDs | forms |
-|---|---|---|---:|---|---|---|---|
-| `t1JOySXRCJBAeXbkEXW4` | Add Sync | false | 0 | true | [] | UNKNOWN | UNKNOWN |
-| `PRIG7DYPNNgco3lGf1zx` | AOD-9604 | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `yearpPaLo5H0k0FU5Ej8` | AOD-9604 / MOTS-C / Tesamorelin Metabolic Triple Protocol | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `7Kix55LA15U0lNvY9QXI` | AOD-9604/MOTS-C | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `KXMm9SsbOEYnFy9phmZn` | BPC-157 | false | 0 | false | [] | UNKNOWN (historically Optimal Balance BPC/TB500 mapping for MBM SKU) | UNKNOWN |
-| `MXsSZY2GpiCByJUQer1p` | BPC-157 + GHK-Cu + KPV + TB-500 Comprehensive Recovery Protocol | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `Kju2P3fGsc0mbI1UGVeF` | BPC-157 + KPV + TB-500 Anti-Inflammatory Recovery Protocol | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `kAekLzXT2Wl2MDSBxjls` | BPC-157 + TB-500 + GHK-Cu Recovery & Anti-Aging Protocol | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `afROXeaudxZUdh0Y1Qfc` | BPC-157 Gut & Recovery Protocol (Oral Capsules) | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `TQBv1oBNGfwIGY8ypl86` | BPC-157 Recovery Protocol (Injectable) | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `NTN40APqv0NQokAGmuyg` | BPC-157 Recovery Protocol (Oral Capsule) | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `zpQmWLDx6QxyDz5N8IaI` | BPC-157/GHK-U/KPV/TB500 | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `lkpQbjBhhWMeLUszAvbh` | BPC-157/GHK/TB500 | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `26RwCZyLvfqRYRY7AG6T` | BPC-157/KPV/TB500 | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `iJtyig611AZEDBGdvRd9` | BPC-157/TB500 | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `Zd3nud61fajtnKM8EHae` | Elite Body Recomp | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `lT5iApLmX80qlBQTr4qE` | Elite Regenesis | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `gpwERWfomPpuJyY9oB8V` | Epitalon Longevity & Anti-Aging Protocol | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `489YrehNXRlL77fYPkOn` | GHK-Cu | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `qQKHHjPkPzs5D35Wgh2x` | GHK-Cu + Epitalon Anti-Aging Protocol | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `2CVlt0n5ITgHB1cYxoNY` | GHK-Cu Anti-Aging & Skin Health Protocol (Injectable) | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-| `Yq6xdybfGS55O4kUDVI8` | GHK-Cu/Epithalon | false | 0 | false | [] | UNKNOWN | UNKNOWN |
-
-**Inventory notes:**
-
-- No Semaglutide / Tirzepatide / HRT / NAD / Selank / Semax / skin-hair client products in the 22-name catalog (reconfirmed prior Phase 12I.2).
-- Elite Body Recomp description mentions Tirzepatide + Sermorelin — **not** a substitute for website Tirzepatide vial SKUs (do not silently map).
-- BPC injection remains the only historically **READY** MBM↔GEN clinical map (`KXMm9SsbOEYnFy9phmZn`) per Phase 12G/12I — still subject to workbook re-check.
-
----
-
-## Phase 3 — Master workbook mapping
-
-**Status:** `MASTER_WORKBOOK_REQUIRED`
-
-File not found anywhere under `/workspace`, `/home/ubuntu`, `/opt`, `/tmp`:
-
-`MyBareMethod_FINAL_GEN_Smart_Product_Upload_2026-08-23.xlsx`
-
-Therefore row classifications are **not** produced:
+## Totals
 
 | Classification | Count |
 |---|---:|
-| EXISTING_EXACT | **N/A** |
-| EXISTING_NEEDS_UPDATE | **N/A** |
-| CREATE_NEW | **N/A** |
-| FUTURE_CREATE_HIDDEN | **N/A** |
-| REVIEW_REQUIRED | **N/A** |
-| DO_NOT_ADD | **≥1 reserved** (Metformin — owner rule; apply when workbook parsed) |
+| **TOTAL MASTER PRODUCTS** | **253** |
+| EXISTING EXACT | 0 |
+| EXISTING NEEDS UPDATE | 13 |
+| CREATE NEW | 0 |
+| FUTURE CREATE HIDDEN | 23 |
+| REVIEW REQUIRED | 217 |
+| DO NOT ADD | 0 |
 
-### Owner structure rules (recorded for next pass)
+**Metformin:** DO_NOT_ADD — Owner rule; Metformin rows excluded from this workbook (READ ME).
 
-- Website-live flag only for products currently live on MyBareMethod.com (`ProductStatus === 'active'` in `src/data/products.ts`).
-- Future products may be prepared in GEN but must stay hidden/off on MBM + `storefrontEligible=false` + no production routing.
-- Semaglutide / Tirzepatide: parent products (Starting/Low, Mid, High, Any Dose, 3-Month Supply) — **not** one customer-facing product per vial; Any Dose maps to verified ladder, not one arbitrary formulation.
-- Do not silently substitute compound / form / strength / package.
-- Accessories: outside GEN medication routing.
+**Semaglutide structure:** **REVIEW**  
+- SELECTED FORMULARY has Dirx-Hub Semaglutide +Glycine/+B12 vial ladder (SELECTED).
+- Live website GLP-1 Semaglutide parent products are NO SAFE MATCH → REVIEW before pairing.
+- Do not create one customer-facing GEN product per vial; preserve Starting/Low/Mid/High/Any Dose/3-Month parents.
 
-### Website-live reference (MBM catalog, for next-pass flags)
-
-Active (non-exhaustive summary): weight meds (Semaglutide, Tirzepatide, Fat Burner), HRT (Estradiol Patch, Progesterone Capsules, Testosterone Cream), longevity (NAD+, Selank, Semax, Selank/Semax nasal, Tesamorelin, BPC), dermatology (Tretinoin, Minoxidil topical, Bimatoprost), provider care (IPV, FUV, Lab Review, Lab Kit), accessories (a1–a8, a10).  
-Future (hidden on MBM): Sermorelin, Minoxidil Tablets.
-
----
-
-## Phase 4 — Formulary pairing plan
-
-**Status:** `BLOCKED` — requires master workbook + live product detail / formulary fields.
-
-Known historical exact candidate (not re-verified this phase):
-
-| MBM | GEN productId | Formulation (historical) | Pharmacy | Notes |
-|---|---|---|---|---|
-| `MBM-RP-BPC-INJ-001` | `KXMm9SsbOEYnFy9phmZn` | BPC-157 / TB500 3 MG / 3 MG/ML (5 ML) | Optimal Balance | Re-check against final workbook; shipping UNKNOWN historically |
-
-All other pairings: **REVIEW_REQUIRED** until workbook + verified GEN formulary IDs.
+**Tirzepatide structure:** **REVIEW**  
+- SELECTED FORMULARY has Tirzepatide rows (SELECTED).
+- No LIVE WEBSITE Tirzepatide parent products safely matched in Smart Upload.
+- Workbook row Tirzepatide→0.5mg 30 count flagged REVIEW (not injectable dose-family parent).
+- Do not map Elite Body Recomp as Tirzepatide substitute.
 
 ---
 
-## Phase 5 — Future products
+## Phase 1 — Schema audit (unchanged)
 
-**Status:** Policy recorded; no GEN creates.
-
-When workbook lists future sexual wellness / peptide / hormone / skin-hair rows:
-
-- Intended GEN action: `FUTURE_CREATE_HIDDEN` (after schema confirmed)
-- `storefrontEligible=false`
-- Not active on MyBareMethod.com
-- `checkout_enabled=false` / no Whop/GEN production routing
-- No production cutover
-
----
-
-## Phase 6 — Output
-
-This file + `docs/GEN_CATALOG_IMPORT_PLAN.json`.
-
-**Products created / updated / deactivated this phase:** **0**  
-**GEN modified:** **NO**  
-**Production website modified:** **NO**
-
-### Next actions for owner
-
-1. Upload `MyBareMethod_FINAL_GEN_Smart_Product_Upload_2026-08-23.xlsx` into the cloud agent workspace.
-2. Refresh staging `GEN_HEALTH_API_KEY` if invalid (Edge list currently 401).
-3. Provide or point to GEN V2 Product create/update OpenAPI (or allow a follow-up read-only schema dump after key fix).
-4. Re-run GEN-CATALOG-1 mapping pass — still no POST/PATCH until owner approves an execution phase.
-
----
-
-## Summary counts (this phase)
-
-| Metric | Value |
+| Question | Answer |
 |---|---|
-| TOTAL MASTER PRODUCTS | **UNKNOWN** (workbook missing) |
-| EXISTING EXACT | UNKNOWN |
-| EXISTING NEEDS UPDATE | UNKNOWN |
-| CREATE NEW | UNKNOWN |
-| FUTURE CREATE HIDDEN | UNKNOWN |
-| REVIEW REQUIRED | UNKNOWN |
-| DO NOT ADD | Metformin (rule reserved) |
-| Cached GEN client products | **22** |
-| SEMAGLUTIDE STRUCTURE | **REVIEW** (no GEN SEM products; workbook pending) |
-| TIRZEPATIDE STRUCTURE | **REVIEW** (no GEN TIR vial products; Elite Body Recomp is not a substitute) |
-| METFORMIN | **DO NOT ADD** |
-| PRODUCTS CREATED / UPDATED / DEACTIVATED | **0 / 0 / 0** |
-| GEN/WHOP CUTOVER | **OFF** |
+| GEN CREATE PRODUCT ENDPOINT | **SUPPORTED** (request body schema UNKNOWN) |
+| GEN UPDATE PRODUCT ENDPOINT | **SUPPORTED** (request body schema UNKNOWN) |
+| MULTI-FORMULARY PRODUCT | **UNKNOWN** |
+| DRAFT/HIDDEN PRODUCT | **SUPPORTED** (`storefrontEligible=false`) |
+| FORMULARY PAIRING IN CREATE/PATCH | **UNKNOWN** |
 
-**STOP FOR OWNER REVIEW.**
+Live GEN Products GET on 2026-08-24 returned **401 Invalid API key**; inventory below uses prior cached staging list (22 products).
+
+---
+
+## Phase 2 — Current GEN inventory (cached 22)
+
+All 22 cached GEN client products appear in the master Smart Upload sheet by exact name. None are `EXISTING_EXACT` — each either needs pairing update or is `REVIEW_REQUIRED` (NO SAFE MATCH).
+
+---
+
+## EXISTING_NEEDS_UPDATE (13)
+
+| Master product | GEN productId | Match | Proposed formulary | Pharmacy | Landed | Storefront |
+|---|---|---|---|---|---:|---|
+| AOD-9604 | `PRIG7DYPNNgco3lGf1zx` | HIGH CONFIDENCE MATCH | AOD 9604 300 MCG | Optimal Balance Pharmacy | 21.75 | hidden |
+| AOD-9604 / MOTS-C / Tesamorelin Metabolic Triple Protocol | `yearpPaLo5H0k0FU5Ej8` | AUTO MATCH - REVIEW | AOD 9604/ MOTS-C/ TESAMORELIN/ IPAMORELIN 1.2 MG/ 2 MG/ 2MG/ 2MG/ML (5 ML) | Optimal Balance Pharmacy | 122.0 | website_live_candidate |
+| AOD-9604/MOTS-C | `7Kix55LA15U0lNvY9QXI` | HIGH CONFIDENCE MATCH | AOD 9604/ MOTS-C/ TESAMORELIN/ IPAMORELIN 1.2 MG/ 2 MG/ 2MG/ 2MG/ML (5 ML) | Optimal Balance Pharmacy | 122.0 | hidden |
+| BPC-157 | `KXMm9SsbOEYnFy9phmZn` | HIGH CONFIDENCE MATCH | BPC-157 500 MCG | Optimal Balance Pharmacy | 21.8 | website_live_candidate |
+| BPC-157 + GHK-Cu + KPV + TB-500 Comprehensive Recovery Protocol | `MXsSZY2GpiCByJUQer1p` | AUTO MATCH - REVIEW | BPC-157/TB-500/GHK-CU 3/3/10MG/ML (5ml) | Greenwich Pharmacy | 102.0 | website_live_candidate |
+| BPC-157 + TB-500 + GHK-Cu Recovery & Anti-Aging Protocol | `kAekLzXT2Wl2MDSBxjls` | AUTO MATCH - REVIEW | BPC-157/TB-500/GHK-CU 3/3/10MG/ML (5ml) | Greenwich Pharmacy | 102.0 | hidden |
+| BPC-157 Recovery Protocol (Injectable) | `TQBv1oBNGfwIGY8ypl86` | AUTO MATCH - REVIEW | BPC-157 500 MCG | Optimal Balance Pharmacy | 21.8 | hidden |
+| BPC-157/GHK-U/KPV/TB500 | `zpQmWLDx6QxyDz5N8IaI` | AUTO MATCH - REVIEW | BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL (5ml) | Greenwich Pharmacy | 102.0 | hidden |
+| BPC-157/GHK/TB500 | `lkpQbjBhhWMeLUszAvbh` | HIGH CONFIDENCE MATCH | BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL (5ml) | Greenwich Pharmacy | 102.0 | hidden |
+| BPC-157/KPV/TB500 | `26RwCZyLvfqRYRY7AG6T` | HIGH CONFIDENCE MATCH | BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL (5ml) | Greenwich Pharmacy | 102.0 | hidden |
+| BPC-157/TB500 | `iJtyig611AZEDBGdvRd9` | HIGH CONFIDENCE MATCH | BPC-157/TB500 capsules 500MCG/500MCG | Greenwich Pharmacy | 28.2 | website_live_candidate |
+| GHK-Cu | `489YrehNXRlL77fYPkOn` | HIGH CONFIDENCE MATCH | Minoxidil 2.5mg/GHK-Cu 5mg/Apigenin 50mg/Fisetin 50mg | Epiq Scripts | 38.75 | hidden |
+| GHK-Cu/Epithalon | `Yq6xdybfGS55O4kUDVI8` | HIGH CONFIDENCE MATCH | GHK-CU/ EPITHALON 10 MG/ 2 MG/ML (5 ML) | Optimal Balance Pharmacy | 102.0 | hidden |
+
+---
+
+## FUTURE_CREATE_HIDDEN (23)
+
+Prepare in GEN only: `storefrontEligible=false`, not active on MyBareMethod.com, `checkout_enabled=false`, no production routing.
+
+| Master product | Proposed formulary | Pharmacy | Cost | Ship | Landed |
+|---|---|---|---:|---:|---:|
+| DSIP | DSIP 1mg/mL (5ml) | Greenwich Pharmacy | 62.0 | 25.0 | 87.0 |
+| DSIP/BPC/CJC | DSIP/BPC/CJC 1mg/2mg/2mg (5ml) | Greenwich Pharmacy | 77.0 | 25.0 | 102.0 |
+| Epithalon | Epithalon 2mg/mL (5ml) | Greenwich Pharmacy | 62.0 | 25.0 | 87.0 |
+| Finasteride | FINASTERIDE 1 mg | VitaScripts Pharmacy | 0.5 | 15.0 | 15.5 |
+| Ivermectin 18mg | Ivermectin 18mg | St Luke | 2.0 | 30.0 | 32.0 |
+| Liraglutide | LIRAGLUTIDE 6mg 5ml | Valiant | 100.0 | 30.0 | 130.0 |
+| LL-37 | LL-37 2MG/ML (5ml) | Greenwich Pharmacy | 62.0 | 25.0 | 87.0 |
+| MOTS-C | MOTS-C 2mg/mL (5ml) | Greenwich Pharmacy | 62.0 | 25.0 | 87.0 |
+| NAD + Nasal Spray | NAD+ 50mg/ml | St Luke | 30.0 | 30.0 | 60.0 |
+| NAD+ (Injectable) | NAD+ 50mg/ml | St Luke | 30.0 | 30.0 | 60.0 |
+| Pinealon | Pinealon/PE22-28/Selank 2MG/2MG/ML (5ml) | Greenwich Pharmacy | 77.0 | 25.0 | 102.0 |
+| PT-141 (Bremelanotide) | PT-141 (Bremelanotide) 1mg | St Luke | 3.0 | 30.0 | 33.0 |
+| Semaglutide/B12 | SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL) | Dirx-Hub | 50.0 | 5.0 | 55.0 |
+| Semaglutide/L-Carnitine | SEMAGLUTIDE/L-CARNITINE (2ML) 2mg/100mg/ml | Vios | 50.0 | 30.0 | 80.0 |
+| Sermorelin | SERMORELIN ACETATE (TROCHE) 1 MG | Vios | 0.85 | 30.0 | 30.85 |
+| Sildenafil | SILDENAFIL 100 mg | VitaScripts Pharmacy | 0.5 | 15.0 | 15.5 |
+| Tadalafil | TADALAFIL 10 mg | VitaScripts Pharmacy | 0.5 | 15.0 | 15.5 |
+| Tadalafil+Sildenafil | SILDENAFIL/ TADALAFIL 50 MG/ 10 MG | Optimal Balance Pharmacy | 1.56 | 20.0 | 21.56 |
+| Tesamorelin/Ipamorelin | Tesamorelin/Ipamorelin 3mg/2mg/mL (5ml) | Greenwich Pharmacy | 77.0 | 25.0 | 102.0 |
+| Thymosin A-1 | Thymosin A-1 5mg/mL (5ml) | Greenwich Pharmacy | 77.0 | 30.0 | 107.0 |
+| Tirzepatide/L-Carnitine | TIRZEPATIDE/L-CARNITINE (1ML) 10mg/100mg/ml | Vios | 70.0 | 30.0 | 100.0 |
+| Tirzepatide/Niacinamide | TIRZEPATIDE/NIACINAMIDE (68MG/8MG/4ML) 17mg/2mg/ml | Vios | 180.0 | 30.0 | 210.0 |
+| Vardenafil | VARDENAFIL 20 MG | Optimal Balance Pharmacy | 3.95 | 20.0 | 23.95 |
+
+---
+
+## CREATE_NEW
+
+**0** — no live-website Smart Upload row both lacked a GEN inventory name match and had HIGH CONFIDENCE MATCH. Live Semaglutide parent products are present but **NO SAFE MATCH** → REVIEW.
+
+---
+
+## REVIEW_REQUIRED highlights
+
+**217** rows total. Notable subsets:
+
+### Live website Semaglutide parents (NO SAFE MATCH)
+
+- **GLP-1 Weight Loss – Semaglutide (High Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss – Semaglutide (Low Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss Membership – Semaglutide / B12 (Any Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss Membership – Semaglutide / Glycine (Any Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss Plan – Semaglutide / B12 (High Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss Plan – Semaglutide / B12 (Starting Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss Plan – Semaglutide / Glycine (High Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss Plan – Semaglutide / Glycine (Mid Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss Plan – Semaglutide / Glycine (Starting Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss Plan – Semaglutide + B12 (Starting Dose / Micro-Dose)** — NO SAFE MATCH — do not create/update without exact verified pairing
+- **GLP-1 Weight Loss Plan – Semaglutide 3-Month Escalation Bundle (High: 4→6→10mg)** — NO SAFE MATCH — do not create/update without exact verified pairing
+
+### Safety mismatch / form guards (examples)
+
+- **5-Amino Injectable** — Injectable product paired to capsule formulary — REVIEW form mismatch
+- **Sildenafil (3 Month)** — Proposed formulary is Scream Cream but product name is not Scream Cream — do not silently substitute
+- **Sildenafil (6 Month)** — Proposed formulary is Scream Cream but product name is not Scream Cream — do not silently substitute
+
+### Existing GEN products with NO SAFE MATCH (9)
+
+- **Add Sync** (`t1JOySXRCJBAeXbkEXW4`)
+- **BPC-157 + KPV + TB-500 Anti-Inflammatory Recovery Protocol** (`Kju2P3fGsc0mbI1UGVeF`)
+- **BPC-157 Gut & Recovery Protocol (Oral Capsules)** (`afROXeaudxZUdh0Y1Qfc`)
+- **BPC-157 Recovery Protocol (Oral Capsule)** (`NTN40APqv0NQokAGmuyg`)
+- **Elite Body Recomp** (`Zd3nud61fajtnKM8EHae`)
+- **Elite Regenesis** (`lT5iApLmX80qlBQTr4qE`)
+- **Epitalon Longevity & Anti-Aging Protocol** (`gpwERWfomPpuJyY9oB8V`)
+- **GHK-Cu + Epitalon Anti-Aging Protocol** (`qQKHHjPkPzs5D35Wgh2x`)
+- **GHK-Cu Anti-Aging & Skin Health Protocol (Injectable)** (`2CVlt0n5ITgHB1cYxoNY`)
+
+Full reasons for every REVIEW row: JSON `rows[].reasonForReview`.
+
+---
+
+## SELECTED FORMULARY — Semaglutide / Tirzepatide ladders
+
+### Semaglutide (Dirx-Hub)
+
+| Formulation | Strength | Med cost | Ship | Landed | +50% | Status | Customer ship |
+|---|---|---:|---:|---:|---:|---|---|
+| SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL) | 1mg/0.5mg/mL | 50 | 5 | 55 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL) | 1mg/0.5mg/mL | 50 | 5 | 55 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL) | 2mg/0.5mg/mL | 55 | 5 | 60 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL) | 2mg/0.5mg/mL | 55 | 5 | 60 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL) | 4mg/0.5mg/mL | 58 | 5 | 63 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL) | 4mg/0.5mg/mL | 58 | 5 | 63 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL) | 6mg/0.5mg/mL | 60 | 5 | 65 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL) | 6mg/0.5mg/mL | 60 | 5 | 65 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL) | 10mg/0.5mg/mL | 65 | 5 | 70 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) | 10mg/0.5mg/mL | 65 | 5 | 70 | None | SELECTED | $0 — included in medication retail |
+| SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) (3 VIALS)) | 10mg/0.5mg/mL | 50 | 30 | 80 | None | SELECTED | $0 — included in medication retail |
+
+### Tirzepatide
+
+| Formulation | Pharmacy | Strength | Med cost | Ship | Landed | Status |
+|---|---|---|---:|---:|---:|---|
+| TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 5mg/0.5mg/mL | 65 | 5 | 70 | SELECTED |
+| TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 5mg/0.5mg/mL | 65 | 5 | 70 | SELECTED |
+| TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 10mg/0.5mg/mL | 75 | 5 | 80 | SELECTED |
+| TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 10mg/0.5mg/mL | 75 | 5 | 80 | SELECTED |
+| TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 15mg/0.5mg/mL | 85 | 5 | 90 | SELECTED |
+| TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 15mg/0.5mg/mL | 85 | 5 | 90 | SELECTED |
+| TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 20mg/0.5mg/mL | 90 | 5 | 95 | SELECTED |
+| TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 20mg/0.5mg/mL | 90 | 5 | 95 | SELECTED |
+| TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 25mg/0.5mg/mL | 95 | 5 | 100 | SELECTED |
+| TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 25mg/0.5mg/mL | 95 | 5 | 100 | SELECTED |
+| TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 30mg/0.5mg/mL | 100 | 5 | 105 | SELECTED |
+| TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL) | Dirx-Hub | 30mg/0.5mg/mL | 100 | 5 | 105 | SELECTED |
+| TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) (3 PACK)) | Dirx-Hub | 30mg/0.5mg/mL | 225 | 30 | 255 | SELECTED |
+
+---
+
+## FUTURE ADDITIONS sheet (8)
+
+| Product | Delivery | Pharmacy | Formulation | Landed | Website Active | GEN Action |
+|---|---|---|---|---:|---|---|
+| PT-141 (Bremelanotide) | Nasal Spray | Vios | BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML | 92 | NO | PREP/PAIR IN GEN ONLY — DO NOT LAUNCH |
+| PT-141 (Bremelanotide) | Nasal Spray | Vios | BREMELANOTIDE (PT-141) (PER ML) 5MG/ML | 92 | NO | PREP/PAIR IN GEN ONLY — DO NOT LAUNCH |
+| Oxytocin | Nasal Spray | St Luke | Oxytocin 100 IU/ml | 75 | NO | PREP/PAIR IN GEN ONLY — DO NOT LAUNCH |
+| Sexual Wellness Compound | Capsule | Epiq Scripts | 100mg Flibanserin, 100iu Oxytocin, 50mg Tyrosine | 191 | NO | PREP/PAIR IN GEN ONLY — DO NOT LAUNCH |
+| Finasteride / Minoxidil | Topical | Vios | FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 % | 60 | NO | PREP/PAIR IN GEN ONLY — DO NOT LAUNCH |
+| Finasteride / Minoxidil / Tretinoin | Topical | Vios | FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.25/5/0.01 % | 65 | NO | PREP/PAIR IN GEN ONLY — DO NOT LAUNCH |
+| Bimatoprost | Solution | TBD | No matching Bimatoprost entry confirmed in supplied formulary | None | NO | PREP/PAIR IN GEN ONLY — DO NOT LAUNCH |
+| Scream Cream | Topical Cream | TBD | No exact Scream Cream formulation confirmed in supplied formulary | None | NO | PREP/PAIR IN GEN ONLY — DO NOT LAUNCH |
+
+---
+
+## Owner rules (from workbook READ ME)
+
+- Only CURRENT/LIVE MyBareMethod.com products may be website-active.
+- Future products may be prepared in GEN but must stay OFF on the website.
+- Medication shipping included in retail (customer med shipping $0).
+- Accessories separate (USPS Priority).
+- Metformin: DO NOT ADD.
+- Never silently substitute compound/form/strength/package.
+- Semaglutide/Tirzepatide dose-group products must pair to intended exact formulations.
+- Match and Preview before Apply; do not bulk-apply unresolved rows.
+
+---
+
+## Execution gate
+
+| Action | Count this phase |
+|---|---:|
+| PRODUCTS CREATED | 0 |
+| PRODUCTS UPDATED | 0 |
+| PRODUCTS DEACTIVATED | 0 |
+
+**STOP FOR OWNER REVIEW.** Do not POST/PATCH until owner approves an execution phase and POST/PATCH body schemas are confirmed.

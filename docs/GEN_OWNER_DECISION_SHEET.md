@@ -13,6 +13,8 @@
 - **LIVE PRODUCTS REQUIRING OWNER DECISION:** 0 (within the 14)
 - **LIVE-ADJACENT DECISION:** #1 Semaglutide Mid (B12) — outside the 14
 - **OWNER DECISIONS TOTAL:** 13
+- **OWNER DECISIONS RESOLVED (1G):** 13
+- **OWNER DECISIONS REMAINING:** 0
 - **TRUE FORMULARY REVIEWS:** 7
 - **DUPLICATE DECISIONS:** 7
 - **NET UNIQUE OWNER DECISIONS:** 13
@@ -79,7 +81,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **RECOMMENDED STRUCTURAL CHOICE:** A — keeps dose-ladder symmetry with live Glycine Mid; supported by selected Mid B12 vial coverage.
 
 **OWNER RESPONSE:**
-- [x] A — **APPROVED (GEN-CATALOG-1F)** — retain Mid B12 CP; B12 ladder = Starting/Low, Mid, High, Any Dose, 3-Month as applicable
+- [x] A — **APPROVED (GEN-CATALOG-1F/1G) — retain Mid B12 CP; B12 ladder = Starting/Low, Mid, High, Any Dose, 3-Month as applicable**
 - [ ] B
 - [ ] OTHER
 
@@ -108,7 +110,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **DUPLICATE of Section 3 True Review:** 5-Amino Injectable
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1G) — injectable only; no capsule substitution**
 - [ ] B
 - [ ] OTHER
 
@@ -135,7 +137,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **RECOMMENDED STRUCTURAL CHOICE:** A — this is over-collapse, not pharmacy/vial duplication.
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1G) — split catch-all into distinct products**
 - [ ] B
 - [ ] OTHER
 
@@ -162,7 +164,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **RECOMMENDED STRUCTURAL CHOICE:** A — this is over-collapse, not pharmacy/vial duplication.
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1G) — split; no umbrella HRT**
 - [ ] B
 - [ ] OTHER
 
@@ -189,7 +191,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **RECOMMENDED STRUCTURAL CHOICE:** A — this is over-collapse, not pharmacy/vial duplication.
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1G) — split into distinct hair-loss/combo product(s)**
 - [ ] B
 - [ ] OTHER
 
@@ -220,7 +222,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **OWNER RESPONSE:**
 - [ ] A
 - [ ] B
-- [ ] OTHER
+- [x] OTHER — **APPROVED SEPARATE DELIVERY FORMS (GEN-CATALOG-1G) — Injection and Nasal Spray separate; never cross-pair**
 
 ---
 
@@ -248,7 +250,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 
 **OWNER RESPONSE:**
 - [ ] A
-- [ ] B
+- [x] B — **DEFERRED (GEN-CATALOG-1G) — no troche; no create/pair until exact cream confirmed**
 - [ ] OTHER
 
 ---
@@ -276,7 +278,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **DUPLICATE of Section 3 True Review:** Sildenafil (3 Month)
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1G) — tablet/capsule only; Scream Cream separate**
 - [ ] B
 - [ ] OTHER
 
@@ -305,7 +307,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **DUPLICATE of Section 3 True Review:** Sildenafil (6 Month)
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1G) — tablet/capsule only; Scream Cream separate**
 - [ ] B
 - [ ] OTHER
 
@@ -332,7 +334,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **RECOMMENDED STRUCTURAL CHOICE:** A — this is over-collapse, not pharmacy/vial duplication.
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1G) — split distinct Sildenafil/Tadalafil/combo products**
 - [ ] B
 - [ ] OTHER
 
@@ -359,7 +361,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **RECOMMENDED STRUCTURAL CHOICE:** A — this is over-collapse, not pharmacy/vial duplication.
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1G) — split daily/on-demand/combo products**
 - [ ] B
 - [ ] OTHER
 
@@ -390,7 +392,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **OWNER RESPONSE:**
 - [ ] A
 - [ ] B
-- [ ] OTHER
+- [x] OTHER — **REJECT/DEFER AMBIGUOUS LABELS (GEN-CATALOG-1G) — do not map to B12-only or Glycine-only; no B12+Glycine CP without matching formulary**
 
 ---
 
@@ -415,7 +417,7 @@ Proposed retail = workbook Current GEN Price when present; else non-zero GEN amo
 **RECOMMENDED STRUCTURAL CHOICE:** A — this is over-collapse, not pharmacy/vial duplication.
 
 **OWNER RESPONSE:**
-- [ ] A
+- [x] A — **APPROVED (GEN-CATALOG-1G) — split into distinct skin/hair products**
 - [ ] B
 - [ ] OTHER
 

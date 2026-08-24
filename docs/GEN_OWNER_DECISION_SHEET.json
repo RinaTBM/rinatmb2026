@@ -298,7 +298,7 @@
       "key": "sem-b12-mid",
       "ownerResponse": "A",
       "ownerResponseStatus": "APPROVED",
-      "ownerResponseNote": "GEN-CATALOG-1F: retain Mid B12 CP; B12 ladder Starting/Low, Mid, High, Any Dose, 3-Month as applicable"
+      "ownerResponseNote": "Create/retain separate Mid B12 client product. B12 ladder = Starting/Low, Mid, High, Any Dose, 3-Month as applicable."
     },
     {
       "number": 2,
@@ -325,7 +325,10 @@
       "masterProducts": [
         "5-Amino Injectable"
       ],
-      "key": "review-5amino-form"
+      "key": "review-5amino-form",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Keep injectable product; pair only to confirmed injectable formulary. Do not substitute capsule formulary."
     },
     {
       "number": 3,
@@ -380,7 +383,10 @@
         "Wellness \u2013 MIC-B12 (Lipotropic / Fat Burn)",
         "Wellness \u2013 MIC-B12 (Lipotropic / Fat Burn)"
       ],
-      "key": "other-other-unspecified"
+      "key": "other-other-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split over-collapsed catch-all into appropriate distinct patient-facing products."
     },
     {
       "number": 4,
@@ -420,7 +426,10 @@
         "Womens TRT/HRT 3 Month Plan",
         "Womens TRT/HRT 6 Month Plan"
       ],
-      "key": "hrt-hrtother-unspecified-"
+      "key": "hrt-hrtother-unspecified-",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split into distinct patient-facing products. Do not maintain one umbrella HRT product."
     },
     {
       "number": 5,
@@ -445,7 +454,10 @@
       "masterProducts": [
         "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)"
       ],
-      "key": "minoxidil-unspecified"
+      "key": "minoxidil-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split into the actual distinct hair-loss/combo product(s)."
     },
     {
       "number": 6,
@@ -472,7 +484,10 @@
       "masterProducts": [
         "NAD+ (Injectable)"
       ],
-      "key": "review-nadinjectable"
+      "key": "review-nadinjectable",
+      "ownerResponse": "SEPARATE_DELIVERY_FORMS",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "NAD+ Injection and NAD+ Nasal Spray must remain separate client products. Never cross-pair nasal formulary to injectable product."
     },
     {
       "number": 7,
@@ -499,7 +514,10 @@
       "masterProducts": [
         "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone"
       ],
-      "key": "review-screamcreamsildenafilargininepapaverinet"
+      "key": "review-screamcreamsildenafilargininepapaverinet",
+      "ownerResponse": "B",
+      "ownerResponseStatus": "DEFERRED",
+      "ownerResponseNote": "Do not attach Sildenafil/Testosterone troche to Scream Cream. Keep Scream Cream FUTURE_HIDDEN; do not create/pair until exact cream formulation confirmed."
     },
     {
       "number": 8,
@@ -526,7 +544,10 @@
       "masterProducts": [
         "Sildenafil (3 Month)"
       ],
-      "key": "review-sildenafil3month"
+      "key": "review-sildenafil3month",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Use Sildenafil tablet/capsule formulary only. Scream Cream remains separate."
     },
     {
       "number": 9,
@@ -553,7 +574,10 @@
       "masterProducts": [
         "Sildenafil (6 Month)"
       ],
-      "key": "review-sildenafil6month"
+      "key": "review-sildenafil6month",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Use Sildenafil tablet/capsule formulary only. Scream Cream remains separate."
     },
     {
       "number": 10,
@@ -582,7 +606,10 @@
         "Sildenafil",
         "Tadalafil+Sildenafil"
       ],
-      "key": "sildenafil-unspecified"
+      "key": "sildenafil-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split distinct Sildenafil/Tadalafil/combo products. Do not use one umbrella ED product."
     },
     {
       "number": 11,
@@ -610,7 +637,10 @@
         "Tadalafil",
         "Vardenafil+Tadalafil+Apormorphine"
       ],
-      "key": "tadalafil-unspecified"
+      "key": "tadalafil-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split distinct daily/on-demand/combo products."
     },
     {
       "number": 12,
@@ -639,7 +669,10 @@
         "Tirzepatide/B12/Glycine",
         "Tirzepatide/Glycine/B12"
       ],
-      "key": "tir-b12-glycine-ambiguous"
+      "key": "tir-b12-glycine-ambiguous",
+      "ownerResponse": "REJECT_DEFER_AMBIGUOUS_LABELS",
+      "ownerResponseStatus": "REJECTED_DEFERRED",
+      "ownerResponseNote": "Do not map either ambiguous B12+Glycine label to a B12-only or Glycine-only formulary. Do not create a B12+Glycine product unless an actual matching B12+Glycine formulary is later confirmed. Existing policy: Tirzepatide B12 ladder separate; Tirzepatide Glycine ladder separate."
     },
     {
       "number": 13,
@@ -666,7 +699,10 @@
         "Hair Loss - Minoxdil/Tretinoin/Fluocinolone/Finasteride Spray",
         "Hair Loss \u2013 Triple Combo (Finasteride/Minoxidil/Tretinoin)"
       ],
-      "key": "tretinoin-unspecified"
+      "key": "tretinoin-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split into the actual distinct skin/hair products and combinations."
     }
   ],
   "trueFormularyReviews7": [
@@ -1054,7 +1090,9 @@
     "GEN_DEACTIVATED": 0,
     "GEN_MODIFIED": "NO",
     "GEN_WHOP_CUTOVER": "OFF",
-    "PRODUCTION_WEBSITE_MODIFIED": "NO"
+    "PRODUCTION_WEBSITE_MODIFIED": "NO",
+    "OWNER_DECISIONS_REMAINING": 0,
+    "OWNER_DECISIONS_RESOLVED": 13
   },
   "cleanupOwnerStatus_1f": {
     "status": "APPROVED",
@@ -1074,5 +1112,5 @@
     ],
     "note": "Owner called this Decision #10; sheet Decision #10 is Sildenafil Unspecified and remains unresolved"
   },
-  "phase": "GEN-CATALOG-1F-partial-approvals-recorded"
+  "phase": "GEN-CATALOG-1G-ALL-DECISIONS-RESOLVED"
 }

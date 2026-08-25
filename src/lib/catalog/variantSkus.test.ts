@@ -49,14 +49,14 @@ describe('variant SKU registry', () => {
     expect(missing).toEqual([]);
   });
 
-  it('keeps Tesamorelin and Fat Burner in catalog but held from launch storefront', () => {
+  it('keeps Tesamorelin and Fat Burner visible for browse while checkout stays unready', () => {
     const published = products.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
     expect(published).toHaveLength(2);
     const tesa = published.find(p => p.slug === 'tesamorelin')!;
     const fat = published.find(p => p.slug === 'fat-burner')!;
     for (const p of published) {
       expect(p.status).toBe('active');
-      expect(p.isVisible).toBe(false);
+      expect(p.isVisible).toBe(true);
     }
     expect(tesa.variants[0].sku).toBe('MBM-LON-TESA-INJ-001');
     expect(tesa.variants[0].price).toBe(149);

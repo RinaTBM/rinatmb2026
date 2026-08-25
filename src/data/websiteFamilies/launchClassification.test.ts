@@ -44,13 +44,16 @@ describe('MBM-FINAL-WEBSITE-LAUNCH-1 gate', () => {
     expect(resolveGenClientProductIdForSku('MBM-LON-NAD-INJ-001')).toBeNull();
   });
 
-  it('hides held families from the shop and shows no B6 names', () => {
+  it('restores the public shop catalog without B6 names or future-hidden SKUs', () => {
     const slugs = visibleProducts.map((p) => p.slug);
     expect(slugs).toContain('semaglutide');
     expect(slugs).toContain('tirzepatide');
     expect(slugs).toContain('nad-plus');
-    expect(slugs).not.toContain('fat-burner');
-    expect(slugs).not.toContain('bpc-157-tb-500');
+    expect(slugs).toContain('fat-burner');
+    expect(slugs).toContain('bpc-157-tb-500');
+    expect(slugs).toContain('estradiol-patch');
+    expect(slugs).not.toContain('sermorelin');
+    expect(slugs).not.toContain('minoxidil-tablets');
     for (const p of visibleProducts) {
       expect(p.displayName.toLowerCase()).not.toContain('b6');
     }

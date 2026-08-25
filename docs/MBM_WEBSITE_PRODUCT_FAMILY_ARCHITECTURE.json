@@ -1,0 +1,3492 @@
+{
+  "meta": {
+    "generated_at": "2026-08-24T22:44:24Z",
+    "phase": "MBM-WEBSITE-PRODUCT-ARCHITECTURE-LOCK",
+    "mode": "READ-ONLY DESIGN",
+    "website_model": "ONE_PRODUCT_FAMILY_WITH_VARIANTS",
+    "gen_modified": false,
+    "gen_writes": 0,
+    "website_modified": false,
+    "gen_whop_cutover": "OFF",
+    "locked_launch_map": {
+      "CURRENT_LIVE": 17,
+      "LAUNCH_WITH_WEBSITE_CUTOVER": 16,
+      "FUTURE_HIDDEN": 32,
+      "TOTAL": 65
+    }
+  },
+  "design_principles": [
+    "One clean patient-facing medication/product page per family",
+    "Customer selects applicable options underneath",
+    "Selected option maps to exact GEN backend / formulary route",
+    "Do not create a card per dosage form, strength, pharmacy, GEN CP, or formulary row",
+    "One website product may map to multiple GEN client products",
+    "No checkout without exact backend routing target"
+  ],
+  "families": [
+    {
+      "website_product_family": "Semaglutide",
+      "family_id": "semaglutide",
+      "category": "Weight Management",
+      "launch_state_summary": "CURRENT_LIVE (B6 transitional + membership) \u2192 CUTOVER replaces one-time with B12/Glycine dose groups",
+      "architecture_rule": "ONE website product page. Selectors: Purchase Type, Formulation (B12|Glycine), Dose tier. Do not reintroduce B6.",
+      "available_selectors": [
+        "purchase_type",
+        "formulation_additive",
+        "dose_tier"
+      ],
+      "current_website_slug": "semaglutide",
+      "starting_at_price_display": "Starting at $89 (cutover one-time); Membership $149",
+      "variants": [
+        {
+          "website_option_id": "sem-current-b6",
+          "display_label": "Semaglutide + B6 (current website until cutover)",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B6 (legacy website)",
+          "dose_tier": "website current",
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": null,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "BLOCKED",
+          "checkout_status": "CURRENT_WEBSITE_ONLY",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Transitional. Do not reintroduce B6 into cutover architecture. Replaced by B12/Glycine at cutover."
+        },
+        {
+          "website_option_id": "sem-b12-starting-low",
+          "display_label": "Starting / Low \u00b7 Vitamin B12",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B12",
+          "dose_tier": "Starting / Low",
+          "package_size": "1mL vials (owner dose group)",
+          "purchase_model": "one_time",
+          "retail_price": "89\u201399",
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y",
+          "gen_productId": "SkqQHmsc0WdsbK9vmV1y",
+          "gen_medication_formulary_id": "gqe6H8ay1sw6QlS32SMH",
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 3,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 5,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "Cutover-ready formulary. GEN CP exists \u2014 SAFE_TO_REPAIR_LATER / pairing verification required before checkout."
+        },
+        {
+          "website_option_id": "sem-b12-mid",
+          "display_label": "Mid \u00b7 Vitamin B12",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B12",
+          "dose_tier": "Mid",
+          "package_size": "1mL vials (owner dose group)",
+          "purchase_model": "one_time",
+          "retail_price": 109,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O",
+          "gen_productId": "BLf8inX395YNc7WPCD4O",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 7,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "Cutover-ready formulary. GEN CP exists \u2014 SAFE_TO_REPAIR_LATER / pairing verification required before checkout."
+        },
+        {
+          "website_option_id": "sem-b12-high",
+          "display_label": "High \u00b7 Vitamin B12",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B12",
+          "dose_tier": "High",
+          "package_size": "1mL vials (owner dose group)",
+          "purchase_model": "one_time",
+          "retail_price": "109\u2013119",
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_34I2X8MpVZf3AQTff3bo",
+          "gen_productId": "34I2X8MpVZf3AQTff3bo",
+          "gen_medication_formulary_id": "YqrJ1qnOv3U3ecJHuSzr",
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 9,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 11,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "Cutover-ready formulary. GEN CP exists \u2014 SAFE_TO_REPAIR_LATER / pairing verification required before checkout."
+        },
+        {
+          "website_option_id": "sem-b12-any-dose",
+          "display_label": "Any Dose \u00b7 Vitamin B12",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B12",
+          "dose_tier": "Any Dose",
+          "package_size": "1mL vials (owner dose group)",
+          "purchase_model": "one_time",
+          "retail_price": "89\u2013119",
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MkDIUw0NcJB7YL2pNzYW",
+          "gen_productId": "MkDIUw0NcJB7YL2pNzYW",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 3,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 5,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            },
+            {
+              "excel_row": 7,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 9,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 11,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "Cutover-ready formulary. GEN CP exists \u2014 SAFE_TO_REPAIR_LATER / pairing verification required before checkout."
+        },
+        {
+          "website_option_id": "sem-glycine-starting-low",
+          "display_label": "Starting / Low \u00b7 Glycine",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glycine",
+          "dose_tier": "Starting / Low",
+          "package_size": "1mL vials (owner dose group)",
+          "purchase_model": "one_time",
+          "retail_price": "89\u201399",
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_tk2GW39OGr7JX4MCCoJP",
+          "gen_productId": "tk2GW39OGr7JX4MCCoJP",
+          "gen_medication_formulary_id": "KFVdP0FaVZHpXt9ewjiV",
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 2,
+              "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 4,
+              "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "Cutover-ready formulary. GEN CP exists \u2014 SAFE_TO_REPAIR_LATER / pairing verification required before checkout."
+        },
+        {
+          "website_option_id": "sem-glycine-mid",
+          "display_label": "Mid \u00b7 Glycine",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glycine",
+          "dose_tier": "Mid",
+          "package_size": "1mL vials (owner dose group)",
+          "purchase_model": "one_time",
+          "retail_price": 109,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CjqOUbPuGPZzxephqRou",
+          "gen_productId": "CjqOUbPuGPZzxephqRou",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 6,
+              "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "Cutover-ready formulary. GEN CP exists \u2014 SAFE_TO_REPAIR_LATER / pairing verification required before checkout."
+        },
+        {
+          "website_option_id": "sem-glycine-high",
+          "display_label": "High \u00b7 Glycine",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glycine",
+          "dose_tier": "High",
+          "package_size": "1mL vials (owner dose group)",
+          "purchase_model": "one_time",
+          "retail_price": "109\u2013119",
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_sssEk3FDY4LFbQYGQsLx",
+          "gen_productId": "sssEk3FDY4LFbQYGQsLx",
+          "gen_medication_formulary_id": "IHYsg7nVwVWB2LjoAR6a",
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 8,
+              "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 10,
+              "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "Cutover-ready formulary. GEN CP exists \u2014 SAFE_TO_REPAIR_LATER / pairing verification required before checkout."
+        },
+        {
+          "website_option_id": "sem-glycine-any-dose",
+          "display_label": "Any Dose \u00b7 Glycine",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glycine",
+          "dose_tier": "Any Dose",
+          "package_size": "1mL vials (owner dose group)",
+          "purchase_model": "one_time",
+          "retail_price": "89\u2013119",
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_wQK2JsFnh7oFBf3Lag4n",
+          "gen_productId": "wQK2JsFnh7oFBf3Lag4n",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 2,
+              "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 4,
+              "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            },
+            {
+              "excel_row": 6,
+              "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 8,
+              "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 10,
+              "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "Cutover-ready formulary. GEN CP exists \u2014 SAFE_TO_REPAIR_LATER / pairing verification required before checkout."
+        },
+        {
+          "website_option_id": "sem-membership",
+          "display_label": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE Membership",
+          "delivery_form": "Injection",
+          "formulation_additive": "Any Dose (B12 or Glycine backend split invisible to patient)",
+          "dose_tier": "Any Dose",
+          "package_size": null,
+          "purchase_model": "membership",
+          "retail_price": 149,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK",
+          "gen_productId": "5F8jESeVeXcpkLU5rrdK",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_LIVE_MEMBERSHIP",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "ONE patient-facing membership offer $149. Backend B12/Glycine split allowed if GEN requires."
+        },
+        {
+          "website_option_id": "sem-b12-3month",
+          "display_label": "3-Month supply \u00b7 Vitamin B12",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B12",
+          "dose_tier": "multi-month",
+          "package_size": null,
+          "purchase_model": "3_month",
+          "retail_price": null,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_sN2ggSXRJINjElMYTQjf",
+          "gen_productId": "sN2ggSXRJINjElMYTQjf",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 3,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 5,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            },
+            {
+              "excel_row": 7,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 9,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 11,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Tirzepatide",
+      "family_id": "tirzepatide",
+      "category": "Weight Management",
+      "launch_state_summary": "CURRENT_LIVE (B6 transitional + membership) \u2192 CUTOVER B12/Glycine dose groups",
+      "architecture_rule": "ONE website product. Selectors: Purchase Type, Formulation, Dose (owner tiers). Do not use Tirzepatide/B12/Glycine ambiguous blends.",
+      "available_selectors": [
+        "purchase_type",
+        "formulation_additive",
+        "dose_tier"
+      ],
+      "current_website_slug": "tirzepatide",
+      "starting_at_price_display": "Starting at $119 (cutover one-time); Membership $275 at cutover",
+      "variants": [
+        {
+          "website_option_id": "tir-current-b6",
+          "display_label": "Tirzepatide + B6 (current website until cutover)",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B6 (legacy website)",
+          "dose_tier": "website current",
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": null,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "BLOCKED",
+          "checkout_status": "CURRENT_WEBSITE_ONLY",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Transitional. Replaced by B12/Glycine at cutover. Do not reintroduce B6."
+        },
+        {
+          "website_option_id": "tir-b12-starting-low",
+          "display_label": "Starting / Low \u00b7 Vitamin B12",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B12",
+          "dose_tier": "Starting / Low (5+10)",
+          "package_size": "2mL vials",
+          "purchase_model": "one_time",
+          "retail_price": "119\u2013139",
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 14,
+              "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            },
+            {
+              "excel_row": 16,
+              "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+              "cost": 75,
+              "shipping": 5,
+              "one_time_x9": 139
+            }
+          ],
+          "backend_mapping_status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "FORMULARY_VERIFIED / CUTOVER_READY. CREATE_REQUIRED_AT_EXECUTION for GEN CP."
+        },
+        {
+          "website_option_id": "tir-b12-mid",
+          "display_label": "Mid \u00b7 Vitamin B12",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B12",
+          "dose_tier": "Mid (15+20)",
+          "package_size": "2mL vials",
+          "purchase_model": "one_time",
+          "retail_price": "149\u2013159",
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 18,
+              "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+              "cost": 85,
+              "shipping": 5,
+              "one_time_x9": 149
+            },
+            {
+              "excel_row": 20,
+              "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+              "cost": 90,
+              "shipping": 5,
+              "one_time_x9": 159
+            }
+          ],
+          "backend_mapping_status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "FORMULARY_VERIFIED / CUTOVER_READY. CREATE_REQUIRED_AT_EXECUTION for GEN CP."
+        },
+        {
+          "website_option_id": "tir-b12-high",
+          "display_label": "High \u00b7 Vitamin B12",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B12",
+          "dose_tier": "High (25+30)",
+          "package_size": "2mL vials",
+          "purchase_model": "one_time",
+          "retail_price": "169\u2013179",
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 22,
+              "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+              "cost": 95,
+              "shipping": 5,
+              "one_time_x9": 169
+            },
+            {
+              "excel_row": 24,
+              "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+              "cost": 100,
+              "shipping": 5,
+              "one_time_x9": 179
+            }
+          ],
+          "backend_mapping_status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "FORMULARY_VERIFIED / CUTOVER_READY. CREATE_REQUIRED_AT_EXECUTION for GEN CP."
+        },
+        {
+          "website_option_id": "tir-b12-any-dose",
+          "display_label": "Any Dose \u00b7 Vitamin B12",
+          "delivery_form": "Injection",
+          "formulation_additive": "Vitamin B12",
+          "dose_tier": "Any Dose (5\u201330)",
+          "package_size": "2mL vials",
+          "purchase_model": "one_time",
+          "retail_price": "119\u2013179",
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 14,
+              "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            },
+            {
+              "excel_row": 16,
+              "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+              "cost": 75,
+              "shipping": 5,
+              "one_time_x9": 139
+            },
+            {
+              "excel_row": 18,
+              "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+              "cost": 85,
+              "shipping": 5,
+              "one_time_x9": 149
+            },
+            {
+              "excel_row": 20,
+              "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+              "cost": 90,
+              "shipping": 5,
+              "one_time_x9": 159
+            },
+            {
+              "excel_row": 22,
+              "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+              "cost": 95,
+              "shipping": 5,
+              "one_time_x9": 169
+            },
+            {
+              "excel_row": 24,
+              "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+              "cost": 100,
+              "shipping": 5,
+              "one_time_x9": 179
+            }
+          ],
+          "backend_mapping_status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "FORMULARY_VERIFIED / CUTOVER_READY. CREATE_REQUIRED_AT_EXECUTION for GEN CP."
+        },
+        {
+          "website_option_id": "tir-glycine-starting-low",
+          "display_label": "Starting / Low \u00b7 Glycine",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glycine",
+          "dose_tier": "Starting / Low (5+10)",
+          "package_size": "2mL vials",
+          "purchase_model": "one_time",
+          "retail_price": "119\u2013139",
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 13,
+              "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            },
+            {
+              "excel_row": 15,
+              "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+              "cost": 75,
+              "shipping": 5,
+              "one_time_x9": 139
+            }
+          ],
+          "backend_mapping_status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "FORMULARY_VERIFIED / CUTOVER_READY. CREATE_REQUIRED_AT_EXECUTION for GEN CP."
+        },
+        {
+          "website_option_id": "tir-glycine-mid",
+          "display_label": "Mid \u00b7 Glycine",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glycine",
+          "dose_tier": "Mid (15+20)",
+          "package_size": "2mL vials",
+          "purchase_model": "one_time",
+          "retail_price": "149\u2013159",
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 17,
+              "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+              "cost": 85,
+              "shipping": 5,
+              "one_time_x9": 149
+            },
+            {
+              "excel_row": 19,
+              "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+              "cost": 90,
+              "shipping": 5,
+              "one_time_x9": 159
+            }
+          ],
+          "backend_mapping_status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "FORMULARY_VERIFIED / CUTOVER_READY. CREATE_REQUIRED_AT_EXECUTION for GEN CP."
+        },
+        {
+          "website_option_id": "tir-glycine-high",
+          "display_label": "High \u00b7 Glycine",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glycine",
+          "dose_tier": "High (25+30)",
+          "package_size": "2mL vials",
+          "purchase_model": "one_time",
+          "retail_price": "169\u2013179",
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 21,
+              "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+              "cost": 95,
+              "shipping": 5,
+              "one_time_x9": 169
+            },
+            {
+              "excel_row": 23,
+              "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+              "cost": 100,
+              "shipping": 5,
+              "one_time_x9": 179
+            }
+          ],
+          "backend_mapping_status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "FORMULARY_VERIFIED / CUTOVER_READY. CREATE_REQUIRED_AT_EXECUTION for GEN CP."
+        },
+        {
+          "website_option_id": "tir-glycine-any-dose",
+          "display_label": "Any Dose \u00b7 Glycine",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glycine",
+          "dose_tier": "Any Dose (5\u201330)",
+          "package_size": "2mL vials",
+          "purchase_model": "one_time",
+          "retail_price": "119\u2013179",
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 13,
+              "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            },
+            {
+              "excel_row": 15,
+              "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+              "cost": 75,
+              "shipping": 5,
+              "one_time_x9": 139
+            },
+            {
+              "excel_row": 17,
+              "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+              "cost": 85,
+              "shipping": 5,
+              "one_time_x9": 149
+            },
+            {
+              "excel_row": 19,
+              "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+              "cost": 90,
+              "shipping": 5,
+              "one_time_x9": 159
+            },
+            {
+              "excel_row": 21,
+              "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+              "cost": 95,
+              "shipping": 5,
+              "one_time_x9": 169
+            },
+            {
+              "excel_row": 23,
+              "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+              "cost": 100,
+              "shipping": 5,
+              "one_time_x9": 179
+            }
+          ],
+          "backend_mapping_status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "checkout_status": "OFF_UNTIL_CUTOVER",
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "notes": "FORMULARY_VERIFIED / CUTOVER_READY. CREATE_REQUIRED_AT_EXECUTION for GEN CP."
+        },
+        {
+          "website_option_id": "tir-membership",
+          "display_label": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE Membership",
+          "delivery_form": "Injection",
+          "formulation_additive": "Any Dose (B12 or Glycine backend split invisible)",
+          "dose_tier": "Any Dose",
+          "package_size": null,
+          "purchase_model": "membership",
+          "retail_price": 275,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE",
+          "gen_productId": "E3MXZeeR01QROCuTLRLE",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Dirx-Hub",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_LIVE_MEMBERSHIP_REPRICE_AT_CUTOVER",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "ONE membership offer. Website still $249 until cutover \u2192 $275. Backend split allowed."
+        }
+      ]
+    },
+    {
+      "website_product_family": "NAD+",
+      "family_id": "nad-plus",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "CURRENT_LIVE injection (strength pending) + FUTURE nasal under ONE family",
+      "architecture_rule": "ONE website product NAD+. Selectors: Delivery Method (Injection|Nasal), Package. Injection and nasal priced and GEN-mapped separately. Never cross-pair.",
+      "available_selectors": [
+        "delivery_method",
+        "package_size"
+      ],
+      "current_website_slug": "nad-plus",
+      "starting_at_price_display": "Starting at $199 (current injection list) / nasal from $79 when launched",
+      "variants": [
+        {
+          "website_option_id": "nad-inj-5ml-500",
+          "display_label": "Injection \u00b7 5 mL / 500 mg",
+          "delivery_form": "Injection",
+          "formulation_additive": "NAD+",
+          "dose_tier": null,
+          "package_size": "5mL / 500mg total",
+          "purchase_model": "one_time",
+          "retail_price": 199,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn",
+          "gen_productId": "SHJpGAACUFEeMONdpEbn",
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": false,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Website promises 100mg/mL. SELECTED injectable is 200mg/ml only (r83). FORMULATION_STRENGTH_CONFLICT. Never cross-pair to nasal."
+        },
+        {
+          "website_option_id": "nad-inj-10ml-1000",
+          "display_label": "Injection \u00b7 10 mL / 1000 mg",
+          "delivery_form": "Injection",
+          "formulation_additive": "NAD+",
+          "dose_tier": null,
+          "package_size": "10mL / 1000mg total",
+          "purchase_model": "one_time",
+          "retail_price": 229,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn",
+          "gen_productId": "SHJpGAACUFEeMONdpEbn",
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": false,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Same strength conflict as 5mL variant."
+        },
+        {
+          "website_option_id": "nad-inj-selected-r83",
+          "display_label": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 owner option A",
+          "delivery_form": "Injection",
+          "formulation_additive": "NAD+ 200mg/ml",
+          "dose_tier": null,
+          "package_size": "5ml vial (1000mg)",
+          "purchase_model": "one_time",
+          "retail_price": 139,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn",
+          "gen_productId": "SHJpGAACUFEeMONdpEbn",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": false,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 83,
+              "exact": "NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml",
+              "cost": 64,
+              "shipping": 30,
+              "one_time_x9": 139
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_PENDING_OWNER_STRENGTH_DECISION",
+          "launch_state": "CUTOVER_PENDING_FORMULARY",
+          "notes": "Only if owner chooses to change website to SELECTED 200mg/ml. Not auto-activated."
+        },
+        {
+          "website_option_id": "nad-nasal-r81",
+          "display_label": "Nasal Spray \u00b7 NAD+ 50mg/ml",
+          "delivery_form": "Nasal Spray",
+          "formulation_additive": "NAD+ 50mg/ml",
+          "dose_tier": null,
+          "package_size": "15ml",
+          "purchase_model": "one_time",
+          "retail_price": 79,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 81,
+              "exact": "NAD+ 50mg/ml",
+              "cost": 30,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Do not cross-pair with injection. Separate GEN route."
+        },
+        {
+          "website_option_id": "nad-nasal-r82",
+          "display_label": "Nasal Spray \u00b7 NAD+ 200mg/ml",
+          "delivery_form": "Nasal Spray",
+          "formulation_additive": "NAD+ 200mg/ml",
+          "dose_tier": null,
+          "package_size": "15ml",
+          "purchase_model": "one_time",
+          "retail_price": 109,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 82,
+              "exact": "NAD+ 200mg/ml",
+              "cost": 45,
+              "shipping": 30,
+              "one_time_x9": 109
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Do not cross-pair with injection. Separate GEN route."
+        },
+        {
+          "website_option_id": "nad-nasal-r84",
+          "display_label": "Nasal Spray \u00b7 NAD+ 50mg/ml",
+          "delivery_form": "Nasal Spray",
+          "formulation_additive": "NAD+ 50mg/ml",
+          "dose_tier": null,
+          "package_size": "15ml",
+          "purchase_model": "one_time",
+          "retail_price": 79,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 84,
+              "exact": "NAD+ 50mg/ml",
+              "cost": 30,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Do not cross-pair with injection. Separate GEN route."
+        },
+        {
+          "website_option_id": "nad-nasal-r85",
+          "display_label": "Nasal Spray \u00b7 NAD+ 200mg/ml",
+          "delivery_form": "Nasal Spray",
+          "formulation_additive": "NAD+ 200mg/ml",
+          "dose_tier": null,
+          "package_size": "15ml",
+          "purchase_model": "one_time",
+          "retail_price": 109,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": true,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 85,
+              "exact": "NAD+ 200mg/ml",
+              "cost": 45,
+              "shipping": 30,
+              "one_time_x9": 109
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Do not cross-pair with injection. Separate GEN route."
+        }
+      ]
+    },
+    {
+      "website_product_family": "Wolverine / BPC-TB",
+      "family_id": "wolverine-bpc-tb",
+      "category": "Recovery & Performance",
+      "launch_state_summary": "CURRENT_LIVE \u2014 one product, two dosage-form variants",
+      "architecture_rule": "ONE website product. Selector: Delivery Method (Capsules|Injection). Separate price, formulation, GEN mapping per variant. Do not count as two patient-facing products.",
+      "available_selectors": [
+        "delivery_method"
+      ],
+      "current_website_slug": "bpc-157-tb-500",
+      "starting_at_price_display": "Starting at $29 (architecture capsule) / Injection $159",
+      "variants": [
+        {
+          "website_option_id": "wolverine-capsule",
+          "display_label": "Capsule",
+          "delivery_form": "Capsule",
+          "formulation_additive": "BPC-157/TB-500 Blend",
+          "dose_tier": null,
+          "package_size": "1EA",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+          "gen_productId": "omhh3NabouO8AsNR5tkD",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 104,
+              "exact": "BPC-157/TB500 capsules 500MCG/500MCG",
+              "cost": 3.2,
+              "shipping": 25,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Website list price $99; architecture retail $29. ONE product / TWO variants."
+        },
+        {
+          "website_option_id": "wolverine-injection",
+          "display_label": "Injection",
+          "delivery_form": "Injection",
+          "formulation_additive": "BPC-157/TB-500 Blend",
+          "dose_tier": null,
+          "package_size": "5ML",
+          "purchase_model": "one_time",
+          "retail_price": 159,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+          "gen_productId": "iJtyig611AZEDBGdvRd9",
+          "gen_medication_formulary_id": "27WtrIdo3z4Ssj5sDcc6",
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 103,
+              "exact": "BPC-157/TB500 3mg/3mg/mL",
+              "cost": 77,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Website list price $199; architecture retail $159. ONE product / TWO variants."
+        }
+      ]
+    },
+    {
+      "website_product_family": "Minoxidil",
+      "family_id": "minoxidil",
+      "category": "Prescription Skin & Hair",
+      "launch_state_summary": "CURRENT_LIVE locked Fin/Minox 0.1%/5%; other topicals FUTURE_HIDDEN",
+      "architecture_rule": "ONE current website product (combination topical). Locked formulation Fin/Minox 0.1%/5% Vios $79.",
+      "available_selectors": [
+        "formulation"
+      ],
+      "current_website_slug": "minoxidil-topical",
+      "starting_at_price_display": "$79 (locked)",
+      "variants": [
+        {
+          "website_option_id": "minoxidil-fin-minox-0.1-5",
+          "display_label": "Finasteride / Minoxidil 0.1% / 5%",
+          "delivery_form": "Topical",
+          "formulation_additive": "Finasteride/Minoxidil 0.1%/5%",
+          "dose_tier": null,
+          "package_size": "per ml foam basis",
+          "purchase_model": "one_time",
+          "retail_price": 79,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+          "gen_productId": "BboYS4a2Uj7APetrFo6W",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": false,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 129,
+              "exact": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+              "cost": 30,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Owner-locked. SAFE_TO_REPAIR Dual Combo later. Do not use GHK-Cu/Minoxidil CP."
+        },
+        {
+          "website_option_id": "minoxidil-solution",
+          "display_label": "Plain Minoxidil Solution",
+          "delivery_form": "Topical",
+          "formulation_additive": "Minoxidil 2% solution",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_489YrehNXRlL77fYPkOn",
+          "gen_productId": "489YrehNXRlL77fYPkOn",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 128,
+              "exact": "MINOXIDIL 2%",
+              "cost": 1.28,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Future variant under Minoxidil family or separate if clinically distinct \u2014 kept FUTURE_HIDDEN."
+        },
+        {
+          "website_option_id": "minoxidil-cream",
+          "display_label": "Minoxidil Cream",
+          "delivery_form": "Topical",
+          "formulation_additive": "Minoxidil cream 7\u201315%",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 89,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_489YrehNXRlL77fYPkOn",
+          "gen_productId": "489YrehNXRlL77fYPkOn",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 131,
+              "exact": "MINOXIDIL 10%",
+              "cost": 32,
+              "shipping": 30,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 132,
+              "exact": "MINOXIDIL 15%",
+              "cost": 32,
+              "shipping": 30,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 133,
+              "exact": "MINOXIDIL 7%",
+              "cost": 32,
+              "shipping": 30,
+              "one_time_x9": 89
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Future variant under Minoxidil family or separate if clinically distinct \u2014 kept FUTURE_HIDDEN."
+        },
+        {
+          "website_option_id": "fin-minox-tret",
+          "display_label": "Fin/Minox/Tretinoin",
+          "delivery_form": "Topical",
+          "formulation_additive": "Finasteride/Minoxidil/Tretinoin topical",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 89,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9",
+          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 134,
+              "exact": "FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.25/5/0.01 %",
+              "cost": 35,
+              "shipping": 30,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 135,
+              "exact": "FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.25/5/0.03 %",
+              "cost": 35,
+              "shipping": 30,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 136,
+              "exact": "FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.5/5/0.01 %",
+              "cost": 35,
+              "shipping": 30,
+              "one_time_x9": 89
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Future variant under Minoxidil family or separate if clinically distinct \u2014 kept FUTURE_HIDDEN."
+        }
+      ]
+    },
+    {
+      "website_product_family": "Estradiol",
+      "family_id": "estradiol",
+      "category": "Women's Hormone Therapy",
+      "launch_state_summary": "CURRENT_LIVE Patch; Tablet/Injection FUTURE_HIDDEN under same family",
+      "architecture_rule": "ONE family. Selector: Delivery Method + Strength. Only expose delivery methods with verified routes.",
+      "available_selectors": [
+        "delivery_method",
+        "strength"
+      ],
+      "current_website_slug": "estradiol-patch",
+      "starting_at_price_display": "Starting at $119",
+      "variants": [
+        {
+          "website_option_id": "estradiol-patch-r26",
+          "display_label": "Patch \u00b7 0.025mg/hr",
+          "delivery_form": "Patch",
+          "formulation_additive": "Estradiol transdermal",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 119,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Valiant",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 26,
+              "exact": "ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count",
+              "cost": 50,
+              "shipping": 30,
+              "one_time_x9": 119
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "GEN candidate is near-name only \u2014 pairing/repair required. Do not fuzzy-match vaginal products."
+        },
+        {
+          "website_option_id": "estradiol-patch-r27",
+          "display_label": "Patch \u00b7 0.0375mg/hr",
+          "delivery_form": "Patch",
+          "formulation_additive": "Estradiol transdermal",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 129,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Valiant",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 27,
+              "exact": "ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count",
+              "cost": 55,
+              "shipping": 30,
+              "one_time_x9": 129
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "GEN candidate is near-name only \u2014 pairing/repair required. Do not fuzzy-match vaginal products."
+        },
+        {
+          "website_option_id": "estradiol-patch-r28",
+          "display_label": "Patch \u00b7 0.05mg/hr",
+          "delivery_form": "Patch",
+          "formulation_additive": "Estradiol transdermal",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 139,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Valiant",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 28,
+              "exact": "ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count",
+              "cost": 60,
+              "shipping": 30,
+              "one_time_x9": 139
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "GEN candidate is near-name only \u2014 pairing/repair required. Do not fuzzy-match vaginal products."
+        },
+        {
+          "website_option_id": "estradiol-patch-r29",
+          "display_label": "Patch \u00b7 0.1mg/hr",
+          "delivery_form": "Patch",
+          "formulation_additive": "Estradiol transdermal",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 149,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Valiant",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 29,
+              "exact": "ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count",
+              "cost": 70,
+              "shipping": 30,
+              "one_time_x9": 149
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "GEN candidate is near-name only \u2014 pairing/repair required. Do not fuzzy-match vaginal products."
+        },
+        {
+          "website_option_id": "estradiol-tablet-r37",
+          "display_label": "Tablet \u00b7 0.5MG",
+          "delivery_form": "Tablet",
+          "formulation_additive": "ESTRADIOL 0.5MG TABLET 0.5MG",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 37,
+              "exact": "ESTRADIOL 0.5MG TABLET 0.5MG",
+              "cost": 0.48,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "estradiol-tablet-r38",
+          "display_label": "Tablet \u00b7 1 MG",
+          "delivery_form": "Tablet",
+          "formulation_additive": "ESTRADIOL 1 MG TABLET 1 MG",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 38,
+              "exact": "ESTRADIOL 1 MG TABLET 1 MG",
+              "cost": 0.48,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "estradiol-tablet-r39",
+          "display_label": "Tablet \u00b7 2 MG",
+          "delivery_form": "Tablet",
+          "formulation_additive": "ESTRADIOL 2 MG TABLET 2 MG",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 39,
+              "exact": "ESTRADIOL 2 MG TABLET 2 MG",
+              "cost": 0.48,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "estradiol-injection-r40",
+          "display_label": "Injection \u00b7 10 MG/ML",
+          "delivery_form": "Injection",
+          "formulation_additive": "ESTRADIOL CYPIONATE (MCT OIL) 10 MG/ML",
+          "dose_tier": null,
+          "package_size": "3ml mg/ml",
+          "purchase_model": "one_time",
+          "retail_price": 89,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 40,
+              "exact": "ESTRADIOL CYPIONATE (MCT OIL) 10 MG/ML",
+              "cost": 32,
+              "shipping": 30,
+              "one_time_x9": 89
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Progesterone",
+      "family_id": "progesterone",
+      "category": "Women's Hormone Therapy",
+      "launch_state_summary": "CURRENT_LIVE IR capsules; SR FUTURE_HIDDEN",
+      "architecture_rule": "ONE family. Selectors: Release type (IR|SR), Strength.",
+      "available_selectors": [
+        "formulation",
+        "strength"
+      ],
+      "current_website_slug": "progesterone-capsules",
+      "starting_at_price_display": "Starting at $29",
+      "variants": [
+        {
+          "website_option_id": "prog-ir-r41",
+          "display_label": "IR Capsule \u00b7 100mg",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone IR",
+          "dose_tier": null,
+          "package_size": "1 mg",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 41,
+              "exact": "PROGESTERONE 100MG CAPSULE 100mg",
+              "cost": 0.75,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Prefer Progesterone GEN over BiEst combo near-name."
+        },
+        {
+          "website_option_id": "prog-ir-r42",
+          "display_label": "IR Capsule \u00b7 200mg",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone IR",
+          "dose_tier": null,
+          "package_size": "1 mg",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 42,
+              "exact": "PROGESTERONE 200MG CAPSULE 200mg",
+              "cost": 0.75,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Prefer Progesterone GEN over BiEst combo near-name."
+        },
+        {
+          "website_option_id": "prog-ir-r43",
+          "display_label": "IR Capsule \u00b7 50mg",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone IR",
+          "dose_tier": null,
+          "package_size": "1 mg",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 43,
+              "exact": "PROGESTERONE 50MG CAPSULE 50mg",
+              "cost": 0.75,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Prefer Progesterone GEN over BiEst combo near-name."
+        },
+        {
+          "website_option_id": "prog-ir-r44",
+          "display_label": "IR Capsule \u00b7 100 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone IR",
+          "dose_tier": null,
+          "package_size": "1 each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 44,
+              "exact": "PROGESTERONE IR 100 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Prefer Progesterone GEN over BiEst combo near-name."
+        },
+        {
+          "website_option_id": "prog-ir-r45",
+          "display_label": "IR Capsule \u00b7 150 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone IR",
+          "dose_tier": null,
+          "package_size": "1 each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 45,
+              "exact": "PROGESTERONE IR 150 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Prefer Progesterone GEN over BiEst combo near-name."
+        },
+        {
+          "website_option_id": "prog-ir-r46",
+          "display_label": "IR Capsule \u00b7 200 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone IR",
+          "dose_tier": null,
+          "package_size": "1 each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 46,
+              "exact": "PROGESTERONE IR 200 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Prefer Progesterone GEN over BiEst combo near-name."
+        },
+        {
+          "website_option_id": "prog-ir-r47",
+          "display_label": "IR Capsule \u00b7 200MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone IR",
+          "dose_tier": null,
+          "package_size": "1 each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 47,
+              "exact": "PROGESTERONE IR (DYE-FREE)(LACTOSE-FREE) (M NEW) 200MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Prefer Progesterone GEN over BiEst combo near-name."
+        },
+        {
+          "website_option_id": "prog-ir-r48",
+          "display_label": "IR Capsule \u00b7 300 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone IR",
+          "dose_tier": null,
+          "package_size": "1 each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 48,
+              "exact": "PROGESTERONE IR 300 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Prefer Progesterone GEN over BiEst combo near-name."
+        },
+        {
+          "website_option_id": "prog-ir-r49",
+          "display_label": "IR Capsule \u00b7 400 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone IR",
+          "dose_tier": null,
+          "package_size": "1 each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 49,
+              "exact": "PROGESTERONE IR 400 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "CURRENT_WEBSITE",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Prefer Progesterone GEN over BiEst combo near-name."
+        },
+        {
+          "website_option_id": "prog-sr-r50",
+          "display_label": "SR Capsule \u00b7 100 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone SR",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 50,
+              "exact": "PROGESTERONE SR 100 MG",
+              "cost": 0.54,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "prog-sr-r51",
+          "display_label": "SR Capsule \u00b7 125 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone SR",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 51,
+              "exact": "PROGESTERONE SR 125 MG",
+              "cost": 0.54,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "prog-sr-r52",
+          "display_label": "SR Capsule \u00b7 150 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Progesterone SR",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 52,
+              "exact": "PROGESTERONE SR 150 MG",
+              "cost": 0.54,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Tretinoin",
+      "family_id": "tretinoin",
+      "category": "Prescription Skin & Hair",
+      "launch_state_summary": "CURRENT_LIVE strengths pending formulary match",
+      "architecture_rule": "ONE website product. Selector: Strength. Do not silent-substitute 0.15% or combo for 0.025/0.05/0.1%.",
+      "available_selectors": [
+        "strength"
+      ],
+      "current_website_slug": "tretinoin-cream",
+      "starting_at_price_display": "Starting at $79",
+      "variants": [
+        {
+          "website_option_id": "tretinoin-0.025%",
+          "display_label": "Cream \u00b7 0.025% \u00b7 20g",
+          "delivery_form": "Cream",
+          "formulation_additive": "Tretinoin 0.025%",
+          "dose_tier": null,
+          "package_size": "20g",
+          "purchase_model": "one_time",
+          "retail_price": 79,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Website explicit strengths. No exact SELECTED match (SELECTED has 0.15% and combo)."
+        },
+        {
+          "website_option_id": "tretinoin-0.05%",
+          "display_label": "Cream \u00b7 0.05% \u00b7 20g",
+          "delivery_form": "Cream",
+          "formulation_additive": "Tretinoin 0.05%",
+          "dose_tier": null,
+          "package_size": "20g",
+          "purchase_model": "one_time",
+          "retail_price": 89,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Website explicit strengths. No exact SELECTED match (SELECTED has 0.15% and combo)."
+        },
+        {
+          "website_option_id": "tretinoin-0.1%",
+          "display_label": "Cream \u00b7 0.1% \u00b7 20g",
+          "delivery_form": "Cream",
+          "formulation_additive": "Tretinoin 0.1%",
+          "dose_tier": null,
+          "package_size": "20g",
+          "purchase_model": "one_time",
+          "retail_price": 109,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "Website explicit strengths. No exact SELECTED match (SELECTED has 0.15% and combo)."
+        },
+        {
+          "website_option_id": "tretinoin-selected-r126",
+          "display_label": "SELECTED \u00b7 TRETINOIN 0.15%",
+          "delivery_form": "Cream",
+          "formulation_additive": "TRETINOIN 0.15%",
+          "dose_tier": null,
+          "package_size": "30 grams",
+          "purchase_model": "one_time",
+          "retail_price": 79,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9",
+          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 126,
+              "exact": "TRETINOIN 0.15%",
+              "cost": 25.5,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_PENDING_OWNER_STRENGTH_DECISION",
+          "launch_state": "CUTOVER_PENDING_FORMULARY",
+          "notes": "Owner option only \u2014 do not silent-substitute for website strengths."
+        },
+        {
+          "website_option_id": "tretinoin-selected-r127",
+          "display_label": "SELECTED \u00b7 HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+          "delivery_form": "Cream",
+          "formulation_additive": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+          "dose_tier": null,
+          "package_size": "30 grams",
+          "purchase_model": "one_time",
+          "retail_price": 129,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9",
+          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 127,
+              "exact": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+              "cost": 54,
+              "shipping": 30,
+              "one_time_x9": 129
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF_PENDING_OWNER_STRENGTH_DECISION",
+          "launch_state": "CUTOVER_PENDING_FORMULARY",
+          "notes": "Owner option only \u2014 do not silent-substitute for website strengths."
+        }
+      ]
+    },
+    {
+      "website_product_family": "Fat Burner",
+      "family_id": "fat-burner",
+      "category": "Weight Management",
+      "launch_state_summary": "CURRENT_LIVE_FORMULARY_PENDING (+ future delivery forms where verified)",
+      "architecture_rule": "ONE website product family. Do not force near matches. Keep on website this phase.",
+      "available_selectors": [
+        "(pending \u2014 single current variant)"
+      ],
+      "current_website_slug": "fat-burner",
+      "starting_at_price_display": "$259",
+      "variants": [
+        {
+          "website_option_id": "fat-burner-current",
+          "display_label": "Injection \u00b7 current website",
+          "delivery_form": "Injection",
+          "formulation_additive": "AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
+          "dose_tier": null,
+          "package_size": "1.2/2/3 mg/mL \u00b7 5mL",
+          "purchase_model": "one_time",
+          "retail_price": 259,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI",
+          "gen_productId": "7Kix55LA15U0lNvY9QXI",
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_FORMULARY_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+        }
+      ]
+    },
+    {
+      "website_product_family": "Testosterone",
+      "family_id": "testosterone",
+      "category": "Men's Hormone Therapy",
+      "launch_state_summary": "CURRENT_LIVE_FORMULARY_PENDING (+ future delivery forms where verified)",
+      "architecture_rule": "ONE website product family. Do not force near matches. Keep on website this phase.",
+      "available_selectors": [
+        "delivery_method"
+      ],
+      "current_website_slug": "testosterone-cream",
+      "starting_at_price_display": "$79",
+      "variants": [
+        {
+          "website_option_id": "testosterone-current",
+          "display_label": "Cream \u00b7 current website",
+          "delivery_form": "Cream",
+          "formulation_additive": "Testosterone-only cream 5 mg/g",
+          "dose_tier": null,
+          "package_size": "e.g. 30g TBD",
+          "purchase_model": "one_time",
+          "retail_price": 79,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Gn4XaP00anr4q9oheSTe",
+          "gen_productId": "Gn4XaP00anr4q9oheSTe",
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_FORMULARY_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+        },
+        {
+          "website_option_id": "testosterone-inj-r76",
+          "display_label": "Injection \u00b7 TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML)",
+          "delivery_form": "Injection",
+          "formulation_additive": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML)",
+          "dose_tier": null,
+          "package_size": "5 mL",
+          "purchase_model": "one_time",
+          "retail_price": 59,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Cm94vp3KgPz0yhqy01gX",
+          "gen_productId": "Cm94vp3KgPz0yhqy01gX",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 76,
+              "exact": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML)",
+              "cost": 23.75,
+              "shipping": 20,
+              "one_time_x9": 59
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Do not mix cream pending with injection as same clinical SKU without owner approval \u2014 shown as family delivery option when launched."
+        },
+        {
+          "website_option_id": "testosterone-inj-r77",
+          "display_label": "Injection \u00b7 TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML)",
+          "delivery_form": "Injection",
+          "formulation_additive": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML)",
+          "dose_tier": null,
+          "package_size": "5 mL",
+          "purchase_model": "one_time",
+          "retail_price": 59,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Cm94vp3KgPz0yhqy01gX",
+          "gen_productId": "Cm94vp3KgPz0yhqy01gX",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 77,
+              "exact": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML)",
+              "cost": 23.75,
+              "shipping": 20,
+              "one_time_x9": 59
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Do not mix cream pending with injection as same clinical SKU without owner approval \u2014 shown as family delivery option when launched."
+        }
+      ]
+    },
+    {
+      "website_product_family": "Selank",
+      "family_id": "selank",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "CURRENT_LIVE_FORMULARY_PENDING (+ future delivery forms where verified)",
+      "architecture_rule": "ONE website product family. Do not force near matches. Keep on website this phase.",
+      "available_selectors": [
+        "delivery_method"
+      ],
+      "current_website_slug": "selank",
+      "starting_at_price_display": "$129",
+      "variants": [
+        {
+          "website_option_id": "selank-current",
+          "display_label": "Injection \u00b7 current website",
+          "delivery_form": "Injection",
+          "formulation_additive": "Selank injectable",
+          "dose_tier": null,
+          "package_size": "5 mg/mL \u00b7 2mL target",
+          "purchase_model": "one_time",
+          "retail_price": 129,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Ukctbyh5Yrek3SnGSYA3",
+          "gen_productId": "Ukctbyh5Yrek3SnGSYA3",
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_FORMULARY_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+        },
+        {
+          "website_option_id": "selank-nasal-r119",
+          "display_label": "Nasal Spray \u00b7 verified SELECTED",
+          "delivery_form": "Nasal Spray",
+          "formulation_additive": "Selank 2.5mg/mL Nasal Spray",
+          "dose_tier": null,
+          "package_size": "20ml",
+          "purchase_model": "one_time",
+          "retail_price": 129,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Ukctbyh5Yrek3SnGSYA3",
+          "gen_productId": "Ukctbyh5Yrek3SnGSYA3",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 119,
+              "exact": "Selank 2.5mg/mL Nasal Spray",
+              "cost": 60,
+              "shipping": 25,
+              "one_time_x9": 129
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Expose nasal only when ready. Do not substitute for injection pending."
+        }
+      ]
+    },
+    {
+      "website_product_family": "Semax",
+      "family_id": "semax",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "CURRENT_LIVE_FORMULARY_PENDING (+ future delivery forms where verified)",
+      "architecture_rule": "ONE website product family. Do not force near matches. Keep on website this phase.",
+      "available_selectors": [
+        "delivery_method"
+      ],
+      "current_website_slug": "semax",
+      "starting_at_price_display": "$129",
+      "variants": [
+        {
+          "website_option_id": "semax-current",
+          "display_label": "Injection \u00b7 current website",
+          "delivery_form": "Injection",
+          "formulation_additive": "Semax injectable",
+          "dose_tier": null,
+          "package_size": "5 mg/mL \u00b7 2mL target",
+          "purchase_model": "one_time",
+          "retail_price": 129,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_YTHcdrlRICMpt56hdxeJ",
+          "gen_productId": "YTHcdrlRICMpt56hdxeJ",
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_FORMULARY_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+        },
+        {
+          "website_option_id": "semax-nasal-r118",
+          "display_label": "Nasal Spray \u00b7 verified SELECTED",
+          "delivery_form": "Nasal Spray",
+          "formulation_additive": "Semax 2.5mg/mL Nasal Spray",
+          "dose_tier": null,
+          "package_size": "20ml",
+          "purchase_model": "one_time",
+          "retail_price": 129,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_YTHcdrlRICMpt56hdxeJ",
+          "gen_productId": "YTHcdrlRICMpt56hdxeJ",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 118,
+              "exact": "Semax 2.5mg/mL Nasal Spray",
+              "cost": 60,
+              "shipping": 25,
+              "one_time_x9": 129
+            }
+          ],
+          "backend_mapping_status": "GEN_PAIRING_REQUIRED",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Selank + Semax Blend",
+      "family_id": "selank-semax-blend",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "CURRENT_LIVE_FORMULARY_PENDING (+ future delivery forms where verified)",
+      "architecture_rule": "ONE website product family. Do not force near matches. Keep on website this phase.",
+      "available_selectors": [
+        "(pending \u2014 single current variant)"
+      ],
+      "current_website_slug": "selank-semax-nasal-spray",
+      "starting_at_price_display": "$169",
+      "variants": [
+        {
+          "website_option_id": "selank-semax-blend-current",
+          "display_label": "Nasal Spray \u00b7 current website",
+          "delivery_form": "Nasal Spray",
+          "formulation_additive": "Combined Selank+Semax nasal",
+          "dose_tier": null,
+          "package_size": "50mcg/50mcg \u00b7 10mL",
+          "purchase_model": "one_time",
+          "retail_price": 169,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_LWkYtwm66dIeLuDSvSfi",
+          "gen_productId": "LWkYtwm66dIeLuDSvSfi",
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_FORMULARY_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+        }
+      ]
+    },
+    {
+      "website_product_family": "Tesamorelin",
+      "family_id": "tesamorelin",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "CURRENT_LIVE_FORMULARY_PENDING (+ future delivery forms where verified)",
+      "architecture_rule": "ONE website product family. Do not force near matches. Keep on website this phase.",
+      "available_selectors": [
+        "(pending \u2014 single current variant)"
+      ],
+      "current_website_slug": "tesamorelin",
+      "starting_at_price_display": "$149",
+      "variants": [
+        {
+          "website_option_id": "tesamorelin-current",
+          "display_label": "Injection \u00b7 current website",
+          "delivery_form": "Injection",
+          "formulation_additive": "Plain Tesamorelin",
+          "dose_tier": null,
+          "package_size": "10mg / 2mL \u00b7 5mg/mL",
+          "purchase_model": "one_time",
+          "retail_price": 149,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_2cYxVfvwpWyyrANZx06G",
+          "gen_productId": "2cYxVfvwpWyyrANZx06G",
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_FORMULARY_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+        }
+      ]
+    },
+    {
+      "website_product_family": "Lash / Brow Growth Serum",
+      "family_id": "lash-brow",
+      "category": "Prescription Skin & Hair",
+      "launch_state_summary": "CURRENT_LIVE_FORMULARY_PENDING (+ future delivery forms where verified)",
+      "architecture_rule": "ONE website product family. Do not force near matches. Keep on website this phase.",
+      "available_selectors": [
+        "(pending \u2014 single current variant)"
+      ],
+      "current_website_slug": "bimatoprost-solution",
+      "starting_at_price_display": "$89",
+      "variants": [
+        {
+          "website_option_id": "lash-brow-current",
+          "display_label": "Solution \u00b7 current website",
+          "delivery_form": "Solution",
+          "formulation_additive": "Bimatoprost 0.03%",
+          "dose_tier": null,
+          "package_size": "2.5mL",
+          "purchase_model": "one_time",
+          "retail_price": 89,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "CURRENT_WEBSITE_FORMULARY_PENDING",
+          "launch_state": "CURRENT_LIVE",
+          "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+        }
+      ]
+    },
+    {
+      "website_product_family": "PT-141",
+      "family_id": "pt-141",
+      "category": "Sexual Wellness",
+      "launch_state_summary": "FUTURE_HIDDEN \u2014 ONE product with Injection + Nasal when launched",
+      "architecture_rule": "ONE website product. Selector: Delivery Method. Do not expose delivery without verified route.",
+      "available_selectors": [
+        "delivery_method",
+        "strength"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "Starting at $129",
+      "variants": [
+        {
+          "website_option_id": "pt141-inj-r115",
+          "display_label": "Injection \u00b7 PT-141 2mg/mL",
+          "delivery_form": "Injection",
+          "formulation_additive": "PT-141 2mg/mL",
+          "dose_tier": null,
+          "package_size": "5ML",
+          "purchase_model": "one_time",
+          "retail_price": 129,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7a11W067k20AKLSsL2xM",
+          "gen_productId": "7a11W067k20AKLSsL2xM",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 115,
+              "exact": "PT-141 2mg/mL",
+              "cost": 62,
+              "shipping": 25,
+              "one_time_x9": 129
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "pt141-nasal-r116",
+          "display_label": "Nasal Spray \u00b7 BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML",
+          "delivery_form": "Nasal Spray",
+          "formulation_additive": "BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML",
+          "dose_tier": null,
+          "package_size": "1 ml",
+          "purchase_model": "one_time",
+          "retail_price": 139,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_mSehcuPAbjD70fTWdckF",
+          "gen_productId": "mSehcuPAbjD70fTWdckF",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 116,
+              "exact": "BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML",
+              "cost": 62,
+              "shipping": 30,
+              "one_time_x9": 139
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Owner: do not activate nasal without explicit approval"
+        },
+        {
+          "website_option_id": "pt141-nasal-r117",
+          "display_label": "Nasal Spray \u00b7 BREMELANOTIDE (PT-141) (PER ML) 5MG/ML",
+          "delivery_form": "Nasal Spray",
+          "formulation_additive": "BREMELANOTIDE (PT-141) (PER ML) 5MG/ML",
+          "dose_tier": null,
+          "package_size": "1 ml",
+          "purchase_model": "one_time",
+          "retail_price": 139,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_mSehcuPAbjD70fTWdckF",
+          "gen_productId": "mSehcuPAbjD70fTWdckF",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Vios",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 117,
+              "exact": "BREMELANOTIDE (PT-141) (PER ML) 5MG/ML",
+              "cost": 62,
+              "shipping": 30,
+              "one_time_x9": 139
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "Owner: do not activate nasal without explicit approval"
+        }
+      ]
+    },
+    {
+      "website_product_family": "Glutathione",
+      "family_id": "glutathione",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "delivery_method"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $59",
+      "variants": [
+        {
+          "website_option_id": "glutathione-injection-r86",
+          "display_label": "Glutathione 200mg/ml",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glutathione 200mg/ml",
+          "dose_tier": null,
+          "package_size": "10ml vial",
+          "purchase_model": "one_time",
+          "retail_price": 59,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_17H4pVR8uYnwvcBIz8iY",
+          "gen_productId": "17H4pVR8uYnwvcBIz8iY",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 86,
+              "exact": "Glutathione 200mg/ml",
+              "cost": 15,
+              "shipping": 30,
+              "one_time_x9": 59
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "glutathione-injection-r87",
+          "display_label": "Glutathione 200mg/ml",
+          "delivery_form": "Injection",
+          "formulation_additive": "Glutathione 200mg/ml",
+          "dose_tier": null,
+          "package_size": "3x10ml vial (30ml)",
+          "purchase_model": "one_time",
+          "retail_price": 99,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_17H4pVR8uYnwvcBIz8iY",
+          "gen_productId": "17H4pVR8uYnwvcBIz8iY",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 87,
+              "exact": "Glutathione 200mg/ml",
+              "cost": 40,
+              "shipping": 30,
+              "one_time_x9": 99
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "GHK-Cu",
+      "family_id": "ghk-cu",
+      "category": "Prescription Skin & Hair",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "strength"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $109",
+      "variants": [
+        {
+          "website_option_id": "ghk-cream-r105",
+          "display_label": "GHK-Cu Cream 2mg/ml",
+          "delivery_form": "Cream",
+          "formulation_additive": "GHK-Cu Cream 2mg/ml",
+          "dose_tier": null,
+          "package_size": "30gm",
+          "purchase_model": "one_time",
+          "retail_price": 109,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 105,
+              "exact": "GHK-Cu Cream 2mg/ml",
+              "cost": 45,
+              "shipping": 30,
+              "one_time_x9": 109
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "ghk-cream-r106",
+          "display_label": "GHK-Cu Cream 5mg/ml",
+          "delivery_form": "Cream",
+          "formulation_additive": "GHK-Cu Cream 5mg/ml",
+          "dose_tier": null,
+          "package_size": "30gm",
+          "purchase_model": "one_time",
+          "retail_price": 129,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 106,
+              "exact": "GHK-Cu Cream 5mg/ml",
+              "cost": 57,
+              "shipping": 30,
+              "one_time_x9": 129
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "ghk-cream-r107",
+          "display_label": "GHK-Cu Cream 10mg/ml",
+          "delivery_form": "Cream",
+          "formulation_additive": "GHK-Cu Cream 10mg/ml",
+          "dose_tier": null,
+          "package_size": "30gm",
+          "purchase_model": "one_time",
+          "retail_price": 189,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 107,
+              "exact": "GHK-Cu Cream 10mg/ml",
+              "cost": 90,
+              "shipping": 30,
+              "one_time_x9": 189
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "ghk-cream-r108",
+          "display_label": "GHK-Cu Cream 2mg/ml",
+          "delivery_form": "Cream",
+          "formulation_additive": "GHK-Cu Cream 2mg/ml",
+          "dose_tier": null,
+          "package_size": "30gm",
+          "purchase_model": "one_time",
+          "retail_price": 109,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 108,
+              "exact": "GHK-Cu Cream 2mg/ml",
+              "cost": 45,
+              "shipping": 30,
+              "one_time_x9": 109
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "MOTS-c",
+      "family_id": "mots-c",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "formulation"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $129",
+      "variants": [
+        {
+          "website_option_id": "mots-c-r112",
+          "display_label": "MOTS-C 2mg/mL",
+          "delivery_form": "Injection",
+          "formulation_additive": "MOTS-C 2mg/mL",
+          "dose_tier": null,
+          "package_size": "5ML",
+          "purchase_model": "one_time",
+          "retail_price": 129,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI",
+          "gen_productId": "7Kix55LA15U0lNvY9QXI",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 112,
+              "exact": "MOTS-C 2mg/mL",
+              "cost": 62,
+              "shipping": 25,
+              "one_time_x9": 129
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Thymosin Alpha-1",
+      "family_id": "thymosin-a1",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "(single / pending)"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $159",
+      "variants": [
+        {
+          "website_option_id": "thymosin-a1-r114",
+          "display_label": "THYMOSIN ALPHA-1 3 MG/ML (5 ML)",
+          "delivery_form": "Injection",
+          "formulation_additive": "THYMOSIN ALPHA-1 3 MG/ML (5 ML)",
+          "dose_tier": null,
+          "package_size": "5 mL",
+          "purchase_model": "one_time",
+          "retail_price": 159,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_qgn9vCpD8bBN5pXNPKE5",
+          "gen_productId": "qgn9vCpD8bBN5pXNPKE5",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 114,
+              "exact": "THYMOSIN ALPHA-1 3 MG/ML (5 ML)",
+              "cost": 82,
+              "shipping": 20,
+              "one_time_x9": 159
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Dihexa",
+      "family_id": "dihexa",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "formulation"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $29",
+      "variants": [
+        {
+          "website_option_id": "dihexa-r124",
+          "display_label": "Dihexa capsules 5mg",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Dihexa capsules 5mg",
+          "dose_tier": null,
+          "package_size": "1EA",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_UIjUhnsOMiWRZFiKXFi7",
+          "gen_productId": "UIjUhnsOMiWRZFiKXFi7",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 124,
+              "exact": "Dihexa capsules 5mg",
+              "cost": 2.6,
+              "shipping": 25,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "dihexa-tes-r125",
+          "display_label": "Dihexa/Tesofensine capsules 5mg/500mcg",
+          "delivery_form": "Capsule",
+          "formulation_additive": "Dihexa/Tesofensine capsules 5mg/500mcg",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_UIjUhnsOMiWRZFiKXFi7",
+          "gen_productId": "UIjUhnsOMiWRZFiKXFi7",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 125,
+              "exact": "Dihexa/Tesofensine capsules 5mg/500mcg",
+              "cost": 3.2,
+              "shipping": 25,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Methylene Blue",
+      "family_id": "methylene-blue",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "strength"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $19",
+      "variants": [
+        {
+          "website_option_id": "methylene-blue-r120",
+          "display_label": "METHYLENE BLUE 5 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "METHYLENE BLUE 5 MG",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 120,
+              "exact": "METHYLENE BLUE 5 MG",
+              "cost": 0.96,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "methylene-blue-r121",
+          "display_label": "METHYLENE BLUE 10 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "METHYLENE BLUE 10 MG",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 121,
+              "exact": "METHYLENE BLUE 10 MG",
+              "cost": 1,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "methylene-blue-r122",
+          "display_label": "METHYLENE BLUE 15 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "METHYLENE BLUE 15 MG",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 122,
+              "exact": "METHYLENE BLUE 15 MG",
+              "cost": 1.25,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "methylene-blue-r123",
+          "display_label": "METHYLENE BLUE 25 MG",
+          "delivery_form": "Capsule",
+          "formulation_additive": "METHYLENE BLUE 25 MG",
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": 19,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Optimal Balance Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 123,
+              "exact": "METHYLENE BLUE 25 MG",
+              "cost": 1.56,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Custom HRT Cream",
+      "family_id": "hrt-custom-cream",
+      "category": "Women's Hormone Therapy",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "formulation"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $69",
+      "variants": [
+        {
+          "website_option_id": "hrt-custom-cream-r30",
+          "display_label": "HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "delivery_form": "Cream",
+          "formulation_additive": "HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "dose_tier": null,
+          "package_size": "30gm",
+          "purchase_model": "one_time",
+          "retail_price": 69,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_RWtVLDbXlP7rsR31FXmH",
+          "gen_productId": "RWtVLDbXlP7rsR31FXmH",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 30,
+              "exact": "HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+              "cost": 25,
+              "shipping": 30,
+              "one_time_x9": 69
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "hrt-custom-cream-r31",
+          "display_label": "HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "delivery_form": "Cream",
+          "formulation_additive": "HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "dose_tier": null,
+          "package_size": "30gm",
+          "purchase_model": "one_time",
+          "retail_price": 79,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_RWtVLDbXlP7rsR31FXmH",
+          "gen_productId": "RWtVLDbXlP7rsR31FXmH",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 31,
+              "exact": "HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+              "cost": 28,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "hrt-custom-cream-r32",
+          "display_label": "HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "delivery_form": "Cream",
+          "formulation_additive": "HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "dose_tier": null,
+          "package_size": "30gm",
+          "purchase_model": "one_time",
+          "retail_price": 89,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_RWtVLDbXlP7rsR31FXmH",
+          "gen_productId": "RWtVLDbXlP7rsR31FXmH",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 32,
+              "exact": "HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+              "cost": 35,
+              "shipping": 30,
+              "one_time_x9": 89
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "hrt-custom-cream-r33",
+          "display_label": "HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "delivery_form": "Cream",
+          "formulation_additive": "HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "dose_tier": null,
+          "package_size": "30gm",
+          "purchase_model": "one_time",
+          "retail_price": 99,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_RWtVLDbXlP7rsR31FXmH",
+          "gen_productId": "RWtVLDbXlP7rsR31FXmH",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 33,
+              "exact": "HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+              "cost": 40,
+              "shipping": 30,
+              "one_time_x9": 99
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Custom Hormone Troche",
+      "family_id": "hrt-custom-troche",
+      "category": "Women's Hormone Therapy",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "formulation"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $29",
+      "variants": [
+        {
+          "website_option_id": "hrt-custom-troche-r34",
+          "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "delivery_form": "Troche",
+          "formulation_additive": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "dose_tier": null,
+          "package_size": "Each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CO68GB2vs5lyfN6awklC",
+          "gen_productId": "CO68GB2vs5lyfN6awklC",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 34,
+              "exact": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+              "cost": 1,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "hrt-custom-troche-r35",
+          "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients",
+          "delivery_form": "Troche",
+          "formulation_additive": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients",
+          "dose_tier": null,
+          "package_size": "Each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CO68GB2vs5lyfN6awklC",
+          "gen_productId": "CO68GB2vs5lyfN6awklC",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 35,
+              "exact": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients",
+              "cost": 1.5,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "hrt-custom-troche-r36",
+          "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients",
+          "delivery_form": "Troche",
+          "formulation_additive": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients",
+          "dose_tier": null,
+          "package_size": "Each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CO68GB2vs5lyfN6awklC",
+          "gen_productId": "CO68GB2vs5lyfN6awklC",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 36,
+              "exact": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients",
+              "cost": 2,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "hrt-custom-troche-r65",
+          "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "delivery_form": "Troche",
+          "formulation_additive": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "dose_tier": null,
+          "package_size": "Each",
+          "purchase_model": "one_time",
+          "retail_price": 29,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CO68GB2vs5lyfN6awklC",
+          "gen_productId": "CO68GB2vs5lyfN6awklC",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 65,
+              "exact": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+              "cost": 1,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Sildenafil / Testosterone Troche",
+      "family_id": "sildenafil-testosterone-troche",
+      "category": "Sexual Wellness",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "(single / pending)"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $39",
+      "variants": [
+        {
+          "website_option_id": "sildenafil-testosterone-troche-r75",
+          "display_label": "Sildenafil/Testosterone 120mg/22mg",
+          "delivery_form": "Troche",
+          "formulation_additive": "Sildenafil/Testosterone 120mg/22mg",
+          "dose_tier": null,
+          "package_size": "Each",
+          "purchase_model": "one_time",
+          "retail_price": 39,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_w0Rf0DXmI8ukPgoMtH6g",
+          "gen_productId": "w0Rf0DXmI8ukPgoMtH6g",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "St Luke",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 75,
+              "exact": "Sildenafil/Testosterone 120mg/22mg",
+              "cost": 2.75,
+              "shipping": 30,
+              "one_time_x9": 39
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "BPC Triple / Quad Blends",
+      "family_id": "bpc-advanced-blends",
+      "category": "Recovery & Performance",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "formulation"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $159",
+      "variants": [
+        {
+          "website_option_id": "bpc-tb-ghk-r100",
+          "display_label": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML",
+          "delivery_form": "Injection",
+          "formulation_additive": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML",
+          "dose_tier": null,
+          "package_size": "5ML",
+          "purchase_model": "one_time",
+          "retail_price": 159,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5iCQzEtTXw90ctEhIhkB",
+          "gen_productId": "5iCQzEtTXw90ctEhIhkB",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 100,
+              "exact": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML",
+              "cost": 77,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "bpc-ghk-kpv-tb-r101",
+          "display_label": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL",
+          "delivery_form": "Injection",
+          "formulation_additive": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL",
+          "dose_tier": null,
+          "package_size": "5ML",
+          "purchase_model": "one_time",
+          "retail_price": 159,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 101,
+              "exact": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL",
+              "cost": 77,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        },
+        {
+          "website_option_id": "bpc-kpv-tb-r102",
+          "display_label": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL",
+          "delivery_form": "Injection",
+          "formulation_additive": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL",
+          "dose_tier": null,
+          "package_size": "5ML",
+          "purchase_model": "one_time",
+          "retail_price": 159,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 102,
+              "exact": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL",
+              "cost": 77,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "MOTS-c / Tesamorelin",
+      "family_id": "mots-tes",
+      "category": "Longevity & Cognitive",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "(single / pending)"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "from $159",
+      "variants": [
+        {
+          "website_option_id": "mots-tes-r113",
+          "display_label": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+          "delivery_form": "Injection",
+          "formulation_additive": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+          "dose_tier": null,
+          "package_size": "5ml",
+          "purchase_model": "one_time",
+          "retail_price": 159,
+          "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI",
+          "gen_productId": "7Kix55LA15U0lNvY9QXI",
+          "gen_medication_formulary_id": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [
+            {
+              "excel_row": 113,
+              "exact": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+              "cost": 79,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "backend_mapping_status": "FUTURE_HIDDEN",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "website_product_family": "Oxytocin",
+      "family_id": "oxytocin",
+      "category": "Sexual Wellness",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "(single / pending)"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "TBD",
+      "variants": [
+        {
+          "website_option_id": "oxytocin-pending",
+          "display_label": "Oxytocin Nasal Spray",
+          "delivery_form": null,
+          "formulation_additive": null,
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": null,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "FUTURE_HIDDEN_PENDING"
+        }
+      ]
+    },
+    {
+      "website_product_family": "Sexual Wellness Compound",
+      "family_id": "sexual-wellness-compound",
+      "category": "Sexual Wellness",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "(single / pending)"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "TBD",
+      "variants": [
+        {
+          "website_option_id": "sexual-wellness-compound-pending",
+          "display_label": "Sexual Wellness Compound Capsules",
+          "delivery_form": null,
+          "formulation_additive": null,
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": null,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "FORMULARY_PENDING",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "FUTURE_HIDDEN_PENDING"
+        }
+      ]
+    },
+    {
+      "website_product_family": "Scream Cream",
+      "family_id": "scream-cream",
+      "category": "Sexual Wellness",
+      "launch_state_summary": "FUTURE_HIDDEN",
+      "architecture_rule": "ONE website family when launched; only expose verified selectors.",
+      "available_selectors": [
+        "(single / pending)"
+      ],
+      "current_website_slug": null,
+      "starting_at_price_display": "TBD",
+      "variants": [
+        {
+          "website_option_id": "scream-cream-pending",
+          "display_label": "Scream Cream",
+          "delivery_form": null,
+          "formulation_additive": null,
+          "dose_tier": null,
+          "package_size": null,
+          "purchase_model": "one_time",
+          "retail_price": null,
+          "gen_clientProductId": null,
+          "gen_productId": null,
+          "gen_medication_formulary_id": null,
+          "pharmacy": null,
+          "gen_storefrontEligible": null,
+          "exact_formulary_mapping": [],
+          "backend_mapping_status": "BLOCKED",
+          "checkout_status": "OFF",
+          "launch_state": "FUTURE_HIDDEN",
+          "notes": "No SELECTED rows / explicit do-not-activate"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "current_website_patient_facing_product_families": 15,
+    "total_website_product_families_designed": 30,
+    "total_website_variants": 103,
+    "routing_status_counts": {
+      "BLOCKED": 3,
+      "GEN_PAIRING_REQUIRED": 35,
+      "FUTURE_HIDDEN": 43,
+      "GEN_PRODUCT_CREATE_REQUIRED": 8,
+      "FORMULARY_PENDING": 14
+    }
+  },
+  "final_report": {
+    "CURRENT_WEBSITE_PATIENT_FACING_PRODUCT_FAMILIES": 15,
+    "TOTAL_WEBSITE_PRODUCT_FAMILIES_AFTER_CUTOVER_DESIGN": 30,
+    "TOTAL_WEBSITE_VARIANTS": 103,
+    "ROUTING_READY": 0,
+    "FORMULARY_PENDING": 14,
+    "GEN_PRODUCT_CREATE_REQUIRED": 8,
+    "GEN_PAIRING_REQUIRED": 35,
+    "FUTURE_HIDDEN": 43,
+    "BLOCKED": 3,
+    "CUTOVER_PENDING_FORMULARY": 3,
+    "NAD_ONE_WEBSITE_PRODUCT": true,
+    "SEM_ONE_WEBSITE_PRODUCT": true,
+    "TIR_ONE_WEBSITE_PRODUCT": true,
+    "WOLVERINE_ONE_WEBSITE_PRODUCT": true,
+    "PT141_ONE_WEBSITE_PRODUCT": true,
+    "PATIENT_FACING_PRODUCT_COUNT_REDUCED_BY_VARIANT_GROUPING": true,
+    "reduction_notes": [
+      "Memberships fold into Semaglutide and Tirzepatide families (2 fewer standalone membership cards vs current 17-card model when redesigned)",
+      "16 SEM/TIR cutover dose-group architecture products become selectors under 2 families (not 16 cards)",
+      "NAD+ injection + nasal = 1 family",
+      "Wolverine capsule + injection = 1 family",
+      "PT-141 injection + nasal = 1 family when launched",
+      "Selank/Semax injection + future nasal = 1 family each"
+    ],
+    "GEN_MODIFIED": false,
+    "GEN_WRITES": 0,
+    "WEBSITE_MODIFIED": false,
+    "GEN_WHOP_CUTOVER": "OFF",
+    "NAD_INJECTION_VARIANTS": 3,
+    "NAD_NASAL_VARIANTS": 4,
+    "SEM_ONE_TIME_OPTIONS": 8,
+    "SEM_MEMBERSHIP_OPTION": 1,
+    "TIR_ONE_TIME_OPTIONS": 8,
+    "TIR_MEMBERSHIP_OPTION": 1,
+    "WOLVERINE_CAPSULE": true,
+    "WOLVERINE_INJECTION": true,
+    "PT141_INJECTION": true,
+    "PT141_NASAL": true
+  }
+}

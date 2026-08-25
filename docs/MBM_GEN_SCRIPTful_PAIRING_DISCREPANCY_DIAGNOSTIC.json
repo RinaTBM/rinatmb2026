@@ -1,0 +1,1176 @@
+{
+  "meta": {
+    "document": "MBM_GEN_SCRIPTful_PAIRING_DISCREPANCY_DIAGNOSTIC",
+    "generated_at": "2026-08-25T05:47:15Z",
+    "mode": "READ_ONLY",
+    "source": {
+      "client_products": "POST gen-health-list-products {} \u2192 GET /v2/client/products?limit=500",
+      "formulary_pairings": "POST gen-health-list-products {\"view\":\"formulary\"} \u2192 GET /v2/client/products?limit=500&view=formulary \u2192 data.formularyProducts[]",
+      "product_count": 255,
+      "formulary_row_count": 71,
+      "unique_products_with_pairings": 23
+    },
+    "gen_modified": false,
+    "pairings_modified": false,
+    "website_routing_modified": false,
+    "genPairingVerified_modified": false,
+    "new_gen_products_created": 0,
+    "published": false,
+    "cutover": "OFF",
+    "pr19": "OPEN / NOT MERGED"
+  },
+  "data_model": {
+    "concepts": {
+      "SCRIPTful_PRODUCT_in_this_repo": "MBM website/variant SKU export layer (docs/scriptful-variant-skus.md, scripts/gen-scriptful-variant-skus.ts) \u2014 NOT a GEN API object observed in Client Products payloads.",
+      "GEN_CLIENT_PRODUCT": "Objects returned by GET /v2/client/products (productId / clientProductId / displayName / pricing / pharmacies\u2026). This is what website routing locks to.",
+      "FORMULARY_MEDICATION": "Pharmacy formulary rows identified by medicationId + standardizedMedicationName + pharmacyName.",
+      "CLIENT_PRODUCT_MEDICATION_PAIRING": "Links exposed read-only via ?view=formulary as formularyProducts[] rows keyed by productId. Write path NOT available via Client Products API (GEN-CATALOG-2A / GEN_LIVE_FORMULARY_PAIRING_AUDIT); admin UI required for attach/detach."
+    },
+    "relationship_supported_by_evidence": "Website variant \u2192 locked genClientProductId (Client Product) \u2192 zero or more formulary medication pairings (readable via formulary view). No Scriptful product id fields appear on Client Product payloads.",
+    "when_owner_edits_medication_under_scriptful_gen_products_ui_should_audit_see_it": "YES",
+    "when_owner_edits_explanation": "If the owner attaches/detaches formulary medications on a GEN Client Product in the Products admin UI, those pairings are the same objects returned by GET /v2/client/products?view=formulary. Our audit already successfully reads pairings for other CPs (71 formulary rows / 23 products with attachments). Therefore successful Client-Product formulary edits SHOULD appear in the current audit endpoint.",
+    "caveats": [
+      "If \u201cScriptful Products\u201d refers to a different GEN UI surface than Client Product formulary pairing, we have NO separate API evidence for that layer \u2192 cannot confirm visibility (would be UNKNOWN for that hypothetical path).",
+      "Inactive Client Products drop from the default list per AGENTS.md \u2014 not visible in this inventory.",
+      "No Scriptful identifiers are exposed on Client Product JSON keys observed in live responses."
+    ],
+    "are_scriptful_products_and_audited_gen_client_products_same_data_layer": "UNKNOWN",
+    "same_data_layer_explanation": "In-repo \u201cScriptful\u201d = website SKU system. Owner phrase \u201cScriptful / GEN Products\u201d likely means GEN Products admin. GEN API evidence only shows Client Products + formularyProducts. No distinct Scriptful Product resource found in live payloads. If owner edits are Client Product formulary pairings, they are the audited layer (YES for that interpretation).",
+    "does_api_prove_owner_edits_did_not_save": "NO",
+    "does_api_prove_explanation": "API does not prove a failed save. Multiple intended medications are visible on DIFFERENT Client Products than the website-locked IDs (Minoxidil\u2192Raw7m, TIR B12/Glycine\u2192GLP-2 Any Dose, Wolverine capsule med\u2192Injection CP). That pattern fits wrong-target edits or duplicate-product confusion better than \u201cedits vanished.\u201d"
+  },
+  "products": [
+    {
+      "product": "SEM Mid B12",
+      "website_variant": "sem-b12-mid",
+      "locked_productId": "BLf8inX395YNc7WPCD4O",
+      "locked": {
+        "name": "Semaglutide Injection \u2014 Mid (B12)",
+        "productId": "BLf8inX395YNc7WPCD4O",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O",
+        "price_usd": 109,
+        "storefrontEligible": true,
+        "requiresSyncVisit": true,
+        "listedInDefaultClientProductsApi": true,
+        "active_status_field_exposed": false,
+        "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+        "pharmacies": [],
+        "scriptful_identifiers_exposed": null,
+        "attachmentCount": 0,
+        "attachments": []
+      },
+      "other_matching_cps": [
+        {
+          "name": "Semaglutide Injection \u2014 Mid (Glycine)",
+          "productId": "CjqOUbPuGPZzxephqRou",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CjqOUbPuGPZzxephqRou",
+          "price_usd": 109,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Dirx-Hub",
+              "integrationId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+              "externalPharmacyId": "BGPcJbPQIUSXdI0EAYgj"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 2,
+          "attachments": [
+            {
+              "name": "Semaglutide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "KFVdP0FaVZHpXt9ewjiV"
+            },
+            {
+              "name": "Semaglutide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "SX8kyR4siUDVAUrm9CvN"
+            }
+          ]
+        },
+        {
+          "name": "Semaglutide Injection \u2014 Any Dose (B12)",
+          "productId": "MkDIUw0NcJB7YL2pNzYW",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MkDIUw0NcJB7YL2pNzYW",
+          "price_usd": 119,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Dirx-Hub",
+              "integrationId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+              "externalPharmacyId": "BGPcJbPQIUSXdI0EAYgj"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 3,
+          "attachments": [
+            {
+              "name": "Semaglutide B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "99BZowkyXTMiGTu5cosT"
+            },
+            {
+              "name": "Semaglutide B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "ekw92avqC0Uf2thW7fA9"
+            },
+            {
+              "name": "Semaglutide B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "iXnkfsa6XHugbDanwjUX"
+            }
+          ]
+        },
+        {
+          "name": "Semaglutide/B12",
+          "productId": "NF825utCtjVqbbGsnQN3",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_NF825utCtjVqbbGsnQN3",
+          "price_usd": 0,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Dirx-Hub",
+              "integrationId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+              "externalPharmacyId": "BGPcJbPQIUSXdI0EAYgj"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 2,
+          "attachments": [
+            {
+              "name": "Semaglutide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "ewWMNKHYGihPlL0hgTyJ"
+            },
+            {
+              "name": "Semaglutide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "oC8SvJujh4fWdn70np3M"
+            }
+          ]
+        },
+        {
+          "name": "Semaglutide Injection \u2014 Starting / Low (B12)",
+          "productId": "SkqQHmsc0WdsbK9vmV1y",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y",
+          "price_usd": 99,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Dirx-Hub",
+              "integrationId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+              "externalPharmacyId": "BGPcJbPQIUSXdI0EAYgj"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 1,
+          "attachments": [
+            {
+              "name": "Semaglutide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "gqe6H8ay1sw6QlS32SMH"
+            }
+          ]
+        },
+        {
+          "name": "Semaglutide Injection \u2014 High (B12)",
+          "productId": "34I2X8MpVZf3AQTff3bo",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_34I2X8MpVZf3AQTff3bo",
+          "price_usd": 119,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Dirx-Hub",
+              "integrationId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+              "externalPharmacyId": "BGPcJbPQIUSXdI0EAYgj"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 1,
+          "attachments": [
+            {
+              "name": "Semaglutide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "YqrJ1qnOv3U3ecJHuSzr"
+            }
+          ]
+        }
+      ],
+      "where_intended_medication_found": [
+        {
+          "note": "No Semaglutide+B12 attachment exists on any product titled Mid (B12)."
+        },
+        {
+          "note": "Semaglutide + Vitamin B12 / Semaglutide B12 meds currently live on Starting/High/Any-Dose B12 CPs, Semaglutide/B12 (NF825\u2026), and legacy GLP-1 plan titles \u2014 not Mid B12."
+        }
+      ],
+      "diagnosis": "OWNER_CHANGE_NOT_FOUND_ANYWHERE",
+      "recommended_next_action": "Owner confirm in GEN Products UI they opened exactly \u201cSemaglutide Injection \u2014 Mid (B12)\u201d (BLf8in\u2026). Attach \u22651 Dirx Semaglutide + Vitamin B12 there. Do not assume Mid Glycine CP. Do not retarget website to Semaglutide/B12 slash product without review."
+    },
+    {
+      "product": "SEM Membership $149",
+      "website_variant": "sem-membership",
+      "locked_productId": "5F8jESeVeXcpkLU5rrdK",
+      "locked": {
+        "name": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "productId": "5F8jESeVeXcpkLU5rrdK",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK",
+        "price_usd": 149,
+        "storefrontEligible": true,
+        "requiresSyncVisit": true,
+        "listedInDefaultClientProductsApi": true,
+        "active_status_field_exposed": false,
+        "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+        "pharmacies": [],
+        "scriptful_identifiers_exposed": null,
+        "attachmentCount": 0,
+        "attachments": []
+      },
+      "other_matching_cps": [
+        {
+          "name": "Semaglutide Injection \u2014 Any Dose (B12)",
+          "productId": "MkDIUw0NcJB7YL2pNzYW",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MkDIUw0NcJB7YL2pNzYW",
+          "price_usd": 119,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Dirx-Hub",
+              "integrationId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+              "externalPharmacyId": "BGPcJbPQIUSXdI0EAYgj"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 3,
+          "attachments": [
+            {
+              "name": "Semaglutide B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "99BZowkyXTMiGTu5cosT"
+            },
+            {
+              "name": "Semaglutide B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "ekw92avqC0Uf2thW7fA9"
+            },
+            {
+              "name": "Semaglutide B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "iXnkfsa6XHugbDanwjUX"
+            }
+          ]
+        },
+        {
+          "name": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+          "productId": "wQK2JsFnh7oFBf3Lag4n",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_wQK2JsFnh7oFBf3Lag4n",
+          "price_usd": 119,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Dirx-Hub",
+              "integrationId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+              "externalPharmacyId": "BGPcJbPQIUSXdI0EAYgj"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 4,
+          "attachments": [
+            {
+              "name": "Semaglutide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "IHYsg7nVwVWB2LjoAR6a"
+            },
+            {
+              "name": "Semaglutide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "KFVdP0FaVZHpXt9ewjiV"
+            },
+            {
+              "name": "Semaglutide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "SX8kyR4siUDVAUrm9CvN"
+            },
+            {
+              "name": "Semaglutide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "WPEBtvCdn2I8l6tRmT9R"
+            }
+          ]
+        },
+        {
+          "name": "GLP-1 Weight Loss Membership \u2013 Semaglutide / L-Carnitine (Any Dose)",
+          "productId": "1sgLVERqG9oWU9WKht9b",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_1sgLVERqG9oWU9WKht9b",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        }
+      ],
+      "where_intended_medication_found": [
+        {
+          "note": "Locked membership CP has 0 formulary attachments."
+        },
+        {
+          "note": "Compatible Semaglutide B12/Glycine medications are attached to one-time / Any Dose dose-group CPs (already present before this discrepancy), not to the $149 membership CP."
+        }
+      ],
+      "diagnosis": "OWNER_CHANGE_NOT_FOUND_ANYWHERE",
+      "recommended_next_action": "Owner open exactly \u201cSEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP\u201d ($149, 5F8jES\u2026). Attach compatible B12 and/or Glycine options on THAT CP. Dose-group CPs are not membership."
+    },
+    {
+      "product": "TIR Membership $275",
+      "website_variant": "tir-membership",
+      "locked_productId": "E3MXZeeR01QROCuTLRLE",
+      "locked": {
+        "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "productId": "E3MXZeeR01QROCuTLRLE",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE",
+        "price_usd": 275,
+        "storefrontEligible": true,
+        "requiresSyncVisit": true,
+        "listedInDefaultClientProductsApi": true,
+        "active_status_field_exposed": false,
+        "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+        "pharmacies": [],
+        "scriptful_identifiers_exposed": null,
+        "attachmentCount": 0,
+        "attachments": []
+      },
+      "other_matching_cps": [
+        {
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SvFDJ7W4nmWL2bkLUMMS",
+          "price_usd": 279,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Dirx-Hub",
+              "integrationId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+              "externalPharmacyId": "BGPcJbPQIUSXdI0EAYgj"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 17,
+          "attachments": [
+            {
+              "name": "Tirzepatide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "HNLxTKQLLJRRgqxcu7MC"
+            },
+            {
+              "name": "Tirzepatide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "Nbq0VYpNP7cJ42m34R7V"
+            },
+            {
+              "name": "Tirzepatide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "Oil2I0PpmGgZJf9uZohu"
+            },
+            {
+              "name": "Tirzepatide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "SK0domcSmLTrVFvfJemY"
+            },
+            {
+              "name": "Tirzepatide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "k4Q9U1iaEKYLL4CJWDFA"
+            },
+            {
+              "name": "Tirzepatide + Glycine",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "koA9F7FAumxgLjH94v2Y"
+            },
+            {
+              "name": "Tirzepatide + Glycine (3 PACK))",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "sq8Hh3Dw96LWXhRz2gRf"
+            },
+            {
+              "name": "Tirzepatide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "2dS304PkquUWBEt8xQHC"
+            },
+            {
+              "name": "Tirzepatide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "4wYsbRl9UWIysNgow55C"
+            },
+            {
+              "name": "Tirzepatide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "CGMpoawPriiihA7kFs0n"
+            },
+            {
+              "name": "Tirzepatide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "J32cJUbcYH3hrqCi5BkE"
+            },
+            {
+              "name": "Tirzepatide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "O5P9W9VUcgmTxg3hguKG"
+            },
+            {
+              "name": "Tirzepatide + Vitamin B12",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "aG4pseKfQLizQHCHO1sY"
+            },
+            {
+              "name": "Tirzepatide B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "BbgLtCH8WXrRFv2KbK6w"
+            },
+            {
+              "name": "Tirzepatide B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "Ut7rmUz2KawrZJcxisvt"
+            },
+            {
+              "name": "Tirzepatide Mid-starter B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "lRPelaKfRpIoJbGAsgdW"
+            },
+            {
+              "name": "Tirzepatide Starter B12 ( , , )",
+              "pharmacy": "Dirx-Hub",
+              "medicationId": "uasdUbKu9Hk0ksrwHZ58"
+            }
+          ]
+        },
+        {
+          "name": "Tirzepatide/B12/Glycine",
+          "productId": "iWGB1hvWlU5AzzLsfuEj",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iWGB1hvWlU5AzzLsfuEj",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        },
+        {
+          "name": "Tirzepatide/Glycine/B12",
+          "productId": "fvEsD7VkIu1c6EGu5slC",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_fvEsD7VkIu1c6EGu5slC",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        },
+        {
+          "name": "GLP-2 Weight Loss Membership \u2013 Tirzepatide Any Dose (3 Months)",
+          "productId": "Mk6NCa9023u9hGBnFg8z",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Mk6NCa9023u9hGBnFg8z",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        }
+      ],
+      "where_intended_medication_found": [
+        {
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "price_usd": 279,
+          "note": "ALL live Tirzepatide + B12 and Tirzepatide + Glycine formulary attachments currently sit on this GLP-2 Any Dose CP (17 attachments), not on the $275 membership CP."
+        }
+      ],
+      "diagnosis": "OWNER_CHANGE_VISIBLE_ON_DIFFERENT_CP",
+      "recommended_next_action": "Likely the owner configured GLP-2 Any Dose (SvFDJ7\u2026) instead of \u201cTIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP\u201d (E3MXZe\u2026). Do NOT retarget website membership to GLP-2 (forbidden reuse / wrong product class / $279). Owner should attach compatible TIR B12/Glycine options onto the membership CP, or confirm GEN_BACKEND_SPLIT_REQUIRED. KEEP create-set TIR\u00d78 separate.",
+      "routing_target_review_required": false,
+      "do_not_reuse": [
+        "SvFDJ7W4nmWL2bkLUMMS",
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12"
+      ]
+    },
+    {
+      "product": "Wolverine Capsule",
+      "website_variant": "wolverine-capsule",
+      "locked_productId": "omhh3NabouO8AsNR5tkD",
+      "locked": {
+        "name": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+        "productId": "omhh3NabouO8AsNR5tkD",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+        "price_usd": 0,
+        "storefrontEligible": false,
+        "requiresSyncVisit": false,
+        "listedInDefaultClientProductsApi": true,
+        "active_status_field_exposed": false,
+        "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+        "pharmacies": [],
+        "scriptful_identifiers_exposed": null,
+        "attachmentCount": 0,
+        "attachments": []
+      },
+      "other_matching_cps": [
+        {
+          "name": "BPC-157/TB500",
+          "productId": "iJtyig611AZEDBGdvRd9",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+          "price_usd": 169,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Greenwich Pharmacy",
+              "integrationId": "pharmacy-olnitvqyqof9lzyalso5",
+              "externalPharmacyId": "olnitvqyqoF9LzyaLsO5"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 2,
+          "attachments": [
+            {
+              "name": "BPC-157 / TB500",
+              "pharmacy": "Greenwich Pharmacy",
+              "medicationId": "27WtrIdo3z4Ssj5sDcc6"
+            },
+            {
+              "name": "BPC-157 / TB500 Capsules",
+              "pharmacy": "Greenwich Pharmacy",
+              "medicationId": "SLBdNaBijUHmDFSohdaM"
+            }
+          ]
+        },
+        {
+          "name": "BPC-157 Gut & Recovery Protocol (Oral Capsules)",
+          "productId": "afROXeaudxZUdh0Y1Qfc",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_afROXeaudxZUdh0Y1Qfc",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        },
+        {
+          "name": "BPC-157 Recovery Protocol (Oral Capsule)",
+          "productId": "NTN40APqv0NQokAGmuyg",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_NTN40APqv0NQokAGmuyg",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        },
+        {
+          "name": "Peptides \u2013 BPC-157 (Oral)",
+          "productId": "cDX2WRgzavWG4IhRLpXM",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_cDX2WRgzavWG4IhRLpXM",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        }
+      ],
+      "where_intended_medication_found": [
+        {
+          "productId": "iJtyig611AZEDBGdvRd9",
+          "name": "BPC-157/TB500",
+          "medication": "BPC-157 / TB500 Capsules",
+          "medicationId": "SLBdNaBijUHmDFSohdaM",
+          "pharmacy": "Greenwich Pharmacy",
+          "note": "Only capsule-titled Wolverine/BPC-TB medication in live formulary is attached to the INJECTION CP, not the Wolverine capsule CP."
+        }
+      ],
+      "diagnosis": "OWNER_CHANGE_VISIBLE_ON_DIFFERENT_CP",
+      "recommended_next_action": "Capsule medication appears on injection CP (iJtyig\u2026). Move/attach capsule medication onto Wolverine capsule CP (omhh3N\u2026). Do not treat injection CP as the capsule backend."
+    },
+    {
+      "product": "Wolverine Injection",
+      "website_variant": "wolverine-injection",
+      "locked_productId": "iJtyig611AZEDBGdvRd9",
+      "locked": {
+        "name": "BPC-157/TB500",
+        "productId": "iJtyig611AZEDBGdvRd9",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+        "price_usd": 169,
+        "storefrontEligible": true,
+        "requiresSyncVisit": true,
+        "listedInDefaultClientProductsApi": true,
+        "active_status_field_exposed": false,
+        "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+        "pharmacies": [
+          {
+            "name": "Greenwich Pharmacy",
+            "integrationId": "pharmacy-olnitvqyqof9lzyalso5",
+            "externalPharmacyId": "olnitvqyqoF9LzyaLsO5"
+          }
+        ],
+        "scriptful_identifiers_exposed": null,
+        "attachmentCount": 2,
+        "attachments": [
+          {
+            "name": "BPC-157 / TB500",
+            "pharmacy": "Greenwich Pharmacy",
+            "medicationId": "27WtrIdo3z4Ssj5sDcc6"
+          },
+          {
+            "name": "BPC-157 / TB500 Capsules",
+            "pharmacy": "Greenwich Pharmacy",
+            "medicationId": "SLBdNaBijUHmDFSohdaM"
+          }
+        ]
+      },
+      "other_matching_cps": [
+        {
+          "name": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+          "productId": "omhh3NabouO8AsNR5tkD",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        },
+        {
+          "name": "BPC-157 Recovery Protocol (Injectable)",
+          "productId": "TQBv1oBNGfwIGY8ypl86",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_TQBv1oBNGfwIGY8ypl86",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        },
+        {
+          "name": "Peptides \u2013 BPC-157 (Injectable)",
+          "productId": "f8iFGqOGRXlFbjSiyVU1",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_f8iFGqOGRXlFbjSiyVU1",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        }
+      ],
+      "where_intended_medication_found": [
+        {
+          "note": "Compatible injection medication \u201cBPC-157 / TB500\u201d IS on the expected injection CP."
+        },
+        {
+          "note": "Claimed correction (remove capsule) is NOT reflected \u2014 capsule medication remains on the same CP."
+        }
+      ],
+      "diagnosis": "OWNER_CHANGE_NOT_FOUND_ANYWHERE",
+      "diagnosis_note": "Applies to the claimed removal of capsule medication. Injection-compatible med already present on expected CP.",
+      "recommended_next_action": "On injection CP iJtyig\u2026 remove \u201cBPC-157 / TB500 Capsules\u201d. Keep injection medication. Capsule belongs on omhh3N\u2026"
+    },
+    {
+      "product": "Minoxidil",
+      "website_variant": "minoxidil-fin-minox-0.1-5",
+      "locked_productId": "BboYS4a2Uj7APetrFo6W",
+      "locked": {
+        "name": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+        "productId": "BboYS4a2Uj7APetrFo6W",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+        "price_usd": 0,
+        "storefrontEligible": false,
+        "requiresSyncVisit": false,
+        "listedInDefaultClientProductsApi": true,
+        "active_status_field_exposed": false,
+        "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+        "pharmacies": [],
+        "scriptful_identifiers_exposed": null,
+        "attachmentCount": 0,
+        "attachments": []
+      },
+      "other_matching_cps": [
+        {
+          "name": "Hair Loss \u2013 Minoxidil (Topical)",
+          "productId": "Raw7mUkuzzhVdAo88jpL",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Raw7mUkuzzhVdAo88jpL",
+          "price_usd": 0,
+          "storefrontEligible": true,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Vios",
+              "integrationId": "pharmacy-swmeeimzfor541holvw3",
+              "externalPharmacyId": "sWmEeImZfoR541hOlvW3"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 11,
+          "attachments": [
+            {
+              "name": "Finasteride / Minoxidil (PER ML) 0.1 / 10 %",
+              "pharmacy": "Vios",
+              "medicationId": "TbZGZNFAzrChVQoGgkXs"
+            },
+            {
+              "name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+              "pharmacy": "Vios",
+              "medicationId": "9qNwEbSAfgVxUjuy3mNg"
+            },
+            {
+              "name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+              "pharmacy": "Vios",
+              "medicationId": "R1KXXsuKlENVt3rnHUTI"
+            },
+            {
+              "name": "Finasteride / Minoxidil (PER ML) 0.1 / 7 %",
+              "pharmacy": "Vios",
+              "medicationId": "VjSceyy4fZ3UUL7aZubm"
+            },
+            {
+              "name": "Finasteride / Minoxidil (PER ML) 0.1 / 7 %",
+              "pharmacy": "Vios",
+              "medicationId": "yLLv6cvly0vgq82P4Za3"
+            },
+            {
+              "name": "Finasteride / Minoxidil / Tretinoin (PER ML) 0.25 / 5 / 0.01 %",
+              "pharmacy": "Vios",
+              "medicationId": "0XBMtwTFsCYJvHzZbGmv"
+            },
+            {
+              "name": "Finasteride / Minoxidil / Tretinoin (PER ML) 0.25 / 5 / 0.03 %",
+              "pharmacy": "Vios",
+              "medicationId": "lMf2Pgs0Kyzil511S3AA"
+            },
+            {
+              "name": "Finasteride / Minoxidil / Tretinoin (PER ML) 0.5 / 5 / 0.01 %",
+              "pharmacy": "Vios",
+              "medicationId": "O4SZ6tx6jbWFV6eb6Mvh"
+            },
+            {
+              "name": "Minoxidil 10%",
+              "pharmacy": "Vios",
+              "medicationId": "dkG7xeZ0vEysUIK8m4ze"
+            },
+            {
+              "name": "Minoxidil 15%",
+              "pharmacy": "Vios",
+              "medicationId": "TzPHypfsr7APpXLmTJAi"
+            },
+            {
+              "name": "Minoxidil 2%",
+              "pharmacy": "Vios",
+              "medicationId": "8mc7RjVdMx0gNm1JZEiz"
+            }
+          ]
+        },
+        {
+          "name": "GHK-Cu / Minoxidil Topical Combo",
+          "productId": "489YrehNXRlL77fYPkOn",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_489YrehNXRlL77fYPkOn",
+          "price_usd": 69,
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [
+            {
+              "name": "Greenwich Pharmacy",
+              "integrationId": "pharmacy-olnitvqyqof9lzyalso5",
+              "externalPharmacyId": "olnitvqyqoF9LzyaLsO5"
+            }
+          ],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 1,
+          "attachments": [
+            {
+              "name": "GHK-CU",
+              "pharmacy": "Greenwich Pharmacy",
+              "medicationId": "DEu7EzsWmcFP6d60NT9J"
+            }
+          ]
+        },
+        {
+          "name": "Hair Loss \u2013 Triple Combo (Finasteride/Minoxidil/Tretinoin)",
+          "productId": "7sX9dhAxA6i21Jg1swrK",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7sX9dhAxA6i21Jg1swrK",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        },
+        {
+          "name": "Hair Loss \u2013 Minoxidil (Oral)",
+          "productId": "M5oNllXUu1ikySSuXIR0",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_M5oNllXUu1ikySSuXIR0",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        }
+      ],
+      "where_intended_medication_found": [
+        {
+          "productId": "Raw7mUkuzzhVdAo88jpL",
+          "name": "Hair Loss \u2013 Minoxidil (Topical)",
+          "medications": [
+            {
+              "name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+              "pharmacy": "Vios",
+              "medicationId": "9qNwEbSAfgVxUjuy3mNg"
+            },
+            {
+              "name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+              "pharmacy": "Vios",
+              "medicationId": "R1KXXsuKlENVt3rnHUTI"
+            }
+          ],
+          "also_has": "0.1/10%, 0.1/7%, Fin/Minox/Tretinoin blends, plain Minoxidil 2/10/15%",
+          "note": "Intended Vios Fin/Minox 0.1%/5% is attached here, NOT on Dual Combo BboYS\u2026"
+        }
+      ],
+      "diagnosis": "OWNER_CHANGE_VISIBLE_ON_DIFFERENT_CP",
+      "routing_target_review_required": true,
+      "routing_target_review": {
+        "flag": "ROUTING_TARGET_REVIEW_REQUIRED",
+        "old_cp": "BboYS4a2Uj7APetrFo6W",
+        "old_name": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+        "proposed_cp_for_review_only": "Raw7mUkuzzhVdAo88jpL",
+        "proposed_name": "Hair Loss \u2013 Minoxidil (Topical)",
+        "do_not_change_yet": true,
+        "comparison": {
+          "dual_combo_BboYS": {
+            "name_match_to_locked_intent": "STRONG (Dual Combo Finasteride/Minoxidil)",
+            "price_usd": 0,
+            "architecture_price": 79,
+            "attachments": 0,
+            "storefrontEligible": false
+          },
+          "topical_Raw7m": {
+            "name_match_to_locked_intent": "WEAK/AMBIGUOUS (generic Minoxidil Topical)",
+            "price_usd": 0,
+            "attachments": 11,
+            "includes_intended_0_1_5": true,
+            "includes_extra_incompatible_for_locked_intent": true,
+            "extras": [
+              "0.1/10%",
+              "0.1/7%",
+              "Fin/Minox/Tretinoin",
+              "plain Minoxidil strengths"
+            ],
+            "storefrontEligible": true
+          },
+          "ghk_minox_489Y": {
+            "note": "GHK-Cu/Minoxidil \u2014 rejected substitute (GHK-CU only attachment)"
+          }
+        }
+      },
+      "recommended_next_action": "OWNER REVIEW before any redo: either (A) keep Dual Combo BboYS\u2026 as locked target and attach/move Vios 0.1%/5% there (and set price $79), or (B) approve retargeting website minoxidil-fin-minox-0.1-5 \u2192 Raw7m\u2026 after cleaning extras. Do NOT use GHK-Cu/Minoxidil. Do NOT change routing in this diagnostic run."
+    },
+    {
+      "product": "Progesterone IR",
+      "website_variant": "prog-ir-r41\u2026r49 (shared CP)",
+      "locked_productId": "5dGkjdpLP7DkKKE2iVxh",
+      "locked": {
+        "name": "Women's Hormones (HRT) \u2013 Progesterone",
+        "productId": "5dGkjdpLP7DkKKE2iVxh",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+        "price_usd": 79,
+        "storefrontEligible": true,
+        "requiresSyncVisit": true,
+        "listedInDefaultClientProductsApi": true,
+        "active_status_field_exposed": false,
+        "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+        "pharmacies": [
+          {
+            "name": "Vios",
+            "integrationId": "pharmacy-swmeeimzfor541holvw3",
+            "externalPharmacyId": "sWmEeImZfoR541hOlvW3"
+          }
+        ],
+        "scriptful_identifiers_exposed": null,
+        "attachmentCount": 14,
+        "attachments": [
+          {
+            "name": "Pregnenolone IR",
+            "pharmacy": "Vios",
+            "medicationId": "LHAilcdBK0wULcdmoJVl"
+          },
+          {
+            "name": "Progesterone",
+            "pharmacy": "Vios",
+            "medicationId": "QbXdjaowZ1w0Ohc7RgB7"
+          },
+          {
+            "name": "Progesterone",
+            "pharmacy": "Vios",
+            "medicationId": "Z9joueirLKsW5uD8LkPg"
+          },
+          {
+            "name": "Progesterone",
+            "pharmacy": "Vios",
+            "medicationId": "tiJV7uCEsWhM2TOOycHF"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "DsXWglQ4j9epTGms7D5x"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "YT2RkB7DvqWxUnXfySDc"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "ZIAWU7zBZHPrezBdiexZ"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "dAWcMgzf6d7OH1JyKlEw"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "q21bosU7qNA9YLfqLnQH"
+          },
+          {
+            "name": "Progesterone IR (DYE-FREE)(Lactose-free) (M NEW)",
+            "pharmacy": "Vios",
+            "medicationId": "A4fU56tPD0DJTPPyUT3K"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "NRZXW0LomEaoyN5oA3WO"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "ORLfICIf7sgo1WTdXvEM"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "KleUHs9VxvMycdhX0Z14"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "xrMRDAQr9if9OrehgcH6"
+          }
+        ]
+      },
+      "other_matching_cps": [
+        {
+          "name": "Women's Hormones (HRT) \u2013 Progesterone Suppository",
+          "productId": "Fu7uvywkCFT9R8t71BGf",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Fu7uvywkCFT9R8t71BGf",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        },
+        {
+          "name": "Women's Hormones (HRT) \u2013 BiEst / Progesterone / Testosterone Combo Cream",
+          "productId": "AVNvVWBE98DfINxyz5Dm",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_AVNvVWBE98DfINxyz5Dm",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        },
+        {
+          "name": "Women's Hormones (HRT) \u2013 BiEst / Progesterone Combo Cream",
+          "productId": "9MVuV5RWKZVFXorgD10h",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_9MVuV5RWKZVFXorgD10h",
+          "price_usd": 0,
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "listedInDefaultClientProductsApi": true,
+          "active_status_field_exposed": false,
+          "active_status_note": "Client Products list does not expose status; AGENTS.md documents inactive products drop from default list",
+          "pharmacies": [],
+          "scriptful_identifiers_exposed": null,
+          "attachmentCount": 0,
+          "attachments": []
+        }
+      ],
+      "where_intended_medication_found": [
+        {
+          "note": "Compatible Progesterone / Progesterone IR medications ARE on the locked CP."
+        },
+        {
+          "note": "Pregnenolone IR and Progesterone SR attachments remain on the same CP \u2014 claimed removals not visible."
+        },
+        {
+          "note": "No other GEN CP contains a clean IR-only Progesterone set."
+        }
+      ],
+      "diagnosis": "OWNER_CHANGE_NOT_FOUND_ANYWHERE",
+      "diagnosis_note": "Applies to claimed removal of Pregnenolone/SR. IR options already present on expected CP.",
+      "recommended_next_action": "On locked CP 5dGkjdp\u2026 remove Pregnenolone IR and all Progesterone SR rows. Keep multiple IR strengths. No alternate clean IR CP found to retarget."
+    }
+  ],
+  "classification_counts": {
+    "OWNER_CHANGE_VISIBLE_ON_EXPECTED_CP": 0,
+    "OWNER_CHANGE_VISIBLE_ON_DIFFERENT_CP": 3,
+    "SCRIPTful_CHANGE_NOT_VISIBLE_VIA_CURRENT_API": 0,
+    "DUPLICATE_CP_ROUTING_TARGET_MISMATCH": 0,
+    "OWNER_CHANGE_NOT_FOUND_ANYWHERE": 4,
+    "UNABLE_TO_DETERMINE": 0
+  },
+  "website_routing_targets_appear_wrong": true,
+  "routing_target_reviews": [
+    {
+      "website_variant": "minoxidil-fin-minox-0.1-5",
+      "old_cp": "BboYS4a2Uj7APetrFo6W",
+      "proposed_cp_for_review_only": "Raw7mUkuzzhVdAo88jpL",
+      "flag": "ROUTING_TARGET_REVIEW_REQUIRED",
+      "changed_in_this_run": false
+    }
+  ],
+  "owner_needs_to_redo_manual_pairings": [
+    {
+      "product": "SEM Mid B12",
+      "reason": "No Mid B12 attachments found on locked or alternate Mid-titled CP."
+    },
+    {
+      "product": "SEM Membership",
+      "reason": "Membership CP still has 0 attachments; dose-group CPs are not substitutes."
+    },
+    {
+      "product": "TIR Membership",
+      "reason": "Intended TIR B12/Glycine options are on GLP-2 Any Dose CP, not membership CP \u2014 attach to E3MXZe\u2026 (do not reuse GLP-2 as membership)."
+    },
+    {
+      "product": "Wolverine Capsule + Injection",
+      "reason": "Capsule med is on injection CP; capsule CP empty; remove capsule from injection CP / attach on capsule CP."
+    },
+    {
+      "product": "Progesterone IR",
+      "reason": "Pregnenolone + SR still on locked CP; remove them (IR already present)."
+    },
+    {
+      "product": "Minoxidil",
+      "reason": "OWNER REVIEW FIRST \u2014 intended meds on Raw7m\u2026; decide retarget vs move to Dual Combo before redo."
+    }
+  ],
+  "next_13_create_set": "UNCHANGED",
+  "final_answers": {
+    "PRODUCTS_INVESTIGATED": "7 / 7",
+    "ARE_SCRIPTful_PRODUCTS_AND_AUDITED_GEN_CLIENT_PRODUCTS_THE_SAME_DATA_LAYER": "UNKNOWN",
+    "DOES_OUR_CURRENT_API_PROVE_THAT_THE_OWNERS_SCRIPTful_EDITS_DID_NOT_SAVE": "NO",
+    "DO_ANY_WEBSITE_ROUTING_TARGETS_APPEAR_TO_BE_WRONG": "YES",
+    "NEXT_13_CREATE_SET": "UNCHANGED"
+  }
+}

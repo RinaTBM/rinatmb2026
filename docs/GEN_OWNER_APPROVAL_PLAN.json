@@ -1,0 +1,234 @@
+{
+  "version": "gen-catalog-1g-final-owner-approvals",
+  "generated_at": "2026-08-24T06:59:21Z",
+  "mode": "READ_ONLY",
+  "phase": "GEN-CATALOG-1G",
+  "allDecisionsResolved": true,
+  "finalOwnerDecisions": [
+    {
+      "number": 1,
+      "product": "Semaglutide Injection \u2014 Mid (B12)",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Create/retain separate Mid B12 client product. B12 ladder = Starting/Low, Mid, High, Any Dose, 3-Month as applicable.",
+      "executionEffect": "READY_FOR_WRITE (CREATE Mid B12 CP; pair Mid B12 vials only)"
+    },
+    {
+      "number": 2,
+      "product": "5-Amino Injectable",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Keep injectable product; pair only to confirmed injectable formulary. Do not substitute capsule formulary.",
+      "executionEffect": "DEFERRED pending confirmed injectable 5-Amino-1MQ formulary (capsule pairing forbidden)"
+    },
+    {
+      "number": 3,
+      "product": "Accelerate & Thrive",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Split over-collapsed catch-all into appropriate distinct patient-facing products.",
+      "executionEffect": "SPLIT_REQUIRED \u2014 do not write umbrella; emit distinct CPs from master list (FUTURE_HIDDEN until each has clear formulary)",
+      "splitMasters": [
+        "Accelerate & Thrive",
+        "ARA-290 Neuroprotection & Nerve Repair Protocol",
+        "BAM-15 Mitochondrial Uncoupler Protocol",
+        "Elite Body Recomp",
+        "Elite Regenesis",
+        "Kisspeptin-10",
+        "KPV Anti-Inflammatory Gut & Systemic Protocol",
+        "Lean & Energized",
+        "Lean & Ready",
+        "Lean & Timeless",
+        "Melanotan 2 Tanning & Sexual Health Protocol",
+        "PE-22-28",
+        "PE-22-28 Antidepressant & Cognitive Protocol",
+        "Peak Performance",
+        "Peptides \u2013 Kisspeptin-10",
+        "Performance \u2013 Oxandrolone (High Dose)",
+        "Performance \u2013 Oxandrolone (Low Dose)",
+        "Performance \u2013 Stanozolol",
+        "Power & Recovery",
+        "Sculpt & Perform",
+        "Slim & Sensational",
+        "Slim & Timeless",
+        "SLU-PP-332 Metabolic & Exercise Mimetic Protocol",
+        "The Ultimate Protocol",
+        "Thyroid Support (BioThyroid)",
+        "Total Transformation",
+        "Vitality & Longevity",
+        "Wellness \u2013 Low-Dose Naltrexone (LDN) Starter",
+        "Wellness \u2013 Low-Dose Naltrexone (LDN) Therapeutic",
+        "Wellness \u2013 MIC-B12 (Lipotropic / Fat Burn)",
+        "Wellness \u2013 MIC-B12 (Lipotropic / Fat Burn)"
+      ]
+    },
+    {
+      "number": 4,
+      "product": "HRT Other \u2014 Unspecified",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Split into distinct patient-facing products. Do not maintain one umbrella HRT product.",
+      "executionEffect": "SPLIT_REQUIRED \u2014 no umbrella HRT write",
+      "splitMasters": [
+        "Hormone + Intimacy",
+        "Kisspeptin-10 Reproductive Hormone Protocol",
+        "Men's Hormones \u2013 Fertility (Clomiphene)",
+        "Men's Hormones \u2013 Fertility (HCG)",
+        "Men's Hormones \u2013 Gonadorelin",
+        "Men's Hormones \u2013 PCT / Estrogen Blocker (Tamoxifen)",
+        "Men's Hormones (TRT) \u2013 Estrogen Management (Anastrozole)",
+        "Men's Hormones (TRT) \u2013 Fertility / HPTA Support (Enclomiphene)",
+        "Mens HRT/TRT In-Clinic Approval",
+        "Mens TRT/HRT 1 Month Plan",
+        "Mens TRT/HRT 3 Month Plan",
+        "Mens TRT/HRT 6 Month Plan",
+        "Womens HRT GFE In-Clinic Approval",
+        "Womens TRT/HRT 1 Month Plan",
+        "Womens TRT/HRT 3 Month Plan",
+        "Womens TRT/HRT 6 Month Plan"
+      ]
+    },
+    {
+      "number": 5,
+      "product": "Minoxidil / Hair \u2014 Unspecified",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Split into the actual distinct hair-loss/combo product(s).",
+      "executionEffect": "SPLIT_REQUIRED \u2014 use distinct hair products (e.g. Dual Combo Finasteride/Minoxidil), not unspecified umbrella",
+      "splitMasters": [
+        "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)"
+      ]
+    },
+    {
+      "number": 6,
+      "product": "NAD+ (Injectable)",
+      "choice": "SEPARATE_DELIVERY_FORMS",
+      "status": "APPROVED",
+      "instruction": "NAD+ Injection and NAD+ Nasal Spray must remain separate client products. Never cross-pair nasal formulary to injectable product.",
+      "executionEffect": "READY structure: keep nad-injection and nad-nasal separate; reject cross-pair on review-nadinjectable; DEFERRED injectable pairing until injectable formulary confirmed for injectable-named row"
+    },
+    {
+      "number": 7,
+      "product": "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone",
+      "choice": "B",
+      "status": "DEFERRED",
+      "instruction": "Do not attach Sildenafil/Testosterone troche to Scream Cream. Keep Scream Cream FUTURE_HIDDEN; do not create/pair until exact cream formulation confirmed.",
+      "executionEffect": "DEFERRED \u2014 no create/pair in GEN-CATALOG-2 until exact cream formulary confirmed"
+    },
+    {
+      "number": 8,
+      "product": "Sildenafil (3 Month)",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Use Sildenafil tablet/capsule formulary only. Scream Cream remains separate.",
+      "executionEffect": "READY_FOR_WRITE only after tablet/capsule formulary confirmed; forbid Scream Cream / troche pairing"
+    },
+    {
+      "number": 9,
+      "product": "Sildenafil (6 Month)",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Use Sildenafil tablet/capsule formulary only. Scream Cream remains separate.",
+      "executionEffect": "READY_FOR_WRITE only after tablet/capsule formulary confirmed; forbid Scream Cream / troche pairing"
+    },
+    {
+      "number": 10,
+      "product": "Sildenafil \u2014 Unspecified",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Split distinct Sildenafil/Tadalafil/combo products. Do not use one umbrella ED product.",
+      "executionEffect": "SPLIT_REQUIRED \u2014 no umbrella ED write",
+      "splitMasters": [
+        "ED \u2013 Caffeine / Sildenafil (Performance Boost)",
+        "ED \u2013 Sildenafil (On-Demand)",
+        "ED \u2013 Sildenafil / Tadalafil Combo",
+        "Sildenafil",
+        "Tadalafil+Sildenafil"
+      ]
+    },
+    {
+      "number": 11,
+      "product": "Tadalafil \u2014 Unspecified",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Split distinct daily/on-demand/combo products.",
+      "executionEffect": "SPLIT_REQUIRED \u2014 no umbrella Tadalafil write",
+      "splitMasters": [
+        "ED \u2013 Tadalafil (Daily / Low Dose)",
+        "ED \u2013 Tadalafil (On-Demand / High Dose)",
+        "Tadalafil",
+        "Vardenafil+Tadalafil+Apormorphine"
+      ]
+    },
+    {
+      "number": 12,
+      "product": "Tirzepatide Injection \u2014 B12+Glycine (ambiguous)",
+      "choice": "REJECT_DEFER_AMBIGUOUS_LABELS",
+      "status": "REJECTED_DEFERRED",
+      "instruction": "Do not map either ambiguous B12+Glycine label to a B12-only or Glycine-only formulary. Do not create a B12+Glycine product unless an actual matching B12+Glycine formulary is later confirmed. Existing policy: Tirzepatide B12 ladder separate; Tirzepatide Glycine ladder separate.",
+      "executionEffect": "EXCLUDE from write \u2014 reject/defer Tirzepatide/B12/Glycine and Tirzepatide/Glycine/B12 labels",
+      "labels": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12"
+      ]
+    },
+    {
+      "number": 13,
+      "product": "Tretinoin / Skin \u2014 Unspecified",
+      "choice": "A",
+      "status": "APPROVED",
+      "instruction": "Split into the actual distinct skin/hair products and combinations.",
+      "executionEffect": "SPLIT_REQUIRED \u2014 no umbrella tretinoin/skin write",
+      "splitMasters": [
+        "Finasteride, Tretinoin, Fluocinolone, VitaminE",
+        "Hair Loss - Minoxdil/Tretinoin/Fluocinolone/Finasteride Spray",
+        "Hair Loss \u2013 Triple Combo (Finasteride/Minoxidil/Tretinoin)"
+      ]
+    }
+  ],
+  "structuralPolicies": {
+    "tirzepatideB12GlycineSeparateLadders": "APPROVED",
+    "detail": "Tirzepatide B12 ladder = separate. Tirzepatide Glycine ladder = separate. Do not combine."
+  },
+  "cleanupApprovals": [
+    {
+      "name": "Add Sync",
+      "action": "DEACTIVATE",
+      "status": "APPROVED",
+      "writeNow": false
+    },
+    {
+      "name": "Metformin (Metabolic / Weight Support)",
+      "action": "DEACTIVATE",
+      "status": "APPROVED",
+      "ownerRule": "DO NOT ADD METFORMIN",
+      "writeNow": false
+    },
+    {
+      "name": "Metformin / Topiramate",
+      "action": "DEACTIVATE",
+      "status": "APPROVED",
+      "ownerRule": "DO NOT ADD METFORMIN",
+      "writeNow": false
+    },
+    {
+      "name": "BPC-157 (Copy 1)",
+      "action": "MERGE_THEN_DEACTIVATE",
+      "status": "APPROVED",
+      "mergeInto": {
+        "name": "BPC-157 Injection",
+        "productId": "KXMm9SsbOEYnFy9phmZn"
+      },
+      "writeNow": false
+    }
+  ],
+  "unresolvedDecisions": [],
+  "counts": {
+    "OWNER_DECISIONS_APPROVED_OR_RESOLVED": 13,
+    "OWNER_DECISIONS_REMAINING": 0,
+    "CLEANUP_APPROVED": 4,
+    "GEN_MODIFIED": "NO",
+    "GEN_WRITES": 0,
+    "GEN_WHOP_CUTOVER": "OFF"
+  }
+}

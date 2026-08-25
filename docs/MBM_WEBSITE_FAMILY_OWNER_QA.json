@@ -1,0 +1,2441 @@
+{
+  "meta": {
+    "title": "MBM Website Family Owner QA",
+    "phase": "MBM-WEBSITE-GEN-QA-1",
+    "generatedAt": "2026-08-25T01:59:22Z",
+    "mode": "QA_VERIFICATION_ONLY",
+    "previewIndex": "/preview/families",
+    "doNotPublish": true,
+    "legacyProductionUnchanged": true,
+    "auditNote": "Automated structural audit of 30 families / 103 variants. Focus families SEM/TIR/NAD/Wolverine evaluated against locked UX rules. No business-rule ambiguity silently fixed. genPairingVerified remains false for all."
+  },
+  "familyUxRule": {
+    "customerSees": "ONE clean product family then selectors for only the choices that matter",
+    "doNotExpose": [
+      "GEN IDs",
+      "pharmacy names unless intentionally customer-facing",
+      "formulary row numbers",
+      "internal backend names",
+      "GEN_PAIRING_PENDING / technical routing language"
+    ],
+    "examples": {
+      "NAD+": [
+        "Delivery Method",
+        "Injection / Nasal Spray",
+        "Size/strength if applicable"
+      ],
+      "Semaglutide": [
+        "Purchase Type",
+        "Formulation",
+        "Dose/Tier"
+      ],
+      "Tirzepatide": [
+        "Purchase Type",
+        "Formulation",
+        "Dose/Tier"
+      ],
+      "Wolverine": [
+        "Delivery Method",
+        "Capsule / Injection"
+      ]
+    }
+  },
+  "routingGateExpectations": {
+    "genId_present_pairing_false": "real GEN handoff BLOCKED",
+    "genId_present_pairing_true": "structurally eligible BUT production cutover still prevents real GEN order",
+    "FORMULARY_PENDING": "blocked",
+    "FUTURE_HIDDEN": "blocked",
+    "BLOCKED": "blocked",
+    "browserCannotBypassServerGate": true,
+    "gateImplementation": "src/lib/catalog/familyRoutingGate.ts \u2192 assertFamilyVariantGenOrderAllowed"
+  },
+  "futureHiddenProtection": {
+    "confirmed": true,
+    "variantCount": 51,
+    "filter": "listPatientVisibleVariants excludes FUTURE_HIDDEN and legacy B6 ids",
+    "examples": [
+      "pt-141",
+      "scream-cream",
+      "selank-nasal-r119",
+      "semax-nasal-r118",
+      "nad-nasal-r81",
+      "nad-nasal-r82"
+    ]
+  },
+  "formularyPendingProtection": {
+    "count": 14,
+    "confirmedNoInventedGenBackend": true,
+    "note": "FORMULARY_PENDING variants have null genClientProductId; gate blocks order submission. No fallback mapping."
+  },
+  "ownerReviewItems": [
+    {
+      "code": "OTHER",
+      "severity": false
+    },
+    {
+      "code": "OTHER",
+      "severity": false
+    },
+    {
+      "code": "OTHER",
+      "severity": false
+    }
+  ],
+  "verificationUpdateMechanism": {
+    "prepared": true,
+    "registrySourceOfTruth": "src/data/websiteFamilies/pairingVerificationRegistry.ts",
+    "applyHelper": "src/data/websiteFamilies/applyPairingVerification.ts",
+    "generatedData": "src/data/websiteFamilies/families.generated.ts (+ .json)",
+    "rule": "After owner confirms a GEN CP in the pairing checklist, add its genClientProductId to OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS then run apply helper to set genPairingVerified=true only on matching variants. Do not edit unrelated product fields. Do not auto-verify from name/price/title.",
+    "thisPhase": "Registry empty; all genPairingVerified remain false."
+  },
+  "families": [
+    {
+      "family": "Semaglutide",
+      "familyId": "semaglutide",
+      "previewUrl": "/preview/families/semaglutide",
+      "category": "Weight Management",
+      "liveFuture": "MIXED",
+      "variantCount": 11,
+      "patientVisibleCount": 9,
+      "statusCounts": {
+        "GEN_PAIRING_PENDING": 9,
+        "BLOCKED": 1,
+        "FUTURE_HIDDEN": 1
+      },
+      "availableSelectors": [
+        "purchase_type",
+        "formulation_additive",
+        "dose_tier"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "9 of 11 have GEN id",
+      "pairingQa": "9 unverified",
+      "ownerStatus": "NEEDS_REVIEW",
+      "focusFamilyResult": "PASS",
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Structure PASS. Owner must still confirm GEN formulary pairings before ROUTING_READY.",
+        "Legacy B6 variant retained as BLOCKED/internal only; excluded from patient-visible selectors."
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "sem-b12-starting-low",
+          "displayLabel": "Starting / Low \u00b7 Vitamin B12",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B12",
+          "doseTier": "Starting / Low",
+          "finalRetailPrice": "89\u201399",
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "sem-b12-mid",
+          "displayLabel": "Mid \u00b7 Vitamin B12",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B12",
+          "doseTier": "Mid",
+          "finalRetailPrice": 109,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "sem-b12-high",
+          "displayLabel": "High \u00b7 Vitamin B12",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B12",
+          "doseTier": "High",
+          "finalRetailPrice": "109\u2013119",
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_34I2X8MpVZf3AQTff3bo",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "sem-b12-any-dose",
+          "displayLabel": "Any Dose \u00b7 Vitamin B12",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B12",
+          "doseTier": "Any Dose",
+          "finalRetailPrice": "89\u2013119",
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MkDIUw0NcJB7YL2pNzYW",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "sem-glycine-starting-low",
+          "displayLabel": "Starting / Low \u00b7 Glycine",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glycine",
+          "doseTier": "Starting / Low",
+          "finalRetailPrice": "89\u201399",
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_tk2GW39OGr7JX4MCCoJP",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "sem-glycine-mid",
+          "displayLabel": "Mid \u00b7 Glycine",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glycine",
+          "doseTier": "Mid",
+          "finalRetailPrice": 109,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CjqOUbPuGPZzxephqRou",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "sem-glycine-high",
+          "displayLabel": "High \u00b7 Glycine",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glycine",
+          "doseTier": "High",
+          "finalRetailPrice": "109\u2013119",
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_sssEk3FDY4LFbQYGQsLx",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "sem-glycine-any-dose",
+          "displayLabel": "Any Dose \u00b7 Glycine",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glycine",
+          "doseTier": "Any Dose",
+          "finalRetailPrice": "89\u2013119",
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_wQK2JsFnh7oFBf3Lag4n",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "sem-current-b6",
+          "displayLabel": "Semaglutide + B6 (legacy until cutover)",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B6 (legacy)",
+          "doseTier": null,
+          "finalRetailPrice": null,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "CURRENT_LIVE_UNTIL_CUTOVER_THEN_REMOVE",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "sem-membership",
+          "displayLabel": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE Membership",
+          "purchaseType": "membership",
+          "form": "Injection",
+          "additive": "Any Dose (backend B12/Glycine split allowed, invisible to patient)",
+          "doseTier": "Any Dose",
+          "finalRetailPrice": 149,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "sem-b12-3month",
+          "displayLabel": "3-Month \u00b7 Vitamin B12",
+          "purchaseType": "3_month",
+          "form": "Injection",
+          "additive": "Vitamin B12",
+          "doseTier": null,
+          "finalRetailPrice": 359,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Tirzepatide",
+      "familyId": "tirzepatide",
+      "previewUrl": "/preview/families/tirzepatide",
+      "category": "Weight Management",
+      "liveFuture": "CURRENT",
+      "variantCount": 10,
+      "patientVisibleCount": 9,
+      "statusCounts": {
+        "BLOCKED": 9,
+        "GEN_PAIRING_PENDING": 1
+      },
+      "availableSelectors": [
+        "purchase_type",
+        "formulation_additive",
+        "dose_tier"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "1 of 10 have GEN id",
+      "pairingQa": "1 unverified",
+      "ownerStatus": "NEEDS_REVIEW",
+      "focusFamilyResult": "PASS",
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Structure PASS. Owner must still confirm GEN formulary pairings before ROUTING_READY.",
+        "One-time TIR CPs not created yet (BLOCKED, no invented IDs). Membership $275 has GEN id.",
+        "Legacy B6 variant retained as BLOCKED/internal only; excluded from patient-visible selectors."
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "tir-b12-starting-low",
+          "displayLabel": "Starting / Low (5+10) \u00b7 Vitamin B12",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B12",
+          "doseTier": "Starting / Low (5+10)",
+          "finalRetailPrice": "119\u2013139",
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tir-b12-mid",
+          "displayLabel": "Mid (15+20) \u00b7 Vitamin B12",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B12",
+          "doseTier": "Mid (15+20)",
+          "finalRetailPrice": "149\u2013159",
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tir-b12-high",
+          "displayLabel": "High (25+30) \u00b7 Vitamin B12",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B12",
+          "doseTier": "High (25+30)",
+          "finalRetailPrice": "169\u2013179",
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tir-b12-any-dose",
+          "displayLabel": "Any Dose (5\u201330) \u00b7 Vitamin B12",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B12",
+          "doseTier": "Any Dose (5\u201330)",
+          "finalRetailPrice": "119\u2013179",
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tir-glycine-starting-low",
+          "displayLabel": "Starting / Low (5+10) \u00b7 Glycine",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glycine",
+          "doseTier": "Starting / Low (5+10)",
+          "finalRetailPrice": "119\u2013139",
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tir-glycine-mid",
+          "displayLabel": "Mid (15+20) \u00b7 Glycine",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glycine",
+          "doseTier": "Mid (15+20)",
+          "finalRetailPrice": "149\u2013159",
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tir-glycine-high",
+          "displayLabel": "High (25+30) \u00b7 Glycine",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glycine",
+          "doseTier": "High (25+30)",
+          "finalRetailPrice": "169\u2013179",
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tir-glycine-any-dose",
+          "displayLabel": "Any Dose (5\u201330) \u00b7 Glycine",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glycine",
+          "doseTier": "Any Dose (5\u201330)",
+          "finalRetailPrice": "119\u2013179",
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tir-current-b6",
+          "displayLabel": "Tirzepatide + B6 (legacy until cutover)",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Vitamin B6 (legacy)",
+          "doseTier": null,
+          "finalRetailPrice": null,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "CURRENT_LIVE_UNTIL_CUTOVER_THEN_REMOVE",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "tir-membership",
+          "displayLabel": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE Membership",
+          "purchaseType": "membership",
+          "form": "Injection",
+          "additive": "Any Dose (backend B12/Glycine split allowed, invisible)",
+          "doseTier": "Any Dose",
+          "finalRetailPrice": 275,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        }
+      ]
+    },
+    {
+      "family": "NAD+",
+      "familyId": "nad",
+      "previewUrl": "/preview/families/nad",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "MIXED",
+      "variantCount": 7,
+      "patientVisibleCount": 4,
+      "statusCounts": {
+        "FORMULARY_PENDING": 2,
+        "FUTURE_HIDDEN": 3,
+        "GEN_PAIRING_PENDING": 1,
+        "BLOCKED": 1
+      },
+      "availableSelectors": [
+        "delivery_method",
+        "package_size"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "1 of 7 have GEN id",
+      "pairingQa": "1 unverified",
+      "ownerStatus": "NEEDS_REVIEW",
+      "focusFamilyResult": "PASS",
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Structure PASS. Owner must still confirm GEN formulary pairings before ROUTING_READY.",
+        "Injection 100mg/mL FORMULARY_PENDING; nasal r84 GEN_PAIRING_PENDING; r85 BLOCKED (CREATE pending)."
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "nad-inj-5ml-500",
+          "displayLabel": "Injection \u00b7 5 mL / 500 mg",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "NAD+ 100mg/mL (website)",
+          "doseTier": null,
+          "finalRetailPrice": 199,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "nad-inj-10ml-1000",
+          "displayLabel": "Injection \u00b7 10 mL / 1000 mg",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "NAD+ 100mg/mL (website)",
+          "doseTier": null,
+          "finalRetailPrice": 229,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "nad-inj-selected-r83",
+          "displayLabel": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 OWNER REJECTED (keep 100mg/mL)",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 139,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "nad-nasal-r84",
+          "displayLabel": "Nasal Spray \u00b7 NAD+ 50mg/ml \u00b7 15ml",
+          "purchaseType": "one_time",
+          "form": "Nasal Spray",
+          "additive": "NAD+ 50mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 79,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "nad-nasal-r85",
+          "displayLabel": "Nasal Spray \u00b7 NAD+ 200mg/ml \u00b7 15ml",
+          "purchaseType": "one_time",
+          "form": "Nasal Spray",
+          "additive": "NAD+ 200mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 109,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "nad-nasal-r81",
+          "displayLabel": "NAD+ 50mg/ml",
+          "purchaseType": "one_time",
+          "form": "Nasal Spray",
+          "additive": "NAD+ 50mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 79,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "nad-nasal-r82",
+          "displayLabel": "NAD+ 200mg/ml",
+          "purchaseType": "one_time",
+          "form": "Nasal Spray",
+          "additive": "NAD+ 200mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 109,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Wolverine / BPC-TB",
+      "familyId": "wolverine-bpc-tb",
+      "previewUrl": "/preview/families/wolverine-bpc-tb",
+      "category": "Recovery & Performance",
+      "liveFuture": "CURRENT",
+      "variantCount": 2,
+      "patientVisibleCount": 2,
+      "statusCounts": {
+        "GEN_PAIRING_PENDING": 2
+      },
+      "availableSelectors": [
+        "delivery_method"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "2 of 2 have GEN id",
+      "pairingQa": "2 unverified",
+      "ownerStatus": "NEEDS_REVIEW",
+      "focusFamilyResult": "PASS",
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Structure PASS. Owner must still confirm GEN formulary pairings before ROUTING_READY."
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "wolverine-capsule",
+          "displayLabel": "Capsules",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "BPC-157/TB500 capsules 500MCG/500MCG",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "wolverine-injection",
+          "displayLabel": "Injection",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "BPC-157/TB500 3mg/3mg/mL",
+          "doseTier": null,
+          "finalRetailPrice": 159,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        }
+      ]
+    },
+    {
+      "family": "Minoxidil",
+      "familyId": "minoxidil",
+      "previewUrl": "/preview/families/minoxidil",
+      "category": "Prescription Skin & Hair",
+      "liveFuture": "MIXED",
+      "variantCount": 4,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "GEN_PAIRING_PENDING": 1,
+        "FUTURE_HIDDEN": 3
+      },
+      "availableSelectors": [
+        "formulation"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "1 of 4 have GEN id",
+      "pairingQa": "1 unverified",
+      "ownerStatus": "NEEDS_REVIEW",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [],
+      "variants": [
+        {
+          "websiteVariantId": "minoxidil-fin-minox-0.1-5",
+          "displayLabel": "Finasteride/Minoxidil 0.1%/5%",
+          "purchaseType": "one_time",
+          "form": "Topical",
+          "additive": "Finasteride/Minoxidil 0.1%/5%",
+          "doseTier": null,
+          "finalRetailPrice": 79,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "minoxidil-solution",
+          "displayLabel": "Minoxidil 2% solution",
+          "purchaseType": "one_time",
+          "form": "Topical",
+          "additive": "Minoxidil 2% solution",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "minoxidil-cream",
+          "displayLabel": "Minoxidil cream 7\u201315%",
+          "purchaseType": "one_time",
+          "form": "Topical",
+          "additive": "Minoxidil cream 7\u201315%",
+          "doseTier": null,
+          "finalRetailPrice": 89,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "fin-minox-tret",
+          "displayLabel": "Finasteride/Minoxidil/Tretinoin topical",
+          "purchaseType": "one_time",
+          "form": "Topical",
+          "additive": "Finasteride/Minoxidil/Tretinoin topical",
+          "doseTier": null,
+          "finalRetailPrice": 89,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Estradiol",
+      "familyId": "estradiol",
+      "previewUrl": "/preview/families/estradiol",
+      "category": "Women's Hormone Therapy",
+      "liveFuture": "MIXED",
+      "variantCount": 8,
+      "patientVisibleCount": 4,
+      "statusCounts": {
+        "BLOCKED": 4,
+        "FUTURE_HIDDEN": 4
+      },
+      "availableSelectors": [
+        "delivery_method",
+        "strength"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "NEEDS_REVIEW",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [],
+      "variants": [
+        {
+          "websiteVariantId": "estradiol-patch-r26",
+          "displayLabel": "Estradiol transdermal",
+          "purchaseType": "one_time",
+          "form": "Patch",
+          "additive": "Estradiol transdermal",
+          "doseTier": null,
+          "finalRetailPrice": 119,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "estradiol-patch-r27",
+          "displayLabel": "Estradiol transdermal",
+          "purchaseType": "one_time",
+          "form": "Patch",
+          "additive": "Estradiol transdermal",
+          "doseTier": null,
+          "finalRetailPrice": 129,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "estradiol-patch-r28",
+          "displayLabel": "Estradiol transdermal",
+          "purchaseType": "one_time",
+          "form": "Patch",
+          "additive": "Estradiol transdermal",
+          "doseTier": null,
+          "finalRetailPrice": 139,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "estradiol-patch-r29",
+          "displayLabel": "Estradiol transdermal",
+          "purchaseType": "one_time",
+          "form": "Patch",
+          "additive": "Estradiol transdermal",
+          "doseTier": null,
+          "finalRetailPrice": 149,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "BLOCKED",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "estradiol-tablet-r37",
+          "displayLabel": "ESTRADIOL 0.5MG TABLET 0.5MG",
+          "purchaseType": "one_time",
+          "form": "Tablet",
+          "additive": "ESTRADIOL 0.5MG TABLET 0.5MG",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "estradiol-tablet-r38",
+          "displayLabel": "ESTRADIOL 1 MG TABLET 1 MG",
+          "purchaseType": "one_time",
+          "form": "Tablet",
+          "additive": "ESTRADIOL 1 MG TABLET 1 MG",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "estradiol-tablet-r39",
+          "displayLabel": "ESTRADIOL 2 MG TABLET 2 MG",
+          "purchaseType": "one_time",
+          "form": "Tablet",
+          "additive": "ESTRADIOL 2 MG TABLET 2 MG",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "estradiol-injection-r40",
+          "displayLabel": "ESTRADIOL CYPIONATE (MCT OIL) 10 MG/ML",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "ESTRADIOL CYPIONATE (MCT OIL) 10 MG/ML",
+          "doseTier": null,
+          "finalRetailPrice": 89,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Progesterone",
+      "familyId": "progesterone",
+      "previewUrl": "/preview/families/progesterone",
+      "category": "Women's Hormone Therapy",
+      "liveFuture": "MIXED",
+      "variantCount": 12,
+      "patientVisibleCount": 9,
+      "statusCounts": {
+        "GEN_PAIRING_PENDING": 9,
+        "FUTURE_HIDDEN": 3
+      },
+      "availableSelectors": [
+        "formulation",
+        "strength"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "9 of 12 have GEN id",
+      "pairingQa": "9 unverified",
+      "ownerStatus": "NEEDS_REVIEW",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/progesterone"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "prog-ir-r41",
+          "displayLabel": "Progesterone IR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone IR",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "prog-ir-r42",
+          "displayLabel": "Progesterone IR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone IR",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "prog-ir-r43",
+          "displayLabel": "Progesterone IR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone IR",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "prog-ir-r44",
+          "displayLabel": "Progesterone IR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone IR",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "prog-ir-r45",
+          "displayLabel": "Progesterone IR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone IR",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "prog-ir-r46",
+          "displayLabel": "Progesterone IR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone IR",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "prog-ir-r47",
+          "displayLabel": "Progesterone IR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone IR",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "prog-ir-r48",
+          "displayLabel": "Progesterone IR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone IR",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "prog-ir-r49",
+          "displayLabel": "Progesterone IR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone IR",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+          "genPairingVerified": false,
+          "routingStatus": "GEN_PAIRING_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "prog-sr-r50",
+          "displayLabel": "Progesterone SR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone SR",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "prog-sr-r51",
+          "displayLabel": "Progesterone SR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone SR",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "prog-sr-r52",
+          "displayLabel": "Progesterone SR",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Progesterone SR",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Tretinoin",
+      "familyId": "tretinoin",
+      "previewUrl": "/preview/families/tretinoin",
+      "category": "Prescription Skin & Hair",
+      "liveFuture": "MIXED",
+      "variantCount": 5,
+      "patientVisibleCount": 3,
+      "statusCounts": {
+        "FORMULARY_PENDING": 3,
+        "FUTURE_HIDDEN": 2
+      },
+      "availableSelectors": [
+        "strength"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/tretinoin"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "tretinoin-0.025%",
+          "displayLabel": "Tretinoin 0.025%",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "Tretinoin 0.025%",
+          "doseTier": null,
+          "finalRetailPrice": 79,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tretinoin-0.05%",
+          "displayLabel": "Tretinoin 0.05%",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "Tretinoin 0.05%",
+          "doseTier": null,
+          "finalRetailPrice": 89,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tretinoin-0.1%",
+          "displayLabel": "Tretinoin 0.1%",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "Tretinoin 0.1%",
+          "doseTier": null,
+          "finalRetailPrice": 109,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "tretinoin-selected-r126",
+          "displayLabel": "TRETINOIN 0.15%",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "TRETINOIN 0.15%",
+          "doseTier": null,
+          "finalRetailPrice": 79,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "tretinoin-selected-r127",
+          "displayLabel": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+          "doseTier": null,
+          "finalRetailPrice": 129,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Fat Burner",
+      "familyId": "fat-burner",
+      "previewUrl": "/preview/families/fat-burner",
+      "category": "Weight Management",
+      "liveFuture": "CURRENT",
+      "variantCount": 1,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "FORMULARY_PENDING": 1
+      },
+      "availableSelectors": [
+        "(pending \u2014 single current variant)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/fat-burner"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "fat-burner-current",
+          "displayLabel": "AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
+          "doseTier": null,
+          "finalRetailPrice": 259,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        }
+      ]
+    },
+    {
+      "family": "Testosterone",
+      "familyId": "testosterone",
+      "previewUrl": "/preview/families/testosterone",
+      "category": "Men's Hormone Therapy",
+      "liveFuture": "MIXED",
+      "variantCount": 3,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "FORMULARY_PENDING": 1,
+        "FUTURE_HIDDEN": 2
+      },
+      "availableSelectors": [
+        "delivery_method"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/testosterone"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "testosterone-current",
+          "displayLabel": "Testosterone-only cream 5 mg/g",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "Testosterone-only cream 5 mg/g",
+          "doseTier": null,
+          "finalRetailPrice": 79,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "testosterone-inj-r76",
+          "displayLabel": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML)",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML)",
+          "doseTier": null,
+          "finalRetailPrice": 59,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "testosterone-inj-r77",
+          "displayLabel": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML)",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML)",
+          "doseTier": null,
+          "finalRetailPrice": 59,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Selank",
+      "familyId": "selank",
+      "previewUrl": "/preview/families/selank",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "MIXED",
+      "variantCount": 2,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "FORMULARY_PENDING": 1,
+        "FUTURE_HIDDEN": 1
+      },
+      "availableSelectors": [
+        "delivery_method"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/selank"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "selank-current",
+          "displayLabel": "Selank injectable",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Selank injectable",
+          "doseTier": null,
+          "finalRetailPrice": 129,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "selank-nasal-r119",
+          "displayLabel": "Selank 2.5mg/mL Nasal Spray",
+          "purchaseType": "one_time",
+          "form": "Nasal Spray",
+          "additive": "Selank 2.5mg/mL Nasal Spray",
+          "doseTier": null,
+          "finalRetailPrice": 129,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Semax",
+      "familyId": "semax",
+      "previewUrl": "/preview/families/semax",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "MIXED",
+      "variantCount": 2,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "FORMULARY_PENDING": 1,
+        "FUTURE_HIDDEN": 1
+      },
+      "availableSelectors": [
+        "delivery_method"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/semax"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "semax-current",
+          "displayLabel": "Semax injectable",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Semax injectable",
+          "doseTier": null,
+          "finalRetailPrice": 129,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        },
+        {
+          "websiteVariantId": "semax-nasal-r118",
+          "displayLabel": "Semax 2.5mg/mL Nasal Spray",
+          "purchaseType": "one_time",
+          "form": "Nasal Spray",
+          "additive": "Semax 2.5mg/mL Nasal Spray",
+          "doseTier": null,
+          "finalRetailPrice": 129,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Selank + Semax Blend",
+      "familyId": "selank-semax-blend",
+      "previewUrl": "/preview/families/selank-semax-blend",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "CURRENT",
+      "variantCount": 1,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "FORMULARY_PENDING": 1
+      },
+      "availableSelectors": [
+        "(pending \u2014 single current variant)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/selank-semax-blend"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "selank-semax-blend-current",
+          "displayLabel": "Combined Selank+Semax nasal",
+          "purchaseType": "one_time",
+          "form": "Nasal Spray",
+          "additive": "Combined Selank+Semax nasal",
+          "doseTier": null,
+          "finalRetailPrice": 169,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        }
+      ]
+    },
+    {
+      "family": "Tesamorelin",
+      "familyId": "tesamorelin",
+      "previewUrl": "/preview/families/tesamorelin",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "CURRENT",
+      "variantCount": 1,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "FORMULARY_PENDING": 1
+      },
+      "availableSelectors": [
+        "(pending \u2014 single current variant)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/tesamorelin"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "tesamorelin-current",
+          "displayLabel": "Plain Tesamorelin",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Plain Tesamorelin",
+          "doseTier": null,
+          "finalRetailPrice": 149,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        }
+      ]
+    },
+    {
+      "family": "Lash / Brow Growth Serum",
+      "familyId": "lash-brow",
+      "previewUrl": "/preview/families/lash-brow",
+      "category": "Prescription Skin & Hair",
+      "liveFuture": "CURRENT",
+      "variantCount": 1,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "FORMULARY_PENDING": 1
+      },
+      "availableSelectors": [
+        "(pending \u2014 single current variant)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/lash-brow"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "lash-brow-current",
+          "displayLabel": "Bimatoprost 0.03%",
+          "purchaseType": "one_time",
+          "form": "Solution",
+          "additive": "Bimatoprost 0.03%",
+          "doseTier": null,
+          "finalRetailPrice": 89,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "CURRENT_LIVE",
+          "patientVisible": true
+        }
+      ]
+    },
+    {
+      "family": "PT-141",
+      "familyId": "pt-141",
+      "previewUrl": "/preview/families/pt-141",
+      "category": "Sexual Wellness",
+      "liveFuture": "FUTURE",
+      "variantCount": 3,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 3
+      },
+      "availableSelectors": [
+        "delivery_method",
+        "strength"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/pt-141"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "pt141-inj-r115",
+          "displayLabel": "PT-141 2mg/mL",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "PT-141 2mg/mL",
+          "doseTier": null,
+          "finalRetailPrice": 129,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "pt141-nasal-r116",
+          "displayLabel": "BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML",
+          "purchaseType": "one_time",
+          "form": "Nasal Spray",
+          "additive": "BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML",
+          "doseTier": null,
+          "finalRetailPrice": 139,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "pt141-nasal-r117",
+          "displayLabel": "BREMELANOTIDE (PT-141) (PER ML) 5MG/ML",
+          "purchaseType": "one_time",
+          "form": "Nasal Spray",
+          "additive": "BREMELANOTIDE (PT-141) (PER ML) 5MG/ML",
+          "doseTier": null,
+          "finalRetailPrice": 139,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Glutathione",
+      "familyId": "glutathione",
+      "previewUrl": "/preview/families/glutathione",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "FUTURE",
+      "variantCount": 2,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 2
+      },
+      "availableSelectors": [
+        "delivery_method"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/glutathione"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "glutathione-injection-r86",
+          "displayLabel": "Glutathione 200mg/ml",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glutathione 200mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 59,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "glutathione-injection-r87",
+          "displayLabel": "Glutathione 200mg/ml",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "Glutathione 200mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 99,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "GHK-Cu",
+      "familyId": "ghk-cu",
+      "previewUrl": "/preview/families/ghk-cu",
+      "category": "Prescription Skin & Hair",
+      "liveFuture": "FUTURE",
+      "variantCount": 4,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 4
+      },
+      "availableSelectors": [
+        "strength"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/ghk-cu"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "ghk-cream-r105",
+          "displayLabel": "GHK-Cu Cream 2mg/ml",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "GHK-Cu Cream 2mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 109,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "ghk-cream-r106",
+          "displayLabel": "GHK-Cu Cream 5mg/ml",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "GHK-Cu Cream 5mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 129,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "ghk-cream-r107",
+          "displayLabel": "GHK-Cu Cream 10mg/ml",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "GHK-Cu Cream 10mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 189,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "ghk-cream-r108",
+          "displayLabel": "GHK-Cu Cream 2mg/ml",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "GHK-Cu Cream 2mg/ml",
+          "doseTier": null,
+          "finalRetailPrice": 109,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "MOTS-c",
+      "familyId": "mots-c",
+      "previewUrl": "/preview/families/mots-c",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "FUTURE",
+      "variantCount": 1,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 1
+      },
+      "availableSelectors": [
+        "formulation"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/mots-c"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "mots-c-r112",
+          "displayLabel": "MOTS-C 2mg/mL",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "MOTS-C 2mg/mL",
+          "doseTier": null,
+          "finalRetailPrice": 129,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Thymosin Alpha-1",
+      "familyId": "thymosin-a1",
+      "previewUrl": "/preview/families/thymosin-a1",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "FUTURE",
+      "variantCount": 1,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 1
+      },
+      "availableSelectors": [
+        "(single / pending)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/thymosin-a1"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "thymosin-a1-r114",
+          "displayLabel": "THYMOSIN ALPHA-1 3 MG/ML (5 ML)",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "THYMOSIN ALPHA-1 3 MG/ML (5 ML)",
+          "doseTier": null,
+          "finalRetailPrice": 159,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Dihexa",
+      "familyId": "dihexa",
+      "previewUrl": "/preview/families/dihexa",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "FUTURE",
+      "variantCount": 2,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 2
+      },
+      "availableSelectors": [
+        "formulation"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/dihexa"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "dihexa-r124",
+          "displayLabel": "Dihexa capsules 5mg",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Dihexa capsules 5mg",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "dihexa-tes-r125",
+          "displayLabel": "Dihexa/Tesofensine capsules 5mg/500mcg",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "Dihexa/Tesofensine capsules 5mg/500mcg",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Methylene Blue",
+      "familyId": "methylene-blue",
+      "previewUrl": "/preview/families/methylene-blue",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "FUTURE",
+      "variantCount": 4,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 4
+      },
+      "availableSelectors": [
+        "strength"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/methylene-blue"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "methylene-blue-r120",
+          "displayLabel": "METHYLENE BLUE 5 MG",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "METHYLENE BLUE 5 MG",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "methylene-blue-r121",
+          "displayLabel": "METHYLENE BLUE 10 MG",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "METHYLENE BLUE 10 MG",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "methylene-blue-r122",
+          "displayLabel": "METHYLENE BLUE 15 MG",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "METHYLENE BLUE 15 MG",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "methylene-blue-r123",
+          "displayLabel": "METHYLENE BLUE 25 MG",
+          "purchaseType": "one_time",
+          "form": "Capsule",
+          "additive": "METHYLENE BLUE 25 MG",
+          "doseTier": null,
+          "finalRetailPrice": 19,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Custom HRT Cream",
+      "familyId": "hrt-custom-cream",
+      "previewUrl": "/preview/families/hrt-custom-cream",
+      "category": "Women's Hormone Therapy",
+      "liveFuture": "FUTURE",
+      "variantCount": 4,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 4
+      },
+      "availableSelectors": [
+        "formulation"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/hrt-custom-cream"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "hrt-custom-cream-r30",
+          "displayLabel": "HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "doseTier": null,
+          "finalRetailPrice": 69,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "hrt-custom-cream-r31",
+          "displayLabel": "HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "doseTier": null,
+          "finalRetailPrice": 79,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "hrt-custom-cream-r32",
+          "displayLabel": "HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "doseTier": null,
+          "finalRetailPrice": 89,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "hrt-custom-cream-r33",
+          "displayLabel": "HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "purchaseType": "one_time",
+          "form": "Cream",
+          "additive": "HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "doseTier": null,
+          "finalRetailPrice": 99,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Custom Hormone Troche",
+      "familyId": "hrt-custom-troche",
+      "previewUrl": "/preview/families/hrt-custom-troche",
+      "category": "Women's Hormone Therapy",
+      "liveFuture": "FUTURE",
+      "variantCount": 4,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 4
+      },
+      "availableSelectors": [
+        "formulation"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/hrt-custom-troche"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "hrt-custom-troche-r34",
+          "displayLabel": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "purchaseType": "one_time",
+          "form": "Troche",
+          "additive": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "hrt-custom-troche-r35",
+          "displayLabel": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients",
+          "purchaseType": "one_time",
+          "form": "Troche",
+          "additive": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "hrt-custom-troche-r36",
+          "displayLabel": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients",
+          "purchaseType": "one_time",
+          "form": "Troche",
+          "additive": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "hrt-custom-troche-r65",
+          "displayLabel": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "purchaseType": "one_time",
+          "form": "Troche",
+          "additive": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "doseTier": null,
+          "finalRetailPrice": 29,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Sildenafil / Testosterone Troche",
+      "familyId": "sildenafil-testosterone-troche",
+      "previewUrl": "/preview/families/sildenafil-testosterone-troche",
+      "category": "Sexual Wellness",
+      "liveFuture": "FUTURE",
+      "variantCount": 1,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 1
+      },
+      "availableSelectors": [
+        "(single / pending)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/sildenafil-testosterone-troche"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "sildenafil-testosterone-troche-r75",
+          "displayLabel": "Sildenafil/Testosterone 120mg/22mg",
+          "purchaseType": "one_time",
+          "form": "Troche",
+          "additive": "Sildenafil/Testosterone 120mg/22mg",
+          "doseTier": null,
+          "finalRetailPrice": 39,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "BPC Triple / Quad Blends",
+      "familyId": "bpc-advanced-blends",
+      "previewUrl": "/preview/families/bpc-advanced-blends",
+      "category": "Recovery & Performance",
+      "liveFuture": "FUTURE",
+      "variantCount": 3,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 3
+      },
+      "availableSelectors": [
+        "formulation"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/bpc-advanced-blends"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "bpc-tb-ghk-r100",
+          "displayLabel": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML",
+          "doseTier": null,
+          "finalRetailPrice": 159,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "bpc-ghk-kpv-tb-r101",
+          "displayLabel": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL",
+          "doseTier": null,
+          "finalRetailPrice": 159,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        },
+        {
+          "websiteVariantId": "bpc-kpv-tb-r102",
+          "displayLabel": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL",
+          "doseTier": null,
+          "finalRetailPrice": 159,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "MOTS-c / Tesamorelin",
+      "familyId": "mots-tes",
+      "previewUrl": "/preview/families/mots-tes",
+      "category": "Longevity & Cognitive",
+      "liveFuture": "FUTURE",
+      "variantCount": 1,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 1
+      },
+      "availableSelectors": [
+        "(single / pending)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/mots-tes"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "mots-tes-r113",
+          "displayLabel": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+          "purchaseType": "one_time",
+          "form": "Injection",
+          "additive": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+          "doseTier": null,
+          "finalRetailPrice": 159,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    },
+    {
+      "family": "Oxytocin",
+      "familyId": "oxytocin",
+      "previewUrl": "/preview/families/oxytocin",
+      "category": "Sexual Wellness",
+      "liveFuture": "CURRENT",
+      "variantCount": 1,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "FORMULARY_PENDING": 1
+      },
+      "availableSelectors": [
+        "(single / pending)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/oxytocin"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "oxytocin-pending",
+          "displayLabel": "oxytocin-pending",
+          "purchaseType": "one_time",
+          "form": null,
+          "additive": null,
+          "doseTier": null,
+          "finalRetailPrice": null,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": true
+        }
+      ]
+    },
+    {
+      "family": "Sexual Wellness Compound",
+      "familyId": "sexual-wellness-compound",
+      "previewUrl": "/preview/families/sexual-wellness-compound",
+      "category": "Sexual Wellness",
+      "liveFuture": "CURRENT",
+      "variantCount": 1,
+      "patientVisibleCount": 1,
+      "statusCounts": {
+        "FORMULARY_PENDING": 1
+      },
+      "availableSelectors": [
+        "(single / pending)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FORMULARY_PENDING",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "Preview index lists focus families only \u2014 open via /preview/families/sexual-wellness-compound"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "sexual-wellness-compound-pending",
+          "displayLabel": "sexual-wellness-compound-pending",
+          "purchaseType": "one_time",
+          "form": null,
+          "additive": null,
+          "doseTier": null,
+          "finalRetailPrice": null,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FORMULARY_PENDING",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": true
+        }
+      ]
+    },
+    {
+      "family": "Scream Cream",
+      "familyId": "scream-cream",
+      "previewUrl": "/preview/families/scream-cream",
+      "category": "Sexual Wellness",
+      "liveFuture": "FUTURE",
+      "variantCount": 1,
+      "patientVisibleCount": 0,
+      "statusCounts": {
+        "FUTURE_HIDDEN": 1
+      },
+      "availableSelectors": [
+        "(single / pending)"
+      ],
+      "priceQa": "OK",
+      "selectorQa": "OK",
+      "genIdQa": "NONE (expected)",
+      "pairingQa": "N/A",
+      "ownerStatus": "FUTURE_HIDDEN",
+      "focusFamilyResult": null,
+      "focusIssues": [],
+      "issueFlags": [],
+      "notes": [
+        "All variants FUTURE_HIDDEN \u2014 not purchasable in patient-visible catalog.",
+        "Preview index lists focus families only \u2014 open via /preview/families/scream-cream"
+      ],
+      "variants": [
+        {
+          "websiteVariantId": "scream-cream-pending",
+          "displayLabel": "scream-cream-pending",
+          "purchaseType": "one_time",
+          "form": null,
+          "additive": null,
+          "doseTier": null,
+          "finalRetailPrice": null,
+          "genClientProductId": null,
+          "genPairingVerified": false,
+          "routingStatus": "FUTURE_HIDDEN",
+          "launchState": "FUTURE_HIDDEN",
+          "patientVisible": false
+        }
+      ]
+    }
+  ],
+  "finalReport": {
+    "FAMILIES_QA'D": 30,
+    "VARIANTS_QA'D": 103,
+    "FAMILY_UX_ISSUES": 0,
+    "PRICE_ISSUES": 0,
+    "SELECTOR_ISSUES": 0,
+    "ROUTING_ISSUES": 0,
+    "DUPLICATE_VARIANTS": 0,
+    "COPY_ISSUES": 0,
+    "GEN_CLIENT_PRODUCTS_TO_MANUALLY_VERIFY": 15,
+    "WEBSITE_VARIANTS_COVERED_BY_THOSE_GEN_CPS": 23,
+    "genPairingVerified_TRUE": 0,
+    "genPairingVerified_FALSE": 23,
+    "ROUTING_READY": 0,
+    "GEN_PAIRING_PENDING": 23,
+    "FORMULARY_PENDING": 14,
+    "FUTURE_HIDDEN": 51,
+    "BLOCKED": 15,
+    "SEM_FAMILY_QA": "PASS",
+    "TIR_FAMILY_QA": "PASS",
+    "NAD_FAMILY_QA": "PASS",
+    "WOLVERINE_FAMILY_QA": "PASS",
+    "PAIRING_VERIFICATION_CHECKLIST_CREATED": "YES",
+    "SAFE_VERIFICATION_UPDATE_MECHANISM_PREPARED": "YES",
+    "REAL_GEN_ORDER_SUBMISSION": "OFF",
+    "LEGACY_PRODUCTION_STORE": "UNCHANGED",
+    "WEBSITE_CUTOVER": "OFF",
+    "GEN_WHOP_CUTOVER": "OFF",
+    "GEN_MODIFIED": "NO",
+    "PAIRINGS_MODIFIED": "NO"
+  }
+}

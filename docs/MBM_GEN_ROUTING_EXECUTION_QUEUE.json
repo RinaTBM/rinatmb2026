@@ -1,0 +1,3072 @@
+{
+  "meta": {
+    "generated_at": "2026-08-25T00:48:39Z",
+    "phase": "MBM-GEN-PRICE-CONFLICT-RESOLUTION-1",
+    "mode": "QUEUES ONLY \u2014 DO NOT EXECUTE",
+    "pairing_execution_method": "MANUAL_GEN_ADMIN",
+    "owner_choices_locked": [
+      "A",
+      "A",
+      "B",
+      "A",
+      "A",
+      "B",
+      "A",
+      "A"
+    ],
+    "gen_writes": 0,
+    "website_writes": 0,
+    "pairing_writes": 0,
+    "cutover": "OFF",
+    "queue_legend": {
+      "A": "GEN CP CREATE",
+      "B": "GEN CP REPAIR",
+      "C": "FORMULARY PAIRING (status-only residual)",
+      "D": "NO GEN ACTION NEEDED",
+      "E": "FORMULARY/SOURCING PENDING",
+      "F": "FUTURE HIDDEN"
+    }
+  },
+  "note": "Updated after price-conflict resolution. DO NOT EXECUTE.",
+  "status_counts": {
+    "ROUTING_READY": 0,
+    "GEN_PRODUCT_CREATE_REQUIRED": 13,
+    "GEN_PRODUCT_REPAIR_REQUIRED": 22,
+    "GEN_PAIRING_REQUIRED": 1,
+    "FORMULARY_PENDING": 14,
+    "PRICE_PENDING": 0,
+    "FUTURE_HIDDEN": 53,
+    "BLOCKED_OWNER_REVIEW": 0
+  },
+  "queues": {
+    "A_GEN_CP_CREATE": {
+      "count": 13,
+      "items": [
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-b12-starting-low",
+          "display_label": "Starting / Low (5+10) \u00b7 Vitamin B12",
+          "gen_productId": null,
+          "gen_cp_name": "Starting / Low (5+10) \u00b7 Vitamin B12",
+          "price": "119\u2013139",
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 14,
+              "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            },
+            {
+              "excel_row": 16,
+              "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+              "cost": 75,
+              "shipping": 5,
+              "one_time_x9": 139
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+          "required_actions": [
+            "CREATE_GEN_CP",
+            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+            "SET_PRICE_FROM_LOCKED_X9",
+            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-b12-mid",
+          "display_label": "Mid (15+20) \u00b7 Vitamin B12",
+          "gen_productId": null,
+          "gen_cp_name": "Mid (15+20) \u00b7 Vitamin B12",
+          "price": "149\u2013159",
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 18,
+              "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+              "cost": 85,
+              "shipping": 5,
+              "one_time_x9": 149
+            },
+            {
+              "excel_row": 20,
+              "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+              "cost": 90,
+              "shipping": 5,
+              "one_time_x9": 159
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+          "required_actions": [
+            "CREATE_GEN_CP",
+            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+            "SET_PRICE_FROM_LOCKED_X9",
+            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-b12-high",
+          "display_label": "High (25+30) \u00b7 Vitamin B12",
+          "gen_productId": null,
+          "gen_cp_name": "High (25+30) \u00b7 Vitamin B12",
+          "price": "169\u2013179",
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 22,
+              "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+              "cost": 95,
+              "shipping": 5,
+              "one_time_x9": 169
+            },
+            {
+              "excel_row": 24,
+              "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+              "cost": 100,
+              "shipping": 5,
+              "one_time_x9": 179
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+          "required_actions": [
+            "CREATE_GEN_CP",
+            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+            "SET_PRICE_FROM_LOCKED_X9",
+            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-b12-any-dose",
+          "display_label": "Any Dose (5\u201330) \u00b7 Vitamin B12",
+          "gen_productId": null,
+          "gen_cp_name": "Any Dose (5\u201330) \u00b7 Vitamin B12",
+          "price": "119\u2013179",
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 14,
+              "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            },
+            {
+              "excel_row": 16,
+              "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+              "cost": 75,
+              "shipping": 5,
+              "one_time_x9": 139
+            },
+            {
+              "excel_row": 18,
+              "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+              "cost": 85,
+              "shipping": 5,
+              "one_time_x9": 149
+            },
+            {
+              "excel_row": 20,
+              "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+              "cost": 90,
+              "shipping": 5,
+              "one_time_x9": 159
+            },
+            {
+              "excel_row": 22,
+              "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+              "cost": 95,
+              "shipping": 5,
+              "one_time_x9": 169
+            },
+            {
+              "excel_row": 24,
+              "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+              "cost": 100,
+              "shipping": 5,
+              "one_time_x9": 179
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+          "required_actions": [
+            "CREATE_GEN_CP",
+            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+            "SET_PRICE_FROM_LOCKED_X9",
+            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-glycine-starting-low",
+          "display_label": "Starting / Low (5+10) \u00b7 Glycine",
+          "gen_productId": null,
+          "gen_cp_name": "Starting / Low (5+10) \u00b7 Glycine",
+          "price": "119\u2013139",
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 13,
+              "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            },
+            {
+              "excel_row": 15,
+              "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+              "cost": 75,
+              "shipping": 5,
+              "one_time_x9": 139
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+          "required_actions": [
+            "CREATE_GEN_CP",
+            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+            "SET_PRICE_FROM_LOCKED_X9",
+            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-glycine-mid",
+          "display_label": "Mid (15+20) \u00b7 Glycine",
+          "gen_productId": null,
+          "gen_cp_name": "Mid (15+20) \u00b7 Glycine",
+          "price": "149\u2013159",
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 17,
+              "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+              "cost": 85,
+              "shipping": 5,
+              "one_time_x9": 149
+            },
+            {
+              "excel_row": 19,
+              "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+              "cost": 90,
+              "shipping": 5,
+              "one_time_x9": 159
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+          "required_actions": [
+            "CREATE_GEN_CP",
+            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+            "SET_PRICE_FROM_LOCKED_X9",
+            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-glycine-high",
+          "display_label": "High (25+30) \u00b7 Glycine",
+          "gen_productId": null,
+          "gen_cp_name": "High (25+30) \u00b7 Glycine",
+          "price": "169\u2013179",
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 21,
+              "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+              "cost": 95,
+              "shipping": 5,
+              "one_time_x9": 169
+            },
+            {
+              "excel_row": 23,
+              "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+              "cost": 100,
+              "shipping": 5,
+              "one_time_x9": 179
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+          "required_actions": [
+            "CREATE_GEN_CP",
+            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+            "SET_PRICE_FROM_LOCKED_X9",
+            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-glycine-any-dose",
+          "display_label": "Any Dose (5\u201330) \u00b7 Glycine",
+          "gen_productId": null,
+          "gen_cp_name": "Any Dose (5\u201330) \u00b7 Glycine",
+          "price": "119\u2013179",
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 13,
+              "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            },
+            {
+              "excel_row": 15,
+              "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+              "cost": 75,
+              "shipping": 5,
+              "one_time_x9": 139
+            },
+            {
+              "excel_row": 17,
+              "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+              "cost": 85,
+              "shipping": 5,
+              "one_time_x9": 149
+            },
+            {
+              "excel_row": 19,
+              "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+              "cost": 90,
+              "shipping": 5,
+              "one_time_x9": 159
+            },
+            {
+              "excel_row": 21,
+              "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+              "cost": 95,
+              "shipping": 5,
+              "one_time_x9": 169
+            },
+            {
+              "excel_row": 23,
+              "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+              "cost": 100,
+              "shipping": 5,
+              "one_time_x9": 179
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+          "required_actions": [
+            "CREATE_GEN_CP",
+            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+            "SET_PRICE_FROM_LOCKED_X9",
+            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-nasal-r85",
+          "display_label": "Nasal Spray \u00b7 NAD+ 200mg/ml \u00b7 15ml",
+          "gen_productId": null,
+          "gen_cp_name": "Nasal Spray \u00b7 NAD+ 200mg/ml \u00b7 15ml",
+          "price": 109,
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 85,
+              "exact": "NAD+ 200mg/ml",
+              "form": "Nasal Spray",
+              "package": "15ml",
+              "pharmacy": "St Luke",
+              "cost": 45,
+              "shipping": 30,
+              "one_time_x9": 109
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": "PRICE-CONFLICT-RESOLUTION: GEN_CP_SPLIT \u2014 CREATE new nasal CP for r85 @ $109; do not share price with r84.",
+          "required_actions": [
+            "CREATE_GEN_CP_NAD_NASAL_200MG_ML",
+            "SET_PRICE_109",
+            "MANUAL_PAIR_R85"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "B_GEN_CP_SPLIT_REQUIRED",
+            "role": "CREATE_FOR_R85",
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Estradiol",
+          "website_variant": "estradiol-patch-r26",
+          "display_label": "Estradiol transdermal",
+          "gen_productId": null,
+          "gen_cp_name": "Estradiol transdermal",
+          "price": 119,
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 26,
+              "exact": "ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count",
+              "cost": 50,
+              "shipping": 30,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Valiant",
+          "reason": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r26 @ $119.",
+          "required_actions": [
+            "CREATE_GEN_CP_ESTRADIOL_PATCH",
+            "DO_NOT_REUSE_VAGINAL_CP",
+            "SET_LOCKED_PRICE",
+            "MANUAL_PAIR_SELECTED_ROW"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "B_GEN_CP_SPLIT_REQUIRED",
+            "do_not_reuse": "o7dNtf9QsnEqPCrLr2tR",
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Estradiol",
+          "website_variant": "estradiol-patch-r27",
+          "display_label": "Estradiol transdermal",
+          "gen_productId": null,
+          "gen_cp_name": "Estradiol transdermal",
+          "price": 129,
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 27,
+              "exact": "ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count",
+              "cost": 55,
+              "shipping": 30,
+              "one_time_x9": 129
+            }
+          ],
+          "pharmacy": "Valiant",
+          "reason": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r27 @ $129.",
+          "required_actions": [
+            "CREATE_GEN_CP_ESTRADIOL_PATCH",
+            "DO_NOT_REUSE_VAGINAL_CP",
+            "SET_LOCKED_PRICE",
+            "MANUAL_PAIR_SELECTED_ROW"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "B_GEN_CP_SPLIT_REQUIRED",
+            "do_not_reuse": "o7dNtf9QsnEqPCrLr2tR",
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Estradiol",
+          "website_variant": "estradiol-patch-r28",
+          "display_label": "Estradiol transdermal",
+          "gen_productId": null,
+          "gen_cp_name": "Estradiol transdermal",
+          "price": 139,
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 28,
+              "exact": "ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count",
+              "cost": 60,
+              "shipping": 30,
+              "one_time_x9": 139
+            }
+          ],
+          "pharmacy": "Valiant",
+          "reason": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r28 @ $139.",
+          "required_actions": [
+            "CREATE_GEN_CP_ESTRADIOL_PATCH",
+            "DO_NOT_REUSE_VAGINAL_CP",
+            "SET_LOCKED_PRICE",
+            "MANUAL_PAIR_SELECTED_ROW"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "B_GEN_CP_SPLIT_REQUIRED",
+            "do_not_reuse": "o7dNtf9QsnEqPCrLr2tR",
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Estradiol",
+          "website_variant": "estradiol-patch-r29",
+          "display_label": "Estradiol transdermal",
+          "gen_productId": null,
+          "gen_cp_name": "Estradiol transdermal",
+          "price": 149,
+          "status": "GEN_PRODUCT_CREATE_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 29,
+              "exact": "ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count",
+              "cost": 70,
+              "shipping": 30,
+              "one_time_x9": 149
+            }
+          ],
+          "pharmacy": "Valiant",
+          "reason": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r29 @ $149.",
+          "required_actions": [
+            "CREATE_GEN_CP_ESTRADIOL_PATCH",
+            "DO_NOT_REUSE_VAGINAL_CP",
+            "SET_LOCKED_PRICE",
+            "MANUAL_PAIR_SELECTED_ROW"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "B_GEN_CP_SPLIT_REQUIRED",
+            "do_not_reuse": "o7dNtf9QsnEqPCrLr2tR",
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        }
+      ]
+    },
+    "B_GEN_CP_REPAIR": {
+      "count": 22,
+      "items": [
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-b12-starting-low",
+          "display_label": "Starting / Low \u00b7 Vitamin B12",
+          "gen_productId": "SkqQHmsc0WdsbK9vmV1y",
+          "gen_cp_name": "Semaglutide Injection \u2014 Starting / Low (B12)",
+          "price": "89\u201399",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 3,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 5,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-b12-high",
+          "display_label": "High \u00b7 Vitamin B12",
+          "gen_productId": "34I2X8MpVZf3AQTff3bo",
+          "gen_cp_name": "Semaglutide Injection \u2014 High (B12)",
+          "price": "109\u2013119",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 9,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 11,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-b12-any-dose",
+          "display_label": "Any Dose \u00b7 Vitamin B12",
+          "gen_productId": "MkDIUw0NcJB7YL2pNzYW",
+          "gen_cp_name": "Semaglutide Injection \u2014 Any Dose (B12)",
+          "price": "89\u2013119",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 3,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 5,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            },
+            {
+              "excel_row": 7,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 9,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 11,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "REPAIR_FORMULARY_PAIRINGS_DIRX_HUB_ONLY",
+            "REMOVE_NON_SELECTED_PHARMACY_ATTACHMENTS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY",
+            "VERIFY_EXACT_STRENGTH_MED_IDS"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-glycine-starting-low",
+          "display_label": "Starting / Low \u00b7 Glycine",
+          "gen_productId": "tk2GW39OGr7JX4MCCoJP",
+          "gen_cp_name": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+          "price": "89\u201399",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 2,
+              "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 4,
+              "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-glycine-mid",
+          "display_label": "Mid \u00b7 Glycine",
+          "gen_productId": "CjqOUbPuGPZzxephqRou",
+          "gen_cp_name": "Semaglutide Injection \u2014 Mid (Glycine)",
+          "price": 109,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 6,
+              "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-glycine-high",
+          "display_label": "High \u00b7 Glycine",
+          "gen_productId": "sssEk3FDY4LFbQYGQsLx",
+          "gen_cp_name": "Semaglutide Injection \u2014 High (Glycine)",
+          "price": "109\u2013119",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 8,
+              "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 10,
+              "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-glycine-any-dose",
+          "display_label": "Any Dose \u00b7 Glycine",
+          "gen_productId": "wQK2JsFnh7oFBf3Lag4n",
+          "gen_cp_name": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+          "price": "89\u2013119",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 2,
+              "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 4,
+              "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            },
+            {
+              "excel_row": 6,
+              "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 8,
+              "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 10,
+              "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-membership",
+          "display_label": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE Membership",
+          "gen_productId": "5F8jESeVeXcpkLU5rrdK",
+          "gen_cp_name": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "price": 149,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": null,
+          "pharmacy": "Dirx-Hub",
+          "reason": "Owner membership price locked $149.",
+          "required_actions": [
+            "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
+            "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
+            "VERIFY_PRICE_149"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-membership",
+          "display_label": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE Membership",
+          "gen_productId": "E3MXZeeR01QROCuTLRLE",
+          "gen_cp_name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "price": 275,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": null,
+          "pharmacy": "Dirx-Hub",
+          "reason": null,
+          "required_actions": [
+            "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
+            "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
+            "WEBSITE_REPRICE_249_TO_275_AT_CUTOVER"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-nasal-r84",
+          "display_label": "Nasal Spray \u00b7 NAD+ 50mg/ml \u00b7 15ml",
+          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
+          "gen_cp_name": "NAD + Nasal Spray",
+          "price": 79,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 84,
+              "exact": "NAD+ 50mg/ml",
+              "form": "Nasal Spray",
+              "package": "15ml",
+              "pharmacy": "St Luke",
+              "cost": 30,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": "PRICE-CONFLICT-RESOLUTION: GEN_CP_SPLIT \u2014 reuse existing nasal CP for r84 @ $79; pair St Luke r84.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_79",
+            "MANUAL_PAIR_R84",
+            "NEVER_CROSS_PAIR_INJECTION"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "B_GEN_CP_SPLIT_REQUIRED",
+            "role": "REUSE_FOR_R84",
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Wolverine / BPC-TB",
+          "website_variant": "wolverine-capsule",
+          "display_label": "Capsules",
+          "gen_productId": "omhh3NabouO8AsNR5tkD",
+          "gen_cp_name": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 104,
+              "exact": "BPC-157/TB500 capsules 500MCG/500MCG",
+              "cost": 3.2,
+              "shipping": 25,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 + pair r104.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_R104"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Wolverine / BPC-TB",
+          "website_variant": "wolverine-injection",
+          "display_label": "Injection",
+          "gen_productId": "iJtyig611AZEDBGdvRd9",
+          "gen_cp_name": "BPC-157/TB500",
+          "price": 159,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 103,
+              "exact": "BPC-157/TB500 3mg/3mg/mL",
+              "cost": 77,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 169\u2192159 supported by r103.",
+          "required_actions": [
+            "VERIFY_PAIRING_IS_EXACT_R103_NOT_GHK_OR_KPV_BLEND",
+            "ALIGN_GEN_PRICE",
+            "OPTIONAL_RENAME_DISPLAY_TO_WOLVERINE"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 159,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Minoxidil",
+          "website_variant": "minoxidil-fin-minox-0.1-5",
+          "display_label": "Finasteride/Minoxidil 0.1%/5%",
+          "gen_productId": "BboYS4a2Uj7APetrFo6W",
+          "gen_cp_name": "Finasteride/Minoxidil 0.1%/5%",
+          "price": 79,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 129,
+              "exact": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+              "cost": 30,
+              "shipping": 30,
+              "one_time_x9": 79,
+              "pharmacy": "Vios"
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219279 + pair Vios r129. Dual Combo CP OK. Not GHK-Cu/Minoxidil.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_79",
+            "MANUAL_PAIR_VIOS_R129",
+            "DO_NOT_USE_GHK_CU_MINOXIDIL_CP"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 79,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-ir-r41",
+          "display_label": "Progesterone IR",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_cp_name": "Progesterone IR",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 41,
+              "exact": "PROGESTERONE 100MG CAPSULE 100mg",
+              "cost": 0.75,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_EXACT_SELECTED_ROWS"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-ir-r42",
+          "display_label": "Progesterone IR",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_cp_name": "Progesterone IR",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 42,
+              "exact": "PROGESTERONE 200MG CAPSULE 200mg",
+              "cost": 0.75,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_EXACT_SELECTED_ROWS"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-ir-r43",
+          "display_label": "Progesterone IR",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_cp_name": "Progesterone IR",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 43,
+              "exact": "PROGESTERONE 50MG CAPSULE 50mg",
+              "cost": 0.75,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_EXACT_SELECTED_ROWS"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-ir-r44",
+          "display_label": "Progesterone IR",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_cp_name": "Progesterone IR",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 44,
+              "exact": "PROGESTERONE IR 100 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_EXACT_SELECTED_ROWS"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-ir-r45",
+          "display_label": "Progesterone IR",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_cp_name": "Progesterone IR",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 45,
+              "exact": "PROGESTERONE IR 150 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_EXACT_SELECTED_ROWS"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-ir-r46",
+          "display_label": "Progesterone IR",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_cp_name": "Progesterone IR",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 46,
+              "exact": "PROGESTERONE IR 200 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_EXACT_SELECTED_ROWS"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-ir-r47",
+          "display_label": "Progesterone IR",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_cp_name": "Progesterone IR",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 47,
+              "exact": "PROGESTERONE IR (DYE-FREE)(LACTOSE-FREE) (M NEW) 200MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_EXACT_SELECTED_ROWS"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-ir-r48",
+          "display_label": "Progesterone IR",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_cp_name": "Progesterone IR",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 48,
+              "exact": "PROGESTERONE IR 300 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_EXACT_SELECTED_ROWS"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-ir-r49",
+          "display_label": "Progesterone IR",
+          "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+          "gen_cp_name": "Progesterone IR",
+          "price": 29,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 49,
+              "exact": "PROGESTERONE IR 400 MG",
+              "cost": 0.85,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
+          "required_actions": [
+            "REPAIR_PRICE_TO_29",
+            "MANUAL_PAIR_EXACT_SELECTED_ROWS"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": {
+            "classification": "A_SIMPLE_PRICE_REPAIR",
+            "locked_price": 29,
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        }
+      ]
+    },
+    "C_FORMULARY_PAIRING": {
+      "count": 1,
+      "items": [
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-b12-mid",
+          "display_label": "Mid \u00b7 Vitamin B12",
+          "gen_productId": "BLf8inX395YNc7WPCD4O",
+          "gen_cp_name": "Semaglutide Injection \u2014 Mid (B12)",
+          "price": 109,
+          "status": "GEN_PAIRING_REQUIRED",
+          "exact_formulary": [
+            {
+              "excel_row": 7,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+            "VERIFY_PRICE_VS_LOCKED_X9"
+          ],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "price_conflict_resolution": null
+        }
+      ]
+    },
+    "D_NO_GEN_ACTION_NEEDED": {
+      "count": 0,
+      "items": []
+    },
+    "E_FORMULARY_SOURCING_PENDING": {
+      "count": 14,
+      "items": [
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-inj-5ml-500",
+          "display_label": "Injection \u00b7 5 mL / 500 mg",
+          "gen_productId": "SHJpGAACUFEeMONdpEbn",
+          "gen_cp_name": "NAD+ (Injectable)",
+          "price": 199,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": null,
+          "pharmacy": null,
+          "reason": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal).",
+          "required_actions": [
+            "SOURCE_EXACT_100MG_ML_INJECTABLE_FORMULARY",
+            "DO_NOT_SUBSTITUTE_200_FOR_100",
+            "KEEP_ONE_NAD_WEBSITE_PRODUCT"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-inj-10ml-1000",
+          "display_label": "Injection \u00b7 10 mL / 1000 mg",
+          "gen_productId": "SHJpGAACUFEeMONdpEbn",
+          "gen_cp_name": "NAD+ (Injectable)",
+          "price": 229,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": null,
+          "pharmacy": null,
+          "reason": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal).",
+          "required_actions": [
+            "SOURCE_EXACT_100MG_ML_INJECTABLE_FORMULARY",
+            "DO_NOT_SUBSTITUTE_200_FOR_100",
+            "KEEP_ONE_NAD_WEBSITE_PRODUCT"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tretinoin",
+          "website_variant": "tretinoin-0.025%",
+          "display_label": "Tretinoin 0.025%",
+          "gen_productId": null,
+          "gen_cp_name": "Tretinoin 0.025%",
+          "price": 79,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package.",
+          "required_actions": [
+            "SOURCE_PLAIN_TRETINOIN_EXACT_WEBSITE_STRENGTH",
+            "DO_NOT_SILENT_SUBSTITUTE_0_15_OR_COMBO"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tretinoin",
+          "website_variant": "tretinoin-0.05%",
+          "display_label": "Tretinoin 0.05%",
+          "gen_productId": null,
+          "gen_cp_name": "Tretinoin 0.05%",
+          "price": 89,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package.",
+          "required_actions": [
+            "SOURCE_PLAIN_TRETINOIN_EXACT_WEBSITE_STRENGTH",
+            "DO_NOT_SILENT_SUBSTITUTE_0_15_OR_COMBO"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tretinoin",
+          "website_variant": "tretinoin-0.1%",
+          "display_label": "Tretinoin 0.1%",
+          "gen_productId": null,
+          "gen_cp_name": "Tretinoin 0.1%",
+          "price": 109,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package.",
+          "required_actions": [
+            "SOURCE_PLAIN_TRETINOIN_EXACT_WEBSITE_STRENGTH",
+            "DO_NOT_SILENT_SUBSTITUTE_0_15_OR_COMBO"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Fat Burner",
+          "website_variant": "fat-burner-current",
+          "display_label": "AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
+          "gen_productId": "7Kix55LA15U0lNvY9QXI",
+          "gen_cp_name": "AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
+          "price": 259,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase.",
+          "required_actions": [
+            "REQUEST_FROM_PHARMACY",
+            "KEEP_CURRENT_LIVE_PROTECTED",
+            "NO_NEAR_MATCH"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Testosterone",
+          "website_variant": "testosterone-current",
+          "display_label": "Testosterone-only cream 5 mg/g",
+          "gen_productId": "Gn4XaP00anr4q9oheSTe",
+          "gen_cp_name": "Testosterone-only cream 5 mg/g",
+          "price": 79,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase.",
+          "required_actions": [
+            "REQUEST_FROM_PHARMACY",
+            "KEEP_CURRENT_LIVE_PROTECTED",
+            "NO_NEAR_MATCH"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Selank",
+          "website_variant": "selank-current",
+          "display_label": "Selank injectable",
+          "gen_productId": "Ukctbyh5Yrek3SnGSYA3",
+          "gen_cp_name": "Selank injectable",
+          "price": 129,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase.",
+          "required_actions": [
+            "REQUEST_FROM_PHARMACY",
+            "KEEP_CURRENT_LIVE_PROTECTED",
+            "NO_NEAR_MATCH"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Semax",
+          "website_variant": "semax-current",
+          "display_label": "Semax injectable",
+          "gen_productId": "YTHcdrlRICMpt56hdxeJ",
+          "gen_cp_name": "Semax injectable",
+          "price": 129,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase.",
+          "required_actions": [
+            "REQUEST_FROM_PHARMACY",
+            "KEEP_CURRENT_LIVE_PROTECTED",
+            "NO_NEAR_MATCH"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Selank + Semax Blend",
+          "website_variant": "selank-semax-blend-current",
+          "display_label": "Combined Selank+Semax nasal",
+          "gen_productId": "LWkYtwm66dIeLuDSvSfi",
+          "gen_cp_name": "Combined Selank+Semax nasal",
+          "price": 169,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase.",
+          "required_actions": [
+            "REQUEST_FROM_PHARMACY",
+            "KEEP_CURRENT_LIVE_PROTECTED",
+            "NO_NEAR_MATCH"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tesamorelin",
+          "website_variant": "tesamorelin-current",
+          "display_label": "Plain Tesamorelin",
+          "gen_productId": "2cYxVfvwpWyyrANZx06G",
+          "gen_cp_name": "Plain Tesamorelin",
+          "price": 149,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase.",
+          "required_actions": [
+            "REQUEST_FROM_PHARMACY",
+            "KEEP_CURRENT_LIVE_PROTECTED",
+            "NO_NEAR_MATCH"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Lash / Brow Growth Serum",
+          "website_variant": "lash-brow-current",
+          "display_label": "Bimatoprost 0.03%",
+          "gen_productId": null,
+          "gen_cp_name": "Bimatoprost 0.03%",
+          "price": 89,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase.",
+          "required_actions": [
+            "REQUEST_FROM_PHARMACY",
+            "KEEP_CURRENT_LIVE_PROTECTED",
+            "NO_NEAR_MATCH"
+          ],
+          "launch_state": "CURRENT_LIVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Oxytocin",
+          "website_variant": "oxytocin-pending",
+          "display_label": "oxytocin-pending",
+          "gen_productId": null,
+          "gen_cp_name": "oxytocin-pending",
+          "price": null,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "FUTURE_HIDDEN_PENDING",
+          "required_actions": [
+            "SOURCE_SELECTED_FORMULARY"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Sexual Wellness Compound",
+          "website_variant": "sexual-wellness-compound-pending",
+          "display_label": "sexual-wellness-compound-pending",
+          "gen_productId": null,
+          "gen_cp_name": "sexual-wellness-compound-pending",
+          "price": null,
+          "status": "FORMULARY_PENDING",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "FUTURE_HIDDEN_PENDING",
+          "required_actions": [
+            "SOURCE_SELECTED_FORMULARY"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        }
+      ]
+    },
+    "F_FUTURE_HIDDEN": {
+      "count": 53,
+      "items": [
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-current-b6",
+          "display_label": "Semaglutide + B6 (legacy until cutover)",
+          "gen_productId": null,
+          "gen_cp_name": "Semaglutide + B6 (legacy until cutover)",
+          "price": null,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": null,
+          "pharmacy": null,
+          "reason": "OWNER LOCKED A \u2014 Remove legacy B6 at website cutover. Cutover architecture = B12 + Glycine only. Do not restore B6. No GEN create/repair for B6.",
+          "required_actions": [
+            "REMOVE_AT_WEBSITE_CUTOVER",
+            "DO_NOT_REINTRODUCE_B6",
+            "NO_GEN_ACTION_FOR_B6"
+          ],
+          "launch_state": "CURRENT_LIVE_UNTIL_CUTOVER_THEN_REMOVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-b12-3month",
+          "display_label": "3-Month \u00b7 Vitamin B12",
+          "gen_productId": "sN2ggSXRJINjElMYTQjf",
+          "gen_cp_name": "Semaglutide Injection \u2014 3-Month (B12)",
+          "price": 359,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 3,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 5,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            },
+            {
+              "excel_row": 7,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 9,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 11,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": null,
+          "required_actions": [
+            "REPAIR_PAIRING_WHEN_LAUNCHING",
+            "VERIFY_3MONTH_PRICE_FORMULA"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-current-b6",
+          "display_label": "Tirzepatide + B6 (legacy until cutover)",
+          "gen_productId": null,
+          "gen_cp_name": "Tirzepatide + B6 (legacy until cutover)",
+          "price": null,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": null,
+          "pharmacy": null,
+          "reason": "OWNER LOCKED A \u2014 Remove legacy B6 at website cutover. Cutover architecture = B12 + Glycine only. Do not restore B6. No GEN create/repair for B6.",
+          "required_actions": [
+            "REMOVE_AT_WEBSITE_CUTOVER",
+            "DO_NOT_REINTRODUCE_B6",
+            "NO_GEN_ACTION_FOR_B6"
+          ],
+          "launch_state": "CURRENT_LIVE_UNTIL_CUTOVER_THEN_REMOVE",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-inj-selected-r83",
+          "display_label": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 OWNER REJECTED (keep 100mg/mL)",
+          "gen_productId": "SHJpGAACUFEeMONdpEbn",
+          "gen_cp_name": "NAD+ (Injectable)",
+          "price": 139,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 83,
+              "exact": "NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml",
+              "strength": "200mg/ml",
+              "form": "Injection Solution",
+              "package": "5ml vial (1000mg)",
+              "pharmacy": "St Luke",
+              "cost": 64,
+              "shipping": 30,
+              "one_time_x9": 139
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": "OWNER LOCKED B \u2014 Do NOT substitute 200mg/mL for website 100mg/mL. r83 excluded from website Injection selectors. Keep on file only; not an active route.",
+          "required_actions": [
+            "DO_NOT_USE_AS_WEBSITE_INJECTION",
+            "DO_NOT_SUBSTITUTE_200_FOR_100",
+            "EXCLUDED_BY_OWNER_DECISION_3B"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-nasal-r81",
+          "display_label": "NAD+ 50mg/ml",
+          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
+          "gen_cp_name": "NAD+ 50mg/ml",
+          "price": 79,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 81,
+              "exact": "NAD+ 50mg/ml",
+              "cost": 30,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": "OWNER LOCKED A \u2014 Exclude r81. Use verified r84 for 50mg/mL nasal. Duplicate/mislabeled.",
+          "required_actions": [
+            "EXCLUDE_FROM_WEBSITE_SELECTORS",
+            "USE_R84_INSTEAD",
+            "DO_NOT_USE_AS_INJECTION"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-nasal-r82",
+          "display_label": "NAD+ 200mg/ml",
+          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
+          "gen_cp_name": "NAD+ 200mg/ml",
+          "price": 109,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 82,
+              "exact": "NAD+ 200mg/ml",
+              "cost": 45,
+              "shipping": 30,
+              "one_time_x9": 109
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": "OWNER LOCKED A \u2014 Exclude r82. Use verified r85 for 200mg/mL nasal. Duplicate/mislabeled.",
+          "required_actions": [
+            "EXCLUDE_FROM_WEBSITE_SELECTORS",
+            "USE_R85_INSTEAD",
+            "DO_NOT_USE_AS_INJECTION"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Minoxidil",
+          "website_variant": "minoxidil-solution",
+          "display_label": "Minoxidil 2% solution",
+          "gen_productId": "489YrehNXRlL77fYPkOn",
+          "gen_cp_name": "Minoxidil 2% solution",
+          "price": 29,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 128,
+              "exact": "MINOXIDIL 2%",
+              "cost": 1.28,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "Future variant under Minoxidil family or separate if clinically distinct \u2014 kept FUTURE_HIDDEN.",
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Minoxidil",
+          "website_variant": "minoxidil-cream",
+          "display_label": "Minoxidil cream 7\u201315%",
+          "gen_productId": "489YrehNXRlL77fYPkOn",
+          "gen_cp_name": "Minoxidil cream 7\u201315%",
+          "price": 89,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 131,
+              "exact": "MINOXIDIL 10%",
+              "cost": 32,
+              "shipping": 30,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 132,
+              "exact": "MINOXIDIL 15%",
+              "cost": 32,
+              "shipping": 30,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 133,
+              "exact": "MINOXIDIL 7%",
+              "cost": 32,
+              "shipping": 30,
+              "one_time_x9": 89
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "Future variant under Minoxidil family or separate if clinically distinct \u2014 kept FUTURE_HIDDEN.",
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Minoxidil",
+          "website_variant": "fin-minox-tret",
+          "display_label": "Finasteride/Minoxidil/Tretinoin topical",
+          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
+          "gen_cp_name": "Finasteride/Minoxidil/Tretinoin topical",
+          "price": 89,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 134,
+              "exact": "FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.25/5/0.01 %",
+              "cost": 35,
+              "shipping": 30,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 135,
+              "exact": "FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.25/5/0.03 %",
+              "cost": 35,
+              "shipping": 30,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 136,
+              "exact": "FINASTERIDE/MINOXIDIL/TRETINOIN (PER ML) 0.5/5/0.01 %",
+              "cost": 35,
+              "shipping": 30,
+              "one_time_x9": 89
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "Future variant under Minoxidil family or separate if clinically distinct \u2014 kept FUTURE_HIDDEN.",
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Estradiol",
+          "website_variant": "estradiol-tablet-r37",
+          "display_label": "ESTRADIOL 0.5MG TABLET 0.5MG",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_cp_name": "ESTRADIOL 0.5MG TABLET 0.5MG",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 37,
+              "exact": "ESTRADIOL 0.5MG TABLET 0.5MG",
+              "cost": 0.48,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Estradiol",
+          "website_variant": "estradiol-tablet-r38",
+          "display_label": "ESTRADIOL 1 MG TABLET 1 MG",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_cp_name": "ESTRADIOL 1 MG TABLET 1 MG",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 38,
+              "exact": "ESTRADIOL 1 MG TABLET 1 MG",
+              "cost": 0.48,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Estradiol",
+          "website_variant": "estradiol-tablet-r39",
+          "display_label": "ESTRADIOL 2 MG TABLET 2 MG",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_cp_name": "ESTRADIOL 2 MG TABLET 2 MG",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 39,
+              "exact": "ESTRADIOL 2 MG TABLET 2 MG",
+              "cost": 0.48,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Estradiol",
+          "website_variant": "estradiol-injection-r40",
+          "display_label": "ESTRADIOL CYPIONATE (MCT OIL) 10 MG/ML",
+          "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+          "gen_cp_name": "ESTRADIOL CYPIONATE (MCT OIL) 10 MG/ML",
+          "price": 89,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 40,
+              "exact": "ESTRADIOL CYPIONATE (MCT OIL) 10 MG/ML",
+              "cost": 32,
+              "shipping": 30,
+              "one_time_x9": 89
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-sr-r50",
+          "display_label": "Progesterone SR",
+          "gen_productId": null,
+          "gen_cp_name": "Progesterone SR",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 50,
+              "exact": "PROGESTERONE SR 100 MG",
+              "cost": 0.54,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-sr-r51",
+          "display_label": "Progesterone SR",
+          "gen_productId": null,
+          "gen_cp_name": "Progesterone SR",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 51,
+              "exact": "PROGESTERONE SR 125 MG",
+              "cost": 0.54,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Progesterone",
+          "website_variant": "prog-sr-r52",
+          "display_label": "Progesterone SR",
+          "gen_productId": null,
+          "gen_cp_name": "Progesterone SR",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 52,
+              "exact": "PROGESTERONE SR 150 MG",
+              "cost": 0.54,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tretinoin",
+          "website_variant": "tretinoin-selected-r126",
+          "display_label": "TRETINOIN 0.15%",
+          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
+          "gen_cp_name": "TRETINOIN 0.15%",
+          "price": 79,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 126,
+              "exact": "TRETINOIN 0.15%",
+              "cost": 25.5,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "OWNER LOCKED B \u2014 Do NOT substitute 0.15% for website 0.025/0.05/0.1%. r126 not mapped to plain Tretinoin website product. May remain future separate strength only if later owner-launched explicitly.",
+          "required_actions": [
+            "DO_NOT_MAP_TO_WEBSITE_PLAIN_TRETINOIN",
+            "EXCLUDED_BY_OWNER_DECISION_6B"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Tretinoin",
+          "website_variant": "tretinoin-selected-r127",
+          "display_label": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
+          "gen_cp_name": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+          "price": 129,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 127,
+              "exact": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+              "cost": 54,
+              "shipping": 30,
+              "one_time_x9": 129
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "OWNER LOCKED A \u2014 Do NOT map combo HA/Niacinamide/Tretinoin to plain Tretinoin. Separate formulation/product. Remain FUTURE_HIDDEN until explicit separate launch.",
+          "required_actions": [
+            "DO_NOT_MAP_TO_PLAIN_TRETINOIN",
+            "SEPARATE_FORMULATION",
+            "EXCLUDED_BY_OWNER_DECISION_7A"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Testosterone",
+          "website_variant": "testosterone-inj-r76",
+          "display_label": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML)",
+          "gen_productId": "Cm94vp3KgPz0yhqy01gX",
+          "gen_cp_name": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML)",
+          "price": 59,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 76,
+              "exact": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML)",
+              "cost": 23.75,
+              "shipping": 20,
+              "one_time_x9": 59
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": "Do not mix cream pending with injection as same clinical SKU without owner approval \u2014 shown as family delivery option when launched.",
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Testosterone",
+          "website_variant": "testosterone-inj-r77",
+          "display_label": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML)",
+          "gen_productId": "Cm94vp3KgPz0yhqy01gX",
+          "gen_cp_name": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML)",
+          "price": 59,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 77,
+              "exact": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML)",
+              "cost": 23.75,
+              "shipping": 20,
+              "one_time_x9": 59
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": "Do not mix cream pending with injection as same clinical SKU without owner approval \u2014 shown as family delivery option when launched.",
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Selank",
+          "website_variant": "selank-nasal-r119",
+          "display_label": "Selank 2.5mg/mL Nasal Spray",
+          "gen_productId": "Ukctbyh5Yrek3SnGSYA3",
+          "gen_cp_name": "Selank 2.5mg/mL Nasal Spray",
+          "price": 129,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 119,
+              "exact": "Selank 2.5mg/mL Nasal Spray",
+              "cost": 60,
+              "shipping": 25,
+              "one_time_x9": 129
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": "Expose nasal only when ready. Do not substitute for injection pending. | PRICE-CONFLICT-RESOLUTION: FUTURE_HIDDEN_NO_EXECUTION \u2014 removed from executable set.",
+          "required_actions": [
+            "NO_EXECUTION_THIS_PHASE",
+            "DO_NOT_ACTIVATE",
+            "DO_NOT_SUBSTITUTE_FOR_INJECTION_PENDING"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": {
+            "classification": "E_FUTURE_HIDDEN_NO_EXECUTION",
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "Semax",
+          "website_variant": "semax-nasal-r118",
+          "display_label": "Semax 2.5mg/mL Nasal Spray",
+          "gen_productId": "YTHcdrlRICMpt56hdxeJ",
+          "gen_cp_name": "Semax 2.5mg/mL Nasal Spray",
+          "price": 129,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 118,
+              "exact": "Semax 2.5mg/mL Nasal Spray",
+              "cost": 60,
+              "shipping": 25,
+              "one_time_x9": 129
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": " | PRICE-CONFLICT-RESOLUTION: FUTURE_HIDDEN_NO_EXECUTION \u2014 removed from executable set.",
+          "required_actions": [
+            "NO_EXECUTION_THIS_PHASE",
+            "DO_NOT_ACTIVATE",
+            "DO_NOT_SUBSTITUTE_FOR_INJECTION_PENDING"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": {
+            "classification": "E_FUTURE_HIDDEN_NO_EXECUTION",
+            "resolved_at": "2026-08-25T00:48:39Z"
+          }
+        },
+        {
+          "website_family": "PT-141",
+          "website_variant": "pt141-inj-r115",
+          "display_label": "PT-141 2mg/mL",
+          "gen_productId": "7a11W067k20AKLSsL2xM",
+          "gen_cp_name": "PT-141 2mg/mL",
+          "price": 129,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 115,
+              "exact": "PT-141 2mg/mL",
+              "cost": 62,
+              "shipping": 25,
+              "one_time_x9": 129
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "WHEN_LAUNCHING_ATTACH_EXACT_FORMULARY"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "PT-141",
+          "website_variant": "pt141-nasal-r116",
+          "display_label": "BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML",
+          "gen_productId": "mSehcuPAbjD70fTWdckF",
+          "gen_cp_name": "BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML",
+          "price": 139,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 116,
+              "exact": "BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML",
+              "cost": 62,
+              "shipping": 30,
+              "one_time_x9": 139
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "Owner: do not activate nasal without explicit approval",
+          "required_actions": [
+            "WHEN_LAUNCHING_ATTACH_EXACT_FORMULARY",
+            "PT141_NASAL_REQUIRES_EXPLICIT_OWNER_ACTIVATION"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "PT-141",
+          "website_variant": "pt141-nasal-r117",
+          "display_label": "BREMELANOTIDE (PT-141) (PER ML) 5MG/ML",
+          "gen_productId": "mSehcuPAbjD70fTWdckF",
+          "gen_cp_name": "BREMELANOTIDE (PT-141) (PER ML) 5MG/ML",
+          "price": 139,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 117,
+              "exact": "BREMELANOTIDE (PT-141) (PER ML) 5MG/ML",
+              "cost": 62,
+              "shipping": 30,
+              "one_time_x9": 139
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "Owner: do not activate nasal without explicit approval",
+          "required_actions": [
+            "WHEN_LAUNCHING_ATTACH_EXACT_FORMULARY",
+            "PT141_NASAL_REQUIRES_EXPLICIT_OWNER_ACTIVATION"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Glutathione",
+          "website_variant": "glutathione-injection-r86",
+          "display_label": "Glutathione 200mg/ml",
+          "gen_productId": "17H4pVR8uYnwvcBIz8iY",
+          "gen_cp_name": "Glutathione 200mg/ml",
+          "price": 59,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 86,
+              "exact": "Glutathione 200mg/ml",
+              "cost": 15,
+              "shipping": 30,
+              "one_time_x9": 59
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Glutathione",
+          "website_variant": "glutathione-injection-r87",
+          "display_label": "Glutathione 200mg/ml",
+          "gen_productId": "17H4pVR8uYnwvcBIz8iY",
+          "gen_cp_name": "Glutathione 200mg/ml",
+          "price": 99,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 87,
+              "exact": "Glutathione 200mg/ml",
+              "cost": 40,
+              "shipping": 30,
+              "one_time_x9": 99
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "GHK-Cu",
+          "website_variant": "ghk-cream-r105",
+          "display_label": "GHK-Cu Cream 2mg/ml",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_cp_name": "GHK-Cu Cream 2mg/ml",
+          "price": 109,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 105,
+              "exact": "GHK-Cu Cream 2mg/ml",
+              "cost": 45,
+              "shipping": 30,
+              "one_time_x9": 109
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "GHK-Cu",
+          "website_variant": "ghk-cream-r106",
+          "display_label": "GHK-Cu Cream 5mg/ml",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_cp_name": "GHK-Cu Cream 5mg/ml",
+          "price": 129,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 106,
+              "exact": "GHK-Cu Cream 5mg/ml",
+              "cost": 57,
+              "shipping": 30,
+              "one_time_x9": 129
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "GHK-Cu",
+          "website_variant": "ghk-cream-r107",
+          "display_label": "GHK-Cu Cream 10mg/ml",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_cp_name": "GHK-Cu Cream 10mg/ml",
+          "price": 189,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 107,
+              "exact": "GHK-Cu Cream 10mg/ml",
+              "cost": 90,
+              "shipping": 30,
+              "one_time_x9": 189
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "GHK-Cu",
+          "website_variant": "ghk-cream-r108",
+          "display_label": "GHK-Cu Cream 2mg/ml",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_cp_name": "GHK-Cu Cream 2mg/ml",
+          "price": 109,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 108,
+              "exact": "GHK-Cu Cream 2mg/ml",
+              "cost": 45,
+              "shipping": 30,
+              "one_time_x9": 109
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "MOTS-c",
+          "website_variant": "mots-c-r112",
+          "display_label": "MOTS-C 2mg/mL",
+          "gen_productId": "7Kix55LA15U0lNvY9QXI",
+          "gen_cp_name": "MOTS-C 2mg/mL",
+          "price": 129,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 112,
+              "exact": "MOTS-C 2mg/mL",
+              "cost": 62,
+              "shipping": 25,
+              "one_time_x9": 129
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Thymosin Alpha-1",
+          "website_variant": "thymosin-a1-r114",
+          "display_label": "THYMOSIN ALPHA-1 3 MG/ML (5 ML)",
+          "gen_productId": "qgn9vCpD8bBN5pXNPKE5",
+          "gen_cp_name": "THYMOSIN ALPHA-1 3 MG/ML (5 ML)",
+          "price": 159,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 114,
+              "exact": "THYMOSIN ALPHA-1 3 MG/ML (5 ML)",
+              "cost": 82,
+              "shipping": 20,
+              "one_time_x9": 159
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Dihexa",
+          "website_variant": "dihexa-r124",
+          "display_label": "Dihexa capsules 5mg",
+          "gen_productId": "UIjUhnsOMiWRZFiKXFi7",
+          "gen_cp_name": "Dihexa capsules 5mg",
+          "price": 29,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 124,
+              "exact": "Dihexa capsules 5mg",
+              "cost": 2.6,
+              "shipping": 25,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Dihexa",
+          "website_variant": "dihexa-tes-r125",
+          "display_label": "Dihexa/Tesofensine capsules 5mg/500mcg",
+          "gen_productId": "UIjUhnsOMiWRZFiKXFi7",
+          "gen_cp_name": "Dihexa/Tesofensine capsules 5mg/500mcg",
+          "price": 29,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 125,
+              "exact": "Dihexa/Tesofensine capsules 5mg/500mcg",
+              "cost": 3.2,
+              "shipping": 25,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Methylene Blue",
+          "website_variant": "methylene-blue-r120",
+          "display_label": "METHYLENE BLUE 5 MG",
+          "gen_productId": null,
+          "gen_cp_name": "METHYLENE BLUE 5 MG",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 120,
+              "exact": "METHYLENE BLUE 5 MG",
+              "cost": 0.96,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Methylene Blue",
+          "website_variant": "methylene-blue-r121",
+          "display_label": "METHYLENE BLUE 10 MG",
+          "gen_productId": null,
+          "gen_cp_name": "METHYLENE BLUE 10 MG",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 121,
+              "exact": "METHYLENE BLUE 10 MG",
+              "cost": 1,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Methylene Blue",
+          "website_variant": "methylene-blue-r122",
+          "display_label": "METHYLENE BLUE 15 MG",
+          "gen_productId": null,
+          "gen_cp_name": "METHYLENE BLUE 15 MG",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 122,
+              "exact": "METHYLENE BLUE 15 MG",
+              "cost": 1.25,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Methylene Blue",
+          "website_variant": "methylene-blue-r123",
+          "display_label": "METHYLENE BLUE 25 MG",
+          "gen_productId": null,
+          "gen_cp_name": "METHYLENE BLUE 25 MG",
+          "price": 19,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 123,
+              "exact": "METHYLENE BLUE 25 MG",
+              "cost": 1.56,
+              "shipping": 20,
+              "one_time_x9": 19
+            }
+          ],
+          "pharmacy": "Optimal Balance Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Custom HRT Cream",
+          "website_variant": "hrt-custom-cream-r30",
+          "display_label": "HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "gen_productId": "RWtVLDbXlP7rsR31FXmH",
+          "gen_cp_name": "HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "price": 69,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 30,
+              "exact": "HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+              "cost": 25,
+              "shipping": 30,
+              "one_time_x9": 69
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Custom HRT Cream",
+          "website_variant": "hrt-custom-cream-r31",
+          "display_label": "HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "gen_productId": "RWtVLDbXlP7rsR31FXmH",
+          "gen_cp_name": "HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "price": 79,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 31,
+              "exact": "HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+              "cost": 28,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Custom HRT Cream",
+          "website_variant": "hrt-custom-cream-r32",
+          "display_label": "HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "gen_productId": "RWtVLDbXlP7rsR31FXmH",
+          "gen_cp_name": "HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "price": 89,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 32,
+              "exact": "HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+              "cost": 35,
+              "shipping": 30,
+              "one_time_x9": 89
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Custom HRT Cream",
+          "website_variant": "hrt-custom-cream-r33",
+          "display_label": "HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "gen_productId": "RWtVLDbXlP7rsR31FXmH",
+          "gen_cp_name": "HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+          "price": 99,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 33,
+              "exact": "HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)",
+              "cost": 40,
+              "shipping": 30,
+              "one_time_x9": 99
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Custom Hormone Troche",
+          "website_variant": "hrt-custom-troche-r34",
+          "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "gen_productId": "CO68GB2vs5lyfN6awklC",
+          "gen_cp_name": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "price": 29,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 34,
+              "exact": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+              "cost": 1,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Custom Hormone Troche",
+          "website_variant": "hrt-custom-troche-r35",
+          "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients",
+          "gen_productId": "CO68GB2vs5lyfN6awklC",
+          "gen_cp_name": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients",
+          "price": 29,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 35,
+              "exact": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients",
+              "cost": 1.5,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Custom Hormone Troche",
+          "website_variant": "hrt-custom-troche-r36",
+          "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients",
+          "gen_productId": "CO68GB2vs5lyfN6awklC",
+          "gen_cp_name": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients",
+          "price": 29,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 36,
+              "exact": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients",
+              "cost": 2,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Custom Hormone Troche",
+          "website_variant": "hrt-custom-troche-r65",
+          "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "gen_productId": "CO68GB2vs5lyfN6awklC",
+          "gen_cp_name": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+          "price": 29,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 65,
+              "exact": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient",
+              "cost": 1,
+              "shipping": 30,
+              "one_time_x9": 29
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Sildenafil / Testosterone Troche",
+          "website_variant": "sildenafil-testosterone-troche-r75",
+          "display_label": "Sildenafil/Testosterone 120mg/22mg",
+          "gen_productId": "w0Rf0DXmI8ukPgoMtH6g",
+          "gen_cp_name": "Sildenafil/Testosterone 120mg/22mg",
+          "price": 39,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 75,
+              "exact": "Sildenafil/Testosterone 120mg/22mg",
+              "cost": 2.75,
+              "shipping": 30,
+              "one_time_x9": 39
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "BPC Triple / Quad Blends",
+          "website_variant": "bpc-tb-ghk-r100",
+          "display_label": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML",
+          "gen_productId": "5iCQzEtTXw90ctEhIhkB",
+          "gen_cp_name": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML",
+          "price": 159,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 100,
+              "exact": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML",
+              "cost": 77,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "BPC Triple / Quad Blends",
+          "website_variant": "bpc-ghk-kpv-tb-r101",
+          "display_label": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_cp_name": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL",
+          "price": 159,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 101,
+              "exact": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL",
+              "cost": 77,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "BPC Triple / Quad Blends",
+          "website_variant": "bpc-kpv-tb-r102",
+          "display_label": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL",
+          "gen_productId": "MXsSZY2GpiCByJUQer1p",
+          "gen_cp_name": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL",
+          "price": 159,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 102,
+              "exact": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL",
+              "cost": 77,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "MOTS-c / Tesamorelin",
+          "website_variant": "mots-tes-r113",
+          "display_label": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+          "gen_productId": "7Kix55LA15U0lNvY9QXI",
+          "gen_cp_name": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+          "price": 159,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [
+            {
+              "excel_row": 113,
+              "exact": "MOTS-C/Tesamorelin 2mg/3mg/mL",
+              "cost": 79,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": null,
+          "required_actions": [
+            "NO_ACTION_UNTIL_LAUNCH",
+            "GEN_PAIRING_REQUIRED_AT_LAUNCH"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        },
+        {
+          "website_family": "Scream Cream",
+          "website_variant": "scream-cream-pending",
+          "display_label": "scream-cream-pending",
+          "gen_productId": null,
+          "gen_cp_name": "scream-cream-pending",
+          "price": null,
+          "status": "FUTURE_HIDDEN",
+          "exact_formulary": [],
+          "pharmacy": null,
+          "reason": "OWNER LOCKED A \u2014 Remain FUTURE_HIDDEN. Do not activate. Do not create live website route. Do not invent formulary mapping.",
+          "required_actions": [
+            "DO_NOT_ACTIVATE",
+            "NO_WEBSITE_ROUTE",
+            "NO_UNSUPPORTED_FORMULARY_MAPPING"
+          ],
+          "launch_state": "FUTURE_HIDDEN",
+          "price_conflict_resolution": null
+        }
+      ]
+    }
+  },
+  "dedupe": {
+    "execution_eligible_website_variants": 36,
+    "unique_gen_create_required": 13,
+    "unique_gen_create_variants": [
+      "tir-b12-starting-low",
+      "tir-b12-mid",
+      "tir-b12-high",
+      "tir-b12-any-dose",
+      "tir-glycine-starting-low",
+      "tir-glycine-mid",
+      "tir-glycine-high",
+      "tir-glycine-any-dose",
+      "nad-nasal-r85",
+      "estradiol-patch-r26",
+      "estradiol-patch-r27",
+      "estradiol-patch-r28",
+      "estradiol-patch-r29"
+    ],
+    "unique_gen_repair_required": 14,
+    "unique_gen_repair_cps": [
+      "34I2X8MpVZf3AQTff3bo",
+      "5F8jESeVeXcpkLU5rrdK",
+      "5dGkjdpLP7DkKKE2iVxh",
+      "BboYS4a2Uj7APetrFo6W",
+      "CjqOUbPuGPZzxephqRou",
+      "E3MXZeeR01QROCuTLRLE",
+      "FVwkzvQqWIZRNAwbslGw",
+      "MkDIUw0NcJB7YL2pNzYW",
+      "SkqQHmsc0WdsbK9vmV1y",
+      "iJtyig611AZEDBGdvRd9",
+      "omhh3NabouO8AsNR5tkD",
+      "sssEk3FDY4LFbQYGQsLx",
+      "tk2GW39OGr7JX4MCCoJP",
+      "wQK2JsFnh7oFBf3Lag4n"
+    ],
+    "unique_gen_cps_requiring_pairing_status_only": 1,
+    "unique_gen_pairing_status_cps": [
+      "BLf8inX395YNc7WPCD4O"
+    ],
+    "manual_gen_admin_pairing_actions": 64,
+    "manual_pairing_detail_count": 64,
+    "pairing_api_writable": 0,
+    "remaining_price_conflicts": 0,
+    "remaining_structure_conflicts": 0,
+    "remaining_stop_items": 0,
+    "note": "Structure splits converted into CREATE/REPAIR plan items \u2014 no longer STOP blockers. Selank/Semax nasal removed from executable set."
+  },
+  "final_report": {
+    "PRICE_CONFLICTS_STARTING": 8,
+    "SIMPLE_PRICE_REPAIR": 4,
+    "GEN_CP_SPLIT_REQUIRED": 2,
+    "ALREADY_CORRECT": 0,
+    "FORMULARY_PENDING_FROM_CONFLICTS": 0,
+    "FUTURE_HIDDEN_REMOVED": 2,
+    "OTHER_BLOCKERS": 0,
+    "NAD_NASAL_BACKEND_STRUCTURE": "SPLIT \u2014 r84 reuses FVwkzvQqWIZRNAwbslGw @$79; r85 CREATE @$109; one website NAD+ family",
+    "ESTRADIOL_BACKEND_STRUCTURE": "SPLIT CREATE\u00d74 patch CPs (do not reuse vaginal Estradiol/DHEA CP); one website Estradiol family",
+    "WOLVERINE_BACKEND_STRUCTURE": "Injection CP iJty\u2026 @$159 + Capsule CP omhh\u2026 @$29; one website Wolverine family",
+    "MINOXIDIL_BACKEND_STRUCTURE": "Reuse Dual Combo BboYS\u2026 @$79 + Vios r129; not GHK-Cu/Minoxidil",
+    "PROGESTERONE_BACKEND_STRUCTURE": "Reuse Progesterone CP 5dGk\u2026 @$29 with multi-strength IR pairings (all $29)",
+    "SELANK_NASAL_EXECUTABLE": "NO",
+    "SEMAX_NASAL_EXECUTABLE": "NO",
+    "UNIQUE_GEN_CREATE_REQUIRED": 13,
+    "UNIQUE_GEN_REPAIR_REQUIRED": 14,
+    "UNIQUE_GEN_CPS_REQUIRING_PAIRING_STATUS_ONLY": 1,
+    "MANUAL_GEN_ADMIN_PAIRING_ACTIONS": 64,
+    "REMAINING_PRICE_CONFLICTS": 0,
+    "REMAINING_STRUCTURE_CONFLICTS": 0,
+    "REMAINING_STOP_ITEMS": 0,
+    "FORMULARY_PENDING": 14,
+    "FUTURE_HIDDEN": 53,
+    "EXECUTION_ELIGIBLE_WEBSITE_VARIANTS": 36,
+    "ALL_EXECUTABLE_PRICES_VERIFIED_FROM_COST_SHIPPING": "YES",
+    "ALL_EXECUTABLE_GEN_CP_IDENTITIES_EXACTLY_SUPPORTED": "YES",
+    "READY_FOR_GEN_WRITE_EXECUTION": "YES",
+    "READY_NOTE": "READY means resolution cleared STOP items. Owner must still explicitly authorize write execution. Pairings remain MANUAL_GEN_ADMIN.",
+    "GEN_MODIFIED": false,
+    "GEN_WRITES": 0,
+    "PAIRING_WRITES": 0,
+    "WEBSITE_MODIFIED": false,
+    "CHECKOUT_MODIFIED": false,
+    "CUTOVER": "OFF",
+    "UNIQUE_GEN_CPS_REQUIRING_PAIRING": 28,
+    "MANUAL_PAIRING_NOTE": "Row-level ADD count includes SEM/TIR membership ladders and multi-strength Prog/SEM dose groups. API writable = 0.",
+    "READY_CAVEAT": "Owner must explicitly authorize write execution. Pairings=MANUAL_GEN_ADMIN. DO NOT EXECUTE in this phase."
+  }
+}

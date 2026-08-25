@@ -1,0 +1,843 @@
+{
+  "meta": {
+    "document": "MBM_GEN_PAIRING_POSTCHECK_3",
+    "generated_at": "2026-08-25T05:25:13Z",
+    "source": "CURRENT LIVE GEN via gen-health-list-products view=formulary mode=detail",
+    "policy": "docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md",
+    "gen_modified_this_run": false,
+    "formulary_pairings_modified_this_run": false,
+    "new_gen_products_created": 0,
+    "real_gen_orders": 0,
+    "website_published": false,
+    "legacy_b6_storefront": "UNCHANGED",
+    "website_cutover": "OFF",
+    "gen_whop_cutover": "OFF",
+    "pr19": "OPEN / NOT MERGED"
+  },
+  "summary": {
+    "gen_cps_checked": "15 / 15",
+    "classifications": {
+      "PAIRING_ACCEPTABLE": 4,
+      "PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS": 4,
+      "PAIRING_NEEDS_ADDITION": 0,
+      "PAIRING_HAS_INCOMPATIBLE_MEDICATION": 2,
+      "PAIRING_MISSING": 5,
+      "UNABLE_TO_VERIFY": 0
+    },
+    "existing_gen_cp_pairing_phase_complete": false,
+    "website_routing": {
+      "ROUTING_READY": 8,
+      "GEN_PAIRING_PENDING": 15,
+      "BLOCKED": 15,
+      "FUTURE_HIDDEN": 51,
+      "FORMULARY_PENDING": 14
+    },
+    "genPairingVerified_true": 8,
+    "genPairingVerified_false": 95,
+    "registry_verified_cps": 8,
+    "family_status": {
+      "SEMAGLUTIDE": "PARTIALLY_ROUTING_READY",
+      "TIRZEPATIDE": "BACKEND_CREATE_REQUIRED",
+      "NAD+": "PARTIALLY_ROUTING_READY",
+      "WOLVERINE": "PARTIALLY_ROUTING_READY",
+      "MINOXIDIL": "PARTIALLY_ROUTING_READY",
+      "PROGESTERONE": "PARTIALLY_ROUTING_READY",
+      "ESTRADIOL": "BACKEND_CREATE_REQUIRED"
+    }
+  },
+  "cps": [
+    {
+      "taskNumber": 1,
+      "genProductName": "Semaglutide Injection \u2014 Starting / Low (B12)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y",
+      "genProductId": "SkqQHmsc0WdsbK9vmV1y",
+      "currentGenPrice": 99.0,
+      "websiteVariantIds": [
+        "sem-b12-starting-low"
+      ],
+      "attachedMedications": [
+        {
+          "name": "Semaglutide + Vitamin B12",
+          "medicationId": "gqe6H8ay1sw6QlS32SMH",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "Semaglutide + Vitamin B12",
+          "medicationId": "gqe6H8ay1sw6QlS32SMH",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_ACCEPTABLE",
+      "eligibleForRegistry": true,
+      "reason": "\u22651 compatible medication; no material mismatch.",
+      "ownerAction": null,
+      "ownerManualCorrectionFocus": false,
+      "flags": []
+    },
+    {
+      "taskNumber": 2,
+      "genProductName": "Semaglutide Injection \u2014 Mid (B12)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O",
+      "genProductId": "BLf8inX395YNc7WPCD4O",
+      "currentGenPrice": 109.0,
+      "websiteVariantIds": [
+        "sem-b12-mid"
+      ],
+      "attachedMedications": [],
+      "compatibleAttachments": [],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_MISSING",
+      "eligibleForRegistry": false,
+      "reason": "No formulary medications attached.",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "ownerManualCorrectionFocus": true,
+      "flags": []
+    },
+    {
+      "taskNumber": 3,
+      "genProductName": "Semaglutide Injection \u2014 High (B12)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_34I2X8MpVZf3AQTff3bo",
+      "genProductId": "34I2X8MpVZf3AQTff3bo",
+      "currentGenPrice": 119.0,
+      "websiteVariantIds": [
+        "sem-b12-high"
+      ],
+      "attachedMedications": [
+        {
+          "name": "Semaglutide + Vitamin B12",
+          "medicationId": "YqrJ1qnOv3U3ecJHuSzr",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "Semaglutide + Vitamin B12",
+          "medicationId": "YqrJ1qnOv3U3ecJHuSzr",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_ACCEPTABLE",
+      "eligibleForRegistry": true,
+      "reason": "\u22651 compatible medication; no material mismatch.",
+      "ownerAction": null,
+      "ownerManualCorrectionFocus": false,
+      "flags": []
+    },
+    {
+      "taskNumber": 4,
+      "genProductName": "Semaglutide Injection \u2014 Any Dose (B12)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MkDIUw0NcJB7YL2pNzYW",
+      "genProductId": "MkDIUw0NcJB7YL2pNzYW",
+      "currentGenPrice": 119.0,
+      "websiteVariantIds": [
+        "sem-b12-any-dose"
+      ],
+      "attachedMedications": [
+        {
+          "name": "Semaglutide B12 ( , , )",
+          "medicationId": "99BZowkyXTMiGTu5cosT",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide B12 ( , , )",
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide B12 ( , , )",
+          "medicationId": "iXnkfsa6XHugbDanwjUX",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "Semaglutide B12 ( , , )",
+          "medicationId": "99BZowkyXTMiGTu5cosT",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide B12 ( , , )",
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide B12 ( , , )",
+          "medicationId": "iXnkfsa6XHugbDanwjUX",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS",
+      "eligibleForRegistry": true,
+      "reason": "3 compatible options \u2014 provider chooses.",
+      "ownerAction": null,
+      "ownerManualCorrectionFocus": true,
+      "flags": []
+    },
+    {
+      "taskNumber": 5,
+      "genProductName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_tk2GW39OGr7JX4MCCoJP",
+      "genProductId": "tk2GW39OGr7JX4MCCoJP",
+      "currentGenPrice": 99.0,
+      "websiteVariantIds": [
+        "sem-glycine-starting-low"
+      ],
+      "attachedMedications": [
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_ACCEPTABLE",
+      "eligibleForRegistry": true,
+      "reason": "\u22651 compatible medication; no material mismatch.",
+      "ownerAction": null,
+      "ownerManualCorrectionFocus": false,
+      "flags": []
+    },
+    {
+      "taskNumber": 6,
+      "genProductName": "Semaglutide Injection \u2014 Mid (Glycine)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CjqOUbPuGPZzxephqRou",
+      "genProductId": "CjqOUbPuGPZzxephqRou",
+      "currentGenPrice": 109.0,
+      "websiteVariantIds": [
+        "sem-glycine-mid"
+      ],
+      "attachedMedications": [
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS",
+      "eligibleForRegistry": true,
+      "reason": "2 compatible options \u2014 provider chooses.",
+      "ownerAction": null,
+      "ownerManualCorrectionFocus": false,
+      "flags": []
+    },
+    {
+      "taskNumber": 7,
+      "genProductName": "Semaglutide Injection \u2014 High (Glycine)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_sssEk3FDY4LFbQYGQsLx",
+      "genProductId": "sssEk3FDY4LFbQYGQsLx",
+      "currentGenPrice": 119.0,
+      "websiteVariantIds": [
+        "sem-glycine-high"
+      ],
+      "attachedMedications": [
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_ACCEPTABLE",
+      "eligibleForRegistry": true,
+      "reason": "\u22651 compatible medication; no material mismatch.",
+      "ownerAction": null,
+      "ownerManualCorrectionFocus": false,
+      "flags": []
+    },
+    {
+      "taskNumber": 8,
+      "genProductName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_wQK2JsFnh7oFBf3Lag4n",
+      "genProductId": "wQK2JsFnh7oFBf3Lag4n",
+      "currentGenPrice": 119.0,
+      "websiteVariantIds": [
+        "sem-glycine-any-dose"
+      ],
+      "attachedMedications": [
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "WPEBtvCdn2I8l6tRmT9R",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "pharmacy": "Dirx-Hub"
+        },
+        {
+          "name": "Semaglutide + Glycine",
+          "medicationId": "WPEBtvCdn2I8l6tRmT9R",
+          "pharmacy": "Dirx-Hub"
+        }
+      ],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS",
+      "eligibleForRegistry": true,
+      "reason": "4 compatible options \u2014 provider chooses.",
+      "ownerAction": null,
+      "ownerManualCorrectionFocus": false,
+      "flags": []
+    },
+    {
+      "taskNumber": 9,
+      "genProductName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK",
+      "genProductId": "5F8jESeVeXcpkLU5rrdK",
+      "currentGenPrice": 149.0,
+      "websiteVariantIds": [
+        "sem-membership"
+      ],
+      "attachedMedications": [],
+      "compatibleAttachments": [],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_MISSING",
+      "eligibleForRegistry": false,
+      "reason": "No formulary medications attached.",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "ownerManualCorrectionFocus": true,
+      "flags": []
+    },
+    {
+      "taskNumber": 10,
+      "genProductName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE",
+      "genProductId": "E3MXZeeR01QROCuTLRLE",
+      "currentGenPrice": 275.0,
+      "websiteVariantIds": [
+        "tir-membership"
+      ],
+      "attachedMedications": [],
+      "compatibleAttachments": [],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_MISSING",
+      "eligibleForRegistry": false,
+      "reason": "No formulary medications attached.",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "ownerManualCorrectionFocus": true,
+      "flags": []
+    },
+    {
+      "taskNumber": 11,
+      "genProductName": "NAD + Nasal Spray",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+      "genProductId": "FVwkzvQqWIZRNAwbslGw",
+      "currentGenPrice": 0.0,
+      "websiteVariantIds": [
+        "nad-nasal-r84"
+      ],
+      "attachedMedications": [
+        {
+          "name": "NAD+",
+          "medicationId": "8jyOUqXjZQr2MFZg77tl",
+          "pharmacy": "St Luke"
+        },
+        {
+          "name": "NAD+",
+          "medicationId": "HYt50C9OwwtiefImpnFB",
+          "pharmacy": "St Luke"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "NAD+",
+          "medicationId": "8jyOUqXjZQr2MFZg77tl",
+          "pharmacy": "St Luke"
+        },
+        {
+          "name": "NAD+",
+          "medicationId": "HYt50C9OwwtiefImpnFB",
+          "pharmacy": "St Luke"
+        }
+      ],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS",
+      "eligibleForRegistry": true,
+      "reason": "2 compatible options \u2014 provider chooses.",
+      "ownerAction": null,
+      "ownerManualCorrectionFocus": true,
+      "flags": []
+    },
+    {
+      "taskNumber": 12,
+      "genProductName": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+      "genProductId": "omhh3NabouO8AsNR5tkD",
+      "currentGenPrice": 0.0,
+      "websiteVariantIds": [
+        "wolverine-capsule"
+      ],
+      "attachedMedications": [],
+      "compatibleAttachments": [],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_MISSING",
+      "eligibleForRegistry": false,
+      "reason": "No formulary medications attached.",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "ownerManualCorrectionFocus": true,
+      "flags": []
+    },
+    {
+      "taskNumber": 13,
+      "genProductName": "BPC-157/TB500",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+      "genProductId": "iJtyig611AZEDBGdvRd9",
+      "currentGenPrice": 169.0,
+      "websiteVariantIds": [
+        "wolverine-injection"
+      ],
+      "attachedMedications": [
+        {
+          "name": "BPC-157 / TB500",
+          "medicationId": "27WtrIdo3z4Ssj5sDcc6",
+          "pharmacy": "Greenwich Pharmacy"
+        },
+        {
+          "name": "BPC-157 / TB500 Capsules",
+          "medicationId": "SLBdNaBijUHmDFSohdaM",
+          "pharmacy": "Greenwich Pharmacy"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "BPC-157 / TB500",
+          "medicationId": "27WtrIdo3z4Ssj5sDcc6",
+          "pharmacy": "Greenwich Pharmacy"
+        }
+      ],
+      "incompatibleAttachments": [
+        {
+          "name": "BPC-157 / TB500 Capsules",
+          "medicationId": "SLBdNaBijUHmDFSohdaM",
+          "pharmacy": "Greenwich Pharmacy"
+        }
+      ],
+      "finalPairingClassification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+      "eligibleForRegistry": false,
+      "reason": "1 material mismatch(es); compatible=1",
+      "ownerAction": "REMOVE: BPC-157 / TB500 Capsules @ Greenwich Pharmacy (`SLBdNaBijUHmDFSohdaM`); KEEP compatible same-family options.",
+      "ownerManualCorrectionFocus": false,
+      "flags": []
+    },
+    {
+      "taskNumber": 14,
+      "genProductName": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+      "genProductId": "BboYS4a2Uj7APetrFo6W",
+      "currentGenPrice": 0.0,
+      "websiteVariantIds": [
+        "minoxidil-fin-minox-0.1-5"
+      ],
+      "attachedMedications": [],
+      "compatibleAttachments": [],
+      "incompatibleAttachments": [],
+      "finalPairingClassification": "PAIRING_MISSING",
+      "eligibleForRegistry": false,
+      "reason": "No formulary medications attached.",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "ownerManualCorrectionFocus": true,
+      "flags": []
+    },
+    {
+      "taskNumber": 15,
+      "genProductName": "Women's Hormones (HRT) \u2013 Progesterone",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "genProductId": "5dGkjdpLP7DkKKE2iVxh",
+      "currentGenPrice": 79.0,
+      "websiteVariantIds": [
+        "prog-ir-r41",
+        "prog-ir-r42",
+        "prog-ir-r43",
+        "prog-ir-r44",
+        "prog-ir-r45",
+        "prog-ir-r46",
+        "prog-ir-r47",
+        "prog-ir-r48",
+        "prog-ir-r49"
+      ],
+      "attachedMedications": [
+        {
+          "name": "Pregnenolone IR",
+          "medicationId": "LHAilcdBK0wULcdmoJVl",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone",
+          "medicationId": "QbXdjaowZ1w0Ohc7RgB7",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone",
+          "medicationId": "Z9joueirLKsW5uD8LkPg",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone",
+          "medicationId": "tiJV7uCEsWhM2TOOycHF",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "DsXWglQ4j9epTGms7D5x",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "YT2RkB7DvqWxUnXfySDc",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "ZIAWU7zBZHPrezBdiexZ",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "dAWcMgzf6d7OH1JyKlEw",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "q21bosU7qNA9YLfqLnQH",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR (DYE-FREE)(Lactose-free) (M NEW)",
+          "medicationId": "A4fU56tPD0DJTPPyUT3K",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)",
+          "medicationId": "NRZXW0LomEaoyN5oA3WO",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)",
+          "medicationId": "ORLfICIf7sgo1WTdXvEM",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+          "medicationId": "KleUHs9VxvMycdhX0Z14",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+          "medicationId": "xrMRDAQr9if9OrehgcH6",
+          "pharmacy": "Vios"
+        }
+      ],
+      "compatibleAttachments": [
+        {
+          "name": "Progesterone",
+          "medicationId": "QbXdjaowZ1w0Ohc7RgB7",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone",
+          "medicationId": "Z9joueirLKsW5uD8LkPg",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone",
+          "medicationId": "tiJV7uCEsWhM2TOOycHF",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "DsXWglQ4j9epTGms7D5x",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "YT2RkB7DvqWxUnXfySDc",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "ZIAWU7zBZHPrezBdiexZ",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "dAWcMgzf6d7OH1JyKlEw",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR",
+          "medicationId": "q21bosU7qNA9YLfqLnQH",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone IR (DYE-FREE)(Lactose-free) (M NEW)",
+          "medicationId": "A4fU56tPD0DJTPPyUT3K",
+          "pharmacy": "Vios"
+        }
+      ],
+      "incompatibleAttachments": [
+        {
+          "name": "Pregnenolone IR",
+          "medicationId": "LHAilcdBK0wULcdmoJVl",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)",
+          "medicationId": "NRZXW0LomEaoyN5oA3WO",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)",
+          "medicationId": "ORLfICIf7sgo1WTdXvEM",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+          "medicationId": "KleUHs9VxvMycdhX0Z14",
+          "pharmacy": "Vios"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+          "medicationId": "xrMRDAQr9if9OrehgcH6",
+          "pharmacy": "Vios"
+        }
+      ],
+      "finalPairingClassification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+      "eligibleForRegistry": false,
+      "reason": "5 material mismatch(es); compatible=9",
+      "ownerAction": "REMOVE: Pregnenolone IR @ Vios (`LHAilcdBK0wULcdmoJVl`); Progesterone SR (DYE-FREE) @ Vios (`NRZXW0LomEaoyN5oA3WO`); Progesterone SR (DYE-FREE) @ Vios (`ORLfICIf7sgo1WTdXvEM`); Progesterone SR (DYE-FREE)(Lactose FREE) @ Vios (`KleUHs9VxvMycdhX0Z14`); Progesterone SR (DYE-FREE)(Lactose FREE) @ Vios (`xrMRDAQr9if9OrehgcH6`); KEEP compatible same-family options.",
+      "ownerManualCorrectionFocus": true,
+      "flags": []
+    }
+  ],
+  "remaining_manual_gen_pairing_actions": [
+    {
+      "taskNumber": 2,
+      "genProductId": "BLf8inX395YNc7WPCD4O",
+      "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O",
+      "genName": "Semaglutide Injection \u2014 Mid (B12)",
+      "websiteVariantIds": [
+        "sem-b12-mid"
+      ],
+      "classification": "PAIRING_MISSING",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "incompatible": [],
+      "compatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "taskNumber": 9,
+      "genProductId": "5F8jESeVeXcpkLU5rrdK",
+      "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK",
+      "genName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "websiteVariantIds": [
+        "sem-membership"
+      ],
+      "classification": "PAIRING_MISSING",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "incompatible": [],
+      "compatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "taskNumber": 10,
+      "genProductId": "E3MXZeeR01QROCuTLRLE",
+      "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE",
+      "genName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "websiteVariantIds": [
+        "tir-membership"
+      ],
+      "classification": "PAIRING_MISSING",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "incompatible": [],
+      "compatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "taskNumber": 12,
+      "genProductId": "omhh3NabouO8AsNR5tkD",
+      "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+      "genName": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+      "websiteVariantIds": [
+        "wolverine-capsule"
+      ],
+      "classification": "PAIRING_MISSING",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "incompatible": [],
+      "compatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "taskNumber": 13,
+      "genProductId": "iJtyig611AZEDBGdvRd9",
+      "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+      "genName": "BPC-157/TB500",
+      "websiteVariantIds": [
+        "wolverine-injection"
+      ],
+      "classification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+      "ownerAction": "REMOVE: BPC-157 / TB500 Capsules @ Greenwich Pharmacy (`SLBdNaBijUHmDFSohdaM`); KEEP compatible same-family options.",
+      "incompatible": [
+        {
+          "name": "BPC-157 / TB500 Capsules",
+          "pharmacy": "Greenwich Pharmacy",
+          "medicationId": "SLBdNaBijUHmDFSohdaM"
+        }
+      ],
+      "compatibleCount": 1,
+      "attachmentCount": 2
+    },
+    {
+      "taskNumber": 14,
+      "genProductId": "BboYS4a2Uj7APetrFo6W",
+      "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+      "genName": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+      "websiteVariantIds": [
+        "minoxidil-fin-minox-0.1-5"
+      ],
+      "classification": "PAIRING_MISSING",
+      "ownerAction": "Attach \u22651 compatible medication for this family (see click guide).",
+      "incompatible": [],
+      "compatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "taskNumber": 15,
+      "genProductId": "5dGkjdpLP7DkKKE2iVxh",
+      "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "genName": "Women's Hormones (HRT) \u2013 Progesterone",
+      "websiteVariantIds": [
+        "prog-ir-r41",
+        "prog-ir-r42",
+        "prog-ir-r43",
+        "prog-ir-r44",
+        "prog-ir-r45",
+        "prog-ir-r46",
+        "prog-ir-r47",
+        "prog-ir-r48",
+        "prog-ir-r49"
+      ],
+      "classification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+      "ownerAction": "REMOVE: Pregnenolone IR @ Vios (`LHAilcdBK0wULcdmoJVl`); Progesterone SR (DYE-FREE) @ Vios (`NRZXW0LomEaoyN5oA3WO`); Progesterone SR (DYE-FREE) @ Vios (`ORLfICIf7sgo1WTdXvEM`); Progesterone SR (DYE-FREE)(Lactose FREE) @ Vios (`KleUHs9VxvMycdhX0Z14`); Progesterone SR (DYE-FREE)(Lactose FREE) @ Vios (`xrMRDAQr9if9OrehgcH6`); KEEP compatible same-family options.",
+      "incompatible": [
+        {
+          "name": "Pregnenolone IR",
+          "pharmacy": "Vios",
+          "medicationId": "LHAilcdBK0wULcdmoJVl"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)",
+          "pharmacy": "Vios",
+          "medicationId": "NRZXW0LomEaoyN5oA3WO"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)",
+          "pharmacy": "Vios",
+          "medicationId": "ORLfICIf7sgo1WTdXvEM"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+          "pharmacy": "Vios",
+          "medicationId": "KleUHs9VxvMycdhX0Z14"
+        },
+        {
+          "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+          "pharmacy": "Vios",
+          "medicationId": "xrMRDAQr9if9OrehgcH6"
+        }
+      ],
+      "compatibleCount": 9,
+      "attachmentCount": 14
+    }
+  ],
+  "next_create_expected_total": 13,
+  "verified_website_variants": [
+    "nad-nasal-r84",
+    "sem-b12-any-dose",
+    "sem-b12-high",
+    "sem-b12-starting-low",
+    "sem-glycine-any-dose",
+    "sem-glycine-high",
+    "sem-glycine-mid",
+    "sem-glycine-starting-low"
+  ],
+  "not_verified_website_variants_with_gen_cp": [
+    "minoxidil-fin-minox-0.1-5",
+    "prog-ir-r41",
+    "prog-ir-r42",
+    "prog-ir-r43",
+    "prog-ir-r44",
+    "prog-ir-r45",
+    "prog-ir-r46",
+    "prog-ir-r47",
+    "prog-ir-r48",
+    "prog-ir-r49",
+    "sem-b12-mid",
+    "sem-membership",
+    "tir-membership",
+    "wolverine-capsule",
+    "wolverine-injection"
+  ]
+}

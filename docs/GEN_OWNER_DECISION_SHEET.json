@@ -1,0 +1,1244 @@
+{
+  "version": "gen-catalog-1e-owner-decision-sheet",
+  "generated_at": "2026-08-24T06:48:22Z",
+  "mode": "READ_ONLY",
+  "liveNowRecommended14": [
+    {
+      "displayName": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+      "websiteName": "Fat Burner ($259)",
+      "genClientProductId": "7Kix55LA15U0lNvY9QXI",
+      "genMatchedName": "AOD-9604/MOTS-C",
+      "currentGenPrice": 219.0,
+      "proposedRetailPrice": 198.5,
+      "deliveryForm": "Injection",
+      "formulation": "AOD-9604",
+      "formularyPairings": 3,
+      "pharmacies": [
+        "Optimal Balance Pharmacy"
+      ],
+      "action": "UPDATE",
+      "materialChange": "Closest website Fat Burner $259 vs workbook Triple $219 / GEN matched AOD-9604/MOTS-C amount 0",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $198.5 (rounded $198)",
+        "Prior proposed was 219.0",
+        "Website $259.0"
+      ],
+      "previousProposedRetail_beforeFormula": 219.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 198,
+      "pricingFlags": []
+    },
+    {
+      "displayName": "AOD-9604 Injection",
+      "websiteName": "No standalone AOD SKU (Fat Burner is the triple)",
+      "genClientProductId": "PRIG7DYPNNgco3lGf1zx",
+      "genMatchedName": "AOD-9604",
+      "currentGenPrice": 179.0,
+      "proposedRetailPrice": 23.06,
+      "deliveryForm": "Injection",
+      "formulation": "AOD-9604",
+      "formularyPairings": 2,
+      "pharmacies": [
+        "Optimal Balance Pharmacy"
+      ],
+      "action": "UPDATE",
+      "materialChange": "Standalone AOD $179 \u2260 Fat Burner $259",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $23.06 (rounded $23)",
+        "Prior proposed was 179.0"
+      ],
+      "previousProposedRetail_beforeFormula": 179.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 23,
+      "pricingFlags": [
+        "COST_LOOKS_PER_UNIT"
+      ]
+    },
+    {
+      "displayName": "BPC-157 / TB-500 Capsules",
+      "websiteName": "Wolverine: BPC-157/TB-500 Capsule ($99)",
+      "genClientProductId": "iJtyig611AZEDBGdvRd9",
+      "genMatchedName": "BPC-157/TB500",
+      "currentGenPrice": 169.0,
+      "proposedRetailPrice": 30.6,
+      "deliveryForm": "Capsule",
+      "formulation": "BPC-157",
+      "formularyPairings": 4,
+      "pharmacies": [
+        "Greenwich Pharmacy"
+      ],
+      "action": "KEEP",
+      "materialChange": "GEN/workbook $169 vs website capsule $99",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $30.6 (rounded $31)",
+        "Prior proposed was 169.0",
+        "Website $99.0"
+      ],
+      "previousProposedRetail_beforeFormula": 169.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 31,
+      "pricingFlags": [
+        "COST_LOOKS_PER_UNIT"
+      ]
+    },
+    {
+      "displayName": "BPC-157 Injection",
+      "websiteName": "Closest Wolverine injection $199 (blend \u2014 not plain BPC)",
+      "genClientProductId": "KXMm9SsbOEYnFy9phmZn",
+      "genMatchedName": "BPC-157",
+      "currentGenPrice": 199.0,
+      "proposedRetailPrice": 199.0,
+      "deliveryForm": "Injection",
+      "formulation": "BPC-157",
+      "formularyPairings": 8,
+      "pharmacies": [
+        "Greenwich Pharmacy",
+        "Optimal Balance Pharmacy"
+      ],
+      "action": "MERGE",
+      "materialChange": "Price $199 matches Wolverine inj; formulation differs (plain BPC vs blend)",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "MULTI_BAND_23.15-159.75; plain BPC cost looks per-unit \u2014 owner must confirm package cost before write",
+        "Formula band $23.15\u2013$159.75"
+      ],
+      "previousProposedRetail_beforeFormula": 199.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        23.15,
+        159.75
+      ],
+      "proposedRetailNote": "MULTI_BAND_23.15-159.75; plain BPC cost looks per-unit \u2014 owner must confirm package cost before write",
+      "pricingFlags": [
+        "BLEND_FORMULARY_UNDER_PLAIN_BPC_PRODUCT",
+        "COST_LOOKS_PER_UNIT",
+        "NEEDS_PACKAGE_COST_CONFIRMATION"
+      ]
+    },
+    {
+      "displayName": "BPC-157 \u2014 Unspecified",
+      "websiteName": "Closest Wolverine / multi-peptide blend listings",
+      "genClientProductId": null,
+      "genMatchedName": "BPC-157 + GHK-Cu + KPV + TB-500 Comprehensive Recovery Protocol",
+      "currentGenPrice": 189.0,
+      "proposedRetailPrice": 159.75,
+      "deliveryForm": "Unspecified",
+      "formulation": "BPC/TB/GHK/KPV blend",
+      "formularyPairings": 4,
+      "pharmacies": [
+        "Greenwich Pharmacy"
+      ],
+      "action": "CREATE",
+      "materialChange": "Rename Unspecified; workbook live $189 vs Wolverine inj $199",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $159.75 (rounded $160)",
+        "Prior proposed was 189.0"
+      ],
+      "previousProposedRetail_beforeFormula": 189.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 160,
+      "pricingFlags": []
+    },
+    {
+      "displayName": "GHK-Cu / Minoxidil Topical Combo",
+      "websiteName": "Minoxidil Combination Topical Formula ($129) \u2014 not exact match",
+      "genClientProductId": "489YrehNXRlL77fYPkOn",
+      "genMatchedName": "GHK-Cu",
+      "currentGenPrice": 149.0,
+      "proposedRetailPrice": 66.31,
+      "deliveryForm": "Topical",
+      "formulation": "Minoxidil/GHK-Cu combo (workbook proposal)",
+      "formularyPairings": 1,
+      "pharmacies": [
+        "Epiq Scripts"
+      ],
+      "action": "UPDATE",
+      "materialChange": "GEN/workbook $149 vs website minoxidil combo $129",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $66.31 (rounded $66)",
+        "Prior proposed was 149.0",
+        "Website $129.0"
+      ],
+      "previousProposedRetail_beforeFormula": 149.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 66,
+      "pricingFlags": []
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 3-Month (B12)",
+      "websiteName": "No dedicated 3-month SKU in current products.ts catalog",
+      "genClientProductId": "sN2ggSXRJINjElMYTQjf",
+      "genMatchedName": "GLP-1 Weight Loss Plan \u2013 Semaglutide 3-Month Escalation Bundle (High: 4\u21926\u219210mg)",
+      "currentGenPrice": 799.0,
+      "proposedRetailPrice": 117.5,
+      "deliveryForm": "Injection",
+      "formulation": "B12",
+      "formularyPairings": 2,
+      "pharmacies": [
+        "Dirx-Hub"
+      ],
+      "action": "UPDATE",
+      "materialChange": "GEN/workbook $799 bundle \u2014 confirm website offer",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $117.5 (rounded $118)",
+        "Prior proposed was 799.0"
+      ],
+      "previousProposedRetail_beforeFormula": 799.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 118,
+      "pricingFlags": [
+        "THREE_MONTH_COST_LOOKS_UNDERSTATED"
+      ]
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Any Dose (B12)",
+      "websiteName": "Semaglutide Membership ($149/mo) \u2014 no separate B12 membership SKU",
+      "genClientProductId": "MkDIUw0NcJB7YL2pNzYW",
+      "genMatchedName": "GLP-1 Weight Loss Membership \u2013 Semaglutide / B12 (Any Dose)",
+      "currentGenPrice": 189.0,
+      "proposedRetailPrice": 189.0,
+      "deliveryForm": "Injection",
+      "formulation": "B12",
+      "formularyPairings": 5,
+      "pharmacies": [
+        "Dirx-Hub"
+      ],
+      "action": "UPDATE",
+      "materialChange": "GEN Any Dose B12 $189 vs membership $149",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+        "Formula band $92.5\u2013$118.75"
+      ],
+      "previousProposedRetail_beforeFormula": 189.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        92.5,
+        118.75
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+      "pricingFlags": []
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+      "websiteName": "Semaglutide Membership ($149/mo)",
+      "genClientProductId": "wQK2JsFnh7oFBf3Lag4n",
+      "genMatchedName": "GLP-1 Weight Loss Membership \u2013 Semaglutide / Glycine (Any Dose)",
+      "currentGenPrice": 149.0,
+      "proposedRetailPrice": 149.0,
+      "deliveryForm": "Injection",
+      "formulation": "Glycine",
+      "formularyPairings": 5,
+      "pharmacies": [
+        "Dirx-Hub"
+      ],
+      "action": "UPDATE",
+      "materialChange": "Membership program formulation moving toward Glycine Any Dose vs historical +B6 copy",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+        "Formula band $92.5\u2013$118.75"
+      ],
+      "previousProposedRetail_beforeFormula": 149.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        92.5,
+        118.75
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$118.75",
+      "pricingFlags": []
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 High (B12)",
+      "websiteName": "Semaglutide + B6 Injection (high vial SKUs)",
+      "genClientProductId": "34I2X8MpVZf3AQTff3bo",
+      "genMatchedName": "GLP-1 Weight Loss Plan \u2013 Semaglutide / B12 (High Dose)",
+      "currentGenPrice": 199.0,
+      "proposedRetailPrice": 199.0,
+      "deliveryForm": "Injection",
+      "formulation": "B12",
+      "formularyPairings": 2,
+      "pharmacies": [
+        "Dirx-Hub"
+      ],
+      "action": "UPDATE",
+      "materialChange": "Website +B6 vs GEN B12",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+        "Formula band $110.0\u2013$118.75"
+      ],
+      "previousProposedRetail_beforeFormula": 199.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        110.0,
+        118.75
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+      "pricingFlags": []
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 High (Glycine)",
+      "websiteName": "Semaglutide + B6 Injection (high vial SKUs)",
+      "genClientProductId": "sssEk3FDY4LFbQYGQsLx",
+      "genMatchedName": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (High Dose)",
+      "currentGenPrice": 129.0,
+      "proposedRetailPrice": 129.0,
+      "deliveryForm": "Injection",
+      "formulation": "Glycine",
+      "formularyPairings": 2,
+      "pharmacies": [
+        "Dirx-Hub"
+      ],
+      "action": "UPDATE",
+      "materialChange": "Website +B6 vs GEN Glycine mismatch",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+        "Formula band $110.0\u2013$118.75"
+      ],
+      "previousProposedRetail_beforeFormula": 129.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        110.0,
+        118.75
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $110.0\u2013$118.75",
+      "pricingFlags": []
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Mid (Glycine)",
+      "websiteName": "Semaglutide + B6 Injection (mid vial SKUs)",
+      "genClientProductId": "CjqOUbPuGPZzxephqRou",
+      "genMatchedName": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (Mid Dose)",
+      "currentGenPrice": 109.0,
+      "proposedRetailPrice": 106.5,
+      "deliveryForm": "Injection",
+      "formulation": "Glycine",
+      "formularyPairings": 1,
+      "pharmacies": [
+        "Dirx-Hub"
+      ],
+      "action": "UPDATE",
+      "materialChange": "Website +B6 vs GEN Glycine mismatch",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "Formula retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal \u2192 $106.5 (rounded $106)",
+        "Prior proposed was 109.0"
+      ],
+      "previousProposedRetail_beforeFormula": 109.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailRounded": 106,
+      "pricingFlags": []
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Starting / Low (B12)",
+      "websiteName": "Semaglutide + B6 Injection (starting vial SKUs)",
+      "genClientProductId": "SkqQHmsc0WdsbK9vmV1y",
+      "genMatchedName": "GLP-1 Weight Loss Plan \u2013 Semaglutide + B12 (Starting Dose / Micro-Dose)",
+      "currentGenPrice": null,
+      "proposedRetailPrice": null,
+      "deliveryForm": "Injection",
+      "formulation": "B12",
+      "formularyPairings": 3,
+      "pharmacies": [
+        "Dirx-Hub"
+      ],
+      "action": "UPDATE",
+      "materialChange": "Website +B6 vs GEN B12; GEN amount unset/0",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+        "Formula band $92.5\u2013$101.25"
+      ],
+      "previousProposedRetail_beforeFormula": null,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        92.5,
+        101.25
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+      "pricingFlags": []
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+      "websiteName": "Semaglutide + B6 Injection (starting/low vial SKUs)",
+      "genClientProductId": "tk2GW39OGr7JX4MCCoJP",
+      "genMatchedName": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (Starting Dose)",
+      "currentGenPrice": 119.0,
+      "proposedRetailPrice": 119.0,
+      "deliveryForm": "Injection",
+      "formulation": "Glycine",
+      "formularyPairings": 2,
+      "pharmacies": [
+        "Dirx-Hub"
+      ],
+      "action": "UPDATE",
+      "materialChange": "Website still lists Semaglutide + B6; GEN ladder is Glycine",
+      "priceFlag": true,
+      "priceFlagNotes": [
+        "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+        "Formula band $92.5\u2013$101.25"
+      ],
+      "previousProposedRetail_beforeFormula": 119.0,
+      "pricingRule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+      "proposedRetailPriceBand": [
+        92.5,
+        101.25
+      ],
+      "proposedRetailNote": "PER_FILL_USING_FORMULA; band $92.5\u2013$101.25",
+      "pricingFlags": []
+    }
+  ],
+  "ownerDecisions13": [
+    {
+      "number": 1,
+      "productFamily": "Weight Management",
+      "product": "Semaglutide Injection \u2014 Mid (B12)",
+      "launch": "LIVE_NOW",
+      "currentGenProducts": [
+        "None matched"
+      ],
+      "proposedProducts": [
+        "Semaglutide Injection \u2014 Mid (B12)"
+      ],
+      "formularyOptionA": "Dirx-Hub SEMAGLUTIDE + VITAMIN B12 mid-tier vial(s) under Mid (B12) CP",
+      "formularyOptionB": "No Mid (B12) CP; Mid vials only via Any Dose (B12)",
+      "priceDifference": null,
+      "why": "B12 Mid has formulary vial coverage in the blueprint but no LIVE website/GEN parent today.",
+      "optionA": "Create/prepare Semaglutide Injection \u2014 Mid (B12) (hidden or later live) and pair Mid B12 vials under it.",
+      "optionB": "Omit Mid B12 client product for now; only use Mid vials under Any Dose (B12) later if multi-pairing is approved.",
+      "recommendedStructuralChoice": "A \u2014 keeps dose-ladder symmetry with live Glycine Mid; supported by selected Mid B12 vial coverage.",
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "masterProducts": [],
+      "key": "sem-b12-mid",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Create/retain separate Mid B12 client product. B12 ladder = Starting/Low, Mid, High, Any Dose, 3-Month as applicable."
+    },
+    {
+      "number": 2,
+      "productFamily": "Recovery & Performance",
+      "product": "5-Amino Injectable",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "5-Amino Injectable"
+      ],
+      "proposedProducts": [
+        "5-Amino Injectable"
+      ],
+      "formularyOptionA": "Injectable 5-Amino-1MQ formulary (confirm exact row)",
+      "formularyOptionB": "Capsule proposal: 5-Amino capsules 50mg",
+      "priceDifference": null,
+      "why": "Name is injectable; workbook proposal is capsule.",
+      "optionA": "Keep injectable 5-Amino-1MQ product; pair only to injectable formulary once confirmed.",
+      "optionB": "Reclassify as capsule product and use capsule formulary only if that is the intended offer.",
+      "recommendedStructuralChoice": "A \u2014 do not pair injectable-named product to capsule row.",
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "5-Amino Injectable"
+      ],
+      "masterProducts": [
+        "5-Amino Injectable"
+      ],
+      "key": "review-5amino-form",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Keep injectable product; pair only to confirmed injectable formulary. Do not substitute capsule formulary."
+    },
+    {
+      "number": 3,
+      "productFamily": "Other",
+      "product": "Accelerate & Thrive",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Accelerate & Thrive"
+      ],
+      "proposedProducts": [
+        "Accelerate & Thrive"
+      ],
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceDifference": null,
+      "why": "Over-collapsed catch-all (31 masters; signals=['combo', 'kisspeptin']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "optionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "optionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "recommendedStructuralChoice": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "masterProducts": [
+        "Accelerate & Thrive",
+        "ARA-290 Neuroprotection & Nerve Repair Protocol",
+        "BAM-15 Mitochondrial Uncoupler Protocol",
+        "Elite Body Recomp",
+        "Elite Regenesis",
+        "Kisspeptin-10",
+        "KPV Anti-Inflammatory Gut & Systemic Protocol",
+        "Lean & Energized",
+        "Lean & Ready",
+        "Lean & Timeless",
+        "Melanotan 2 Tanning & Sexual Health Protocol",
+        "PE-22-28",
+        "PE-22-28 Antidepressant & Cognitive Protocol",
+        "Peak Performance",
+        "Peptides \u2013 Kisspeptin-10",
+        "Performance \u2013 Oxandrolone (High Dose)",
+        "Performance \u2013 Oxandrolone (Low Dose)",
+        "Performance \u2013 Stanozolol",
+        "Power & Recovery",
+        "Sculpt & Perform",
+        "Slim & Sensational",
+        "Slim & Timeless",
+        "SLU-PP-332 Metabolic & Exercise Mimetic Protocol",
+        "The Ultimate Protocol",
+        "Thyroid Support (BioThyroid)",
+        "Total Transformation",
+        "Vitality & Longevity",
+        "Wellness \u2013 Low-Dose Naltrexone (LDN) Starter",
+        "Wellness \u2013 Low-Dose Naltrexone (LDN) Therapeutic",
+        "Wellness \u2013 MIC-B12 (Lipotropic / Fat Burn)",
+        "Wellness \u2013 MIC-B12 (Lipotropic / Fat Burn)"
+      ],
+      "key": "other-other-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split over-collapsed catch-all into appropriate distinct patient-facing products."
+    },
+    {
+      "number": 4,
+      "productFamily": "Women's Hormone Therapy",
+      "product": "HRT Other \u2014 Unspecified",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "None matched"
+      ],
+      "proposedProducts": [
+        "HRT Other \u2014 Unspecified"
+      ],
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceDifference": null,
+      "why": "Over-collapsed catch-all (16 masters; signals=['anastrozole', 'clomiphene', 'combo', 'enclomiphene', 'gonadorelin', 'hcg', 'kisspeptin', 'tamoxifen']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "optionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "optionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "recommendedStructuralChoice": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "masterProducts": [
+        "Hormone + Intimacy",
+        "Kisspeptin-10 Reproductive Hormone Protocol",
+        "Men's Hormones \u2013 Fertility (Clomiphene)",
+        "Men's Hormones \u2013 Fertility (HCG)",
+        "Men's Hormones \u2013 Gonadorelin",
+        "Men's Hormones \u2013 PCT / Estrogen Blocker (Tamoxifen)",
+        "Men's Hormones (TRT) \u2013 Estrogen Management (Anastrozole)",
+        "Men's Hormones (TRT) \u2013 Fertility / HPTA Support (Enclomiphene)",
+        "Mens HRT/TRT In-Clinic Approval",
+        "Mens TRT/HRT 1 Month Plan",
+        "Mens TRT/HRT 3 Month Plan",
+        "Mens TRT/HRT 6 Month Plan",
+        "Womens HRT GFE In-Clinic Approval",
+        "Womens TRT/HRT 1 Month Plan",
+        "Womens TRT/HRT 3 Month Plan",
+        "Womens TRT/HRT 6 Month Plan"
+      ],
+      "key": "hrt-hrtother-unspecified-",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split into distinct patient-facing products. Do not maintain one umbrella HRT product."
+    },
+    {
+      "number": 5,
+      "productFamily": "Prescription Skin & Hair",
+      "product": "Minoxidil / Hair \u2014 Unspecified",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)"
+      ],
+      "proposedProducts": [
+        "Minoxidil / Hair \u2014 Unspecified"
+      ],
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceDifference": null,
+      "why": "Over-collapsed catch-all (1 masters; signals=['combo', 'finasteride', 'minoxidil']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "optionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "optionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "recommendedStructuralChoice": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "masterProducts": [
+        "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)"
+      ],
+      "key": "minoxidil-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split into the actual distinct hair-loss/combo product(s)."
+    },
+    {
+      "number": 6,
+      "productFamily": "Longevity & Cognitive Health",
+      "product": "NAD+ (Injectable)",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "NAD+ (Injectable)"
+      ],
+      "proposedProducts": [
+        "NAD+ (Injectable)"
+      ],
+      "formularyOptionA": "Confirm injectable NAD+ formulary",
+      "formularyOptionB": "Nasal proposal: NAD+ 50mg/ml",
+      "priceDifference": "Landed A=60 vs B=75",
+      "why": "Injectable NAD+ row carries nasal spray form/proposal.",
+      "optionA": "NAD+ Injection = injection formulary only.",
+      "optionB": "NAD+ Nasal Spray = separate product; do not cross-pair.",
+      "recommendedStructuralChoice": "Use both as separate products (split by delivery form).",
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "NAD+ (Injectable)"
+      ],
+      "masterProducts": [
+        "NAD+ (Injectable)"
+      ],
+      "key": "review-nadinjectable",
+      "ownerResponse": "SEPARATE_DELIVERY_FORMS",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "NAD+ Injection and NAD+ Nasal Spray must remain separate client products. Never cross-pair nasal formulary to injectable product."
+    },
+    {
+      "number": 7,
+      "productFamily": "Sexual Wellness",
+      "product": "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone"
+      ],
+      "proposedProducts": [
+        "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone"
+      ],
+      "formularyOptionA": "Sildenafil/Testosterone 120mg/22mg",
+      "formularyOptionB": "Alternate cream variants / defer",
+      "priceDifference": null,
+      "why": "Exact Scream Cream composition/pharmacy still needs owner confirmation (variants exist).",
+      "optionA": "Approve one exact cream formulary under one FUTURE_HIDDEN Scream Cream product.",
+      "optionB": "Defer Scream Cream until exact formulation is confirmed.",
+      "recommendedStructuralChoice": null,
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone"
+      ],
+      "masterProducts": [
+        "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone"
+      ],
+      "key": "review-screamcreamsildenafilargininepapaverinet",
+      "ownerResponse": "B",
+      "ownerResponseStatus": "DEFERRED",
+      "ownerResponseNote": "Do not attach Sildenafil/Testosterone troche to Scream Cream. Keep Scream Cream FUTURE_HIDDEN; do not create/pair until exact cream formulation confirmed."
+    },
+    {
+      "number": 8,
+      "productFamily": "Sexual Wellness",
+      "product": "Sildenafil (3 Month)",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Sildenafil (3 Month)"
+      ],
+      "proposedProducts": [
+        "Sildenafil (3 Month)"
+      ],
+      "formularyOptionA": "SILDENAFIL tablet/capsule formulary (e.g. VitaScripts 100 mg)",
+      "formularyOptionB": "Sildenafil/Testosterone 120mg/22mg",
+      "priceDifference": null,
+      "why": "Sildenafil-named product proposed to Scream Cream formulary.",
+      "optionA": "Pair only to Sildenafil tablet/capsule formulary; keep Scream Cream separate.",
+      "optionB": "Rename these offers to Scream Cream programs if cream is truly intended.",
+      "recommendedStructuralChoice": "A \u2014 no silent Scream Cream substitution under Sildenafil name.",
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "Sildenafil (3 Month)"
+      ],
+      "masterProducts": [
+        "Sildenafil (3 Month)"
+      ],
+      "key": "review-sildenafil3month",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Use Sildenafil tablet/capsule formulary only. Scream Cream remains separate."
+    },
+    {
+      "number": 9,
+      "productFamily": "Sexual Wellness",
+      "product": "Sildenafil (6 Month)",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Sildenafil (6 Month)"
+      ],
+      "proposedProducts": [
+        "Sildenafil (6 Month)"
+      ],
+      "formularyOptionA": "SILDENAFIL tablet/capsule formulary (e.g. VitaScripts 100 mg)",
+      "formularyOptionB": "Sildenafil/Testosterone 120mg/22mg",
+      "priceDifference": null,
+      "why": "Sildenafil-named product proposed to Scream Cream formulary.",
+      "optionA": "Pair only to Sildenafil tablet/capsule formulary; keep Scream Cream separate.",
+      "optionB": "Rename these offers to Scream Cream programs if cream is truly intended.",
+      "recommendedStructuralChoice": "A \u2014 no silent Scream Cream substitution under Sildenafil name.",
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "Sildenafil (6 Month)"
+      ],
+      "masterProducts": [
+        "Sildenafil (6 Month)"
+      ],
+      "key": "review-sildenafil6month",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Use Sildenafil tablet/capsule formulary only. Scream Cream remains separate."
+    },
+    {
+      "number": 10,
+      "productFamily": "Sexual Wellness",
+      "product": "Sildenafil \u2014 Unspecified",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "ED \u2013 Caffeine / Sildenafil (Performance Boost)"
+      ],
+      "proposedProducts": [
+        "Sildenafil \u2014 Unspecified"
+      ],
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceDifference": null,
+      "why": "Over-collapsed catch-all (5 masters; signals=['combo', 'sildenafil', 'tadalafil']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "optionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "optionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "recommendedStructuralChoice": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "masterProducts": [
+        "ED \u2013 Caffeine / Sildenafil (Performance Boost)",
+        "ED \u2013 Sildenafil (On-Demand)",
+        "ED \u2013 Sildenafil / Tadalafil Combo",
+        "Sildenafil",
+        "Tadalafil+Sildenafil"
+      ],
+      "key": "sildenafil-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split distinct Sildenafil/Tadalafil/combo products. Do not use one umbrella ED product."
+    },
+    {
+      "number": 11,
+      "productFamily": "Sexual Wellness",
+      "product": "Tadalafil \u2014 Unspecified",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "ED \u2013 Tadalafil (Daily / Low Dose)"
+      ],
+      "proposedProducts": [
+        "Tadalafil \u2014 Unspecified"
+      ],
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceDifference": null,
+      "why": "Over-collapsed catch-all (4 masters; signals=['combo', 'tadalafil', 'vardenafil']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "optionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "optionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "recommendedStructuralChoice": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "masterProducts": [
+        "ED \u2013 Tadalafil (Daily / Low Dose)",
+        "ED \u2013 Tadalafil (On-Demand / High Dose)",
+        "Tadalafil",
+        "Vardenafil+Tadalafil+Apormorphine"
+      ],
+      "key": "tadalafil-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split distinct daily/on-demand/combo products."
+    },
+    {
+      "number": 12,
+      "productFamily": "Weight Management",
+      "product": "Tirzepatide Injection \u2014 B12+Glycine (ambiguous)",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "None matched"
+      ],
+      "proposedProducts": [
+        "Tirzepatide Injection \u2014 B12+Glycine (ambiguous)"
+      ],
+      "formularyOptionA": "TIRZEPATIDE + GLYCINE vials (Dirx-Hub)",
+      "formularyOptionB": "Separate B12 + Glycine ladders (or reject)",
+      "priceDifference": "Landed A=70 vs B=70",
+      "why": "Labels claim both B12 and Glycine, but proposed/selected context is Glycine-only. Silent choice would mis-label additive.",
+      "optionA": "Treat as Glycine-ladder products (rename) and attach Glycine vials only.",
+      "optionB": "Split into separate B12 and Glycine Tirzepatide products, or reject both labels until clarified.",
+      "recommendedStructuralChoice": null,
+      "duplicateOfTrueReview": true,
+      "duplicateTrueReviewNames": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12"
+      ],
+      "masterProducts": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12"
+      ],
+      "key": "tir-b12-glycine-ambiguous",
+      "ownerResponse": "REJECT_DEFER_AMBIGUOUS_LABELS",
+      "ownerResponseStatus": "REJECTED_DEFERRED",
+      "ownerResponseNote": "Do not map either ambiguous B12+Glycine label to a B12-only or Glycine-only formulary. Do not create a B12+Glycine product unless an actual matching B12+Glycine formulary is later confirmed. Existing policy: Tirzepatide B12 ladder separate; Tirzepatide Glycine ladder separate."
+    },
+    {
+      "number": 13,
+      "productFamily": "Prescription Skin & Hair",
+      "product": "Tretinoin / Skin \u2014 Unspecified",
+      "launch": "FUTURE_HIDDEN",
+      "currentGenProducts": [
+        "Finasteride, Tretinoin, Fluocinolone, VitaminE"
+      ],
+      "proposedProducts": [
+        "Tretinoin / Skin \u2014 Unspecified"
+      ],
+      "formularyOptionA": "Split into distinct CPs (see masters in JSON)",
+      "formularyOptionB": "Keep catch-all (not recommended)",
+      "priceDifference": null,
+      "why": "Over-collapsed catch-all (3 masters; signals=['combo', 'finasteride', 'minoxidil', 'spray', 'tretinoin']) \u2014 should be split into separate patient-facing products before any GEN writes",
+      "optionA": "Split catch-all into separate patient-facing products before GEN writes.",
+      "optionB": "Keep one umbrella product (usually wrong for shopping/prescribing clarity).",
+      "recommendedStructuralChoice": "A \u2014 this is over-collapse, not pharmacy/vial duplication.",
+      "duplicateOfTrueReview": false,
+      "duplicateTrueReviewNames": [],
+      "masterProducts": [
+        "Finasteride, Tretinoin, Fluocinolone, VitaminE",
+        "Hair Loss - Minoxdil/Tretinoin/Fluocinolone/Finasteride Spray",
+        "Hair Loss \u2013 Triple Combo (Finasteride/Minoxidil/Tretinoin)"
+      ],
+      "key": "tretinoin-unspecified",
+      "ownerResponse": "A",
+      "ownerResponseStatus": "APPROVED",
+      "ownerResponseNote": "Split into the actual distinct skin/hair products and combinations."
+    }
+  ],
+  "trueFormularyReviews7": [
+    {
+      "masterProduct": "5-Amino Injectable",
+      "candidateFormulary1": {
+        "medication": "5-Amino capsules 50mg",
+        "pharmacy": "Greenwich Pharmacy",
+        "strength": "50mg",
+        "form": null,
+        "package": "1EA",
+        "medicationCost": 2.6,
+        "shipping": 25,
+        "landedCost": 27.6,
+        "source": "smart_upload_proposed"
+      },
+      "candidateFormulary2": null,
+      "whyAmbiguous": [
+        "Injectable product name paired to capsule formulary \u2014 form mismatch"
+      ],
+      "recommendedAction": "Do not pair injectable 5-Amino to capsule row; locate injectable 5-Amino-1MQ formulary or leave unpaired",
+      "duplicateDecision": true,
+      "duplicateDecisionNumbers": [
+        2
+      ]
+    },
+    {
+      "masterProduct": "NAD+ (Injectable)",
+      "candidateFormulary1": {
+        "medication": "NAD+ 50mg/ml",
+        "pharmacy": "St Luke",
+        "strength": "50mg/ml",
+        "form": "Nasal Spray",
+        "package": "15ml",
+        "medicationCost": 30,
+        "shipping": 30,
+        "landedCost": 60,
+        "source": "selected_formulary"
+      },
+      "candidateFormulary2": {
+        "medication": "NAD+ 200mg/ml",
+        "pharmacy": "St Luke",
+        "strength": "200mg/ml",
+        "form": "Nasal Spray",
+        "package": "15ml",
+        "medicationCost": 45,
+        "shipping": 30,
+        "landedCost": 75,
+        "source": "selected_formulary"
+      },
+      "whyAmbiguous": [
+        "Injectable NAD+ master row carries Nasal Spray form/proposed pairing"
+      ],
+      "recommendedAction": "Split: use NAD+ Injection client product with injectable formulary; do not use nasal spray pairing",
+      "duplicateDecision": true,
+      "duplicateDecisionNumbers": [
+        6
+      ]
+    },
+    {
+      "masterProduct": "Scream Cream: Sildenafil / Arginine / Papaverine / Testosterone",
+      "candidateFormulary1": {
+        "medication": "Sildenafil/Testosterone 120mg/22mg",
+        "pharmacy": "St Luke",
+        "strength": "120mg/22mg",
+        "form": "Troche",
+        "package": "Each",
+        "medicationCost": 2.75,
+        "shipping": 30,
+        "landedCost": 32.75,
+        "source": "selected_formulary"
+      },
+      "candidateFormulary2": null,
+      "whyAmbiguous": [
+        "Sildenafil-named product proposed to Scream Cream formulary \u2014 do not silently substitute",
+        "Scream Cream exact composition/pharmacy confirmation still required vs alternate cream formulas"
+      ],
+      "recommendedAction": "Reject Scream Cream pairing for Sildenafil-named products; pair only to confirmed Sildenafil tablet formulary or rename product to Scream Cream intentionally",
+      "duplicateDecision": true,
+      "duplicateDecisionNumbers": [
+        7
+      ]
+    },
+    {
+      "masterProduct": "Sildenafil (3 Month)",
+      "candidateFormulary1": {
+        "medication": "Sildenafil/Testosterone 120mg/22mg",
+        "pharmacy": "St Luke",
+        "strength": "120mg/22mg",
+        "form": "Troche",
+        "package": "Each",
+        "medicationCost": 2.75,
+        "shipping": 30,
+        "landedCost": 32.75,
+        "source": "selected_formulary"
+      },
+      "candidateFormulary2": null,
+      "whyAmbiguous": [
+        "Sildenafil-named product proposed to Scream Cream formulary \u2014 do not silently substitute"
+      ],
+      "recommendedAction": "Reject Scream Cream pairing for Sildenafil-named products; pair only to confirmed Sildenafil tablet formulary or rename product to Scream Cream intentionally",
+      "duplicateDecision": true,
+      "duplicateDecisionNumbers": [
+        8
+      ]
+    },
+    {
+      "masterProduct": "Sildenafil (6 Month)",
+      "candidateFormulary1": {
+        "medication": "Sildenafil/Testosterone 120mg/22mg",
+        "pharmacy": "St Luke",
+        "strength": "120mg/22mg",
+        "form": "Troche",
+        "package": "Each",
+        "medicationCost": 2.75,
+        "shipping": 30,
+        "landedCost": 32.75,
+        "source": "selected_formulary"
+      },
+      "candidateFormulary2": null,
+      "whyAmbiguous": [
+        "Sildenafil-named product proposed to Scream Cream formulary \u2014 do not silently substitute"
+      ],
+      "recommendedAction": "Reject Scream Cream pairing for Sildenafil-named products; pair only to confirmed Sildenafil tablet formulary or rename product to Scream Cream intentionally",
+      "duplicateDecision": true,
+      "duplicateDecisionNumbers": [
+        9
+      ]
+    },
+    {
+      "masterProduct": "Tirzepatide/B12/Glycine",
+      "candidateFormulary1": {
+        "medication": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "strength": "5mg/0.5mg/mL",
+        "form": "Vial",
+        "package": "2mL",
+        "medicationCost": 65,
+        "shipping": 5,
+        "landedCost": 70,
+        "source": "selected_formulary"
+      },
+      "candidateFormulary2": {
+        "medication": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "strength": "5mg/0.5mg/mL",
+        "form": "Vial",
+        "package": "2mL",
+        "medicationCost": 65,
+        "shipping": 5,
+        "landedCost": 70,
+        "source": "selected_formulary"
+      },
+      "whyAmbiguous": [
+        "Label claims both B12 and Glycine; proposed row is Glycine-only vial \u2014 ambiguous which ladder"
+      ],
+      "recommendedAction": null,
+      "duplicateDecision": true,
+      "duplicateDecisionNumbers": [
+        12
+      ]
+    },
+    {
+      "masterProduct": "Tirzepatide/Glycine/B12",
+      "candidateFormulary1": {
+        "medication": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "strength": "5mg/0.5mg/mL",
+        "form": "Vial",
+        "package": "2mL",
+        "medicationCost": 65,
+        "shipping": 5,
+        "landedCost": 70,
+        "source": "selected_formulary"
+      },
+      "candidateFormulary2": {
+        "medication": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "strength": "5mg/0.5mg/mL",
+        "form": "Vial",
+        "package": "2mL",
+        "medicationCost": 65,
+        "shipping": 5,
+        "landedCost": 70,
+        "source": "selected_formulary"
+      },
+      "whyAmbiguous": [
+        "Label claims both B12 and Glycine; proposed row is Glycine-only vial \u2014 ambiguous which ladder"
+      ],
+      "recommendedAction": null,
+      "duplicateDecision": true,
+      "duplicateDecisionNumbers": [
+        12
+      ]
+    }
+  ],
+  "cleanupApprovals": [
+    "Add Sync \u2192 DEACTIVATE",
+    "Metformin (Metabolic / Weight Support) \u2192 DEACTIVATE (DO NOT ADD)",
+    "Metformin / Topiramate \u2192 DEACTIVATE (DO NOT ADD)",
+    "BPC-157 (Copy 1) \u2192 MERGE into BPC-157 Injection KXMm9SsbOEYnFy9phmZn then deactivate duplicate"
+  ],
+  "primaryBpc": {
+    "name": "BPC-157 Injection",
+    "productId": "KXMm9SsbOEYnFy9phmZn"
+  },
+  "futureCatalog": [
+    {
+      "category": "Weight Management",
+      "clientProducts": 38,
+      "formularyPairings": 78,
+      "existingGenReused": 19,
+      "newEventuallyRequired": 19,
+      "names": [
+        "Lean & Ready \u2013 Semaglutide + BPC-157 + AOD-9604 Plan",
+        "Liraglutide \u2014 Unspecified",
+        "Orforglipron (Oral) \u2014 Any Dose",
+        "Orforglipron (Oral) \u2014 High",
+        "Orforglipron (Oral) \u2014 Mid",
+        "Orforglipron (Oral) \u2014 Starting / Low",
+        "Ozempic (Semaglutide)",
+        "Retatrutide \u2014 Unspecified",
+        "Semaglutide + Ondansetron (Nausea Support)",
+        "Semaglutide Injection \u2014 Any Dose (L-Carnitine)",
+        "Semaglutide Injection \u2014 High (L-Carnitine)",
+        "Semaglutide Injection \u2014 Mid (L-Carnitine)",
+        "Semaglutide Injection \u2014 Starting / Low (L-Carnitine)",
+        "Semaglutide Oral / Sublingual \u2014 High",
+        "Semaglutide Oral / Sublingual \u2014 Mid",
+        "Semaglutide Oral / Sublingual \u2014 Starting / Low",
+        "Semaglutide Weight Loss Plan \u2013 Semaglutide (Any Dose)",
+        "Semaglutide Weight Loss Plan \u2013 Semaglutide (Any Dose) \u2013 3 Month Supply",
+        "Semaglutide Weight Loss Plan \u2013 Semaglutide (High Dose / Maintenance)",
+        "Semaglutide Weight Loss Plan \u2013 Semaglutide (High Dose) \u2013 3 Month Supply",
+        "Semaglutide Weight Loss Plan \u2013 Semaglutide (Low Dose)",
+        "Semaglutide Weight Loss Plan \u2013 Semaglutide (Mid Dose)",
+        "Semaglutide Weight Loss Plan \u2013 Semaglutide (Mid Dose) \u2013 3 Month Supply",
+        "Semaglutide Weight Loss Plan \u2013 Semaglutide (Starting Dose) \u2013 3 Month Supply",
+        "Semaglutide Weight Loss Plan \u2013 Semaglutide 3-Month Escalation Bundle (Low: 1\u21922\u21924mg)",
+        "Semaglutide/B12 (6 Months)",
+        "Semaglutide/B12/Glycine",
+        "The Ultimate Semaglutide Stack",
+        "Tirzepatide + Ondansetron (Nausea Support)",
+        "Tirzepatide Injection \u2014 3-Month (B12)",
+        "Tirzepatide Injection \u2014 3-Month (Glycine)",
+        "Tirzepatide Injection \u2014 Any Dose (B12)",
+        "Tirzepatide Injection \u2014 Any Dose (Glycine)",
+        "Tirzepatide Injection \u2014 High (Glycine)",
+        "Tirzepatide Injection \u2014 Mid (Glycine)",
+        "Tirzepatide Injection \u2014 Starting / Low (Glycine)",
+        "Tirzepatide Injection \u2014 Starting / Low (L-Carnitine)",
+        "Tirzepatide Injection \u2014 Starting / Low (Niacinamide)"
+      ]
+    },
+    {
+      "category": "Longevity & Cognitive Health",
+      "clientProducts": 10,
+      "formularyPairings": 21,
+      "existingGenReused": 5,
+      "newEventuallyRequired": 5,
+      "names": [
+        "Dihexa \u2014 Unspecified",
+        "Epithalon Injection",
+        "NAD+ Injection",
+        "NAD+ Nasal Spray",
+        "NAD+ \u2014 Topical",
+        "Pinealon \u2014 Unspecified",
+        "Selank \u2014 Unspecified",
+        "Semax \u2014 Unspecified"
+      ]
+    },
+    {
+      "category": "Recovery & Performance",
+      "clientProducts": 19,
+      "formularyPairings": 38,
+      "existingGenReused": 13,
+      "newEventuallyRequired": 6,
+      "names": [
+        "5-Amino-1MQ Injection",
+        "BPC-157 \u2014 Unspecified",
+        "CJC-1295 / Ipamorelin Injection",
+        "DSIP Injection",
+        "GHK-Cu / Epithalon Injection",
+        "GHK-Cu Injection",
+        "GHK-Cu \u2014 Unspecified",
+        "Glutathione \u2014 Capsule",
+        "Glutathione \u2014 Injection",
+        "Glutathione \u2014 Topical",
+        "IGF-1 LR3 \u2014 Unspecified",
+        "LL-37 Injection",
+        "MOTS-C Injection",
+        "TB-500 / Blends \u2014 Unspecified",
+        "Tesamorelin / Ipamorelin Injection",
+        "Thymosin Alpha-1 Injection"
+      ]
+    },
+    {
+      "category": "Women's Hormone Therapy",
+      "clientProducts": 8,
+      "formularyPairings": 34,
+      "existingGenReused": 0,
+      "newEventuallyRequired": 8,
+      "names": [
+        "Estradiol / HRT \u2014 Vaginal Cream",
+        "HRT Other \u2014 Capsule",
+        "Progesterone / HRT \u2014 Cream",
+        "Progesterone / HRT \u2014 Unspecified",
+        "Testosterone / HRT \u2014 Cream",
+        "Testosterone / HRT \u2014 Injection",
+        "Testosterone / HRT \u2014 Troche",
+        "Testosterone / HRT \u2014 Unspecified"
+      ]
+    },
+    {
+      "category": "Prescription Skin & Hair",
+      "clientProducts": 5,
+      "formularyPairings": 6,
+      "existingGenReused": 5,
+      "newEventuallyRequired": 0,
+      "names": [
+        "Finasteride / Hair \u2014 Capsule",
+        "Finasteride / Hair \u2014 Topical",
+        "Finasteride / Hair \u2014 Unspecified",
+        "Minoxidil / Hair \u2014 Capsule",
+        "Minoxidil / Hair \u2014 Topical"
+      ]
+    },
+    {
+      "category": "Sexual Wellness",
+      "clientProducts": 5,
+      "formularyPairings": 5,
+      "existingGenReused": 5,
+      "newEventuallyRequired": 0,
+      "names": [
+        "Oxytocin \u2014 Capsule",
+        "Oxytocin \u2014 Nasal Spray",
+        "Oxytocin \u2014 Unspecified",
+        "Scream Cream",
+        "Vardenafil \u2014 Unspecified"
+      ]
+    },
+    {
+      "category": "Research Wellness",
+      "clientProducts": 1,
+      "formularyPairings": 6,
+      "existingGenReused": 1,
+      "newEventuallyRequired": 0,
+      "names": [
+        "PT-141 (Bremelanotide) Nasal Spray"
+      ]
+    },
+    {
+      "category": "Other",
+      "clientProducts": 10,
+      "formularyPairings": 14,
+      "existingGenReused": 4,
+      "newEventuallyRequired": 6,
+      "names": [
+        "Hair Loss \u2013 Dutasteride (Oral)",
+        "Ivermectin \u2014 Capsule",
+        "Ivermectin \u2014 Topical",
+        "Pregnyl - HCG (Merck)",
+        "SS-31 (Elamipretide) Mitochondrial Protection Protocol",
+        "Sermorelin \u2014 Injection",
+        "Sermorelin \u2014 Troche",
+        "Trimix T106 (Papaverine +Phentolamine +PGE)"
+      ]
+    }
+  ],
+  "summary": {
+    "LIVE_PRODUCTS": 14,
+    "LIVE_PRODUCTS_READY_WITHOUT_DECISION": 14,
+    "LIVE_PRODUCTS_REQUIRING_OWNER_DECISION": 0,
+    "LIVE_ADJACENT_OWNER_DECISION": "Decision #1 Semaglutide Mid (B12) \u2014 not inside the 14",
+    "OWNER_DECISIONS_TOTAL": 13,
+    "TRUE_FORMULARY_REVIEWS": 7,
+    "DUPLICATE_DECISIONS": 7,
+    "NET_UNIQUE_OWNER_DECISIONS": 13,
+    "FUTURE_HIDDEN_PRODUCTS": 96,
+    "PT141_NASAL_SPRAY_IN_BLUEPRINT": true,
+    "SCREAM_CREAM_IN_BLUEPRINT": true,
+    "PRICE_FLAGS_IN_LIVE_14": 8,
+    "GEN_CREATED": 0,
+    "GEN_UPDATED": 0,
+    "GEN_DEACTIVATED": 0,
+    "GEN_MODIFIED": "NO",
+    "GEN_WHOP_CUTOVER": "OFF",
+    "PRODUCTION_WEBSITE_MODIFIED": "NO",
+    "OWNER_DECISIONS_REMAINING": 0,
+    "OWNER_DECISIONS_RESOLVED": 13
+  },
+  "cleanupOwnerStatus_1f": {
+    "status": "APPROVED",
+    "writeExecuted": false,
+    "items": [
+      "Add Sync \u2192 DEACTIVATE",
+      "Metformin (Metabolic / Weight Support) \u2192 DEACTIVATE (DO NOT ADD)",
+      "Metformin / Topiramate \u2192 DEACTIVATE (DO NOT ADD)",
+      "BPC-157 (Copy 1) \u2192 MERGE into BPC-157 Injection KXMm9SsbOEYnFy9phmZn then deactivate duplicate"
+    ]
+  },
+  "structuralApprovals_1f": {
+    "tirzepatideB12GlycineSeparateLadders": "APPROVED",
+    "ambiguousTirLabelsRemainOwnerReview": [
+      "Tirzepatide/B12/Glycine",
+      "Tirzepatide/Glycine/B12"
+    ],
+    "note": "Owner called this Decision #10; sheet Decision #10 is Sildenafil Unspecified and remains unresolved"
+  },
+  "phase": "GEN-CATALOG-1G-ALL-DECISIONS-RESOLVED",
+  "pricingRule_1g": {
+    "rule": "retail = medicationCost \u00d7 1.75 + pharmacyShippingInternal",
+    "note": "Workbook SELECTED FORMULARY column \"Cost +75%\" = landedCost \u00d7 1.75 (i.e. (cost+shipping)\u00d71.75). Owner rule differs: cost\u00d71.75+shipping only.",
+    "appliedAt": "2026-08-24T07:05:53Z"
+  }
+}

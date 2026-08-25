@@ -1,0 +1,1840 @@
+{
+  "phase": "GEN-CATALOG-2A.1",
+  "title": "LIVE FORMULARY PAIRING AUDIT + MANUAL ADMIN CHECKLIST",
+  "generated_at": "2026-08-24T08:30:45.557452+00:00",
+  "mode": "READ_ONLY",
+  "liveInventory": {
+    "products": 255,
+    "formularyPairings": 29
+  },
+  "summary": {
+    "LIVE_PRODUCTS_AUDITED": 14,
+    "PAIRING_COMPLETE": 0,
+    "PAIRING_MISSING": 4,
+    "PAIRING_INCOMPLETE": 6,
+    "PAIRING_INCORRECT": 4,
+    "DEFERRED": 0,
+    "DEFERRED_OUTSIDE_LIVE14": 4,
+    "ALREADY_CORRECT": 0,
+    "NEED_MANUAL_PAIRING": 2,
+    "NEED_MANUAL_CORRECTION": 4,
+    "NEED_MANUAL_COMPLETION": 6,
+    "NEED_STRUCTURE_THEN_PAIRING": 2,
+    "TOTAL_MANUAL_PRODUCT_TASKS": 14
+  },
+  "perProductStatus": {
+    "sem-glycine-starting": "PAIRING_INCOMPLETE",
+    "sem-glycine-mid": "PAIRING_INCORRECT",
+    "sem-glycine-high": "PAIRING_INCOMPLETE",
+    "sem-glycine-any": "PAIRING_INCOMPLETE",
+    "sem-b12-starting": "PAIRING_INCOMPLETE",
+    "sem-b12-mid": "PAIRING_MISSING",
+    "sem-b12-high": "PAIRING_INCOMPLETE",
+    "sem-b12-any": "PAIRING_INCORRECT",
+    "sem-b12-3month": "PAIRING_INCOMPLETE",
+    "aod-mots-tesa-blend-injection": "PAIRING_INCORRECT",
+    "bpc-blend": "PAIRING_MISSING",
+    "ghk-minoxidil-topical-combo": "PAIRING_INCORRECT",
+    "sem-membership": "PAIRING_MISSING",
+    "tirz-membership": "PAIRING_MISSING"
+  },
+  "products": [
+    {
+      "key": "sem-glycine-starting",
+      "displayName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+      "clientProductId": "tk2GW39OGr7JX4MCCoJP",
+      "price": 99,
+      "form": "Injection",
+      "status": "PAIRING_INCOMPLETE",
+      "currentPairingCount": 1,
+      "expectedPairingCount": 2,
+      "currentFormularyRows": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "Dirx Glycine family present (1 link) but Start/Low requires BOTH 1mg and 2mg. Live API does not expose vial strength \u2014 verify/replace so both exact SELECTED rows are attached.",
+      "manualAction": "completion",
+      "doNotSelect": [
+        "Any Semaglutide + Vitamin B12",
+        "L-Carnitine SEM rows",
+        "Greenwich SEM"
+      ],
+      "flags": []
+    },
+    {
+      "key": "sem-glycine-mid",
+      "displayName": "Semaglutide Injection \u2014 Mid (Glycine)",
+      "clientProductId": "CjqOUbPuGPZzxephqRou",
+      "price": 109,
+      "form": "Injection",
+      "status": "PAIRING_INCORRECT",
+      "currentPairingCount": 2,
+      "expectedPairingCount": 1,
+      "currentFormularyRows": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "Expected exactly ONE row: 4mg Glycine. Live has TWO Semaglutide + Glycine Dirx links \u2014 remove extras; keep/attach only 4mg/0.5mg/mL (1mL).",
+      "manualAction": "correction",
+      "doNotSelect": [
+        "1mg Glycine",
+        "2mg Glycine",
+        "6mg Glycine",
+        "10mg Glycine",
+        "Any B12"
+      ],
+      "flags": []
+    },
+    {
+      "key": "sem-glycine-high",
+      "displayName": "Semaglutide Injection \u2014 High (Glycine)",
+      "clientProductId": "sssEk3FDY4LFbQYGQsLx",
+      "price": 119,
+      "form": "Injection",
+      "status": "PAIRING_INCOMPLETE",
+      "currentPairingCount": 1,
+      "expectedPairingCount": 2,
+      "currentFormularyRows": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "Needs BOTH 6mg and 10mg Glycine Dirx vials; only 1 Glycine link present.",
+      "manualAction": "completion",
+      "doNotSelect": [
+        "B12 rows",
+        "4mg-only Mid row as sole High pairing"
+      ],
+      "flags": []
+    },
+    {
+      "key": "sem-glycine-any",
+      "displayName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+      "clientProductId": "wQK2JsFnh7oFBf3Lag4n",
+      "price": 119,
+      "form": "Injection",
+      "status": "PAIRING_INCOMPLETE",
+      "currentPairingCount": 4,
+      "expectedPairingCount": 5,
+      "currentFormularyRows": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "WPEBtvCdn2I8l6tRmT9R",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "Full Glycine ladder 1/2/4/6/10 required; 4 Dirx Glycine links present \u2014 add missing strength (likely one of 1/2/4/6/10).",
+      "manualAction": "completion",
+      "doNotSelect": [
+        "B12",
+        "Greenwich",
+        "L-Carnitine"
+      ],
+      "flags": []
+    },
+    {
+      "key": "sem-b12-starting",
+      "displayName": "Semaglutide Injection \u2014 Starting / Low (B12)",
+      "clientProductId": "SkqQHmsc0WdsbK9vmV1y",
+      "price": 99,
+      "form": "Injection",
+      "status": "PAIRING_INCOMPLETE",
+      "currentPairingCount": 1,
+      "expectedPairingCount": 2,
+      "currentFormularyRows": [
+        {
+          "medicationId": "gqe6H8ay1sw6QlS32SMH",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "Needs BOTH 1mg and 2mg B12 Dirx; only 1 Vitamin B12 link present.",
+      "manualAction": "completion",
+      "doNotSelect": [
+        "Glycine",
+        "Greenwich Semaglutide + B12"
+      ],
+      "flags": []
+    },
+    {
+      "key": "sem-b12-mid",
+      "displayName": "Semaglutide Injection \u2014 Mid (B12)",
+      "clientProductId": "BLf8inX395YNc7WPCD4O",
+      "price": 109,
+      "form": "Injection",
+      "status": "PAIRING_MISSING",
+      "currentPairingCount": 0,
+      "expectedPairingCount": 1,
+      "currentFormularyRows": [],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "CREATED in 2A with 0 pairings. Attach Dirx 4mg B12 only.",
+      "manualAction": "pairing",
+      "doNotSelect": [
+        "Glycine 4mg",
+        "other B12 strengths as Mid-only product"
+      ],
+      "flags": []
+    },
+    {
+      "key": "sem-b12-high",
+      "displayName": "Semaglutide Injection \u2014 High (B12)",
+      "clientProductId": "34I2X8MpVZf3AQTff3bo",
+      "price": 119,
+      "form": "Injection",
+      "status": "PAIRING_INCOMPLETE",
+      "currentPairingCount": 1,
+      "expectedPairingCount": 2,
+      "currentFormularyRows": [
+        {
+          "medicationId": "YqrJ1qnOv3U3ecJHuSzr",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "Needs BOTH 6mg and 10mg B12 Dirx; only 1 Vitamin B12 link present.",
+      "manualAction": "completion",
+      "doNotSelect": [],
+      "flags": []
+    },
+    {
+      "key": "sem-b12-any",
+      "displayName": "Semaglutide Injection \u2014 Any Dose (B12)",
+      "clientProductId": "MkDIUw0NcJB7YL2pNzYW",
+      "price": 119,
+      "form": "Injection",
+      "status": "PAIRING_INCORRECT",
+      "currentPairingCount": 8,
+      "expectedPairingCount": 5,
+      "currentFormularyRows": [
+        {
+          "medicationId": "99BZowkyXTMiGTu5cosT",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "iXnkfsa6XHugbDanwjUX",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "BmyTz7FPA4wUuojkq2Hy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "Twz0VeW8olCbbL1UAuQr",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "lPPKidpoLhkYCSV1sLse",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "pBAQDkpmfv9FIcpoqhxa",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "vCNPRlelLVcJmimIT7Wy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "INCORRECT: 5 Greenwich Semaglutide + B12 pairings must be removed. Keep/complete Dirx-Hub SELECTED ladder 1/2/4/6/10 only (currently 3 vague Dirx Semaglutide B12 ( , , ) links).",
+      "manualAction": "correction",
+      "doNotSelect": [
+        "Greenwich Semaglutide + B12 (all)",
+        "Glycine",
+        "broken (3 VIALS) $50 row"
+      ],
+      "flags": []
+    },
+    {
+      "key": "sem-b12-3month",
+      "displayName": "Semaglutide Injection \u2014 3-Month (B12)",
+      "clientProductId": "sN2ggSXRJINjElMYTQjf",
+      "price": 359,
+      "form": "Injection",
+      "status": "PAIRING_INCOMPLETE",
+      "currentPairingCount": 1,
+      "expectedPairingCount": 1,
+      "currentFormularyRows": [
+        {
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "note": "STANDARD \u00d73 model \u2014 product quantityMonths=3; attach controlling 10mg B12 vial (NOT escalation 4\u21926\u219210; NOT broken 3-VIALS row)"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "Owner locked STANDARD \u00d73 \u2192 $359. Expected exact Dirx 10mg B12. Live has 1 vague Semaglutide B12 ( , , ) link \u2014 replace/verify as 10MG/0.5MG/ML (1ML VIAL). Do NOT attach escalation 4\u21926\u219210 set.",
+      "manualAction": "completion",
+      "doNotSelect": [
+        "Escalation 4mg+6mg+10mg set as 3-month structure",
+        "SEMAGLUTIDE + VITAMIN B12 10MG\u2026(3 VIALS)",
+        "Glycine 3-month"
+      ],
+      "flags": []
+    },
+    {
+      "key": "aod-mots-tesa-blend-injection",
+      "displayName": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+      "clientProductId": "7Kix55LA15U0lNvY9QXI",
+      "price": 199,
+      "form": "Injection",
+      "status": "PAIRING_INCORRECT",
+      "currentPairingCount": 1,
+      "expectedPairingCount": 1,
+      "currentFormularyRows": [
+        {
+          "medicationId": "UvuErUI2gDnbXcr4kqcN",
+          "standardizedMedicationName": "AOD 9604",
+          "pharmacyName": "Optimal Balance Pharmacy"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "AOD 9604/ MOTS-C/ TESAMORELIN/ IPAMORELIN 1.2 MG/ 2 MG/ 2MG/ 2MG/ML (5 ML)",
+          "pharmacy": "Optimal Balance Pharmacy",
+          "strength": "1.2/2/2/2 mg/mL",
+          "package": "5 mL",
+          "cost": 102,
+          "ship": 20,
+          "form": "Injection",
+          "knownCorrectMedicationIdOnSibling": "MFHi8Zq2mIOXiO8fgcw9",
+          "siblingProductId": "yearpPaLo5H0k0FU5Ej8",
+          "siblingName": "AOD-9604 / MOTS-C / Tesamorelin Metabolic Triple Protocol"
+        }
+      ],
+      "expectedPharmacy": "Optimal Balance Pharmacy",
+      "notes": "CURRENT = AOD 9604 only (UvuErUI2gDnbXcr4kqcN). EXPECTED = full Optimal Balance blend. Correct medication already paired on sibling yearpPaLo5H0k0FU5Ej8 as MFHi8Zq2mIOXiO8fgcw9.",
+      "manualAction": "correction",
+      "doNotSelect": [
+        "AOD 9604 300 MCG standalone",
+        "AOD 9604 only",
+        "PRIG7DYPNNgco3lGf1zx deferred standalone"
+      ],
+      "flags": []
+    },
+    {
+      "key": "bpc-blend",
+      "displayName": "BPC-157/TB-500/GHK-Cu 3/3/10 mg/mL (5 mL) Injection",
+      "clientProductId": "5iCQzEtTXw90ctEhIhkB",
+      "price": 159,
+      "form": "Injection",
+      "status": "PAIRING_MISSING",
+      "currentPairingCount": 0,
+      "expectedPairingCount": 1,
+      "currentFormularyRows": [],
+      "expectedFormularyRows": [
+        {
+          "exact": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML (5ml)",
+          "pharmacy": "Greenwich Pharmacy",
+          "strength": "3/3/10 mg/mL",
+          "package": "5ML",
+          "cost": 77,
+          "ship": 25,
+          "form": "Injection",
+          "retail": 159
+        }
+      ],
+      "expectedPharmacy": "Greenwich Pharmacy",
+      "notes": "0 pairings. Attach Greenwich 3/3/10 blend ONLY.",
+      "manualAction": "pairing",
+      "doNotSelect": [
+        "BPC-157 500 MCG plain (Optimal Balance)",
+        "BPC-157 / GHK-CU / KPV / TB500",
+        "BPC-157/TB500 capsules",
+        "BPC-157/TB500 3mg/3mg/mL without GHK",
+        "plain BPC product KXMm9SsbOEYnFy9phmZn"
+      ],
+      "flags": []
+    },
+    {
+      "key": "ghk-minoxidil-topical-combo",
+      "displayName": "GHK-Cu / Minoxidil Topical Combo",
+      "clientProductId": "489YrehNXRlL77fYPkOn",
+      "price": 69,
+      "form": "Injection",
+      "status": "PAIRING_INCORRECT",
+      "currentPairingCount": 1,
+      "expectedPairingCount": 1,
+      "currentFormularyRows": [
+        {
+          "medicationId": "DEu7EzsWmcFP6d60NT9J",
+          "standardizedMedicationName": "GHK-CU",
+          "pharmacyName": "Greenwich Pharmacy"
+        }
+      ],
+      "expectedFormularyRows": [
+        {
+          "exact": "Minoxidil 2.5mg/GHK-Cu 5mg/Apigenin 50mg/Fisetin 50mg",
+          "pharmacy": "Epiq Scripts",
+          "strength": "2.5 mg/G (combo)",
+          "package": "30",
+          "cost": 36.75,
+          "ship": 2,
+          "form": "Topical"
+        }
+      ],
+      "expectedPharmacy": "Epiq Scripts",
+      "notes": "CURRENT = GHK-CU @ Greenwich (DEu7EzsWmcFP6d60NT9J). EXPECTED = Epiq Scripts Minoxidil/GHK/Apigenin/Fisetin combo.",
+      "manualAction": "correction",
+      "doNotSelect": [
+        "Greenwich GHK-CU alone",
+        "injectable GHK-Cu",
+        "Vios Minoxidil % topicals"
+      ],
+      "flags": []
+    },
+    {
+      "key": "sem-membership",
+      "displayName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "clientProductId": "5F8jESeVeXcpkLU5rrdK",
+      "price": 149,
+      "form": "Membership",
+      "status": "PAIRING_MISSING",
+      "currentPairingCount": 0,
+      "expectedPairingCount": 10,
+      "currentFormularyRows": [],
+      "expectedFormularyRows": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "0 pairings. Intended: both Dirx SEM ladders (B12 1\u201310 + Glycine 1\u201310) under ONE membership IF GEN allows multi-additive pairings. FLAG if UI blocks mixing B12+Glycine on one CP.",
+      "manualAction": "structure_then_pairing",
+      "doNotSelect": [
+        "L-Carnitine",
+        "Greenwich SEM",
+        "one-time Any Dose products as substitutes"
+      ],
+      "flags": [
+        "GEN_STRUCTURE_DECISION_REQUIRED_IF_MULTI_ADDITIVE_PAIRING_BLOCKED"
+      ]
+    },
+    {
+      "key": "tirz-membership",
+      "displayName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "clientProductId": "E3MXZeeR01QROCuTLRLE",
+      "price": 275,
+      "form": "Membership",
+      "status": "PAIRING_MISSING",
+      "currentPairingCount": 0,
+      "expectedPairingCount": 12,
+      "currentFormularyRows": [],
+      "expectedFormularyRows": [
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 75,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 85,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 90,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 95,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 100,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 75,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 85,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 90,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 95,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 100,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        }
+      ],
+      "expectedPharmacy": "Dirx-Hub",
+      "notes": "0 pairings. Intended: Dirx TIR B12 5\u201330 + Glycine 5\u201330 under ONE membership IF GEN allows. Do NOT use ambiguous Tirzepatide/B12/Glycine labels. FLAG if multi-additive blocked.",
+      "manualAction": "structure_then_pairing",
+      "doNotSelect": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "TIRZEPATIDE + GLYCINE 30MG\u2026(3 PACK)",
+        "ambiguous combo labels"
+      ],
+      "flags": [
+        "GEN_STRUCTURE_DECISION_REQUIRED_IF_MULTI_ADDITIVE_PAIRING_BLOCKED"
+      ]
+    }
+  ],
+  "ownerManualChecklist": [
+    {
+      "product": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+      "genId": "tk2GW39OGr7JX4MCCoJP",
+      "price": 99,
+      "status": "PAIRING_INCOMPLETE",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 verify each existing link strength \u2192 add missing exact SELECTED vials \u2192 remove any wrong-strength links \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "doNotSelect": [
+        "Any Semaglutide + Vitamin B12",
+        "L-Carnitine SEM rows",
+        "Greenwich SEM"
+      ],
+      "expectedFinalPairingCount": 2,
+      "verify": "Exactly the expected SELECTED vials (count=2) with correct strengths.",
+      "flags": [],
+      "currentPresent": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ]
+    },
+    {
+      "product": "Semaglutide Injection \u2014 Mid (Glycine)",
+      "genId": "CjqOUbPuGPZzxephqRou",
+      "price": 109,
+      "status": "PAIRING_INCORRECT",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 REMOVE incorrect current pairings \u2192 attach only expected rows \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "doNotSelect": [
+        "1mg Glycine",
+        "2mg Glycine",
+        "6mg Glycine",
+        "10mg Glycine",
+        "Any B12"
+      ],
+      "expectedFinalPairingCount": 1,
+      "verify": "Only expected pairings remain (count=1).",
+      "flags": [],
+      "currentToRemove": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ]
+    },
+    {
+      "product": "Semaglutide Injection \u2014 High (Glycine)",
+      "genId": "sssEk3FDY4LFbQYGQsLx",
+      "price": 119,
+      "status": "PAIRING_INCOMPLETE",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 verify each existing link strength \u2192 add missing exact SELECTED vials \u2192 remove any wrong-strength links \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "doNotSelect": [
+        "B12 rows",
+        "4mg-only Mid row as sole High pairing"
+      ],
+      "expectedFinalPairingCount": 2,
+      "verify": "Exactly the expected SELECTED vials (count=2) with correct strengths.",
+      "flags": [],
+      "currentPresent": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ]
+    },
+    {
+      "product": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+      "genId": "wQK2JsFnh7oFBf3Lag4n",
+      "price": 119,
+      "status": "PAIRING_INCOMPLETE",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 verify each existing link strength \u2192 add missing exact SELECTED vials \u2192 remove any wrong-strength links \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "doNotSelect": [
+        "B12",
+        "Greenwich",
+        "L-Carnitine"
+      ],
+      "expectedFinalPairingCount": 5,
+      "verify": "Exactly the expected SELECTED vials (count=5) with correct strengths.",
+      "flags": [],
+      "currentPresent": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "WPEBtvCdn2I8l6tRmT9R",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ]
+    },
+    {
+      "product": "Semaglutide Injection \u2014 Starting / Low (B12)",
+      "genId": "SkqQHmsc0WdsbK9vmV1y",
+      "price": 99,
+      "status": "PAIRING_INCOMPLETE",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 verify each existing link strength \u2192 add missing exact SELECTED vials \u2192 remove any wrong-strength links \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "doNotSelect": [
+        "Glycine",
+        "Greenwich Semaglutide + B12"
+      ],
+      "expectedFinalPairingCount": 2,
+      "verify": "Exactly the expected SELECTED vials (count=2) with correct strengths.",
+      "flags": [],
+      "currentPresent": [
+        {
+          "medicationId": "gqe6H8ay1sw6QlS32SMH",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ]
+    },
+    {
+      "product": "Semaglutide Injection \u2014 Mid (B12)",
+      "genId": "BLf8inX395YNc7WPCD4O",
+      "price": 109,
+      "status": "PAIRING_MISSING",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 attach rows listed \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "doNotSelect": [
+        "Glycine 4mg",
+        "other B12 strengths as Mid-only product"
+      ],
+      "expectedFinalPairingCount": 1,
+      "verify": "Pairing count = 1; pharmacy/formulation match expected; no do-not-select rows.",
+      "flags": []
+    },
+    {
+      "product": "Semaglutide Injection \u2014 High (B12)",
+      "genId": "34I2X8MpVZf3AQTff3bo",
+      "price": 119,
+      "status": "PAIRING_INCOMPLETE",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 verify each existing link strength \u2192 add missing exact SELECTED vials \u2192 remove any wrong-strength links \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "doNotSelect": [],
+      "expectedFinalPairingCount": 2,
+      "verify": "Exactly the expected SELECTED vials (count=2) with correct strengths.",
+      "flags": [],
+      "currentPresent": [
+        {
+          "medicationId": "YqrJ1qnOv3U3ecJHuSzr",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ]
+    },
+    {
+      "product": "Semaglutide Injection \u2014 Any Dose (B12)",
+      "genId": "MkDIUw0NcJB7YL2pNzYW",
+      "price": 119,
+      "status": "PAIRING_INCORRECT",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 REMOVE incorrect current pairings \u2192 attach only expected rows \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection"
+        }
+      ],
+      "doNotSelect": [
+        "Greenwich Semaglutide + B12 (all)",
+        "Glycine",
+        "broken (3 VIALS) $50 row"
+      ],
+      "expectedFinalPairingCount": 5,
+      "verify": "Only expected pairings remain (count=5).",
+      "flags": [],
+      "currentToRemove": [
+        {
+          "medicationId": "99BZowkyXTMiGTu5cosT",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "iXnkfsa6XHugbDanwjUX",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "BmyTz7FPA4wUuojkq2Hy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "Twz0VeW8olCbbL1UAuQr",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "lPPKidpoLhkYCSV1sLse",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "pBAQDkpmfv9FIcpoqhxa",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "vCNPRlelLVcJmimIT7Wy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        }
+      ]
+    },
+    {
+      "product": "Semaglutide Injection \u2014 3-Month (B12)",
+      "genId": "sN2ggSXRJINjElMYTQjf",
+      "price": 359,
+      "status": "PAIRING_INCOMPLETE",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 verify each existing link strength \u2192 add missing exact SELECTED vials \u2192 remove any wrong-strength links \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "note": "STANDARD \u00d73 model \u2014 product quantityMonths=3; attach controlling 10mg B12 vial (NOT escalation 4\u21926\u219210; NOT broken 3-VIALS row)"
+        }
+      ],
+      "doNotSelect": [
+        "Escalation 4mg+6mg+10mg set as 3-month structure",
+        "SEMAGLUTIDE + VITAMIN B12 10MG\u2026(3 VIALS)",
+        "Glycine 3-month"
+      ],
+      "expectedFinalPairingCount": 1,
+      "verify": "Exactly the expected SELECTED vials (count=1) with correct strengths.",
+      "flags": [],
+      "currentPresent": [
+        {
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ]
+    },
+    {
+      "product": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+      "genId": "7Kix55LA15U0lNvY9QXI",
+      "price": 199,
+      "status": "PAIRING_INCORRECT",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 REMOVE incorrect current pairings \u2192 attach only expected rows \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "AOD 9604/ MOTS-C/ TESAMORELIN/ IPAMORELIN 1.2 MG/ 2 MG/ 2MG/ 2MG/ML (5 ML)",
+          "pharmacy": "Optimal Balance Pharmacy",
+          "strength": "1.2/2/2/2 mg/mL",
+          "package": "5 mL",
+          "cost": 102,
+          "ship": 20,
+          "form": "Injection",
+          "knownCorrectMedicationIdOnSibling": "MFHi8Zq2mIOXiO8fgcw9",
+          "siblingProductId": "yearpPaLo5H0k0FU5Ej8",
+          "siblingName": "AOD-9604 / MOTS-C / Tesamorelin Metabolic Triple Protocol"
+        }
+      ],
+      "doNotSelect": [
+        "AOD 9604 300 MCG standalone",
+        "AOD 9604 only",
+        "PRIG7DYPNNgco3lGf1zx deferred standalone"
+      ],
+      "expectedFinalPairingCount": 1,
+      "verify": "Only expected pairings remain (count=1).",
+      "flags": [],
+      "currentToRemove": [
+        {
+          "medicationId": "UvuErUI2gDnbXcr4kqcN",
+          "standardizedMedicationName": "AOD 9604",
+          "pharmacyName": "Optimal Balance Pharmacy"
+        }
+      ]
+    },
+    {
+      "product": "BPC-157/TB-500/GHK-Cu 3/3/10 mg/mL (5 mL) Injection",
+      "genId": "5iCQzEtTXw90ctEhIhkB",
+      "price": 159,
+      "status": "PAIRING_MISSING",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 attach rows listed \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML (5ml)",
+          "pharmacy": "Greenwich Pharmacy",
+          "strength": "3/3/10 mg/mL",
+          "package": "5ML",
+          "cost": 77,
+          "ship": 25,
+          "form": "Injection",
+          "retail": 159
+        }
+      ],
+      "doNotSelect": [
+        "BPC-157 500 MCG plain (Optimal Balance)",
+        "BPC-157 / GHK-CU / KPV / TB500",
+        "BPC-157/TB500 capsules",
+        "BPC-157/TB500 3mg/3mg/mL without GHK",
+        "plain BPC product KXMm9SsbOEYnFy9phmZn"
+      ],
+      "expectedFinalPairingCount": 1,
+      "verify": "Pairing count = 1; pharmacy/formulation match expected; no do-not-select rows.",
+      "flags": []
+    },
+    {
+      "product": "GHK-Cu / Minoxidil Topical Combo",
+      "genId": "489YrehNXRlL77fYPkOn",
+      "price": 69,
+      "status": "PAIRING_INCORRECT",
+      "steps": [
+        "Open Products \u2192 locate product \u2192 Edit \u2192 Formulary/Medication \u2192 REMOVE incorrect current pairings \u2192 attach only expected rows \u2192 Save"
+      ],
+      "attach": [
+        {
+          "exact": "Minoxidil 2.5mg/GHK-Cu 5mg/Apigenin 50mg/Fisetin 50mg",
+          "pharmacy": "Epiq Scripts",
+          "strength": "2.5 mg/G (combo)",
+          "package": "30",
+          "cost": 36.75,
+          "ship": 2,
+          "form": "Topical"
+        }
+      ],
+      "doNotSelect": [
+        "Greenwich GHK-CU alone",
+        "injectable GHK-Cu",
+        "Vios Minoxidil % topicals"
+      ],
+      "expectedFinalPairingCount": 1,
+      "verify": "Only expected pairings remain (count=1).",
+      "flags": [],
+      "currentToRemove": [
+        {
+          "medicationId": "DEu7EzsWmcFP6d60NT9J",
+          "standardizedMedicationName": "GHK-CU",
+          "pharmacyName": "Greenwich Pharmacy"
+        }
+      ]
+    },
+    {
+      "product": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "genId": "5F8jESeVeXcpkLU5rrdK",
+      "price": 149,
+      "status": "PAIRING_MISSING",
+      "steps": [
+        "Open Products \u2192 locate membership \u2192 Edit \u2192 Formulary/Medication",
+        "ATTEMPT: attach ALL listed B12 ladder rows AND ALL listed Glycine ladder rows under this ONE client product",
+        "IF GEN blocks mixing B12+Glycine on one CP: STOP. Do not invent a workaround. Record GEN_STRUCTURE_DECISION_REQUIRED (possible separate B12 vs Glycine membership SKUs \u2014 owner decision later)",
+        "IF multi-pair succeeds: Save"
+      ],
+      "attach": [
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 50,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 55,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 58,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 60,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        }
+      ],
+      "doNotSelect": [
+        "L-Carnitine",
+        "Greenwich SEM",
+        "one-time Any Dose products as substitutes"
+      ],
+      "expectedFinalPairingCount": 10,
+      "verify": "Either pairing count=10 with both ladders, OR stopped with structure flag (no unsafe partial state preferred).",
+      "flags": [
+        "GEN_STRUCTURE_DECISION_REQUIRED_IF_MULTI_ADDITIVE_PAIRING_BLOCKED"
+      ]
+    },
+    {
+      "product": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "genId": "E3MXZeeR01QROCuTLRLE",
+      "price": 275,
+      "status": "PAIRING_MISSING",
+      "steps": [
+        "Open Products \u2192 locate membership \u2192 Edit \u2192 Formulary/Medication",
+        "ATTEMPT: attach ALL listed B12 ladder rows AND ALL listed Glycine ladder rows under this ONE client product",
+        "IF GEN blocks mixing B12+Glycine on one CP: STOP. Do not invent a workaround. Record GEN_STRUCTURE_DECISION_REQUIRED (possible separate B12 vs Glycine membership SKUs \u2014 owner decision later)",
+        "IF multi-pair succeeds: Save"
+      ],
+      "attach": [
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 75,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 85,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 90,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 95,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 100,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "B12"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 65,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 75,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 85,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 90,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 95,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        },
+        {
+          "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "cost": 100,
+          "ship": 5,
+          "pharmacy": "Dirx-Hub",
+          "form": "Injection",
+          "ladder": "Glycine"
+        }
+      ],
+      "doNotSelect": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "TIRZEPATIDE + GLYCINE 30MG\u2026(3 PACK)",
+        "ambiguous combo labels"
+      ],
+      "expectedFinalPairingCount": 12,
+      "verify": "Either pairing count=12 with both ladders, OR stopped with structure flag (no unsafe partial state preferred).",
+      "flags": [
+        "GEN_STRUCTURE_DECISION_REQUIRED_IF_MULTI_ADDITIVE_PAIRING_BLOCKED"
+      ]
+    }
+  ],
+  "deferredOutsideLive14": [
+    {
+      "product": "AOD-9604 standalone",
+      "id": "PRIG7DYPNNgco3lGf1zx",
+      "note": "DEFERRED_COST_UNKNOWN \u2014 has AOD-only pairing but leave deferred; do not treat as live-ready"
+    },
+    {
+      "product": "BPC-157 / TB-500 Capsules",
+      "id": "iJtyig611AZEDBGdvRd9",
+      "note": "DEFERRED_COST_UNKNOWN"
+    },
+    {
+      "product": "Plain BPC-157 Injection",
+      "id": "KXMm9SsbOEYnFy9phmZn",
+      "note": "DEFERRED_COST_UNKNOWN \u2014 do not import blend"
+    },
+    {
+      "product": "Semaglutide Injection \u2014 3-Month (Glycine)",
+      "id": null,
+      "note": "DEFERRED_FORMULARY \u2014 not created"
+    }
+  ],
+  "imperfectPairingsDetail": {
+    "AOD": {
+      "current": [
+        {
+          "medicationId": "UvuErUI2gDnbXcr4kqcN",
+          "standardizedMedicationName": "AOD 9604",
+          "pharmacyName": "Optimal Balance Pharmacy"
+        }
+      ],
+      "expected": "AOD 9604/ MOTS-C/ TESAMORELIN/ IPAMORELIN 1.2 MG/ 2 MG/ 2MG/ 2MG/ML (5 ML) @ Optimal Balance",
+      "verdict": "INCORRECT",
+      "recommended": "Remove AOD-only; attach full blend (medicationId MFHi8Zq2mIOXiO8fgcw9 already on sibling yearpPaLo5H0k0FU5Ej8)"
+    },
+    "GHK_MINOXIDIL": {
+      "current": [
+        {
+          "medicationId": "DEu7EzsWmcFP6d60NT9J",
+          "standardizedMedicationName": "GHK-CU",
+          "pharmacyName": "Greenwich Pharmacy"
+        }
+      ],
+      "expected": "Minoxidil 2.5mg/GHK-Cu 5mg/Apigenin 50mg/Fisetin 50mg @ Epiq Scripts",
+      "verdict": "INCORRECT",
+      "recommended": "Remove Greenwich GHK-CU; attach Epiq combo"
+    },
+    "AOD_STANDALONE_DEFERRED": {
+      "id": "PRIG7DYPNNgco3lGf1zx",
+      "note": "Has pairing but remains DEFERRED \u2014 do not expose as live-ready"
+    }
+  },
+  "membershipArchitecture": {
+    "sem": {
+      "id": "5F8jESeVeXcpkLU5rrdK",
+      "preferred": "ONE membership CP with both Dirx B12 + Glycine full ladders (10 rows)",
+      "flagIfBlocked": "GEN_STRUCTURE_DECISION_REQUIRED",
+      "doNotInvent": "Do not silently create separate membership SKUs in this phase"
+    },
+    "tirz": {
+      "id": "E3MXZeeR01QROCuTLRLE",
+      "preferred": "ONE membership CP with both Dirx B12 + Glycine 5\u201330 ladders (12 rows)",
+      "flagIfBlocked": "GEN_STRUCTURE_DECISION_REQUIRED",
+      "ambiguousLabelsDeferred": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12"
+      ]
+    }
+  },
+  "formularyPairingApi": {
+    "status": "NOT_AVAILABLE_NOT_DOCUMENTED",
+    "testedIn2A": [
+      "POST/PATCH medicationId(s) \u2192 Unsupported",
+      "POST/PATCH formularyProductIds / standardizedMedicationIds / medications \u2192 Unsupported",
+      "Subpaths /formulary /medications /pairings /formulary-products \u2192 404"
+    ],
+    "documentedElsewhere": "No Client Products pairing write contract found in repo docs beyond 2A discovery",
+    "readPath": "GET /v2/client/products?view=formulary (works; no strength field)",
+    "futureAutomation": "Until GEN documents a pairing write API, future ~96 products will also need Smart Upload Apply or GEN admin UI",
+    "doNotTestWriteInThisPhase": true
+  },
+  "safety": {
+    "GEN_MODIFIED": "NO",
+    "GEN_WRITES": 0,
+    "WEBSITE_MODIFIED": "NO",
+    "GEN_WHOP_CUTOVER": "OFF",
+    "GEN_CATALOG_2B_STARTED": "NO"
+  },
+  "apiNote": "Live formulary view returns standardizedMedicationName without vial strength \u2014 incomplete SEM Dirx links require admin UI strength verification."
+}

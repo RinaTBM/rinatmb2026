@@ -1,0 +1,4439 @@
+{
+  "meta": {
+    "generated_at": "2026-08-25T00:38:03Z",
+    "phase": "MBM-GEN-FINAL-WRITE-MANIFEST (post price-conflict resolution)",
+    "mode": "FINAL READ-ONLY PREFLIGHT \u2014 DO NOT EXECUTE",
+    "owner_decisions_locked": [
+      "A",
+      "A",
+      "B",
+      "A",
+      "A",
+      "B",
+      "A",
+      "A"
+    ],
+    "website_architecture": "LOCKED",
+    "execution_eligible_website_variants": 38,
+    "gen_writes": 0,
+    "pairing_writes": 0,
+    "website_writes": 0,
+    "cutover": "OFF",
+    "pairing_execution_method_global": "MANUAL_GEN_ADMIN",
+    "pairing_api_status": "NOT_AVAILABLE \u2014 Client Products API cannot write formulary pairings (documented in GEN_CATALOG_2A_LIVE_WRITE_REPORT / GEN_LIVE_FORMULARY_PAIRING_AUDIT)",
+    "sources": [
+      "docs/MBM_GEN_ROUTING_EXECUTION_QUEUE.json",
+      "docs/MBM_WEBSITE_TO_GEN_ROUTING_MATRIX.json",
+      "docs/MBM_OWNER_ROUTING_DECISIONS_2.json",
+      "/tmp/MyBareMethod_FINAL_GEN.xlsx SELECTED FORMULARY",
+      "/tmp/gen_arch_list.json (255)",
+      "/tmp/gen_arch_form.json (29 formulary attachments)"
+    ],
+    "price_conflict_resolution_applied_at": "2026-08-25T00:48:39Z",
+    "price_conflict_resolution_doc": "docs/MBM_GEN_PRICE_CONFLICT_RESOLUTION.md"
+  },
+  "tir_create_validation": {
+    "expected": "4 B12 tier + 4 Glycine tier",
+    "b12_count": 4,
+    "glycine_count": 4,
+    "exactly_supported": true,
+    "forbidden_reuse": [
+      "Tirzepatide/B12/Glycine",
+      "Tirzepatide/Glycine/B12",
+      "legacy GLP-2 plan objects"
+    ]
+  },
+  "dedupe_summary": {
+    "execution_eligible_website_variants": 38,
+    "unique_gen_products_to_create": 8,
+    "unique_gen_products_to_repair": 10,
+    "unique_gen_cps_needing_pairing": 8,
+    "unique_gen_cps_pairing_active": 6,
+    "unique_gen_cps_pairing_deferred_future_hidden": 2,
+    "note": "38 website variants map to fewer unique GEN mutations via shared CPs (e.g. Estradiol patches\u00d74 \u2192 1 CP; Progesterone IR\u00d79 \u2192 1 CP; NAD nasal\u00d72 \u2192 1 CP)"
+  },
+  "section_A_gen_products_to_create": [
+    {
+      "website_family": "Tirzepatide",
+      "website_variants": [
+        "tir-b12-starting-low"
+      ],
+      "proposed_gen_internal_name": "Starting / Low (5+10) \u00b7 Vitamin B12",
+      "proposed_gen_display_name": "Starting / Low (5+10) \u00b7 Vitamin B12",
+      "form": "Injection",
+      "formulation_additive": "Vitamin B12",
+      "dose_tier": "Starting / Low (5+10)",
+      "customer_price": "119\u2013139",
+      "status": "draft_until_cutover",
+      "showPatient_storefrontEligible": false,
+      "exact_formulary_rows": [
+        {
+          "excel_row": 14,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 16,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 139,
+          "locked_one_time_x9": 139,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "why_new_gen_cp_required": "No appropriate TIR B12-only or Glycine-only dose-group CP exists. Must not reuse Tirzepatide/B12/Glycine, Tirzepatide/Glycine/B12, or legacy GLP-2 plan objects.",
+      "searched_existing_gen_candidates": [
+        {
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "43kVbBgNLBocKyVUhQmG",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "mhUSqSGlaFVCghW3V3DD",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "I1cJ6CdD2A1WTBjNrZOw",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Oral Drops)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "4ZWsN26iLt5ZpiLS1HCC",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "HYsMU8nGWX3WIziifSWH",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "NPaculekWp5HC1Gv0rRn",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide Any Dose (6 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "Mk6NCa9023u9hGBnFg8z",
+          "name": "GLP-2 Weight Loss Membership \u2013 Tirzepatide Any Dose (3 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "YkHkffkLKFz3FjC7Wvno",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "SqQy3xtafvX3diphE5nw",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 3 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "qsljAsY5SynzooZNG33e",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 6 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "S7unRy555KrkVQ5tTi9Z",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (High Dose / Maintenance)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "E3MXZeeR01QROCuTLRLE",
+          "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "why_not_appropriate": "Membership CP only \u2014 not a one-time dose-group product"
+        },
+        {
+          "productId": "9iUIrANb8j2XW3rNregB",
+          "name": "Tirzepatide",
+          "why_not_appropriate": "Generic title-only; no proven SELECTED dose-group pairings"
+        }
+      ],
+      "why_existing_not_appropriate": "Existing TIR objects are membership, ambiguous dual-additive, or legacy GLP-2 plans \u2014 none are exact B12-only or Glycine-only dose-group CPs matching approved tiers.",
+      "price_formula_issues": [],
+      "preflight_status": "READY",
+      "mutation_type": "CREATE"
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variants": [
+        "tir-b12-mid"
+      ],
+      "proposed_gen_internal_name": "Mid (15+20) \u00b7 Vitamin B12",
+      "proposed_gen_display_name": "Mid (15+20) \u00b7 Vitamin B12",
+      "form": "Injection",
+      "formulation_additive": "Vitamin B12",
+      "dose_tier": "Mid (15+20)",
+      "customer_price": "149\u2013159",
+      "status": "draft_until_cutover",
+      "showPatient_storefrontEligible": false,
+      "exact_formulary_rows": [
+        {
+          "excel_row": 18,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 149,
+          "locked_one_time_x9": 149,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 20,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 159,
+          "locked_one_time_x9": 159,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "why_new_gen_cp_required": "No appropriate TIR B12-only or Glycine-only dose-group CP exists. Must not reuse Tirzepatide/B12/Glycine, Tirzepatide/Glycine/B12, or legacy GLP-2 plan objects.",
+      "searched_existing_gen_candidates": [
+        {
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "43kVbBgNLBocKyVUhQmG",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "mhUSqSGlaFVCghW3V3DD",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "I1cJ6CdD2A1WTBjNrZOw",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Oral Drops)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "4ZWsN26iLt5ZpiLS1HCC",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "HYsMU8nGWX3WIziifSWH",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "NPaculekWp5HC1Gv0rRn",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide Any Dose (6 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "Mk6NCa9023u9hGBnFg8z",
+          "name": "GLP-2 Weight Loss Membership \u2013 Tirzepatide Any Dose (3 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "YkHkffkLKFz3FjC7Wvno",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "SqQy3xtafvX3diphE5nw",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 3 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "qsljAsY5SynzooZNG33e",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 6 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "S7unRy555KrkVQ5tTi9Z",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (High Dose / Maintenance)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "E3MXZeeR01QROCuTLRLE",
+          "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "why_not_appropriate": "Membership CP only \u2014 not a one-time dose-group product"
+        },
+        {
+          "productId": "9iUIrANb8j2XW3rNregB",
+          "name": "Tirzepatide",
+          "why_not_appropriate": "Generic title-only; no proven SELECTED dose-group pairings"
+        }
+      ],
+      "why_existing_not_appropriate": "Existing TIR objects are membership, ambiguous dual-additive, or legacy GLP-2 plans \u2014 none are exact B12-only or Glycine-only dose-group CPs matching approved tiers.",
+      "price_formula_issues": [],
+      "preflight_status": "READY",
+      "mutation_type": "CREATE"
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variants": [
+        "tir-b12-high"
+      ],
+      "proposed_gen_internal_name": "High (25+30) \u00b7 Vitamin B12",
+      "proposed_gen_display_name": "High (25+30) \u00b7 Vitamin B12",
+      "form": "Injection",
+      "formulation_additive": "Vitamin B12",
+      "dose_tier": "High (25+30)",
+      "customer_price": "169\u2013179",
+      "status": "draft_until_cutover",
+      "showPatient_storefrontEligible": false,
+      "exact_formulary_rows": [
+        {
+          "excel_row": 22,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 169,
+          "locked_one_time_x9": 169,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 24,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 179,
+          "locked_one_time_x9": 179,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "why_new_gen_cp_required": "No appropriate TIR B12-only or Glycine-only dose-group CP exists. Must not reuse Tirzepatide/B12/Glycine, Tirzepatide/Glycine/B12, or legacy GLP-2 plan objects.",
+      "searched_existing_gen_candidates": [
+        {
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "43kVbBgNLBocKyVUhQmG",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "mhUSqSGlaFVCghW3V3DD",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "I1cJ6CdD2A1WTBjNrZOw",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Oral Drops)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "4ZWsN26iLt5ZpiLS1HCC",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "HYsMU8nGWX3WIziifSWH",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "NPaculekWp5HC1Gv0rRn",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide Any Dose (6 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "Mk6NCa9023u9hGBnFg8z",
+          "name": "GLP-2 Weight Loss Membership \u2013 Tirzepatide Any Dose (3 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "YkHkffkLKFz3FjC7Wvno",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "SqQy3xtafvX3diphE5nw",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 3 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "qsljAsY5SynzooZNG33e",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 6 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "S7unRy555KrkVQ5tTi9Z",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (High Dose / Maintenance)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "E3MXZeeR01QROCuTLRLE",
+          "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "why_not_appropriate": "Membership CP only \u2014 not a one-time dose-group product"
+        },
+        {
+          "productId": "9iUIrANb8j2XW3rNregB",
+          "name": "Tirzepatide",
+          "why_not_appropriate": "Generic title-only; no proven SELECTED dose-group pairings"
+        }
+      ],
+      "why_existing_not_appropriate": "Existing TIR objects are membership, ambiguous dual-additive, or legacy GLP-2 plans \u2014 none are exact B12-only or Glycine-only dose-group CPs matching approved tiers.",
+      "price_formula_issues": [],
+      "preflight_status": "READY",
+      "mutation_type": "CREATE"
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variants": [
+        "tir-b12-any-dose"
+      ],
+      "proposed_gen_internal_name": "Any Dose (5\u201330) \u00b7 Vitamin B12",
+      "proposed_gen_display_name": "Any Dose (5\u201330) \u00b7 Vitamin B12",
+      "form": "Injection",
+      "formulation_additive": "Vitamin B12",
+      "dose_tier": "Any Dose (5\u201330)",
+      "customer_price": "119\u2013179",
+      "status": "draft_until_cutover",
+      "showPatient_storefrontEligible": false,
+      "exact_formulary_rows": [
+        {
+          "excel_row": 14,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 16,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 139,
+          "locked_one_time_x9": 139,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 18,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 149,
+          "locked_one_time_x9": 149,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 20,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 159,
+          "locked_one_time_x9": 159,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 22,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 169,
+          "locked_one_time_x9": 169,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 24,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 179,
+          "locked_one_time_x9": 179,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "why_new_gen_cp_required": "No appropriate TIR B12-only or Glycine-only dose-group CP exists. Must not reuse Tirzepatide/B12/Glycine, Tirzepatide/Glycine/B12, or legacy GLP-2 plan objects.",
+      "searched_existing_gen_candidates": [
+        {
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "43kVbBgNLBocKyVUhQmG",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "mhUSqSGlaFVCghW3V3DD",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "I1cJ6CdD2A1WTBjNrZOw",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Oral Drops)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "4ZWsN26iLt5ZpiLS1HCC",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "HYsMU8nGWX3WIziifSWH",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "NPaculekWp5HC1Gv0rRn",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide Any Dose (6 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "Mk6NCa9023u9hGBnFg8z",
+          "name": "GLP-2 Weight Loss Membership \u2013 Tirzepatide Any Dose (3 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "YkHkffkLKFz3FjC7Wvno",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "SqQy3xtafvX3diphE5nw",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 3 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "qsljAsY5SynzooZNG33e",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 6 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "S7unRy555KrkVQ5tTi9Z",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (High Dose / Maintenance)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "E3MXZeeR01QROCuTLRLE",
+          "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "why_not_appropriate": "Membership CP only \u2014 not a one-time dose-group product"
+        },
+        {
+          "productId": "9iUIrANb8j2XW3rNregB",
+          "name": "Tirzepatide",
+          "why_not_appropriate": "Generic title-only; no proven SELECTED dose-group pairings"
+        }
+      ],
+      "why_existing_not_appropriate": "Existing TIR objects are membership, ambiguous dual-additive, or legacy GLP-2 plans \u2014 none are exact B12-only or Glycine-only dose-group CPs matching approved tiers.",
+      "price_formula_issues": [],
+      "preflight_status": "READY",
+      "mutation_type": "CREATE"
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variants": [
+        "tir-glycine-starting-low"
+      ],
+      "proposed_gen_internal_name": "Starting / Low (5+10) \u00b7 Glycine",
+      "proposed_gen_display_name": "Starting / Low (5+10) \u00b7 Glycine",
+      "form": "Injection",
+      "formulation_additive": "Glycine",
+      "dose_tier": "Starting / Low (5+10)",
+      "customer_price": "119\u2013139",
+      "status": "draft_until_cutover",
+      "showPatient_storefrontEligible": false,
+      "exact_formulary_rows": [
+        {
+          "excel_row": 13,
+          "medication_name": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 15,
+          "medication_name": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 139,
+          "locked_one_time_x9": 139,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "why_new_gen_cp_required": "No appropriate TIR B12-only or Glycine-only dose-group CP exists. Must not reuse Tirzepatide/B12/Glycine, Tirzepatide/Glycine/B12, or legacy GLP-2 plan objects.",
+      "searched_existing_gen_candidates": [
+        {
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "43kVbBgNLBocKyVUhQmG",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "mhUSqSGlaFVCghW3V3DD",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "I1cJ6CdD2A1WTBjNrZOw",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Oral Drops)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "4ZWsN26iLt5ZpiLS1HCC",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "HYsMU8nGWX3WIziifSWH",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "NPaculekWp5HC1Gv0rRn",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide Any Dose (6 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "Mk6NCa9023u9hGBnFg8z",
+          "name": "GLP-2 Weight Loss Membership \u2013 Tirzepatide Any Dose (3 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "YkHkffkLKFz3FjC7Wvno",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "SqQy3xtafvX3diphE5nw",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 3 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "qsljAsY5SynzooZNG33e",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 6 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "S7unRy555KrkVQ5tTi9Z",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (High Dose / Maintenance)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "E3MXZeeR01QROCuTLRLE",
+          "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "why_not_appropriate": "Membership CP only \u2014 not a one-time dose-group product"
+        },
+        {
+          "productId": "9iUIrANb8j2XW3rNregB",
+          "name": "Tirzepatide",
+          "why_not_appropriate": "Generic title-only; no proven SELECTED dose-group pairings"
+        }
+      ],
+      "why_existing_not_appropriate": "Existing TIR objects are membership, ambiguous dual-additive, or legacy GLP-2 plans \u2014 none are exact B12-only or Glycine-only dose-group CPs matching approved tiers.",
+      "price_formula_issues": [],
+      "preflight_status": "READY",
+      "mutation_type": "CREATE"
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variants": [
+        "tir-glycine-mid"
+      ],
+      "proposed_gen_internal_name": "Mid (15+20) \u00b7 Glycine",
+      "proposed_gen_display_name": "Mid (15+20) \u00b7 Glycine",
+      "form": "Injection",
+      "formulation_additive": "Glycine",
+      "dose_tier": "Mid (15+20)",
+      "customer_price": "149\u2013159",
+      "status": "draft_until_cutover",
+      "showPatient_storefrontEligible": false,
+      "exact_formulary_rows": [
+        {
+          "excel_row": 17,
+          "medication_name": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 149,
+          "locked_one_time_x9": 149,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 19,
+          "medication_name": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 159,
+          "locked_one_time_x9": 159,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "why_new_gen_cp_required": "No appropriate TIR B12-only or Glycine-only dose-group CP exists. Must not reuse Tirzepatide/B12/Glycine, Tirzepatide/Glycine/B12, or legacy GLP-2 plan objects.",
+      "searched_existing_gen_candidates": [
+        {
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "43kVbBgNLBocKyVUhQmG",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "mhUSqSGlaFVCghW3V3DD",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "I1cJ6CdD2A1WTBjNrZOw",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Oral Drops)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "4ZWsN26iLt5ZpiLS1HCC",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "HYsMU8nGWX3WIziifSWH",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "NPaculekWp5HC1Gv0rRn",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide Any Dose (6 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "Mk6NCa9023u9hGBnFg8z",
+          "name": "GLP-2 Weight Loss Membership \u2013 Tirzepatide Any Dose (3 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "YkHkffkLKFz3FjC7Wvno",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "SqQy3xtafvX3diphE5nw",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 3 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "qsljAsY5SynzooZNG33e",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 6 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "S7unRy555KrkVQ5tTi9Z",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (High Dose / Maintenance)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "E3MXZeeR01QROCuTLRLE",
+          "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "why_not_appropriate": "Membership CP only \u2014 not a one-time dose-group product"
+        },
+        {
+          "productId": "9iUIrANb8j2XW3rNregB",
+          "name": "Tirzepatide",
+          "why_not_appropriate": "Generic title-only; no proven SELECTED dose-group pairings"
+        }
+      ],
+      "why_existing_not_appropriate": "Existing TIR objects are membership, ambiguous dual-additive, or legacy GLP-2 plans \u2014 none are exact B12-only or Glycine-only dose-group CPs matching approved tiers.",
+      "price_formula_issues": [],
+      "preflight_status": "READY",
+      "mutation_type": "CREATE"
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variants": [
+        "tir-glycine-high"
+      ],
+      "proposed_gen_internal_name": "High (25+30) \u00b7 Glycine",
+      "proposed_gen_display_name": "High (25+30) \u00b7 Glycine",
+      "form": "Injection",
+      "formulation_additive": "Glycine",
+      "dose_tier": "High (25+30)",
+      "customer_price": "169\u2013179",
+      "status": "draft_until_cutover",
+      "showPatient_storefrontEligible": false,
+      "exact_formulary_rows": [
+        {
+          "excel_row": 21,
+          "medication_name": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 169,
+          "locked_one_time_x9": 169,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 23,
+          "medication_name": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 179,
+          "locked_one_time_x9": 179,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "why_new_gen_cp_required": "No appropriate TIR B12-only or Glycine-only dose-group CP exists. Must not reuse Tirzepatide/B12/Glycine, Tirzepatide/Glycine/B12, or legacy GLP-2 plan objects.",
+      "searched_existing_gen_candidates": [
+        {
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "43kVbBgNLBocKyVUhQmG",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "mhUSqSGlaFVCghW3V3DD",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "I1cJ6CdD2A1WTBjNrZOw",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Oral Drops)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "4ZWsN26iLt5ZpiLS1HCC",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "HYsMU8nGWX3WIziifSWH",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "NPaculekWp5HC1Gv0rRn",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide Any Dose (6 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "Mk6NCa9023u9hGBnFg8z",
+          "name": "GLP-2 Weight Loss Membership \u2013 Tirzepatide Any Dose (3 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "YkHkffkLKFz3FjC7Wvno",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "SqQy3xtafvX3diphE5nw",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 3 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "qsljAsY5SynzooZNG33e",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 6 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "S7unRy555KrkVQ5tTi9Z",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (High Dose / Maintenance)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "E3MXZeeR01QROCuTLRLE",
+          "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "why_not_appropriate": "Membership CP only \u2014 not a one-time dose-group product"
+        },
+        {
+          "productId": "9iUIrANb8j2XW3rNregB",
+          "name": "Tirzepatide",
+          "why_not_appropriate": "Generic title-only; no proven SELECTED dose-group pairings"
+        }
+      ],
+      "why_existing_not_appropriate": "Existing TIR objects are membership, ambiguous dual-additive, or legacy GLP-2 plans \u2014 none are exact B12-only or Glycine-only dose-group CPs matching approved tiers.",
+      "price_formula_issues": [],
+      "preflight_status": "READY",
+      "mutation_type": "CREATE"
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variants": [
+        "tir-glycine-any-dose"
+      ],
+      "proposed_gen_internal_name": "Any Dose (5\u201330) \u00b7 Glycine",
+      "proposed_gen_display_name": "Any Dose (5\u201330) \u00b7 Glycine",
+      "form": "Injection",
+      "formulation_additive": "Glycine",
+      "dose_tier": "Any Dose (5\u201330)",
+      "customer_price": "119\u2013179",
+      "status": "draft_until_cutover",
+      "showPatient_storefrontEligible": false,
+      "exact_formulary_rows": [
+        {
+          "excel_row": 13,
+          "medication_name": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 15,
+          "medication_name": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 139,
+          "locked_one_time_x9": 139,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 17,
+          "medication_name": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 149,
+          "locked_one_time_x9": 149,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 19,
+          "medication_name": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 159,
+          "locked_one_time_x9": 159,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 21,
+          "medication_name": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 169,
+          "locked_one_time_x9": 169,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 23,
+          "medication_name": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 179,
+          "locked_one_time_x9": 179,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "why_new_gen_cp_required": "No appropriate TIR B12-only or Glycine-only dose-group CP exists. Must not reuse Tirzepatide/B12/Glycine, Tirzepatide/Glycine/B12, or legacy GLP-2 plan objects.",
+      "searched_existing_gen_candidates": [
+        {
+          "productId": "SvFDJ7W4nmWL2bkLUMMS",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "43kVbBgNLBocKyVUhQmG",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "mhUSqSGlaFVCghW3V3DD",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "I1cJ6CdD2A1WTBjNrZOw",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide (Oral Drops)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "4ZWsN26iLt5ZpiLS1HCC",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (High Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "HYsMU8nGWX3WIziifSWH",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide / Ondansetron ODT (Low Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "NPaculekWp5HC1Gv0rRn",
+          "name": "GLP-2 Weight Loss \u2013 Tirzepatide Any Dose (6 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "Mk6NCa9023u9hGBnFg8z",
+          "name": "GLP-2 Weight Loss Membership \u2013 Tirzepatide Any Dose (3 Months)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "YkHkffkLKFz3FjC7Wvno",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "SqQy3xtafvX3diphE5nw",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 3 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "qsljAsY5SynzooZNG33e",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (Any Dose) \u2013 6 Month Supply",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "S7unRy555KrkVQ5tTi9Z",
+          "name": "GLP-2 Weight Loss Plan \u2013 Tirzepatide (High Dose / Maintenance)",
+          "why_not_appropriate": "Ambiguous additive combo or legacy GLP-2 plan object \u2014 forbidden for cutover TIR dose-group CPs"
+        },
+        {
+          "productId": "E3MXZeeR01QROCuTLRLE",
+          "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "why_not_appropriate": "Membership CP only \u2014 not a one-time dose-group product"
+        },
+        {
+          "productId": "9iUIrANb8j2XW3rNregB",
+          "name": "Tirzepatide",
+          "why_not_appropriate": "Generic title-only; no proven SELECTED dose-group pairings"
+        }
+      ],
+      "why_existing_not_appropriate": "Existing TIR objects are membership, ambiguous dual-additive, or legacy GLP-2 plans \u2014 none are exact B12-only or Glycine-only dose-group CPs matching approved tiers.",
+      "price_formula_issues": [],
+      "preflight_status": "READY",
+      "mutation_type": "CREATE"
+    }
+  ],
+  "section_B_gen_products_to_repair": [
+    {
+      "clientProductId": "SkqQHmsc0WdsbK9vmV1y",
+      "current": {
+        "name": "Semaglutide Injection \u2014 Starting / Low (B12)",
+        "displayName": "Semaglutide Injection \u2014 Starting / Low (B12)",
+        "price": 99,
+        "storefrontEligible": true,
+        "formulary_attachments": [
+          {
+            "medicationId": "gqe6H8ay1sw6QlS32SMH",
+            "standardizedMedicationName": "Semaglutide + Vitamin B12",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          }
+        ]
+      },
+      "desired": {
+        "name": "Semaglutide Injection \u2014 Starting / Low (B12)",
+        "displayName": "Starting / Low \u00b7 Vitamin B12",
+        "price": "89\u201399",
+        "price_note": "Band prices: GEN holds one amount within band until cutover policy refined",
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "PRICE_BAND_OK",
+        "detail": "Current $99.0 within locked band $89\u2013$99 (GEN holds single price)",
+        "owner_override": false
+      },
+      "formulary_attachments_to_keep": [
+        {
+          "medicationId": "gqe6H8ay1sw6QlS32SMH",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        }
+      ],
+      "formulary_attachments_to_remove": [],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 3,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 5,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 3,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 89,
+          "locked_one_time_x9": 89,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 5,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 99,
+          "locked_one_time_x9": 99,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+      "website_variants_routing_here": [
+        "sem-b12-starting-low"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "sem-b12-starting-low"
+      ],
+      "required_actions": [
+        "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+        "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+      ],
+      "membership_note": null,
+      "stop_items": [],
+      "preflight_status": "READY_WITH_MANUAL_PAIRING",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    },
+    {
+      "clientProductId": "34I2X8MpVZf3AQTff3bo",
+      "current": {
+        "name": "Semaglutide Injection \u2014 High (B12)",
+        "displayName": "Semaglutide Injection \u2014 High (B12)",
+        "price": 119,
+        "storefrontEligible": true,
+        "formulary_attachments": [
+          {
+            "medicationId": "YqrJ1qnOv3U3ecJHuSzr",
+            "standardizedMedicationName": "Semaglutide + Vitamin B12",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          }
+        ]
+      },
+      "desired": {
+        "name": "Semaglutide Injection \u2014 High (B12)",
+        "displayName": "High \u00b7 Vitamin B12",
+        "price": "109\u2013119",
+        "price_note": "Band prices: GEN holds one amount within band until cutover policy refined",
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "PRICE_BAND_OK",
+        "detail": "Current $119.0 within locked band $109\u2013$119 (GEN holds single price)",
+        "owner_override": false
+      },
+      "formulary_attachments_to_keep": [
+        {
+          "medicationId": "YqrJ1qnOv3U3ecJHuSzr",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        }
+      ],
+      "formulary_attachments_to_remove": [],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 9,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 11,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 9,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 11,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+      "website_variants_routing_here": [
+        "sem-b12-high"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "sem-b12-high"
+      ],
+      "required_actions": [
+        "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+        "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+      ],
+      "membership_note": null,
+      "stop_items": [],
+      "preflight_status": "READY_WITH_MANUAL_PAIRING",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    },
+    {
+      "clientProductId": "MkDIUw0NcJB7YL2pNzYW",
+      "current": {
+        "name": "Semaglutide Injection \u2014 Any Dose (B12)",
+        "displayName": "Semaglutide Injection \u2014 Any Dose (B12)",
+        "price": 119,
+        "storefrontEligible": true,
+        "formulary_attachments": [
+          {
+            "medicationId": "99BZowkyXTMiGTu5cosT",
+            "standardizedMedicationName": "Semaglutide B12 ( , , )",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "ekw92avqC0Uf2thW7fA9",
+            "standardizedMedicationName": "Semaglutide B12 ( , , )",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "iXnkfsa6XHugbDanwjUX",
+            "standardizedMedicationName": "Semaglutide B12 ( , , )",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "BmyTz7FPA4wUuojkq2Hy",
+            "standardizedMedicationName": "Semaglutide + B12",
+            "pharmacyName": "Greenwich Pharmacy",
+            "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "Twz0VeW8olCbbL1UAuQr",
+            "standardizedMedicationName": "Semaglutide + B12",
+            "pharmacyName": "Greenwich Pharmacy",
+            "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "lPPKidpoLhkYCSV1sLse",
+            "standardizedMedicationName": "Semaglutide + B12",
+            "pharmacyName": "Greenwich Pharmacy",
+            "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "pBAQDkpmfv9FIcpoqhxa",
+            "standardizedMedicationName": "Semaglutide + B12",
+            "pharmacyName": "Greenwich Pharmacy",
+            "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "vCNPRlelLVcJmimIT7Wy",
+            "standardizedMedicationName": "Semaglutide + B12",
+            "pharmacyName": "Greenwich Pharmacy",
+            "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          }
+        ]
+      },
+      "desired": {
+        "name": "Semaglutide Injection \u2014 Any Dose (B12)",
+        "displayName": "Any Dose \u00b7 Vitamin B12",
+        "price": "89\u2013119",
+        "price_note": "Band prices: GEN holds one amount within band until cutover policy refined",
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "PRICE_BAND_OK",
+        "detail": "Current $119.0 within locked band $89\u2013$119 (GEN holds single price)",
+        "owner_override": false
+      },
+      "formulary_attachments_to_keep": [
+        {
+          "medicationId": "99BZowkyXTMiGTu5cosT",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        },
+        {
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        },
+        {
+          "medicationId": "iXnkfsa6XHugbDanwjUX",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        }
+      ],
+      "formulary_attachments_to_remove": [
+        {
+          "medicationId": "BmyTz7FPA4wUuojkq2Hy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy",
+          "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "REMOVE",
+          "reason": "Non-SELECTED pharmacy Greenwich Pharmacy \u2014 Dirx-Hub only for SEM cutover"
+        },
+        {
+          "medicationId": "Twz0VeW8olCbbL1UAuQr",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy",
+          "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "REMOVE",
+          "reason": "Non-SELECTED pharmacy Greenwich Pharmacy \u2014 Dirx-Hub only for SEM cutover"
+        },
+        {
+          "medicationId": "lPPKidpoLhkYCSV1sLse",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy",
+          "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "REMOVE",
+          "reason": "Non-SELECTED pharmacy Greenwich Pharmacy \u2014 Dirx-Hub only for SEM cutover"
+        },
+        {
+          "medicationId": "pBAQDkpmfv9FIcpoqhxa",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy",
+          "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "REMOVE",
+          "reason": "Non-SELECTED pharmacy Greenwich Pharmacy \u2014 Dirx-Hub only for SEM cutover"
+        },
+        {
+          "medicationId": "vCNPRlelLVcJmimIT7Wy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy",
+          "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "REMOVE",
+          "reason": "Non-SELECTED pharmacy Greenwich Pharmacy \u2014 Dirx-Hub only for SEM cutover"
+        }
+      ],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 3,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 5,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 7,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 9,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 11,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 3,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 89,
+          "locked_one_time_x9": 89,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 5,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 99,
+          "locked_one_time_x9": 99,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 7,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 9,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 11,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+      "website_variants_routing_here": [
+        "sem-b12-any-dose"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "sem-b12-any-dose"
+      ],
+      "required_actions": [
+        "REPAIR_FORMULARY_PAIRINGS_DIRX_HUB_ONLY",
+        "REMOVE_NON_SELECTED_PHARMACY_ATTACHMENTS",
+        "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY",
+        "VERIFY_EXACT_STRENGTH_MED_IDS"
+      ],
+      "membership_note": null,
+      "stop_items": [],
+      "preflight_status": "READY_WITH_MANUAL_PAIRING",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    },
+    {
+      "clientProductId": "tk2GW39OGr7JX4MCCoJP",
+      "current": {
+        "name": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+        "displayName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+        "price": 99,
+        "storefrontEligible": true,
+        "formulary_attachments": [
+          {
+            "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+            "standardizedMedicationName": "Semaglutide + Glycine",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          }
+        ]
+      },
+      "desired": {
+        "name": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+        "displayName": "Starting / Low \u00b7 Glycine",
+        "price": "89\u201399",
+        "price_note": "Band prices: GEN holds one amount within band until cutover policy refined",
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "PRICE_BAND_OK",
+        "detail": "Current $99.0 within locked band $89\u2013$99 (GEN holds single price)",
+        "owner_override": false
+      },
+      "formulary_attachments_to_keep": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        }
+      ],
+      "formulary_attachments_to_remove": [],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 2,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 4,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 2,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 89,
+          "locked_one_time_x9": 89,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 4,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 99,
+          "locked_one_time_x9": 99,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+      "website_variants_routing_here": [
+        "sem-glycine-starting-low"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "sem-glycine-starting-low"
+      ],
+      "required_actions": [
+        "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+        "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+      ],
+      "membership_note": null,
+      "stop_items": [],
+      "preflight_status": "READY_WITH_MANUAL_PAIRING",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    },
+    {
+      "clientProductId": "CjqOUbPuGPZzxephqRou",
+      "current": {
+        "name": "Semaglutide Injection \u2014 Mid (Glycine)",
+        "displayName": "Semaglutide Injection \u2014 Mid (Glycine)",
+        "price": 109,
+        "storefrontEligible": true,
+        "formulary_attachments": [
+          {
+            "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+            "standardizedMedicationName": "Semaglutide + Glycine",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "SX8kyR4siUDVAUrm9CvN",
+            "standardizedMedicationName": "Semaglutide + Glycine",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          }
+        ]
+      },
+      "desired": {
+        "name": "Semaglutide Injection \u2014 Mid (Glycine)",
+        "displayName": "Mid \u00b7 Glycine",
+        "price": 109,
+        "price_note": null,
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "OK",
+        "detail": "Matches locked $109",
+        "owner_override": false
+      },
+      "formulary_attachments_to_keep": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        }
+      ],
+      "formulary_attachments_to_remove": [],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 6,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 6,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+      "website_variants_routing_here": [
+        "sem-glycine-mid"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "sem-glycine-mid"
+      ],
+      "required_actions": [
+        "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+        "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+      ],
+      "membership_note": null,
+      "stop_items": [],
+      "preflight_status": "READY_WITH_MANUAL_PAIRING",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    },
+    {
+      "clientProductId": "sssEk3FDY4LFbQYGQsLx",
+      "current": {
+        "name": "Semaglutide Injection \u2014 High (Glycine)",
+        "displayName": "Semaglutide Injection \u2014 High (Glycine)",
+        "price": 119,
+        "storefrontEligible": true,
+        "formulary_attachments": [
+          {
+            "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+            "standardizedMedicationName": "Semaglutide + Glycine",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          }
+        ]
+      },
+      "desired": {
+        "name": "Semaglutide Injection \u2014 High (Glycine)",
+        "displayName": "High \u00b7 Glycine",
+        "price": "109\u2013119",
+        "price_note": "Band prices: GEN holds one amount within band until cutover policy refined",
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "PRICE_BAND_OK",
+        "detail": "Current $119.0 within locked band $109\u2013$119 (GEN holds single price)",
+        "owner_override": false
+      },
+      "formulary_attachments_to_keep": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        }
+      ],
+      "formulary_attachments_to_remove": [],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 8,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 10,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 8,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 10,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+      "website_variants_routing_here": [
+        "sem-glycine-high"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "sem-glycine-high"
+      ],
+      "required_actions": [
+        "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+        "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+      ],
+      "membership_note": null,
+      "stop_items": [],
+      "preflight_status": "READY_WITH_MANUAL_PAIRING",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    },
+    {
+      "clientProductId": "wQK2JsFnh7oFBf3Lag4n",
+      "current": {
+        "name": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+        "displayName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+        "price": 119,
+        "storefrontEligible": true,
+        "formulary_attachments": [
+          {
+            "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+            "standardizedMedicationName": "Semaglutide + Glycine",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+            "standardizedMedicationName": "Semaglutide + Glycine",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "SX8kyR4siUDVAUrm9CvN",
+            "standardizedMedicationName": "Semaglutide + Glycine",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          },
+          {
+            "medicationId": "WPEBtvCdn2I8l6tRmT9R",
+            "standardizedMedicationName": "Semaglutide + Glycine",
+            "pharmacyName": "Dirx-Hub",
+            "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          }
+        ]
+      },
+      "desired": {
+        "name": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+        "displayName": "Any Dose \u00b7 Glycine",
+        "price": "89\u2013119",
+        "price_note": "Band prices: GEN holds one amount within band until cutover policy refined",
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "PRICE_BAND_OK",
+        "detail": "Current $119.0 within locked band $89\u2013$119 (GEN holds single price)",
+        "owner_override": false
+      },
+      "formulary_attachments_to_keep": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        },
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        },
+        {
+          "medicationId": "WPEBtvCdn2I8l6tRmT9R",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub",
+          "pharmacyId": "pharmacy-bgpcjbpqiusxdi0eaygj",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        }
+      ],
+      "formulary_attachments_to_remove": [],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 2,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 4,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 6,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 8,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 10,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 2,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 89,
+          "locked_one_time_x9": 89,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 4,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 99,
+          "locked_one_time_x9": 99,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 6,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 8,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 10,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+      "website_variants_routing_here": [
+        "sem-glycine-any-dose"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "sem-glycine-any-dose"
+      ],
+      "required_actions": [
+        "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+        "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+      ],
+      "membership_note": null,
+      "stop_items": [],
+      "preflight_status": "READY_WITH_MANUAL_PAIRING",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    },
+    {
+      "clientProductId": "5F8jESeVeXcpkLU5rrdK",
+      "current": {
+        "name": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "displayName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "price": 149,
+        "storefrontEligible": true,
+        "formulary_attachments": []
+      },
+      "desired": {
+        "name": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "displayName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE Membership",
+        "price": 149,
+        "price_note": null,
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "OK",
+        "detail": "Owner override matches",
+        "owner_override": true
+      },
+      "formulary_attachments_to_keep": [],
+      "formulary_attachments_to_remove": [],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 2,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 3,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 4,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 5,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 6,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 7,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 8,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 9,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 10,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 11,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 2,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 89,
+          "locked_one_time_x9": 89,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 3,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 89,
+          "locked_one_time_x9": 89,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 4,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 99,
+          "locked_one_time_x9": 99,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 5,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 99,
+          "locked_one_time_x9": 99,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 6,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 7,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 8,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 9,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 10,
+          "medication_name": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 11,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "Owner membership price locked $149.",
+      "website_variants_routing_here": [
+        "sem-membership"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "sem-membership"
+      ],
+      "required_actions": [
+        "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
+        "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
+        "VERIFY_PRICE_149"
+      ],
+      "membership_note": "Membership: attach full Dirx-Hub B12 + Glycine SELECTED ladders (SEM 10 rows / TIR 12 rows) unless GEN UI forces split \u2014 then GEN_STRUCTURE_DECISION_REQUIRED",
+      "stop_items": [],
+      "preflight_status": "READY_WITH_MANUAL_PAIRING",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    },
+    {
+      "clientProductId": "E3MXZeeR01QROCuTLRLE",
+      "current": {
+        "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "displayName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "price": 275,
+        "storefrontEligible": true,
+        "formulary_attachments": []
+      },
+      "desired": {
+        "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "displayName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE Membership",
+        "price": 275,
+        "price_note": null,
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "OK",
+        "detail": "Owner override matches",
+        "owner_override": true
+      },
+      "formulary_attachments_to_keep": [],
+      "formulary_attachments_to_remove": [],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 13,
+          "medication_name": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 14,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 15,
+          "medication_name": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 16,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 17,
+          "medication_name": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 18,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 19,
+          "medication_name": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 20,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 21,
+          "medication_name": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 22,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 23,
+          "medication_name": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        },
+        {
+          "action": "ADD",
+          "excel_row": 24,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5,
+          "medicationId": null,
+          "NOTE": "Membership ladder \u2014 select exact vials in GEN admin; no inferred IDs"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 13,
+          "medication_name": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 14,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 15,
+          "medication_name": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 139,
+          "locked_one_time_x9": 139,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 16,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 139,
+          "locked_one_time_x9": 139,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 17,
+          "medication_name": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 149,
+          "locked_one_time_x9": 149,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 18,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 149,
+          "locked_one_time_x9": 149,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 19,
+          "medication_name": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 159,
+          "locked_one_time_x9": 159,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 20,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 159,
+          "locked_one_time_x9": 159,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 21,
+          "medication_name": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 169,
+          "locked_one_time_x9": 169,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 22,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 169,
+          "locked_one_time_x9": 169,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 23,
+          "medication_name": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 179,
+          "locked_one_time_x9": 179,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 24,
+          "medication_name": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "package": "2mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 179,
+          "locked_one_time_x9": 179,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES; KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER; WEBSITE_REPRICE_249_TO_275_AT_CUTOVER",
+      "website_variants_routing_here": [
+        "tir-membership"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "tir-membership"
+      ],
+      "required_actions": [
+        "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
+        "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
+        "WEBSITE_REPRICE_249_TO_275_AT_CUTOVER"
+      ],
+      "membership_note": "Membership: attach full Dirx-Hub B12 + Glycine SELECTED ladders (SEM 10 rows / TIR 12 rows) unless GEN UI forces split \u2014 then GEN_STRUCTURE_DECISION_REQUIRED",
+      "stop_items": [],
+      "preflight_status": "READY_WITH_MANUAL_PAIRING",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    },
+    {
+      "clientProductId": "iJtyig611AZEDBGdvRd9",
+      "current": {
+        "name": "BPC-157/TB500",
+        "displayName": "BPC-157/TB500",
+        "price": 169,
+        "storefrontEligible": true,
+        "formulary_attachments": [
+          {
+            "medicationId": "27WtrIdo3z4Ssj5sDcc6",
+            "standardizedMedicationName": "BPC-157 / TB500",
+            "pharmacyName": "Greenwich Pharmacy",
+            "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+            "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin"
+          }
+        ]
+      },
+      "desired": {
+        "name": "BPC-157/TB500",
+        "displayName": "Injection",
+        "price": 159,
+        "price_note": null,
+        "storefrontEligible": true,
+        "status": "active_cutover_target"
+      },
+      "price_check": {
+        "status": "PRICE_CONFLICT",
+        "detail": "Current $169.0 != locked $159",
+        "owner_override": false
+      },
+      "formulary_attachments_to_keep": [
+        {
+          "medicationId": "27WtrIdo3z4Ssj5sDcc6",
+          "standardizedMedicationName": "BPC-157 / TB500",
+          "pharmacyName": "Greenwich Pharmacy",
+          "pharmacyId": "pharmacy-olnitvqyqof9lzyalso5",
+          "NOTE": "API formulary view does not return vial strength \u2014 exact strength must be verified in GEN admin",
+          "action": "KEEP_PENDING_STRENGTH_VERIFY",
+          "reason": "Pharmacy/additive plausible \u2014 verify exact vial strength in GEN admin (API lacks strength)"
+        }
+      ],
+      "formulary_attachments_to_remove": [],
+      "formulary_attachments_to_add": [
+        {
+          "action": "ADD",
+          "excel_row": 103,
+          "medication_name": "BPC-157/TB500 3mg/3mg/mL",
+          "strength": "3mg/3mg/mL",
+          "package": "5ML",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 77,
+          "shipping": 25,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId \u2014 select exact SELECTED vial in GEN admin"
+        }
+      ],
+      "exact_formulary_rows": [
+        {
+          "excel_row": 103,
+          "medication_name": "BPC-157/TB500 3mg/3mg/mL",
+          "strength": "3mg/3mg/mL",
+          "package": "5ML",
+          "form": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 77,
+          "shipping": 25,
+          "calculated_mbm_retail_x9": 159,
+          "locked_one_time_x9": 159,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "exact_reason_for_repair": "Live pairing exists to BPC-157/TB500 @ Greenwich \u2014 verify exact strength/package equals SELECTED r103.",
+      "website_variants_routing_here": [
+        "wolverine-injection"
+      ],
+      "all_matrix_variants_on_this_cp": [
+        "wolverine-injection"
+      ],
+      "required_actions": [
+        "VERIFY_PAIRING_IS_EXACT_R103_NOT_GHK_OR_KPV_BLEND",
+        "ALIGN_GEN_PRICE",
+        "OPTIONAL_RENAME_DISPLAY_TO_WOLVERINE"
+      ],
+      "membership_note": null,
+      "stop_items": [
+        {
+          "type": "PRICE_CONFLICT",
+          "detail": "Current $169.0 != locked $159"
+        }
+      ],
+      "preflight_status": "STOP_PRICE_CONFLICT",
+      "mutation_type": "REPAIR",
+      "api_writable_fields": [
+        "name",
+        "displayName",
+        "pricing.amount",
+        "storefrontEligible"
+      ],
+      "manual_gen_admin_fields": [
+        "formulary_pairings"
+      ]
+    }
+  ],
+  "section_C_formulary_pairings_api_writable": [],
+  "section_D_formulary_pairings_manual_gen_admin": [
+    {
+      "clientProductId": "BLf8inX395YNc7WPCD4O",
+      "gen_display_name": "Semaglutide Injection \u2014 Mid (B12)",
+      "website_family": "Semaglutide",
+      "website_variants": [
+        "sem-b12-mid"
+      ],
+      "launch_states": [
+        "LAUNCH_WITH_WEBSITE_CUTOVER"
+      ],
+      "current_pairings": [],
+      "desired_final_pairings": [
+        {
+          "excel_row": 7,
+          "medication_name": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "form": "Vial",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "pairing_actions": [
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 7,
+          "exact_medication": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "formulation": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5,
+          "calculated_retail_x9": 109,
+          "locked_retail_x9": 109,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        }
+      ],
+      "pairing_execution_method": "MANUAL_GEN_ADMIN",
+      "api_writable": false,
+      "price_issues": [],
+      "defer_until_launch": false,
+      "defer_reason": null,
+      "preflight_status": "READY_MANUAL_PAIRING"
+    },
+    {
+      "clientProductId": "FVwkzvQqWIZRNAwbslGw",
+      "gen_display_name": "NAD + Nasal Spray",
+      "website_family": "NAD+",
+      "website_variants": [
+        "nad-nasal-r84",
+        "nad-nasal-r85"
+      ],
+      "launch_states": [
+        "CURRENT_LIVE"
+      ],
+      "current_pairings": [],
+      "desired_final_pairings": [
+        {
+          "excel_row": 84,
+          "medication_name": "NAD+ 50mg/ml",
+          "strength": "50mg/ml",
+          "package": "15ml",
+          "form": "Nasal Spray",
+          "pharmacy": "St Luke",
+          "cost": 30,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 79,
+          "locked_one_time_x9": 79,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 85,
+          "medication_name": "NAD+ 200mg/ml",
+          "strength": "200mg/ml",
+          "package": "15ml",
+          "form": "Nasal Spray",
+          "pharmacy": "St Luke",
+          "cost": 45,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 109,
+          "locked_one_time_x9": 109,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "pairing_actions": [
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 84,
+          "exact_medication": "NAD+ 50mg/ml",
+          "formulation": "NAD+ 50mg/ml",
+          "strength": "50mg/ml",
+          "package": "15ml",
+          "pharmacy": "St Luke",
+          "cost": 30,
+          "shipping": 30,
+          "calculated_retail_x9": 79,
+          "locked_retail_x9": 79,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 85,
+          "exact_medication": "NAD+ 200mg/ml",
+          "formulation": "NAD+ 200mg/ml",
+          "strength": "200mg/ml",
+          "package": "15ml",
+          "pharmacy": "St Luke",
+          "cost": 45,
+          "shipping": 30,
+          "calculated_retail_x9": 109,
+          "locked_retail_x9": 109,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        }
+      ],
+      "pairing_execution_method": "MANUAL_GEN_ADMIN",
+      "api_writable": false,
+      "price_issues": [
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "nad-nasal-r84",
+          "detail": "GEN price 0 vs desired 79 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "nad-nasal-r85",
+          "detail": "GEN price 0 vs desired 109 \u2014 align price before/with pairing"
+        }
+      ],
+      "defer_until_launch": false,
+      "defer_reason": null,
+      "preflight_status": "STOP_PRICE_OR_STRUCTURE"
+    },
+    {
+      "clientProductId": "omhh3NabouO8AsNR5tkD",
+      "gen_display_name": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+      "website_family": "Wolverine / BPC-TB",
+      "website_variants": [
+        "wolverine-capsule"
+      ],
+      "launch_states": [
+        "CURRENT_LIVE"
+      ],
+      "current_pairings": [],
+      "desired_final_pairings": [
+        {
+          "excel_row": 104,
+          "medication_name": "BPC-157/TB500 capsules 500MCG/500MCG",
+          "strength": "500mcg/500mcg",
+          "package": "1EA",
+          "form": null,
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 3.2,
+          "shipping": 25,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "pairing_actions": [
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 104,
+          "exact_medication": "BPC-157/TB500 capsules 500MCG/500MCG",
+          "formulation": "BPC-157/TB500 capsules 500MCG/500MCG",
+          "strength": "500mcg/500mcg",
+          "package": "1EA",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 3.2,
+          "shipping": 25,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        }
+      ],
+      "pairing_execution_method": "MANUAL_GEN_ADMIN",
+      "api_writable": false,
+      "price_issues": [
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "wolverine-capsule",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        }
+      ],
+      "defer_until_launch": false,
+      "defer_reason": null,
+      "preflight_status": "STOP_PRICE_OR_STRUCTURE"
+    },
+    {
+      "clientProductId": "BboYS4a2Uj7APetrFo6W",
+      "gen_display_name": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+      "website_family": "Minoxidil",
+      "website_variants": [
+        "minoxidil-fin-minox-0.1-5"
+      ],
+      "launch_states": [
+        "CURRENT_LIVE"
+      ],
+      "current_pairings": [],
+      "desired_final_pairings": [
+        {
+          "excel_row": 129,
+          "medication_name": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+          "strength": "0.1/5 %",
+          "package": "1 ml",
+          "form": "Foam",
+          "pharmacy": "Vios",
+          "cost": 30,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 79,
+          "locked_one_time_x9": 79,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "pairing_actions": [
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 129,
+          "exact_medication": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+          "formulation": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+          "strength": "0.1/5 %",
+          "package": "1 ml",
+          "pharmacy": "Vios",
+          "cost": 30,
+          "shipping": 30,
+          "calculated_retail_x9": 79,
+          "locked_retail_x9": 79,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        }
+      ],
+      "pairing_execution_method": "MANUAL_GEN_ADMIN",
+      "api_writable": false,
+      "price_issues": [
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "minoxidil-fin-minox-0.1-5",
+          "detail": "GEN price 0 vs desired 79 \u2014 align price before/with pairing"
+        }
+      ],
+      "defer_until_launch": false,
+      "defer_reason": null,
+      "preflight_status": "STOP_PRICE_OR_STRUCTURE"
+    },
+    {
+      "clientProductId": "o7dNtf9QsnEqPCrLr2tR",
+      "gen_display_name": "Women's Hormones (HRT) \u2013 Vaginal Health (Estradiol / DHEA)",
+      "website_family": "Estradiol",
+      "website_variants": [
+        "estradiol-patch-r26",
+        "estradiol-patch-r27",
+        "estradiol-patch-r28",
+        "estradiol-patch-r29"
+      ],
+      "launch_states": [
+        "CURRENT_LIVE"
+      ],
+      "current_pairings": [],
+      "desired_final_pairings": [
+        {
+          "excel_row": 26,
+          "medication_name": "ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count",
+          "strength": "0.025mg/hr",
+          "package": null,
+          "form": "Patch",
+          "pharmacy": "Valiant",
+          "cost": 50,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 119,
+          "locked_one_time_x9": 119,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 27,
+          "medication_name": "ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count",
+          "strength": "0.0375mg/hr",
+          "package": null,
+          "form": "Patch",
+          "pharmacy": "Valiant",
+          "cost": 55,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 129,
+          "locked_one_time_x9": 129,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 28,
+          "medication_name": "ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count",
+          "strength": "0.05mg/hr",
+          "package": null,
+          "form": "Patch",
+          "pharmacy": "Valiant",
+          "cost": 60,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 139,
+          "locked_one_time_x9": 139,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 29,
+          "medication_name": "ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count",
+          "strength": "0.1mg/hr",
+          "package": null,
+          "form": "Patch",
+          "pharmacy": "Valiant",
+          "cost": 70,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 149,
+          "locked_one_time_x9": 149,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "pairing_actions": [
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 26,
+          "exact_medication": "ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count",
+          "formulation": "ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count",
+          "strength": "0.025mg/hr",
+          "package": null,
+          "pharmacy": "Valiant",
+          "cost": 50,
+          "shipping": 30,
+          "calculated_retail_x9": 119,
+          "locked_retail_x9": 119,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 27,
+          "exact_medication": "ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count",
+          "formulation": "ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count",
+          "strength": "0.0375mg/hr",
+          "package": null,
+          "pharmacy": "Valiant",
+          "cost": 55,
+          "shipping": 30,
+          "calculated_retail_x9": 129,
+          "locked_retail_x9": 129,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 28,
+          "exact_medication": "ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count",
+          "formulation": "ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count",
+          "strength": "0.05mg/hr",
+          "package": null,
+          "pharmacy": "Valiant",
+          "cost": 60,
+          "shipping": 30,
+          "calculated_retail_x9": 139,
+          "locked_retail_x9": 139,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 29,
+          "exact_medication": "ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count",
+          "formulation": "ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count",
+          "strength": "0.1mg/hr",
+          "package": null,
+          "pharmacy": "Valiant",
+          "cost": 70,
+          "shipping": 30,
+          "calculated_retail_x9": 149,
+          "locked_retail_x9": 149,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        }
+      ],
+      "pairing_execution_method": "MANUAL_GEN_ADMIN",
+      "api_writable": false,
+      "price_issues": [
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "estradiol-patch-r26",
+          "detail": "GEN price 0 vs desired 119 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "estradiol-patch-r27",
+          "detail": "GEN price 0 vs desired 129 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "estradiol-patch-r28",
+          "detail": "GEN price 0 vs desired 139 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "estradiol-patch-r29",
+          "detail": "GEN price 0 vs desired 149 \u2014 align price before/with pairing"
+        }
+      ],
+      "defer_until_launch": false,
+      "defer_reason": null,
+      "preflight_status": "STOP_PRICE_OR_STRUCTURE"
+    },
+    {
+      "clientProductId": "5dGkjdpLP7DkKKE2iVxh",
+      "gen_display_name": "Women's Hormones (HRT) \u2013 Progesterone",
+      "website_family": "Progesterone",
+      "website_variants": [
+        "prog-ir-r41",
+        "prog-ir-r42",
+        "prog-ir-r43",
+        "prog-ir-r44",
+        "prog-ir-r45",
+        "prog-ir-r46",
+        "prog-ir-r47",
+        "prog-ir-r48",
+        "prog-ir-r49"
+      ],
+      "launch_states": [
+        "CURRENT_LIVE"
+      ],
+      "current_pairings": [],
+      "desired_final_pairings": [
+        {
+          "excel_row": 41,
+          "medication_name": "PROGESTERONE 100MG CAPSULE 100mg",
+          "strength": "100mg",
+          "package": "1 mg",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 42,
+          "medication_name": "PROGESTERONE 200MG CAPSULE 200mg",
+          "strength": "200mg",
+          "package": "1 mg",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 43,
+          "medication_name": "PROGESTERONE 50MG CAPSULE 50mg",
+          "strength": "50mg",
+          "package": "1 mg",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 44,
+          "medication_name": "PROGESTERONE IR 100 MG",
+          "strength": "100 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 45,
+          "medication_name": "PROGESTERONE IR 150 MG",
+          "strength": "150 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 46,
+          "medication_name": "PROGESTERONE IR 200 MG",
+          "strength": "200 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 47,
+          "medication_name": "PROGESTERONE IR (DYE-FREE)(LACTOSE-FREE) (M NEW) 200MG",
+          "strength": "200MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 48,
+          "medication_name": "PROGESTERONE IR 300 MG",
+          "strength": "300 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        },
+        {
+          "excel_row": 49,
+          "medication_name": "PROGESTERONE IR 400 MG",
+          "strength": "400 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_mbm_retail_x9": 29,
+          "locked_one_time_x9": 29,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "pairing_actions": [
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 41,
+          "exact_medication": "PROGESTERONE 100MG CAPSULE 100mg",
+          "formulation": "PROGESTERONE 100MG CAPSULE 100mg",
+          "strength": "100mg",
+          "package": "1 mg",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 42,
+          "exact_medication": "PROGESTERONE 200MG CAPSULE 200mg",
+          "formulation": "PROGESTERONE 200MG CAPSULE 200mg",
+          "strength": "200mg",
+          "package": "1 mg",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 43,
+          "exact_medication": "PROGESTERONE 50MG CAPSULE 50mg",
+          "formulation": "PROGESTERONE 50MG CAPSULE 50mg",
+          "strength": "50mg",
+          "package": "1 mg",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 44,
+          "exact_medication": "PROGESTERONE IR 100 MG",
+          "formulation": "PROGESTERONE IR 100 MG",
+          "strength": "100 MG",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 45,
+          "exact_medication": "PROGESTERONE IR 150 MG",
+          "formulation": "PROGESTERONE IR 150 MG",
+          "strength": "150 MG",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 46,
+          "exact_medication": "PROGESTERONE IR 200 MG",
+          "formulation": "PROGESTERONE IR 200 MG",
+          "strength": "200 MG",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 47,
+          "exact_medication": "PROGESTERONE IR (DYE-FREE)(LACTOSE-FREE) (M NEW) 200MG",
+          "formulation": "PROGESTERONE IR (DYE-FREE)(LACTOSE-FREE) (M NEW) 200MG",
+          "strength": "200MG",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 48,
+          "exact_medication": "PROGESTERONE IR 300 MG",
+          "formulation": "PROGESTERONE IR 300 MG",
+          "strength": "300 MG",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        },
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 49,
+          "exact_medication": "PROGESTERONE IR 400 MG",
+          "formulation": "PROGESTERONE IR 400 MG",
+          "strength": "400 MG",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "calculated_retail_x9": 29,
+          "locked_retail_x9": 29,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        }
+      ],
+      "pairing_execution_method": "MANUAL_GEN_ADMIN",
+      "api_writable": false,
+      "price_issues": [
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "prog-ir-r41",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "prog-ir-r42",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "prog-ir-r43",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "prog-ir-r44",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "prog-ir-r45",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "prog-ir-r46",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "prog-ir-r47",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "prog-ir-r48",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        },
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "prog-ir-r49",
+          "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
+        }
+      ],
+      "defer_until_launch": false,
+      "defer_reason": null,
+      "preflight_status": "STOP_PRICE_OR_STRUCTURE"
+    },
+    {
+      "clientProductId": "Ukctbyh5Yrek3SnGSYA3",
+      "gen_display_name": "Selank Anxiolytic & Cognitive Protocol",
+      "website_family": "Selank",
+      "website_variants": [
+        "selank-nasal-r119"
+      ],
+      "launch_states": [
+        "FUTURE_HIDDEN"
+      ],
+      "current_pairings": [],
+      "desired_final_pairings": [
+        {
+          "excel_row": 119,
+          "medication_name": "Selank 2.5mg/mL Nasal Spray",
+          "strength": "2.5mg/20mL",
+          "package": "20ml",
+          "form": "Nasal Spray",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 60,
+          "shipping": 25,
+          "calculated_mbm_retail_x9": 129,
+          "locked_one_time_x9": 129,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "pairing_actions": [
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 119,
+          "exact_medication": "Selank 2.5mg/mL Nasal Spray",
+          "formulation": "Selank 2.5mg/mL Nasal Spray",
+          "strength": "2.5mg/20mL",
+          "package": "20ml",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 60,
+          "shipping": 25,
+          "calculated_retail_x9": 129,
+          "locked_retail_x9": 129,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        }
+      ],
+      "pairing_execution_method": "MANUAL_GEN_ADMIN",
+      "api_writable": false,
+      "price_issues": [
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "selank-nasal-r119",
+          "detail": "GEN price 0 vs desired 129 \u2014 align price before/with pairing"
+        }
+      ],
+      "defer_until_launch": true,
+      "defer_reason": "All website variants for this CP have launch_state FUTURE_HIDDEN \u2014 do not activate; pairing optional/deferred",
+      "preflight_status": "DEFER_FUTURE_HIDDEN"
+    },
+    {
+      "clientProductId": "YTHcdrlRICMpt56hdxeJ",
+      "gen_display_name": "Semax Nootropic & Neuroprotective Protocol",
+      "website_family": "Semax",
+      "website_variants": [
+        "semax-nasal-r118"
+      ],
+      "launch_states": [
+        "FUTURE_HIDDEN"
+      ],
+      "current_pairings": [],
+      "desired_final_pairings": [
+        {
+          "excel_row": 118,
+          "medication_name": "Semax 2.5mg/mL Nasal Spray",
+          "strength": "2.5mg/20mL",
+          "package": "20ml",
+          "form": "Nasal Spray",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 60,
+          "shipping": 25,
+          "calculated_mbm_retail_x9": 129,
+          "locked_one_time_x9": 129,
+          "price_formula_match": true,
+          "workbook_row_found": true
+        }
+      ],
+      "pairing_actions": [
+        {
+          "pairing_action": "ADD",
+          "selected_formulary_row": 118,
+          "exact_medication": "Semax 2.5mg/mL Nasal Spray",
+          "formulation": "Semax 2.5mg/mL Nasal Spray",
+          "strength": "2.5mg/20mL",
+          "package": "20ml",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 60,
+          "shipping": 25,
+          "calculated_retail_x9": 129,
+          "locked_retail_x9": 129,
+          "medicationId": null,
+          "NOTE": "No inferred medicationId"
+        }
+      ],
+      "pairing_execution_method": "MANUAL_GEN_ADMIN",
+      "api_writable": false,
+      "price_issues": [
+        {
+          "type": "PRICE_CONFLICT",
+          "variant": "semax-nasal-r118",
+          "detail": "GEN price 0 vs desired 129 \u2014 align price before/with pairing"
+        }
+      ],
+      "defer_until_launch": true,
+      "defer_reason": "All website variants for this CP have launch_state FUTURE_HIDDEN \u2014 do not activate; pairing optional/deferred",
+      "preflight_status": "DEFER_FUTURE_HIDDEN"
+    }
+  ],
+  "section_E_no_action_already_correct": [],
+  "section_F_excluded_formulary_pending": [
+    {
+      "website_family": "NAD+",
+      "website_variant": "nad-inj-5ml-500",
+      "display_label": "Injection \u00b7 5 mL / 500 mg",
+      "reason": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal)."
+    },
+    {
+      "website_family": "NAD+",
+      "website_variant": "nad-inj-10ml-1000",
+      "display_label": "Injection \u00b7 10 mL / 1000 mg",
+      "reason": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal)."
+    },
+    {
+      "website_family": "Tretinoin",
+      "website_variant": "tretinoin-0.025%",
+      "display_label": "Tretinoin 0.025%",
+      "reason": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package."
+    },
+    {
+      "website_family": "Tretinoin",
+      "website_variant": "tretinoin-0.05%",
+      "display_label": "Tretinoin 0.05%",
+      "reason": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package."
+    },
+    {
+      "website_family": "Tretinoin",
+      "website_variant": "tretinoin-0.1%",
+      "display_label": "Tretinoin 0.1%",
+      "reason": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package."
+    },
+    {
+      "website_family": "Fat Burner",
+      "website_variant": "fat-burner-current",
+      "display_label": "AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
+      "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+    },
+    {
+      "website_family": "Testosterone",
+      "website_variant": "testosterone-current",
+      "display_label": "Testosterone-only cream 5 mg/g",
+      "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+    },
+    {
+      "website_family": "Selank",
+      "website_variant": "selank-current",
+      "display_label": "Selank injectable",
+      "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+    },
+    {
+      "website_family": "Semax",
+      "website_variant": "semax-current",
+      "display_label": "Semax injectable",
+      "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+    },
+    {
+      "website_family": "Selank + Semax Blend",
+      "website_variant": "selank-semax-blend-current",
+      "display_label": "Combined Selank+Semax nasal",
+      "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+    },
+    {
+      "website_family": "Tesamorelin",
+      "website_variant": "tesamorelin-current",
+      "display_label": "Plain Tesamorelin",
+      "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+    },
+    {
+      "website_family": "Lash / Brow Growth Serum",
+      "website_variant": "lash-brow-current",
+      "display_label": "Bimatoprost 0.03%",
+      "reason": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
+    },
+    {
+      "website_family": "Oxytocin",
+      "website_variant": "oxytocin-pending",
+      "display_label": "oxytocin-pending",
+      "reason": "FUTURE_HIDDEN_PENDING"
+    },
+    {
+      "website_family": "Sexual Wellness Compound",
+      "website_variant": "sexual-wellness-compound-pending",
+      "display_label": "sexual-wellness-compound-pending",
+      "reason": "FUTURE_HIDDEN_PENDING"
+    }
+  ],
+  "section_G_excluded_future_hidden": [
+    {
+      "website_family": "Semaglutide",
+      "website_variant": "sem-current-b6",
+      "display_label": "Semaglutide + B6 (legacy until cutover)"
+    },
+    {
+      "website_family": "Semaglutide",
+      "website_variant": "sem-b12-3month",
+      "display_label": "3-Month \u00b7 Vitamin B12"
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variant": "tir-current-b6",
+      "display_label": "Tirzepatide + B6 (legacy until cutover)"
+    },
+    {
+      "website_family": "NAD+",
+      "website_variant": "nad-inj-selected-r83",
+      "display_label": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 OWNER REJECTED (keep 100mg/mL)"
+    },
+    {
+      "website_family": "NAD+",
+      "website_variant": "nad-nasal-r81",
+      "display_label": "NAD+ 50mg/ml"
+    },
+    {
+      "website_family": "NAD+",
+      "website_variant": "nad-nasal-r82",
+      "display_label": "NAD+ 200mg/ml"
+    },
+    {
+      "website_family": "Minoxidil",
+      "website_variant": "minoxidil-solution",
+      "display_label": "Minoxidil 2% solution"
+    },
+    {
+      "website_family": "Minoxidil",
+      "website_variant": "minoxidil-cream",
+      "display_label": "Minoxidil cream 7\u201315%"
+    },
+    {
+      "website_family": "Minoxidil",
+      "website_variant": "fin-minox-tret",
+      "display_label": "Finasteride/Minoxidil/Tretinoin topical"
+    },
+    {
+      "website_family": "Estradiol",
+      "website_variant": "estradiol-tablet-r37",
+      "display_label": "ESTRADIOL 0.5MG TABLET 0.5MG"
+    },
+    {
+      "website_family": "Estradiol",
+      "website_variant": "estradiol-tablet-r38",
+      "display_label": "ESTRADIOL 1 MG TABLET 1 MG"
+    },
+    {
+      "website_family": "Estradiol",
+      "website_variant": "estradiol-tablet-r39",
+      "display_label": "ESTRADIOL 2 MG TABLET 2 MG"
+    },
+    {
+      "website_family": "Estradiol",
+      "website_variant": "estradiol-injection-r40",
+      "display_label": "ESTRADIOL CYPIONATE (MCT OIL) 10 MG/ML"
+    },
+    {
+      "website_family": "Progesterone",
+      "website_variant": "prog-sr-r50",
+      "display_label": "Progesterone SR"
+    },
+    {
+      "website_family": "Progesterone",
+      "website_variant": "prog-sr-r51",
+      "display_label": "Progesterone SR"
+    },
+    {
+      "website_family": "Progesterone",
+      "website_variant": "prog-sr-r52",
+      "display_label": "Progesterone SR"
+    },
+    {
+      "website_family": "Tretinoin",
+      "website_variant": "tretinoin-selected-r126",
+      "display_label": "TRETINOIN 0.15%"
+    },
+    {
+      "website_family": "Tretinoin",
+      "website_variant": "tretinoin-selected-r127",
+      "display_label": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%"
+    },
+    {
+      "website_family": "Testosterone",
+      "website_variant": "testosterone-inj-r76",
+      "display_label": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 20 MG/ML (5 ML)"
+    },
+    {
+      "website_family": "Testosterone",
+      "website_variant": "testosterone-inj-r77",
+      "display_label": "TESTOSTERONE CYPIONATE (GRAPESEED OIL) 50 MG/ML (5 ML)"
+    },
+    {
+      "website_family": "PT-141",
+      "website_variant": "pt141-inj-r115",
+      "display_label": "PT-141 2mg/mL"
+    },
+    {
+      "website_family": "PT-141",
+      "website_variant": "pt141-nasal-r116",
+      "display_label": "BREMELANOTIDE (PT-141) (PER ML) 10 MG/ML"
+    },
+    {
+      "website_family": "PT-141",
+      "website_variant": "pt141-nasal-r117",
+      "display_label": "BREMELANOTIDE (PT-141) (PER ML) 5MG/ML"
+    },
+    {
+      "website_family": "Glutathione",
+      "website_variant": "glutathione-injection-r86",
+      "display_label": "Glutathione 200mg/ml"
+    },
+    {
+      "website_family": "Glutathione",
+      "website_variant": "glutathione-injection-r87",
+      "display_label": "Glutathione 200mg/ml"
+    },
+    {
+      "website_family": "GHK-Cu",
+      "website_variant": "ghk-cream-r105",
+      "display_label": "GHK-Cu Cream 2mg/ml"
+    },
+    {
+      "website_family": "GHK-Cu",
+      "website_variant": "ghk-cream-r106",
+      "display_label": "GHK-Cu Cream 5mg/ml"
+    },
+    {
+      "website_family": "GHK-Cu",
+      "website_variant": "ghk-cream-r107",
+      "display_label": "GHK-Cu Cream 10mg/ml"
+    },
+    {
+      "website_family": "GHK-Cu",
+      "website_variant": "ghk-cream-r108",
+      "display_label": "GHK-Cu Cream 2mg/ml"
+    },
+    {
+      "website_family": "MOTS-c",
+      "website_variant": "mots-c-r112",
+      "display_label": "MOTS-C 2mg/mL"
+    },
+    {
+      "website_family": "Thymosin Alpha-1",
+      "website_variant": "thymosin-a1-r114",
+      "display_label": "THYMOSIN ALPHA-1 3 MG/ML (5 ML)"
+    },
+    {
+      "website_family": "Dihexa",
+      "website_variant": "dihexa-r124",
+      "display_label": "Dihexa capsules 5mg"
+    },
+    {
+      "website_family": "Dihexa",
+      "website_variant": "dihexa-tes-r125",
+      "display_label": "Dihexa/Tesofensine capsules 5mg/500mcg"
+    },
+    {
+      "website_family": "Methylene Blue",
+      "website_variant": "methylene-blue-r120",
+      "display_label": "METHYLENE BLUE 5 MG"
+    },
+    {
+      "website_family": "Methylene Blue",
+      "website_variant": "methylene-blue-r121",
+      "display_label": "METHYLENE BLUE 10 MG"
+    },
+    {
+      "website_family": "Methylene Blue",
+      "website_variant": "methylene-blue-r122",
+      "display_label": "METHYLENE BLUE 15 MG"
+    },
+    {
+      "website_family": "Methylene Blue",
+      "website_variant": "methylene-blue-r123",
+      "display_label": "METHYLENE BLUE 25 MG"
+    },
+    {
+      "website_family": "Custom HRT Cream",
+      "website_variant": "hrt-custom-cream-r30",
+      "display_label": "HRT Cream - 1 Ingredient (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)"
+    },
+    {
+      "website_family": "Custom HRT Cream",
+      "website_variant": "hrt-custom-cream-r31",
+      "display_label": "HRT Cream - 2 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)"
+    },
+    {
+      "website_family": "Custom HRT Cream",
+      "website_variant": "hrt-custom-cream-r32",
+      "display_label": "HRT Cream - 3 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)"
+    },
+    {
+      "website_family": "Custom HRT Cream",
+      "website_variant": "hrt-custom-cream-r33",
+      "display_label": "HRT Cream - 4 Ingredients (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone)"
+    },
+    {
+      "website_family": "Custom Hormone Troche",
+      "website_variant": "hrt-custom-troche-r34",
+      "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient"
+    },
+    {
+      "website_family": "Custom Hormone Troche",
+      "website_variant": "hrt-custom-troche-r35",
+      "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 2 Ingredients"
+    },
+    {
+      "website_family": "Custom Hormone Troche",
+      "website_variant": "hrt-custom-troche-r36",
+      "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 3 Ingredients"
+    },
+    {
+      "website_family": "Custom Hormone Troche",
+      "website_variant": "hrt-custom-troche-r65",
+      "display_label": "Hormone Troche (Estradiol/Estriol/DHEA/Pregnenolone/Progesterone/Testosterone) - 1 Ingredient"
+    },
+    {
+      "website_family": "Sildenafil / Testosterone Troche",
+      "website_variant": "sildenafil-testosterone-troche-r75",
+      "display_label": "Sildenafil/Testosterone 120mg/22mg"
+    },
+    {
+      "website_family": "BPC Triple / Quad Blends",
+      "website_variant": "bpc-tb-ghk-r100",
+      "display_label": "BPC-157/TB-500/GHK-CU 3/3/10MG/ML"
+    },
+    {
+      "website_family": "BPC Triple / Quad Blends",
+      "website_variant": "bpc-ghk-kpv-tb-r101",
+      "display_label": "BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL"
+    },
+    {
+      "website_family": "BPC Triple / Quad Blends",
+      "website_variant": "bpc-kpv-tb-r102",
+      "display_label": "BPC-157/KPV/TB500 3mg/3mg/3mg/mL"
+    },
+    {
+      "website_family": "MOTS-c / Tesamorelin",
+      "website_variant": "mots-tes-r113",
+      "display_label": "MOTS-C/Tesamorelin 2mg/3mg/mL"
+    },
+    {
+      "website_family": "Scream Cream",
+      "website_variant": "scream-cream-pending",
+      "display_label": "scream-cream-pending"
+    }
+  ],
+  "section_H_conflicts_stop_items": [
+    {
+      "type": "RESOLVED",
+      "note": "All 8 prior PRICE_CONFLICT / structure STOP items resolved in MBM_GEN_PRICE_CONFLICT_RESOLUTION \u2014 see that doc. Selank/Semax nasal removed from executable set. NAD/Estradiol converted to backend split CREATE/REPAIR plan.",
+      "remaining_price_conflicts": 0,
+      "remaining_structure_conflicts": 0,
+      "remaining_stop_items": 0
+    }
+  ],
+  "proposed_execution_order": [
+    "1. CREATE required GEN CPs (8 TIR dose-group)",
+    "2. Verify created CPs by GET",
+    "3. REPAIR existing CPs (API-writable fields only: name/display/price/storefront) \u2014 skip any PRICE_CONFLICT until owner resolves",
+    "4. Verify repairs by GET",
+    "5. Formulary pairing \u2014 API writable: NONE",
+    "6. Manually complete GEN-admin-only pairings (Section D)",
+    "7. Re-read entire relevant GEN inventory",
+    "8. Validate website \u2192 GEN routing matrix",
+    "9. Only then approve website cutover work"
+  ],
+  "final_report": {
+    "EXECUTION_ELIGIBLE_WEBSITE_VARIANTS": 36,
+    "UNIQUE_GEN_PRODUCTS_TO_CREATE": 13,
+    "UNIQUE_GEN_PRODUCTS_TO_REPAIR": 14,
+    "PAIRING_ACTIONS_TOTAL": 64,
+    "PAIRING_API_WRITABLE": 0,
+    "PAIRING_MANUAL_GEN_ADMIN": 64,
+    "ALREADY_CORRECT_NO_WRITE": 0,
+    "PRICE_CONFLICTS": 0,
+    "FORMULATION_CONFLICTS": 0,
+    "MISSING_IDENTIFIERS": "All pairing ADDs intentionally have medicationId=null (no inference); strength not returned by formulary API view",
+    "OTHER_STOP_ITEMS": 0,
+    "SEM_GEN_OBJECTS_IN_MANIFEST": 9,
+    "TIR_GEN_OBJECTS_IN_MANIFEST": 9,
+    "NAD_GEN_OBJECTS_IN_MANIFEST": 1,
+    "WOLVERINE_GEN_OBJECTS_IN_MANIFEST": 2,
+    "FORMULARY_PENDING_EXCLUDED": 14,
+    "FUTURE_HIDDEN_EXCLUDED": 51,
+    "ALL_CREATE_ACTIONS_EXACTLY_SUPPORTED": true,
+    "ALL_REPAIR_ACTIONS_EXACTLY_SUPPORTED": true,
+    "ALL_PAIRING_ACTIONS_EXACTLY_SUPPORTED": true,
+    "READY_FOR_GEN_WRITE_EXECUTION": "YES",
+    "READY_REASON": "Price/structure STOP items resolved into CREATE/REPAIR/FUTURE_HIDDEN plan; pairings remain MANUAL_GEN_ADMIN; do not execute until owner authorizes writes",
+    "GEN_MODIFIED": false,
+    "GEN_WRITES": 0,
+    "PAIRING_WRITES": 0,
+    "WEBSITE_MODIFIED": false,
+    "CHECKOUT_MODIFIED": false,
+    "CUTOVER": "OFF",
+    "PRICE_CONFLICT_CLIENT_PRODUCT_IDS": [],
+    "PAIRING_ACTIONS_ACTIVE_NON_DEFERRED": 18,
+    "UNIQUE_GEN_CPS_FOR_PAIRING": 8,
+    "resolution_final_report": {
+      "PRICE_CONFLICTS_STARTING": 8,
+      "SIMPLE_PRICE_REPAIR": 4,
+      "GEN_CP_SPLIT_REQUIRED": 2,
+      "ALREADY_CORRECT": 0,
+      "FORMULARY_PENDING_FROM_CONFLICTS": 0,
+      "FUTURE_HIDDEN_REMOVED": 2,
+      "OTHER_BLOCKERS": 0,
+      "NAD_NASAL_BACKEND_STRUCTURE": "SPLIT \u2014 r84 reuses FVwkzvQqWIZRNAwbslGw @$79; r85 CREATE @$109; one website NAD+ family",
+      "ESTRADIOL_BACKEND_STRUCTURE": "SPLIT CREATE\u00d74 patch CPs (do not reuse vaginal Estradiol/DHEA CP); one website Estradiol family",
+      "WOLVERINE_BACKEND_STRUCTURE": "Injection CP iJty\u2026 @$159 + Capsule CP omhh\u2026 @$29; one website Wolverine family",
+      "MINOXIDIL_BACKEND_STRUCTURE": "Reuse Dual Combo BboYS\u2026 @$79 + Vios r129; not GHK-Cu/Minoxidil",
+      "PROGESTERONE_BACKEND_STRUCTURE": "Reuse Progesterone CP 5dGk\u2026 @$29 with multi-strength IR pairings (all $29)",
+      "SELANK_NASAL_EXECUTABLE": "NO",
+      "SEMAX_NASAL_EXECUTABLE": "NO",
+      "UNIQUE_GEN_CREATE_REQUIRED": 13,
+      "UNIQUE_GEN_REPAIR_REQUIRED": 14,
+      "UNIQUE_GEN_CPS_REQUIRING_PAIRING_STATUS_ONLY": 1,
+      "MANUAL_GEN_ADMIN_PAIRING_ACTIONS": 64,
+      "REMAINING_PRICE_CONFLICTS": 0,
+      "REMAINING_STRUCTURE_CONFLICTS": 0,
+      "REMAINING_STOP_ITEMS": 0,
+      "FORMULARY_PENDING": 14,
+      "FUTURE_HIDDEN": 53,
+      "EXECUTION_ELIGIBLE_WEBSITE_VARIANTS": 36,
+      "ALL_EXECUTABLE_PRICES_VERIFIED_FROM_COST_SHIPPING": "YES",
+      "ALL_EXECUTABLE_GEN_CP_IDENTITIES_EXACTLY_SUPPORTED": "YES",
+      "READY_FOR_GEN_WRITE_EXECUTION": "YES",
+      "READY_NOTE": "READY means resolution cleared STOP items. Owner must still explicitly authorize write execution. Pairings remain MANUAL_GEN_ADMIN.",
+      "GEN_MODIFIED": false,
+      "GEN_WRITES": 0,
+      "PAIRING_WRITES": 0,
+      "WEBSITE_MODIFIED": false,
+      "CHECKOUT_MODIFIED": false,
+      "CUTOVER": "OFF",
+      "UNIQUE_GEN_CPS_REQUIRING_PAIRING": 28,
+      "MANUAL_PAIRING_NOTE": "Row-level ADD count includes SEM/TIR membership ladders and multi-strength Prog/SEM dose groups. API writable = 0."
+    },
+    "READY_CAVEAT": "Owner must explicitly authorize write execution. Pairings=MANUAL_GEN_ADMIN. DO NOT EXECUTE in this phase."
+  },
+  "post_resolution_queues": {
+    "create_count": 13,
+    "repair_count": 22,
+    "pairing_status_count": 1,
+    "create_variants": [
+      "tir-b12-starting-low",
+      "tir-b12-mid",
+      "tir-b12-high",
+      "tir-b12-any-dose",
+      "tir-glycine-starting-low",
+      "tir-glycine-mid",
+      "tir-glycine-high",
+      "tir-glycine-any-dose",
+      "nad-nasal-r85",
+      "estradiol-patch-r26",
+      "estradiol-patch-r27",
+      "estradiol-patch-r28",
+      "estradiol-patch-r29"
+    ],
+    "repair_cps": [
+      "34I2X8MpVZf3AQTff3bo",
+      "5F8jESeVeXcpkLU5rrdK",
+      "5dGkjdpLP7DkKKE2iVxh",
+      "BboYS4a2Uj7APetrFo6W",
+      "CjqOUbPuGPZzxephqRou",
+      "E3MXZeeR01QROCuTLRLE",
+      "FVwkzvQqWIZRNAwbslGw",
+      "MkDIUw0NcJB7YL2pNzYW",
+      "SkqQHmsc0WdsbK9vmV1y",
+      "iJtyig611AZEDBGdvRd9",
+      "omhh3NabouO8AsNR5tkD",
+      "sssEk3FDY4LFbQYGQsLx",
+      "tk2GW39OGr7JX4MCCoJP",
+      "wQK2JsFnh7oFBf3Lag4n"
+    ]
+  },
+  "section_A_gen_products_to_create_NOTE": "Superseded counts \u2014 see post_resolution_queues and MBM_GEN_ROUTING_EXECUTION_QUEUE / PRICE_CONFLICT_RESOLUTION for authoritative post-resolution CREATE list (TIR\u00d78 + NAD r85 + Estradiol patches\u00d74).",
+  "section_D_NOTE": "Selank/Semax nasal removed. NAD split and Estradiol creates added. All pairings still MANUAL_GEN_ADMIN."
+}

@@ -12,6 +12,7 @@ import { GoalPage } from '@/pages/GoalPage';
 import { SectionPage } from '@/pages/SectionPage';
 import { BestSellersPage } from '@/pages/BestSellersPage';
 import { ProductPage } from '@/pages/ProductPage';
+import { FamilyProductPreviewPage } from '@/pages/FamilyProductPreviewPage';
 import { CheckoutPage } from '@/pages/CheckoutPage';
 import { OrderPaymentInstructionsPage } from '@/pages/OrderPaymentInstructionsPage';
 import { KashuCardResultPage } from '@/pages/KashuCardResultPage';
@@ -85,6 +86,11 @@ function App() {
     if (path.startsWith('/section/')) return <SectionPage sectionId={path.replace('/section/', '')} subFilter={route.query.sub} />;
     if (path === '/best-sellers') return <BestSellersPage />;
     if (path.startsWith('/product/')) return <ProductPage slug={path.replace('/product/', '')} />;
+    // QA-only family/variant GEN routing preview (cutover OFF — does not replace live PDP)
+    if (path === '/preview/families') return <FamilyProductPreviewPage />;
+    if (path.startsWith('/preview/families/')) {
+      return <FamilyProductPreviewPage familyId={path.replace('/preview/families/', '')} />;
+    }
     if (path === '/checkout') return <CheckoutPage />;
     if (path.startsWith('/order/payment/')) {
       const orderNumber = path.replace('/order/payment/', '').split('/')[0];

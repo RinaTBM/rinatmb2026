@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "generated_at": "2026-08-25T05:40:24Z",
+    "closeout": "MBM_GEN_PAIRING_FINAL_CLOSEOUT"
+  },
+  "verified_cps": 8,
+  "phase_complete": false,
+  "remaining": [
+    {
+      "label": "SEM Mid B12",
+      "genProductId": "BLf8inX395YNc7WPCD4O",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O",
+      "classification": "PAIRING_MISSING",
+      "websiteVariantIds": [
+        "sem-b12-mid"
+      ],
+      "action": "Attach \u22651 Dirx Semaglutide + Vitamin B12 medication.",
+      "compatibleCount": 0,
+      "incompatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "label": "SEM Membership",
+      "genProductId": "5F8jESeVeXcpkLU5rrdK",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK",
+      "classification": "PAIRING_MISSING",
+      "websiteVariantIds": [
+        "sem-membership"
+      ],
+      "action": "Attach compatible Semaglutide + B12 and/or + Glycine options (may coexist). If GEN cannot hold both under one CP \u2192 GEN_BACKEND_SPLIT_REQUIRED (do not create in this run).",
+      "compatibleCount": 0,
+      "incompatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "label": "TIR Membership",
+      "genProductId": "E3MXZeeR01QROCuTLRLE",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE",
+      "classification": "PAIRING_MISSING",
+      "websiteVariantIds": [
+        "tir-membership"
+      ],
+      "action": "Attach compatible Tirzepatide + B12 and/or + Glycine options (may coexist). If GEN cannot hold both \u2192 GEN_BACKEND_SPLIT_REQUIRED.",
+      "compatibleCount": 0,
+      "incompatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "label": "Wolverine Capsule",
+      "genProductId": "omhh3NabouO8AsNR5tkD",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+      "classification": "PAIRING_MISSING",
+      "websiteVariantIds": [
+        "wolverine-capsule"
+      ],
+      "action": "Attach \u22651 compatible capsule medication (BPC/TB capsule).",
+      "compatibleCount": 0,
+      "incompatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "label": "Wolverine Injection",
+      "genProductId": "iJtyig611AZEDBGdvRd9",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+      "classification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+      "websiteVariantIds": [
+        "wolverine-injection"
+      ],
+      "action": "REMOVE incompatible: BPC-157 / TB500 Capsules @ Greenwich Pharmacy (`SLBdNaBijUHmDFSohdaM`). Keep compatible same-family options.",
+      "compatibleCount": 1,
+      "incompatibleCount": 1,
+      "attachmentCount": 2
+    },
+    {
+      "label": "Minoxidil Dual Combo",
+      "genProductId": "BboYS4a2Uj7APetrFo6W",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+      "classification": "PAIRING_MISSING",
+      "websiteVariantIds": [
+        "minoxidil-fin-minox-0.1-5"
+      ],
+      "action": "Attach Vios Finasteride/Minoxidil 0.1%/5% to THIS CP (BboYS4\u2026). Note: matching meds currently appear on Raw7m\u2026 (Minoxidil Topical) \u2014 move/reattach to locked Dual Combo CP.",
+      "compatibleCount": 0,
+      "incompatibleCount": 0,
+      "attachmentCount": 0
+    },
+    {
+      "label": "Progesterone IR",
+      "genProductId": "5dGkjdpLP7DkKKE2iVxh",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "classification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+      "websiteVariantIds": [
+        "prog-ir-r41",
+        "prog-ir-r42",
+        "prog-ir-r43",
+        "prog-ir-r44",
+        "prog-ir-r45",
+        "prog-ir-r46",
+        "prog-ir-r47",
+        "prog-ir-r48",
+        "prog-ir-r49"
+      ],
+      "action": "REMOVE incompatible: Pregnenolone IR @ Vios (`LHAilcdBK0wULcdmoJVl`), Progesterone SR (DYE-FREE) @ Vios (`NRZXW0LomEaoyN5oA3WO`), Progesterone SR (DYE-FREE) @ Vios (`ORLfICIf7sgo1WTdXvEM`), Progesterone SR (DYE-FREE)(Lactose FREE) @ Vios (`KleUHs9VxvMycdhX0Z14`), Progesterone SR (DYE-FREE)(Lactose FREE) @ Vios (`xrMRDAQr9if9OrehgcH6`). Keep compatible same-family options.",
+      "compatibleCount": 9,
+      "incompatibleCount": 5,
+      "attachmentCount": 14
+    }
+  ],
+  "observational_notes": [
+    {
+      "severity": "MINOXIDIL_ATTACHMENTS_ON_WRONG_GEN_CP",
+      "locked_cp": "BboYS4a2Uj7APetrFo6W",
+      "found_on_cp": "Raw7mUkuzzhVdAo88jpL",
+      "found_on_name": "Hair Loss \u2013 Minoxidil (Topical)",
+      "compatible_looking_attachments": [
+        {
+          "name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+          "pharmacy": "Vios",
+          "medicationId": "9qNwEbSAfgVxUjuy3mNg"
+        },
+        {
+          "name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+          "pharmacy": "Vios",
+          "medicationId": "R1KXXsuKlENVt3rnHUTI"
+        }
+      ],
+      "action": "Move/attach Vios Finasteride/Minoxidil 0.1%/5% onto locked Dual Combo CP BboYS4a2Uj7APetrFo6W. Do not retarget website routing to Raw7m without owner approval. Do not use GHK-Cu/Minoxidil."
+    }
+  ],
+  "routing": {
+    "ROUTING_READY": 8,
+    "GEN_PAIRING_PENDING": 15,
+    "FORMULARY_PENDING": 14,
+    "FUTURE_HIDDEN": 51,
+    "BLOCKED": 15,
+    "genPairingVerified_true": 8,
+    "genPairingVerified_false": 95,
+    "total_variants": 103
+  }
+}

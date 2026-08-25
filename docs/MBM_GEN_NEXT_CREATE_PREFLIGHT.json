@@ -1,0 +1,661 @@
+{
+  "meta": {
+    "document": "MBM_GEN_NEXT_CREATE_PREFLIGHT",
+    "generated_at": "2026-08-25T05:25:13Z",
+    "mode": "PREFLIGHT_ONLY \u2014 DO NOT EXECUTE",
+    "execute_creates": false,
+    "source_authority": [
+      "docs/MBM_GEN_FINAL_WRITE_MANIFEST.json \u2192 post_resolution_queues.create_variants",
+      "docs/MBM_GEN_ROUTING_EXECUTION_QUEUE.json \u2192 queues.A_GEN_CP_CREATE"
+    ]
+  },
+  "expected_total": 13,
+  "groups": {
+    "tirzepatide_create_x8": {
+      "status": "READY",
+      "count": 8,
+      "variants": [
+        "tir-b12-starting-low",
+        "tir-b12-mid",
+        "tir-b12-high",
+        "tir-b12-any-dose",
+        "tir-glycine-starting-low",
+        "tir-glycine-mid",
+        "tir-glycine-high",
+        "tir-glycine-any-dose"
+      ]
+    },
+    "estradiol_patch_create_x4": {
+      "status": "READY",
+      "count": 4,
+      "variants": [
+        "estradiol-patch-r26",
+        "estradiol-patch-r27",
+        "estradiol-patch-r28",
+        "estradiol-patch-r29"
+      ]
+    },
+    "nad_nasal_r85_create_x1": {
+      "status": "READY",
+      "count": 1,
+      "variants": [
+        "nad-nasal-r85"
+      ]
+    }
+  },
+  "total_create_cps_ready": "13 / 13",
+  "create_rows": [
+    {
+      "website_family": "Tirzepatide",
+      "website_variant_id": "tir-b12-starting-low",
+      "display_label": "Starting / Low (5+10) \u00b7 Vitamin B12",
+      "intended_gen_cp_name": "Starting / Low (5+10) \u00b7 Vitamin B12",
+      "form": "Injection",
+      "additive": "Vitamin B12",
+      "price": "119\u2013139",
+      "pharmacy": "Dirx-Hub",
+      "exact_formulary": [
+        {
+          "excel_row": 14,
+          "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+          "cost": 65,
+          "shipping": 5,
+          "one_time_x9": 119
+        },
+        {
+          "excel_row": 16,
+          "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+          "cost": 75,
+          "shipping": 5,
+          "one_time_x9": 139
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP",
+        "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+        "SET_PRICE_FROM_LOCKED_X9",
+        "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+      ],
+      "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variant_id": "tir-b12-mid",
+      "display_label": "Mid (15+20) \u00b7 Vitamin B12",
+      "intended_gen_cp_name": "Mid (15+20) \u00b7 Vitamin B12",
+      "form": "Injection",
+      "additive": "Vitamin B12",
+      "price": "149\u2013159",
+      "pharmacy": "Dirx-Hub",
+      "exact_formulary": [
+        {
+          "excel_row": 18,
+          "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+          "cost": 85,
+          "shipping": 5,
+          "one_time_x9": 149
+        },
+        {
+          "excel_row": 20,
+          "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+          "cost": 90,
+          "shipping": 5,
+          "one_time_x9": 159
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP",
+        "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+        "SET_PRICE_FROM_LOCKED_X9",
+        "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+      ],
+      "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variant_id": "tir-b12-high",
+      "display_label": "High (25+30) \u00b7 Vitamin B12",
+      "intended_gen_cp_name": "High (25+30) \u00b7 Vitamin B12",
+      "form": "Injection",
+      "additive": "Vitamin B12",
+      "price": "169\u2013179",
+      "pharmacy": "Dirx-Hub",
+      "exact_formulary": [
+        {
+          "excel_row": 22,
+          "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+          "cost": 95,
+          "shipping": 5,
+          "one_time_x9": 169
+        },
+        {
+          "excel_row": 24,
+          "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "cost": 100,
+          "shipping": 5,
+          "one_time_x9": 179
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP",
+        "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+        "SET_PRICE_FROM_LOCKED_X9",
+        "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+      ],
+      "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variant_id": "tir-b12-any-dose",
+      "display_label": "Any Dose (5\u201330) \u00b7 Vitamin B12",
+      "intended_gen_cp_name": "Any Dose (5\u201330) \u00b7 Vitamin B12",
+      "form": "Injection",
+      "additive": "Vitamin B12",
+      "price": "119\u2013179",
+      "pharmacy": "Dirx-Hub",
+      "exact_formulary": [
+        {
+          "excel_row": 14,
+          "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+          "cost": 65,
+          "shipping": 5,
+          "one_time_x9": 119
+        },
+        {
+          "excel_row": 16,
+          "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+          "cost": 75,
+          "shipping": 5,
+          "one_time_x9": 139
+        },
+        {
+          "excel_row": 18,
+          "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+          "cost": 85,
+          "shipping": 5,
+          "one_time_x9": 149
+        },
+        {
+          "excel_row": 20,
+          "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+          "cost": 90,
+          "shipping": 5,
+          "one_time_x9": 159
+        },
+        {
+          "excel_row": 22,
+          "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+          "cost": 95,
+          "shipping": 5,
+          "one_time_x9": 169
+        },
+        {
+          "excel_row": 24,
+          "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "cost": 100,
+          "shipping": 5,
+          "one_time_x9": 179
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP",
+        "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+        "SET_PRICE_FROM_LOCKED_X9",
+        "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+      ],
+      "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variant_id": "tir-glycine-starting-low",
+      "display_label": "Starting / Low (5+10) \u00b7 Glycine",
+      "intended_gen_cp_name": "Starting / Low (5+10) \u00b7 Glycine",
+      "form": "Injection",
+      "additive": "Glycine",
+      "price": "119\u2013139",
+      "pharmacy": "Dirx-Hub",
+      "exact_formulary": [
+        {
+          "excel_row": 13,
+          "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+          "cost": 65,
+          "shipping": 5,
+          "one_time_x9": 119
+        },
+        {
+          "excel_row": 15,
+          "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+          "cost": 75,
+          "shipping": 5,
+          "one_time_x9": 139
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP",
+        "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+        "SET_PRICE_FROM_LOCKED_X9",
+        "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+      ],
+      "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variant_id": "tir-glycine-mid",
+      "display_label": "Mid (15+20) \u00b7 Glycine",
+      "intended_gen_cp_name": "Mid (15+20) \u00b7 Glycine",
+      "form": "Injection",
+      "additive": "Glycine",
+      "price": "149\u2013159",
+      "pharmacy": "Dirx-Hub",
+      "exact_formulary": [
+        {
+          "excel_row": 17,
+          "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+          "cost": 85,
+          "shipping": 5,
+          "one_time_x9": 149
+        },
+        {
+          "excel_row": 19,
+          "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+          "cost": 90,
+          "shipping": 5,
+          "one_time_x9": 159
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP",
+        "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+        "SET_PRICE_FROM_LOCKED_X9",
+        "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+      ],
+      "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variant_id": "tir-glycine-high",
+      "display_label": "High (25+30) \u00b7 Glycine",
+      "intended_gen_cp_name": "High (25+30) \u00b7 Glycine",
+      "form": "Injection",
+      "additive": "Glycine",
+      "price": "169\u2013179",
+      "pharmacy": "Dirx-Hub",
+      "exact_formulary": [
+        {
+          "excel_row": 21,
+          "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+          "cost": 95,
+          "shipping": 5,
+          "one_time_x9": 169
+        },
+        {
+          "excel_row": 23,
+          "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+          "cost": 100,
+          "shipping": 5,
+          "one_time_x9": 179
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP",
+        "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+        "SET_PRICE_FROM_LOCKED_X9",
+        "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+      ],
+      "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Tirzepatide",
+      "website_variant_id": "tir-glycine-any-dose",
+      "display_label": "Any Dose (5\u201330) \u00b7 Glycine",
+      "intended_gen_cp_name": "Any Dose (5\u201330) \u00b7 Glycine",
+      "form": "Injection",
+      "additive": "Glycine",
+      "price": "119\u2013179",
+      "pharmacy": "Dirx-Hub",
+      "exact_formulary": [
+        {
+          "excel_row": 13,
+          "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+          "cost": 65,
+          "shipping": 5,
+          "one_time_x9": 119
+        },
+        {
+          "excel_row": 15,
+          "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+          "cost": 75,
+          "shipping": 5,
+          "one_time_x9": 139
+        },
+        {
+          "excel_row": 17,
+          "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+          "cost": 85,
+          "shipping": 5,
+          "one_time_x9": 149
+        },
+        {
+          "excel_row": 19,
+          "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+          "cost": 90,
+          "shipping": 5,
+          "one_time_x9": 159
+        },
+        {
+          "excel_row": 21,
+          "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+          "cost": 95,
+          "shipping": 5,
+          "one_time_x9": 169
+        },
+        {
+          "excel_row": 23,
+          "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+          "cost": 100,
+          "shipping": 5,
+          "one_time_x9": 179
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP",
+        "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
+        "SET_PRICE_FROM_LOCKED_X9",
+        "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
+      ],
+      "reason": "Do not reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 ambiguous CPs. Do not reuse old GLP-2 plan titles.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "NAD+",
+      "website_variant_id": "nad-nasal-r85",
+      "display_label": "Nasal Spray \u00b7 NAD+ 200mg/ml \u00b7 15ml",
+      "intended_gen_cp_name": "Nasal Spray \u00b7 NAD+ 200mg/ml \u00b7 15ml",
+      "form": "Nasal Spray",
+      "additive": null,
+      "price": 109,
+      "pharmacy": "St Luke",
+      "exact_formulary": [
+        {
+          "excel_row": 85,
+          "exact": "NAD+ 200mg/ml",
+          "form": "Nasal Spray",
+          "package": "15ml",
+          "pharmacy": "St Luke",
+          "cost": 45,
+          "shipping": 30,
+          "one_time_x9": 109
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP_NAD_NASAL_200MG_ML",
+        "SET_PRICE_109",
+        "MANUAL_PAIR_R85"
+      ],
+      "reason": "PRICE-CONFLICT-RESOLUTION: GEN_CP_SPLIT \u2014 CREATE new nasal CP for r85 @ $109; do not share price with r84.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Estradiol",
+      "website_variant_id": "estradiol-patch-r26",
+      "display_label": "Estradiol transdermal",
+      "intended_gen_cp_name": "Estradiol transdermal",
+      "form": "Patch",
+      "additive": null,
+      "price": 119,
+      "pharmacy": "Valiant",
+      "exact_formulary": [
+        {
+          "excel_row": 26,
+          "exact": "ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count",
+          "cost": 50,
+          "shipping": 30,
+          "one_time_x9": 119
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP_ESTRADIOL_PATCH",
+        "DO_NOT_REUSE_VAGINAL_CP",
+        "SET_LOCKED_PRICE",
+        "MANUAL_PAIR_SELECTED_ROW"
+      ],
+      "reason": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r26 @ $119.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Estradiol",
+      "website_variant_id": "estradiol-patch-r27",
+      "display_label": "Estradiol transdermal",
+      "intended_gen_cp_name": "Estradiol transdermal",
+      "form": "Patch",
+      "additive": null,
+      "price": 129,
+      "pharmacy": "Valiant",
+      "exact_formulary": [
+        {
+          "excel_row": 27,
+          "exact": "ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count",
+          "cost": 55,
+          "shipping": 30,
+          "one_time_x9": 129
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP_ESTRADIOL_PATCH",
+        "DO_NOT_REUSE_VAGINAL_CP",
+        "SET_LOCKED_PRICE",
+        "MANUAL_PAIR_SELECTED_ROW"
+      ],
+      "reason": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r27 @ $129.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Estradiol",
+      "website_variant_id": "estradiol-patch-r28",
+      "display_label": "Estradiol transdermal",
+      "intended_gen_cp_name": "Estradiol transdermal",
+      "form": "Patch",
+      "additive": null,
+      "price": 139,
+      "pharmacy": "Valiant",
+      "exact_formulary": [
+        {
+          "excel_row": 28,
+          "exact": "ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count",
+          "cost": 60,
+          "shipping": 30,
+          "one_time_x9": 139
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP_ESTRADIOL_PATCH",
+        "DO_NOT_REUSE_VAGINAL_CP",
+        "SET_LOCKED_PRICE",
+        "MANUAL_PAIR_SELECTED_ROW"
+      ],
+      "reason": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r28 @ $139.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    },
+    {
+      "website_family": "Estradiol",
+      "website_variant_id": "estradiol-patch-r29",
+      "display_label": "Estradiol transdermal",
+      "intended_gen_cp_name": "Estradiol transdermal",
+      "form": "Patch",
+      "additive": null,
+      "price": 149,
+      "pharmacy": "Valiant",
+      "exact_formulary": [
+        {
+          "excel_row": 29,
+          "exact": "ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count",
+          "cost": 70,
+          "shipping": 30,
+          "one_time_x9": 149
+        }
+      ],
+      "required_actions": [
+        "CREATE_GEN_CP_ESTRADIOL_PATCH",
+        "DO_NOT_REUSE_VAGINAL_CP",
+        "SET_LOCKED_PRICE",
+        "MANUAL_PAIR_SELECTED_ROW"
+      ],
+      "reason": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r29 @ $149.",
+      "duplicate_exists": false,
+      "status": "READY",
+      "do_not_reuse": [
+        "Tirzepatide/B12/Glycine",
+        "Tirzepatide/Glycine/B12",
+        "legacy B6",
+        "30MG 3-PACK",
+        "unapproved GLP-2 objects",
+        "vaginal Estradiol CP for patches",
+        "existing NAD nasal r84 CP for r85"
+      ]
+    }
+  ],
+  "duplicate_scan_notes": [
+    "No existing GEN CP with proper TIR B12/Glycine dose-group naming for the 8 create slots (legacy GLP-2 / Tirzepatide/B12/Glycine objects must NOT be reused).",
+    "No Estradiol patch CPs exist \u2014 only vaginal Estradiol CPs (do not reuse).",
+    "Existing NAD + Nasal Spray CP FVwkzvQqWIZRNAwbslGw is r84 \u2014 create separate CP for r85; do not reuse."
+  ],
+  "keep_out_of_create_set": [
+    "NAD injection 100mg/mL \u2014 FORMULARY/SOURCING_PENDING",
+    "Tretinoin 0.025% / 0.05% / 0.1% \u2014 FORMULARY/SOURCING_PENDING",
+    "other FORMULARY_PENDING",
+    "FUTURE_HIDDEN",
+    "Scream Cream",
+    "legacy B6",
+    "owner-rejected formulations",
+    "ambiguous products"
+  ],
+  "nad_injection_sourcing_pending": true,
+  "tretinoin_sourcing_pending": true
+}

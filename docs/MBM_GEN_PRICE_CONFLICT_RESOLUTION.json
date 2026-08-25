@@ -1,0 +1,877 @@
+{
+  "meta": {
+    "generated_at": "2026-08-25T00:48:39Z",
+    "phase": "MBM-GEN-PRICE-CONFLICT-RESOLUTION-1",
+    "mode": "READ-ONLY RESOLUTION \u2014 DO NOT EXECUTE",
+    "manifest_source": "docs/MBM_GEN_FINAL_WRITE_MANIFEST.json",
+    "price_conflicts_starting": 8,
+    "manifest_ids_match_expected_list": true,
+    "manifest_conflict_ids": [
+      "5dGkjdpLP7DkKKE2iVxh",
+      "BboYS4a2Uj7APetrFo6W",
+      "FVwkzvQqWIZRNAwbslGw",
+      "Ukctbyh5Yrek3SnGSYA3",
+      "YTHcdrlRICMpt56hdxeJ",
+      "iJtyig611AZEDBGdvRd9",
+      "o7dNtf9QsnEqPCrLr2tR",
+      "omhh3NabouO8AsNR5tkD"
+    ],
+    "expected_conflict_ids": [
+      "iJtyig611AZEDBGdvRd9",
+      "FVwkzvQqWIZRNAwbslGw",
+      "omhh3NabouO8AsNR5tkD",
+      "BboYS4a2Uj7APetrFo6W",
+      "o7dNtf9QsnEqPCrLr2tR",
+      "5dGkjdpLP7DkKKE2iVxh",
+      "Ukctbyh5Yrek3SnGSYA3",
+      "YTHcdrlRICMpt56hdxeJ"
+    ],
+    "gen_writes": 0,
+    "pairing_writes": 0,
+    "website_writes": 0,
+    "cutover": "OFF",
+    "pricing_authority": "(cost\u00d71.75)+shipping \u2192 nearest $X9; SEM membership $149; TIR membership $275",
+    "architecture_rule": "Website family \u2260 GEN CP. One family may route to multiple backend CPs."
+  },
+  "conflicts": [
+    {
+      "conflict_number": 1,
+      "label": "Wolverine Injection",
+      "clientProductId": "iJtyig611AZEDBGdvRd9",
+      "current_gen": {
+        "clientProductId": "iJtyig611AZEDBGdvRd9",
+        "name": "BPC-157/TB500",
+        "displayName": "BPC-157/TB500",
+        "current_price": 169,
+        "storefrontEligible": true,
+        "live_pairings": [
+          {
+            "standardizedMedicationName": "BPC-157 / TB500",
+            "pharmacyName": "Greenwich Pharmacy",
+            "medicationId": "27WtrIdo3z4Ssj5sDcc6"
+          }
+        ]
+      },
+      "website_family": "Wolverine / BPC-TB",
+      "website_variants": [
+        "wolverine-injection"
+      ],
+      "expected_locked_retail": 159,
+      "formulary_support": {
+        "excel_row": 103,
+        "exact": "BPC-157/TB500 3mg/3mg/mL",
+        "strength": "3mg/3mg/mL",
+        "package": "5ML",
+        "form": null,
+        "pharmacy": "Greenwich Pharmacy",
+        "cost": 77,
+        "shipping": 25,
+        "raw": 159.75,
+        "locked_retail_x9": 159
+      },
+      "price_verified": true,
+      "classification": "A_SIMPLE_PRICE_REPAIR",
+      "resolution": "Set GEN price 169 \u2192 159. Exact SELECTED r103 supports $159 ((77\u00d71.75)+25 \u2192 159.75 \u2192 $159). Keep Greenwich pairing; verify strength 3mg/3mg/mL \u00b7 5mL in admin.",
+      "executable": true,
+      "proposed_actions": [
+        "REPAIR_PRICE_TO_159",
+        "VERIFY_PAIRING_EXACT_R103",
+        "OPTIONAL_RENAME_DISPLAY_WOLVERINE_INJECTION"
+      ]
+    },
+    {
+      "conflict_number": 2,
+      "label": "NAD+ Nasal",
+      "clientProductId": "FVwkzvQqWIZRNAwbslGw",
+      "current_gen": {
+        "clientProductId": "FVwkzvQqWIZRNAwbslGw",
+        "name": "NAD + Nasal Spray",
+        "displayName": "NAD + Nasal Spray",
+        "current_price": 0,
+        "storefrontEligible": true,
+        "live_pairings": []
+      },
+      "website_family": "NAD+",
+      "website_variants": [
+        "nad-nasal-r84",
+        "nad-nasal-r85"
+      ],
+      "expected_locked_retails": {
+        "r84": 79,
+        "r85": 109
+      },
+      "formulary_support": {
+        "r84": {
+          "excel_row": 84,
+          "exact": "NAD+ 50mg/ml",
+          "strength": "50mg/ml",
+          "package": "15ml",
+          "form": "Nasal Spray",
+          "pharmacy": "St Luke",
+          "cost": 30,
+          "shipping": 30,
+          "raw": 82.5,
+          "locked_retail_x9": 79
+        },
+        "r85": {
+          "excel_row": 85,
+          "exact": "NAD+ 200mg/ml",
+          "strength": "200mg/ml",
+          "package": "15ml",
+          "form": "Nasal Spray",
+          "pharmacy": "St Luke",
+          "cost": 45,
+          "shipping": 30,
+          "raw": 108.75,
+          "locked_retail_x9": 109
+        }
+      },
+      "price_verified": true,
+      "classification": "B_GEN_CP_SPLIT_REQUIRED",
+      "resolution": "One CP cannot hold both $79 and $109. Split backend: reuse existing NAD nasal CP for r84 @ $79; CREATE new CP for r85 @ $109. Website remains ONE NAD+ family with Nasal Spray \u2192 strength selectors.",
+      "executable": true,
+      "proposed_backend": [
+        {
+          "role": "REUSE_REPAIR",
+          "clientProductId": "FVwkzvQqWIZRNAwbslGw",
+          "maps_to": "nad-nasal-r84",
+          "row": 84,
+          "price": 79,
+          "name": "NAD+ Nasal Spray \u2014 50mg/mL \u00b7 15mL"
+        },
+        {
+          "role": "CREATE",
+          "clientProductId": null,
+          "maps_to": "nad-nasal-r85",
+          "row": 85,
+          "price": 109,
+          "name": "NAD+ Nasal Spray \u2014 200mg/mL \u00b7 15mL"
+        }
+      ],
+      "proposed_actions": [
+        "SPLIT_BACKEND_CPS",
+        "REPAIR_EXISTING_CP_PRICE_79_FOR_R84",
+        "CREATE_CP_FOR_R85_PRICE_109",
+        "MANUAL_PAIR_R84_R85",
+        "DO_NOT_USE_R81_R82",
+        "DO_NOT_SUBSTITUTE_R83"
+      ]
+    },
+    {
+      "conflict_number": 3,
+      "label": "Wolverine Capsule",
+      "clientProductId": "omhh3NabouO8AsNR5tkD",
+      "current_gen": {
+        "clientProductId": "omhh3NabouO8AsNR5tkD",
+        "name": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+        "displayName": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+        "current_price": 0,
+        "storefrontEligible": false,
+        "live_pairings": []
+      },
+      "website_family": "Wolverine / BPC-TB",
+      "website_variants": [
+        "wolverine-capsule"
+      ],
+      "expected_locked_retail": 29,
+      "formulary_support": {
+        "excel_row": 104,
+        "exact": "BPC-157/TB500 capsules 500MCG/500MCG",
+        "strength": "500mcg/500mcg",
+        "package": "1EA",
+        "form": null,
+        "pharmacy": "Greenwich Pharmacy",
+        "cost": 3.2,
+        "shipping": 25,
+        "raw": 30.6,
+        "locked_retail_x9": 29
+      },
+      "price_verified": true,
+      "classification": "A_SIMPLE_PRICE_REPAIR",
+      "resolution": "Single sellable capsule option. Set GEN price 0 \u2192 29 from r104 ((3.2\u00d71.75)+25 \u2192 30.60 \u2192 $29). Pair Greenwich r104. Independent from injection economics.",
+      "executable": true,
+      "proposed_actions": [
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_R104",
+        "SET_STOREFRONT_ELIGIBLE_AS_POLICY"
+      ]
+    },
+    {
+      "conflict_number": 4,
+      "label": "Minoxidil / Finasteride 0.1%/5%",
+      "clientProductId": "BboYS4a2Uj7APetrFo6W",
+      "current_gen": {
+        "clientProductId": "BboYS4a2Uj7APetrFo6W",
+        "name": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+        "displayName": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+        "current_price": 0,
+        "storefrontEligible": false,
+        "live_pairings": []
+      },
+      "website_family": "Minoxidil",
+      "website_variants": [
+        "minoxidil-fin-minox-0.1-5"
+      ],
+      "expected_locked_retail": 79,
+      "formulary_support": {
+        "excel_row": 129,
+        "exact": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+        "strength": "0.1/5 %",
+        "package": "1 ml",
+        "form": "Foam",
+        "pharmacy": "Vios",
+        "cost": 30,
+        "shipping": 30,
+        "raw": 82.5,
+        "locked_retail_x9": 79
+      },
+      "price_verified": true,
+      "classification": "A_SIMPLE_PRICE_REPAIR",
+      "resolution": "Existing Dual Combo CP cleanly represents Finasteride/Minoxidil (not GHK-Cu/Minoxidil). Set price 0 \u2192 79 from r129 ((30\u00d71.75)+30 \u2192 82.50 \u2192 $79). Manual pair Vios r129. Do not use 489YrehNXRlL77fYPkOn.",
+      "executable": true,
+      "forbidden_cp": "489YrehNXRlL77fYPkOn",
+      "proposed_actions": [
+        "REPAIR_PRICE_TO_79",
+        "MANUAL_PAIR_VIOS_R129",
+        "RENAME_DISPLAY_TO_FIN_MINOX_0_1_5",
+        "DO_NOT_USE_GHK_CU_MINOXIDIL_CP"
+      ]
+    },
+    {
+      "conflict_number": 5,
+      "label": "Estradiol patches",
+      "clientProductId": "o7dNtf9QsnEqPCrLr2tR",
+      "current_gen": {
+        "clientProductId": "o7dNtf9QsnEqPCrLr2tR",
+        "name": "Women's Hormones (HRT) \u2013 Vaginal Health (Estradiol / DHEA)",
+        "displayName": "Women's Hormones (HRT) \u2013 Vaginal Health (Estradiol / DHEA)",
+        "current_price": 0,
+        "storefrontEligible": false,
+        "live_pairings": []
+      },
+      "website_family": "Estradiol",
+      "website_variants": [
+        "estradiol-patch-r26",
+        "estradiol-patch-r27",
+        "estradiol-patch-r28",
+        "estradiol-patch-r29"
+      ],
+      "expected_locked_retails": {
+        "26": 119,
+        "27": 129,
+        "28": 139,
+        "29": 149
+      },
+      "formulary_support": {
+        "26": {
+          "excel_row": 26,
+          "exact": "ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count",
+          "strength": "0.025mg/hr",
+          "package": null,
+          "form": "Patch",
+          "pharmacy": "Valiant",
+          "cost": 50,
+          "shipping": 30,
+          "raw": 117.5,
+          "locked_retail_x9": 119
+        },
+        "27": {
+          "excel_row": 27,
+          "exact": "ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count",
+          "strength": "0.0375mg/hr",
+          "package": null,
+          "form": "Patch",
+          "pharmacy": "Valiant",
+          "cost": 55,
+          "shipping": 30,
+          "raw": 126.25,
+          "locked_retail_x9": 129
+        },
+        "28": {
+          "excel_row": 28,
+          "exact": "ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count",
+          "strength": "0.05mg/hr",
+          "package": null,
+          "form": "Patch",
+          "pharmacy": "Valiant",
+          "cost": 60,
+          "shipping": 30,
+          "raw": 135.0,
+          "locked_retail_x9": 139
+        },
+        "29": {
+          "excel_row": 29,
+          "exact": "ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count",
+          "strength": "0.1mg/hr",
+          "package": null,
+          "form": "Patch",
+          "pharmacy": "Valiant",
+          "cost": 70,
+          "shipping": 30,
+          "raw": 152.5,
+          "locked_retail_x9": 149
+        }
+      },
+      "price_verified": true,
+      "classification": "B_GEN_CP_SPLIT_REQUIRED",
+      "resolution": "Existing CP is Vaginal Health (Estradiol/DHEA) \u2014 clinically wrong for transdermal patches. Four patch strengths have four different retail prices. CREATE four backend CPs (one per strength/price). Do not repair vaginal CP into a patch product. Website remains ONE Estradiol family with patch strength selectors.",
+      "executable": true,
+      "do_not_reuse_cp": "o7dNtf9QsnEqPCrLr2tR",
+      "proposed_backend": [
+        {
+          "role": "CREATE",
+          "maps_to": "estradiol-patch-r26",
+          "row": 26,
+          "price": 119,
+          "name": "Estradiol Transdermal Patch 0.025mg/hr \u00b7 8 count",
+          "pharmacy": "Valiant"
+        },
+        {
+          "role": "CREATE",
+          "maps_to": "estradiol-patch-r27",
+          "row": 27,
+          "price": 129,
+          "name": "Estradiol Transdermal Patch 0.0375mg/hr \u00b7 8 count",
+          "pharmacy": "Valiant"
+        },
+        {
+          "role": "CREATE",
+          "maps_to": "estradiol-patch-r28",
+          "row": 28,
+          "price": 139,
+          "name": "Estradiol Transdermal Patch 0.05mg/hr \u00b7 8 count",
+          "pharmacy": "Valiant"
+        },
+        {
+          "role": "CREATE",
+          "maps_to": "estradiol-patch-r29",
+          "row": 29,
+          "price": 149,
+          "name": "Estradiol Transdermal Patch 0.1mg/hr \u00b7 8 count",
+          "pharmacy": "Valiant"
+        }
+      ],
+      "proposed_actions": [
+        "CREATE_FOUR_PATCH_CPS",
+        "DO_NOT_REUSE_VAGINAL_ESTRADIOL_DHEA_CP",
+        "MANUAL_PAIR_EACH_TO_SELECTED_ROW",
+        "ONE_WEBSITE_FAMILY_FOUR_BACKEND_CPS"
+      ]
+    },
+    {
+      "conflict_number": 6,
+      "label": "Progesterone IR",
+      "clientProductId": "5dGkjdpLP7DkKKE2iVxh",
+      "current_gen": {
+        "clientProductId": "5dGkjdpLP7DkKKE2iVxh",
+        "name": "Women's Hormones (HRT) \u2013 Progesterone",
+        "displayName": "Women's Hormones (HRT) \u2013 Progesterone",
+        "current_price": 0,
+        "storefrontEligible": false,
+        "live_pairings": []
+      },
+      "website_family": "Progesterone",
+      "website_variants": [
+        "prog-ir-r41",
+        "prog-ir-r42",
+        "prog-ir-r43",
+        "prog-ir-r44",
+        "prog-ir-r45",
+        "prog-ir-r46",
+        "prog-ir-r47",
+        "prog-ir-r48",
+        "prog-ir-r49"
+      ],
+      "expected_locked_retail": 29,
+      "all_variants_same_retail": true,
+      "formulary_support": {
+        "41": {
+          "excel_row": 41,
+          "exact": "PROGESTERONE 100MG CAPSULE 100mg",
+          "strength": "100mg",
+          "package": "1 mg",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30,
+          "raw": 31.31,
+          "locked_retail_x9": 29
+        },
+        "42": {
+          "excel_row": 42,
+          "exact": "PROGESTERONE 200MG CAPSULE 200mg",
+          "strength": "200mg",
+          "package": "1 mg",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30,
+          "raw": 31.31,
+          "locked_retail_x9": 29
+        },
+        "43": {
+          "excel_row": 43,
+          "exact": "PROGESTERONE 50MG CAPSULE 50mg",
+          "strength": "50mg",
+          "package": "1 mg",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30,
+          "raw": 31.31,
+          "locked_retail_x9": 29
+        },
+        "44": {
+          "excel_row": 44,
+          "exact": "PROGESTERONE IR 100 MG",
+          "strength": "100 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "raw": 31.49,
+          "locked_retail_x9": 29
+        },
+        "45": {
+          "excel_row": 45,
+          "exact": "PROGESTERONE IR 150 MG",
+          "strength": "150 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "raw": 31.49,
+          "locked_retail_x9": 29
+        },
+        "46": {
+          "excel_row": 46,
+          "exact": "PROGESTERONE IR 200 MG",
+          "strength": "200 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "raw": 31.49,
+          "locked_retail_x9": 29
+        },
+        "47": {
+          "excel_row": 47,
+          "exact": "PROGESTERONE IR (DYE-FREE)(LACTOSE-FREE) (M NEW) 200MG",
+          "strength": "200MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "raw": 31.49,
+          "locked_retail_x9": 29
+        },
+        "48": {
+          "excel_row": 48,
+          "exact": "PROGESTERONE IR 300 MG",
+          "strength": "300 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "raw": 31.49,
+          "locked_retail_x9": 29
+        },
+        "49": {
+          "excel_row": 49,
+          "exact": "PROGESTERONE IR 400 MG",
+          "strength": "400 MG",
+          "package": "1 each",
+          "form": "Capsule",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30,
+          "raw": 31.49,
+          "locked_retail_x9": 29
+        }
+      },
+      "price_verified": true,
+      "classification": "A_SIMPLE_PRICE_REPAIR",
+      "resolution": "CP identity (Progesterone) is appropriate. All 9 IR/capsule SELECTED rows lock to $29 \u2014 no price-driven split required. Set GEN price 0 \u2192 29. Manual-pair exact Vios rows; verify each strength in admin. Prefer this CP over BiEst combo CPs.",
+      "executable": true,
+      "proposed_actions": [
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_VIOS_ROWS_41_TO_49",
+        "VERIFY_EACH_STRENGTH_IN_ADMIN"
+      ]
+    },
+    {
+      "conflict_number": 7,
+      "label": "Selank nasal",
+      "clientProductId": "Ukctbyh5Yrek3SnGSYA3",
+      "current_gen": {
+        "clientProductId": "Ukctbyh5Yrek3SnGSYA3",
+        "name": "Selank Anxiolytic & Cognitive Protocol",
+        "displayName": "Selank Anxiolytic & Cognitive Protocol",
+        "current_price": 0,
+        "storefrontEligible": false,
+        "live_pairings": []
+      },
+      "website_family": "Selank",
+      "website_variants": [
+        "selank-nasal-r119"
+      ],
+      "launch_state": "FUTURE_HIDDEN",
+      "classification": "E_FUTURE_HIDDEN_NO_EXECUTION",
+      "resolution": "Remove selank-nasal-r119 from executable manifest. Do not price/pair/activate now. Selank Injection (selank-current) remains FORMULARY_PENDING \u2014 nasal must not substitute.",
+      "executable": false,
+      "proposed_actions": [
+        "REMOVE_FROM_EXECUTABLE_SET",
+        "SET_PRIMARY_STATUS_FUTURE_HIDDEN",
+        "DO_NOT_SUBSTITUTE_FOR_INJECTION_PENDING"
+      ]
+    },
+    {
+      "conflict_number": 8,
+      "label": "Semax nasal",
+      "clientProductId": "YTHcdrlRICMpt56hdxeJ",
+      "current_gen": {
+        "clientProductId": "YTHcdrlRICMpt56hdxeJ",
+        "name": "Semax Nootropic & Neuroprotective Protocol",
+        "displayName": "Semax Nootropic & Neuroprotective Protocol",
+        "current_price": 0,
+        "storefrontEligible": false,
+        "live_pairings": []
+      },
+      "website_family": "Semax",
+      "website_variants": [
+        "semax-nasal-r118"
+      ],
+      "launch_state": "FUTURE_HIDDEN",
+      "classification": "E_FUTURE_HIDDEN_NO_EXECUTION",
+      "resolution": "Remove semax-nasal-r118 from executable manifest. Do not price/pair/activate now. Semax Injection remains FORMULARY_PENDING \u2014 nasal must not substitute.",
+      "executable": false,
+      "proposed_actions": [
+        "REMOVE_FROM_EXECUTABLE_SET",
+        "SET_PRIMARY_STATUS_FUTURE_HIDDEN",
+        "DO_NOT_SUBSTITUTE_FOR_INJECTION_PENDING"
+      ]
+    }
+  ],
+  "classification_counts": {
+    "A_SIMPLE_PRICE_REPAIR": 4,
+    "B_GEN_CP_SPLIT_REQUIRED": 2,
+    "C_ALREADY_CORRECT_NO_WRITE": 0,
+    "D_FORMULARY_PENDING": 0,
+    "E_FUTURE_HIDDEN_NO_EXECUTION": 2,
+    "F_OTHER_BLOCKER": 0
+  },
+  "backend_routing_models": {
+    "NAD+": [
+      {
+        "website_family": "NAD+",
+        "patient_selector": "Delivery",
+        "patient_option": "Injection \u00b7 5mL/500mg (100mg/mL)",
+        "final_retail": 199,
+        "gen_cp": null,
+        "formulary_row": null,
+        "pharmacy": null,
+        "status": "FORMULARY_PENDING"
+      },
+      {
+        "website_family": "NAD+",
+        "patient_selector": "Delivery",
+        "patient_option": "Injection \u00b7 10mL/1000mg (100mg/mL)",
+        "final_retail": 229,
+        "gen_cp": null,
+        "formulary_row": null,
+        "pharmacy": null,
+        "status": "FORMULARY_PENDING"
+      },
+      {
+        "website_family": "NAD+",
+        "patient_selector": "Delivery \u2192 Nasal Spray \u2192 Strength",
+        "patient_option": "50mg/mL \u00b7 15mL (r84)",
+        "final_retail": 79,
+        "gen_cp": "FVwkzvQqWIZRNAwbslGw",
+        "formulary_row": 84,
+        "pharmacy": "St Luke",
+        "status": "REPAIR_PRICE_PLUS_PAIR"
+      },
+      {
+        "website_family": "NAD+",
+        "patient_selector": "Delivery \u2192 Nasal Spray \u2192 Strength",
+        "patient_option": "200mg/mL \u00b7 15mL (r85)",
+        "final_retail": 109,
+        "gen_cp": "CREATE_REQUIRED",
+        "formulary_row": 85,
+        "pharmacy": "St Luke",
+        "status": "CREATE_PLUS_PAIR"
+      }
+    ],
+    "Estradiol": [
+      {
+        "website_family": "Estradiol",
+        "patient_selector": "Patch strength",
+        "patient_option": "0.025mg/hr \u00b7 8 count",
+        "final_retail": 119,
+        "gen_cp": "CREATE_REQUIRED",
+        "formulary_row": 26,
+        "pharmacy": "Valiant",
+        "status": "CREATE_PLUS_PAIR"
+      },
+      {
+        "website_family": "Estradiol",
+        "patient_selector": "Patch strength",
+        "patient_option": "0.0375mg/hr \u00b7 8 count",
+        "final_retail": 129,
+        "gen_cp": "CREATE_REQUIRED",
+        "formulary_row": 27,
+        "pharmacy": "Valiant",
+        "status": "CREATE_PLUS_PAIR"
+      },
+      {
+        "website_family": "Estradiol",
+        "patient_selector": "Patch strength",
+        "patient_option": "0.05mg/hr \u00b7 8 count",
+        "final_retail": 139,
+        "gen_cp": "CREATE_REQUIRED",
+        "formulary_row": 28,
+        "pharmacy": "Valiant",
+        "status": "CREATE_PLUS_PAIR"
+      },
+      {
+        "website_family": "Estradiol",
+        "patient_selector": "Patch strength",
+        "patient_option": "0.1mg/hr \u00b7 8 count",
+        "final_retail": 149,
+        "gen_cp": "CREATE_REQUIRED",
+        "formulary_row": 29,
+        "pharmacy": "Valiant",
+        "status": "CREATE_PLUS_PAIR"
+      }
+    ],
+    "Wolverine": [
+      {
+        "website_family": "Wolverine / BPC-TB",
+        "patient_selector": "Form",
+        "patient_option": "Injection",
+        "final_retail": 159,
+        "gen_cp": "iJtyig611AZEDBGdvRd9",
+        "formulary_row": 103,
+        "pharmacy": "Greenwich Pharmacy",
+        "status": "SIMPLE_PRICE_REPAIR"
+      },
+      {
+        "website_family": "Wolverine / BPC-TB",
+        "patient_selector": "Form",
+        "patient_option": "Capsule",
+        "final_retail": 29,
+        "gen_cp": "omhh3NabouO8AsNR5tkD",
+        "formulary_row": 104,
+        "pharmacy": "Greenwich Pharmacy",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      }
+    ],
+    "Minoxidil": [
+      {
+        "website_family": "Minoxidil",
+        "patient_selector": "Formula",
+        "patient_option": "Finasteride/Minoxidil 0.1%/5%",
+        "final_retail": 79,
+        "gen_cp": "BboYS4a2Uj7APetrFo6W",
+        "formulary_row": 129,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      }
+    ],
+    "Progesterone": [
+      {
+        "website_family": "Progesterone",
+        "patient_selector": "IR strength",
+        "patient_option": "PROGESTERONE 100MG CAPSULE 100mg",
+        "final_retail": 29,
+        "gen_cp": "5dGkjdpLP7DkKKE2iVxh",
+        "formulary_row": 41,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      },
+      {
+        "website_family": "Progesterone",
+        "patient_selector": "IR strength",
+        "patient_option": "PROGESTERONE 200MG CAPSULE 200mg",
+        "final_retail": 29,
+        "gen_cp": "5dGkjdpLP7DkKKE2iVxh",
+        "formulary_row": 42,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      },
+      {
+        "website_family": "Progesterone",
+        "patient_selector": "IR strength",
+        "patient_option": "PROGESTERONE 50MG CAPSULE 50mg",
+        "final_retail": 29,
+        "gen_cp": "5dGkjdpLP7DkKKE2iVxh",
+        "formulary_row": 43,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      },
+      {
+        "website_family": "Progesterone",
+        "patient_selector": "IR strength",
+        "patient_option": "PROGESTERONE IR 100 MG",
+        "final_retail": 29,
+        "gen_cp": "5dGkjdpLP7DkKKE2iVxh",
+        "formulary_row": 44,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      },
+      {
+        "website_family": "Progesterone",
+        "patient_selector": "IR strength",
+        "patient_option": "PROGESTERONE IR 150 MG",
+        "final_retail": 29,
+        "gen_cp": "5dGkjdpLP7DkKKE2iVxh",
+        "formulary_row": 45,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      },
+      {
+        "website_family": "Progesterone",
+        "patient_selector": "IR strength",
+        "patient_option": "PROGESTERONE IR 200 MG",
+        "final_retail": 29,
+        "gen_cp": "5dGkjdpLP7DkKKE2iVxh",
+        "formulary_row": 46,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      },
+      {
+        "website_family": "Progesterone",
+        "patient_selector": "IR strength",
+        "patient_option": "PROGESTERONE IR (DYE-FREE)(LACTOSE-FREE) (M NEW) 200MG",
+        "final_retail": 29,
+        "gen_cp": "5dGkjdpLP7DkKKE2iVxh",
+        "formulary_row": 47,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      },
+      {
+        "website_family": "Progesterone",
+        "patient_selector": "IR strength",
+        "patient_option": "PROGESTERONE IR 300 MG",
+        "final_retail": 29,
+        "gen_cp": "5dGkjdpLP7DkKKE2iVxh",
+        "formulary_row": 48,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      },
+      {
+        "website_family": "Progesterone",
+        "patient_selector": "IR strength",
+        "patient_option": "PROGESTERONE IR 400 MG",
+        "final_retail": 29,
+        "gen_cp": "5dGkjdpLP7DkKKE2iVxh",
+        "formulary_row": 49,
+        "pharmacy": "Vios",
+        "status": "SIMPLE_PRICE_REPAIR_PLUS_PAIR"
+      }
+    ]
+  },
+  "recalculated_status_counts": {
+    "ROUTING_READY": 0,
+    "GEN_PRODUCT_CREATE_REQUIRED": 13,
+    "GEN_PRODUCT_REPAIR_REQUIRED": 22,
+    "GEN_PAIRING_REQUIRED": 1,
+    "FORMULARY_PENDING": 14,
+    "PRICE_PENDING": 0,
+    "FUTURE_HIDDEN": 53,
+    "BLOCKED_OWNER_REVIEW": 0
+  },
+  "recalculated_execution": {
+    "execution_eligible_website_variants": 36,
+    "unique_gen_create_required": 13,
+    "unique_gen_create_variants": [
+      "tir-b12-starting-low",
+      "tir-b12-mid",
+      "tir-b12-high",
+      "tir-b12-any-dose",
+      "tir-glycine-starting-low",
+      "tir-glycine-mid",
+      "tir-glycine-high",
+      "tir-glycine-any-dose",
+      "nad-nasal-r85",
+      "estradiol-patch-r26",
+      "estradiol-patch-r27",
+      "estradiol-patch-r28",
+      "estradiol-patch-r29"
+    ],
+    "unique_gen_repair_required": 14,
+    "unique_gen_repair_cps": [
+      "34I2X8MpVZf3AQTff3bo",
+      "5F8jESeVeXcpkLU5rrdK",
+      "5dGkjdpLP7DkKKE2iVxh",
+      "BboYS4a2Uj7APetrFo6W",
+      "CjqOUbPuGPZzxephqRou",
+      "E3MXZeeR01QROCuTLRLE",
+      "FVwkzvQqWIZRNAwbslGw",
+      "MkDIUw0NcJB7YL2pNzYW",
+      "SkqQHmsc0WdsbK9vmV1y",
+      "iJtyig611AZEDBGdvRd9",
+      "omhh3NabouO8AsNR5tkD",
+      "sssEk3FDY4LFbQYGQsLx",
+      "tk2GW39OGr7JX4MCCoJP",
+      "wQK2JsFnh7oFBf3Lag4n"
+    ],
+    "unique_gen_cps_requiring_pairing_status_only": 1,
+    "unique_gen_pairing_status_cps": [
+      "BLf8inX395YNc7WPCD4O"
+    ],
+    "manual_gen_admin_pairing_actions": 64,
+    "manual_pairing_detail_count": 64,
+    "pairing_api_writable": 0,
+    "remaining_price_conflicts": 0,
+    "remaining_structure_conflicts": 0,
+    "remaining_stop_items": 0,
+    "note": "Structure splits converted into CREATE/REPAIR plan items \u2014 no longer STOP blockers. Selank/Semax nasal removed from executable set.",
+    "unique_gen_cps_requiring_pairing": 28
+  },
+  "final_report": {
+    "PRICE_CONFLICTS_STARTING": 8,
+    "SIMPLE_PRICE_REPAIR": 4,
+    "GEN_CP_SPLIT_REQUIRED": 2,
+    "ALREADY_CORRECT": 0,
+    "FORMULARY_PENDING_FROM_CONFLICTS": 0,
+    "FUTURE_HIDDEN_REMOVED": 2,
+    "OTHER_BLOCKERS": 0,
+    "NAD_NASAL_BACKEND_STRUCTURE": "SPLIT \u2014 r84 reuses FVwkzvQqWIZRNAwbslGw @$79; r85 CREATE @$109; one website NAD+ family",
+    "ESTRADIOL_BACKEND_STRUCTURE": "SPLIT CREATE\u00d74 patch CPs (do not reuse vaginal Estradiol/DHEA CP); one website Estradiol family",
+    "WOLVERINE_BACKEND_STRUCTURE": "Injection CP iJty\u2026 @$159 + Capsule CP omhh\u2026 @$29; one website Wolverine family",
+    "MINOXIDIL_BACKEND_STRUCTURE": "Reuse Dual Combo BboYS\u2026 @$79 + Vios r129; not GHK-Cu/Minoxidil",
+    "PROGESTERONE_BACKEND_STRUCTURE": "Reuse Progesterone CP 5dGk\u2026 @$29 with multi-strength IR pairings (all $29)",
+    "SELANK_NASAL_EXECUTABLE": "NO",
+    "SEMAX_NASAL_EXECUTABLE": "NO",
+    "UNIQUE_GEN_CREATE_REQUIRED": 13,
+    "UNIQUE_GEN_REPAIR_REQUIRED": 14,
+    "UNIQUE_GEN_CPS_REQUIRING_PAIRING_STATUS_ONLY": 1,
+    "MANUAL_GEN_ADMIN_PAIRING_ACTIONS": 64,
+    "REMAINING_PRICE_CONFLICTS": 0,
+    "REMAINING_STRUCTURE_CONFLICTS": 0,
+    "REMAINING_STOP_ITEMS": 0,
+    "FORMULARY_PENDING": 14,
+    "FUTURE_HIDDEN": 53,
+    "EXECUTION_ELIGIBLE_WEBSITE_VARIANTS": 36,
+    "ALL_EXECUTABLE_PRICES_VERIFIED_FROM_COST_SHIPPING": "YES",
+    "ALL_EXECUTABLE_GEN_CP_IDENTITIES_EXACTLY_SUPPORTED": "YES",
+    "READY_FOR_GEN_WRITE_EXECUTION": "YES",
+    "READY_NOTE": "READY means resolution cleared STOP items. Owner must still explicitly authorize write execution. Pairings remain MANUAL_GEN_ADMIN.",
+    "GEN_MODIFIED": false,
+    "GEN_WRITES": 0,
+    "PAIRING_WRITES": 0,
+    "WEBSITE_MODIFIED": false,
+    "CHECKOUT_MODIFIED": false,
+    "CUTOVER": "OFF",
+    "UNIQUE_GEN_CPS_REQUIRING_PAIRING": 28,
+    "MANUAL_PAIRING_NOTE": "Row-level ADD count includes SEM/TIR membership ladders and multi-strength Prog/SEM dose groups. API writable = 0.",
+    "READY_CAVEAT": "Owner must explicitly authorize write execution. Pairings=MANUAL_GEN_ADMIN. DO NOT EXECUTE in this phase."
+  }
+}

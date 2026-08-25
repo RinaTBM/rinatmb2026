@@ -23,7 +23,10 @@ import {
   resolveGenApiOrdersEnabled,
   isProductionCheckoutTestSkuCart,
 } from "../_shared/commerceEnvPolicy.ts";
-import { resolveGenClientProductIdForSku } from "../_shared/familyCommerce.ts";
+import {
+  isLaunchReadyFamilyPaymentSku,
+  resolveGenClientProductIdForSku,
+} from "../_shared/familyCommerce.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -109,19 +112,24 @@ async function assertRxGenMappingsReady(input: {
     return { ok: true };
   }
 
+  // Launch-ready website-family SKUs: Tagada payment may proceed while GEN API Orders
+  // and GEN handoff stay OFF. Real automated GEN order creation remains fail-closed.
+  const otherRx = rxSkus.filter((s) => !isLaunchReadyFamilyPaymentSku(s));
+  if (otherRx.length === 0) {
+    return { ok: true };
+  }
+
   // Production Rx also requires GEN API Orders capability (distinct from mapping READY).
   if (!resolveGenApiOrdersEnabled()) {
     return {
       ok: false,
       message:
         "This medication is temporarily unavailable for checkout. Please contact support.",
-      blockedSku: rxSkus[0],
+      blockedSku: otherRx[0],
     };
   }
 
-  // Launch-ready website-family SKUs resolve GEN clientProductId in-code.
-  // Does not enable real GEN order submission; API Orders gate above still applies.
-  const unresolved = rxSkus.filter((s) => !resolveGenClientProductIdForSku(s));
+  const unresolved = otherRx.filter((s) => !resolveGenClientProductIdForSku(s));
   if (unresolved.length === 0) {
     return { ok: true };
   }

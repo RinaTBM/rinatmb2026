@@ -476,6 +476,53 @@ Deno.serve(async (req) => {
     );
   }
 
+  // ---------- Launch-ready kashu_sku_map upsert (service role; no Tagada writes) ----------
+  if (action === "upsert_kashu_sku_map") {
+    const supabaseUrl = (Deno.env.get("SUPABASE_URL") || "").trim();
+    const serviceKey = (Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "").trim();
+    if (!supabaseUrl || !serviceKey) {
+      return json({ error: "missing_service_role" }, 503);
+    }
+    const rows = (body.rows || []) as Array<Record<string, unknown>>;
+    if (!Array.isArray(rows) || rows.length === 0) {
+      return json({ error: "rows_required" }, 400);
+    }
+    const payload = rows.map((r) => ({
+      mbm_sku: String(r.mbm_sku || "").trim(),
+      mbm_product_id: r.mbm_product_id ?? null,
+      mbm_variant_id: r.mbm_variant_id ?? null,
+      tagada_product_id: String(r.tagada_product_id || "").trim(),
+      tagada_variant_id: String(r.tagada_variant_id || "").trim(),
+      tagada_price_id: r.tagada_price_id ?? null,
+      mbm_price_cents: Number(r.mbm_price_cents),
+      tagada_price_cents: Number(r.tagada_price_cents),
+      is_active: true,
+      notes: r.notes ?? "MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified",
+      updated_at: new Date().toISOString(),
+    }));
+    if (payload.some((r) => !r.mbm_sku || !r.tagada_product_id || !r.tagada_variant_id)) {
+      return json({ error: "invalid_row" }, 400);
+    }
+    const res = await fetch(`${supabaseUrl}/rest/v1/kashu_sku_map?on_conflict=mbm_sku`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${serviceKey}`,
+        apikey: serviceKey,
+        "Content-Type": "application/json",
+        Prefer: "resolution=merge-duplicates,return=representation",
+      },
+      body: JSON.stringify(payload),
+    });
+    const text = await res.text();
+    let data: unknown = text;
+    try {
+      data = text ? JSON.parse(text) : null;
+    } catch {
+      data = { raw: text.slice(0, 500) };
+    }
+    return json({ ok: res.ok, status: res.status, data });
+  }
+
   if (action === "raw") {
     const method = String(body.method || "GET");
     const path = String(body.path || "");

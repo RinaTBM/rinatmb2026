@@ -1,0 +1,274 @@
+{
+  "phase": "MBM-FINAL-CHECKOUT-LAUNCH-1",
+  "workingBranch": "cursor/final-website-launch-ed1e",
+  "launchPr": 20,
+  "doNotMergePr19": true,
+  "verifiedAt": "2026-08-25",
+  "tagadaSource": "live tagada-product-sync list/get on production Edge bsgtuuzwgeetsjjdrtrm",
+  "flags": {
+    "WEBSITE_FAMILY_CUTOVER_ENABLED": true,
+    "REAL_GEN_ORDER_SUBMISSION_ENABLED": false,
+    "GEN_HANDOFF_AUTOMATION_ENABLED": false,
+    "GEN_API_ORDERS_ENABLED": false
+  },
+  "launchReadyOneTimeSkus": 17,
+  "oneTimeMaps": [
+    {
+      "websiteFamily": "semaglutide",
+      "websiteVariant": "sem-b12-starting-low",
+      "mbmSku": "MBM-WM-SEM-B12-001",
+      "mbmPriceCents": 8900,
+      "tagadaProductId": "product_6b750325addf",
+      "tagadaVariantId": "variant_f9ac5ea25184",
+      "tagadaPriceId": "price_e31ac583370d",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "semaglutide",
+      "websiteVariant": "sem-b12-mid",
+      "mbmSku": "MBM-WM-SEM-B12-002",
+      "mbmPriceCents": 10900,
+      "tagadaProductId": "product_6b750325addf",
+      "tagadaVariantId": "variant_d839f0aab609",
+      "tagadaPriceId": "price_0bf0b622fd45",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "semaglutide",
+      "websiteVariant": "sem-b12-high",
+      "mbmSku": "MBM-WM-SEM-B12-003",
+      "mbmPriceCents": 10900,
+      "tagadaProductId": "product_6b750325addf",
+      "tagadaVariantId": "variant_d9dac92d2f71",
+      "tagadaPriceId": "price_3c22af390881",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "semaglutide",
+      "websiteVariant": "sem-b12-any-dose",
+      "mbmSku": "MBM-WM-SEM-B12-004",
+      "mbmPriceCents": 8900,
+      "tagadaProductId": "product_6b750325addf",
+      "tagadaVariantId": "variant_9ffb5ebc2ee4",
+      "tagadaPriceId": "price_0b4649e6fc5b",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "semaglutide",
+      "websiteVariant": "sem-glycine-starting-low",
+      "mbmSku": "MBM-WM-SEM-GLY-001",
+      "mbmPriceCents": 8900,
+      "tagadaProductId": "product_dcc64482bbbf",
+      "tagadaVariantId": "variant_c51c894cfee6",
+      "tagadaPriceId": "price_74822644bb1f",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "semaglutide",
+      "websiteVariant": "sem-glycine-mid",
+      "mbmSku": "MBM-WM-SEM-GLY-002",
+      "mbmPriceCents": 10900,
+      "tagadaProductId": "product_dcc64482bbbf",
+      "tagadaVariantId": "variant_398f72f8ca6b",
+      "tagadaPriceId": "price_9113997a5445",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "semaglutide",
+      "websiteVariant": "sem-glycine-high",
+      "mbmSku": "MBM-WM-SEM-GLY-003",
+      "mbmPriceCents": 10900,
+      "tagadaProductId": "product_dcc64482bbbf",
+      "tagadaVariantId": "variant_a71889d8f2e1",
+      "tagadaPriceId": "price_0c321507201f",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "semaglutide",
+      "websiteVariant": "sem-glycine-any-dose",
+      "mbmSku": "MBM-WM-SEM-GLY-004",
+      "mbmPriceCents": 8900,
+      "tagadaProductId": "product_dcc64482bbbf",
+      "tagadaVariantId": "variant_cea940cbbe1a",
+      "tagadaPriceId": "price_95d6839eb9c2",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "tirzepatide",
+      "websiteVariant": "tir-b12-starting-low",
+      "mbmSku": "MBM-WM-TIR-B12-001",
+      "mbmPriceCents": 11900,
+      "tagadaProductId": "product_74cd4752c9d6",
+      "tagadaVariantId": "variant_2d96cc588f51",
+      "tagadaPriceId": "price_ed0142289010",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "tirzepatide",
+      "websiteVariant": "tir-b12-mid",
+      "mbmSku": "MBM-WM-TIR-B12-002",
+      "mbmPriceCents": 14900,
+      "tagadaProductId": "product_74cd4752c9d6",
+      "tagadaVariantId": "variant_0acda4e3b2d7",
+      "tagadaPriceId": "price_3db063ba334a",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "tirzepatide",
+      "websiteVariant": "tir-b12-high",
+      "mbmSku": "MBM-WM-TIR-B12-003",
+      "mbmPriceCents": 16900,
+      "tagadaProductId": "product_74cd4752c9d6",
+      "tagadaVariantId": "variant_5e13db7812ee",
+      "tagadaPriceId": "price_fb5946461765",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "tirzepatide",
+      "websiteVariant": "tir-b12-any-dose",
+      "mbmSku": "MBM-WM-TIR-B12-004",
+      "mbmPriceCents": 11900,
+      "tagadaProductId": "product_74cd4752c9d6",
+      "tagadaVariantId": "variant_5be6af0494ac",
+      "tagadaPriceId": "price_a6eba9a2a721",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "tirzepatide",
+      "websiteVariant": "tir-glycine-starting-low",
+      "mbmSku": "MBM-WM-TIR-GLY-001",
+      "mbmPriceCents": 11900,
+      "tagadaProductId": "product_861e0edd8ab2",
+      "tagadaVariantId": "variant_ddd60b897d66",
+      "tagadaPriceId": "price_5e4581d60278",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "tirzepatide",
+      "websiteVariant": "tir-glycine-mid",
+      "mbmSku": "MBM-WM-TIR-GLY-002",
+      "mbmPriceCents": 14900,
+      "tagadaProductId": "product_861e0edd8ab2",
+      "tagadaVariantId": "variant_b7e1562ee522",
+      "tagadaPriceId": "price_0e41d6b0aeab",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "tirzepatide",
+      "websiteVariant": "tir-glycine-high",
+      "mbmSku": "MBM-WM-TIR-GLY-003",
+      "mbmPriceCents": 16900,
+      "tagadaProductId": "product_861e0edd8ab2",
+      "tagadaVariantId": "variant_121e6d8cd921",
+      "tagadaPriceId": "price_9803c9a96da8",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "tirzepatide",
+      "websiteVariant": "tir-glycine-any-dose",
+      "mbmSku": "MBM-WM-TIR-GLY-004",
+      "mbmPriceCents": 11900,
+      "tagadaProductId": "product_861e0edd8ab2",
+      "tagadaVariantId": "variant_6c383930239c",
+      "tagadaPriceId": "price_cb4042a35b42",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    },
+    {
+      "websiteFamily": "nad",
+      "websiteVariant": "nad-nasal-r84",
+      "mbmSku": "MBM-LON-NAD-NS-001",
+      "mbmPriceCents": 7900,
+      "tagadaProductId": "product_9dd959e8b3b2",
+      "tagadaVariantId": "variant_c41bb700e856",
+      "tagadaPriceId": "price_79f07341d00a",
+      "kashuSkuMapStatus": "MAPPED_CORRECTLY",
+      "priorStatus": "TAGADA_PRODUCT_CREATE_REQUIRED"
+    }
+  ],
+  "tagadaObjectsCreated": {
+    "products": 5,
+    "oneTimeVariants": 17,
+    "tirRecurringPrices": 3,
+    "productIds": [
+      "product_6b750325addf",
+      "product_dcc64482bbbf",
+      "product_74cd4752c9d6",
+      "product_861e0edd8ab2",
+      "product_9dd959e8b3b2"
+    ]
+  },
+  "tirMembership": {
+    "newEnrollment": {
+      "basePriceId": "price_2d2dd07b2f73",
+      "baseCents": 27500,
+      "twoDayComboPriceId": "price_94c92b6e5749",
+      "twoDayCents": 30500,
+      "nextDayComboPriceId": "price_d6941e334598",
+      "nextDayCents": 32500,
+      "variantId": "variant_b3890c799e09",
+      "productId": "product_8b3bfb6614c4"
+    },
+    "historicalKeepDoNotDelete": {
+      "base249": "price_5cf1fa89610c",
+      "twoDay279": "price_e0ebef9851a8",
+      "nextDay299": "price_ef9ea132d6cf"
+    }
+  },
+  "semMembershipUnchanged": {
+    "basePriceId": "price_344d3dacb4ab",
+    "baseCents": 14900,
+    "twoDayComboPriceId": "price_41179f7cafe2",
+    "twoDayCents": 17900,
+    "nextDayComboPriceId": "price_7ce0f74a7509",
+    "nextDayCents": 19900
+  },
+  "ownerDeploySteps": [
+    "Do not merge PR #19",
+    "Apply supabase/migrations/20260825104500_kashu_sku_map_launch_ready.sql via Bolt/Supabase",
+    "Redeploy create-invoice-order and create-kashu-checkout-session",
+    "Keep GEN_API_ORDERS_ENABLED off, GEN_HANDOFF_AUTOMATION_ENABLED off, REAL_GEN_ORDER_SUBMISSION_ENABLED off",
+    "Stop for owner approval before merging PR #20 or publishing"
+  ],
+  "operationalLimitation": "Card payment is ready. Real GEN medication-order automation stays fail-closed. Fulfillment is manual until GEN API Orders / external-paid is enabled.",
+  "report": {
+    "LAUNCH_READY_ONE_TIME_SKUS": 17,
+    "TAGADA_KASHU_MAPPED": "17 / 17",
+    "TAGADA_OBJECTS_CREATED": 8,
+    "TAGADA_MAPS_CREATED_UPDATED": 18,
+    "SEM_MEMBERSHIP": "$149 / $179 / $199 — READY",
+    "TIR_MEMBERSHIP": "$275 / $305 / $325 — READY",
+    "OLD_TIR_249_NEW_ENROLLMENT_PATH_REMOVED": "YES",
+    "ONE_TIME_CARD_CHECKOUT": "READY",
+    "SEM_MEMBERSHIP_CHECKOUT": "READY",
+    "TIR_MEMBERSHIP_CHECKOUT": "READY",
+    "CHECKOUT": "READY",
+    "WEBSITE": "READY",
+    "GEN_ROUTING": "PARTIAL",
+    "REAL_GEN_API_ORDERS": "BLOCKED / OFF",
+    "GEN_HANDOFF_AUTOMATION": "OFF",
+    "FORMULARY_PENDING": "UNCHANGED / HIDDEN",
+    "FUTURE_HIDDEN": "UNCHANGED / HIDDEN",
+    "TYPECHECK": "PASS",
+    "TESTS": "PASS",
+    "BUILD": "PASS",
+    "READY_TO_MERGE_PR_20": "YES",
+    "READY_TO_DEPLOY_WEBSITE": "YES",
+    "PR_19": "OPEN / NOT MERGED"
+  }
+}

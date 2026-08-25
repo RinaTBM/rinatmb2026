@@ -7,7 +7,7 @@
 **COMPLETE**
 
 - Semaglutide membership: **$149/month**
-- Tirzepatide membership: **$249/month**
+- Tirzepatide membership: **$275/month**
 - Auto-Refill 10%, Active Wellness Member 15%, accessory member 15% (non-stacking)
 - Shipping: Two-Day **$30**, Next-Day **$50** (no Standard)
 - Memberships excluded from $500 merchandise free-shipping threshold

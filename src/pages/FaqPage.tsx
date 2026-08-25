@@ -140,11 +140,11 @@ const faqCategories = [
       },
       {
         q: 'What is charged today when I join a membership?',
-        a: 'Due today typically includes membership base + selected shipping + the $75 Initial Provider Visit when required. Examples: Semaglutide + Two-Day $254; Semaglutide + Next-Day $274; Tirzepatide + Two-Day $354; Tirzepatide + Next-Day $374. Those due-today totals are not the ongoing monthly rate.',
+        a: 'Due today typically includes membership base + selected shipping + the $75 Initial Provider Visit when required. Examples: Semaglutide + Two-Day $254; Semaglutide + Next-Day $274; Tirzepatide + Two-Day $380; Tirzepatide + Next-Day $400. Those due-today totals are not the ongoing monthly rate.',
       },
       {
         q: 'What is charged every month?',
-        a: 'Monthly renewal is membership base plus your selected shipping only: Semaglutide $179 or $199/month; Tirzepatide $279 or $299/month. The Initial Provider Visit does not recur.',
+        a: 'Monthly renewal is membership base plus your selected shipping only: Semaglutide $179 or $199/month; Tirzepatide $305 or $325/month. The Initial Provider Visit does not recur.',
       },
       {
         q: 'Is shipping included in the membership price?',

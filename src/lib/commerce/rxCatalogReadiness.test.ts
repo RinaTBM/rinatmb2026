@@ -33,6 +33,22 @@ describe('Phase 12I.3 rx catalog readiness', () => {
     ).toBe(28);
   });
 
+  it('launch-ready family SKUs are production-purchasable with GEN API Orders off', () => {
+    const a = resolveStorefrontRxAvailability({
+      mbmSku: 'MBM-WM-SEM-B12-001',
+      genApiOrdersEnabled: false,
+    });
+    expect(a?.catalogReady).toBe(true);
+    expect(a?.productionPurchasable).toBe(true);
+    expect(a?.customerFacingStatus).toBe('AVAILABLE');
+    expect(
+      resolveStorefrontRxAvailability({
+        mbmSku: 'MBM-LON-NAD-NS-001',
+        genApiOrdersEnabled: false,
+      })?.productionPurchasable,
+    ).toBe(true);
+  });
+
   it('BPC catalog READY but production blocked when API Orders=false', () => {
     const a = resolveStorefrontRxAvailability({
       mbmSku: 'MBM-RP-BPC-INJ-001',

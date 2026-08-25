@@ -692,7 +692,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
       productName: 'Wellness',
       variantLabel: null,
     };
-    // $400 ordinary + $249 membership = $649 shippable, but free-shipping base is only $400.
+    // $400 ordinary + $275 membership = $675 shippable, but free-shipping base is only $400.
     expect(shippableMerchandiseSubtotalCents([ordinary, membership])).toBe(40000 + 27500);
     expect(freeShippingEligibleMerchandiseSubtotalCents([ordinary, membership])).toBe(40000);
 

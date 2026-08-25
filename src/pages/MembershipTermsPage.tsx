@@ -30,8 +30,8 @@ export function MembershipTermsPage() {
               <LegalBulletList items={[
                 'Semaglutide + Two-Day — $179/month',
                 'Semaglutide + Next-Day — $199/month',
-                'Tirzepatide + Two-Day — $279/month',
-                'Tirzepatide + Next-Day — $299/month',
+                'Tirzepatide + Two-Day — $305/month',
+                'Tirzepatide + Next-Day — $325/month',
               ]} />
               <p>
                 Membership availability, pricing, inclusions, and treatment eligibility may change. Membership does
@@ -53,11 +53,11 @@ export function MembershipTermsPage() {
               <LegalBulletList items={[
                 'Semaglutide + Two-Day — Due today $254; renews $179/month',
                 'Semaglutide + Next-Day — Due today $274; renews $199/month',
-                'Tirzepatide + Two-Day — Due today $354; renews $279/month',
-                'Tirzepatide + Next-Day — Due today $374; renews $299/month',
+                'Tirzepatide + Two-Day — Due today $380; renews $305/month',
+                'Tirzepatide + Next-Day — Due today $400; renews $325/month',
               ]} />
               <p>
-                Do not treat due-today totals ($254 / $274 / $354 / $374) as the ongoing monthly rate. Monthly renewal
+                Do not treat due-today totals ($254 / $274 / $380 / $400) as the ongoing monthly rate. Monthly renewal
                 is membership base plus your selected shipping only.
               </p>
             </>

@@ -29,3 +29,11 @@ export function resolveGenClientProductIdForSku(sku: string | null | undefined):
   if (!effectiveGenPairingVerified(row.variant)) return null;
   return row.variant.genClientProductId?.trim() || null;
 }
+
+/**
+ * Launch-ready one-time family SKUs may complete Tagada payment while GEN API Orders
+ * and GEN handoff automation remain OFF. Does not enable real GEN order creation.
+ */
+export function isLaunchReadyFamilyPaymentSku(sku: string | null | undefined): boolean {
+  return resolveGenClientProductIdForSku(sku) != null;
+}

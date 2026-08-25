@@ -282,7 +282,8 @@ export function resolveStorefrontRxAvailability(input: {
       customerFacingStatus: 'AVAILABLE',
       customerMessage: null,
       catalogReady: true,
-      productionPurchasable: input.genApiOrdersEnabled === true,
+      // Payment-only: family SKUs may be purchased while GEN API Orders stays OFF.
+      productionPurchasable: true,
       proposedNewSku: null,
       replacesSku: null,
     };
@@ -400,7 +401,7 @@ export const MEMBERSHIP_LAUNCH_AUDIT = Object.freeze({
     monthlyCents: 27500,
     status: 'BLOCKED_PENDING_GEN' as MembershipLaunchStatus,
     notes:
-      'TIR website membership is $275. GEN fulfillment remains blocked until API Orders / external-paid. Existing Tagada combo priceIds are still $249-based and must not be used. Rebill auto-med: NO.',
+      'TIR website membership is $275. New enrollments use Tagada $275 / $305 / $325. GEN fulfillment remains blocked (API Orders / external-paid OFF). Rebill auto-med: NO.',
   },
 });
 

@@ -28,6 +28,9 @@ import {
   TIRZ_TAGADA_PRICE_ID,
   TIRZ_TAGADA_VARIANT_ID,
   TIRZ_TWO_DAY_COMBO_PRICE_ID,
+  TIRZ_HISTORICAL_249_PRICE_ID,
+  TIRZ_HISTORICAL_279_PRICE_ID,
+  TIRZ_HISTORICAL_299_PRICE_ID,
 } from './tagadaMembershipBilling';
 import { evaluateKashuCardCartEligibility } from '@/lib/payments/kashuTagada';
 import { isStripeCheckoutEnabled } from '@/lib/payments/paymentsEnabled';
@@ -49,11 +52,11 @@ describe('Tagada membership recurring billing', () => {
 
   it('includes verified base + combo recurring priceIds', () => {
     expect(SEM_TAGADA_PRICE_ID).toBe('price_344d3dacb4ab');
-    expect(TIRZ_TAGADA_PRICE_ID).toBe('price_5cf1fa89610c');
+    expect(TIRZ_TAGADA_PRICE_ID).toBe('price_2d2dd07b2f73');
     expect(SEM_TWO_DAY_COMBO_PRICE_ID).toBe('price_41179f7cafe2');
     expect(SEM_NEXT_DAY_COMBO_PRICE_ID).toBe('price_7ce0f74a7509');
-    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).toBe('price_e0ebef9851a8');
-    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).toBe('price_ef9ea132d6cf');
+    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).toBe('price_94c92b6e5749');
+    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).toBe('price_d6941e334598');
   });
 
   it('builds init with variantId + priceId (never variant alone)', () => {
@@ -224,19 +227,34 @@ describe('Tagada membership recurring billing', () => {
     });
   });
 
-  it('TIRZ combo is fail-closed until Tagada $275+shipping priceIds exist', () => {
-    const twoDay = membershipEnrollmentDueTodayCents({
+  it('TIRZ $275 + IPV + Two-Day: due today 38000; rebill 30500; combo price; no MBM-SHIP line', () => {
+    const due = membershipEnrollmentDueTodayCents({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
       shippingCents: 3000,
     });
-    expect(twoDay).toEqual({ ok: false, reason: 'unsupported_combo' });
+    expect(due).toEqual({
+      ok: true,
+      dueTodayCents: 38000,
+      monthlyRebillCents: 30500,
+      baseMembershipAmountCents: 27500,
+      visitCents: 7500,
+      shippingCents: 3000,
+      selectedShippingMethod: 'two_day',
+      tagadaPriceId: TIRZ_TWO_DAY_COMBO_PRICE_ID,
+    });
     const nextDay = membershipEnrollmentDueTodayCents({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
       shippingCents: 5000,
     });
-    expect(nextDay).toEqual({ ok: false, reason: 'unsupported_combo' });
+    expect(nextDay).toMatchObject({
+      ok: true,
+      dueTodayCents: 40000,
+      monthlyRebillCents: 32500,
+      shippingCents: 5000,
+      tagadaPriceId: TIRZ_NEXT_DAY_COMBO_PRICE_ID,
+    });
     const init = buildMembershipEnrollmentTagadaInitItems({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
@@ -247,10 +265,15 @@ describe('Tagada membership recurring billing', () => {
       shippingVariantId: 'variant_6817c3c6e31a',
       shippingPriceId: 'price_53861f3e4cad',
     });
-    expect(init.ok).toBe(false);
-    if (!init.ok) expect(init.reason).toBe('unsupported_combo');
-    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).toBe('price_e0ebef9851a8');
-    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).toBe('price_ef9ea132d6cf');
+    expect(init.ok).toBe(true);
+    if (!init.ok) return;
+    expect(init.monthlyRebillCents).toBe(32500);
+    expect(init.shippingSku).toBeNull();
+    expect(init.items[0].priceId).toBe(TIRZ_NEXT_DAY_COMBO_PRICE_ID);
+    expect(init.items.some((i) => i.priceId === 'price_53861f3e4cad')).toBe(false);
+    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).not.toBe(TIRZ_HISTORICAL_279_PRICE_ID);
+    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).not.toBe(TIRZ_HISTORICAL_299_PRICE_ID);
+    expect(TIRZ_TAGADA_PRICE_ID).not.toBe(TIRZ_HISTORICAL_249_PRICE_ID);
   });
 
   it('rejects missing enrollment shipping ($0)', () => {

@@ -250,20 +250,20 @@ Membership is unchanged and is not part of this checklist: SEM **$149/month**, T
 
 ## Task 3 — Reconciliation table (paste live IDs after creation)
 
-Do not fill unknown IDs. Owner pastes `variant_…` and `price_…` after dashboard create. Confirm Tagada price cents equal MBM price cents before mapping.
+Do not fill unknown IDs. Owner pastes live `variant_…` and `price_…` after dashboard create. Confirm Tagada price cents equal MBM price cents before mapping. Leave VARIANT ID, PRICE ID, TAGADA PRICE CENTS, and ACTIVE empty until the dashboard values are copied.
 
 | MBM SKU | TAGADA PRODUCT ID | TAGADA VARIANT ID | TAGADA PRICE ID | MBM PRICE CENTS | TAGADA PRICE CENTS | ACTIVE |
 | --- | --- | --- | --- | --- | --- | --- |
-| MBM-WM-SEM-B12-005 | product_6b750325addf | | | 9900 | 9900 | |
-| MBM-WM-SEM-B12-006 | product_6b750325addf | | | 11900 | 11900 | |
-| MBM-WM-SEM-GLY-005 | product_dcc64482bbbf | | | 9900 | 9900 | |
-| MBM-WM-SEM-GLY-006 | product_dcc64482bbbf | | | 11900 | 11900 | |
-| MBM-WM-TIR-B12-005 | product_74cd4752c9d6 | | | 13900 | 13900 | |
-| MBM-WM-TIR-B12-006 | product_74cd4752c9d6 | | | 15900 | 15900 | |
-| MBM-WM-TIR-B12-007 | product_74cd4752c9d6 | | | 17900 | 17900 | |
-| MBM-WM-TIR-GLY-005 | product_861e0edd8ab2 | | | 13900 | 13900 | |
-| MBM-WM-TIR-GLY-006 | product_861e0edd8ab2 | | | 15900 | 15900 | |
-| MBM-WM-TIR-GLY-007 | product_861e0edd8ab2 | | | 17900 | 17900 | |
+| MBM-WM-SEM-B12-005 | product_6b750325addf | | | 9900 | | |
+| MBM-WM-SEM-B12-006 | product_6b750325addf | | | 11900 | | |
+| MBM-WM-SEM-GLY-005 | product_dcc64482bbbf | | | 9900 | | |
+| MBM-WM-SEM-GLY-006 | product_dcc64482bbbf | | | 11900 | | |
+| MBM-WM-TIR-B12-005 | product_74cd4752c9d6 | | | 13900 | | |
+| MBM-WM-TIR-B12-006 | product_74cd4752c9d6 | | | 15900 | | |
+| MBM-WM-TIR-B12-007 | product_74cd4752c9d6 | | | 17900 | | |
+| MBM-WM-TIR-GLY-005 | product_861e0edd8ab2 | | | 13900 | | |
+| MBM-WM-TIR-GLY-006 | product_861e0edd8ab2 | | | 15900 | | |
+| MBM-WM-TIR-GLY-007 | product_861e0edd8ab2 | | | 17900 | | |
 
 After all 10 rows are filled:
 
@@ -285,3 +285,25 @@ Prepared, **not executed**: `supabase/migrations/20260825234000_kashu_sku_map_gl
 - No historical price deletion
 - No GEN changes
 - Applying the file as committed is a **no-op** until live IDs are pasted and the insert is uncommented
+
+---
+
+## Task 5 — Status
+
+```
+MISSING TAGADA VARIANTS: 10
+SEM B12: 2
+SEM GLYCINE: 2
+TIR B12: 3
+TIR GLYCINE: 3
+DUPLICATE PRODUCT FAMILIES REQUIRED: NO
+OWNER MANUAL TAGADA ACTION REQUIRED: YES
+KASHU MAP MIGRATION PREPARED: YES
+PR #23 DEPLOYABLE NOW: NO
+PR #23 DEPLOYABLE AFTER VARIANTS + MAP: YES
+GEN API ORDERS: OFF
+GEN HANDOFF: OFF
+STOP.
+```
+
+After variants + map, also fill `LAUNCH_READY_KASHU_MAP` in `src/lib/payments/launchReadyKashuMap.ts` and `supabase/functions/_shared/launchReadyKashuMap.ts`, then re-run typecheck / tests / build. Do not apply the Kashu SQL from Cursor. Do not deploy until the owner says so.

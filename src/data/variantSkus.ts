@@ -1,13 +1,16 @@
 /**
- * Approved variant-level SKU registry (53 total).
- * 51 retail/selectable variant SKUs + 2 membership program SKUs.
- * Do not invent abbreviations or renumber sequences.
+ * Approved variant-level SKU registry.
+ * Historical B6 / held-family SKUs remain for prior orders.
+ * Cutover family variants are merged from FAMILY_VARIANT_SKU_BY_ID.
  */
+
+import { FAMILY_VARIANT_SKU_BY_ID } from './websiteFamilies/familyVariantSkus';
 
 export const SKU_PATTERN = /^MBM-[A-Z0-9]+-[A-Z0-9]+-[A-Z0-9]+-[0-9]{3}$/;
 
 /** variant_key / ProductVariant.id → retail SKU */
 export const VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
+  ...FAMILY_VARIANT_SKU_BY_ID,
   'semaglutide-v1': 'MBM-WM-SEM-INJ-001',
   'semaglutide-v2': 'MBM-WM-SEM-INJ-002',
   'semaglutide-v3': 'MBM-WM-SEM-INJ-003',
@@ -67,7 +70,7 @@ export const MEMBERSHIP_PROGRAM_SKU_BY_APP_ID: Readonly<Record<string, string>> 
   m2: 'MBM-MEM-TIR-MEM-001',
 };
 
-export const EXPECTED_RETAIL_SKU_COUNT = 51;
+export const EXPECTED_RETAIL_SKU_COUNT = 68;
 export const EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT = 2;
 export const EXPECTED_TOTAL_SKU_COUNT =
   EXPECTED_RETAIL_SKU_COUNT + EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT;
@@ -75,7 +78,7 @@ export const EXPECTED_TOTAL_SKU_COUNT =
 export function skuForVariantId(variantId: string | undefined | null): string | null {
   if (!variantId) return null;
   const key = variantId.replace(/-refill$/i, '');
-  return VARIANT_SKU_BY_ID[key] ?? null;
+  return VARIANT_SKU_BY_ID[key] ?? FAMILY_VARIANT_SKU_BY_ID[key] ?? null;
 }
 
 export function programSkuForMembershipAppId(appId: string | undefined | null): string | null {

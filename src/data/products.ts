@@ -347,13 +347,15 @@ interface VariantSeed {
   strength: string;
   size: string;
   price: number;
+  /** Stable id override (website family variant id). */
+  id?: string;
 }
 
 function buildVariants(slug: string, seeds: VariantSeed[]): ProductVariant[] {
   const distinctForms = new Set(seeds.map(s => s.dosageForm));
   const multiForm = distinctForms.size > 1;
   return seeds.map((s, i) => {
-    const id = `${slug}-v${i + 1}`;
+    const id = s.id ?? `${slug}-v${i + 1}`;
     const sku = VARIANT_SKU_BY_ID[id];
     return {
       id,
@@ -508,47 +510,53 @@ export const products: Product[] = [
   mk({
     id: 'p1', // preserves the previous GLP-1 app_product_id for Stripe mapping
     slug: 'semaglutide',
-    displayName: 'Semaglutide + B6 Injection',
+    displayName: 'Semaglutide',
     shortName: 'Semaglutide',
     subtitle: 'Provider-directed weight management',
     category: 'weight-management',
     goals: ['weight-management'],
-    shortDescription: 'A provider-directed weight-management injection pairing semaglutide with vitamin B6.',
+    shortDescription: 'A provider-directed weight-management injection with Vitamin B12 or Glycine options.',
     longDescription: WEIGHT_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'Amber injection vial for Semaglutide + B6, a provider-directed weight-management option',
+    imageAlt: 'Amber injection vial for Semaglutide, a provider-directed weight-management option',
     providerDisclaimer: WEIGHT_DISCLAIMER,
     bestSeller: true,
-    // Membership savings do not apply — Semaglutide Membership ($149/mo) is the member offer.
     memberPricingEligible: false,
     variants: [
-      { dosageForm: 'Injection', strength: '0.5mg', size: 'Vial', price: 119 },
-      { dosageForm: 'Injection', strength: '1mg', size: 'Vial', price: 139 },
-      { dosageForm: 'Injection', strength: '2.5mg', size: 'Vial', price: 189.02 },
-      { dosageForm: 'Injection', strength: '5mg', size: 'Vial', price: 329 },
+      { id: 'sem-b12-starting-low', dosageForm: 'Injection', strength: 'Vitamin B12 · Starting / Low', size: '1mL vials', price: 89 },
+      { id: 'sem-b12-mid', dosageForm: 'Injection', strength: 'Vitamin B12 · Mid', size: '1mL vials', price: 109 },
+      { id: 'sem-b12-high', dosageForm: 'Injection', strength: 'Vitamin B12 · High', size: '1mL vials', price: 109 },
+      { id: 'sem-b12-any-dose', dosageForm: 'Injection', strength: 'Vitamin B12 · Any Dose', size: '1mL vials', price: 89 },
+      { id: 'sem-glycine-starting-low', dosageForm: 'Injection', strength: 'Glycine · Starting / Low', size: '1mL vials', price: 89 },
+      { id: 'sem-glycine-mid', dosageForm: 'Injection', strength: 'Glycine · Mid', size: '1mL vials', price: 109 },
+      { id: 'sem-glycine-high', dosageForm: 'Injection', strength: 'Glycine · High', size: '1mL vials', price: 109 },
+      { id: 'sem-glycine-any-dose', dosageForm: 'Injection', strength: 'Glycine · Any Dose', size: '1mL vials', price: 89 },
     ],
   }),
   mk({
     id: 'p5', // preserves the previous GLP-1/GIP app_product_id for Stripe mapping
     slug: 'tirzepatide',
-    displayName: 'Tirzepatide + B6 Injection',
+    displayName: 'Tirzepatide',
     shortName: 'Tirzepatide',
     subtitle: 'Provider-directed weight management',
     category: 'weight-management',
     goals: ['weight-management'],
-    shortDescription: 'A provider-directed weight-management injection pairing tirzepatide with vitamin B6.',
+    shortDescription: 'A provider-directed weight-management injection with Vitamin B12 or Glycine options.',
     longDescription: WEIGHT_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'Amber injection vial for Tirzepatide + B6, a provider-directed weight-management option',
+    imageAlt: 'Amber injection vial for Tirzepatide, a provider-directed weight-management option',
     providerDisclaimer: WEIGHT_DISCLAIMER,
     bestSeller: true,
-    // Membership savings do not apply — Tirzepatide Membership ($249/mo) is the member offer.
     memberPricingEligible: false,
     variants: [
-      { dosageForm: 'Injection', strength: '2.5mg', size: 'Vial', price: 189 },
-      { dosageForm: 'Injection', strength: '7.5mg', size: 'Vial', price: 258.99 },
-      { dosageForm: 'Injection', strength: '12.5mg', size: 'Vial', price: 369 },
-      { dosageForm: 'Injection', strength: '15mg', size: 'Vial', price: 429 },
+      { id: 'tir-b12-starting-low', dosageForm: 'Injection', strength: 'Vitamin B12 · Starting / Low', size: '1mL vials', price: 119 },
+      { id: 'tir-b12-mid', dosageForm: 'Injection', strength: 'Vitamin B12 · Mid', size: '1mL vials', price: 149 },
+      { id: 'tir-b12-high', dosageForm: 'Injection', strength: 'Vitamin B12 · High', size: '1mL vials', price: 169 },
+      { id: 'tir-b12-any-dose', dosageForm: 'Injection', strength: 'Vitamin B12 · Any Dose', size: '1mL vials', price: 119 },
+      { id: 'tir-glycine-starting-low', dosageForm: 'Injection', strength: 'Glycine · Starting / Low', size: '1mL vials', price: 119 },
+      { id: 'tir-glycine-mid', dosageForm: 'Injection', strength: 'Glycine · Mid', size: '1mL vials', price: 149 },
+      { id: 'tir-glycine-high', dosageForm: 'Injection', strength: 'Glycine · High', size: '1mL vials', price: 169 },
+      { id: 'tir-glycine-any-dose', dosageForm: 'Injection', strength: 'Glycine · Any Dose', size: '1mL vials', price: 119 },
     ],
     needsDedicatedImage: true,
   }),
@@ -566,9 +574,9 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Fat Burner compounded injection — AOD-9604, MOTS-C, and Tesamorelin',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    // Medical-director copy approved — active + visible for storefront publish.
+    // FORMULARY_PENDING — hidden from launch storefront.
     status: 'active',
-    isVisible: true,
+    isVisible: false,
     // Owner-approved retail $259.00 (at-cost $150.00). SKU MBM-WM-FB3-INJ-001.
     variants: [
       {
@@ -597,6 +605,7 @@ export const products: Product[] = [
     image: IMG_PATCH,
     imageAlt: 'Estradiol transdermal patch, a provider-directed hormone therapy option',
     providerDisclaimer: RX_DISCLAIMER,
+    isVisible: false,
     variants: [
       { dosageForm: 'Patch', strength: '0.025mg twice weekly', size: '8 patches', price: 129 },
       { dosageForm: 'Patch', strength: '0.05mg twice weekly', size: '8 patches', price: 138.98 },
@@ -616,6 +625,7 @@ export const products: Product[] = [
     image: IMG_CAPSULE,
     imageAlt: 'Progesterone capsules bottle, a provider-directed hormone therapy option',
     providerDisclaimer: RX_DISCLAIMER,
+    isVisible: false,
     variants: [
       { dosageForm: 'Capsule', strength: '100mg', size: '30 capsules', price: 39 },
       { dosageForm: 'Capsule', strength: '200mg', size: '30 capsules', price: 59 },
@@ -634,6 +644,7 @@ export const products: Product[] = [
     image: IMG_CREAM,
     imageAlt: 'Testosterone cream, a provider-directed hormone therapy option',
     providerDisclaimer: RX_DISCLAIMER,
+    isVisible: false,
     variants: [
       { dosageForm: 'Cream', strength: '5mg/g', size: '30g', price: 79 },
     ],
@@ -643,20 +654,19 @@ export const products: Product[] = [
   mk({
     id: 'p9', // preserves previous NAD+ Injection app_product_id
     slug: 'nad-plus',
-    displayName: 'NAD+ Injection',
+    displayName: 'NAD+',
     shortName: 'NAD+',
     subtitle: 'Provider-directed compounded formulation',
     category: 'longevity-cognitive',
     goals: ['longevity'],
-    shortDescription: 'A provider-directed compounded NAD+ injection formulation.',
+    shortDescription: 'A provider-directed compounded NAD+ nasal spray, available after eligibility review.',
     longDescription: COMPOUNDED_DISCLAIMER,
-    image: IMG_INJECTION,
-    imageAlt: 'NAD+ injection, a provider-directed compounded formulation',
+    image: IMG_NASAL,
+    imageAlt: 'NAD+ nasal spray, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     bestSeller: true,
     variants: [
-      { dosageForm: 'Injection', strength: '100mg/mL · 500mg total', size: '5mL', price: 199 },
-      { dosageForm: 'Injection', strength: '100mg/mL · 1,000mg total', size: '10mL', price: 229 },
+      { id: 'nad-nasal-r84', dosageForm: 'Nasal Spray', strength: '50mg/mL', size: '15mL', price: 79 },
     ],
   }),
   mk({
@@ -672,6 +682,7 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Selank injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    isVisible: false,
     variants: [
       { dosageForm: 'Injection', strength: '5mg/mL', size: '2mL', price: 129 },
     ],
@@ -689,6 +700,7 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Semax injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    isVisible: false,
     variants: [
       { dosageForm: 'Injection', strength: '5mg/mL', size: '2mL', price: 129 },
     ],
@@ -706,6 +718,7 @@ export const products: Product[] = [
     image: IMG_NASAL,
     imageAlt: 'Selank and Semax blend nasal spray, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    isVisible: false,
     variants: [
       { dosageForm: 'Nasal Spray', strength: '50mcg/50mcg per spray', size: '10mL', price: 169 },
     ],
@@ -724,9 +737,9 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Tesamorelin injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    // Medical-director copy approved — active + visible for storefront publish.
+    // FORMULARY_PENDING — hidden from launch storefront.
     status: 'active',
-    isVisible: true,
+    isVisible: false,
     // Owner-approved retail $149.00 (at-cost $83.33). SKU MBM-LON-TESA-INJ-001.
     variants: [
       {
@@ -755,6 +768,7 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Wolverine BPC-157/TB-500 blend, a provider-directed compounded formulation in capsule and injection forms',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    isVisible: false,
     variants: [
       { dosageForm: 'Capsule', strength: 'Blend', size: 'Capsule', price: 99 },
       { dosageForm: 'Injection', strength: 'Blend', size: 'Injection', price: 199 },
@@ -778,6 +792,7 @@ export const products: Product[] = [
     imageAlt: 'Tretinoin cream, a prescription topical skin-care treatment',
     providerDisclaimer: RX_DISCLAIMER,
     bestSeller: true,
+    isVisible: false,
     variants: [
       { dosageForm: 'Cream', strength: '0.025%', size: '20g', price: 79 },
       { dosageForm: 'Cream', strength: '0.05%', size: '20g', price: 89 },
@@ -800,6 +815,7 @@ export const products: Product[] = [
     providerDisclaimer:
       'Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
     needsDedicatedImage: true,
+    isVisible: false,
     variants: [
       { dosageForm: 'Topical Solution', strength: 'Combination formula', size: 'Bottle', price: 129 },
     ],
@@ -820,6 +836,7 @@ export const products: Product[] = [
     imageAlt: 'Lash/Brow Growth Serum — prescription bimatoprost solution',
     providerDisclaimer: RX_DISCLAIMER,
     needsDedicatedImage: true,
+    isVisible: false,
     internalNotes:
       'Customer-facing display name is Lash/Brow Growth Serum. Underlying formulation remains Bimatoprost Solution. Slug/SKU/IDs unchanged (bimatoprost-solution / MBM-SH-BIM-SOL-001 / p71).',
     variants: [
@@ -1254,9 +1271,9 @@ export const memberships: Membership[] = [
     billingFrequency: 'monthly',
     initialTermMonths: 3,
     lockedRate: true,
-    includedProducts: ['Semaglutide + B6 Injection'],
-    includedFormulations: ['0.5mg', '1mg', '2.5mg', '5mg'],
-    maximumIncludedFormulation: '5mg',
+    includedProducts: ['Semaglutide'],
+    includedFormulations: ['Vitamin B12', 'Glycine'],
+    maximumIncludedFormulation: 'Any Dose (provider-directed)',
     excludedFormulations: [],
     providerReviewRequired: true,
     prescriptionGuaranteed: false,
@@ -1308,7 +1325,7 @@ export const memberships: Membership[] = [
     seoTitle: 'Semaglutide Membership — My Bare Method',
     seoDescription: 'Locked-price provider-guided Semaglutide membership from My Bare Method.',
     image: IMG_INJECTION,
-    imageAlt: 'Semaglutide Membership — provider-directed Semaglutide + B6 injection program',
+    imageAlt: 'Semaglutide Membership — provider-directed Semaglutide injection program',
 
     name: 'Semaglutide Membership',
     price: 149,
@@ -1322,12 +1339,12 @@ export const memberships: Membership[] = [
     slug: 'tirzepatide-membership',
     displayName: 'Tirzepatide Membership',
     brandName: 'Bare Momentum',
-    monthlyPrice: 249,
+    monthlyPrice: 275,
     billingFrequency: 'monthly',
     initialTermMonths: 3,
     lockedRate: true,
-    includedProducts: ['Tirzepatide + B6 Injection'],
-    includedFormulations: ['2.5mg', '7.5mg', '12.5mg', '15mg'],
+    includedProducts: ['Tirzepatide'],
+    includedFormulations: ['Vitamin B12', 'Glycine'],
     maximumIncludedFormulation: '15mg',
     excludedFormulations: [],
     providerReviewRequired: true,
@@ -1355,16 +1372,16 @@ export const memberships: Membership[] = [
     exclusions: [],
     termsSummary: [
       ...sharedTerms(3),
-      'The $249 locked rate includes eligible provider-selected formulations through 15mg.',
+      'The $275 locked rate includes eligible provider-selected formulations through 15mg.',
     ],
     faq: [
       {
         q: 'Will my price increase if my treatment changes?',
-        a: 'Your Tirzepatide membership remains $249 per month while your membership stays continuously active and your provider-selected treatment remains within the included program through 15mg.',
+        a: 'Your Tirzepatide membership remains $275 per month while your membership stays continuously active and your provider-selected treatment remains within the included program through 15mg.',
       },
       {
         q: 'Is the highest Tirzepatide formulation included?',
-        a: 'The $249 membership includes eligible provider-selected formulations through 15mg. 30mg is not part of this program.',
+        a: 'The $275 membership includes eligible provider-selected formulations through 15mg. 30mg is not part of this program.',
       },
       {
         q: 'Is membership the same as a retail vial purchase?',
@@ -1372,7 +1389,7 @@ export const memberships: Membership[] = [
       },
       {
         q: 'How is membership billed?',
-        a: 'Join with Credit / Debit Card. Your card is charged monthly for the $249 membership plus selected shipping ($279 Two-Day or $299 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
+        a: 'Join with Credit / Debit Card. Your card is charged monthly for the $275 membership plus selected shipping ($305 Two-Day or $325 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
       },
       {
         q: PHARMACY_503A_FAQ.q,
@@ -1387,11 +1404,11 @@ export const memberships: Membership[] = [
     seoTitle: 'Tirzepatide Membership — My Bare Method',
     seoDescription: 'Locked-price provider-guided Tirzepatide membership through the included program maximum.',
     image: IMG_INJECTION,
-    imageAlt: 'Tirzepatide Membership — provider-directed Tirzepatide + B6 injection program',
+    imageAlt: 'Tirzepatide Membership — provider-directed Tirzepatide injection program',
     highlighted: true,
 
     name: 'Tirzepatide Membership',
-    price: 249,
+    price: 275,
     priceLabel: '/month',
     tagline: 'Bare Momentum',
     description: MEMBERSHIP_COPY['tirzepatide-membership'].about,

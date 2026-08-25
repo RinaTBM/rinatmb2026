@@ -24,8 +24,8 @@ export const TIRZ_MEMBERSHIP_SKU: TagadaMembershipProgramSku = 'MBM-MEM-TIR-MEM-
 
 /**
  * Verified live Tagada BASE recurring priceIds (keep — do not delete).
- * Customer-facing base membership display remains $149 / $249.
- * Enrollment checkout uses combo membership+shipping priceIds below.
+ * Customer-facing base membership display remains $149 SEM / $275 TIR.
+ * Existing TIR Tagada combo priceIds are still $249-based ($279/$299) and must not be used until replaced.
  */
 export const SEM_TAGADA_PRICE_ID = 'price_344d3dacb4ab';
 export const TIRZ_TAGADA_PRICE_ID = 'price_5cf1fa89610c';
@@ -148,6 +148,10 @@ export function resolveMembershipComboSelection(
   if (!isMembershipEnrollmentShippingCents(shippingCents)) return null;
   const program = TAGADA_MEMBERSHIP_PROGRAMS[membershipSku];
   const combo = MEMBERSHIP_COMBO_BY_SKU_SHIP[membershipSku][shippingCents];
+  if (program.monthlyAmountCents + shippingCents !== combo.monthlyCents) {
+    // Stale Tagada combo (e.g. TIR still $249-based while website is $275). Fail closed — do not invent priceIds.
+    return null;
+  }
   return {
     sku: membershipSku,
     shippingCents,
@@ -380,7 +384,7 @@ export function membershipEnrollmentDueTodayCents(input: {
 
 /**
  * Validate a rebill / subscription charge against the stored combo monthly amount.
- * Do not compare all SEM renewals against 14900 or all TIRZ against 24900.
+ * Do not compare all SEM renewals against 14900 or all TIRZ against 27500.
  */
 export function assertMembershipRebillAmountMatches(input: {
   expectedMonthlyAmountCents: number;

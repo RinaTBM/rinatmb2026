@@ -73,7 +73,7 @@ const tirzMembership: CatalogMembershipRow = {
   stripe_price_id_test: 'price_test_tirz_249',
   monthly_price_cents: TIRZEPATIDE_MEMBERSHIP_CENTS,
   display_name: 'Tirzepatide Membership',
-  included_formulations: ['2.5mg', '7.5mg', '12.5mg', '15mg'],
+  included_formulations: ['Vitamin B12', 'Glycine'],
 };
 
 const semaVariant: CatalogVariantRow = {
@@ -110,14 +110,14 @@ describe('Stripe mapping (catalog TEST prices)', () => {
           productId: TIRZEPATIDE_MEMBERSHIP_APP_ID,
           quantity: 1,
           purchaseType: 'membership_program',
-          unitAmountCents: 24900,
-          requestedFormulation: '7.5mg',
+          unitAmountCents: 27500,
+          requestedFormulation: 'Glycine',
         },
         tirzMembership,
       ),
     );
     expect(line.stripePriceId).toBe('price_test_tirz_249');
-    expect(line.unitAmountCents).toBe(24900);
+    expect(line.unitAmountCents).toBe(27500);
   });
 
   it('undiscounted one-time product resolves to catalog variant TEST price', () => {
@@ -154,9 +154,9 @@ describe('Stripe mapping (catalog TEST prices)', () => {
 });
 
 describe('membership / savings rules', () => {
-  it('Semaglutide membership remains $149/month and Tirzepatide $249/month', () => {
+  it('Semaglutide membership remains $149/month and Tirzepatide $275/month', () => {
     expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
-    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(24900);
+    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(27500);
   });
 
   it('Tirzepatide 30mg $350 is not accidentally exposed as self-service', () => {
@@ -571,7 +571,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
   });
 
-  it('$249 Tirzepatide membership does not receive free shipping', () => {
+  it('$275 Tirzepatide membership does not receive free shipping', () => {
     const r = authorizeShippingCents({
       shippingMethod: 'next_day',
       clientShippingCents: NEXT_DAY_SHIPPING_CENTS,
@@ -584,7 +584,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     expect(r.freeShippingEligible).toBe(false);
     expect(r.shippingMethod).toBe('next_day');
     expect(r.shippingCents).toBe(5000);
-    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(24900);
+    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(27500);
   });
 
   it('membership value does not count toward $500 threshold', () => {
@@ -676,7 +676,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
           productId: 'm2',
           quantity: 1,
           purchaseType: 'membership_program',
-          requestedFormulation: '7.5mg',
+          requestedFormulation: 'Glycine',
         },
         tirzMembership,
       ),
@@ -693,7 +693,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
       variantLabel: null,
     };
     // $400 ordinary + $249 membership = $649 shippable, but free-shipping base is only $400.
-    expect(shippableMerchandiseSubtotalCents([ordinary, membership])).toBe(40000 + 24900);
+    expect(shippableMerchandiseSubtotalCents([ordinary, membership])).toBe(40000 + 27500);
     expect(freeShippingEligibleMerchandiseSubtotalCents([ordinary, membership])).toBe(40000);
 
     const r = authorizeShippingCents({
@@ -756,7 +756,7 @@ describe('membership requested formulation authorization', () => {
           tirzMembership,
         ),
       );
-      expect(line.unitAmountCents).toBe(24900);
+      expect(line.unitAmountCents).toBe(27500);
     }
   });
 

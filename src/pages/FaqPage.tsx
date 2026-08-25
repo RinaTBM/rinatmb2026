@@ -136,7 +136,7 @@ const faqCategories = [
       },
       {
         q: 'How does the Tirzepatide membership work?',
-        a: 'Tirzepatide Membership is $249/month base. Selected shipping recurs monthly (+$30 Two-Day or +$50 Next-Day), so monthly card charges are $279 or $299. A one-time Initial Provider Visit ($75) may apply when required. The program includes eligible formulations through 15mg. Provider review is required; payment does not guarantee a prescription.',
+        a: 'Tirzepatide Membership is $275/month base. Selected shipping recurs monthly (+$30 Two-Day or +$50 Next-Day). A one-time Initial Provider Visit ($75) may apply when required. The program includes eligible formulations through 15mg. Provider review is required; payment does not guarantee a prescription.',
       },
       {
         q: 'What is charged today when I join a membership?',
@@ -148,7 +148,7 @@ const faqCategories = [
       },
       {
         q: 'Is shipping included in the membership price?',
-        a: 'No. Shipping is not included in the base $149 / $249 membership price. You select shipping at enrollment and it is billed with each monthly renewal.',
+        a: 'No. Shipping is not included in the base $149 / $275 membership price. You select shipping at enrollment and it is billed with each monthly renewal.',
       },
       {
         q: 'Is membership shipping recurring?',

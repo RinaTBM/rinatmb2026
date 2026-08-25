@@ -13,7 +13,7 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
     expect(detail.membership.slug).toBe('semaglutide-membership');
     expect(detail.membership.checkoutProductId).toBe('m1');
     expect(detail.membership.monthlyPrice).toBe(149);
-    expect(detail.membership.includedFormulations).toEqual(['0.5mg', '1mg', '2.5mg', '5mg']);
+    expect(detail.membership.includedFormulations).toEqual(['Vitamin B12', 'Glycine']);
     expect(detail.membership.initialTermMonths).toBe(3);
     expect(detail.membership.providerReviewRequired).toBe(true);
     expect(detail.membership.prescriptionGuaranteed).toBe(false);
@@ -25,8 +25,8 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
     if (detail.kind !== 'membership') return;
     expect(detail.membership.slug).toBe('tirzepatide-membership');
     expect(detail.membership.checkoutProductId).toBe('m2');
-    expect(detail.membership.monthlyPrice).toBe(249);
-    expect(detail.membership.includedFormulations).toEqual(['2.5mg', '7.5mg', '12.5mg', '15mg']);
+    expect(detail.membership.monthlyPrice).toBe(275);
+    expect(detail.membership.includedFormulations).toEqual(['Vitamin B12', 'Glycine']);
   });
 
   it('Semaglutide detail displays $149/month (never $199)', () => {
@@ -37,9 +37,9 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
     expect(detail.kind === 'membership' && detail.membership.monthlyPrice).toBe(149);
   });
 
-  it('Tirzepatide detail displays $249/month', () => {
+  it('Tirzepatide detail displays $275/month', () => {
     const detail = resolveStorefrontDetail('tirzepatide-membership');
-    expect(detail.kind === 'membership' && detail.membership.monthlyPrice).toBe(249);
+    expect(detail.kind === 'membership' && detail.membership.monthlyPrice).toBe(275);
   });
 
   it('membership cart links resolve to /product/:membership-slug', () => {
@@ -54,7 +54,7 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
   });
 
   it('regular product detail routes still work', () => {
-    for (const slug of ['semaglutide', 'tirzepatide', 'estradiol-patch']) {
+    for (const slug of ['semaglutide', 'tirzepatide', 'nad-plus']) {
       const detail = resolveStorefrontDetail(slug);
       expect(detail.kind).toBe('product');
       expect(getProduct(slug)?.slug).toBe(slug);
@@ -64,6 +64,8 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
   it('unknown product slug still correctly shows Product not found', () => {
     expect(resolveStorefrontDetail('definitely-not-a-real-product').kind).toBe('not_found');
     expect(resolveStorefrontDetail('elite-wellness-membership').kind).toBe('not_found');
+    expect(resolveStorefrontDetail('estradiol-patch').kind).toBe('not_found');
+    expect(resolveStorefrontDetail('bpc-157-tb-500').kind).toBe('not_found');
   });
 
   it('checkout item type remains membership_program for membership cart lines', () => {

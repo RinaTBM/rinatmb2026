@@ -10,30 +10,26 @@ import {
 } from './requestedFormulation';
 
 describe('membership requested formulation options', () => {
-  it('Semaglutide offers Getting Started / Not Sure + 0.5mg, 1mg, 2.5mg, 5mg', () => {
+  it('Semaglutide offers Getting Started / Not Sure + Vitamin B12 and Glycine', () => {
     const m = getMembership('semaglutide-membership')!;
     expect(m.monthlyPrice).toBe(149);
     const opts = requestedFormulationOptions(m.includedFormulations);
     expect(opts.map(o => o.value)).toEqual([
       GETTING_STARTED_FORMULATION,
-      '0.5mg',
-      '1mg',
-      '2.5mg',
-      '5mg',
+      'Vitamin B12',
+      'Glycine',
     ]);
     expect(opts[0].label).toBe(GETTING_STARTED_LABEL);
   });
 
-  it('Tirzepatide offers Getting Started / Not Sure + 2.5mg, 7.5mg, 12.5mg, 15mg', () => {
+  it('Tirzepatide offers Getting Started / Not Sure + Vitamin B12 and Glycine', () => {
     const m = getMembership('tirzepatide-membership')!;
-    expect(m.monthlyPrice).toBe(249);
+    expect(m.monthlyPrice).toBe(275);
     const opts = requestedFormulationOptions(m.includedFormulations);
     expect(opts.map(o => o.value)).toEqual([
       GETTING_STARTED_FORMULATION,
-      '2.5mg',
-      '7.5mg',
-      '12.5mg',
-      '15mg',
+      'Vitamin B12',
+      'Glycine',
     ]);
   });
 
@@ -69,7 +65,7 @@ describe('membership requested formulation options', () => {
   it('requested formulation persists into cart-shaped payload and checkout metadata fields', () => {
     const m = getMembership('semaglutide-membership')!;
     const validated = validateMembershipRequestedFormulation({
-      requestedFormulation: '1mg',
+      requestedFormulation: 'Vitamin B12',
       includedFormulations: m.includedFormulations,
     });
     expect(validated.ok).toBe(true);
@@ -85,8 +81,8 @@ describe('membership requested formulation options', () => {
       requestedFormulation: validated.value,
       variantLabel: `Requested dose: ${labelRequestedFormulation(validated.value)}`,
     };
-    expect(cartItem.requestedFormulation).toBe('1mg');
-    expect(cartItem.variantLabel).toBe('Requested dose: 1mg');
+    expect(cartItem.requestedFormulation).toBe('Vitamin B12');
+    expect(cartItem.variantLabel).toBe('Requested dose: Vitamin B12');
     expect(cartItem.price).toBe(149);
 
     const checkoutPayload = {
@@ -95,7 +91,7 @@ describe('membership requested formulation options', () => {
       membership_app_product_id: cartItem.productId,
     };
     expect(checkoutPayload).toEqual({
-      requested_formulation: '1mg',
+      requested_formulation: 'Vitamin B12',
       membership_slug: 'semaglutide-membership',
       membership_app_product_id: 'm1',
     });

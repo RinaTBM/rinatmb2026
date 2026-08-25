@@ -182,7 +182,7 @@ const MEM_BASE_BY_SKU: Record<string, { basePriceId: string; baseCents: number; 
   },
   "MBM-MEM-TIR-MEM-001": {
     basePriceId: "price_5cf1fa89610c",
-    baseCents: 24900,
+    baseCents: 27500,
     type: "tirzepatide",
   },
 };
@@ -351,6 +351,15 @@ Deno.serve(async (req) => {
             "Membership card enrollment requires Two-Day ($30) or Next-Day ($50) shipping. Shipping is included with each monthly membership renewal.",
           blocker: "TAGADA_SHIPPING_PARITY_BLOCKER",
           shippingCents: memShipCents,
+        }, 409);
+      }
+      if (baseCfg.baseCents + memShipCents !== comboCfg.monthlyCents) {
+        return json({
+          error: "Membership card checkout is temporarily unavailable for this program. Please contact support.",
+          blocker: "TAGADA_MEMBERSHIP_COMBO_STALE",
+          shippingCents: memShipCents,
+          expectedMonthlyCents: baseCfg.baseCents + memShipCents,
+          comboMonthlyCents: comboCfg.monthlyCents,
         }, 409);
       }
       membershipCombo = {

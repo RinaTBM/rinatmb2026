@@ -7,7 +7,7 @@ export const SEMAGLUTIDE_MEMBERSHIP_APP_ID = 'm1';
 export const TIRZEPATIDE_MEMBERSHIP_APP_ID = 'm2';
 
 export const SEMAGLUTIDE_MEMBERSHIP_CENTS = 14900;
-export const TIRZEPATIDE_MEMBERSHIP_CENTS = 24900;
+export const TIRZEPATIDE_MEMBERSHIP_CENTS = 27500;
 /** Provider/admin-gated only — never a self-serve checkout amount. */
 export const TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS = 35000;
 

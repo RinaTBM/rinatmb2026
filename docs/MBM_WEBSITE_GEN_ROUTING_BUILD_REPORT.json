@@ -1,0 +1,150 @@
+{
+  "meta": {
+    "generated_at": "2026-08-25T01:11:11Z",
+    "phase": "MBM-WEBSITE-GEN-ROUTING-BUILD-1",
+    "mode": "WEBSITE IMPLEMENTATION \u2014 cutover OFF",
+    "preview_routes": [
+      "/preview/families",
+      "/preview/families/:familyId"
+    ],
+    "legacy_storefront": "PRESERVED \u2014 /product/* still serves B6 SEM/TIR and current PDPs"
+  },
+  "counts": {
+    "WEBSITE_FAMILIES_IMPLEMENTED": 30,
+    "WEBSITE_VARIANTS_IMPLEMENTED": 103,
+    "ROUTING_READY": 0,
+    "GEN_PAIRING_PENDING": 23,
+    "FORMULARY_PENDING": 14,
+    "FUTURE_HIDDEN": 51,
+    "BLOCKED": 15,
+    "VARIANTS_WITH_GEN_CLIENT_PRODUCT_ID": 23,
+    "VARIANTS_WITHOUT_GEN_CLIENT_PRODUCT_ID": 80
+  },
+  "focus_families": {
+    "semaglutide": {
+      "familyId": "semaglutide",
+      "displayName": "Semaglutide",
+      "patientVisibleVariants": 9,
+      "selectors": [
+        "purchase_type",
+        "formulation_additive",
+        "dose_tier"
+      ],
+      "hasMembership": true,
+      "variantsWithGenId": 9,
+      "complete": true
+    },
+    "tirzepatide": {
+      "familyId": "tirzepatide",
+      "displayName": "Tirzepatide",
+      "patientVisibleVariants": 9,
+      "selectors": [
+        "purchase_type",
+        "formulation_additive",
+        "dose_tier"
+      ],
+      "hasMembership": true,
+      "variantsWithGenId": 1,
+      "complete": true
+    },
+    "nad": {
+      "familyId": "nad",
+      "displayName": "NAD+",
+      "patientVisibleVariants": 4,
+      "selectors": [
+        "delivery_method",
+        "package_size"
+      ],
+      "hasMembership": false,
+      "variantsWithGenId": 1,
+      "complete": true
+    },
+    "wolverine-bpc-tb": {
+      "familyId": "wolverine-bpc-tb",
+      "displayName": "Wolverine / BPC-TB",
+      "patientVisibleVariants": 2,
+      "selectors": [
+        "delivery_method"
+      ],
+      "hasMembership": false,
+      "variantsWithGenId": 2,
+      "complete": true
+    },
+    "estradiol": {
+      "familyId": "estradiol",
+      "displayName": "Estradiol",
+      "patientVisibleVariants": 4,
+      "selectors": [
+        "delivery_method",
+        "strength"
+      ],
+      "hasMembership": false,
+      "variantsWithGenId": 0,
+      "complete": true
+    },
+    "minoxidil": {
+      "familyId": "minoxidil",
+      "displayName": "Minoxidil",
+      "patientVisibleVariants": 1,
+      "selectors": [
+        "formulation"
+      ],
+      "hasMembership": false,
+      "variantsWithGenId": 1,
+      "complete": true
+    }
+  },
+  "gates": {
+    "GEN_PAIRING_VERIFICATION_GATE_IMPLEMENTED": true,
+    "REAL_GEN_ORDER_SUBMISSION_ENABLED": false,
+    "WEBSITE_FAMILY_CUTOVER_ENABLED": false,
+    "LEGACY_B6_STILL_PRESERVED_UNTIL_CUTOVER": true
+  },
+  "qa": {
+    "BUILD": "PASS",
+    "TYPECHECK": "PASS",
+    "TESTS": "PASS (527 total; 10 new family routing tests)",
+    "LINT": "PREEXISTING_ERROR_IN_genHealth.ts_unused_var \u2014 not introduced by this phase"
+  },
+  "files_added": [
+    "src/data/websiteFamilies/types.ts",
+    "src/data/websiteFamilies/families.generated.ts",
+    "src/data/websiteFamilies/families.generated.json",
+    "src/data/websiteFamilies/index.ts",
+    "src/data/websiteFamilies/familyRouting.build.test.ts",
+    "src/lib/catalog/familyRoutingGate.ts",
+    "src/pages/FamilyProductPreviewPage.tsx"
+  ],
+  "files_modified": [
+    "src/App.tsx",
+    "src/lib/genHealth/genHandoffOrchestrator.ts"
+  ],
+  "final_report": {
+    "WEBSITE_FAMILIES_IMPLEMENTED": 30,
+    "WEBSITE_VARIANTS_IMPLEMENTED": 103,
+    "ROUTING_READY": 0,
+    "GEN_PAIRING_PENDING": 23,
+    "FORMULARY_PENDING": 14,
+    "FUTURE_HIDDEN": 51,
+    "BLOCKED": 15,
+    "VARIANTS_WITH_GEN_CLIENT_PRODUCT_ID": 23,
+    "VARIANTS_WITHOUT_GEN_CLIENT_PRODUCT_ID": 80,
+    "SEM_FAMILY_COMPLETE": "YES",
+    "TIR_FAMILY_COMPLETE": "YES",
+    "NAD_FAMILY_COMPLETE": "YES",
+    "WOLVERINE_FAMILY_COMPLETE": "YES",
+    "ESTRADIOL_FAMILY_COMPLETE": "YES",
+    "MINOXIDIL_FAMILY_COMPLETE": "YES",
+    "GEN_PAIRING_VERIFICATION_GATE_IMPLEMENTED": "YES",
+    "REAL_GEN_ORDER_SUBMISSION_ENABLED": "NO",
+    "LEGACY_B6_STILL_PRESERVED_UNTIL_CUTOVER": "YES",
+    "GEN_MODIFIED": "NO",
+    "FORMULARY_PAIRINGS_MODIFIED": "NO",
+    "WEBSITE_MODIFIED": "YES",
+    "CHECKOUT_CUTOVER": "OFF",
+    "GEN_WHOP_CUTOVER": "OFF",
+    "BUILD": "PASS",
+    "TYPECHECK": "PASS",
+    "TESTS": "PASS"
+  }
+}

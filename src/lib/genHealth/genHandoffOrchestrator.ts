@@ -98,6 +98,11 @@ export type HandoffOrchestrationResult =
 /**
  * Execute GEN handoff plan with mocked or real client.
  * When GEN is disabled, returns GEN_DISABLED without calling fetch.
+ *
+ * Website family/variant cutover remains OFF (MBM-WEBSITE-GEN-ROUTING-BUILD-1).
+ * When family-routed lines are introduced, they must also pass
+ * `assertFamilyVariantGenOrderAllowed` (genClientProductId + genPairingVerified + ROUTING_READY).
+ * Legacy SKU → gen_sku_map resolution is unchanged.
  */
 export async function executeGenHandoff(
   input: HandoffOrchestrationInput,

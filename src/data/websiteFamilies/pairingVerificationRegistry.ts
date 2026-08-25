@@ -2,7 +2,7 @@
  * Owner-confirmed GEN formulary pairing verification registry.
  *
  * Policy: docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md
- * Postcheck: docs/MBM_GEN_PAIRING_POSTCHECK_3.md
+ * Closeout: docs/MBM_GEN_PAIRING_FINAL_CLOSEOUT.md
  *
  * TRUE only for CPs with ≥1 compatible formulary medication and no material mismatches.
  * Multiple same-family strengths are allowed (provider chooses).
@@ -11,8 +11,9 @@
 import { PAIRING_POLICY_AMENDMENT_META } from './pairingPolicy';
 
 /**
- * Live-verified GEN clientProductIds (MBM-GEN-PAIRING-POSTCHECK-3).
- * Re-derived from current GEN formulary read — not stale prior audits.
+ * Live-verified GEN clientProductIds (MBM-GEN-PAIRING-FINAL-CLOSEOUT).
+ * Reconfirmed from current GEN formulary read — prior 8 remain acceptable;
+ * the 7 previously open items are still NOT eligible on live GEN.
  */
 export const OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS: ReadonlySet<string> = new Set([
   // SEM B12 — Starting / Low
@@ -41,10 +42,11 @@ export function isOwnerVerifiedGenClientProductId(
 }
 
 export const PAIRING_VERIFICATION_REGISTRY_META = {
-  phase: 'MBM-GEN-PAIRING-POSTCHECK-3',
+  phase: 'MBM-GEN-PAIRING-FINAL-CLOSEOUT',
   verifiedCount: OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size,
   checklistDoc: 'docs/MBM_GEN_PAIRING_VERIFICATION_CHECKLIST.md',
   policyDoc: 'docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md',
+  closeoutDoc: 'docs/MBM_GEN_PAIRING_FINAL_CLOSEOUT.md',
   postcheckDoc: 'docs/MBM_GEN_PAIRING_POSTCHECK_3.md',
   generatedDataFiles: [
     'src/data/websiteFamilies/families.generated.ts',

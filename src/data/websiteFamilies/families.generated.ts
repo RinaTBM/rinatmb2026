@@ -2772,7 +2772,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
 ];
 
 export const WEBSITE_FAMILY_BUILD_META = {
-  "phase": "MBM-GEN-PAIRING-POSTCHECK-3",
+  "phase": "MBM-GEN-PAIRING-FINAL-CLOSEOUT",
   "cutover": "OFF",
   "genPairingVerifiedDefault": false,
   "realGenOrderSubmissionEnabled": false,
@@ -2782,7 +2782,7 @@ export const WEBSITE_FAMILY_BUILD_META = {
     "docs/MBM_WEBSITE_TO_GEN_ROUTING_MATRIX.json",
     "docs/MBM_GEN_PRICE_CONFLICT_RESOLUTION.json"
   ],
-  "note": "Postcheck-3 live GEN read. genPairingVerified true only for registry CPs with \u22651 compatible formulary option and no material mismatches. Cutover OFF.",
+  "note": "Final closeout live GEN read. Owner claimed 7 remaining pairings complete; live evidence still shows those 7 failing. Registry remains 8 verified CPs. Cutover OFF.",
   "pairingPolicy": "amended_compatible_family_multi_option",
   "requiresExactStrengthPackage": false
 } as const;

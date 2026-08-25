@@ -51,8 +51,9 @@ export function getMembershipProgramSku(membershipAppId: string): string | null 
 }
 
 /**
- * Resolve fulfillment SKU for a membership requested dose.
- * Returns null if membership or dose is unknown.
+ * Resolve fulfillment SKU from membership requested *formulation* (Vitamin B12 / Glycine).
+ * The second argument is not a patient weekly dose and must not be used as one.
+ * Returns null if membership or formulation is unknown.
  */
 export function resolveMembershipFulfillmentSku(
   membershipAppId: string,

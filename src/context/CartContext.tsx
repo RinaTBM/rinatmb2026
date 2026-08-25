@@ -21,15 +21,19 @@ export interface CartItem {
   variantLabel?: string;
   isMembership?: boolean;
   /**
-   * Normalized membership requested formulation (e.g. `getting_started`, `1mg`).
-   * Request only — not a guaranteed dose/prescription.
+   * Formulation additive (Vitamin B12 / Glycine). Not a weekly dose.
    */
   requestedFormulation?: string;
+  /**
+   * Patient current/weekly dose for provider review (`getting_started` or e.g. `0.25 mg`).
+   * Metadata only — must not select pharmacy vial, SKU, or Tagada price.
+   */
+  requestedDose?: string;
   billingFrequency?: 'monthly';
   purchaseType?: CartPurchaseType;
   discountPercent?: number;
   appliedDiscount?: AppliedDiscount;
-  /** Stable line identity: product + variant + purchase type (+ requested dose for memberships). */
+  /** Stable line identity: product + variant + purchase type + formulation + weekly dose. */
   key: string;
 }
 
@@ -39,10 +43,12 @@ export function lineKey(
   subscription: boolean,
   purchaseType?: CartPurchaseType,
   requestedFormulation?: string,
+  requestedDose?: string,
 ) {
   const type = purchaseType ?? (subscription ? 'auto_refill' : 'one_time');
-  const dose = requestedFormulation ?? '';
-  return `${productId}|${variantId ?? ''}|${type}|${dose}`;
+  const formulation = requestedFormulation ?? '';
+  const dose = requestedDose ?? '';
+  return `${productId}|${variantId ?? ''}|${type}|${formulation}|${dose}`;
 }
 
 interface CartContextValue {
@@ -92,6 +98,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                   i.subscription,
                   purchaseType,
                   i.requestedFormulation,
+                  i.requestedDose,
                 ),
             };
           }),
@@ -120,6 +127,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       item.subscription,
       purchaseType,
       item.requestedFormulation,
+      item.requestedDose,
     );
     setItems(prev => {
       const existing = prev.find(i => i.key === key);

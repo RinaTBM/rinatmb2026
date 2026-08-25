@@ -41,6 +41,7 @@ export interface RawOrderLine {
   section?: string;
   membershipSlug?: string;
   requestedFormulation?: string;
+  requestedDose?: string;
   purchaseType?: string;
   subscription?: boolean;
   isMembership?: boolean;

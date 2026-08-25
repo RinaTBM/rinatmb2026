@@ -30,6 +30,12 @@ import {
   labelRequestedFormulation,
   validateMembershipRequestedFormulation,
 } from '@/lib/membership/requestedFormulation';
+import {
+  glp1FamilyIdFromSku,
+  glp1FamilyIdFromSlug,
+  labelRequestedDose,
+  validateRequestedDose,
+} from '@/lib/glp1/patientRequestedDose';
 import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
 import {
   isManualCheckoutEnabled,
@@ -168,6 +174,7 @@ export function CheckoutPage() {
           slug: i.slug,
           membershipSlug: isMembershipLine ? i.slug : undefined,
           requestedFormulation: i.requestedFormulation,
+          requestedDose: i.requestedDose,
           purchaseType,
           isMembership: isMembershipLine,
         };
@@ -249,24 +256,68 @@ export function CheckoutPage() {
 
   const membershipDoseIssues = items
     .filter(i => i.isMembership || i.purchaseType === 'membership_program')
-    .map(i => {
+    .flatMap(i => {
       const membership = getMembership(i.slug);
-      const validated = validateMembershipRequestedFormulation({
+      const issues: Array<{
+        key: string;
+        slug: string;
+        name: string;
+        error: string;
+        fixPath: string;
+      }> = [];
+      const formulation = validateMembershipRequestedFormulation({
         requestedFormulation: i.requestedFormulation,
         includedFormulations: membership?.includedFormulations ?? [],
       });
-      return validated.ok
-        ? null
-        : {
-            key: i.key,
+      if (!formulation.ok) {
+        issues.push({
+          key: i.key,
+          slug: i.slug,
+          name: i.name,
+          error: formulation.error,
+          fixPath: cartItemDetailPath(i),
+        });
+      }
+      const familyId = glp1FamilyIdFromSlug(i.slug);
+      if (familyId) {
+        const dose = validateRequestedDose({
+          requestedDose: i.requestedDose,
+          familyId,
+        });
+        if (!dose.ok) {
+          issues.push({
+            key: `${i.key}-dose`,
             slug: i.slug,
             name: i.name,
-            error: validated.error,
+            error: dose.error,
             fixPath: cartItemDetailPath(i),
-          };
-    })
-    .filter((x): x is NonNullable<typeof x> => !!x);
+          });
+        }
+      }
+      return issues;
+    });
   const membershipDoseBlocking = membershipDoseIssues.length > 0;
+
+  const glp1OneTimeDoseIssues = items
+    .filter(i => !i.isMembership && i.purchaseType !== 'membership_program')
+    .flatMap(i => {
+      const familyId =
+        glp1FamilyIdFromSlug(i.slug) || glp1FamilyIdFromSku(skuForVariantId(i.variantId));
+      if (!familyId) return [];
+      const dose = validateRequestedDose({ requestedDose: i.requestedDose, familyId });
+      return dose.ok
+        ? []
+        : [
+            {
+              key: `${i.key}-dose`,
+              slug: i.slug,
+              name: i.name,
+              error: dose.error,
+              fixPath: cartItemDetailPath(i),
+            },
+          ];
+    });
+  const glp1DoseBlocking = membershipDoseBlocking || glp1OneTimeDoseIssues.length > 0;
 
   // Strip client provider-visit lines from merchandise subtotal; reinject required visit for display.
   const merchandiseSubtotalCents = items
@@ -599,9 +650,9 @@ export function CheckoutPage() {
     setLoading(true);
     setError(null);
 
-    if (membershipDoseBlocking) {
+    if (glp1DoseBlocking) {
       setError(
-        'Please select a requested dose for each membership before checkout. Open the membership details to choose a formulation.',
+        'Please select a formulation and current dose before checkout. Open the product details to complete provider-review information.',
       );
       setLoading(false);
       return;
@@ -694,6 +745,7 @@ export function CheckoutPage() {
             slug: line.slug,
             membershipSlug: line.membershipSlug,
             requestedFormulation: line.requestedFormulation,
+            requestedDose: line.requestedDose,
             memberPricingEligible: line.productId === 'a1' ? false : undefined,
           })),
         },
@@ -849,19 +901,20 @@ export function CheckoutPage() {
                     <input placeholder="Phone" value={form.phone} onChange={e => update('phone', e.target.value)} className="input-lux" />
                   </div>
                 </div>
-                {membershipDoseBlocking && (
+                {(membershipDoseBlocking || glp1OneTimeDoseIssues.length > 0) && (
                   <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-                    <p className="font-medium mb-1">Requested dose required</p>
+                    <p className="font-medium mb-1">Provider-review information required</p>
                     <p className="text-xs mb-2">
-                      Membership checkout cannot continue until each membership has a requested dose.
-                      Your selection is a request only and does not guarantee approval or a prescription.
+                      Checkout cannot continue until each Semaglutide or Tirzepatide item has a
+                      formulation and current dose. Your selection is a request only and does not
+                      guarantee approval or a prescription.
                     </p>
                     <ul className="space-y-1 text-xs">
-                      {membershipDoseIssues.map(issue => (
+                      {[...membershipDoseIssues, ...glp1OneTimeDoseIssues].map(issue => (
                         <li key={issue.key}>
                           {issue.name}:{' '}
                           <Link to={issue.fixPath} className="underline font-medium">
-                            choose requested dose
+                            complete selection
                           </Link>
                         </li>
                       ))}
@@ -963,7 +1016,7 @@ export function CheckoutPage() {
                   type="button"
                   onClick={() => setStep('payment')}
                   className="btn-primary"
-                  disabled={membershipDoseBlocking || !guestAuthGate.ok}
+                  disabled={glp1DoseBlocking || !guestAuthGate.ok}
                 >
                   Continue to Payment
                 </button>
@@ -1195,7 +1248,7 @@ export function CheckoutPage() {
                       disabled={
                         !allAccepted ||
                         loading ||
-                        membershipDoseBlocking ||
+                        glp1DoseBlocking ||
                         !guestAuthGate.ok ||
                         selectablePaymentMethods.length === 0
                       }
@@ -1203,7 +1256,7 @@ export function CheckoutPage() {
                       className={`btn-primary flex-1 ${
                         !allAccepted ||
                         loading ||
-                        membershipDoseBlocking ||
+                        glp1DoseBlocking ||
                         !guestAuthGate.ok ||
                         selectablePaymentMethods.length === 0
                           ? 'opacity-50 cursor-not-allowed'
@@ -1269,7 +1322,12 @@ export function CheckoutPage() {
                           <>
                             {item.requestedFormulation && (
                               <p className="text-xs text-ink-700">
-                                Requested dose: {labelRequestedFormulation(item.requestedFormulation)}
+                                Formulation: {labelRequestedFormulation(item.requestedFormulation)}
+                              </p>
+                            )}
+                            {item.requestedDose && (
+                              <p className="text-xs text-ink-700">
+                                Current dose: {labelRequestedDose(item.requestedDose)}
                               </p>
                             )}
                             <p className="text-xs text-gold-600">Active Wellness Membership · billed monthly</p>
@@ -1279,7 +1337,14 @@ export function CheckoutPage() {
                           </>
                         ) : (
                           <>
-                            {item.variantLabel && <p className="text-xs text-ink-500 truncate">{item.variantLabel}</p>}
+                            {item.variantLabel && (
+                              <p className="text-xs text-ink-500 truncate">{item.variantLabel}</p>
+                            )}
+                            {item.requestedDose && (
+                              <p className="text-xs text-ink-700">
+                                Current dose: {labelRequestedDose(item.requestedDose)}
+                              </p>
+                            )}
                             {item.section === 'accessories' ? (
                               <p className="text-xs text-ink-500">Quantity: {item.quantity}</p>
                             ) : (

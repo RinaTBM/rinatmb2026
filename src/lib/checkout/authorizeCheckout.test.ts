@@ -742,7 +742,7 @@ describe('membership requested formulation authorization', () => {
         ),
       );
       expect(line.unitAmountCents).toBe(14900);
-      expect(line.variantLabel).toMatch(/Requested dose:/);
+      expect(line.variantLabel).toMatch(/Formulation:/);
     }
     for (const dose of ['getting_started', 'Vitamin B12', 'Glycine']) {
       const line = expectMapped(

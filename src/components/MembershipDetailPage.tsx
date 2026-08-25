@@ -8,37 +8,41 @@ import {
   PHARMACY_FULFILLMENT_HEADING,
 } from '@/data/pharmacyFulfillmentCopy';
 import { useCart } from '@/context/CartContext';
-import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
 import { ProductHighlights } from '@/components/ProductDescriptionSections';
+import { Glp1FormulationSelector, Glp1PatientDoseSelector } from '@/components/Glp1PatientDoseSelector';
 import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
+import { buildGlp1MembershipCartFields } from '@/lib/glp1/membershipCart';
 import {
-  labelRequestedFormulation,
-  validateMembershipRequestedFormulation,
-} from '@/lib/membership/requestedFormulation';
+  GETTING_STARTED_DOSE_LABEL,
+  glp1FamilyIdFromSlug,
+  patientWeeklyDosesForFamily,
+} from '@/lib/glp1/patientRequestedDose';
 
 /** Membership detail experience served at `/product/:membership-slug`. */
 export function MembershipDetailPage({ membership }: { membership: Membership }) {
   const { addItem } = useCart();
-  const [requestedFormulation, setRequestedFormulation] = useState('');
+  const [formulation, setFormulation] = useState('');
+  const [requestedDose, setRequestedDose] = useState('');
   const [doseError, setDoseError] = useState<string | null>(null);
+  const familyId = glp1FamilyIdFromSlug(membership.slug);
 
   const handleJoin = () => {
-    const validated = validateMembershipRequestedFormulation({
-      requestedFormulation,
-      includedFormulations: membership.includedFormulations,
+    const built = buildGlp1MembershipCartFields({
+      membership,
+      formulation,
+      requestedDose,
     });
-    if (!validated.ok) {
-      setDoseError(validated.error);
+    if (!built.ok) {
+      setDoseError(built.error);
       return;
     }
     setDoseError(null);
-    const doseLabel = labelRequestedFormulation(validated.value);
     addItem({
       productId: membership.checkoutProductId || membership.id,
       slug: membership.slug,
       name: membership.displayName,
-      price: membership.monthlyPrice,
-      standardPrice: membership.monthlyPrice,
+      price: built.monthlyPrice,
+      standardPrice: built.monthlyPrice,
       image: membership.image,
       subscription: true,
       section: 'membership',
@@ -48,8 +52,9 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
       purchaseType: 'membership_program',
       discountPercent: 0,
       appliedDiscount: 'none',
-      requestedFormulation: validated.value,
-      variantLabel: `Requested dose: ${doseLabel}`,
+      requestedFormulation: built.requestedFormulation,
+      requestedDose: built.requestedDose,
+      variantLabel: built.variantLabel,
     });
   };
 
@@ -108,7 +113,7 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
 
               <div className="mb-5">
                 <p className="text-xs font-semibold uppercase tracking-wider text-ink-400 mb-2">
-                  Available requested doses
+                  Available formulations
                 </p>
                 <ul className="space-y-1.5">
                   {membership.includedFormulations.map(f => (
@@ -126,16 +131,20 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
                 )}
               </div>
 
-              <div className="mb-5 rounded-xl border border-cream-300 bg-white p-4">
-                <MembershipRequestedDoseField
-                  id={`requested-dose-${membership.slug}`}
-                  includedFormulations={membership.includedFormulations}
-                  value={requestedFormulation}
-                  onChange={v => {
-                    setRequestedFormulation(v);
-                    setDoseError(null);
-                  }}
-                />
+              <div className="mb-5 space-y-4 rounded-xl border border-cream-300 bg-white p-4">
+                {familyId && (
+                  <>
+                    <Glp1FormulationSelector value={formulation} onChange={setFormulation} />
+                    <Glp1PatientDoseSelector
+                      familyId={familyId}
+                      value={requestedDose}
+                      onChange={v => {
+                        setRequestedDose(v);
+                        setDoseError(null);
+                      }}
+                    />
+                  </>
+                )}
                 {doseError && <p className="mt-2 text-xs text-red-700">{doseError}</p>}
               </div>
 
@@ -224,7 +233,7 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
 
           <div className="space-y-3">
             <h2 className="font-serif text-2xl md:text-3xl text-ink-900">
-              Available Requested Doses
+              Formulation and current dose
             </h2>
             <ul className="space-y-2">
               {membership.includedFormulations.map(f => (
@@ -236,9 +245,25 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
                 </li>
               ))}
             </ul>
+            {familyId && (
+              <ul className="space-y-2">
+                <li className="rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-800">
+                  {GETTING_STARTED_DOSE_LABEL}
+                </li>
+                {patientWeeklyDosesForFamily(familyId).map(d => (
+                  <li
+                    key={d}
+                    className="rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-800"
+                  >
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            )}
             <p className="text-xs text-ink-500">
-              Requested dose informs intake. Your provider determines the approved dose. Medication
-              fulfillment uses the matching retail vial SKU.
+              Current dose is provider-review information only. It does not select a pharmacy vial
+              or change membership price. Your provider determines the approved dose and
+              prescription.
             </p>
           </div>
 

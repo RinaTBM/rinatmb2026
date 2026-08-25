@@ -3,12 +3,10 @@ import { Check, X, Lock, ArrowRight, ShieldCheck, ClipboardList, Stethoscope, Pa
 import { Link } from '@/router';
 import { visibleMemberships, type Membership } from '@/data/products';
 import { useCart } from '@/context/CartContext';
-import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
+import { Glp1FormulationSelector, Glp1PatientDoseSelector } from '@/components/Glp1PatientDoseSelector';
 import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
-import {
-  labelRequestedFormulation,
-  validateMembershipRequestedFormulation,
-} from '@/lib/membership/requestedFormulation';
+import { buildGlp1MembershipCartFields } from '@/lib/glp1/membershipCart';
+import { glp1FamilyIdFromSlug } from '@/lib/glp1/patientRequestedDose';
 
 const howItWorks = [
   { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($149/month) or Tirzepatide ($275/month) membership, your requested dose, and shipping (Two-Day or Next-Day).' },
@@ -57,16 +55,18 @@ function Cell({ value }: { value: string | boolean }) {
 
 export function MembershipsPage() {
   const { addItem } = useCart();
-  const [requestedBySlug, setRequestedBySlug] = useState<Record<string, string>>({});
+  const [formulationBySlug, setFormulationBySlug] = useState<Record<string, string>>({});
+  const [doseBySlug, setDoseBySlug] = useState<Record<string, string>>({});
   const [doseErrors, setDoseErrors] = useState<Record<string, string>>({});
 
   const handleJoin = (m: Membership) => {
-    const validated = validateMembershipRequestedFormulation({
-      requestedFormulation: requestedBySlug[m.slug],
-      includedFormulations: m.includedFormulations,
+    const built = buildGlp1MembershipCartFields({
+      membership: m,
+      formulation: formulationBySlug[m.slug],
+      requestedDose: doseBySlug[m.slug],
     });
-    if (!validated.ok) {
-      setDoseErrors(prev => ({ ...prev, [m.slug]: validated.error }));
+    if (!built.ok) {
+      setDoseErrors(prev => ({ ...prev, [m.slug]: built.error }));
       return;
     }
     setDoseErrors(prev => {
@@ -74,13 +74,12 @@ export function MembershipsPage() {
       delete next[m.slug];
       return next;
     });
-    const doseLabel = labelRequestedFormulation(validated.value);
     addItem({
       productId: m.checkoutProductId || m.id,
       slug: m.slug,
       name: m.displayName,
-      price: m.monthlyPrice,
-      standardPrice: m.monthlyPrice,
+      price: built.monthlyPrice,
+      standardPrice: built.monthlyPrice,
       image: m.image,
       subscription: true,
       section: 'membership',
@@ -90,8 +89,9 @@ export function MembershipsPage() {
       purchaseType: 'membership_program',
       discountPercent: 0,
       appliedDiscount: 'none',
-      requestedFormulation: validated.value,
-      variantLabel: `Requested dose: ${doseLabel}`,
+      requestedFormulation: built.requestedFormulation,
+      requestedDose: built.requestedDose,
+      variantLabel: built.variantLabel,
     });
   };
 
@@ -202,20 +202,34 @@ export function MembershipsPage() {
                 </p>
                 <p className="mb-4 text-xs text-ink-500">Selected shipping renews monthly with your card charge (+$30 Two-Day or +$50 Next-Day). Initial term: 3 months, then month to month.</p>
 
-                <div className="mb-4 rounded-xl border border-cream-300 bg-cream-50/80 p-3">
-                  <MembershipRequestedDoseField
-                    id={`requested-dose-${m.slug}`}
-                    includedFormulations={m.includedFormulations}
-                    value={requestedBySlug[m.slug] ?? ''}
-                    onChange={v => {
-                      setRequestedBySlug(prev => ({ ...prev, [m.slug]: v }));
-                      setDoseErrors(prev => {
-                        const next = { ...prev };
-                        delete next[m.slug];
-                        return next;
-                      });
-                    }}
-                  />
+                <div className="mb-4 space-y-4 rounded-xl border border-cream-300 bg-cream-50/80 p-3">
+                  {glp1FamilyIdFromSlug(m.slug) && (
+                    <>
+                      <Glp1FormulationSelector
+                        value={formulationBySlug[m.slug] ?? ''}
+                        onChange={v => {
+                          setFormulationBySlug(prev => ({ ...prev, [m.slug]: v }));
+                          setDoseErrors(prev => {
+                            const next = { ...prev };
+                            delete next[m.slug];
+                            return next;
+                          });
+                        }}
+                      />
+                      <Glp1PatientDoseSelector
+                        familyId={glp1FamilyIdFromSlug(m.slug)!}
+                        value={doseBySlug[m.slug] ?? ''}
+                        onChange={v => {
+                          setDoseBySlug(prev => ({ ...prev, [m.slug]: v }));
+                          setDoseErrors(prev => {
+                            const next = { ...prev };
+                            delete next[m.slug];
+                            return next;
+                          });
+                        }}
+                      />
+                    </>
+                  )}
                   {doseErrors[m.slug] && (
                     <p className="mt-2 text-xs text-red-700">{doseErrors[m.slug]}</p>
                   )}

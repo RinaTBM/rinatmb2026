@@ -27,6 +27,13 @@ import {
   isLaunchReadyFamilyPaymentSku,
   resolveGenClientProductIdForSku,
 } from "../_shared/familyCommerce.ts";
+import {
+  formatProviderReviewSnapshot,
+  glp1FamilyIdFromProductId,
+  glp1FamilyIdFromSku,
+  glp1FamilyIdFromSlug,
+  validateRequestedDose,
+} from "../_shared/patientRequestedDose.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -341,6 +348,27 @@ Deno.serve(async (req) => {
     const rawItems: RawOrderLine[] = Array.isArray(body.items) ? body.items : [];
     if (rawItems.length === 0) return json({ error: "Your cart is empty." }, 400);
 
+    for (const item of rawItems) {
+      const slug =
+        (typeof item.membershipSlug === "string" && item.membershipSlug) ||
+        (typeof item.slug === "string" && item.slug) ||
+        "";
+      const sku = typeof item.sku === "string" ? item.sku : "";
+      const familyId =
+        glp1FamilyIdFromSlug(slug) ||
+        glp1FamilyIdFromSku(sku) ||
+        glp1FamilyIdFromProductId(typeof item.productId === "string" ? item.productId : "");
+      if (!familyId) continue;
+      const dose = validateRequestedDose({
+        requestedDose: typeof item.requestedDose === "string" ? item.requestedDose : null,
+        familyId,
+      });
+      if (!dose.ok) {
+        return json({ error: dose.error }, 400);
+      }
+      item.requestedDose = dose.value;
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
@@ -617,6 +645,7 @@ async function finalizeOrderResponse(input: {
     fulfillmentSku?: string;
     section?: string;
     requestedFormulation?: string;
+    requestedDose?: string;
     requiredProviderVisit?: boolean;
   }>;
   subtotalCents: number;
@@ -632,10 +661,12 @@ async function finalizeOrderResponse(input: {
     const unit = Math.max(0, Number(i.unitAmountCents) || 0);
     const formulation =
       typeof i.requestedFormulation === "string" ? i.requestedFormulation : null;
-    const variantParts = [
-      typeof i.variantLabel === "string" ? i.variantLabel : null,
-      formulation ? `Requested dose: ${formulation}` : null,
-    ].filter(Boolean);
+    const requestedDose = typeof i.requestedDose === "string" ? i.requestedDose : null;
+    const snapshot = formatProviderReviewSnapshot({
+      fulfillmentLabel: typeof i.variantLabel === "string" ? i.variantLabel : null,
+      formulation,
+      requestedDose,
+    });
     const sku = typeof i.sku === "string" && i.sku.trim() ? i.sku.trim() : null;
     const variantId =
       typeof i.variantId === "string" && i.variantId.trim() ? i.variantId.trim() : null;
@@ -647,7 +678,7 @@ async function finalizeOrderResponse(input: {
       order_id: input.orderId,
       product_id: i.productId || null,
       product_name_snapshot: String(i.productName || "Item"),
-      variant_snapshot: variantParts.length ? variantParts.join(" · ") : null,
+      variant_snapshot: snapshot || null,
       sku,
       variant_id: variantId,
       fulfillment_sku: fulfillmentSku,

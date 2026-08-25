@@ -1,6 +1,7 @@
 import {
   REAL_GEN_ORDER_SUBMISSION_ENABLED,
   WEBSITE_FAMILY_CUTOVER_ENABLED,
+  isOwnerVerifiedGenClientProductId,
 } from '@/data/websiteFamilies';
 import type { GenOrderGateInput, GenOrderGateResult } from '@/data/websiteFamilies/types';
 
@@ -11,10 +12,11 @@ import type { GenOrderGateInput, GenOrderGateResult } from '@/data/websiteFamili
  * - cutover enabled (currently OFF)
  * - real GEN order submission enabled (currently OFF)
  * - genClientProductId exists
- * - genPairingVerified === true
+ * - pairing verified (variant flag OR owner registry)
  * - routingStatus === ROUTING_READY
  *
  * GEN_PAIRING_PENDING may be built on the website but must not submit live GEN orders.
+ * Browser UI must never bypass this server-side gate.
  */
 export function assertFamilyVariantGenOrderAllowed(
   input: GenOrderGateInput,
@@ -66,7 +68,10 @@ export function assertFamilyVariantGenOrderAllowed(
       message: 'No GEN clientProductId — never invent IDs.',
     };
   }
-  if (!input.genPairingVerified) {
+  const pairingVerified =
+    Boolean(input.genPairingVerified) ||
+    isOwnerVerifiedGenClientProductId(input.genClientProductId);
+  if (!pairingVerified) {
     return {
       allowed: false,
       code: 'PAIRING_NOT_VERIFIED',

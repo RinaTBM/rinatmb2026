@@ -9,6 +9,15 @@ import type {
 
 export * from './types';
 export { WEBSITE_PRODUCT_FAMILIES, WEBSITE_FAMILY_BUILD_META };
+export {
+  OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS,
+  isOwnerVerifiedGenClientProductId,
+  PAIRING_VERIFICATION_REGISTRY_META,
+} from './pairingVerificationRegistry';
+export {
+  effectiveGenPairingVerified,
+  applyOwnerVerifiedPairingsToFamilies,
+} from './applyPairingVerification';
 
 /** Cutover stays OFF — legacy B6 storefront remains production-active. */
 export const WEBSITE_FAMILY_CUTOVER_ENABLED = false;

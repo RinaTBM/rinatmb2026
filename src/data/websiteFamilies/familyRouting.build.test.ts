@@ -6,6 +6,10 @@ import {
   resolveFamilyVariant,
   REAL_GEN_ORDER_SUBMISSION_ENABLED,
   WEBSITE_FAMILY_CUTOVER_ENABLED,
+  OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS,
+  applyOwnerVerifiedPairingsToFamilies,
+  effectiveGenPairingVerified,
+  listPatientVisibleVariants,
 } from '@/data/websiteFamilies';
 import { assertFamilyVariantGenOrderAllowed } from '@/lib/catalog/familyRoutingGate';
 
@@ -137,5 +141,90 @@ describe('MBM website family → GEN routing build', () => {
     });
     expect(pairingGate.allowed).toBe(false);
     expect(pairingGate.code).toBe('PAIRING_NOT_VERIFIED');
+  });
+
+  it('routing gate matrix: pairing false / formulary / future / blocked all deny handoff', () => {
+    const base = {
+      websiteFamilyCutoverEnabled: true,
+      realGenOrderSubmissionEnabled: true,
+    } as const;
+    const genId = 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y';
+
+    const pairingFalse = assertFamilyVariantGenOrderAllowed({
+      ...base,
+      genClientProductId: genId,
+      genPairingVerified: false,
+      routingStatus: 'ROUTING_READY',
+    });
+    expect(pairingFalse.allowed).toBe(false);
+    expect(pairingFalse.code).toBe('PAIRING_NOT_VERIFIED');
+
+    // Verified + cutover on → structurally eligible (production cutover flags still OFF by default)
+    const eligible = assertFamilyVariantGenOrderAllowed({
+      ...base,
+      genClientProductId: genId,
+      genPairingVerified: true,
+      routingStatus: 'ROUTING_READY',
+    });
+    expect(eligible.allowed).toBe(true);
+
+    // Same verified path with production defaults still blocked by cutover
+    const cutoverOff = assertFamilyVariantGenOrderAllowed({
+      genClientProductId: genId,
+      genPairingVerified: true,
+      routingStatus: 'ROUTING_READY',
+    });
+    expect(cutoverOff.allowed).toBe(false);
+    expect(cutoverOff.code).toBe('CUTOVER_OFF');
+
+    for (const status of ['FORMULARY_PENDING', 'FUTURE_HIDDEN', 'BLOCKED'] as const) {
+      const r = assertFamilyVariantGenOrderAllowed({
+        ...base,
+        genClientProductId: genId,
+        genPairingVerified: true,
+        routingStatus: status,
+      });
+      expect(r.allowed).toBe(false);
+      expect(r.code).toBe(status);
+    }
+  });
+
+  it('keeps FUTURE_HIDDEN out of patient-visible catalog options', () => {
+    const hiddenFamilies = ['pt-141', 'scream-cream', 'selank', 'semax'];
+    for (const id of hiddenFamilies) {
+      const f = WEBSITE_PRODUCT_FAMILIES.find((x) => x.familyId === id);
+      expect(f).toBeTruthy();
+      const visible = listPatientVisibleVariants(f!);
+      expect(visible.every((v) => v.routingStatus !== 'FUTURE_HIDDEN')).toBe(true);
+      if (id === 'pt-141' || id === 'scream-cream') {
+        expect(visible).toHaveLength(0);
+      }
+    }
+    const nad = WEBSITE_PRODUCT_FAMILIES.find((x) => x.familyId === 'nad')!;
+    const nadVisible = listPatientVisibleVariants(nad);
+    expect(nadVisible.some((v) => v.websiteVariantId.includes('r81'))).toBe(false);
+    expect(nadVisible.some((v) => v.websiteVariantId.includes('r82'))).toBe(false);
+  });
+
+  it('pairing verification registry stays empty and apply flips nothing in this phase', () => {
+    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(0);
+    for (const f of WEBSITE_PRODUCT_FAMILIES) {
+      for (const v of f.variants) {
+        expect(effectiveGenPairingVerified(v)).toBe(false);
+      }
+    }
+    const { result } = applyOwnerVerifiedPairingsToFamilies(WEBSITE_PRODUCT_FAMILIES);
+    expect(result.variantsFlippedToTrue).toBe(0);
+    expect(result.anyVerified).toBe(false);
+  });
+
+  it('FORMULARY_PENDING variants never invent a GEN clientProductId', () => {
+    for (const f of WEBSITE_PRODUCT_FAMILIES) {
+      for (const v of f.variants) {
+        if (v.routingStatus === 'FORMULARY_PENDING') {
+          expect(v.genClientProductId).toBeNull();
+        }
+      }
+    }
   });
 });

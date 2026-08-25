@@ -195,6 +195,15 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - **Tagada sandbox caution:** prior CRM `testMode=true` + 4242 still hit live rails. Do not retry PATH A card flows until a true non-live sandbox rail is authoritatively confirmed.
 - **Cutover:** keep `GEN_HANDOFF_AUTOMATION_ENABLED=false` on first production deploy. Seed only BPC READY; remaining Rx BLOCKED until owner-approved map readiness (staging GEN catalog is much larger than the old 22-product snapshot — see `docs/GEN_CATALOG_IMPORT_PLAN.md`; do not treat catalog presence as READY). SEM/TIR membership med-fulfillment promises while maps are BLOCKED are a launch blocker. **Production Rx cutover remains BLOCKED** until GEN API Orders / external-paid is enabled and staging GEN orders no longer stick at `pending_payment`/`unpaid` after paid handoff. Ambiguous GEN candidates must never be marked READY without owner validation. Metformin remains **DO NOT ADD** / do not website-activate even if present in GEN.
 
+### Website family → GEN routing (preview only — cutover OFF)
+
+- Architecture data: `src/data/websiteFamilies/` (30 families / 103 variants). Preview routes: `/preview/families`, `/preview/families/:familyId`. Live `/product/*` storefront stays legacy (B6 SEM/TIR) until cutover.
+- Flags stay OFF: `WEBSITE_FAMILY_CUTOVER_ENABLED`, `REAL_GEN_ORDER_SUBMISSION_ENABLED`. Do not publish new architecture, remove legacy B6, enable GEN/Whop cutover, or invent GEN `clientProductId`s.
+- `genPairingVerified` must stay **false** until the owner confirms exact GEN formulary attachment. Do not auto-verify from name/price/title/id existence.
+- Owner QA: `docs/MBM_WEBSITE_FAMILY_OWNER_QA.md` (+ `.json`). Pairing checklist (23 variants → 15 GEN CPs): `docs/MBM_GEN_PAIRING_VERIFICATION_CHECKLIST.md` (+ `.json`).
+- After owner confirmation only: add GEN `clientProductId` to `src/data/websiteFamilies/pairingVerificationRegistry.ts`, then use `applyPairingVerification.ts` to flip matching variants — do not hand-edit unrelated product fields.
+- Live GEN handoff gate: `src/lib/catalog/familyRoutingGate.ts` (`assertFamilyVariantGenOrderAllowed`). Browser UI must never bypass it. FORMULARY_PENDING / FUTURE_HIDDEN / BLOCKED / unverified pairing all deny.
+
 ### GitHub source of truth vs Bolt (permanent)
 
 **Current ACH/Wire production tip (post-reconcile):** `deploy/ach-launch-clean-2026`  

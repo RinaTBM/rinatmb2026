@@ -19,7 +19,10 @@
       "Pre\u2013MASTER-FIRST manual pairing checklist \u2014 DO NOT USE"
     ],
     "doNotExecute": true,
-    "howToUse": "Sit in GEN Health. Work Task 1 \u2192 Task 15. For each: open product \u2192 Formulary \u2192 select exact rows \u2192 remove extras \u2192 save \u2192 check boxes."
+    "howToUse": "Sit in GEN Health. Work Task 1 \u2192 Task 15. For each: open product \u2192 Formulary \u2192 select exact rows \u2192 remove extras \u2192 save \u2192 check boxes.",
+    "directUrlMapDoc": "docs/MBM_GEN_OWNER_DIRECT_URL_MAP.md",
+    "directUrlPrefixProven": true,
+    "updatedAt": "2026-08-25T06:33:01Z"
   },
   "revalidation": {
     "checklistUniqueGenCps": 15,
@@ -1483,5 +1486,52 @@
     "WEBSITE_CUTOVER": "OFF",
     "GEN_WHOP_CUTOVER": "OFF",
     "PR_19": "KEEP OPEN / DO NOT MERGE"
-  }
+  },
+  "directUrlsForLockedUnresolved": [
+    {
+      "product": "SEM Mid B12",
+      "clientProductId": "BLf8inX395YNc7WPCD4O",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O"
+    },
+    {
+      "product": "SEM Membership $149",
+      "clientProductId": "5F8jESeVeXcpkLU5rrdK",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK"
+    },
+    {
+      "product": "TIR Membership $275",
+      "clientProductId": "E3MXZeeR01QROCuTLRLE",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE"
+    },
+    {
+      "product": "Wolverine Capsule",
+      "clientProductId": "omhh3NabouO8AsNR5tkD",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD"
+    },
+    {
+      "product": "Minoxidil Dual Combo",
+      "clientProductId": "BboYS4a2Uj7APetrFo6W",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W"
+    },
+    {
+      "product": "Wolverine Injection",
+      "clientProductId": "iJtyig611AZEDBGdvRd9",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9"
+    },
+    {
+      "product": "Progesterone IR",
+      "clientProductId": "5dGkjdpLP7DkKKE2iVxh",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+    }
+  ],
+  "doNotConfuse": [
+    {
+      "id": "SvFDJ7W4nmWL2bkLUMMS",
+      "why": "GLP-2 Tirzepatide Any Dose $279 \u2014 NOT TIR membership $275"
+    },
+    {
+      "id": "489YrehNXRlL77fYPkOn",
+      "why": "GHK-Cu/Minoxidil \u2014 NOT Dual Combo Minoxidil"
+    }
+  ]
 }

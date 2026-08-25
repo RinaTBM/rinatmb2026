@@ -6,12 +6,36 @@ Work top to bottom in GEN Health. For each task: open the named product → Edit
 
 This guide covers the **15 GEN client products** that already have IDs (23 website variants). It does **not** include FORMULARY_PENDING, FUTURE_HIDDEN, TIR one-time CREATE, NAD r85 CREATE, or Estradiol patch CREATE.
 
+## Direct GEN product URLs (owner-proven)
+
+Authority: `docs/MBM_GEN_OWNER_DIRECT_URL_MAP.md`
+
+GEN product URL pattern (constant prefix across owner-supplied links):
+
+`https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_{CLIENT_PRODUCT_ID}`
+
+**Prefer opening these exact links** for the unresolved locked CPs (do not rely on title search alone):
+
+| Product | Client Product ID | Direct URL |
+|---|---|---|
+| SEM Mid B12 | `BLf8inX395YNc7WPCD4O` | https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O |
+| SEM Membership $149 | `5F8jESeVeXcpkLU5rrdK` | https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK |
+| TIR Membership $275 | `E3MXZeeR01QROCuTLRLE` | https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE |
+| Wolverine Capsule | `omhh3NabouO8AsNR5tkD` | https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD |
+| Minoxidil Dual Combo | `BboYS4a2Uj7APetrFo6W` | https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W |
+| Wolverine Injection | `iJtyig611AZEDBGdvRd9` | https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9 |
+| Progesterone IR | `5dGkjdpLP7DkKKE2iVxh` | https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh |
+
+**Do NOT use for membership:** `SvFDJ7W4nmWL2bkLUMMS` (GLP-2 Tirzepatide Any Dose **$279**) — different product from TIR membership **$275**.
+
+**Do NOT use for Minoxidil Dual Combo:** `489YrehNXRlL77fYPkOn` (GHK-Cu / Minoxidil).
+
 ## Before you start
 
-1. Open GEN Health admin for My Bare Method.
+1. Open GEN Health admin for My Bare Method — prefer the **direct product URLs** above for locked fixes.
 2. Have this guide open next to GEN.
-3. Prefer searching by the **exact product display name** below.
-4. When picking formulary meds, match **pharmacy + strength + form + package** to the SELECTED FORMULARY text (not “close enough”).
+3. Prefer searching by the **exact product display name** below only if the direct URL is unavailable.
+4. When picking formulary meds, match **pharmacy + strength + form + package** to the SELECTED FORMULARY text (not “close enough”). Under amended pairing policy, multiple compatible same-family strengths may remain.
 5. If anything does not match: check **DOES NOT MATCH — STOP** and message the team. Do not guess.
 
 ## Out of scope (do not pair in this session)

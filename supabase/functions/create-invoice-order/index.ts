@@ -23,6 +23,10 @@ import {
   resolveGenApiOrdersEnabled,
   isProductionCheckoutTestSkuCart,
 } from "../_shared/commerceEnvPolicy.ts";
+import {
+  isLaunchReadyFamilyPaymentSku,
+  resolveGenClientProductIdForSku,
+} from "../_shared/familyCommerce.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -108,17 +112,29 @@ async function assertRxGenMappingsReady(input: {
     return { ok: true };
   }
 
+  // Launch-ready website-family SKUs: Tagada payment may proceed while GEN API Orders
+  // and GEN handoff stay OFF. Real automated GEN order creation remains fail-closed.
+  const otherRx = rxSkus.filter((s) => !isLaunchReadyFamilyPaymentSku(s));
+  if (otherRx.length === 0) {
+    return { ok: true };
+  }
+
   // Production Rx also requires GEN API Orders capability (distinct from mapping READY).
   if (!resolveGenApiOrdersEnabled()) {
     return {
       ok: false,
       message:
         "This medication is temporarily unavailable for checkout. Please contact support.",
-      blockedSku: rxSkus[0],
+      blockedSku: otherRx[0],
     };
   }
 
-  const inList = rxSkus.map((s) => `"${s.replace(/"/g, "")}"`).join(",");
+  const unresolved = otherRx.filter((s) => !resolveGenClientProductIdForSku(s));
+  if (unresolved.length === 0) {
+    return { ok: true };
+  }
+
+  const inList = unresolved.map((s) => `"${s.replace(/"/g, "")}"`).join(",");
   const res = await fetch(
     `${input.supabaseUrl}/rest/v1/gen_sku_map?mbm_sku=in.(${inList})&select=mbm_sku,mapping_status,active`,
     {
@@ -134,7 +150,7 @@ async function assertRxGenMappingsReady(input: {
       ok: false,
       message:
         "Clinical product mapping is not available for checkout. Please contact support.",
-      blockedSku: rxSkus[0],
+      blockedSku: unresolved[0],
     };
   }
   const rows = (await res.json()) as Array<{
@@ -145,7 +161,7 @@ async function assertRxGenMappingsReady(input: {
   const bySku = new Map(
     (Array.isArray(rows) ? rows : []).map((r) => [String(r.mbm_sku || "").toUpperCase(), r]),
   );
-  for (const sku of rxSkus) {
+  for (const sku of unresolved) {
     const row = bySku.get(sku.toUpperCase());
     const status = String(row?.mapping_status || "").toUpperCase();
     const ready =

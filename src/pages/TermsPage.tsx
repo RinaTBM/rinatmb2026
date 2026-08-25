@@ -116,7 +116,7 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                Semaglutide Membership is $149/month and Tirzepatide Membership is $249/month. Selected shipping
+                Semaglutide Membership is $149/month and Tirzepatide Membership is $275/month. Selected shipping
                 recurs monthly (Two-Day +$30/month or Next-Day +$50/month). A one-time Initial Provider Visit ($75)
                 may apply on enrollment when required and does not recur. See Membership &amp; Cancellation Terms for
                 due-today versus monthly renewal examples.

@@ -1,0 +1,413 @@
+{
+  "meta": {
+    "document": "MBM_GEN_BACKEND_COMPLETION_1",
+    "phase": "MBM-GEN-BACKEND-COMPLETION-1",
+    "generated_at": "2026-08-25T07:43:00Z",
+    "authority": "docs/MBM_OWNER_SET_FINAL_ROUTING_PREFLIGHT.md (OWNER APPROVED)",
+    "owner_working_set": "OWNER_SELECTED_GEN_WORKING_SET (22)",
+    "gen_modified": true,
+    "pairings_modified_via_api": false,
+    "pairing_api_available": false,
+    "website_published": false,
+    "real_gen_orders": "OFF",
+    "cutover": "OFF",
+    "legacy_b6": "UNCHANGED",
+    "pr19": "OPEN / NOT MERGED"
+  },
+  "agents_md_phase1": "UPDATED \u2014 family/selector rules, TIR collapse, pricing authority, PR#19 lock",
+  "dedupe": {
+    "estradiol_patch_existing": 0,
+    "nad_r85_compatible_existing": 0,
+    "wolverine_capsule_appropriate_existing": 0,
+    "minoxidil_dual_clean_existing": "BboYS4a2Uj7APetrFo6W empty Dual Combo shell \u2014 REUSED (no CREATE)"
+  },
+  "creates": [
+    {
+      "key": "estradiol-patch-r26",
+      "displayName": "Estradiol Transdermal Patch 0.025mg/hr (8 count)",
+      "customerPrice": 119,
+      "displayDescription": "MBM backend CP for website estradiol-patch-r26. Pair Valiant ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count. Do not use vaginal Estradiol.",
+      "productId": "rziDZ07sJzDMXpdTvPcL",
+      "fullClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_rziDZ07sJzDMXpdTvPcL",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_rziDZ07sJzDMXpdTvPcL",
+      "apiOk": true,
+      "resolvedViaList": true
+    },
+    {
+      "key": "estradiol-patch-r27",
+      "displayName": "Estradiol Transdermal Patch 0.0375mg/hr (8 count)",
+      "customerPrice": 129,
+      "displayDescription": "MBM backend CP for website estradiol-patch-r27. Pair Valiant ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count.",
+      "productId": "fxHkYJjkwqydini7s157",
+      "fullClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_fxHkYJjkwqydini7s157",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_fxHkYJjkwqydini7s157",
+      "apiOk": true,
+      "resolvedViaList": true
+    },
+    {
+      "key": "estradiol-patch-r28",
+      "displayName": "Estradiol Transdermal Patch 0.05mg/hr (8 count)",
+      "customerPrice": 139,
+      "displayDescription": "MBM backend CP for website estradiol-patch-r28. Pair Valiant ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count.",
+      "productId": "BUKqtZJ3GDGMgBxJY0hM",
+      "fullClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BUKqtZJ3GDGMgBxJY0hM",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BUKqtZJ3GDGMgBxJY0hM",
+      "apiOk": true,
+      "resolvedViaList": true
+    },
+    {
+      "key": "estradiol-patch-r29",
+      "displayName": "Estradiol Transdermal Patch 0.1mg/hr (8 count)",
+      "customerPrice": 149,
+      "displayDescription": "MBM backend CP for website estradiol-patch-r29. Pair Valiant ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count.",
+      "productId": "T4kMQnbixxDm7f0Ptjtq",
+      "fullClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_T4kMQnbixxDm7f0Ptjtq",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_T4kMQnbixxDm7f0Ptjtq",
+      "apiOk": true,
+      "resolvedViaList": true
+    },
+    {
+      "key": "nad-nasal-r85",
+      "displayName": "NAD + Nasal Spray 200mg/ml \u00b7 15ml",
+      "customerPrice": 109,
+      "displayDescription": "MBM backend CP for website nad-nasal-r85. Separate from r84. Pair St Luke NAD+ 200mg/ml nasal 15ml.",
+      "productId": "3KnF8Ll7XPm7Vk0lr4Li",
+      "fullClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_3KnF8Ll7XPm7Vk0lr4Li",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_3KnF8Ll7XPm7Vk0lr4Li",
+      "apiOk": true,
+      "resolvedViaList": true
+    },
+    {
+      "key": "wolverine-capsule",
+      "displayName": "Wolverine / BPC-TB Capsules",
+      "customerPrice": 29,
+      "displayDescription": "MBM backend CP for website wolverine-capsule. Attach BPC-157/TB500 Capsules only. Do not attach injectable.",
+      "productId": "RaEueocVyzaAOzXvRFwC",
+      "fullClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_RaEueocVyzaAOzXvRFwC",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_RaEueocVyzaAOzXvRFwC",
+      "apiOk": true,
+      "resolvedViaList": true
+    }
+  ],
+  "repairs": [
+    {
+      "key": "tir-svfdj7-rename",
+      "productId": "SvFDJ7W4nmWL2bkLUMMS",
+      "payload": {
+        "displayName": "Tirzepatide Injection \u2014 Any Dose (B12/Glycine)"
+      },
+      "note": "Rename away from GLP-2 title. 3-PACK removal is MANUAL pairing (API cannot detach).",
+      "apiOk": true,
+      "responseStatus": 200
+    },
+    {
+      "key": "sem-mid-b12-nf825",
+      "productId": "NF825utCtjVqbbGsnQN3",
+      "payload": {
+        "displayName": "Semaglutide Injection \u2014 Mid (B12)",
+        "customerPrice": 109
+      },
+      "note": "Prefer NF825 over empty BLf8in for Mid B12.",
+      "apiOk": true,
+      "responseStatus": 200
+    },
+    {
+      "key": "nad-r84-price",
+      "productId": "FVwkzvQqWIZRNAwbslGw",
+      "payload": {
+        "displayName": "NAD + Nasal Spray 50mg/ml \u00b7 15ml",
+        "customerPrice": 79
+      },
+      "note": "Align GEN customerPrice toward website $79 (storefront still uses MBM).",
+      "apiOk": true,
+      "responseStatus": 200
+    },
+    {
+      "key": "wolverine-injection-meta",
+      "productId": "iJtyig611AZEDBGdvRd9",
+      "payload": {
+        "displayName": "Wolverine / BPC-TB Injection",
+        "customerPrice": 159
+      },
+      "note": "Capsule med removal is MANUAL pairing.",
+      "apiOk": true,
+      "responseStatus": 200
+    },
+    {
+      "key": "minoxidil-dual-bboys-reuse",
+      "productId": "BboYS4a2Uj7APetrFo6W",
+      "payload": {
+        "displayName": "Finasteride/Minoxidil 0.1%/5% Dual Combo",
+        "customerPrice": 79,
+        "showPatient": false,
+        "status": "active"
+      },
+      "note": "REUSE existing Dual Combo shell instead of CREATE duplicate. Manual pair Vios 0.1%/5% only.",
+      "apiOk": true,
+      "responseStatus": 200
+    },
+    {
+      "key": "progesterone-rename",
+      "productId": "5dGkjdpLP7DkKKE2iVxh",
+      "payload": {
+        "displayName": "Progesterone IR (shared strengths)",
+        "customerPrice": 29
+      },
+      "note": "Pregnenolone/SR removal is MANUAL pairing.",
+      "apiOk": true,
+      "responseStatus": 200
+    }
+  ],
+  "reused": [
+    {
+      "key": "minoxidil-dual",
+      "productId": "BboYS4a2Uj7APetrFo6W",
+      "classification": "REUSE_WITH_REPAIR",
+      "reason": "Existing Dual Combo shell present (empty). Avoid duplicate CREATE. Manual pair Vios Fin/Minox 0.1%/5% only.",
+      "fullClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+      "url": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+      "customerPrice": 79
+    }
+  ],
+  "not_created": {
+    "tir_tier_cps": 0,
+    "fat_burner": "FORMULARY_PENDING \u2014 no non-Ipamorelin triple medication available to attach via API",
+    "nad_injection_100mg_ml": "FORMULARY_PENDING",
+    "minoxidil_dual_new": "REUSED BboYS4 instead of CREATE"
+  },
+  "pairing_handoff": [
+    {
+      "genProductName": "Tirzepatide Injection \u2014 Any Dose (B12/Glycine)",
+      "genProductId": "SvFDJ7W4nmWL2bkLUMMS",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SvFDJ7W4nmWL2bkLUMMS",
+      "selectThisMedication": "Keep Dirx Tirzepatide + Vitamin B12 and Tirzepatide + Glycine strength options (provider chooses)",
+      "pharmacy": "Dirx-Hub",
+      "removeTheseMedications": [
+        "Tirzepatide + Glycine (3 PACK))"
+      ],
+      "doNotSelect": [
+        "B6 / Pyridoxine",
+        "Semaglutide",
+        "unrelated blends"
+      ],
+      "expectedAcceptableEndState": "\u22651 TIR+B12 and \u22651 TIR+Glycine compatible options; no 3-PACK; then pairing-verify all TIR website selectors"
+    },
+    {
+      "genProductName": "Semaglutide Injection \u2014 Mid (B12)",
+      "genProductId": "NF825utCtjVqbbGsnQN3",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_NF825utCtjVqbbGsnQN3",
+      "selectThisMedication": "Already has Dirx Semaglutide + Vitamin B12 (keep)",
+      "pharmacy": "Dirx-Hub",
+      "removeTheseMedications": [],
+      "doNotSelect": [
+        "Glycine-only",
+        "B6",
+        "Greenwich SEM if present"
+      ],
+      "expectedAcceptableEndState": "LIVE VERIFIED \u2014 ROUTING_READY (metadata repaired)"
+    },
+    {
+      "genProductName": "NAD + Nasal Spray 50mg/ml \u00b7 15ml",
+      "genProductId": "FVwkzvQqWIZRNAwbslGw",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+      "selectThisMedication": "Keep St Luke NAD+ nasal options for r84",
+      "pharmacy": "St Luke",
+      "removeTheseMedications": [],
+      "doNotSelect": [
+        "200mg/ml r85 (belongs on separate CP)",
+        "Injection NAD"
+      ],
+      "expectedAcceptableEndState": "LIVE VERIFIED \u2014 ROUTING_READY (price repaired to $79)"
+    },
+    {
+      "genProductName": "NAD + Nasal Spray 200mg/ml \u00b7 15ml",
+      "genProductId": "3KnF8Ll7XPm7Vk0lr4Li",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_3KnF8Ll7XPm7Vk0lr4Li",
+      "selectThisMedication": "St Luke NAD+ 200mg/ml nasal 15ml (r85)",
+      "pharmacy": "St Luke",
+      "removeTheseMedications": [],
+      "doNotSelect": [
+        "50mg/ml r84",
+        "NAD Injection",
+        "200mg/mL injection substitute"
+      ],
+      "expectedAcceptableEndState": "\u22651 compatible r85 nasal medication; empty until owner pairs"
+    },
+    {
+      "genProductName": "Wolverine / BPC-TB Injection",
+      "genProductId": "iJtyig611AZEDBGdvRd9",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+      "selectThisMedication": "Keep BPC-157 / TB500 injectable",
+      "pharmacy": "Greenwich Pharmacy",
+      "removeTheseMedications": [
+        "BPC-157 / TB500 Capsules"
+      ],
+      "doNotSelect": [
+        "Capsule-only products",
+        "plain BPC without TB500 if not Wolverine"
+      ],
+      "expectedAcceptableEndState": "Injectable only on this CP"
+    },
+    {
+      "genProductName": "Wolverine / BPC-TB Capsules",
+      "genProductId": "RaEueocVyzaAOzXvRFwC",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_RaEueocVyzaAOzXvRFwC",
+      "selectThisMedication": "BPC-157 / TB500 Capsules (Greenwich)",
+      "pharmacy": "Greenwich Pharmacy",
+      "removeTheseMedications": [],
+      "doNotSelect": [
+        "Injectable BPC/TB500",
+        "plain BPC capsule gut protocols"
+      ],
+      "expectedAcceptableEndState": "Capsule med(s) only; empty until owner pairs"
+    },
+    {
+      "genProductName": "Finasteride/Minoxidil 0.1%/5% Dual Combo",
+      "genProductId": "BboYS4a2Uj7APetrFo6W",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+      "selectThisMedication": "Vios Finasteride / Minoxidil (PER ML) 0.1 / 5 % only",
+      "pharmacy": "Vios",
+      "removeTheseMedications": [],
+      "doNotSelect": [
+        "0.1/7%",
+        "0.1/10%",
+        "Tretinoin blends",
+        "plain Minoxidil",
+        "GHK-Cu 489Yreh"
+      ],
+      "expectedAcceptableEndState": "Only 0.1%/5% Vios attached; empty until owner pairs"
+    },
+    {
+      "genProductName": "Progesterone IR (shared strengths)",
+      "genProductId": "5dGkjdpLP7DkKKE2iVxh",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "selectThisMedication": "Keep Progesterone IR options (multiple strengths OK)",
+      "pharmacy": "(existing IR pharmacies)",
+      "removeTheseMedications": [
+        "Pregnenolone IR",
+        "Progesterone SR (DYE-FREE)",
+        "Progesterone SR (DYE-FREE)(Lactose FREE)"
+      ],
+      "doNotSelect": [
+        "SR as primary IR route",
+        "Pregnenolone"
+      ],
+      "expectedAcceptableEndState": "IR only; provider chooses strength"
+    },
+    {
+      "genProductName": "AOD-9604 / MOTS-C / Tesamorelin Injection (Fat Burner)",
+      "genProductId": "7Kix55LA15U0lNvY9QXI",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI",
+      "selectThisMedication": "AOD + MOTS-c + Tesamorelin WITHOUT Ipamorelin (when pharmacy sources)",
+      "pharmacy": "Optimal Balance (or approved source)",
+      "removeTheseMedications": [
+        "AOD 9604 alone if replacing with full triple"
+      ],
+      "doNotSelect": [
+        "AOD/MOTS/Tes/Ipamorelin quad (yearpPa)",
+        "Ipamorelin"
+      ],
+      "expectedAcceptableEndState": "FORMULARY_PENDING until triple without Ipamorelin exists to attach"
+    },
+    {
+      "genProductName": "Estradiol Transdermal Patch 0.025mg/hr (8 count)",
+      "genProductId": "rziDZ07sJzDMXpdTvPcL",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_rziDZ07sJzDMXpdTvPcL",
+      "selectThisMedication": "ESTRADIOL TRANSDERMAL PATCH 0.025mg/hr 8 count",
+      "pharmacy": "Valiant",
+      "removeTheseMedications": [],
+      "doNotSelect": [
+        "Vaginal Estradiol CPs o7dNtf\u2026 / 5yKBz\u2026",
+        "other strengths on wrong CP"
+      ],
+      "expectedAcceptableEndState": "Exactly that patch row paired; website price $119; empty until owner pairs"
+    },
+    {
+      "genProductName": "Estradiol Transdermal Patch 0.0375mg/hr (8 count)",
+      "genProductId": "fxHkYJjkwqydini7s157",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_fxHkYJjkwqydini7s157",
+      "selectThisMedication": "ESTRADIOL TRANSDERMAL PATCH 0.0375mg/hr 8 count",
+      "pharmacy": "Valiant",
+      "removeTheseMedications": [],
+      "doNotSelect": [
+        "Vaginal Estradiol CPs o7dNtf\u2026 / 5yKBz\u2026",
+        "other strengths on wrong CP"
+      ],
+      "expectedAcceptableEndState": "Exactly that patch row paired; website price $129; empty until owner pairs"
+    },
+    {
+      "genProductName": "Estradiol Transdermal Patch 0.05mg/hr (8 count)",
+      "genProductId": "BUKqtZJ3GDGMgBxJY0hM",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BUKqtZJ3GDGMgBxJY0hM",
+      "selectThisMedication": "ESTRADIOL TRANSDERMAL PATCH 0.05mg/hr 8 count",
+      "pharmacy": "Valiant",
+      "removeTheseMedications": [],
+      "doNotSelect": [
+        "Vaginal Estradiol CPs o7dNtf\u2026 / 5yKBz\u2026",
+        "other strengths on wrong CP"
+      ],
+      "expectedAcceptableEndState": "Exactly that patch row paired; website price $139; empty until owner pairs"
+    },
+    {
+      "genProductName": "Estradiol Transdermal Patch 0.1mg/hr (8 count)",
+      "genProductId": "T4kMQnbixxDm7f0Ptjtq",
+      "directGenUrl": "https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_T4kMQnbixxDm7f0Ptjtq",
+      "selectThisMedication": "ESTRADIOL TRANSDERMAL PATCH 0.1mg/hr 8 count",
+      "pharmacy": "Valiant",
+      "removeTheseMedications": [],
+      "doNotSelect": [
+        "Vaginal Estradiol CPs o7dNtf\u2026 / 5yKBz\u2026",
+        "other strengths on wrong CP"
+      ],
+      "expectedAcceptableEndState": "Exactly that patch row paired; website price $149; empty until owner pairs"
+    }
+  ],
+  "routing_updates": {
+    "sem_mid_b12": "NF825utCtjVqbbGsnQN3 ROUTING_READY",
+    "sem_membership": "MkDIUw0NcJB7YL2pNzYW ROUTING_READY @$149 (Glycine twin wQK2Js\u2026 available)",
+    "tir_all_selectors": "SvFDJ7W4nmWL2bkLUMMS GEN_PAIRING_PENDING until 3-PACK removed",
+    "estradiol_patches": "4 new CPs GEN_PAIRING_PENDING",
+    "nad_r85": "3KnF8Ll7XPm7Vk0lr4Li GEN_PAIRING_PENDING",
+    "wolverine_capsule": "RaEueocVyzaAOzXvRFwC GEN_PAIRING_PENDING",
+    "minoxidil_dual": "BboYS4a2Uj7APetrFo6W GEN_PAIRING_PENDING"
+  },
+  "status_counts": {
+    "ROUTING_READY": 10,
+    "BLOCKED": 2,
+    "FUTURE_HIDDEN": 51,
+    "GEN_PAIRING_PENDING": 26,
+    "FORMULARY_PENDING": 14
+  },
+  "final_report": {
+    "OWNER_WORKING_SET": 22,
+    "TIR_SINGLE_BACKEND": "YES",
+    "TIR_NEW_CPS_CREATED": 0,
+    "ESTRADIOL_CPS_CREATED": "4 / 4",
+    "NAD_NASAL_CPS_CREATED": "1 / 1",
+    "WOLVERINE_CAPSULE_CPS_CREATED": "1 / 1",
+    "MINOXIDIL_CPS_CREATED": "0 / 1 (REUSED existing Dual Combo shell BboYS4)",
+    "TOTAL_NEW_GEN_CPS_CREATED": "6 / maximum 7",
+    "GEN_CPS_REPAIRED": 6,
+    "MANUAL_PAIRINGS_STILL_REQUIRED": 11,
+    "PAIRINGS_LIVE_VERIFIED": 9,
+    "ROUTING_READY": 10,
+    "FORMULARY_PENDING": 14,
+    "FUTURE_HIDDEN": 51,
+    "NAD_INJECTION_100MG_ML": "FORMULARY_PENDING",
+    "FAT_BURNER": "FORMULARY_PENDING",
+    "WEBSITE_FAMILY_UX_READY": "YES",
+    "WEBSITE_ROUTING_CODE_READY": "YES",
+    "GEN_BACKEND_READY": "NO",
+    "READY_FOR_FINAL_STOREFRONT_CUTOVER_QA": "NO",
+    "REAL_GEN_ORDERS": "OFF",
+    "WEBSITE_PUBLISHED": "NO",
+    "CUTOVER": "OFF",
+    "LEGACY_B6": "UNCHANGED",
+    "PR19": "OPEN / NOT MERGED"
+  },
+  "validation": {
+    "TYPECHECK": "PASS",
+    "TESTS": "PASS (43 files / 531 tests)",
+    "BUILD": "PASS (vite build + prerender)"
+  }
+}

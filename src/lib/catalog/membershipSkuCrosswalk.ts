@@ -23,17 +23,15 @@ export interface MembershipFulfillmentMapping {
 }
 
 const SEMA_DOSE_TO_VARIANT: Readonly<Record<string, string>> = {
-  '0.5mg': 'semaglutide-v1',
-  '1mg': 'semaglutide-v2',
-  '2.5mg': 'semaglutide-v3',
-  '5mg': 'semaglutide-v4',
+  'Vitamin B12': 'sem-b12-any-dose',
+  Glycine: 'sem-glycine-any-dose',
+  getting_started: 'sem-b12-any-dose',
 };
 
 const TIRZ_DOSE_TO_VARIANT: Readonly<Record<string, string>> = {
-  '2.5mg': 'tirzepatide-v1',
-  '7.5mg': 'tirzepatide-v2',
-  '12.5mg': 'tirzepatide-v3',
-  '15mg': 'tirzepatide-v4',
+  'Vitamin B12': 'tir-b12-any-dose',
+  Glycine: 'tir-glycine-any-dose',
+  getting_started: 'tir-b12-any-dose',
 };
 
 function normalizeDose(dose: string): string {

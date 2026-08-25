@@ -5,6 +5,10 @@ import {
 } from 'lucide-react';
 import { useMember } from '@/context/MemberContext';
 import {
+  SEMAGLUTIDE_MEMBERSHIP_MONTHLY,
+  TIRZEPATIDE_MEMBERSHIP_MONTHLY,
+} from '@/lib/pricing/weightMembership';
+import {
   CANCELLATION_POLICY_COPY,
   listCancellationRequests,
   listManagedSubscriptions,
@@ -179,7 +183,9 @@ export function AccountPage() {
                               memberships[0]?.monthlyAmountCents != null
                                 ? memberships[0].monthlyAmountCents / 100
                                 : memberships[0]?.unitPrice ??
-                                  (member.program === 'semaglutide' ? 149 : 249)
+                                  (member.program === 'semaglutide'
+                                    ? SEMAGLUTIDE_MEMBERSHIP_MONTHLY
+                                    : TIRZEPATIDE_MEMBERSHIP_MONTHLY)
                             ).toFixed(0)}
                             /month
                           </p>
@@ -229,8 +235,8 @@ export function AccountPage() {
                                 name: member.displayName ?? 'Active Wellness Membership',
                                 productId: member.checkoutProductId ?? 'm2',
                                 slug: member.program === 'semaglutide' ? 'semaglutide-membership' : 'tirzepatide-membership',
-                                unitPrice: member.program === 'semaglutide' ? 149 : 249,
-                                standardPrice: member.program === 'semaglutide' ? 149 : 249,
+                                unitPrice: member.program === 'semaglutide' ? SEMAGLUTIDE_MEMBERSHIP_MONTHLY : TIRZEPATIDE_MEMBERSHIP_MONTHLY,
+                                standardPrice: member.program === 'semaglutide' ? SEMAGLUTIDE_MEMBERSHIP_MONTHLY : TIRZEPATIDE_MEMBERSHIP_MONTHLY,
                                 discountPercent: 0,
                                 billingFrequency: 'monthly' as const,
                                 renewalDate: member.renewalDate ?? new Date().toISOString(),

@@ -3,6 +3,8 @@
  * Does not invent GEN IDs or activate replacement SKUs.
  */
 
+import { FAMILY_VARIANT_SKU_BY_ID } from '../../data/websiteFamilies/familyVariantSkus';
+
 export type WebsiteRxAction =
   | 'KEEP_READY'
   | 'TEMPORARILY_UNAVAILABLE'
@@ -272,6 +274,21 @@ export function resolveStorefrontRxAvailability(input: {
     return null;
   }
 
+  const familySkus = new Set(Object.values(FAMILY_VARIANT_SKU_BY_ID));
+  if (familySkus.has(sku)) {
+    return {
+      mbmSku: sku,
+      websiteAction: 'KEEP_READY',
+      customerFacingStatus: 'AVAILABLE',
+      customerMessage: null,
+      catalogReady: true,
+      // Payment-only: family SKUs may be purchased while GEN API Orders stays OFF.
+      productionPurchasable: true,
+      proposedNewSku: null,
+      replacesSku: null,
+    };
+  }
+
   const apiOrders = input.genApiOrdersEnabled === true;
   const proposed = PROPOSED_REPLACEMENT_SKUS.find((p) => p.replacesMbmSku === sku);
 
@@ -363,7 +380,7 @@ export const BPC_OWNER_PRICING = Object.freeze({
 
 /**
  * Membership launch classification (Phase 12I.3).
- * Prices unchanged ($149 SEM / $249 TIR). Recurring rebill never auto-creates GEN meds.
+ * Prices: $149 SEM / $275 TIR website. Recurring rebill never auto-creates GEN meds.
  */
 export type MembershipLaunchStatus =
   | 'SAFE_AS_IS'
@@ -381,10 +398,10 @@ export const MEMBERSHIP_LAUNCH_AUDIT = Object.freeze({
   },
   tirzepatide: {
     programSku: 'MBM-MEM-TIR-MEM-001',
-    monthlyCents: 24900,
+    monthlyCents: 27500,
     status: 'BLOCKED_PENDING_GEN' as MembershipLaunchStatus,
     notes:
-      'TIR medication maps are NEW_SKU_REQUIRED — membership join must not imply immediate GEN fulfillment. Prices unchanged. Rebill auto-med: NO.',
+      'TIR website membership is $275. New enrollments use Tagada $275 / $305 / $325. GEN fulfillment remains blocked (API Orders / external-paid OFF). Rebill auto-med: NO.',
   },
 });
 

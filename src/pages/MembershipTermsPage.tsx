@@ -16,11 +16,11 @@ export function MembershipTermsPage() {
               <p>Current weight-management membership base rates:</p>
               <LegalBulletList items={[
                 'Semaglutide Membership — $149 per month',
-                'Tirzepatide Membership — $249 per month',
+                'Tirzepatide Membership — $275 per month',
               ]} />
               <p>
                 Selected shipping is billed with each monthly membership renewal and is not included in the base
-                $149 / $249 membership price:
+                $149 / $275 membership price:
               </p>
               <LegalBulletList items={[
                 'Two-Day Shipping — +$30 per month',
@@ -30,8 +30,8 @@ export function MembershipTermsPage() {
               <LegalBulletList items={[
                 'Semaglutide + Two-Day — $179/month',
                 'Semaglutide + Next-Day — $199/month',
-                'Tirzepatide + Two-Day — $279/month',
-                'Tirzepatide + Next-Day — $299/month',
+                'Tirzepatide + Two-Day — $305/month',
+                'Tirzepatide + Next-Day — $325/month',
               ]} />
               <p>
                 Membership availability, pricing, inclusions, and treatment eligibility may change. Membership does
@@ -53,11 +53,11 @@ export function MembershipTermsPage() {
               <LegalBulletList items={[
                 'Semaglutide + Two-Day — Due today $254; renews $179/month',
                 'Semaglutide + Next-Day — Due today $274; renews $199/month',
-                'Tirzepatide + Two-Day — Due today $354; renews $279/month',
-                'Tirzepatide + Next-Day — Due today $374; renews $299/month',
+                'Tirzepatide + Two-Day — Due today $380; renews $305/month',
+                'Tirzepatide + Next-Day — Due today $400; renews $325/month',
               ]} />
               <p>
-                Do not treat due-today totals ($254 / $274 / $354 / $374) as the ongoing monthly rate. Monthly renewal
+                Do not treat due-today totals ($254 / $274 / $380 / $400) as the ongoing monthly rate. Monthly renewal
                 is membership base plus your selected shipping only.
               </p>
             </>
@@ -94,7 +94,7 @@ export function MembershipTermsPage() {
                 Switching between Semaglutide and Tirzepatide requires enrollment in the current rate for the new
                 membership program.
               </p>
-              <p>The $249 Tirzepatide locked rate includes eligible provider-selected formulations through 15mg.</p>
+              <p>The $275 Tirzepatide locked rate includes eligible provider-selected formulations through 15mg.</p>
             </>
           ),
         },
@@ -142,7 +142,7 @@ export function MembershipTermsPage() {
           title: 'What Is Not Automatically Included',
           body: (
             <>
-              <p>Unless expressly stated, the base membership price ($149 / $249) does not automatically include:</p>
+              <p>Unless expressly stated, the base membership price ($149 / $275) does not automatically include:</p>
               <LegalBulletList items={[
                 'The $75 Initial Provider Visit (one-time when required; does not recur)',
                 'Laboratory testing or the Required HRT Lab Package',

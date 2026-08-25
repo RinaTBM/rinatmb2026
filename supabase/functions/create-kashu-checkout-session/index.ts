@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { resolveKashuSkuMapRow } from "../_shared/launchReadyKashuMap.ts";
 
 /**
  * Create a Kashu / TagadaPay hosted checkout session for an existing MBM order.
@@ -181,8 +182,8 @@ const MEM_BASE_BY_SKU: Record<string, { basePriceId: string; baseCents: number; 
     type: "semaglutide",
   },
   "MBM-MEM-TIR-MEM-001": {
-    basePriceId: "price_5cf1fa89610c",
-    baseCents: 24900,
+    basePriceId: "price_2d2dd07b2f73",
+    baseCents: 27500,
     type: "tirzepatide",
   },
 };
@@ -197,8 +198,8 @@ const MEM_COMBO_BY_SKU_SHIP: Record<
     5000: { priceId: "price_7ce0f74a7509", monthlyCents: 19900, method: "next_day" },
   },
   "MBM-MEM-TIR-MEM-001": {
-    3000: { priceId: "price_e0ebef9851a8", monthlyCents: 27900, method: "two_day" },
-    5000: { priceId: "price_ef9ea132d6cf", monthlyCents: 29900, method: "next_day" },
+    3000: { priceId: "price_94c92b6e5749", monthlyCents: 30500, method: "two_day" },
+    5000: { priceId: "price_d6941e334598", monthlyCents: 32500, method: "next_day" },
   },
 };
 
@@ -353,6 +354,15 @@ Deno.serve(async (req) => {
           shippingCents: memShipCents,
         }, 409);
       }
+      if (baseCfg.baseCents + memShipCents !== comboCfg.monthlyCents) {
+        return json({
+          error: "Membership card checkout is temporarily unavailable for this program. Please contact support.",
+          blocker: "TAGADA_MEMBERSHIP_COMBO_STALE",
+          shippingCents: memShipCents,
+          expectedMonthlyCents: baseCfg.baseCents + memShipCents,
+          comboMonthlyCents: comboCfg.monthlyCents,
+        }, 409);
+      }
       membershipCombo = {
         memSku,
         priceId: comboCfg.priceId,
@@ -445,7 +455,8 @@ Deno.serve(async (req) => {
         missing.push(String(line.product_name_snapshot || "item"));
         continue;
       }
-      const mapped = bySku.get(sku);
+      const mappedRaw = bySku.get(sku);
+      const mapped = resolveKashuSkuMapRow(sku, mappedRaw ?? null);
       if (!mapped?.tagada_variant_id) {
         missing.push(sku);
         continue;
@@ -459,7 +470,7 @@ Deno.serve(async (req) => {
       skuList.push(`${sku}×${qty}`);
       if (isMembershipCheckout) {
         if (membershipCombo && sku === membershipCombo.memSku) {
-          // Combo recurring priceId (membership + shipping). Map base cents stay 14900/24900
+          // Combo recurring priceId (membership + shipping). Map base cents stay 14900/27500
           // for display; Tagada charge uses combo monthly cents.
           if (Math.trunc(unit) !== membershipCombo.baseCents) {
             return json({
@@ -640,7 +651,7 @@ Deno.serve(async (req) => {
         const sku = line.sku as string | null;
         const qty = Number(line.quantity) || 1;
         if (!sku) continue;
-        const mapped = bySku.get(sku);
+        const mapped = resolveKashuSkuMapRow(sku, bySku.get(sku) ?? null);
         if (!mapped?.tagada_variant_id || !mapped.tagada_product_id) {
           return json({
             error: "Tagada product sync incomplete for OGTBM discount binding.",
@@ -755,7 +766,10 @@ Deno.serve(async (req) => {
     // Browser return must not activate. Requires migration 20260819140000_customer_memberships.sql
     // + 20260819190000_membership_combo_shipping_fields.sql for combo columns.
     if (isMembershipCheckout && membershipCombo) {
-      const mapped = bySku.get(membershipCombo.memSku);
+      const mapped = resolveKashuSkuMapRow(
+        membershipCombo.memSku,
+        bySku.get(membershipCombo.memSku) ?? null,
+      );
       await fetch(`${supabaseUrl}/rest/v1/customer_memberships`, {
         method: "POST",
         headers: {

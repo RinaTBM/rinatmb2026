@@ -23,23 +23,30 @@ export const SEM_MEMBERSHIP_SKU: TagadaMembershipProgramSku = 'MBM-MEM-SEM-MEM-0
 export const TIRZ_MEMBERSHIP_SKU: TagadaMembershipProgramSku = 'MBM-MEM-TIR-MEM-001';
 
 /**
- * Verified live Tagada BASE recurring priceIds (keep — do not delete).
- * Customer-facing base membership display remains $149 / $249.
- * Enrollment checkout uses combo membership+shipping priceIds below.
+ * Verified live Tagada BASE recurring priceIds.
+ * Customer-facing base membership display remains $149 SEM / $275 TIR.
+ * Historical TIR $249 / $279 / $299 price objects remain in Tagada for old subscriptions
+ * (price_5cf1fa89610c / price_e0ebef9851a8 / price_ef9ea132d6cf) — do not delete.
+ * New TIR enrollments use $275-based priceIds below.
  */
 export const SEM_TAGADA_PRICE_ID = 'price_344d3dacb4ab';
-export const TIRZ_TAGADA_PRICE_ID = 'price_5cf1fa89610c';
+export const TIRZ_TAGADA_PRICE_ID = 'price_2d2dd07b2f73';
 
-/** Combo recurring prices (membership + selected shipping). Created 2026-08-19. */
+/** Combo recurring prices (membership + selected shipping). */
 export const SEM_TWO_DAY_COMBO_PRICE_ID = 'price_41179f7cafe2';
 export const SEM_NEXT_DAY_COMBO_PRICE_ID = 'price_7ce0f74a7509';
-export const TIRZ_TWO_DAY_COMBO_PRICE_ID = 'price_e0ebef9851a8';
-export const TIRZ_NEXT_DAY_COMBO_PRICE_ID = 'price_ef9ea132d6cf';
+export const TIRZ_TWO_DAY_COMBO_PRICE_ID = 'price_94c92b6e5749';
+export const TIRZ_NEXT_DAY_COMBO_PRICE_ID = 'price_d6941e334598';
+
+/** Historical TIR prices — not used for new enrollments. */
+export const TIRZ_HISTORICAL_249_PRICE_ID = 'price_5cf1fa89610c';
+export const TIRZ_HISTORICAL_279_PRICE_ID = 'price_e0ebef9851a8';
+export const TIRZ_HISTORICAL_299_PRICE_ID = 'price_ef9ea132d6cf';
 
 export const SEM_TWO_DAY_MONTHLY_CENTS = 17900;
 export const SEM_NEXT_DAY_MONTHLY_CENTS = 19900;
-export const TIRZ_TWO_DAY_MONTHLY_CENTS = 27900;
-export const TIRZ_NEXT_DAY_MONTHLY_CENTS = 29900;
+export const TIRZ_TWO_DAY_MONTHLY_CENTS = 30500;
+export const TIRZ_NEXT_DAY_MONTHLY_CENTS = 32500;
 
 export const SEM_TAGADA_VARIANT_ID = 'variant_6973906c4bd6';
 export const TIRZ_TAGADA_VARIANT_ID = 'variant_b3890c799e09';
@@ -148,6 +155,10 @@ export function resolveMembershipComboSelection(
   if (!isMembershipEnrollmentShippingCents(shippingCents)) return null;
   const program = TAGADA_MEMBERSHIP_PROGRAMS[membershipSku];
   const combo = MEMBERSHIP_COMBO_BY_SKU_SHIP[membershipSku][shippingCents];
+  if (program.monthlyAmountCents + shippingCents !== combo.monthlyCents) {
+    // Combo cents must equal base + shipping. Fail closed — do not invent priceIds.
+    return null;
+  }
   return {
     sku: membershipSku,
     shippingCents,
@@ -380,7 +391,7 @@ export function membershipEnrollmentDueTodayCents(input: {
 
 /**
  * Validate a rebill / subscription charge against the stored combo monthly amount.
- * Do not compare all SEM renewals against 14900 or all TIRZ against 24900.
+ * Do not compare all SEM renewals against 14900 or all TIRZ against 27500.
  */
 export function assertMembershipRebillAmountMatches(input: {
   expectedMonthlyAmountCents: number;

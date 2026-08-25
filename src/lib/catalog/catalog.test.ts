@@ -7,21 +7,24 @@ import { buildSyncPlan, summarizePlan, emptyState, type ExistingStripeState } fr
 import { priceFingerprint, productFingerprint, idempotencyKey, stableHash } from './fingerprint';
 
 describe('catalog normalization', () => {
-  it('has 13 syncable approved wellness products; review-hold + future excluded', () => {
-    expect(syncableProducts()).toHaveLength(13);
-    expect(catalogProducts.length).toBeGreaterThan(13);
+  it('has 3 syncable launch-ready wellness families; held + review-hold + future excluded', () => {
+    expect(syncableProducts()).toHaveLength(3);
+    expect(catalogProducts.length).toBeGreaterThan(3);
     const slugs = syncableProducts().map(p => p.slug);
-    expect(slugs).toContain('tesamorelin');
-    expect(slugs).toContain('fat-burner');
+    expect(slugs).toContain('semaglutide');
+    expect(slugs).toContain('tirzepatide');
+    expect(slugs).toContain('nad-plus');
+    expect(slugs).not.toContain('tesamorelin');
+    expect(slugs).not.toContain('fat-burner');
     expect(slugs).not.toContain('sermorelin');
     expect(slugs).not.toContain('minoxidil-tablets');
     expect(slugs).not.toContain('tretinoin-cream');
     expect(slugs).not.toContain('bimatoprost-solution');
-    const published = catalogProducts.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
-    expect(published).toHaveLength(2);
-    for (const p of published) {
+    const held = catalogProducts.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
+    expect(held).toHaveLength(2);
+    for (const p of held) {
       expect(p.status).toBe('active');
-      expect(p.isVisible).toBe(true);
+      expect(p.isVisible).toBe(false);
     }
   });
 
@@ -34,16 +37,18 @@ describe('catalog normalization', () => {
     expect(toCents(258.99)).toBe(25899);
     expect(toCents(138.98)).toBe(13898);
     const sema = syncableProducts().find(p => p.slug === 'semaglutide')!;
-    expect(sema.variants.map(v => v.priceCents)).toEqual([11900, 13900, 18902, 32900]);
+    expect(sema.variants.map(v => v.priceCents)).toEqual([
+      8900, 10900, 10900, 8900, 8900, 10900, 10900, 8900,
+    ]);
   });
 
-  it('exposes exactly 2 syncable memberships at $149 and $249, monthly recurring', () => {
+  it('exposes exactly 2 syncable memberships at $149 and $275, monthly recurring', () => {
     const mems = syncableMemberships();
     expect(mems).toHaveLength(2);
     const sema = mems.find(m => m.slug === 'semaglutide-membership')!;
     const tirz = mems.find(m => m.slug === 'tirzepatide-membership')!;
     expect(sema.monthlyPriceCents).toBe(14900);
-    expect(tirz.monthlyPriceCents).toBe(24900);
+    expect(tirz.monthlyPriceCents).toBe(27500);
     expect(sema.billingInterval).toBe('month');
     expect(tirz.billingInterval).toBe('month');
     expect(sema.initialTermMonths).toBe(3);
@@ -105,16 +110,16 @@ describe('fingerprints & idempotency', () => {
 });
 
 describe('sync plan', () => {
-  it('first sync creates 15 Stripe products (13 approved wellness + 2 memberships)', () => {
+  it('first sync creates 5 Stripe products (3 launch-ready wellness families + 2 memberships)', () => {
     const plan = buildSyncPlan('test', emptyState());
     const s = summarizePlan(plan);
-    expect(s.createProducts).toBe(15); // 13 products + 2 memberships
+    expect(s.createProducts).toBe(5); // 3 products + 2 memberships
     expect(s.reusePrices).toBe(0);
     expect(s.archivePrices).toBe(0);
     // exactly one recurring membership price each
     const recurringCreates = plan.filter(i => i.op === 'create_price' && i.billingType === 'recurring');
     expect(recurringCreates).toHaveLength(2);
-    expect(recurringCreates.map(i => i.amountCents).sort()).toEqual([14900, 24900]);
+    expect(recurringCreates.map(i => i.amountCents).sort()).toEqual([14900, 27500]);
   });
 
   it('reuses product + price when they already exist (idempotent)', () => {
@@ -133,7 +138,7 @@ describe('sync plan', () => {
     const plan = buildSyncPlan('test', state);
     const s = summarizePlan(plan);
     expect(s.createProducts).toBe(0);
-    expect(s.updateProducts).toBe(15);
+    expect(s.updateProducts).toBe(5);
     expect(s.createPrices).toBe(0);
     expect(s.reusePrices).toBeGreaterThan(0);
     expect(s.archivePrices).toBe(0);
@@ -143,9 +148,9 @@ describe('sync plan', () => {
     const state = emptyState();
     state.productIdBySlug['semaglutide'] = 'prod_sema';
     // A stale current price at a different amount, with no matching fingerprint for the new amount
-    state.currentPrice['semaglutide::semaglutide-v1'] = { priceId: 'price_old', amountCents: 13900 };
+    state.currentPrice['semaglutide::sem-b12-starting-low'] = { priceId: 'price_old', amountCents: 13900 };
     const plan = buildSyncPlan('test', state);
-    const semaV1 = plan.filter(i => i.slug === 'semaglutide' && i.variantKey === 'semaglutide-v1');
+    const semaV1 = plan.filter(i => i.slug === 'semaglutide' && i.variantKey === 'sem-b12-starting-low');
     const create = semaV1.find(i => i.op === 'create_price');
     const archive = semaV1.find(i => i.op === 'archive_price');
     expect(create).toBeTruthy();

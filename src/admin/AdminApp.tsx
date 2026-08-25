@@ -408,7 +408,7 @@ function PurchasePricingSettings() {
       <h1 className="font-serif text-3xl text-ink-900 mb-2">Purchase Pricing</h1>
       <p className="text-sm text-ink-500 mb-6">
         Configure automatic savings. Discounts never stack. Maximum automatic savings is the member rate.
-        Membership base prices ($149 / $249), provider care, shipping, and taxes are not edited here.
+        Membership base prices ($149 / $275), provider care, shipping, and taxes are not edited here.
         Accessory member savings are separate from wellness-product member savings.
       </p>
       <div className="card-lux p-5 space-y-4">

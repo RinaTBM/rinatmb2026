@@ -3,6 +3,8 @@
  * Classifies sellable items and checkout / clinical readiness without inventing GEN IDs.
  */
 
+import { isLaunchReadyFamilyPaymentSku } from '../catalog/familyCommerce';
+
 export type ProductCommerceType =
   | 'RX_MEDICATION'
   | 'PROVIDER_VISIT'
@@ -203,6 +205,10 @@ export function assertCartEligibleForCheckout(input: {
     if (requireGen && el.commerceType === 'RX_MEDICATION') {
       if (testCart) {
         // Payment-only allowlist: Tagada still required above; GEN/API Orders deferred.
+        continue;
+      }
+      if (isLaunchReadyFamilyPaymentSku(line.mbmSku)) {
+        // Launch-ready family SKUs: Tagada payment allowed; GEN API Orders / handoff stay OFF.
         continue;
       }
       if (!el.genHandoffAllowed) {

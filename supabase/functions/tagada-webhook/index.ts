@@ -344,7 +344,7 @@ Deno.serve(async (req) => {
         (typeof membership.minimum_term_ends_at === "string" && membership.minimum_term_ends_at) ||
         addMonthsUtc(startedAt, 3);
 
-      // Validate rebill against stored combo monthly_amount_cents (not always base 14900/24900).
+      // Validate rebill against stored combo monthly_amount_cents (not always base 14900/27500).
       const expectedMonthlyCents = Number(membership.monthly_amount_cents) || 0;
       const rebillPaidCents = extractAmountCents(payload);
       const rebillAmountMismatch =

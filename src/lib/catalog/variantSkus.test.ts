@@ -14,7 +14,7 @@ import {
 } from './membershipSkuCrosswalk';
 
 describe('variant SKU registry', () => {
-  it('has exactly 51 retail SKUs and 2 membership program SKUs', () => {
+  it('has retail SKUs covering historical rows plus cutover family variants', () => {
     expect(Object.keys(VARIANT_SKU_BY_ID)).toHaveLength(EXPECTED_RETAIL_SKU_COUNT);
     expect(Object.keys(MEMBERSHIP_PROGRAM_SKU_BY_APP_ID)).toHaveLength(
       EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT,
@@ -49,14 +49,14 @@ describe('variant SKU registry', () => {
     expect(missing).toEqual([]);
   });
 
-  it('publishes Tesamorelin and Fat Burner as active + visible with approved SKUs/prices', () => {
+  it('keeps Tesamorelin and Fat Burner in catalog but held from launch storefront', () => {
     const published = products.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
     expect(published).toHaveLength(2);
     const tesa = published.find(p => p.slug === 'tesamorelin')!;
     const fat = published.find(p => p.slug === 'fat-burner')!;
     for (const p of published) {
       expect(p.status).toBe('active');
-      expect(p.isVisible).toBe(true);
+      expect(p.isVisible).toBe(false);
     }
     expect(tesa.variants[0].sku).toBe('MBM-LON-TESA-INJ-001');
     expect(tesa.variants[0].price).toBe(149);
@@ -85,35 +85,23 @@ describe('variant SKU registry', () => {
 });
 
 describe('membership PROGRAM vs FULFILLMENT crosswalk', () => {
-  it('maps Semaglutide membership doses to retail WM SKUs', () => {
-    expect(resolveMembershipFulfillmentSku('m1', '0.5mg')).toEqual({
+  it('maps Semaglutide membership requested formulation to Any Dose family SKUs', () => {
+    expect(resolveMembershipFulfillmentSku('m1', 'Vitamin B12')).toEqual({
       programSku: 'MBM-MEM-SEM-MEM-001',
-      fulfillmentSku: 'MBM-WM-SEM-INJ-001',
-      fulfillmentVariantId: 'semaglutide-v1',
+      fulfillmentSku: 'MBM-WM-SEM-B12-004',
+      fulfillmentVariantId: 'sem-b12-any-dose',
     });
-    expect(resolveMembershipFulfillmentSku('m1', '1mg')?.fulfillmentSku).toBe(
-      'MBM-WM-SEM-INJ-002',
-    );
-    expect(resolveMembershipFulfillmentSku('m1', '2.5mg')?.fulfillmentSku).toBe(
-      'MBM-WM-SEM-INJ-003',
-    );
-    expect(resolveMembershipFulfillmentSku('m1', '5mg')?.fulfillmentSku).toBe(
-      'MBM-WM-SEM-INJ-004',
+    expect(resolveMembershipFulfillmentSku('m1', 'Glycine')?.fulfillmentSku).toBe(
+      'MBM-WM-SEM-GLY-004',
     );
   });
 
-  it('maps Tirzepatide membership doses to retail WM SKUs', () => {
-    expect(resolveMembershipFulfillmentSku('m2', '2.5mg')?.fulfillmentSku).toBe(
-      'MBM-WM-TIR-INJ-001',
+  it('maps Tirzepatide membership requested formulation to Any Dose family SKUs', () => {
+    expect(resolveMembershipFulfillmentSku('m2', 'Vitamin B12')?.fulfillmentSku).toBe(
+      'MBM-WM-TIR-B12-004',
     );
-    expect(resolveMembershipFulfillmentSku('m2', '7.5mg')?.fulfillmentSku).toBe(
-      'MBM-WM-TIR-INJ-002',
-    );
-    expect(resolveMembershipFulfillmentSku('m2', '12.5mg')?.fulfillmentSku).toBe(
-      'MBM-WM-TIR-INJ-003',
-    );
-    expect(resolveMembershipFulfillmentSku('m2', '15mg')?.fulfillmentSku).toBe(
-      'MBM-WM-TIR-INJ-004',
+    expect(resolveMembershipFulfillmentSku('m2', 'Glycine')?.fulfillmentSku).toBe(
+      'MBM-WM-TIR-GLY-004',
     );
   });
 

@@ -64,7 +64,7 @@ const semaMembership: CatalogMembershipRow = {
   stripe_price_id_test: 'price_test_sema_199',
   monthly_price_cents: SEMAGLUTIDE_MEMBERSHIP_CENTS,
   display_name: 'Semaglutide Membership',
-  included_formulations: ['0.5mg', '1mg', '2.5mg', '5mg'],
+  included_formulations: ['Vitamin B12', 'Glycine'],
 };
 
 const tirzMembership: CatalogMembershipRow = {
@@ -73,7 +73,7 @@ const tirzMembership: CatalogMembershipRow = {
   stripe_price_id_test: 'price_test_tirz_249',
   monthly_price_cents: TIRZEPATIDE_MEMBERSHIP_CENTS,
   display_name: 'Tirzepatide Membership',
-  included_formulations: ['2.5mg', '7.5mg', '12.5mg', '15mg'],
+  included_formulations: ['Vitamin B12', 'Glycine'],
 };
 
 const semaVariant: CatalogVariantRow = {
@@ -93,7 +93,7 @@ describe('Stripe mapping (catalog TEST prices)', () => {
           quantity: 1,
           purchaseType: 'membership_program',
           unitAmountCents: 14900,
-          requestedFormulation: '1mg',
+          requestedFormulation: 'Vitamin B12',
         },
         semaMembership,
       ),
@@ -110,14 +110,14 @@ describe('Stripe mapping (catalog TEST prices)', () => {
           productId: TIRZEPATIDE_MEMBERSHIP_APP_ID,
           quantity: 1,
           purchaseType: 'membership_program',
-          unitAmountCents: 24900,
-          requestedFormulation: '7.5mg',
+          unitAmountCents: 27500,
+          requestedFormulation: 'Glycine',
         },
         tirzMembership,
       ),
     );
     expect(line.stripePriceId).toBe('price_test_tirz_249');
-    expect(line.unitAmountCents).toBe(24900);
+    expect(line.unitAmountCents).toBe(27500);
   });
 
   it('undiscounted one-time product resolves to catalog variant TEST price', () => {
@@ -154,9 +154,9 @@ describe('Stripe mapping (catalog TEST prices)', () => {
 });
 
 describe('membership / savings rules', () => {
-  it('Semaglutide membership remains $149/month and Tirzepatide $249/month', () => {
+  it('Semaglutide membership remains $149/month and Tirzepatide $275/month', () => {
     expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
-    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(24900);
+    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(27500);
   });
 
   it('Tirzepatide 30mg $350 is not accidentally exposed as self-service', () => {
@@ -303,7 +303,7 @@ describe('Provider Care (tax-inclusive; no separate tax add-on)', () => {
           productId: 'm1',
           quantity: 1,
           purchaseType: 'membership_program',
-          requestedFormulation: '0.5mg',
+          requestedFormulation: 'Vitamin B12',
         },
         semaMembership,
       ),
@@ -355,7 +355,7 @@ describe('Provider Care (tax-inclusive; no separate tax add-on)', () => {
           productId: 'm1',
           quantity: 1,
           purchaseType: 'membership_program',
-          requestedFormulation: '2.5mg',
+          requestedFormulation: 'Vitamin B12',
         },
         semaMembership,
       ),
@@ -571,7 +571,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
   });
 
-  it('$249 Tirzepatide membership does not receive free shipping', () => {
+  it('$275 Tirzepatide membership does not receive free shipping', () => {
     const r = authorizeShippingCents({
       shippingMethod: 'next_day',
       clientShippingCents: NEXT_DAY_SHIPPING_CENTS,
@@ -584,7 +584,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     expect(r.freeShippingEligible).toBe(false);
     expect(r.shippingMethod).toBe('next_day');
     expect(r.shippingCents).toBe(5000);
-    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(24900);
+    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(27500);
   });
 
   it('membership value does not count toward $500 threshold', () => {
@@ -594,7 +594,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
           productId: 'm1',
           quantity: 1,
           purchaseType: 'membership_program',
-          requestedFormulation: '1mg',
+          requestedFormulation: 'Vitamin B12',
         },
         semaMembership,
       ),
@@ -676,7 +676,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
           productId: 'm2',
           quantity: 1,
           purchaseType: 'membership_program',
-          requestedFormulation: '7.5mg',
+          requestedFormulation: 'Glycine',
         },
         tirzMembership,
       ),
@@ -692,8 +692,8 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
       productName: 'Wellness',
       variantLabel: null,
     };
-    // $400 ordinary + $249 membership = $649 shippable, but free-shipping base is only $400.
-    expect(shippableMerchandiseSubtotalCents([ordinary, membership])).toBe(40000 + 24900);
+    // $400 ordinary + $275 membership = $675 shippable, but free-shipping base is only $400.
+    expect(shippableMerchandiseSubtotalCents([ordinary, membership])).toBe(40000 + 27500);
     expect(freeShippingEligibleMerchandiseSubtotalCents([ordinary, membership])).toBe(40000);
 
     const r = authorizeShippingCents({
@@ -729,7 +729,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
 
 describe('membership requested formulation authorization', () => {
   it('accepts Getting Started / Not Sure and included formulations', () => {
-    for (const dose of ['getting_started', '0.5mg', '1mg', '2.5mg', '5mg']) {
+    for (const dose of ['getting_started', 'Vitamin B12', 'Glycine']) {
       const line = expectMapped(
         resolveMembershipLine(
           {
@@ -744,7 +744,7 @@ describe('membership requested formulation authorization', () => {
       expect(line.unitAmountCents).toBe(14900);
       expect(line.variantLabel).toMatch(/Requested dose:/);
     }
-    for (const dose of ['getting_started', '2.5mg', '7.5mg', '12.5mg', '15mg']) {
+    for (const dose of ['getting_started', 'Vitamin B12', 'Glycine']) {
       const line = expectMapped(
         resolveMembershipLine(
           {
@@ -756,7 +756,7 @@ describe('membership requested formulation authorization', () => {
           tirzMembership,
         ),
       );
-      expect(line.unitAmountCents).toBe(24900);
+      expect(line.unitAmountCents).toBe(27500);
     }
   });
 

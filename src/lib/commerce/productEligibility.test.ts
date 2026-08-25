@@ -103,6 +103,33 @@ describe('productEligibility', () => {
     ).toBe(true);
   });
 
+  it('launch-ready family SKUs may pay while GEN API Orders stays off', () => {
+    const line = {
+      mbmSku: 'MBM-WM-SEM-B12-001',
+      hasActiveTagadaMapping: true,
+      genMappingStatus: 'MISSING' as const,
+    };
+    expect(
+      assertCartEligibleForCheckout({
+        lines: [line],
+        requireGenMappingForRx: true,
+        genApiOrdersEnabled: false,
+      }).ok,
+    ).toBe(true);
+    const otherRx = {
+      mbmSku: 'MBM-RP-BPC-INJ-001',
+      hasActiveTagadaMapping: true,
+      genMappingStatus: 'READY' as const,
+    };
+    expect(
+      assertCartEligibleForCheckout({
+        lines: [otherRx],
+        requireGenMappingForRx: true,
+        genApiOrdersEnabled: false,
+      }).ok,
+    ).toBe(false);
+  });
+
   it('membership rebill never creates GEN medication orders', () => {
     expect(shouldCreateGenOrderOnMembershipRebill()).toBe(false);
   });

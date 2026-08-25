@@ -1,0 +1,107 @@
+{
+  "phase": "MBM-FINAL-WEBSITE-LAUNCH-1",
+  "sourceBranch": "deploy/ach-launch-clean-2026",
+  "workingBranch": "cursor/final-website-launch-ed1e",
+  "doNotMergePr19": true,
+  "flags": {
+    "WEBSITE_FAMILY_CUTOVER_ENABLED": true,
+    "REAL_GEN_ORDER_SUBMISSION_ENABLED": false
+  },
+  "visibleProductFamilies": 3,
+  "visibleLaunchReadyVariants": 19,
+  "temporarilyHeldVariants": 29,
+  "visibleFamilies": [
+    {
+      "familyId": "semaglutide",
+      "displayName": "Semaglutide",
+      "websiteStatus": "READY",
+      "variants": [
+        "sem-b12-starting-low",
+        "sem-b12-mid",
+        "sem-b12-high",
+        "sem-b12-any-dose",
+        "sem-glycine-starting-low",
+        "sem-glycine-mid",
+        "sem-glycine-high",
+        "sem-glycine-any-dose",
+        "sem-membership"
+      ],
+      "membershipMonthlyCents": 14900
+    },
+    {
+      "familyId": "tirzepatide",
+      "displayName": "Tirzepatide",
+      "websiteStatus": "READY",
+      "backendGenProductId": "SvFDJ7W4nmWL2bkLUMMS",
+      "variants": [
+        "tir-b12-starting-low",
+        "tir-b12-mid",
+        "tir-b12-high",
+        "tir-b12-any-dose",
+        "tir-glycine-starting-low",
+        "tir-glycine-mid",
+        "tir-glycine-high",
+        "tir-glycine-any-dose",
+        "tir-membership"
+      ],
+      "membershipMonthlyCents": 27500,
+      "doNotDisplayGenPrice279": true
+    },
+    {
+      "familyId": "nad",
+      "displayName": "NAD+",
+      "nasalStatus": "READY",
+      "injectionStatus": "HELD",
+      "visibleVariants": ["nad-nasal-r84"],
+      "heldVariants": ["nad-inj-5ml-500", "nad-inj-10ml-1000", "nad-nasal-r85"]
+    }
+  ],
+  "wolverine": {
+    "websiteStatus": "BLOCKED",
+    "architecture": "ONE family with Capsule / Injection selectors",
+    "heldVariants": ["wolverine-capsule", "wolverine-injection"]
+  },
+  "formularyPending": [
+    "nad-inj-5ml-500",
+    "nad-inj-10ml-1000",
+    "tretinoin-0.025%",
+    "tretinoin-0.05%",
+    "tretinoin-0.1%",
+    "fat-burner-current",
+    "testosterone-current",
+    "selank-current",
+    "semax-current",
+    "selank-semax-blend-current",
+    "tesamorelin-current",
+    "lash-brow-current"
+  ],
+  "report": {
+    "SEM_WEBSITE": "READY",
+    "TIR_WEBSITE": "READY",
+    "NAD_NASAL": "READY",
+    "NAD_INJECTION": "HELD",
+    "WOLVERINE": "BLOCKED",
+    "WEBSITE_STOREFRONT": "READY",
+    "CHECKOUT": "BLOCKED",
+    "GEN_ROUTING": "PARTIAL",
+    "REAL_GEN_API_ORDERS": "BLOCKED",
+    "TYPECHECK": "PASS",
+    "TESTS": "PASS",
+    "BUILD": "PASS",
+    "READY_TO_DEPLOY_WEBSITE": "YES"
+  },
+  "remainingTrueLaunchBlockers": [
+    "GEN Health API Orders / external-paid is still blocked. Real GEN medication-order automation stays fail-closed.",
+    "Launch-ready one-time family SKUs have no Tagada / kashu_sku_map rows, so card checkout cannot complete for those SKUs.",
+    "Tirzepatide membership Tagada combo priceIds are still $249-based ($279 / $299). Website is $275. Combo parity fail-closes TIR card enrollment until $305 / $325 combo priceIds exist.",
+    "Do not merge PR #19."
+  ],
+  "checkoutNotes": {
+    "semMembershipCard": "Operational at $149 + shipping combos $179 / $199",
+    "tirMembershipCard": "Fail-closed until $275 combo priceIds exist",
+    "oneTimeFamilySkus": "Cart/selectors work; invoice/card blocked until Tagada maps + GEN API Orders",
+    "accessoriesAndProviderCare": "Unchanged",
+    "pharmacyShipping": "Included in medication retail; MBM Two-Day/Next-Day is checkout delivery, not a second pharmacy add-on",
+    "realGenOrders": "NOT operational"
+  }
+}

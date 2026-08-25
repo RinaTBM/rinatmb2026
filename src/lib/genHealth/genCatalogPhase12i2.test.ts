@@ -192,16 +192,14 @@ describe('Phase 12I.2 GEN formulary matching', () => {
     const sem = MEMBERSHIP_FULFILLMENT_CROSSWALK.filter((r) => r.membershipAppId === 'm1');
     const tir = MEMBERSHIP_FULFILLMENT_CROSSWALK.filter((r) => r.membershipAppId === 'm2');
     expect(sem.map((r) => r.fulfillmentSku)).toEqual([
-      'MBM-WM-SEM-INJ-001',
-      'MBM-WM-SEM-INJ-002',
-      'MBM-WM-SEM-INJ-003',
-      'MBM-WM-SEM-INJ-004',
+      'MBM-WM-SEM-B12-004',
+      'MBM-WM-SEM-GLY-004',
+      'MBM-WM-SEM-B12-004',
     ]);
     expect(tir.map((r) => r.fulfillmentSku)).toEqual([
-      'MBM-WM-TIR-INJ-001',
-      'MBM-WM-TIR-INJ-002',
-      'MBM-WM-TIR-INJ-003',
-      'MBM-WM-TIR-INJ-004',
+      'MBM-WM-TIR-B12-004',
+      'MBM-WM-TIR-GLY-004',
+      'MBM-WM-TIR-B12-004',
     ]);
   });
 

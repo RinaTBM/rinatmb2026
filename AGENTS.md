@@ -32,14 +32,15 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Card eligibility: one-time carts (no membership+ordinary-merchandise mix), **or** SEM/TIRZ membership recurring carts with optional required provider-visit SKU (IPV/FUV) as a one-time enrollment line; unsupported shipping, unmapped SKUs, and **any unexpected `tax_cents > 0`** (`TAGADA_UNEXPECTED_TAX_AMOUNT` fail-safe). Do not re-enable separate MBM tax add-ons without an explicit product decision.
 - **Membership Tagada card recurring (SEM / TIRZ):**
   - Semaglutide Membership `MBM-MEM-SEM-MEM-001` — **$149/month base** (display) — base Tagada `price_344d3dacb4ab` (`variant_6973906c4bd6`) — keep; do not delete
-  - Tirzepatide Membership `MBM-MEM-TIR-MEM-001` — **$249/month base** (display) — base Tagada `price_5cf1fa89610c` (`variant_b3890c799e09`) — keep; do not delete
+  - Tirzepatide Membership `MBM-MEM-TIR-MEM-001` — **$275/month base** (display) — base Tagada `price_2d2dd07b2f73` (`variant_b3890c799e09`). Historical $249 `price_5cf1fa89610c` remains in Tagada for old subscriptions — do not delete; do not use for new enrollments
   - **Combo recurring prices (membership + selected shipping)** — enrollment uses these `priceId`s (not base):
     - SEM + Two-Day `$179/mo` → `price_41179f7cafe2` (17900)
     - SEM + Next-Day `$199/mo` → `price_7ce0f74a7509` (19900)
-    - TIRZ + Two-Day `$279/mo` → `price_e0ebef9851a8` (27900)
-    - TIRZ + Next-Day `$299/mo` → `price_ef9ea132d6cf` (29900)
+    - TIRZ + Two-Day `$305/mo` → `price_94c92b6e5749` (30500)
+    - TIRZ + Next-Day `$325/mo` → `price_d6941e334598` (32500)
+    - Historical TIR combos `price_e0ebef9851a8` (27900) / `price_ef9ea132d6cf` (29900) remain for old subscriptions only
   - Hosted recurring init **must** send both `variantId` + **combo** `priceId` (priceId authoritative). Do not recreate Tagada store ShippingRates. Do not use `addDeliveryOnRebill`.
-  - Tagada handles automatic monthly rebill; MBM `customer_memberships` + `tagada-webhook` `subscription/*` events are authoritative for status. Rebill amount validation uses stored `monthly_amount_cents` (combo), not always 14900/24900.
+  - Tagada handles automatic monthly rebill; MBM `customer_memberships` + `tagada-webhook` `subscription/*` events are authoritative for status. Rebill amount validation uses stored `monthly_amount_cents` (combo), not always 14900/27500.
   - **Browser return never activates membership.** Activate only on Tagada payment/subscription evidence.
   - **3-month minimum** is MBM-enforced (`minimum_term_ends_at`) — do not assume Tagada-native cancel lock.
   - Recurring program product remains **not shippable** (`isShippable=false`, `addDeliveryOnRebill=false`). Shipping dollars are inside the combo recurring price — **do not** append `MBM-SHIP-*` on membership enrollment (prevents duplicate shipping). Membership value stays excluded from the **$500** free-shipping merchandise threshold.
@@ -52,7 +53,7 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`.
 - Public `public_order_number` values are allocated server-side via Postgres `generate_public_order_number()` (`nextval` on `order_number_seq`). If the sequence drifts behind existing `MBM-YYYY-######` rows, insert can hit `orders_public_order_number_key` — repair with migration `20260819120000_repair_public_order_number_allocator.sql` (collision-skipping allocator + sequence resync). `create-invoice-order` also retries allocation on 23505 and never returns raw Postgres errors to customers.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation). Admin marks funds received via Orders UI / `mark-payment-received` after verification (ACH/Wire emergency path).
-- Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$249, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold). Accessory/Provider Care **add-on tax rates are 0** (tax-inclusive).
+- Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$275, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold). Accessory/Provider Care **add-on tax rates are 0** (tax-inclusive).
 - Legacy Stripe Edge Functions remain in repo but must not be deployed for launch. **Do not re-enable Stripe.**
 
 ### Promo code OGTBM (pre-production)
@@ -60,7 +61,7 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Code: **`OGTBM`** — **$50 off each eligible unit** (quantity-aware). Not $50 off the order. Never discounts a line below $0.
 - Authoritative math: `src/lib/promo/ogtbmPromo.ts` (+ Edge `_shared/ogtbmPromo.ts`). Applied in `buildAuthoritativeOrderLines` / `create-invoice-order`; persists `orders.promo_code` + `discount_cents`.
 - **Excluded** (structured category/SKU/productId — not display-name): accessories, dermatology (`prescription-skin-hair` / `MBM-SH-*`), all provider care (`pc*` / `MBM-PC-*` including Lab Kit + Lab Review), shipping (`MBM-SHIP-*`), memberships (`m1`/`m2` / `MBM-MEM-*`).
-- **Membership:** OGTBM must never alter combo recurring amounts (SEM Two-Day 17900 / SEM Next-Day 19900 / TIRZ Two-Day 27900 / TIRZ Next-Day 29900). Checkout UI blocks promo on membership carts; `create-kashu-checkout-session` rejects membership enrollment when `discount_cents > 0`.
+- **Membership:** OGTBM must never alter combo recurring amounts (SEM Two-Day 17900 / SEM Next-Day 19900 / TIRZ Two-Day 30500 / TIRZ Next-Day 32500). Checkout UI blocks promo on membership carts; `create-kashu-checkout-session` rejects membership enrollment when `discount_cents > 0`.
 - Card path: when OGTBM applies, Edge binds discounted one-time Tagada `priceId`s on eligible variants so hosted total equals MBM `orders.total_cents`. Do not rely on Tagada dashboard promo rules for eligibility.
 
 ### HRT Lab Kit + Lab Review (pre-production)

@@ -7,6 +7,8 @@ import { useMember } from '@/context/MemberContext';
 import { ProductCard } from '@/components/ProductCard';
 import { AccessoryProductPage } from '@/components/AccessoryProductPage';
 import { MembershipDetailPage } from '@/components/MembershipDetailPage';
+import { FamilyProductPage, isFamilyStorefrontSlug } from '@/pages/FamilyProductPage';
+import { WEBSITE_FAMILY_CUTOVER_ENABLED } from '@/data/websiteFamilies';
 import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
 import { ProductDescriptionSections, ProductHighlights } from '@/components/ProductDescriptionSections';
 import { resolveStorefrontDetail } from '@/lib/catalog/resolveStorefrontDetail';
@@ -30,6 +32,18 @@ import { RxAvailabilityBanner } from '@/components/RxAvailabilityBanner';
 export function ProductPage({ slug }: { slug: string }) {
   const detail = resolveStorefrontDetail(slug);
   if (detail.kind === 'membership') {
+    if (WEBSITE_FAMILY_CUTOVER_ENABLED) {
+      const familySlug =
+        detail.membership.slug === 'semaglutide-membership'
+          ? 'semaglutide'
+          : detail.membership.slug === 'tirzepatide-membership'
+            ? 'tirzepatide'
+            : null;
+      const familyProduct = familySlug ? getProduct(familySlug) : undefined;
+      if (familyProduct && isFamilyStorefrontSlug(familyProduct.slug)) {
+        return <FamilyProductPage product={familyProduct} initialPurchaseType="membership" />;
+      }
+    }
     return <MembershipDetailPage membership={detail.membership} />;
   }
   if (detail.kind === 'not_found') {
@@ -43,6 +57,9 @@ export function ProductPage({ slug }: { slug: string }) {
   const product = detail.product;
   if (product.category === 'accessories') {
     return <AccessoryProductPage product={product} />;
+  }
+  if (isFamilyStorefrontSlug(product.slug)) {
+    return <FamilyProductPage product={product} />;
   }
   return <WellnessProductPage slug={slug} />;
 }

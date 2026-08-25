@@ -28,6 +28,9 @@ import {
   TIRZ_TAGADA_PRICE_ID,
   TIRZ_TAGADA_VARIANT_ID,
   TIRZ_TWO_DAY_COMBO_PRICE_ID,
+  TIRZ_HISTORICAL_249_PRICE_ID,
+  TIRZ_HISTORICAL_279_PRICE_ID,
+  TIRZ_HISTORICAL_299_PRICE_ID,
 } from './tagadaMembershipBilling';
 import { evaluateKashuCardCartEligibility } from '@/lib/payments/kashuTagada';
 import { isStripeCheckoutEnabled } from '@/lib/payments/paymentsEnabled';
@@ -42,18 +45,18 @@ describe('Tagada membership recurring billing', () => {
     expect(TAGADA_MEMBERSHIP_PROGRAMS[SEM_MEMBERSHIP_SKU].monthlyAmountCents).toBe(14900);
   });
 
-  it('TIRZ membership price = 24900', () => {
-    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(24900);
-    expect(TAGADA_MEMBERSHIP_PROGRAMS[TIRZ_MEMBERSHIP_SKU].monthlyAmountCents).toBe(24900);
+  it('TIRZ membership price = 27500', () => {
+    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(27500);
+    expect(TAGADA_MEMBERSHIP_PROGRAMS[TIRZ_MEMBERSHIP_SKU].monthlyAmountCents).toBe(27500);
   });
 
   it('includes verified base + combo recurring priceIds', () => {
     expect(SEM_TAGADA_PRICE_ID).toBe('price_344d3dacb4ab');
-    expect(TIRZ_TAGADA_PRICE_ID).toBe('price_5cf1fa89610c');
+    expect(TIRZ_TAGADA_PRICE_ID).toBe('price_2d2dd07b2f73');
     expect(SEM_TWO_DAY_COMBO_PRICE_ID).toBe('price_41179f7cafe2');
     expect(SEM_NEXT_DAY_COMBO_PRICE_ID).toBe('price_7ce0f74a7509');
-    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).toBe('price_e0ebef9851a8');
-    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).toBe('price_ef9ea132d6cf');
+    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).toBe('price_94c92b6e5749');
+    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).toBe('price_d6941e334598');
   });
 
   it('builds init with variantId + priceId (never variant alone)', () => {
@@ -224,32 +227,33 @@ describe('Tagada membership recurring billing', () => {
     });
   });
 
-  it('TIRZ + IPV + Two-Day: due today 35400; rebill 27900', () => {
+  it('TIRZ $275 + IPV + Two-Day: due today 38000; rebill 30500; combo price; no MBM-SHIP line', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
       shippingCents: 3000,
     });
-    expect(due).toMatchObject({
+    expect(due).toEqual({
       ok: true,
-      dueTodayCents: 35400,
-      monthlyRebillCents: 27900,
+      dueTodayCents: 38000,
+      monthlyRebillCents: 30500,
+      baseMembershipAmountCents: 27500,
+      visitCents: 7500,
       shippingCents: 3000,
+      selectedShippingMethod: 'two_day',
       tagadaPriceId: TIRZ_TWO_DAY_COMBO_PRICE_ID,
     });
-  });
-
-  it('TIRZ + IPV + Next-Day: due today 37400; rebill 29900', () => {
-    const due = membershipEnrollmentDueTodayCents({
+    const nextDay = membershipEnrollmentDueTodayCents({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
       shippingCents: 5000,
     });
-    expect(due).toMatchObject({
+    expect(nextDay).toMatchObject({
       ok: true,
-      dueTodayCents: 37400,
-      monthlyRebillCents: 29900,
+      dueTodayCents: 40000,
+      monthlyRebillCents: 32500,
       shippingCents: 5000,
+      tagadaPriceId: TIRZ_NEXT_DAY_COMBO_PRICE_ID,
     });
     const init = buildMembershipEnrollmentTagadaInitItems({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
@@ -263,11 +267,13 @@ describe('Tagada membership recurring billing', () => {
     });
     expect(init.ok).toBe(true);
     if (!init.ok) return;
-    expect(init.items).toHaveLength(2);
-    expect(init.items[0].priceId).toBe(TIRZ_NEXT_DAY_COMBO_PRICE_ID);
-    expect(init.monthlyRebillCents).toBe(29900);
-    expect(init.dueTodayCents).toBe(37400);
+    expect(init.monthlyRebillCents).toBe(32500);
     expect(init.shippingSku).toBeNull();
+    expect(init.items[0].priceId).toBe(TIRZ_NEXT_DAY_COMBO_PRICE_ID);
+    expect(init.items.some((i) => i.priceId === 'price_53861f3e4cad')).toBe(false);
+    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).not.toBe(TIRZ_HISTORICAL_279_PRICE_ID);
+    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).not.toBe(TIRZ_HISTORICAL_299_PRICE_ID);
+    expect(TIRZ_TAGADA_PRICE_ID).not.toBe(TIRZ_HISTORICAL_249_PRICE_ID);
   });
 
   it('rejects missing enrollment shipping ($0)', () => {
@@ -455,7 +461,8 @@ describe('Tagada membership recurring billing', () => {
 
   it('Tirzepatide current options through 15mg; 30mg excluded', () => {
     const m = getMembership('tirzepatide-membership');
-    expect(m?.includedFormulations).toEqual(['2.5mg', '7.5mg', '12.5mg', '15mg']);
+    expect(m?.includedFormulations).toEqual(['Vitamin B12', 'Glycine']);
+    expect(m?.maximumIncludedFormulation).toBe('15mg');
     expect(m?.includedFormulations.includes('30mg')).toBe(false);
   });
 

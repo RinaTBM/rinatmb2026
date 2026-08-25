@@ -33,6 +33,22 @@ describe('Phase 12I.3 rx catalog readiness', () => {
     ).toBe(28);
   });
 
+  it('launch-ready family SKUs are production-purchasable with GEN API Orders off', () => {
+    const a = resolveStorefrontRxAvailability({
+      mbmSku: 'MBM-WM-SEM-B12-001',
+      genApiOrdersEnabled: false,
+    });
+    expect(a?.catalogReady).toBe(true);
+    expect(a?.productionPurchasable).toBe(true);
+    expect(a?.customerFacingStatus).toBe('AVAILABLE');
+    expect(
+      resolveStorefrontRxAvailability({
+        mbmSku: 'MBM-LON-NAD-NS-001',
+        genApiOrdersEnabled: false,
+      })?.productionPurchasable,
+    ).toBe(true);
+  });
+
   it('BPC catalog READY but production blocked when API Orders=false', () => {
     const a = resolveStorefrontRxAvailability({
       mbmSku: 'MBM-RP-BPC-INJ-001',
@@ -251,7 +267,7 @@ describe('Phase 12I.3 rx catalog readiness', () => {
   it('membership rebill behavior unchanged', () => {
     expect(shouldCreateGenOrderOnMembershipRebill()).toBe(false);
     expect(MEMBERSHIP_LAUNCH_AUDIT.semaglutide.monthlyCents).toBe(14900);
-    expect(MEMBERSHIP_LAUNCH_AUDIT.tirzepatide.monthlyCents).toBe(24900);
+    expect(MEMBERSHIP_LAUNCH_AUDIT.tirzepatide.monthlyCents).toBe(27500);
     expect(MEMBERSHIP_LAUNCH_AUDIT.semaglutide.status).toBe('BLOCKED_PENDING_GEN');
     expect(MEMBERSHIP_LAUNCH_AUDIT.tirzepatide.status).toBe('BLOCKED_PENDING_GEN');
   });

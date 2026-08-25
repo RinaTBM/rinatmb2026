@@ -196,10 +196,10 @@ describe('unchanged membership / medication / auto-refill pricing', () => {
     expect(m.monthlyPrice).toBe(149);
   });
 
-  it('Tirzepatide flat membership remains $249', () => {
-    expect(TIRZEPATIDE_MEMBERSHIP_MONTHLY).toBe(249);
+  it('Tirzepatide flat membership remains $275', () => {
+    expect(TIRZEPATIDE_MEMBERSHIP_MONTHLY).toBe(275);
     const m = memberships.find(x => x.slug === 'tirzepatide-membership')!;
-    expect(m.monthlyPrice).toBe(249);
+    expect(m.monthlyPrice).toBe(275);
   });
 
   it('Tirzepatide 30mg member-only remains $350', () => {

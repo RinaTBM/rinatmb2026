@@ -25,9 +25,9 @@ describe('weight membership flat-rate program', () => {
     expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
   });
 
-  it('uses authoritative Tirzepatide membership $249/month', () => {
-    expect(TIRZEPATIDE_MEMBERSHIP_MONTHLY).toBe(249);
-    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(24900);
+  it('uses authoritative Tirzepatide membership $275/month', () => {
+    expect(TIRZEPATIDE_MEMBERSHIP_MONTHLY).toBe(275);
+    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(27500);
     expect(TIRZEPATIDE_30MG_MEMBER_ONLY_MONTHLY).toBe(350);
     expect(TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS).toBe(35000);
   });
@@ -44,7 +44,7 @@ describe('weight membership flat-rate program', () => {
     expect(opts[0].finalPrice).toBe(149);
     expect(opts[0].cta).toContain('$149/month');
     expect(opts[0].program?.cartLabel).toBe('Semaglutide Wellness Membership — $149/month');
-    expect(opts[0].program?.includedFormulations).toEqual(['0.5mg', '1mg', '2.5mg', '5mg']);
+    expect(opts[0].program?.includedFormulations).toEqual(['Vitamin B12', 'Glycine']);
   });
 
   it('Semaglutide membership is not calculated from the selected dose', () => {
@@ -56,11 +56,11 @@ describe('weight membership flat-rate program', () => {
         selectedVariant: v,
       })[0].finalPrice,
     );
-    expect(prices).toEqual([149, 149, 149, 149]);
+    expect(prices.every((p) => p === 149)).toBe(true);
     expect(new Set(prices).size).toBe(1);
   });
 
-  it('Tirzepatide page shows $249/month flat membership through 15mg', () => {
+  it('Tirzepatide page shows $275/month flat membership through 15mg', () => {
     for (const v of tirzepatide.variants) {
       const opts = buildPurchaseOptions({
         standardPrice: v.price,
@@ -68,18 +68,18 @@ describe('weight membership flat-rate program', () => {
         isActiveMember: false,
         selectedVariant: v,
       });
-      expect(opts[0].finalPrice).toBe(249);
+      expect(opts[0].finalPrice).toBe(275);
       expect(opts[0].program?.memberOnlyNotice).toBeNull();
-      expect(opts[0].program?.cartLabel).toBe('Tirzepatide Wellness Membership — $249/month');
+      expect(opts[0].program?.cartLabel).toBe('Tirzepatide Wellness Membership — $275/month');
     }
   });
 
-  it('authoritative Semaglutide retail variants preserve exact cents', () => {
-    expect(semaglutide.variants.map(v => v.price)).toEqual([119, 139, 189.02, 329]);
+  it('authoritative Semaglutide retail variants preserve locked family prices', () => {
+    expect(semaglutide.variants.map(v => v.price)).toEqual([89, 109, 109, 89, 89, 109, 109, 89]);
   });
 
-  it('authoritative Tirzepatide retail variants preserve exact cents', () => {
-    expect(tirzepatide.variants.map(v => v.price)).toEqual([189, 258.99, 369, 429]);
+  it('authoritative Tirzepatide retail variants preserve locked family prices', () => {
+    expect(tirzepatide.variants.map(v => v.price)).toEqual([119, 149, 169, 119, 119, 149, 169, 119]);
   });
 
   it('obsolete Tirzepatide 30mg SKU is not in retail catalog', () => {
@@ -88,10 +88,10 @@ describe('weight membership flat-rate program', () => {
 
   it('Auto-Refill remains 10% off the selected dose price', () => {
     const cases = [
-      { product: semaglutide, price: 119, expected: 107.1 },
-      { product: semaglutide, price: 189.02, expected: 170.12 },
-      { product: tirzepatide, price: 258.99, expected: 233.09 },
-      { product: tirzepatide, price: 429, expected: 386.1 },
+      { product: semaglutide, price: 89, expected: 80.1 },
+      { product: semaglutide, price: 109, expected: 98.1 },
+      { product: tirzepatide, price: 119, expected: 107.1 },
+      { product: tirzepatide, price: 169, expected: 152.1 },
     ];
     for (const c of cases) {
       const variant = c.product.variants.find(v => v.price === c.price)!;
@@ -109,7 +109,7 @@ describe('weight membership flat-rate program', () => {
 
   it('customers cannot activate a $350 member-only rate via membership program', () => {
     const program = getWeightMembershipProgram(tirzepatide, tirzepatide.variants[0]);
-    expect(program?.monthlyPrice).toBe(249);
+    expect(program?.monthlyPrice).toBe(275);
     expect(program?.memberOnlyPurchasable).toBe(false);
     expect(program?.checkoutProductId).toBe('m2');
   });

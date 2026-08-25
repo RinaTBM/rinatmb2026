@@ -78,6 +78,6 @@ describe('approved checkout shipping methods', () => {
     expect(next.shippingCents).toBe(5000);
     // Stripe shipping_options amount uses the same authorized cents (not metadata-only).
     expect(two.shippingCents + 14900).toBe(17900);
-    expect(next.shippingCents + 24900).toBe(29900);
+    expect(next.shippingCents + 27500).toBe(32500);
   });
 });

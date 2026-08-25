@@ -270,13 +270,13 @@ describe('OGTBM promo code', () => {
     expect(
       assertOgtbmDoesNotAlterMembershipRebill({
         monthlyAmountCents: TIRZ_TWO_DAY_MONTHLY_CENTS,
-        expectedMonthlyAmountCents: 27900,
+        expectedMonthlyAmountCents: 30500,
       }),
     ).toBe(true);
     expect(
       assertOgtbmDoesNotAlterMembershipRebill({
         monthlyAmountCents: TIRZ_NEXT_DAY_MONTHLY_CENTS,
-        expectedMonthlyAmountCents: 29900,
+        expectedMonthlyAmountCents: 32500,
       }),
     ).toBe(true);
   });

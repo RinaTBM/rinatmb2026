@@ -55,7 +55,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   semaglutide: {
     benefitHeadline: 'Appetite & Metabolic Support for Provider-Guided Weight Management',
     shortDescription:
-      'Semaglutide + B6 Injection is a provider-guided injectable option designed to support appetite control and metabolic balance as part of a structured weight-management plan. Many people explore it when they want help feeling fuller sooner and staying satisfied longer — with vitamin B6 included in this compounded preparation.',
+      'Semaglutide is a provider-guided injectable option designed to support appetite control and metabolic balance as part of a structured weight-management plan. Choose Vitamin B12 or Glycine, then a dose option. Many people explore it when they want help feeling fuller sooner and staying satisfied longer.',
     highlights: [
       'Appetite Support',
       'Feel Fuller Longer',
@@ -64,7 +64,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Multiple Strengths',
     ],
     about: [
-      'Semaglutide is a GLP-1 medication option used in provider-directed weight-management care. On My Bare Method, it is offered as a compounded injection that pairs semaglutide with vitamin B6.',
+      'Semaglutide is a GLP-1 medication option used in provider-directed weight-management care. On My Bare Method, it is offered as a compounded injection with Vitamin B12 or Glycine formulation selectors.',
       'This page is for the retail injectable product with selectable vial strengths. If you prefer one predictable monthly program rate instead of paying per vial strength, see Semaglutide Membership.',
       'Treatment is personalized. Ordering begins a clinical review — it does not automatically mean a prescription will be issued.',
     ].join('\n\n'),
@@ -79,7 +79,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Semaglutide works with GLP-1 receptors involved in appetite and blood-sugar regulation. In everyday terms, those pathways help your body register fullness and manage metabolic signals after eating. Many people notice they are less driven to overeat and can stick with smaller portions more comfortably. Individual responses vary. Your provider decides whether this approach fits your health history and how to advance treatment over time.',
     whyPeopleChooseIt: [
       'Clear injectable format with labeled strength options on this page',
-      'Pairs semaglutide with vitamin B6 in a provider-directed compounded preparation',
+      'Choose Vitamin B12 or Glycine in a provider-directed compounded preparation',
       'Fits customers who want medication support alongside lifestyle changes',
       'Can be purchased à la carte or explored through Semaglutide Membership for flat monthly pricing',
     ],
@@ -88,14 +88,14 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'No guaranteed weight-loss amount.',
-      'Do not claim FDA approval for this specific compounded Semaglutide + B6 listing.',
+      'Do not claim FDA approval for this specific compounded Semaglutide listing.',
     ],
   },
 
   tirzepatide: {
     benefitHeadline: 'Dual-Pathway Appetite Support for Provider-Guided Metabolic Goals',
     shortDescription:
-      'Tirzepatide + B6 Injection is a provider-guided injectable option that engages two related pathways involved in appetite and metabolic regulation. People often consider it when they want strong fullness support under clinical care — with vitamin B6 included in this compounded preparation.',
+      'Tirzepatide is a provider-guided injectable option that engages two related pathways involved in appetite and metabolic regulation. Choose Vitamin B12 or Glycine, then a dose option. People often consider it when they want strong fullness support under clinical care.',
     highlights: [
       'Dual-Pathway Support',
       'Appetite Control',
@@ -113,7 +113,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'May help reduce interest in large portions as part of a supervised plan',
       'Engages two metabolic pathways (GLP-1 and GIP) under provider direction',
       'Offers multiple vial strengths for individualized clinical titration',
-      'Pairs treatment with vitamin B6 in this compounded injectable format',
+      'Choose Vitamin B12 or Glycine in this compounded injectable format',
     ],
     howItWorks:
       'Tirzepatide works with receptors tied to appetite and blood-sugar regulation — commonly described as GLP-1 and GIP pathways. Together, those signals can influence how quickly you feel satisfied and how your body manages metabolic cues after eating. Many people experience a quieter “food noise” and an easier time with portion control, though results vary. Your provider sets expectations and adjusts treatment based on your response and safety profile.',
@@ -299,33 +299,33 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'nad-plus': {
     benefitHeadline: 'Provider-Guided NAD+ Wellness Support',
     shortDescription:
-      'NAD+ Injection is a provider-directed compounded option for customers exploring cellular energy and longevity-focused wellness care. It is available only after eligibility review, with clear expectations and no hype-driven promises.',
+      'NAD+ is a provider-directed compounded option for customers exploring cellular energy and longevity-focused wellness care. Nasal spray is available now. It is available only after eligibility review, with clear expectations and no hype-driven promises.',
     highlights: [
       'Provider-Directed',
-      'Compounded Injectable',
+      'Nasal Spray',
       'Cellular Energy Support',
-      'Two Vial Options',
+      'Compounded Option',
     ],
     about: [
-      'NAD+ (nicotinamide adenine dinucleotide) is a molecule found naturally in the body and often discussed in wellness and longevity care. This listing offers a compounded injectable form after a licensed provider reviews your eligibility.',
+      'NAD+ (nicotinamide adenine dinucleotide) is a molecule found naturally in the body and often discussed in wellness and longevity care. This listing offers a compounded nasal-spray form after a licensed provider reviews your eligibility.',
       'Wellness interest is not the same as an established medical claim. NAD+ may be considered as part of a supervised plan — not as an anti-aging cure or guaranteed energy fix.',
     ].join('\n\n'),
     potentialBenefits: [
       'May be considered for customers exploring NAD+ under clinical guidance',
       'Supports a structured intake and provider-review experience',
-      'Offers more than one vial size for clinical matching',
+      'Nasal spray option available after provider review',
       'Keeps expectations realistic — individual responses vary widely',
     ],
     howItWorks:
-      'In general biology, NAD+ participates in normal cellular processes related to energy metabolism. A compounded injectable delivers NAD+ under provider direction. How any one person feels afterward varies, and this page does not claim a specific clinical outcome. Your care team explains whether it belongs in your plan.',
+      'In general biology, NAD+ participates in normal cellular processes related to energy metabolism. A compounded nasal spray delivers NAD+ under provider direction. How any one person feels afterward varies, and this page does not claim a specific clinical outcome. Your care team explains whether it belongs in your plan.',
     whyPeopleChooseIt: [
-      'Transparent vial options listed on this page',
+      'Nasal spray option listed on this page',
       'Appeals to customers interested in longevity-oriented wellness care',
       'Provider review before anything is dispensed',
       'Clear distinction from peptide products and other longevity listings',
     ],
     whatToExpect:
-      'Select a vial option, complete intake, and wait for provider review. Administration details and schedule come from your prescribing provider and pharmacy materials if approved.',
+      'Select the available option, complete intake, and wait for provider review. Administration details and schedule come from your prescribing provider and pharmacy materials if approved.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [
       'Confirm preferred public claim boundary for NAD+ with medical director.',
@@ -1103,7 +1103,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
   'semaglutide-membership': {
     benefitHeadline: 'One Membership. One Predictable Monthly Price.',
     shortDescription:
-      'Semaglutide Membership is a flat $149/month program for provider-guided Semaglutide + B6 care within the included dose range. You get structured support, a locked rate while continuously enrolled, and clear separation between the membership program and the medication vial used for fulfillment.',
+      'Semaglutide Membership is a flat $149/month program for provider-guided Semaglutide care with Vitamin B12 or Glycine options. You get structured support, a locked rate while continuously enrolled, and clear separation between the membership program and medication fulfillment.',
     highlights: [
       '$149 Flat Monthly Rate',
       'Provider-Guided Care',
@@ -1153,9 +1153,9 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
   'tirzepatide-membership': {
     benefitHeadline: 'Flat Monthly Tirzepatide Care Through the Included Maximum',
     shortDescription:
-      'Tirzepatide Membership is a flat $249/month program for provider-guided Tirzepatide + B6 care through the included dose maximum (formulations through 15mg). It is built for customers who want dual-pathway medication support with predictable membership pricing — not per-vial retail checkout.',
+      'Tirzepatide Membership is a flat $275/month program for provider-guided Tirzepatide care with Vitamin B12 or Glycine options through the included dose maximum (formulations through 15mg). It is built for customers who want dual-pathway medication support with predictable membership pricing — not per-vial retail checkout.',
     highlights: [
-      '$249 Flat Monthly Rate',
+      '$275 Flat Monthly Rate',
       'Through 15mg Maximum',
       'Provider-Guided Care',
       'Member Product Savings',
@@ -1163,17 +1163,17 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     about: [
       'This membership is a program purchase with one predictable monthly rate through the included Tirzepatide maximum. It is not interchangeable with Semaglutide Membership, and 30mg is not part of this program.',
       'You choose a requested dose when joining. A licensed provider reviews eligibility and may approve a different dose. Fulfillment uses the retail Tirzepatide vial SKU that matches the approved medication strength.',
-      'Selected shipping renews monthly with your card charge and is not included in the base $249 membership price. A one-time Initial Provider Visit ($75) may apply when required.',
+      'Selected shipping renews monthly with your card charge and is not included in the base $275 membership price. A one-time Initial Provider Visit ($75) may apply when required.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Predictable $249 monthly program pricing through the included maximum',
+      'Predictable $275 monthly program pricing through the included maximum',
       'Provider-directed adjustments within listed Tirzepatide formulations while enrolled',
       'Locked rate while membership stays continuously active and in good standing',
       'Save 15% on other eligible wellness products and accessories per program terms',
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'Enrollment purchases the membership PROGRAM. You select a requested dose and shipping. Your card is charged monthly for the $249 membership plus selected shipping ($279 or $299/month). A one-time Initial Provider Visit ($75) may apply when required. Requested dose informs intake; approved treatment drives which retail fulfillment SKU is used. Payment does not guarantee a prescription.',
+      'Enrollment purchases the membership PROGRAM. You select a requested formulation and shipping. Your card is charged monthly for the $275 membership plus selected shipping. A one-time Initial Provider Visit ($75) may apply when required. Requested formulation informs intake; approved treatment drives fulfillment. Payment does not guarantee a prescription.',
     whyPeopleChooseIt: [
       'Want Tirzepatide’s dual-pathway option with flat monthly budgeting',
       'Prefer a clear included maximum through 15mg',
@@ -1185,7 +1185,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     importantInformation:
       'Payment and enrollment do not guarantee a prescription. Tirzepatide Membership is not interchangeable with Semaglutide Membership. 30mg is not included.',
     benefits: [
-      'Flat $249 monthly program rate through included Tirzepatide maximum',
+      'Flat $275 monthly program rate through included Tirzepatide maximum',
       'Locked membership pricing while continuously enrolled in good standing',
       'Provider-directed adjustments within included formulations through 15mg',
       'Save 15% on other eligible wellness products',

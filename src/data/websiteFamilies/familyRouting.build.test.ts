@@ -31,12 +31,12 @@ describe('MBM website family → GEN routing build', () => {
     }
   });
 
-  it('covers 30 families / 103 variants with amended pairing status buckets', () => {
+  it('covers 30 families / 113 variants with amended pairing status buckets', () => {
     expect(WEBSITE_PRODUCT_FAMILIES).toHaveLength(30);
     const total = WEBSITE_PRODUCT_FAMILIES.reduce((n, f) => n + f.variants.length, 0);
-    expect(total).toBe(103);
+    expect(total).toBe(113);
     const counts = countByRoutingStatus();
-    expect(counts.ROUTING_READY).toBe(19);
+    expect(counts.ROUTING_READY).toBe(29);
     expect(counts.FORMULARY_PENDING).toBe(14);
     expect(counts.GEN_PAIRING_PENDING).toBe(17);
     expect(counts.FUTURE_HIDDEN).toBe(51);
@@ -47,7 +47,7 @@ describe('MBM website family → GEN routing build', () => {
         counts.GEN_PAIRING_PENDING +
         counts.FORMULARY_PENDING +
         counts.ROUTING_READY,
-    ).toBe(103);
+    ).toBe(113);
   });
 
   it('SEM B12 vs Glycine and membership resolve to distinct GEN routes', () => {

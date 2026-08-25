@@ -4,7 +4,7 @@
  */
 
 import { FAMILY_VARIANT_SKU_BY_ID } from './familyVariantSkus';
-import { WEBSITE_PRODUCT_FAMILIES } from './families.generated';
+import { WEBSITE_PRODUCT_FAMILIES } from './appliedFamilies';
 import { effectiveGenPairingVerified } from './applyPairingVerification';
 import type { WebsiteProductFamily, WebsiteProductVariant } from './types';
 

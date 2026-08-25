@@ -34,6 +34,11 @@ import {
   glp1FamilyIdFromSlug,
   validateRequestedDose,
 } from "../_shared/patientRequestedDose.ts";
+import {
+  authorizeGlp1OneTimeOrderLine,
+  formatOneTimeProviderSnapshot,
+} from "../_shared/oneTimeVialMapping.ts";
+import { LAUNCH_READY_KASHU_MAP } from "../_shared/launchReadyKashuMap.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -367,6 +372,31 @@ Deno.serve(async (req) => {
         return json({ error: dose.error }, 400);
       }
       item.requestedDose = dose.value;
+      const auth = authorizeGlp1OneTimeOrderLine({
+        productId: typeof item.productId === "string" ? item.productId : null,
+        slug,
+        sku,
+        purchaseType: typeof item.purchaseType === "string" ? item.purchaseType : null,
+        isMembership: Boolean(item.isMembership),
+        requestedFormulation: typeof item.requestedFormulation === "string"
+          ? item.requestedFormulation
+          : null,
+        requestedDose: dose.value,
+        unitAmountCents: typeof item.unitAmountCents === "number" ? item.unitAmountCents : null,
+        variantId: typeof item.variantId === "string" ? item.variantId : null,
+      });
+      if (!auth.ok) {
+        return json({ error: auth.error }, 400);
+      }
+      if (!auth.skipped) {
+        item.unitAmountCents = auth.mapping.retailPriceCents;
+        item.sku = auth.mapping.mbmSku;
+        item.variantId = auth.mapping.websiteVariantId;
+        item.variantLabel = formatOneTimeProviderSnapshot(
+          auth.mapping,
+          LAUNCH_READY_KASHU_MAP[auth.mapping.mbmSku]?.tagada_price_id ?? null,
+        );
+      }
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");

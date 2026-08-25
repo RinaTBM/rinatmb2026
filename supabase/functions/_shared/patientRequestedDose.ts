@@ -28,6 +28,8 @@ export const TIR_PATIENT_WEEKLY_DOSES = [
 ] as const;
 
 export type Glp1FamilyId = 'semaglutide' | 'tirzepatide';
+export const GLP1_FORMULATION_OPTIONS = ['Vitamin B12', 'Glycine'] as const;
+export type Glp1Formulation = (typeof GLP1_FORMULATION_OPTIONS)[number];
 
 export function glp1FamilyIdFromSlug(slug: string | null | undefined): Glp1FamilyId | null {
   const s = (slug || '').trim().toLowerCase();
@@ -104,6 +106,14 @@ export function validateRequestedDose(input: {
     return { ok: false, error: `Unsupported current dose: ${input.requestedDose}` };
   }
   return { ok: true, value: normalized };
+}
+
+export function validateGlp1Formulation(
+  value: string | null | undefined,
+): { ok: true; value: Glp1Formulation } | { ok: false; error: string } {
+  const v = (value || '').trim();
+  if (v === 'Vitamin B12' || v === 'Glycine') return { ok: true, value: v };
+  return { ok: false, error: 'Please select a formulation (Vitamin B12 or Glycine).' };
 }
 
 export function formatProviderReviewSnapshot(input: {

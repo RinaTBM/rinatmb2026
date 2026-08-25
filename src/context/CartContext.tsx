@@ -25,8 +25,8 @@ export interface CartItem {
    */
   requestedFormulation?: string;
   /**
-   * Patient current/weekly dose for provider review (`getting_started` or e.g. `0.25 mg`).
-   * Metadata only — must not select pharmacy vial, SKU, or Tagada price.
+   * Patient current/weekly dose (`getting_started` or e.g. `0.25 mg`).
+   * One-time checkout maps this to a fulfillment vial; membership price stays flat.
    */
   requestedDose?: string;
   billingFrequency?: 'monthly';

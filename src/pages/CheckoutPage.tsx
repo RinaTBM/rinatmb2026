@@ -36,6 +36,7 @@ import {
   labelRequestedDose,
   validateRequestedDose,
 } from '@/lib/glp1/patientRequestedDose';
+import { authorizeGlp1OneTimeOrderLine } from '@/lib/glp1/oneTimeVialMapping';
 import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
 import {
   isManualCheckoutEnabled,
@@ -304,18 +305,27 @@ export function CheckoutPage() {
       const familyId =
         glp1FamilyIdFromSlug(i.slug) || glp1FamilyIdFromSku(skuForVariantId(i.variantId));
       if (!familyId) return [];
-      const dose = validateRequestedDose({ requestedDose: i.requestedDose, familyId });
-      return dose.ok
-        ? []
-        : [
-            {
-              key: `${i.key}-dose`,
-              slug: i.slug,
-              name: i.name,
-              error: dose.error,
-              fixPath: cartItemDetailPath(i),
-            },
-          ];
+      const auth = authorizeGlp1OneTimeOrderLine({
+        productId: i.productId,
+        slug: i.slug,
+        sku: skuForVariantId(i.variantId),
+        purchaseType: i.purchaseType,
+        isMembership: i.isMembership,
+        requestedFormulation: i.requestedFormulation,
+        requestedDose: i.requestedDose,
+        unitAmountCents: Math.round(i.price * 100),
+        variantId: i.variantId,
+      });
+      if (auth.ok) return [];
+      return [
+        {
+          key: `${i.key}-dose`,
+          slug: i.slug,
+          name: i.name,
+          error: auth.error,
+          fixPath: cartItemDetailPath(i),
+        },
+      ];
     });
   const glp1DoseBlocking = membershipDoseBlocking || glp1OneTimeDoseIssues.length > 0;
 

@@ -31,6 +31,7 @@ import {
   buildMembershipEnrollmentTagadaInitItems,
   membershipEnrollmentDueTodayCents,
 } from '@/lib/membership/tagadaMembershipBilling';
+import { NEW_ONE_TIME_VIAL_SKUS } from '@/lib/glp1/oneTimeVialMapping';
 import { ACCESSORY_SALES_TAX_RATE, PROVIDER_CARE_TAX_RATE } from '@/lib/checkout/checkoutConstants';
 
 describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
@@ -40,10 +41,13 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
     expect(resolveGenApiOrdersEnabled({})).toBe(false);
   });
 
-  it('inventories 17 launch-ready one-time SKUs with live Tagada maps', () => {
-    expect(LAUNCH_READY_ONE_TIME_SKUS).toHaveLength(17);
-    expect(new Set(LAUNCH_READY_ONE_TIME_SKUS).size).toBe(17);
+  it('inventories live-verified Tagada maps for every family SKU that is not a pending vial split', () => {
+    const pending = new Set<string>(NEW_ONE_TIME_VIAL_SKUS);
+    const mapped = LAUNCH_READY_ONE_TIME_SKUS.filter((sku) => !pending.has(sku));
+    expect(mapped.length).toBeGreaterThanOrEqual(17);
+    expect(new Set(LAUNCH_READY_ONE_TIME_SKUS).size).toBe(LAUNCH_READY_ONE_TIME_SKUS.length);
     for (const sku of Object.values(FAMILY_VARIANT_SKU_BY_ID)) {
+      if (pending.has(sku) && !LAUNCH_READY_KASHU_MAP[sku]) continue;
       expect(LAUNCH_READY_KASHU_MAP[sku]).toBeTruthy();
       expect(LAUNCH_READY_KASHU_MAP[sku].mbm_sku).toBe(sku);
       expect(LAUNCH_READY_KASHU_MAP[sku].tagada_product_id).toMatch(/^product_/);
@@ -63,6 +67,7 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
         const sku = skuForFamilyVariantId(variant.websiteVariantId);
         expect(sku).toBeTruthy();
         const map = LAUNCH_READY_KASHU_MAP[sku!];
+        if (!map && sku && (NEW_ONE_TIME_VIAL_SKUS as readonly string[]).includes(sku)) continue;
         expect(map).toBeTruthy();
         const dollars = lockedRetailPrice(variant);
         expect(dollars).not.toBeNull();

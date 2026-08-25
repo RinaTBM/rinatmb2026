@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getMembership } from '@/data/products';
-import { resolveFamilyVariant, skuForFamilyVariantId } from '@/data/websiteFamilies';
+import { lockedRetailPrice, resolveFamilyVariant, skuForFamilyVariantId } from '@/data/websiteFamilies';
 import { LAUNCH_READY_KASHU_MAP } from '@/lib/payments/launchReadyKashuMap';
 import {
   GETTING_STARTED_DOSE,
@@ -14,6 +14,34 @@ import {
   validateGlp1Formulation,
   validateRequestedDose,
 } from './patientRequestedDose';
+import {
+  NEW_ONE_TIME_VIAL_SKUS,
+  ONE_TIME_GETTING_STARTED_BLOCKER,
+  authorizeGlp1OneTimeOrderLine,
+  listOneTimeVialMappings,
+  patientSafeOneTimeCartLabel,
+  resolveOneTimeVial,
+} from './oneTimeVialMapping';
+
+const SEM_PRICES: Record<string, number> = {
+  '0.25 mg': 89,
+  '0.5 mg': 99,
+  '0.75 mg': 109,
+  '1 mg': 109,
+  '1.25 mg': 109,
+  '1.5 mg': 109,
+  '1.75 mg': 119,
+  '2 mg': 119,
+};
+
+const TIR_PRICES: Record<string, number> = {
+  '2.5 mg': 119,
+  '5 mg': 139,
+  '7.5 mg': 149,
+  '10 mg': 159,
+  '12.5 mg': 169,
+  '15 mg': 179,
+};
 
 describe('GLP-1 patient weekly dose (provider-review metadata)', () => {
   it('SEM shows Getting Started plus 0.25–2 mg and never B6 / Pyridoxine / Any Dose', () => {
@@ -73,29 +101,6 @@ describe('GLP-1 patient weekly dose (provider-review metadata)', () => {
     }
   });
 
-  it('weekly dose does not change one-time fulfillment variant / SKU / Tagada price', () => {
-    const b12Low = resolveFamilyVariant('semaglutide', {
-      purchaseType: 'one_time',
-      additive: 'Vitamin B12',
-      doseTier: 'Starting / Low',
-    });
-    expect(b12Low.variant?.websiteVariantId).toBe('sem-b12-starting-low');
-    const sku = skuForFamilyVariantId(b12Low.variant!.websiteVariantId)!;
-    const tagada = LAUNCH_READY_KASHU_MAP[sku];
-    expect(tagada?.mbm_price_cents).toBe(8900);
-    for (const dose of SEM_PATIENT_WEEKLY_DOSES) {
-      const again = resolveFamilyVariant('semaglutide', {
-        purchaseType: 'one_time',
-        additive: 'Vitamin B12',
-        doseTier: 'Starting / Low',
-      });
-      expect(again.variant?.websiteVariantId).toBe('sem-b12-starting-low');
-      expect(skuForFamilyVariantId(again.variant!.websiteVariantId)).toBe(sku);
-      expect(LAUNCH_READY_KASHU_MAP[sku]?.tagada_price_id).toBe(tagada?.tagada_price_id);
-      expect(isAllowedRequestedDose(dose, 'semaglutide')).toBe(true);
-    }
-  });
-
   it('snapshot keeps formulation and current dose separate from fulfillment label', () => {
     expect(
       formatProviderReviewSnapshot({
@@ -110,5 +115,108 @@ describe('GLP-1 patient weekly dose (provider-review metadata)', () => {
         requestedDose: GETTING_STARTED_DOSE,
       }),
     ).toBe(`Formulation: Glycine · Current dose: ${GETTING_STARTED_DOSE_LABEL}`);
+  });
+});
+
+describe('owner-approved one-time vial mapping', () => {
+  it('maps every SEM weekly dose × B12/Glycine to vial-specific retail', () => {
+    for (const formulation of ['Vitamin B12', 'Glycine'] as const) {
+      for (const dose of SEM_PATIENT_WEEKLY_DOSES) {
+        const resolved = resolveOneTimeVial({
+          familyId: 'semaglutide',
+          formulation,
+          requestedDose: dose,
+        });
+        expect(resolved.ok).toBe(true);
+        if (!resolved.ok) continue;
+        expect(resolved.mapping.retailPriceCents).toBe(SEM_PRICES[dose] * 100);
+        const route = resolveFamilyVariant('semaglutide', {
+          purchaseType: 'one_time',
+          additive: formulation,
+          requestedDose: dose,
+        });
+        expect(route.ok).toBe(true);
+        expect(route.variant?.websiteVariantId).toBe(resolved.mapping.websiteVariantId);
+        expect(lockedRetailPrice(route.variant!)).toBe(SEM_PRICES[dose]);
+        expect(skuForFamilyVariantId(route.variant!.websiteVariantId)).toBe(resolved.mapping.mbmSku);
+        expect(patientSafeOneTimeCartLabel({ formulation, requestedDose: dose })).not.toMatch(
+          /Starting \/ Low|Mid|High|Any Dose|mg\/mL/i,
+        );
+      }
+    }
+  });
+
+  it('maps every TIR weekly dose × B12/Glycine to vial-specific retail', () => {
+    for (const formulation of ['Vitamin B12', 'Glycine'] as const) {
+      for (const dose of TIR_PATIENT_WEEKLY_DOSES) {
+        const resolved = resolveOneTimeVial({
+          familyId: 'tirzepatide',
+          formulation,
+          requestedDose: dose,
+        });
+        expect(resolved.ok).toBe(true);
+        if (!resolved.ok) continue;
+        expect(resolved.mapping.retailPriceCents).toBe(TIR_PRICES[dose] * 100);
+        const route = resolveFamilyVariant('tirzepatide', {
+          purchaseType: 'one_time',
+          additive: formulation,
+          requestedDose: dose,
+        });
+        expect(route.ok).toBe(true);
+        expect(route.variant?.websiteVariantId).toBe(resolved.mapping.websiteVariantId);
+        expect(lockedRetailPrice(route.variant!)).toBe(TIR_PRICES[dose]);
+        expect(skuForFamilyVariantId(route.variant!.websiteVariantId)).toBe(resolved.mapping.mbmSku);
+        expect(resolved.mapping.fulfillmentVialLabel).not.toMatch(/mg\/mL|× 2 mL|x 2 mL/i);
+      }
+    }
+  });
+
+  it('does not invent a one-time vial for Getting Started / Not Sure', () => {
+    const blocked = resolveOneTimeVial({
+      familyId: 'semaglutide',
+      formulation: 'Vitamin B12',
+      requestedDose: GETTING_STARTED_DOSE,
+    });
+    expect(blocked).toEqual({ ok: false, error: ONE_TIME_GETTING_STARTED_BLOCKER });
+    const route = resolveFamilyVariant('semaglutide', {
+      purchaseType: 'one_time',
+      additive: 'Vitamin B12',
+      requestedDose: GETTING_STARTED_DOSE,
+    });
+    expect(route.ok).toBe(false);
+    const auth = authorizeGlp1OneTimeOrderLine({
+      productId: 'p1',
+      slug: 'semaglutide',
+      purchaseType: 'one_time',
+      requestedFormulation: 'Vitamin B12',
+      requestedDose: GETTING_STARTED_DOSE,
+      unitAmountCents: 8900,
+    });
+    expect(auth.ok).toBe(false);
+  });
+
+  it('membership resolution stays flat and ignores weekly dose for price', () => {
+    const sem = resolveFamilyVariant('semaglutide', {
+      purchaseType: 'membership',
+      requestedDose: '2 mg',
+    });
+    const tir = resolveFamilyVariant('tirzepatide', {
+      purchaseType: 'membership',
+      requestedDose: GETTING_STARTED_DOSE,
+    });
+    expect(sem.variant?.finalRetailPrice).toBe(149);
+    expect(tir.variant?.finalRetailPrice).toBe(275);
+  });
+
+  it('covers 28 one-time dose/formulation pairs and 10 new SKUs', () => {
+    expect(listOneTimeVialMappings()).toHaveLength(28);
+    expect(NEW_ONE_TIME_VIAL_SKUS).toHaveLength(10);
+  });
+
+  it('reuses existing Tagada prices when the vial SKU already exists', () => {
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-001']?.mbm_price_cents).toBe(8900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-002']?.mbm_price_cents).toBe(10900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-001']?.mbm_price_cents).toBe(11900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-002']?.mbm_price_cents).toBe(14900);
   });
 });

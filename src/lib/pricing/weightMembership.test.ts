@@ -75,11 +75,15 @@ describe('weight membership flat-rate program', () => {
   });
 
   it('authoritative Semaglutide retail variants preserve locked family prices', () => {
-    expect(semaglutide.variants.map(v => v.price)).toEqual([89, 109, 109, 89, 89, 109, 109, 89]);
+    expect(semaglutide.variants.map(v => v.price)).toEqual([
+      89, 99, 109, 109, 119, 89, 89, 99, 109, 109, 119, 89,
+    ]);
   });
 
   it('authoritative Tirzepatide retail variants preserve locked family prices', () => {
-    expect(tirzepatide.variants.map(v => v.price)).toEqual([119, 149, 169, 119, 119, 149, 169, 119]);
+    expect(tirzepatide.variants.map(v => v.price)).toEqual([
+      119, 139, 149, 159, 169, 179, 119, 119, 139, 149, 159, 169, 179, 119,
+    ]);
   });
 
   it('obsolete Tirzepatide 30mg SKU is not in retail catalog', () => {

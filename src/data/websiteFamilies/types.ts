@@ -57,6 +57,8 @@ export interface FamilySelectorState {
   purchaseType?: 'one_time' | 'membership';
   additive?: 'Vitamin B12' | 'Glycine' | string;
   doseTier?: string;
+  /** Patient weekly dose — routes one-time to a vial-specific variant. */
+  requestedDose?: string;
   form?: string;
   strength?: string;
   package?: string;

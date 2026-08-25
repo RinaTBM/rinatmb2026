@@ -2772,7 +2772,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
 ];
 
 export const WEBSITE_FAMILY_BUILD_META = {
-  "phase": "MBM-GEN-PAIRING-FINAL-CLOSEOUT",
+  "phase": "MBM-GEN-MANUAL-FIX-CLOSEOUT-2",
   "cutover": "OFF",
   "genPairingVerifiedDefault": false,
   "realGenOrderSubmissionEnabled": false,
@@ -2782,7 +2782,7 @@ export const WEBSITE_FAMILY_BUILD_META = {
     "docs/MBM_WEBSITE_TO_GEN_ROUTING_MATRIX.json",
     "docs/MBM_GEN_PRICE_CONFLICT_RESOLUTION.json"
   ],
-  "note": "Final closeout live GEN read. Owner claimed 7 remaining pairings complete; live evidence still shows those 7 failing. Registry remains 8 verified CPs. Cutover OFF.",
+  "note": "Manual-fix closeout-2 live GEN read. Owner claimed 7 fixes complete; locked CPs still missing/incompatible. Registry remains 8 verified. Cutover OFF.",
   "pairingPolicy": "amended_compatible_family_multi_option",
   "requiresExactStrengthPackage": false
 } as const;

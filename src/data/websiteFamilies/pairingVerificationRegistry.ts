@@ -11,9 +11,8 @@
 import { PAIRING_POLICY_AMENDMENT_META } from './pairingPolicy';
 
 /**
- * Live-verified GEN clientProductIds (MBM-GEN-PAIRING-FINAL-CLOSEOUT).
- * Reconfirmed from current GEN formulary read — prior 8 remain acceptable;
- * the 7 previously open items are still NOT eligible on live GEN.
+ * Live-verified GEN clientProductIds (still 8 after MBM-GEN-MANUAL-FIX-CLOSEOUT-2).
+ * Prior 8 reconfirmed; the 7 locked manual-fix CPs remain NOT eligible on live GEN.
  */
 export const OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS: ReadonlySet<string> = new Set([
   // SEM B12 — Starting / Low
@@ -42,11 +41,11 @@ export function isOwnerVerifiedGenClientProductId(
 }
 
 export const PAIRING_VERIFICATION_REGISTRY_META = {
-  phase: 'MBM-GEN-PAIRING-FINAL-CLOSEOUT',
+  phase: 'MBM-GEN-MANUAL-FIX-CLOSEOUT-2',
   verifiedCount: OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size,
   checklistDoc: 'docs/MBM_GEN_PAIRING_VERIFICATION_CHECKLIST.md',
   policyDoc: 'docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md',
-  closeoutDoc: 'docs/MBM_GEN_PAIRING_FINAL_CLOSEOUT.md',
+  closeoutDoc: 'docs/MBM_GEN_MANUAL_FIX_CLOSEOUT_2.md',
   postcheckDoc: 'docs/MBM_GEN_PAIRING_POSTCHECK_3.md',
   generatedDataFiles: [
     'src/data/websiteFamilies/families.generated.ts',

@@ -1,0 +1,425 @@
+{
+  "meta": {
+    "document": "MBM_GEN_MANUAL_FIX_CLOSEOUT_2",
+    "generated_at": "2026-08-25T06:16:13Z",
+    "source": "CURRENT LIVE GEN via gen-health-list-products view=formulary",
+    "fix_plan": "docs/MBM_GEN_FINAL_MANUAL_FIX_PLAN.md",
+    "policy": "docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md",
+    "owner_claimed_7_fixes_complete": true,
+    "live_gen_matches_owner_claim": false,
+    "registry_updated_this_run": false,
+    "gen_modified_this_run": false,
+    "pairings_modified_this_run": false,
+    "new_gen_products_created": 0,
+    "real_gen_orders": 0,
+    "website_published": false,
+    "legacy_b6": "UNCHANGED",
+    "cutover": "OFF",
+    "pr19": "OPEN / NOT MERGED"
+  },
+  "focus_7": {
+    "checked": "7 / 7",
+    "classifications": {
+      "PAIRING_ACCEPTABLE": 0,
+      "PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS": 0,
+      "PAIRING_HAS_INCOMPATIBLE_MEDICATION": 2,
+      "PAIRING_MISSING": 5,
+      "UNABLE_TO_VERIFY": 0
+    },
+    "results": [
+      {
+        "product": "SEM Mid B12",
+        "genProductName": "Semaglutide Injection \u2014 Mid (B12)",
+        "genProductId": "BLf8inX395YNc7WPCD4O",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O",
+        "currentGenPrice": 109,
+        "websiteVariantIds": [
+          "sem-b12-mid"
+        ],
+        "attachedMedications": [],
+        "compatibleMedications": [],
+        "incompatibleMedications": [],
+        "finalPairingClassification": "PAIRING_MISSING",
+        "eligibleForRegistry": false,
+        "reason": "No formulary attachments"
+      },
+      {
+        "product": "SEM Membership",
+        "genProductName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "genProductId": "5F8jESeVeXcpkLU5rrdK",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK",
+        "currentGenPrice": 149,
+        "websiteVariantIds": [
+          "sem-membership"
+        ],
+        "attachedMedications": [],
+        "compatibleMedications": [],
+        "incompatibleMedications": [],
+        "finalPairingClassification": "PAIRING_MISSING",
+        "eligibleForRegistry": false,
+        "reason": "No formulary attachments"
+      },
+      {
+        "product": "TIR Membership",
+        "genProductName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "genProductId": "E3MXZeeR01QROCuTLRLE",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE",
+        "currentGenPrice": 275,
+        "websiteVariantIds": [
+          "tir-membership"
+        ],
+        "attachedMedications": [],
+        "compatibleMedications": [],
+        "incompatibleMedications": [],
+        "finalPairingClassification": "PAIRING_MISSING",
+        "eligibleForRegistry": false,
+        "reason": "No formulary attachments"
+      },
+      {
+        "product": "Wolverine Capsule",
+        "genProductName": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+        "genProductId": "omhh3NabouO8AsNR5tkD",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+        "currentGenPrice": 0,
+        "websiteVariantIds": [
+          "wolverine-capsule"
+        ],
+        "attachedMedications": [],
+        "compatibleMedications": [],
+        "incompatibleMedications": [],
+        "finalPairingClassification": "PAIRING_MISSING",
+        "eligibleForRegistry": false,
+        "reason": "No formulary attachments"
+      },
+      {
+        "product": "Wolverine Injection",
+        "genProductName": "BPC-157/TB500",
+        "genProductId": "iJtyig611AZEDBGdvRd9",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+        "currentGenPrice": 169,
+        "websiteVariantIds": [
+          "wolverine-injection"
+        ],
+        "attachedMedications": [
+          {
+            "name": "BPC-157 / TB500",
+            "pharmacy": "Greenwich Pharmacy",
+            "medicationId": "27WtrIdo3z4Ssj5sDcc6"
+          },
+          {
+            "name": "BPC-157 / TB500 Capsules",
+            "pharmacy": "Greenwich Pharmacy",
+            "medicationId": "SLBdNaBijUHmDFSohdaM"
+          }
+        ],
+        "compatibleMedications": [
+          {
+            "name": "BPC-157 / TB500",
+            "pharmacy": "Greenwich Pharmacy",
+            "medicationId": "27WtrIdo3z4Ssj5sDcc6"
+          }
+        ],
+        "incompatibleMedications": [
+          {
+            "name": "BPC-157 / TB500 Capsules",
+            "pharmacy": "Greenwich Pharmacy",
+            "medicationId": "SLBdNaBijUHmDFSohdaM",
+            "reason": "incompatible"
+          }
+        ],
+        "finalPairingClassification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+        "eligibleForRegistry": false,
+        "reason": "1 mismatch(es); compatible=1"
+      },
+      {
+        "product": "Progesterone IR",
+        "genProductName": "Women's Hormones (HRT) \u2013 Progesterone",
+        "genProductId": "5dGkjdpLP7DkKKE2iVxh",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+        "currentGenPrice": 79,
+        "websiteVariantIds": [
+          "prog-ir-r41",
+          "prog-ir-r42",
+          "prog-ir-r43",
+          "prog-ir-r44",
+          "prog-ir-r45",
+          "prog-ir-r46",
+          "prog-ir-r47",
+          "prog-ir-r48",
+          "prog-ir-r49"
+        ],
+        "attachedMedications": [
+          {
+            "name": "Pregnenolone IR",
+            "pharmacy": "Vios",
+            "medicationId": "LHAilcdBK0wULcdmoJVl"
+          },
+          {
+            "name": "Progesterone",
+            "pharmacy": "Vios",
+            "medicationId": "QbXdjaowZ1w0Ohc7RgB7"
+          },
+          {
+            "name": "Progesterone",
+            "pharmacy": "Vios",
+            "medicationId": "Z9joueirLKsW5uD8LkPg"
+          },
+          {
+            "name": "Progesterone",
+            "pharmacy": "Vios",
+            "medicationId": "tiJV7uCEsWhM2TOOycHF"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "DsXWglQ4j9epTGms7D5x"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "YT2RkB7DvqWxUnXfySDc"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "ZIAWU7zBZHPrezBdiexZ"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "dAWcMgzf6d7OH1JyKlEw"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "q21bosU7qNA9YLfqLnQH"
+          },
+          {
+            "name": "Progesterone IR (DYE-FREE)(Lactose-free) (M NEW)",
+            "pharmacy": "Vios",
+            "medicationId": "A4fU56tPD0DJTPPyUT3K"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "NRZXW0LomEaoyN5oA3WO"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "ORLfICIf7sgo1WTdXvEM"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "KleUHs9VxvMycdhX0Z14"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "xrMRDAQr9if9OrehgcH6"
+          }
+        ],
+        "compatibleMedications": [
+          {
+            "name": "Progesterone",
+            "pharmacy": "Vios",
+            "medicationId": "QbXdjaowZ1w0Ohc7RgB7"
+          },
+          {
+            "name": "Progesterone",
+            "pharmacy": "Vios",
+            "medicationId": "Z9joueirLKsW5uD8LkPg"
+          },
+          {
+            "name": "Progesterone",
+            "pharmacy": "Vios",
+            "medicationId": "tiJV7uCEsWhM2TOOycHF"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "DsXWglQ4j9epTGms7D5x"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "YT2RkB7DvqWxUnXfySDc"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "ZIAWU7zBZHPrezBdiexZ"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "dAWcMgzf6d7OH1JyKlEw"
+          },
+          {
+            "name": "Progesterone IR",
+            "pharmacy": "Vios",
+            "medicationId": "q21bosU7qNA9YLfqLnQH"
+          },
+          {
+            "name": "Progesterone IR (DYE-FREE)(Lactose-free) (M NEW)",
+            "pharmacy": "Vios",
+            "medicationId": "A4fU56tPD0DJTPPyUT3K"
+          }
+        ],
+        "incompatibleMedications": [
+          {
+            "name": "Pregnenolone IR",
+            "pharmacy": "Vios",
+            "medicationId": "LHAilcdBK0wULcdmoJVl",
+            "reason": "incompatible"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "NRZXW0LomEaoyN5oA3WO",
+            "reason": "incompatible"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "ORLfICIf7sgo1WTdXvEM",
+            "reason": "incompatible"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "KleUHs9VxvMycdhX0Z14",
+            "reason": "incompatible"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+            "pharmacy": "Vios",
+            "medicationId": "xrMRDAQr9if9OrehgcH6",
+            "reason": "incompatible"
+          }
+        ],
+        "finalPairingClassification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+        "eligibleForRegistry": false,
+        "reason": "5 mismatch(es); compatible=9"
+      },
+      {
+        "product": "Minoxidil Dual",
+        "genProductName": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+        "genProductId": "BboYS4a2Uj7APetrFo6W",
+        "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+        "currentGenPrice": 0,
+        "websiteVariantIds": [
+          "minoxidil-fin-minox-0.1-5"
+        ],
+        "attachedMedications": [],
+        "compatibleMedications": [],
+        "incompatibleMedications": [],
+        "finalPairingClassification": "PAIRING_MISSING",
+        "eligibleForRegistry": false,
+        "reason": "No formulary attachments"
+      }
+    ]
+  },
+  "summary": {
+    "total_existing_cps_verified": "8 / 15",
+    "existing_gen_cp_pairing_phase_complete": false,
+    "website_routing": {
+      "ROUTING_READY": 8,
+      "GEN_PAIRING_PENDING": 15,
+      "BLOCKED": 15,
+      "FUTURE_HIDDEN": 51,
+      "FORMULARY_PENDING": 14
+    },
+    "genPairingVerified_true": 8,
+    "genPairingVerified_false": 95,
+    "next_create": {
+      "tir_x8": "READY",
+      "estradiol_x4": "READY",
+      "nad_r85_x1": "READY",
+      "total_create_ready": "13 / 13",
+      "ready_for_owner_authorization_of_gen_create_phase": false,
+      "reason": "Existing pairing phase incomplete \u2014 7 manual fixes not visible on locked CPs in live GEN"
+    }
+  },
+  "observational_notes": [
+    "Live formulary inventory unchanged vs prior closeout/diagnostic for these 7 CPs (still missing or incompatible).",
+    "Vios Finasteride/Minoxidil 0.1%/5% still appears on Raw7mUkuzzhVdAo88jpL (Minoxidil Topical), not Dual Combo BboYS4\u2026",
+    "Wolverine capsule medication still on injection CP iJtyig\u2026; capsule CP omhh3N\u2026 still empty",
+    "All Tirzepatide B12/Glycine formulary rows still on GLP-2 Any Dose SvFDJ7\u2026 ($279), not membership E3MXZe\u2026",
+    "Prior 8 verified CPs reconfirmed acceptable on live GEN \u2014 registry unchanged"
+  ],
+  "remaining_actions": [
+    {
+      "product": "SEM Mid B12",
+      "genProductId": "BLf8inX395YNc7WPCD4O",
+      "classification": "PAIRING_MISSING",
+      "action": "See docs/MBM_GEN_FINAL_MANUAL_FIX_PLAN.md \u2014 confirm edits on EXACT locked CP name/ID, then re-audit"
+    },
+    {
+      "product": "SEM Membership",
+      "genProductId": "5F8jESeVeXcpkLU5rrdK",
+      "classification": "PAIRING_MISSING",
+      "action": "See docs/MBM_GEN_FINAL_MANUAL_FIX_PLAN.md \u2014 confirm edits on EXACT locked CP name/ID, then re-audit"
+    },
+    {
+      "product": "TIR Membership",
+      "genProductId": "E3MXZeeR01QROCuTLRLE",
+      "classification": "PAIRING_MISSING",
+      "action": "See docs/MBM_GEN_FINAL_MANUAL_FIX_PLAN.md \u2014 confirm edits on EXACT locked CP name/ID, then re-audit"
+    },
+    {
+      "product": "Wolverine Capsule",
+      "genProductId": "omhh3NabouO8AsNR5tkD",
+      "classification": "PAIRING_MISSING",
+      "action": "See docs/MBM_GEN_FINAL_MANUAL_FIX_PLAN.md \u2014 confirm edits on EXACT locked CP name/ID, then re-audit"
+    },
+    {
+      "product": "Wolverine Injection",
+      "genProductId": "iJtyig611AZEDBGdvRd9",
+      "classification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+      "action": "See docs/MBM_GEN_FINAL_MANUAL_FIX_PLAN.md \u2014 confirm edits on EXACT locked CP name/ID, then re-audit"
+    },
+    {
+      "product": "Progesterone IR",
+      "genProductId": "5dGkjdpLP7DkKKE2iVxh",
+      "classification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+      "action": "See docs/MBM_GEN_FINAL_MANUAL_FIX_PLAN.md \u2014 confirm edits on EXACT locked CP name/ID, then re-audit"
+    },
+    {
+      "product": "Minoxidil Dual",
+      "genProductId": "BboYS4a2Uj7APetrFo6W",
+      "classification": "PAIRING_MISSING",
+      "action": "See docs/MBM_GEN_FINAL_MANUAL_FIX_PLAN.md \u2014 confirm edits on EXACT locked CP name/ID, then re-audit"
+    }
+  ],
+  "final_report": {
+    "7_MANUAL_FIXES_CHECKED": "7/7",
+    "PAIRING_ACCEPTABLE": 0,
+    "PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS": 0,
+    "PAIRING_HAS_INCOMPATIBLE_MEDICATION": 2,
+    "PAIRING_MISSING": 5,
+    "UNABLE_TO_VERIFY": 0,
+    "TOTAL_EXISTING_CPS_VERIFIED": "8 / 15",
+    "EXISTING_GEN_CP_PAIRING_PHASE_COMPLETE": "NO",
+    "ROUTING_READY": 8,
+    "GEN_PAIRING_PENDING": 15,
+    "FORMULARY_PENDING": 14,
+    "FUTURE_HIDDEN": 51,
+    "BLOCKED": 15,
+    "genPairingVerified_TRUE": 8,
+    "genPairingVerified_FALSE": 95,
+    "SEM_MID_B12": "PAIRING_MISSING",
+    "SEM_MEMBERSHIP": "PAIRING_MISSING",
+    "TIR_MEMBERSHIP": "PAIRING_MISSING",
+    "WOLVERINE_CAPSULE": "PAIRING_MISSING",
+    "WOLVERINE_INJECTION": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+    "PROGESTERONE_IR": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+    "MINOXIDIL": "PAIRING_MISSING",
+    "NEXT_CREATE_TIR_x8": "READY",
+    "NEXT_CREATE_ESTRADIOL_x4": "READY",
+    "NEXT_CREATE_NAD_r85_x1": "READY",
+    "TOTAL_CREATE_READY": "13 / 13",
+    "READY_FOR_OWNER_AUTHORIZATION_OF_GEN_CREATE_PHASE": "NO"
+  }
+}

@@ -1,0 +1,463 @@
+{
+  "meta": {
+    "document": "MBM_GEN_FINAL_MANUAL_FIX_PLAN",
+    "generated_at": "2026-08-25T05:56:59Z",
+    "mode": "OWNER MANUAL FIX PLAN \u2014 DO NOT EXECUTE IN THIS AGENT RUN",
+    "policy": "docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md",
+    "diagnostic": "docs/MBM_GEN_SCRIPTful_PAIRING_DISCREPANCY_DIAGNOSTIC.md",
+    "gen_modified": false,
+    "pairings_modified": false,
+    "website_routing_modified": false,
+    "new_gen_products_created": 0,
+    "published": false,
+    "cutover": "OFF",
+    "pr19": "OPEN / NOT MERGED"
+  },
+  "direct_fixes_ready": 6,
+  "fixes": [
+    {
+      "product": "SEM Mid B12",
+      "website_variant": "sem-b12-mid",
+      "gen_cp_name": "Semaglutide Injection \u2014 Mid (B12)",
+      "gen_productId": "BLf8inX395YNc7WPCD4O",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O",
+      "current_price_usd": 109,
+      "current_attachments": [],
+      "select_attach": [
+        "Dirx-Hub Semaglutide + Vitamin B12 (prefer Mid / ~4mg/0.5mg/mL 1mL vial if shown in GEN UI)",
+        "Multiple compatible Dirx Semaglutide + B12 strengths may remain \u2014 provider chooses",
+        "Example medicationIds already in GEN catalog (reuse if GEN allows multi-CP attach): gqe6H8ay1sw6QlS32SMH, YqrJ1qnOv3U3ecJHuSzr, 99BZowkyXTMiGTu5cosT, ekw92avqC0Uf2thW7fA9, iXnkfsa6XHugbDanwjUX"
+      ],
+      "remove": [
+        "Glycine-only Semaglutide",
+        "legacy B6",
+        "Greenwich Semaglutide + B12",
+        "any non-Semaglutide+B12 medication"
+      ],
+      "keep": [
+        "Any compatible Dirx Semaglutide + Vitamin B12 options attached after fix"
+      ],
+      "do_not": [
+        "Do not open Mid Glycine CP (CjqOUb\u2026)",
+        "Do not retarget website away from BLf8in\u2026"
+      ],
+      "expected_result": "PAIRING_ACCEPTABLE or PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS on BLf8in\u2026; genPairingVerified eligible for sem-b12-mid after re-audit",
+      "status": "READY"
+    },
+    {
+      "product": "SEM Membership $149",
+      "website_variant": "sem-membership",
+      "gen_cp_name": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "gen_productId": "5F8jESeVeXcpkLU5rrdK",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK",
+      "current_price_usd": 149,
+      "current_attachments": [],
+      "select_attach": [
+        "Dirx-Hub Semaglutide + Vitamin B12 (one or more strengths)",
+        "AND/OR Dirx-Hub Semaglutide + Glycine (one or more strengths)",
+        "B12 + Glycine may coexist on this membership CP",
+        "Example B12 medIds: gqe6H8ay1sw6QlS32SMH, YqrJ1qnOv3U3ecJHuSzr, 99BZowkyXTMiGTu5cosT\u2026",
+        "Example Glycine medIds: KFVdP0FaVZHpXt9ewjiV, SX8kyR4siUDVAUrm9CvN, IHYsg7nVwVWB2LjoAR6a, WPEBtvCdn2I8l6tRmT9R"
+      ],
+      "remove": [
+        "legacy B6",
+        "Greenwich Semaglutide + B12 (if not part of locked path)",
+        "Tirzepatide medications",
+        "unrelated actives"
+      ],
+      "keep": [
+        "Compatible Semaglutide B12 and/or Glycine Dirx options on THIS membership CP"
+      ],
+      "do_not": [
+        "Do NOT route membership to dose-group CPs (MkDIUw\u2026 / wQK2Js\u2026 etc.) merely because meds are already there",
+        "Do not change $149 price"
+      ],
+      "expected_result": "PAIRING_ACCEPTABLE or PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS on 5F8jES\u2026; membership remains $149 dedicated CP",
+      "status": "READY"
+    },
+    {
+      "product": "TIR Membership $275",
+      "website_variant": "tir-membership",
+      "gen_cp_name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "gen_productId": "E3MXZeeR01QROCuTLRLE",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE",
+      "current_price_usd": 275,
+      "current_attachments": [],
+      "select_attach": [
+        "Dirx-Hub Tirzepatide + Vitamin B12 (one or more strengths)",
+        "AND/OR Dirx-Hub Tirzepatide + Glycine (one or more strengths; NOT 3-PACK)",
+        "B12 + Glycine may coexist on this membership CP",
+        "Compatible meds currently visible on GLP-2 Any Dose SvFDJ7\u2026 may be the same formulary rows to attach HERE (do not use SvFDJ7 as the membership product)"
+      ],
+      "remove": [
+        "legacy B6",
+        "Tirzepatide + Glycine (3 PACK)",
+        "Semaglutide medications",
+        "ambiguous Tirzepatide/B12/Glycine blend objects as silent substitutes"
+      ],
+      "keep": [
+        "Compatible Tirzepatide B12 and/or Glycine Dirx options on THIS membership CP only"
+      ],
+      "do_not": [
+        "DO NOT open / reuse SvFDJ7W4nmWL2bkLUMMS (GLP-2 Weight Loss \u2013 Tirzepatide Any Dose, $279)",
+        "DO NOT reuse Tirzepatide/B12/Glycine or Tirzepatide/Glycine/B12 CPs",
+        "Do not change $275 price",
+        "Do not treat TIR\u00d78 one-time CREATE set as membership"
+      ],
+      "expected_result": "PAIRING_ACCEPTABLE or PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS on E3MXZe\u2026; GLP-2 not used for membership",
+      "status": "READY"
+    },
+    {
+      "product": "Wolverine Capsule",
+      "website_variant": "wolverine-capsule",
+      "gen_cp_name": "Wolverine \u2013 BPC-157 + TB-500 Recovery Protocol",
+      "gen_productId": "omhh3NabouO8AsNR5tkD",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+      "current_price_usd": 0,
+      "current_attachments": [],
+      "select_attach": [
+        "BPC-157 / TB500 Capsules @ Greenwich Pharmacy",
+        "medicationId currently on injection CP (move/attach here): SLBdNaBijUHmDFSohdaM",
+        "Multiple compatible capsule options allowed if present"
+      ],
+      "remove": [
+        "Injection-only BPC/TB medications on this capsule CP (if any appear)"
+      ],
+      "keep": [
+        "Compatible capsule medication(s) on omhh3N\u2026"
+      ],
+      "do_not": [
+        "Do not leave the only capsule med exclusively on injection CP iJtyig\u2026"
+      ],
+      "expected_result": "PAIRING_ACCEPTABLE on omhh3N\u2026 for wolverine-capsule",
+      "status": "READY"
+    },
+    {
+      "product": "Wolverine Injection",
+      "website_variant": "wolverine-injection",
+      "gen_cp_name": "BPC-157/TB500",
+      "gen_productId": "iJtyig611AZEDBGdvRd9",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+      "current_price_usd": 169,
+      "current_attachments": [
+        {
+          "name": "BPC-157 / TB500",
+          "pharmacy": "Greenwich Pharmacy",
+          "medicationId": "27WtrIdo3z4Ssj5sDcc6",
+          "action": "KEEP"
+        },
+        {
+          "name": "BPC-157 / TB500 Capsules",
+          "pharmacy": "Greenwich Pharmacy",
+          "medicationId": "SLBdNaBijUHmDFSohdaM",
+          "action": "REMOVE (move to capsule CP)"
+        }
+      ],
+      "select_attach": [
+        "No new attach required if injection med remains",
+        "Keep BPC-157 / TB500 @ Greenwich (`27WtrIdo3z4Ssj5sDcc6`)",
+        "Additional compatible injection options allowed"
+      ],
+      "remove": [
+        "BPC-157 / TB500 Capsules @ Greenwich (`SLBdNaBijUHmDFSohdaM`) \u2014 capsule-only"
+      ],
+      "keep": [
+        "BPC-157 / TB500 (injection) @ Greenwich (`27WtrIdo3z4Ssj5sDcc6`)"
+      ],
+      "do_not": [
+        "Do not remove the injection medication",
+        "Do not retarget website injection selector away from iJtyig\u2026"
+      ],
+      "expected_result": "PAIRING_ACCEPTABLE on iJtyig\u2026 (injection only; no capsule mismatch)",
+      "status": "READY"
+    },
+    {
+      "product": "Progesterone IR",
+      "website_variant": "prog-ir-r41\u2026r49 (shared CP)",
+      "gen_cp_name": "Women's Hormones (HRT) \u2013 Progesterone",
+      "gen_productId": "5dGkjdpLP7DkKKE2iVxh",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "current_price_usd": 79,
+      "current_attachments_summary": {
+        "total": 14,
+        "remove_ids": [
+          {
+            "name": "Pregnenolone IR",
+            "medicationId": "LHAilcdBK0wULcdmoJVl"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)",
+            "medicationId": "NRZXW0LomEaoyN5oA3WO"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)",
+            "medicationId": "ORLfICIf7sgo1WTdXvEM"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+            "medicationId": "KleUHs9VxvMycdhX0Z14"
+          },
+          {
+            "name": "Progesterone SR (DYE-FREE)(Lactose FREE)",
+            "medicationId": "xrMRDAQr9if9OrehgcH6"
+          }
+        ],
+        "keep_names": [
+          "Progesterone",
+          "Progesterone IR",
+          "Progesterone IR (DYE-FREE)(Lactose-free) (M NEW)"
+        ]
+      },
+      "select_attach": [
+        "No new attach required if \u22651 Progesterone IR remains after removals",
+        "Multiple IR strengths may remain \u2014 provider chooses"
+      ],
+      "remove": [
+        "Pregnenolone IR (`LHAilcdBK0wULcdmoJVl`)",
+        "All Progesterone SR / sustained-release rows (`NRZXW0LomEaoyN5oA3WO`, `ORLfICIf7sgo1WTdXvEM`, `KleUHs9VxvMycdhX0Z14`, `xrMRDAQr9if9OrehgcH6`)"
+      ],
+      "keep": [
+        "Progesterone / Progesterone IR / dye-free lactose-free IR options @ Vios (multiple OK)"
+      ],
+      "do_not": [
+        "Do not remove all IR options",
+        "Do not retarget to Progesterone Suppository CP"
+      ],
+      "expected_result": "PAIRING_ACCEPTABLE or PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS on 5dGkjdp\u2026 (IR only)",
+      "status": "READY"
+    }
+  ],
+  "minoxidil_owner_decision": {
+    "decision_phase": "OWNER_DECISION_REQUIRED \u2014 routing not changed this run",
+    "locked_website_variant": "minoxidil-fin-minox-0.1-5",
+    "locked_cp": {
+      "productId": "BboYS4a2Uj7APetrFo6W",
+      "name": "Hair Loss \u2013 Dual Combo (Finasteride/Minoxidil)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+      "current_price_usd": 0,
+      "target_price_usd": 79,
+      "attachment_count": 0
+    },
+    "raw7_cp": {
+      "productId": "Raw7mUkuzzhVdAo88jpL",
+      "name": "Hair Loss \u2013 Minoxidil (Topical)",
+      "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Raw7mUkuzzhVdAo88jpL",
+      "current_price_usd": 0,
+      "target_price_usd": 79,
+      "attachments": [
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 10 %",
+          "medicationId": "TbZGZNFAzrChVQoGgkXs",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+          "medicationId": "9qNwEbSAfgVxUjuy3mNg",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+          "medicationId": "R1KXXsuKlENVt3rnHUTI",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 7 %",
+          "medicationId": "VjSceyy4fZ3UUL7aZubm",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 7 %",
+          "medicationId": "yLLv6cvly0vgq82P4Za3",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil / Tretinoin (PER ML) 0.25 / 5 / 0.01 %",
+          "medicationId": "0XBMtwTFsCYJvHzZbGmv",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "Fin/Minox/Tretinoin = materially different blend"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil / Tretinoin (PER ML) 0.25 / 5 / 0.03 %",
+          "medicationId": "lMf2Pgs0Kyzil511S3AA",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "Fin/Minox/Tretinoin = materially different blend"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil / Tretinoin (PER ML) 0.5 / 5 / 0.01 %",
+          "medicationId": "O4SZ6tx6jbWFV6eb6Mvh",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "Fin/Minox/Tretinoin = materially different blend"
+        },
+        {
+          "medication_name": "Minoxidil 10%",
+          "medicationId": "dkG7xeZ0vEysUIK8m4ze",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "plain Minoxidil without Finasteride"
+        },
+        {
+          "medication_name": "Minoxidil 15%",
+          "medicationId": "TzPHypfsr7APpXLmTJAi",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "plain Minoxidil without Finasteride"
+        },
+        {
+          "medication_name": "Minoxidil 2%",
+          "medicationId": "8mc7RjVdMx0gNm1JZEiz",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "plain Minoxidil without Finasteride"
+        }
+      ],
+      "compatible_attachments": [
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 10 %",
+          "medicationId": "TbZGZNFAzrChVQoGgkXs",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+          "medicationId": "9qNwEbSAfgVxUjuy3mNg",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+          "medicationId": "R1KXXsuKlENVt3rnHUTI",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 7 %",
+          "medicationId": "VjSceyy4fZ3UUL7aZubm",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil (PER ML) 0.1 / 7 %",
+          "medicationId": "yLLv6cvly0vgq82P4Za3",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": true,
+          "material_mismatch": false,
+          "why": "Finasteride/Minoxidil family (multiple strengths allowed)"
+        }
+      ],
+      "incompatible_attachments": [
+        {
+          "medication_name": "Finasteride / Minoxidil / Tretinoin (PER ML) 0.25 / 5 / 0.01 %",
+          "medicationId": "0XBMtwTFsCYJvHzZbGmv",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "Fin/Minox/Tretinoin = materially different blend"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil / Tretinoin (PER ML) 0.25 / 5 / 0.03 %",
+          "medicationId": "lMf2Pgs0Kyzil511S3AA",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "Fin/Minox/Tretinoin = materially different blend"
+        },
+        {
+          "medication_name": "Finasteride / Minoxidil / Tretinoin (PER ML) 0.5 / 5 / 0.01 %",
+          "medicationId": "O4SZ6tx6jbWFV6eb6Mvh",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "Fin/Minox/Tretinoin = materially different blend"
+        },
+        {
+          "medication_name": "Minoxidil 10%",
+          "medicationId": "dkG7xeZ0vEysUIK8m4ze",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "plain Minoxidil without Finasteride"
+        },
+        {
+          "medication_name": "Minoxidil 15%",
+          "medicationId": "TzPHypfsr7APpXLmTJAi",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "plain Minoxidil without Finasteride"
+        },
+        {
+          "medication_name": "Minoxidil 2%",
+          "medicationId": "8mc7RjVdMx0gNm1JZEiz",
+          "pharmacy": "Vios",
+          "compatible_with_fin_minox_family": false,
+          "material_mismatch": true,
+          "why": "plain Minoxidil without Finasteride"
+        }
+      ],
+      "compatible_count": 5,
+      "incompatible_count": 6
+    },
+    "target_medication": {
+      "name": "Finasteride / Minoxidil (PER ML) 0.1 / 5 %",
+      "pharmacy": "Vios",
+      "retail_usd": 79,
+      "medicationIds_on_raw7": [
+        "9qNwEbSAfgVxUjuy3mNg",
+        "R1KXXsuKlENVt3rnHUTI"
+      ]
+    },
+    "is_raw7_clean_acceptable_backend_for_intended_website_minoxidil": false,
+    "why_not_clean": "Raw7m has \u22651 compatible Fin/Minox options BUT also material mismatches: Fin/Minox/Tretinoin blends (3) and plain Minoxidil without Finasteride (3). Under amended policy, material mismatches fail the CP.",
+    "recommendation": "KEEP_BBOYS_AND_ATTACH",
+    "recommended_routing_target": "BboYS4",
+    "recommended_routing_target_full": "BboYS4a2Uj7APetrFo6W",
+    "recommendation_why": "Keep Dual Combo CP (name matches locked Fin/Minox intent). Attach Vios Finasteride/Minoxidil 0.1%/5% there (and repair price 0\u219279 separately). Do not retarget website to Raw7m while Tretinoin blends and plain Minoxidil remain attached. Do not use GHK-Cu/Minoxidil.",
+    "alternative_if_owner_insists_on_raw7": "First REMOVE all Fin/Minox/Tretinoin and plain Minoxidil rows from Raw7m; keep only Fin/Minox family options; set price $79; then owner may authorize ROUTING_TARGET retarget \u2014 not in this phase."
+  },
+  "glp2_tir_used_for_membership": false,
+  "next_13_create_set": "UNCHANGED",
+  "final_report": {
+    "DIRECT_GEN_FIXES_READY": 6,
+    "SEM_MID_B12": "READY \u2014 keep BLf8in\u2026 attach Dirx SEM+B12",
+    "SEM_MEMBERSHIP": "READY \u2014 keep 5F8jES\u2026 attach Dirx SEM B12 and/or Glycine",
+    "TIR_MEMBERSHIP": "READY \u2014 keep E3MXZe\u2026 attach Dirx TIR B12 and/or Glycine; NOT SvFDJ7",
+    "WOLVERINE_CAPSULE": "READY \u2014 keep omhh3N\u2026 attach/move capsule med",
+    "WOLVERINE_INJECTION": "READY \u2014 keep iJtyig\u2026 remove capsule med",
+    "PROGESTERONE_IR": "READY \u2014 keep 5dGkjdp\u2026 remove Pregnenolone + SR",
+    "MINOXIDIL_DECISION": "KEEP_BBOYS_AND_ATTACH",
+    "GLP_2_TIR_PRODUCT_USED_FOR_MEMBERSHIP": "NO",
+    "NEXT_13_CREATE_SET": "UNCHANGED"
+  }
+}

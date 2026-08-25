@@ -24,7 +24,7 @@ describe('catalog normalization', () => {
     expect(held).toHaveLength(2);
     for (const p of held) {
       expect(p.status).toBe('active');
-      expect(p.isVisible).toBe(false);
+      expect(p.isVisible).toBe(true);
     }
   });
 

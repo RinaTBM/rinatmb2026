@@ -11,6 +11,8 @@ import {
 } from '@/lib/pricing/purchaseOptions';
 import { isAccessoryMemberDiscountEligible } from '@/lib/pricing/accessoryMemberDiscount';
 import { DEFAULT_ACCESSORY_MEMBER_DISCOUNT_PERCENT } from '@/lib/pricing/settings';
+import { skuForVariantId } from '@/data/variantSkus';
+import { resolveStorefrontRxAvailability } from '@/lib/commerce/rxCatalogReadiness';
 
 export function ProductCard({ product }: { product: Product }) {
   const { isActiveMember, status: membershipStatus } = useMember();
@@ -25,6 +27,13 @@ export function ProductCard({ product }: { product: Product }) {
     isActiveMember &&
     membershipStatus === 'active' &&
     isAccessoryMemberDiscountEligible(product);
+  const firstSku = product.variants[0]?.sku || skuForVariantId(product.variants[0]?.id);
+  const rxAvailability = resolveStorefrontRxAvailability({ mbmSku: firstSku });
+  const browseUnavailable =
+    !!rxAvailability &&
+    !rxAvailability.productionPurchasable &&
+    product.category !== 'accessories' &&
+    product.category !== 'provider-care';
 
   return (
     <Link to={`/product/${product.slug}`} className="group block">
@@ -44,6 +53,12 @@ export function ProductCard({ product }: { product: Product }) {
             {showAccessoryMemberBadge ? (
               <span className="rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-900">
                 Members Save {DEFAULT_ACCESSORY_MEMBER_DISCOUNT_PERCENT}%
+              </span>
+            ) : browseUnavailable ? (
+              <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-amber-900">
+                {rxAvailability?.customerFacingStatus === 'COMING_SOON'
+                  ? 'Coming soon'
+                  : 'Temporarily unavailable'}
               </span>
             ) : memberEligible ? (
               <span className="rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-900">

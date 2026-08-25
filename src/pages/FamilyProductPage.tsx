@@ -373,25 +373,27 @@ function FamilySelectors({
                   </fieldset>
                 )}
 
-                {isNad && injReady && nasalReady && (
+                {isNad && (
                   <fieldset>
                     <legend className="text-sm font-medium text-ink-900 mb-2">Delivery method</legend>
                     <div className="flex flex-wrap gap-2">
-                      {injReady && (
-                        <SelectorChip
-                          selected={form === 'Injection'}
-                          onClick={() => setForm('Injection')}
-                          label="Injection"
-                        />
-                      )}
+                      <SelectorChip
+                        selected={false}
+                        disabled
+                        onClick={() => undefined}
+                        label="Injection · Temporarily unavailable"
+                      />
                       {nasalReady && (
                         <SelectorChip
-                          selected={form === 'Nasal Spray'}
+                          selected={form === 'Nasal Spray' || !form}
                           onClick={() => setForm('Nasal Spray')}
                           label="Nasal Spray"
                         />
                       )}
                     </div>
+                    <p className="mt-2 text-xs text-ink-500 leading-relaxed">
+                      Injection is temporarily unavailable. Nasal spray remains available after provider review.
+                    </p>
                   </fieldset>
                 )}
 
@@ -552,18 +554,26 @@ function SelectorChip({
   selected,
   onClick,
   label,
+  disabled,
 }: {
   selected: boolean;
   onClick: () => void;
   label: string;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      disabled={disabled}
       aria-pressed={selected}
+      aria-disabled={disabled || undefined}
       className={`rounded-full px-4 py-2 text-sm border transition-colors ${
-        selected ? 'border-ink-900 bg-ink-900 text-white' : 'border-ink-200 bg-white text-ink-700 hover:border-ink-400'
+        disabled
+          ? 'border-ink-100 bg-cream-100 text-ink-400 cursor-not-allowed'
+          : selected
+            ? 'border-ink-900 bg-ink-900 text-white'
+            : 'border-ink-200 bg-white text-ink-700 hover:border-ink-400'
       }`}
     >
       {label}

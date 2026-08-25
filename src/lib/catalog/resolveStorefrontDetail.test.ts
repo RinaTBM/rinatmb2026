@@ -64,8 +64,13 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
   it('unknown product slug still correctly shows Product not found', () => {
     expect(resolveStorefrontDetail('definitely-not-a-real-product').kind).toBe('not_found');
     expect(resolveStorefrontDetail('elite-wellness-membership').kind).toBe('not_found');
-    expect(resolveStorefrontDetail('estradiol-patch').kind).toBe('not_found');
-    expect(resolveStorefrontDetail('bpc-157-tb-500').kind).toBe('not_found');
+    expect(resolveStorefrontDetail('sermorelin').kind).toBe('not_found');
+    expect(resolveStorefrontDetail('minoxidil-tablets').kind).toBe('not_found');
+  });
+
+  it('restored public families resolve as products', () => {
+    expect(resolveStorefrontDetail('estradiol-patch').kind).toBe('product');
+    expect(resolveStorefrontDetail('bpc-157-tb-500').kind).toBe('product');
   });
 
   it('checkout item type remains membership_program for membership cart lines', () => {

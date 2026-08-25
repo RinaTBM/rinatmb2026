@@ -98,6 +98,12 @@ const SYNC_EXCLUDED_CATEGORIES = new Set(['provider-care', 'accessories']);
  */
 const SYNC_EXCLUDED_PRODUCT_SLUGS = new Set(['tretinoin-cream', 'bimatoprost-solution']);
 
+/**
+ * Stripe-sync allowlist is independent of shop visibility.
+ * Shop All may show legitimate public families that are not launch-purchasable.
+ */
+const STRIPE_SYNC_SLUGS = new Set(['semaglutide', 'tirzepatide', 'nad-plus']);
+
 export const toCents = (dollars: number): number => Math.round(dollars * 100);
 export const formatCents = (cents: number): string => `$${(cents / 100).toFixed(2)}`;
 
@@ -179,10 +185,13 @@ export const catalogProducts: CatalogProduct[] = sourceProducts
   .map(mapProduct);
 export const catalogMemberships: CatalogMembership[] = sourceMemberships.map(mapMembership);
 
-/** Products that should be synced to Stripe (active + visible). Future/hidden excluded. */
+/** Products that should be synced to Stripe (launch-ready wellness only). Shop visibility is separate. */
 export const syncableProducts = (): CatalogProduct[] =>
   catalogProducts.filter(
-    p => p.status === 'active' && p.isVisible && !SYNC_EXCLUDED_PRODUCT_SLUGS.has(p.slug),
+    p =>
+      p.status === 'active' &&
+      STRIPE_SYNC_SLUGS.has(p.slug) &&
+      !SYNC_EXCLUDED_PRODUCT_SLUGS.has(p.slug),
   );
 
 /** Active storefront products intentionally withheld from stripe-sync pending review. */

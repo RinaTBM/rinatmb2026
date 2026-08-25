@@ -574,9 +574,9 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Fat Burner compounded injection — AOD-9604, MOTS-C, and Tesamorelin',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    // FORMULARY_PENDING — hidden from launch storefront.
+    // Visible for browse; checkout remains unavailable until routing/payment is ready.
     status: 'active',
-    isVisible: false,
+    isVisible: true,
     // Owner-approved retail $259.00 (at-cost $150.00). SKU MBM-WM-FB3-INJ-001.
     variants: [
       {
@@ -605,7 +605,6 @@ export const products: Product[] = [
     image: IMG_PATCH,
     imageAlt: 'Estradiol transdermal patch, a provider-directed hormone therapy option',
     providerDisclaimer: RX_DISCLAIMER,
-    isVisible: false,
     variants: [
       { dosageForm: 'Patch', strength: '0.025mg twice weekly', size: '8 patches', price: 129 },
       { dosageForm: 'Patch', strength: '0.05mg twice weekly', size: '8 patches', price: 138.98 },
@@ -625,7 +624,6 @@ export const products: Product[] = [
     image: IMG_CAPSULE,
     imageAlt: 'Progesterone capsules bottle, a provider-directed hormone therapy option',
     providerDisclaimer: RX_DISCLAIMER,
-    isVisible: false,
     variants: [
       { dosageForm: 'Capsule', strength: '100mg', size: '30 capsules', price: 39 },
       { dosageForm: 'Capsule', strength: '200mg', size: '30 capsules', price: 59 },
@@ -644,7 +642,6 @@ export const products: Product[] = [
     image: IMG_CREAM,
     imageAlt: 'Testosterone cream, a provider-directed hormone therapy option',
     providerDisclaimer: RX_DISCLAIMER,
-    isVisible: false,
     variants: [
       { dosageForm: 'Cream', strength: '5mg/g', size: '30g', price: 79 },
     ],
@@ -682,7 +679,6 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Selank injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    isVisible: false,
     variants: [
       { dosageForm: 'Injection', strength: '5mg/mL', size: '2mL', price: 129 },
     ],
@@ -700,7 +696,6 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Semax injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    isVisible: false,
     variants: [
       { dosageForm: 'Injection', strength: '5mg/mL', size: '2mL', price: 129 },
     ],
@@ -718,7 +713,6 @@ export const products: Product[] = [
     image: IMG_NASAL,
     imageAlt: 'Selank and Semax blend nasal spray, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    isVisible: false,
     variants: [
       { dosageForm: 'Nasal Spray', strength: '50mcg/50mcg per spray', size: '10mL', price: 169 },
     ],
@@ -737,9 +731,9 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Tesamorelin injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    // FORMULARY_PENDING — hidden from launch storefront.
+    // Visible for browse; checkout remains unavailable until routing/payment is ready.
     status: 'active',
-    isVisible: false,
+    isVisible: true,
     // Owner-approved retail $149.00 (at-cost $83.33). SKU MBM-LON-TESA-INJ-001.
     variants: [
       {
@@ -768,7 +762,6 @@ export const products: Product[] = [
     image: IMG_INJECTION,
     imageAlt: 'Wolverine BPC-157/TB-500 blend, a provider-directed compounded formulation in capsule and injection forms',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    isVisible: false,
     variants: [
       { dosageForm: 'Capsule', strength: 'Blend', size: 'Capsule', price: 99 },
       { dosageForm: 'Injection', strength: 'Blend', size: 'Injection', price: 199 },
@@ -792,7 +785,6 @@ export const products: Product[] = [
     imageAlt: 'Tretinoin cream, a prescription topical skin-care treatment',
     providerDisclaimer: RX_DISCLAIMER,
     bestSeller: true,
-    isVisible: false,
     variants: [
       { dosageForm: 'Cream', strength: '0.025%', size: '20g', price: 79 },
       { dosageForm: 'Cream', strength: '0.05%', size: '20g', price: 89 },
@@ -815,7 +807,6 @@ export const products: Product[] = [
     providerDisclaimer:
       'Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
     needsDedicatedImage: true,
-    isVisible: false,
     variants: [
       { dosageForm: 'Topical Solution', strength: 'Combination formula', size: 'Bottle', price: 129 },
     ],
@@ -836,7 +827,6 @@ export const products: Product[] = [
     imageAlt: 'Lash/Brow Growth Serum — prescription bimatoprost solution',
     providerDisclaimer: RX_DISCLAIMER,
     needsDedicatedImage: true,
-    isVisible: false,
     internalNotes:
       'Customer-facing display name is Lash/Brow Growth Serum. Underlying formulation remains Bimatoprost Solution. Slug/SKU/IDs unchanged (bimatoprost-solution / MBM-SH-BIM-SOL-001 / p71).',
     variants: [

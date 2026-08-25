@@ -10,13 +10,15 @@
  * - Do NOT infer verification from GEN product name, price, title, or id existence.
  * - Verification means owner (or live GEN formulary read) confirmed the exact
  *   intended medication/formulation is attached to that client product.
- * - MBM-WEBSITE-GEN-QA-1: intentionally empty — all genPairingVerified stay false.
+ * - Remains empty until a live GEN read proves EXACT formulary match
+ *   (medication + pharmacy + strength + form + package) per the click guide.
+ * - MBM-GEN-PAIRING-POSTCHECK-1: 0 of 15 CPs reached PAIRING_VERIFIED — keep empty.
  */
 
-/** GEN clientProductIds the owner has explicitly confirmed. Empty in this phase. */
+/** GEN clientProductIds proven exact in live GEN. Empty until postcheck verifies. */
 export const OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS: ReadonlySet<string> = new Set([
-  // Example (do not uncomment until owner confirms):
-  // 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y',
+  // Do not add IDs from docs alone. Add only after PAIRING_VERIFIED in
+  // docs/MBM_GEN_PAIRING_POSTCHECK_*.json (or a later postcheck).
 ]);
 
 export function isOwnerVerifiedGenClientProductId(
@@ -27,7 +29,7 @@ export function isOwnerVerifiedGenClientProductId(
 }
 
 export const PAIRING_VERIFICATION_REGISTRY_META = {
-  phase: 'MBM-WEBSITE-GEN-QA-1',
+  phase: 'MBM-GEN-PAIRING-POSTCHECK-1',
   verifiedCount: OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size,
   checklistDoc: 'docs/MBM_GEN_PAIRING_VERIFICATION_CHECKLIST.md',
   generatedDataFiles: [

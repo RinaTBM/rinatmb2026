@@ -1,13 +1,14 @@
 /**
- * Safe apply helper for owner-confirmed GEN pairing verification.
+ * Safe apply helper for owner-/policy-confirmed GEN pairing verification.
  *
- * After the owner confirms exact formulary pairing for a GEN client product:
- * 1. Check the box in docs/MBM_GEN_PAIRING_VERIFICATION_CHECKLIST.md
- * 2. Add the genClientProductId to pairingVerificationRegistry.ts
- * 3. Call applyOwnerVerifiedPairingsToFamilies() when regenerating/persisting data
- *    so ONLY matching variants flip genPairingVerified → true
+ * After a GEN CP is classified PAIRING_ACCEPTABLE or
+ * PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS under the amended policy:
+ * 1. Add its genClientProductId to pairingVerificationRegistry.ts
+ * 2. Run applyOwnerVerifiedPairingsToFamilies() to set genPairingVerified=true
+ *    (and routingStatus ROUTING_READY when previously GEN_PAIRING_PENDING)
+ *    only on matching variants — no unrelated field edits.
  *
- * This phase does not set any true values (registry is empty).
+ * Does not write to GEN. Cutover / real GEN orders stay OFF until separately enabled.
  */
 
 import { isOwnerVerifiedGenClientProductId } from './pairingVerificationRegistry';
@@ -17,7 +18,7 @@ export interface ApplyPairingVerificationResult {
   familiesTouched: number;
   variantsFlippedToTrue: number;
   variantIdsFlipped: string[];
-  /** Always false in MBM-WEBSITE-GEN-QA-1 (empty registry). */
+  routingStatusPromotedToReady: string[];
   anyVerified: boolean;
 }
 
@@ -38,26 +39,37 @@ export function effectiveGenPairingVerified(
 /**
  * Returns a deep-copied family list with genPairingVerified set true only for
  * variants whose genClientProductId is in the owner registry.
- * Does not mutate unrelated fields. Does not invent GEN ids.
+ * Promotes GEN_PAIRING_PENDING → ROUTING_READY for those variants only.
+ * Does not invent GEN ids. Does not touch FORMULARY_PENDING / FUTURE_HIDDEN / BLOCKED.
  */
 export function applyOwnerVerifiedPairingsToFamilies(
   families: WebsiteProductFamily[],
 ): { families: WebsiteProductFamily[]; result: ApplyPairingVerificationResult } {
   const variantIdsFlipped: string[] = [];
+  const routingStatusPromotedToReady: string[] = [];
   let familiesTouched = 0;
 
   const next = families.map((family) => {
     let familyChanged = false;
     const variants = family.variants.map((v) => {
       const shouldVerify = isOwnerVerifiedGenClientProductId(v.genClientProductId);
-      if (shouldVerify && !v.genPairingVerified) {
+      if (!shouldVerify) {
+        return { ...v };
+      }
+      let nextVariant = { ...v };
+      if (!v.genPairingVerified) {
         familyChanged = true;
         variantIdsFlipped.push(v.websiteVariantId);
-        return { ...v, genPairingVerified: true };
+        nextVariant = { ...nextVariant, genPairingVerified: true };
       }
-      // Never clear an existing true here — registry is additive for apply.
-      // (This phase has no trues.)
-      return { ...v };
+      if (v.routingStatus === 'GEN_PAIRING_PENDING') {
+        familyChanged = true;
+        if (!routingStatusPromotedToReady.includes(v.websiteVariantId)) {
+          routingStatusPromotedToReady.push(v.websiteVariantId);
+        }
+        nextVariant = { ...nextVariant, routingStatus: 'ROUTING_READY' };
+      }
+      return nextVariant;
     });
     if (familyChanged) familiesTouched += 1;
     return { ...family, variants };
@@ -69,7 +81,8 @@ export function applyOwnerVerifiedPairingsToFamilies(
       familiesTouched,
       variantsFlippedToTrue: variantIdsFlipped.length,
       variantIdsFlipped,
-      anyVerified: variantIdsFlipped.length > 0,
+      routingStatusPromotedToReady,
+      anyVerified: variantIdsFlipped.length > 0 || routingStatusPromotedToReady.length > 0,
     },
   };
 }

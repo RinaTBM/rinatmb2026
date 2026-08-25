@@ -1,4 +1,5 @@
 import { WEBSITE_PRODUCT_FAMILIES, WEBSITE_FAMILY_BUILD_META } from './families.generated';
+import { isOwnerVerifiedGenClientProductId } from './pairingVerificationRegistry';
 import type {
   FamilyRouteResolution,
   FamilySelectorState,
@@ -18,6 +19,10 @@ export {
   effectiveGenPairingVerified,
   applyOwnerVerifiedPairingsToFamilies,
 } from './applyPairingVerification';
+export {
+  PAIRING_POLICY_AMENDMENT_META,
+} from './pairingPolicy';
+export type { AmendedPairingClassification } from './pairingPolicy';
 
 /** Cutover stays OFF — legacy B6 storefront remains production-active. */
 export const WEBSITE_FAMILY_CUTOVER_ENABLED = false;
@@ -216,8 +221,12 @@ export function countByRoutingStatus(): Record<WebsiteRoutingStatus, number> {
 export function assertNoInventedGenIds(families: WebsiteProductFamily[] = WEBSITE_PRODUCT_FAMILIES): void {
   for (const f of families) {
     for (const v of f.variants) {
-      if (v.genPairingVerified) {
-        throw new Error(`genPairingVerified must default false: ${v.websiteVariantId}`);
+      // genPairingVerified may be true only when the CP is in the owner registry
+      // (amended policy: compatible formulary family, not exact strength/package).
+      if (v.genPairingVerified && !isOwnerVerifiedGenClientProductId(v.genClientProductId)) {
+        throw new Error(
+          `genPairingVerified true without registry entry: ${v.websiteVariantId}`,
+        );
       }
       if (v.genClientProductId && !v.genProductId && v.routingStatus === 'GEN_PAIRING_PENDING') {
         // full client id should embed product id when present

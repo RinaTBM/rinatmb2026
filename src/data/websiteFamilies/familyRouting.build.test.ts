@@ -19,24 +19,35 @@ describe('MBM website family → GEN routing build', () => {
     expect(REAL_GEN_ORDER_SUBMISSION_ENABLED).toBe(false);
   });
 
-  it('defaults genPairingVerified to false for every variant', () => {
+  it('defaults genPairingVerified false unless registry lists the GEN CP', () => {
     expect(() => assertNoInventedGenIds()).not.toThrow();
     for (const f of WEBSITE_PRODUCT_FAMILIES) {
       for (const v of f.variants) {
-        expect(v.genPairingVerified).toBe(false);
+        if (v.genPairingVerified) {
+          expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.has(v.genClientProductId!)).toBe(true);
+          expect(effectiveGenPairingVerified(v)).toBe(true);
+        }
       }
     }
   });
 
-  it('covers 30 families / 103 variants with expected status buckets', () => {
+  it('covers 30 families / 103 variants with amended pairing status buckets', () => {
     expect(WEBSITE_PRODUCT_FAMILIES).toHaveLength(30);
     const total = WEBSITE_PRODUCT_FAMILIES.reduce((n, f) => n + f.variants.length, 0);
     expect(total).toBe(103);
     const counts = countByRoutingStatus();
-    expect(counts.ROUTING_READY).toBe(0);
+    expect(counts.ROUTING_READY).toBe(7);
     expect(counts.FORMULARY_PENDING).toBe(14);
-    expect(counts.GEN_PAIRING_PENDING).toBeGreaterThan(0);
-    expect(counts.FUTURE_HIDDEN + counts.BLOCKED + counts.GEN_PAIRING_PENDING + counts.FORMULARY_PENDING).toBe(103);
+    expect(counts.GEN_PAIRING_PENDING).toBe(16);
+    expect(counts.FUTURE_HIDDEN).toBe(51);
+    expect(counts.BLOCKED).toBe(15);
+    expect(
+      counts.FUTURE_HIDDEN +
+        counts.BLOCKED +
+        counts.GEN_PAIRING_PENDING +
+        counts.FORMULARY_PENDING +
+        counts.ROUTING_READY,
+    ).toBe(103);
   });
 
   it('SEM B12 vs Glycine and membership resolve to distinct GEN routes', () => {
@@ -115,8 +126,13 @@ describe('MBM website family → GEN routing build', () => {
   });
 
   it('GEN order gate requires pairing verified + ROUTING_READY + cutover', () => {
+    const unverifiedCp =
+      'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O'; // Mid B12 — still missing
+    const verifiedCp =
+      'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y';
+
     const blocked = assertFamilyVariantGenOrderAllowed({
-      genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y',
+      genClientProductId: unverifiedCp,
       genPairingVerified: false,
       routingStatus: 'GEN_PAIRING_PENDING',
     });
@@ -124,7 +140,7 @@ describe('MBM website family → GEN routing build', () => {
     expect(blocked.code).toBe('CUTOVER_OFF');
 
     const stillBlocked = assertFamilyVariantGenOrderAllowed({
-      genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y',
+      genClientProductId: verifiedCp,
       genPairingVerified: true,
       routingStatus: 'ROUTING_READY',
       websiteFamilyCutoverEnabled: true,
@@ -133,7 +149,7 @@ describe('MBM website family → GEN routing build', () => {
     expect(stillBlocked.allowed).toBe(true);
 
     const pairingGate = assertFamilyVariantGenOrderAllowed({
-      genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y',
+      genClientProductId: unverifiedCp,
       genPairingVerified: false,
       routingStatus: 'ROUTING_READY',
       websiteFamilyCutoverEnabled: true,
@@ -148,11 +164,14 @@ describe('MBM website family → GEN routing build', () => {
       websiteFamilyCutoverEnabled: true,
       realGenOrderSubmissionEnabled: true,
     } as const;
-    const genId = 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y';
+    const unverifiedCp =
+      'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O';
+    const verifiedCp =
+      'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y';
 
     const pairingFalse = assertFamilyVariantGenOrderAllowed({
       ...base,
-      genClientProductId: genId,
+      genClientProductId: unverifiedCp,
       genPairingVerified: false,
       routingStatus: 'ROUTING_READY',
     });
@@ -162,7 +181,7 @@ describe('MBM website family → GEN routing build', () => {
     // Verified + cutover on → structurally eligible (production cutover flags still OFF by default)
     const eligible = assertFamilyVariantGenOrderAllowed({
       ...base,
-      genClientProductId: genId,
+      genClientProductId: verifiedCp,
       genPairingVerified: true,
       routingStatus: 'ROUTING_READY',
     });
@@ -170,7 +189,7 @@ describe('MBM website family → GEN routing build', () => {
 
     // Same verified path with production defaults still blocked by cutover
     const cutoverOff = assertFamilyVariantGenOrderAllowed({
-      genClientProductId: genId,
+      genClientProductId: verifiedCp,
       genPairingVerified: true,
       routingStatus: 'ROUTING_READY',
     });
@@ -180,7 +199,7 @@ describe('MBM website family → GEN routing build', () => {
     for (const status of ['FORMULARY_PENDING', 'FUTURE_HIDDEN', 'BLOCKED'] as const) {
       const r = assertFamilyVariantGenOrderAllowed({
         ...base,
-        genClientProductId: genId,
+        genClientProductId: verifiedCp,
         genPairingVerified: true,
         routingStatus: status,
       });
@@ -206,16 +225,31 @@ describe('MBM website family → GEN routing build', () => {
     expect(nadVisible.some((v) => v.websiteVariantId.includes('r82'))).toBe(false);
   });
 
-  it('pairing verification registry stays empty and apply flips nothing in this phase', () => {
-    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(0);
-    for (const f of WEBSITE_PRODUCT_FAMILIES) {
-      for (const v of f.variants) {
-        expect(effectiveGenPairingVerified(v)).toBe(false);
-      }
-    }
+  it('amended pairing registry marks 7 compatible CPs verified; apply is idempotent', () => {
+    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(7);
+    const verifiedVariants = WEBSITE_PRODUCT_FAMILIES.flatMap((f) =>
+      f.variants.filter((v) => v.genPairingVerified),
+    );
+    expect(verifiedVariants).toHaveLength(7);
+    expect(verifiedVariants.every((v) => v.routingStatus === 'ROUTING_READY')).toBe(true);
+    // Mid B12 still missing pairing — not verified
+    const midB12 = resolveFamilyVariant('semaglutide', {
+      purchaseType: 'one_time',
+      additive: 'Vitamin B12',
+      doseTier: 'Mid',
+    });
+    expect(midB12.variant?.genPairingVerified).toBe(false);
+    expect(midB12.variant?.routingStatus).toBe('GEN_PAIRING_PENDING');
+    // Multiple Glycine Mid options acceptable — verified
+    const midGly = resolveFamilyVariant('semaglutide', {
+      purchaseType: 'one_time',
+      additive: 'Glycine',
+      doseTier: 'Mid',
+    });
+    expect(midGly.variant?.genPairingVerified).toBe(true);
     const { result } = applyOwnerVerifiedPairingsToFamilies(WEBSITE_PRODUCT_FAMILIES);
+    // Already applied in generated data — no additional flips
     expect(result.variantsFlippedToTrue).toBe(0);
-    expect(result.anyVerified).toBe(false);
   });
 
   it('FORMULARY_PENDING variants never invent a GEN clientProductId', () => {

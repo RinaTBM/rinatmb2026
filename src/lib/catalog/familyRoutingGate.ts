@@ -15,6 +15,12 @@ import type { GenOrderGateInput, GenOrderGateResult } from '@/data/websiteFamili
  * - pairing verified (variant flag OR owner registry)
  * - routingStatus === ROUTING_READY
  *
+ * Pairing verification (amended policy): TRUE when the GEN CP has ≥1 compatible
+ * formulary medication for the website family/additive/form and no material
+ * mismatches. Exact strength/package equality is NOT required — provider chooses
+ * among valid attached options. See pairingPolicy.ts /
+ * docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md.
+ *
  * GEN_PAIRING_PENDING may be built on the website but must not submit live GEN orders.
  * Browser UI must never bypass this server-side gate.
  */

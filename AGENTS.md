@@ -199,10 +199,10 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 
 - Architecture data: `src/data/websiteFamilies/` (30 families / 103 variants). Preview routes: `/preview/families`, `/preview/families/:familyId`. Live `/product/*` storefront stays legacy (B6 SEM/TIR) until cutover.
 - Flags stay OFF: `WEBSITE_FAMILY_CUTOVER_ENABLED`, `REAL_GEN_ORDER_SUBMISSION_ENABLED`. Do not publish new architecture, remove legacy B6, enable GEN/Whop cutover, or invent GEN `clientProductId`s.
-- `genPairingVerified` must stay **false** until the owner confirms exact GEN formulary attachment. Do not auto-verify from name/price/title/id existence.
-- Owner QA: `docs/MBM_WEBSITE_FAMILY_OWNER_QA.md` (+ `.json`). Pairing checklist (23 variants → 15 GEN CPs): `docs/MBM_GEN_PAIRING_VERIFICATION_CHECKLIST.md` (+ `.json`).
-- After owner confirmation only: add GEN `clientProductId` to `src/data/websiteFamilies/pairingVerificationRegistry.ts`, then use `applyPairingVerification.ts` to flip matching variants — do not hand-edit unrelated product fields.
-- Live GEN handoff gate: `src/lib/catalog/familyRoutingGate.ts` (`assertFamilyVariantGenOrderAllowed`). Browser UI must never bypass it. FORMULARY_PENDING / FUTURE_HIDDEN / BLOCKED / unverified pairing all deny.
+- **Pairing policy (amended):** `docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md`. `genPairingVerified` may be true when the GEN CP has ≥1 **compatible** formulary medication (correct family/additive/form + approved pharmacy) and **no material mismatches**. Multiple same-family strengths may remain for provider choice. Do **not** require exact strength/package equality (GEN API often omits those fields). Still reject B12↔Glycine cross-wire, inj/nasal mismatch, wrong pharmacy family, B6, unrelated blends.
+- Registry: `pairingVerificationRegistry.ts` → apply via `applyPairingVerification.ts` (also promotes `GEN_PAIRING_PENDING` → `ROUTING_READY` for verified CPs only).
+- Owner QA / click guide / checklist: `docs/MBM_WEBSITE_FAMILY_OWNER_QA.md`, `docs/MBM_GEN_PAIRING_OWNER_CLICK_GUIDE.md`, `docs/MBM_GEN_PAIRING_VERIFICATION_CHECKLIST.md`.
+- Live GEN handoff gate: `src/lib/catalog/familyRoutingGate.ts`. Browser UI must never bypass it. Cutover OFF still blocks real GEN orders even when `ROUTING_READY`.
 
 ### GitHub source of truth vs Bolt (permanent)
 

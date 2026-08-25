@@ -5,8 +5,8 @@
     "mode": "QA / VERIFICATION ONLY",
     "variantsWithGenClientProductId": 23,
     "uniqueGenClientProductsToVerify": 15,
-    "genPairingVerifiedTrue": 0,
-    "genPairingVerifiedFalse": 23,
+    "genPairingVerifiedTrue": 7,
+    "genPairingVerifiedFalse": 16,
     "doNotAutoVerify": true,
     "cutover": "OFF",
     "realGenOrders": "OFF",
@@ -20,7 +20,14 @@
       "doNotAutoVerify": true,
       "thisPhaseRegistryEmpty": true
     },
-    "relatedOwnerQa": "docs/MBM_WEBSITE_FAMILY_OWNER_QA.md"
+    "relatedOwnerQa": "docs/MBM_WEBSITE_FAMILY_OWNER_QA.md",
+    "pairingPolicy": "MBM-GEN-PAIRING-POLICY-AMENDMENT-1",
+    "requiresExactStrengthPackage": false,
+    "allowsMultipleCompatibleOptions": true,
+    "providerChoosesStrength": true,
+    "updatedAt": "2026-08-25T04:48:29Z",
+    "policyDoc": "docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md",
+    "note": "Amended: verify compatible medication family + pharmacy; multiple strengths OK; reject material mismatches only. Exact strength/package not required."
   },
   "checklist": [
     {
@@ -55,10 +62,27 @@
       ],
       "genPairingVerified": false,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": false,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "No formulary medications attached.",
+        "ownerActionRequired": "Attach at least one compatible Dirx/St Luke/Vios/Greenwich medication for this product family (see click guide). Do not invent formulations."
+      },
+      "amendedClassification": "PAIRING_MISSING",
+      "routingEligibleUnderAmendedPolicy": false,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 129,
+          "exactMedication": "FINASTERIDE/MINOXIDIL (PER ML) 0.1/5 %",
+          "strength": "0.1/5 %",
+          "form": "Foam",
+          "package": "1 ml",
+          "pharmacy": "Vios",
+          "cost": 30,
+          "shipping": 30
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
@@ -92,10 +116,27 @@
       ],
       "genPairingVerified": false,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": false,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "No formulary medications attached.",
+        "ownerActionRequired": "Attach at least one compatible Dirx/St Luke/Vios/Greenwich medication for this product family (see click guide). Do not invent formulations."
+      },
+      "amendedClassification": "PAIRING_MISSING",
+      "routingEligibleUnderAmendedPolicy": false,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 84,
+          "exactMedication": "NAD+ 50mg/ml",
+          "strength": "50mg/ml",
+          "form": "Nasal Spray",
+          "package": "15ml",
+          "pharmacy": "St Luke",
+          "cost": 30,
+          "shipping": 30
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
@@ -265,10 +306,107 @@
       ],
       "genPairingVerified": false,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": false,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "No formulary medications attached.",
+        "ownerActionRequired": "Attach at least one compatible Dirx/St Luke/Vios/Greenwich medication for this product family (see click guide). Do not invent formulations."
+      },
+      "amendedClassification": "PAIRING_MISSING",
+      "routingEligibleUnderAmendedPolicy": false,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 41,
+          "exactMedication": "PROGESTERONE 100MG CAPSULE 100mg",
+          "strength": "100mg",
+          "form": "Capsule",
+          "package": "1 mg",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30
+        },
+        {
+          "excelRow": 42,
+          "exactMedication": "PROGESTERONE 200MG CAPSULE 200mg",
+          "strength": "200mg",
+          "form": "Capsule",
+          "package": "1 mg",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30
+        },
+        {
+          "excelRow": 43,
+          "exactMedication": "PROGESTERONE 50MG CAPSULE 50mg",
+          "strength": "50mg",
+          "form": "Capsule",
+          "package": "1 mg",
+          "pharmacy": "Vios",
+          "cost": 0.75,
+          "shipping": 30
+        },
+        {
+          "excelRow": 44,
+          "exactMedication": "PROGESTERONE IR 100 MG",
+          "strength": "100 MG",
+          "form": "Capsule",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30
+        },
+        {
+          "excelRow": 45,
+          "exactMedication": "PROGESTERONE IR 150 MG",
+          "strength": "150 MG",
+          "form": "Capsule",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30
+        },
+        {
+          "excelRow": 46,
+          "exactMedication": "PROGESTERONE IR 200 MG",
+          "strength": "200 MG",
+          "form": "Capsule",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30
+        },
+        {
+          "excelRow": 47,
+          "exactMedication": "PROGESTERONE IR (DYE-FREE)(LACTOSE-FREE) (M NEW) 200MG",
+          "strength": "200MG",
+          "form": "Capsule",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30
+        },
+        {
+          "excelRow": 48,
+          "exactMedication": "PROGESTERONE IR 300 MG",
+          "strength": "300 MG",
+          "form": "Capsule",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30
+        },
+        {
+          "excelRow": 49,
+          "exactMedication": "PROGESTERONE IR 400 MG",
+          "strength": "400 MG",
+          "form": "Capsule",
+          "package": "1 each",
+          "pharmacy": "Vios",
+          "cost": 0.85,
+          "shipping": 30
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5F8jESeVeXcpkLU5rrdK",
@@ -392,10 +530,117 @@
       ],
       "genPairingVerified": false,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": false,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "No formulary medications attached.",
+        "ownerActionRequired": "Attach at least one compatible Dirx/St Luke/Vios/Greenwich medication for this product family (see click guide). Do not invent formulations."
+      },
+      "amendedClassification": "PAIRING_MISSING",
+      "routingEligibleUnderAmendedPolicy": false,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 2,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5
+        },
+        {
+          "excelRow": 3,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5
+        },
+        {
+          "excelRow": 4,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5
+        },
+        {
+          "excelRow": 5,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5
+        },
+        {
+          "excelRow": 6,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5
+        },
+        {
+          "excelRow": 7,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5
+        },
+        {
+          "excelRow": 8,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5
+        },
+        {
+          "excelRow": 9,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5
+        },
+        {
+          "excelRow": 10,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5
+        },
+        {
+          "excelRow": 11,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MkDIUw0NcJB7YL2pNzYW",
@@ -469,10 +714,67 @@
       ],
       "genPairingVerified": false,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": false,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": true,
+        "notes": "5 incompatible attachment(s) present; also 3 compatible",
+        "ownerActionRequired": "REMOVE incompatible medication(s): Semaglutide + B12 @ Greenwich Pharmacy (BmyTz7FPA4wUuojkq2Hy); Semaglutide + B12 @ Greenwich Pharmacy (Twz0VeW8olCbbL1UAuQr); Semaglutide + B12 @ Greenwich Pharmacy (lPPKidpoLhkYCSV1sLse); Semaglutide + B12 @ Greenwich Pharmacy (pBAQDkpmfv9FIcpoqhxa); Semaglutide + B12 @ Greenwich Pharmacy (vCNPRlelLVcJmimIT7Wy). Keep compatible same-family strengths."
+      },
+      "amendedClassification": "PAIRING_HAS_INCOMPATIBLE_MEDICATION",
+      "routingEligibleUnderAmendedPolicy": false,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 3,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5
+        },
+        {
+          "excelRow": 5,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5
+        },
+        {
+          "excelRow": 7,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5
+        },
+        {
+          "excelRow": 9,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5
+        },
+        {
+          "excelRow": 11,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_wQK2JsFnh7oFBf3Lag4n",
@@ -544,12 +846,69 @@
           "shipping": 5
         }
       ],
-      "genPairingVerified": false,
+      "genPairingVerified": true,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": true,
+        "multipleOptionsOk": true,
+        "materialMismatchPresent": false,
+        "notes": "4 compatible formulary options \u2014 keep all; provider chooses strength.",
+        "ownerActionRequired": null
+      },
+      "amendedClassification": "PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS",
+      "routingEligibleUnderAmendedPolicy": true,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 2,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5
+        },
+        {
+          "excelRow": 4,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5
+        },
+        {
+          "excelRow": 6,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5
+        },
+        {
+          "excelRow": 8,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5
+        },
+        {
+          "excelRow": 10,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_34I2X8MpVZf3AQTff3bo",
@@ -591,12 +950,39 @@
           "shipping": 5
         }
       ],
-      "genPairingVerified": false,
+      "genPairingVerified": true,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": true,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "At least one compatible formulary medication; no material mismatches.",
+        "ownerActionRequired": null
+      },
+      "amendedClassification": "PAIRING_ACCEPTABLE",
+      "routingEligibleUnderAmendedPolicy": true,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 9,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5
+        },
+        {
+          "excelRow": 11,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_sssEk3FDY4LFbQYGQsLx",
@@ -638,12 +1024,39 @@
           "shipping": 5
         }
       ],
-      "genPairingVerified": false,
+      "genPairingVerified": true,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": true,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "At least one compatible formulary medication; no material mismatches.",
+        "ownerActionRequired": null
+      },
+      "amendedClassification": "PAIRING_ACCEPTABLE",
+      "routingEligibleUnderAmendedPolicy": true,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 8,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+          "strength": "6mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 60,
+          "shipping": 5
+        },
+        {
+          "excelRow": 10,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O",
@@ -677,10 +1090,27 @@
       ],
       "genPairingVerified": false,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": false,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "No formulary medications attached.",
+        "ownerActionRequired": "Attach at least one compatible Dirx/St Luke/Vios/Greenwich medication for this product family (see click guide). Do not invent formulations."
+      },
+      "amendedClassification": "PAIRING_MISSING",
+      "routingEligibleUnderAmendedPolicy": false,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 7,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CjqOUbPuGPZzxephqRou",
@@ -712,12 +1142,29 @@
           "shipping": 5
         }
       ],
-      "genPairingVerified": false,
+      "genPairingVerified": true,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": true,
+        "multipleOptionsOk": true,
+        "materialMismatchPresent": false,
+        "notes": "2 compatible formulary options \u2014 keep all; provider chooses strength.",
+        "ownerActionRequired": null
+      },
+      "amendedClassification": "PAIRING_ACCEPTABLE_MULTIPLE_OPTIONS",
+      "routingEligibleUnderAmendedPolicy": true,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 6,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+          "strength": "4mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 58,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y",
@@ -759,12 +1206,39 @@
           "shipping": 5
         }
       ],
-      "genPairingVerified": false,
+      "genPairingVerified": true,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": true,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "At least one compatible formulary medication; no material mismatches.",
+        "ownerActionRequired": null
+      },
+      "amendedClassification": "PAIRING_ACCEPTABLE",
+      "routingEligibleUnderAmendedPolicy": true,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 3,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5
+        },
+        {
+          "excelRow": 5,
+          "exactMedication": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_tk2GW39OGr7JX4MCCoJP",
@@ -806,12 +1280,39 @@
           "shipping": 5
         }
       ],
-      "genPairingVerified": false,
+      "genPairingVerified": true,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": true,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "At least one compatible formulary medication; no material mismatches.",
+        "ownerActionRequired": null
+      },
+      "amendedClassification": "PAIRING_ACCEPTABLE",
+      "routingEligibleUnderAmendedPolicy": true,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 2,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+          "strength": "1mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 50,
+          "shipping": 5
+        },
+        {
+          "excelRow": 4,
+          "exactMedication": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+          "strength": "2mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "1mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 55,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_E3MXZeeR01QROCuTLRLE",
@@ -955,10 +1456,137 @@
       ],
       "genPairingVerified": false,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": false,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "No formulary medications attached.",
+        "ownerActionRequired": "Attach at least one compatible Dirx/St Luke/Vios/Greenwich medication for this product family (see click guide). Do not invent formulations."
+      },
+      "amendedClassification": "PAIRING_MISSING",
+      "routingEligibleUnderAmendedPolicy": false,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 13,
+          "exactMedication": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5
+        },
+        {
+          "excelRow": 14,
+          "exactMedication": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+          "strength": "5mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 65,
+          "shipping": 5
+        },
+        {
+          "excelRow": 15,
+          "exactMedication": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5
+        },
+        {
+          "excelRow": 16,
+          "exactMedication": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+          "strength": "10mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 75,
+          "shipping": 5
+        },
+        {
+          "excelRow": 17,
+          "exactMedication": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5
+        },
+        {
+          "excelRow": 18,
+          "exactMedication": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+          "strength": "15mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 85,
+          "shipping": 5
+        },
+        {
+          "excelRow": 19,
+          "exactMedication": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5
+        },
+        {
+          "excelRow": 20,
+          "exactMedication": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+          "strength": "20mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 90,
+          "shipping": 5
+        },
+        {
+          "excelRow": 21,
+          "exactMedication": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5
+        },
+        {
+          "excelRow": 22,
+          "exactMedication": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+          "strength": "25mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 95,
+          "shipping": 5
+        },
+        {
+          "excelRow": 23,
+          "exactMedication": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5
+        },
+        {
+          "excelRow": 24,
+          "exactMedication": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+          "strength": "30mg/0.5mg/mL",
+          "form": "Vial",
+          "package": "2mL",
+          "pharmacy": "Dirx-Hub",
+          "cost": 100,
+          "shipping": 5
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
@@ -990,12 +1618,29 @@
           "shipping": 25
         }
       ],
-      "genPairingVerified": false,
+      "genPairingVerified": true,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": true,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "At least one compatible formulary medication; no material mismatches.",
+        "ownerActionRequired": null
+      },
+      "amendedClassification": "PAIRING_ACCEPTABLE",
+      "routingEligibleUnderAmendedPolicy": true,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 103,
+          "exactMedication": "BPC-157/TB500 3mg/3mg/mL",
+          "strength": "3mg/3mg/mL",
+          "form": null,
+          "package": "5ML",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 77,
+          "shipping": 25
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     },
     {
       "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
@@ -1029,10 +1674,27 @@
       ],
       "genPairingVerified": false,
       "ownerVerification": {
-        "exactPairingConfirmedInGen": false,
-        "pairingIncorrect": false,
-        "notes": ""
-      }
+        "compatibleFamilyConfirmed": false,
+        "multipleOptionsOk": false,
+        "materialMismatchPresent": false,
+        "notes": "No formulary medications attached.",
+        "ownerActionRequired": "Attach at least one compatible Dirx/St Luke/Vios/Greenwich medication for this product family (see click guide). Do not invent formulations."
+      },
+      "amendedClassification": "PAIRING_MISSING",
+      "routingEligibleUnderAmendedPolicy": false,
+      "expectedFormularyGuidance": [
+        {
+          "excelRow": 104,
+          "exactMedication": "BPC-157/TB500 capsules 500MCG/500MCG",
+          "strength": "500mcg/500mcg",
+          "form": null,
+          "package": "1EA",
+          "pharmacy": "Greenwich Pharmacy",
+          "cost": 3.2,
+          "shipping": 25
+        }
+      ],
+      "policyNote": "Multiple compatible strengths may remain; provider chooses. Do not remove same-family strengths."
     }
   ],
   "verificationRegistry": {

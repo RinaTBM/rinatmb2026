@@ -36,11 +36,11 @@ describe('MBM website family → GEN routing build', () => {
     const total = WEBSITE_PRODUCT_FAMILIES.reduce((n, f) => n + f.variants.length, 0);
     expect(total).toBe(103);
     const counts = countByRoutingStatus();
-    expect(counts.ROUTING_READY).toBe(8);
+    expect(counts.ROUTING_READY).toBe(10);
     expect(counts.FORMULARY_PENDING).toBe(14);
-    expect(counts.GEN_PAIRING_PENDING).toBe(15);
+    expect(counts.GEN_PAIRING_PENDING).toBe(26);
     expect(counts.FUTURE_HIDDEN).toBe(51);
-    expect(counts.BLOCKED).toBe(15);
+    expect(counts.BLOCKED).toBe(2);
     expect(
       counts.FUTURE_HIDDEN +
         counts.BLOCKED +
@@ -72,18 +72,19 @@ describe('MBM website family → GEN routing build', () => {
     expect(b12.variant?.genClientProductId).not.toBe(gly.variant?.genClientProductId);
   });
 
-  it('TIR membership is $275 and one-time tiers exist without inventing CREATE ids', () => {
+  it('TIR membership is $275 and one-time tiers share approved SvFDJ7 backend', () => {
     const mem = resolveFamilyVariant('tirzepatide', { purchaseType: 'membership' });
     expect(mem.variant?.finalRetailPrice).toBe(275);
-    expect(mem.variant?.genClientProductId).toBeTruthy();
+    expect(mem.variant?.genProductId).toBe('SvFDJ7W4nmWL2bkLUMMS');
+    expect(mem.variant?.genPairingVerified).toBe(false);
     const tier = resolveFamilyVariant('tirzepatide', {
       purchaseType: 'one_time',
       additive: 'Vitamin B12',
       doseTier: 'Mid',
     });
     expect(tier.variant?.websiteVariantId).toBe('tir-b12-mid');
-    expect(tier.variant?.genClientProductId).toBeNull();
-    expect(tier.variant?.routingStatus).toBe('BLOCKED');
+    expect(tier.variant?.genProductId).toBe('SvFDJ7W4nmWL2bkLUMMS');
+    expect(tier.variant?.routingStatus).toBe('GEN_PAIRING_PENDING');
   });
 
   it('NAD injection vs nasal and nasal A vs B route correctly', () => {
@@ -98,7 +99,8 @@ describe('MBM website family → GEN routing build', () => {
     expect(nasalA.variant?.genClientProductId).toContain('FVwkzvQqWIZRNAwbslGw');
     expect(nasalB.variant?.websiteVariantId).toBe('nad-nasal-r85');
     expect(nasalB.variant?.finalRetailPrice).toBe(109);
-    expect(nasalB.variant?.genClientProductId).toBeNull();
+    expect(nasalB.variant?.genProductId).toBe('3KnF8Ll7XPm7Vk0lr4Li');
+    expect(nasalB.variant?.genPairingVerified).toBe(false);
   });
 
   it('Wolverine capsule vs injection use separate GEN CPs and prices', () => {
@@ -109,12 +111,14 @@ describe('MBM website family → GEN routing build', () => {
     expect(cap.variant?.genClientProductId).not.toBe(inj.variant?.genClientProductId);
   });
 
-  it('Estradiol patch strengths resolve without vaginal CP substitution', () => {
+  it('Estradiol patch strengths resolve to dedicated patch CPs (not vaginal)', () => {
     const a = resolveFamilyVariant('estradiol', { strength: '0.025' });
     const b = resolveFamilyVariant('estradiol', { strength: '0.1' });
     expect(a.variant?.websiteVariantId).toBe('estradiol-patch-r26');
     expect(b.variant?.websiteVariantId).toBe('estradiol-patch-r29');
-    expect(a.variant?.genClientProductId).toBeNull();
+    expect(a.variant?.genProductId).toBe('rziDZ07sJzDMXpdTvPcL');
+    expect(b.variant?.genProductId).toBe('T4kMQnbixxDm7f0Ptjtq');
+    expect(a.variant?.genPairingVerified).toBe(false);
     expect(b.variant?.finalRetailPrice).toBe(149);
   });
 
@@ -127,7 +131,7 @@ describe('MBM website family → GEN routing build', () => {
 
   it('GEN order gate requires pairing verified + ROUTING_READY + cutover', () => {
     const unverifiedCp =
-      'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BLf8inX395YNc7WPCD4O'; // Mid B12 — still missing
+      'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SvFDJ7W4nmWL2bkLUMMS'; // TIR — 3-PACK still attached
     const verifiedCp =
       'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y';
 
@@ -225,21 +229,23 @@ describe('MBM website family → GEN routing build', () => {
     expect(nadVisible.some((v) => v.websiteVariantId.includes('r82'))).toBe(false);
   });
 
-  it('postcheck-3 registry marks 8 compatible CPs verified; apply is idempotent', () => {
-    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(8);
+  it('backend-completion-1 registry marks 9 compatible CPs verified; apply is idempotent', () => {
+    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(9);
     const verifiedVariants = WEBSITE_PRODUCT_FAMILIES.flatMap((f) =>
       f.variants.filter((v) => v.genPairingVerified),
     );
-    expect(verifiedVariants).toHaveLength(8);
+    // 8 SEM dose/membership backends + NAD r84 (membership shares Any Dose B12 CP)
+    expect(verifiedVariants.length).toBeGreaterThanOrEqual(9);
     expect(verifiedVariants.every((v) => v.routingStatus === 'ROUTING_READY')).toBe(true);
-    // Mid B12 still missing pairing — not verified
+    // Mid B12 now routes to owner NF825 — verified
     const midB12 = resolveFamilyVariant('semaglutide', {
       purchaseType: 'one_time',
       additive: 'Vitamin B12',
       doseTier: 'Mid',
     });
-    expect(midB12.variant?.genPairingVerified).toBe(false);
-    expect(midB12.variant?.routingStatus).toBe('GEN_PAIRING_PENDING');
+    expect(midB12.variant?.genProductId).toBe('NF825utCtjVqbbGsnQN3');
+    expect(midB12.variant?.genPairingVerified).toBe(true);
+    expect(midB12.variant?.routingStatus).toBe('ROUTING_READY');
     // Multiple Glycine Mid options acceptable — verified
     const midGly = resolveFamilyVariant('semaglutide', {
       purchaseType: 'one_time',
@@ -247,7 +253,7 @@ describe('MBM website family → GEN routing build', () => {
       doseTier: 'Mid',
     });
     expect(midGly.variant?.genPairingVerified).toBe(true);
-    // SEM Any Dose B12 + NAD nasal r84 verified (owner corrections); Wolverine injection not
+    // SEM Any Dose B12 + NAD nasal r84 verified; Wolverine injection not (capsule still attached)
     const anyB12 = resolveFamilyVariant('semaglutide', {
       purchaseType: 'one_time',
       additive: 'Vitamin B12',
@@ -262,8 +268,15 @@ describe('MBM website family → GEN routing build', () => {
       (v) => v.websiteVariantId === 'wolverine-injection',
     );
     expect(wolInj?.genPairingVerified).toBe(false);
+    // TIR single backend mapped but not verified until 3-PACK removed
+    const tirAny = resolveFamilyVariant('tirzepatide', {
+      purchaseType: 'one_time',
+      additive: 'Vitamin B12',
+      doseTier: 'Any Dose',
+    });
+    expect(tirAny.variant?.genProductId).toBe('SvFDJ7W4nmWL2bkLUMMS');
+    expect(tirAny.variant?.genPairingVerified).toBe(false);
     const { result } = applyOwnerVerifiedPairingsToFamilies(WEBSITE_PRODUCT_FAMILIES);
-    // Already applied in generated data — no additional flips
     expect(result.variantsFlippedToTrue).toBe(0);
   });
 

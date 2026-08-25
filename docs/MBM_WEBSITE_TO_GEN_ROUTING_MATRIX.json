@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-08-25T00:27:41Z",
-    "phase": "MBM-OWNER-ROUTING-DECISION-GATE-2 \u2014 OWNER APPROVAL APPLIED",
+    "generated_at": "2026-08-25T00:48:39Z",
+    "phase": "MBM-GEN-PRICE-CONFLICT-RESOLUTION-1 applied to routing",
     "mode": "READ-ONLY \u2014 owner decisions locked into routing; no GEN/website writes",
     "website_architecture": "LOCKED \u2014 one family \u2192 variants \u2192 exact GEN route",
     "approved_docs": [
@@ -28,7 +28,8 @@
       "B",
       "A",
       "A"
-    ]
+    ],
+    "price_conflict_resolution_doc": "docs/MBM_GEN_PRICE_CONFLICT_RESOLUTION.md"
   },
   "status_definitions": {
     "ROUTING_READY": "Exact website\u2192GEN CP\u2192formulary\u2192pharmacy\u2192package\u2192price path proven",
@@ -1223,18 +1224,17 @@
           "one_time_x9": 79
         }
       ],
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "gen_action": "REUSE_GEN_PRODUCT",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "OFF",
-      "notes": "OWNER LOCKED Decisions 4\u20135 \u2014 Verified nasal variant under ONE NAD+ website family (Injection + Nasal Spray). Pair exact SELECTED row; never cross-pair with injection; never use r81/r82.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: GEN_CP_SPLIT \u2014 reuse existing nasal CP for r84 @ $79; pair St Luke r84.",
       "required_actions": [
-        "ATTACH_EXACT_NASAL_FORMULARY",
-        "ALIGN_GEN_PRICE",
-        "NEVER_CROSS_PAIR_WITH_INJECTION",
-        "OWNER_LOCKED_VERIFIED_NASAL"
+        "REPAIR_PRICE_TO_79",
+        "MANUAL_PAIR_R84",
+        "NEVER_CROSS_PAIR_INJECTION"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
       "owner_decision_context": {
         "decisions": [
@@ -1246,6 +1246,11 @@
           "A"
         ],
         "locked": true
+      },
+      "price_conflict_resolution": {
+        "classification": "B_GEN_CP_SPLIT_REQUIRED",
+        "role": "REUSE_FOR_R84",
+        "resolved_at": "2026-08-25T00:48:39Z"
       }
     },
     {
@@ -1259,8 +1264,8 @@
       "purchase_model": "one_time",
       "retail_price_architecture": 109,
       "pharmacy": "St Luke",
-      "gen_productId": "FVwkzvQqWIZRNAwbslGw",
-      "gen_name": "NAD + Nasal Spray",
+      "gen_productId": null,
+      "gen_name": null,
       "exact_formulary_mapping": [
         {
           "excel_row": 85,
@@ -1273,18 +1278,17 @@
           "one_time_x9": 109
         }
       ],
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_CREATE_REQUIRED",
       "gen_action": "REUSE_GEN_PRODUCT",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "OFF",
-      "notes": "OWNER LOCKED Decisions 4\u20135 \u2014 Verified nasal variant under ONE NAD+ website family (Injection + Nasal Spray). Pair exact SELECTED row; never cross-pair with injection; never use r81/r82.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: GEN_CP_SPLIT \u2014 CREATE new nasal CP for r85 @ $109; do not share price with r84.",
       "required_actions": [
-        "ATTACH_EXACT_NASAL_FORMULARY",
-        "ALIGN_GEN_PRICE",
-        "NEVER_CROSS_PAIR_WITH_INJECTION",
-        "OWNER_LOCKED_VERIFIED_NASAL"
+        "CREATE_GEN_CP_NAD_NASAL_200MG_ML",
+        "SET_PRICE_109",
+        "MANUAL_PAIR_R85"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
+      "routing_status": "GEN_PRODUCT_CREATE_REQUIRED",
       "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
       "owner_decision_context": {
         "decisions": [
@@ -1296,6 +1300,11 @@
           "A"
         ],
         "locked": true
+      },
+      "price_conflict_resolution": {
+        "classification": "B_GEN_CP_SPLIT_REQUIRED",
+        "role": "CREATE_FOR_R85",
+        "resolved_at": "2026-08-25T00:48:39Z"
       }
     },
     {
@@ -1321,17 +1330,22 @@
           "one_time_x9": 29
         }
       ],
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "gen_action": "REUSE_GEN_PRODUCT",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
       "required_actions": [
-        "ATTACH_FORMULARY_R104",
-        "ALIGN_GEN_PRICE_29_OR_OWNER_WEBSITE_PRICE_POLICY",
-        "VERIFY_NOT_USING_TRIPLE_BLEND_CPS"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_R104"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      },
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 + pair r104."
     },
     {
       "website_product_family": "Wolverine / BPC-TB",
@@ -1367,14 +1381,19 @@
       "gen_action": "REPAIR_GEN_PRODUCT",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Live pairing exists to BPC-157/TB500 @ Greenwich \u2014 verify exact strength/package equals SELECTED r103.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 169\u2192159 supported by r103.",
       "required_actions": [
         "VERIFY_PAIRING_IS_EXACT_R103_NOT_GHK_OR_KPV_BLEND",
         "ALIGN_GEN_PRICE",
         "OPTIONAL_RENAME_DISPLAY_TO_WOLVERINE"
       ],
       "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9"
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 159,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "NAD+",
@@ -1482,18 +1501,23 @@
         }
       ],
       "gen_storefrontEligible": false,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Owner-locked. SAFE_TO_REPAIR Dual Combo later. Do not use GHK-Cu/Minoxidil CP.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219279 + pair Vios r129. Dual Combo CP OK. Not GHK-Cu/Minoxidil.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_VIOS_R129_FIN_MINOX_0_1_5",
-        "SET_PRICE_79",
+        "REPAIR_PRICE_TO_79",
+        "MANUAL_PAIR_VIOS_R129",
         "DO_NOT_USE_GHK_CU_MINOXIDIL_CP"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_BboYS4a2Uj7APetrFo6W",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 79,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Minoxidil",
@@ -1639,7 +1663,7 @@
       "package_size": null,
       "purchase_model": "one_time",
       "retail_price_architecture": 119,
-      "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+      "gen_productId": null,
       "pharmacy": "Valiant",
       "exact_formulary_mapping": [
         {
@@ -1651,17 +1675,25 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_CREATE_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "GEN candidate is near-name only \u2014 pairing/repair required. Do not fuzzy-match vaginal products.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r26 @ $119.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "CREATE_GEN_CP_ESTRADIOL_PATCH",
+        "DO_NOT_REUSE_VAGINAL_CP",
+        "SET_LOCKED_PRICE",
+        "MANUAL_PAIR_SELECTED_ROW"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR"
+      "routing_status": "GEN_PRODUCT_CREATE_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+      "gen_name": null,
+      "price_conflict_resolution": {
+        "classification": "B_GEN_CP_SPLIT_REQUIRED",
+        "do_not_reuse": "o7dNtf9QsnEqPCrLr2tR",
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Estradiol",
@@ -1674,7 +1706,7 @@
       "package_size": null,
       "purchase_model": "one_time",
       "retail_price_architecture": 129,
-      "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+      "gen_productId": null,
       "pharmacy": "Valiant",
       "exact_formulary_mapping": [
         {
@@ -1686,17 +1718,25 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_CREATE_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "GEN candidate is near-name only \u2014 pairing/repair required. Do not fuzzy-match vaginal products.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r27 @ $129.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "CREATE_GEN_CP_ESTRADIOL_PATCH",
+        "DO_NOT_REUSE_VAGINAL_CP",
+        "SET_LOCKED_PRICE",
+        "MANUAL_PAIR_SELECTED_ROW"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR"
+      "routing_status": "GEN_PRODUCT_CREATE_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+      "gen_name": null,
+      "price_conflict_resolution": {
+        "classification": "B_GEN_CP_SPLIT_REQUIRED",
+        "do_not_reuse": "o7dNtf9QsnEqPCrLr2tR",
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Estradiol",
@@ -1709,7 +1749,7 @@
       "package_size": null,
       "purchase_model": "one_time",
       "retail_price_architecture": 139,
-      "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+      "gen_productId": null,
       "pharmacy": "Valiant",
       "exact_formulary_mapping": [
         {
@@ -1721,17 +1761,25 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_CREATE_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "GEN candidate is near-name only \u2014 pairing/repair required. Do not fuzzy-match vaginal products.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r28 @ $139.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "CREATE_GEN_CP_ESTRADIOL_PATCH",
+        "DO_NOT_REUSE_VAGINAL_CP",
+        "SET_LOCKED_PRICE",
+        "MANUAL_PAIR_SELECTED_ROW"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR"
+      "routing_status": "GEN_PRODUCT_CREATE_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+      "gen_name": null,
+      "price_conflict_resolution": {
+        "classification": "B_GEN_CP_SPLIT_REQUIRED",
+        "do_not_reuse": "o7dNtf9QsnEqPCrLr2tR",
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Estradiol",
@@ -1744,7 +1792,7 @@
       "package_size": null,
       "purchase_model": "one_time",
       "retail_price_architecture": 149,
-      "gen_productId": "o7dNtf9QsnEqPCrLr2tR",
+      "gen_productId": null,
       "pharmacy": "Valiant",
       "exact_formulary_mapping": [
         {
@@ -1756,17 +1804,25 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_CREATE_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "GEN candidate is near-name only \u2014 pairing/repair required. Do not fuzzy-match vaginal products.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: Do not use vaginal CP o7dNtf9QsnEqPCrLr2tR. CREATE dedicated patch CP for r29 @ $149.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "CREATE_GEN_CP_ESTRADIOL_PATCH",
+        "DO_NOT_REUSE_VAGINAL_CP",
+        "SET_LOCKED_PRICE",
+        "MANUAL_PAIR_SELECTED_ROW"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR"
+      "routing_status": "GEN_PRODUCT_CREATE_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR",
+      "gen_name": null,
+      "price_conflict_resolution": {
+        "classification": "B_GEN_CP_SPLIT_REQUIRED",
+        "do_not_reuse": "o7dNtf9QsnEqPCrLr2tR",
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Estradiol",
@@ -1931,17 +1987,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Prefer Progesterone GEN over BiEst combo near-name.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_EXACT_SELECTED_ROWS"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Progesterone",
@@ -1966,17 +2027,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Prefer Progesterone GEN over BiEst combo near-name.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_EXACT_SELECTED_ROWS"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Progesterone",
@@ -2001,17 +2067,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Prefer Progesterone GEN over BiEst combo near-name.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_EXACT_SELECTED_ROWS"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Progesterone",
@@ -2036,17 +2107,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Prefer Progesterone GEN over BiEst combo near-name.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_EXACT_SELECTED_ROWS"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Progesterone",
@@ -2071,17 +2147,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Prefer Progesterone GEN over BiEst combo near-name.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_EXACT_SELECTED_ROWS"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Progesterone",
@@ -2106,17 +2187,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Prefer Progesterone GEN over BiEst combo near-name.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_EXACT_SELECTED_ROWS"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Progesterone",
@@ -2141,17 +2227,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Prefer Progesterone GEN over BiEst combo near-name.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_EXACT_SELECTED_ROWS"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Progesterone",
@@ -2176,17 +2267,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Prefer Progesterone GEN over BiEst combo near-name.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_EXACT_SELECTED_ROWS"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Progesterone",
@@ -2211,17 +2307,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "GEN_PRODUCT_REPAIR_REQUIRED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE",
-      "notes": "Prefer Progesterone GEN over BiEst combo near-name.",
+      "notes": "PRICE-CONFLICT-RESOLUTION: SIMPLE_PRICE_REPAIR 0\u219229 (all IR rows $29). Multi-strength pairings on one CP OK.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "REPAIR_PRICE_TO_29",
+        "MANUAL_PAIR_EXACT_SELECTED_ROWS"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh"
+      "routing_status": "GEN_PRODUCT_REPAIR_REQUIRED",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh",
+      "price_conflict_resolution": {
+        "classification": "A_SIMPLE_PRICE_REPAIR",
+        "locked_price": 29,
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Progesterone",
@@ -2676,17 +2777,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "FUTURE_HIDDEN",
       "launch_state": "FUTURE_HIDDEN",
       "checkout_status": "OFF",
-      "notes": "Expose nasal only when ready. Do not substitute for injection pending.",
+      "notes": "Expose nasal only when ready. Do not substitute for injection pending. | PRICE-CONFLICT-RESOLUTION: FUTURE_HIDDEN_NO_EXECUTION \u2014 removed from executable set.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "NO_EXECUTION_THIS_PHASE",
+        "DO_NOT_ACTIVATE",
+        "DO_NOT_SUBSTITUTE_FOR_INJECTION_PENDING"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Ukctbyh5Yrek3SnGSYA3"
+      "routing_status": "FUTURE_HIDDEN",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Ukctbyh5Yrek3SnGSYA3",
+      "price_conflict_resolution": {
+        "classification": "E_FUTURE_HIDDEN_NO_EXECUTION",
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Semax",
@@ -2739,17 +2845,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "GEN_PAIRING_REQUIRED",
+      "primary_status": "FUTURE_HIDDEN",
       "launch_state": "FUTURE_HIDDEN",
       "checkout_status": "OFF",
-      "notes": null,
+      "notes": " | PRICE-CONFLICT-RESOLUTION: FUTURE_HIDDEN_NO_EXECUTION \u2014 removed from executable set.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "ATTACH_EXACT_FORMULARY",
-        "VERIFY_PRICE"
+        "NO_EXECUTION_THIS_PHASE",
+        "DO_NOT_ACTIVATE",
+        "DO_NOT_SUBSTITUTE_FOR_INJECTION_PENDING"
       ],
-      "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_YTHcdrlRICMpt56hdxeJ"
+      "routing_status": "FUTURE_HIDDEN",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_YTHcdrlRICMpt56hdxeJ",
+      "price_conflict_resolution": {
+        "classification": "E_FUTURE_HIDDEN_NO_EXECUTION",
+        "resolved_at": "2026-08-25T00:48:39Z"
+      }
     },
     {
       "website_product_family": "Selank + Semax Blend",
@@ -3964,12 +4075,12 @@
   ],
   "counts": {
     "ROUTING_READY": 0,
-    "GEN_PRODUCT_CREATE_REQUIRED": 8,
-    "GEN_PRODUCT_REPAIR_REQUIRED": 10,
-    "GEN_PAIRING_REQUIRED": 20,
+    "GEN_PRODUCT_CREATE_REQUIRED": 13,
+    "GEN_PRODUCT_REPAIR_REQUIRED": 22,
+    "GEN_PAIRING_REQUIRED": 1,
     "FORMULARY_PENDING": 14,
     "PRICE_PENDING": 0,
-    "FUTURE_HIDDEN": 51,
+    "FUTURE_HIDDEN": 53,
     "BLOCKED_OWNER_REVIEW": 0
   },
   "family_summaries": {
@@ -4174,12 +4285,12 @@
     "TOTAL_WEBSITE_FAMILIES": 30,
     "TOTAL_WEBSITE_VARIANTS": 103,
     "ROUTING_READY": 0,
-    "GEN_PRODUCT_CREATE_REQUIRED": 8,
-    "GEN_PRODUCT_REPAIR_REQUIRED": 10,
-    "GEN_PAIRING_REQUIRED": 20,
+    "GEN_PRODUCT_CREATE_REQUIRED": 13,
+    "GEN_PRODUCT_REPAIR_REQUIRED": 22,
+    "GEN_PAIRING_REQUIRED": 1,
     "FORMULARY_PENDING": 14,
     "PRICE_PENDING": 0,
-    "FUTURE_HIDDEN": 51,
+    "FUTURE_HIDDEN": 53,
     "BLOCKED_OWNER_REVIEW": 0,
     "GEN_EXECUTION_ELIGIBLE_VARIANTS": 38,
     "GEN_EXECUTION_BLOCKED_VARIANTS": 65,
@@ -4191,6 +4302,8 @@
     "WEBSITE_MODIFIED": false,
     "CHECKOUT_MODIFIED": false,
     "CUTOVER": "OFF",
-    "STOP": "STOP FOR OWNER REVIEW \u2014 Do not execute GEN. Do not modify website."
+    "STOP": "STOP FOR OWNER REVIEW \u2014 Do not execute GEN. Do not modify website.",
+    "EXECUTION_ELIGIBLE_WEBSITE_VARIANTS": 36,
+    "PRICE_CONFLICTS_REMAINING": 0
   }
 }

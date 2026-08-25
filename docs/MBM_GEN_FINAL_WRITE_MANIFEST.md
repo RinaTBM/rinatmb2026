@@ -1,26 +1,12 @@
 # MBM GEN Final Write Manifest
 
-**Generated:** 2026-08-25T00:38:03Z  
-**Phase:** MBM-GEN-EXECUTION-PREFLIGHT-1  
-**Mode:** FINAL READ-ONLY PREFLIGHT — **DO NOT EXECUTE**  
+**Updated:** 2026-08-25T00:48:39Z  
+**Phase:** post MBM-GEN-PRICE-CONFLICT-RESOLUTION-1  
+**Mode:** READ-ONLY PREFLIGHT — **DO NOT EXECUTE**
 
-Owner decisions: **LOCKED 8/8** · Website architecture: **LOCKED** · Cutover: **OFF**
-
-## Dedupe summary
-
-- **Execution-eligible website variants:** 38
-- **Unique GEN products to CREATE:** 8
-- **Unique GEN products to REPAIR:** 10
-- **Unique GEN CPs needing pairing:** 8 (active 6 · deferred FUTURE_HIDDEN launch 2)
-- _38 website variants map to fewer unique GEN mutations via shared CPs (e.g. Estradiol patches×4 → 1 CP; Progesterone IR×9 → 1 CP; NAD nasal×2 → 1 CP)_
-
-## Pairing API status
-
-**PAIRING_EXECUTION_METHOD = MANUAL_GEN_ADMIN**
-
-NOT_AVAILABLE — Client Products API cannot write formulary pairings (documented in GEN_CATALOG_2A_LIVE_WRITE_REPORT / GEN_LIVE_FORMULARY_PAIRING_AUDIT)
-
-API_WRITABLE pairing actions: **0**
+> **Price-conflict STOP items resolved.** Authoritative resolution: [`MBM_GEN_PRICE_CONFLICT_RESOLUTION.md`](./MBM_GEN_PRICE_CONFLICT_RESOLUTION.md).  
+> Recalculated executable set: CREATE **13** · REPAIR CPs **14** · eligible variants **36** · remaining PRICE_CONFLICTS **0**.  
+> Pairings remain **MANUAL_GEN_ADMIN**. READY for write execution only after explicit owner authorization.
 
 ---
 
@@ -942,3 +928,49 @@ _Do **not** perform these steps now._
 
 GEN MODIFIED: NO · GEN WRITES: 0 · PAIRING WRITES: 0  
 WEBSITE MODIFIED: NO · CHECKOUT MODIFIED: NO · CUTOVER: OFF
+
+
+---
+
+# POST-RESOLUTION FINAL REPORT
+
+| Item | Value |
+|---|---|
+| PRICE_CONFLICTS_STARTING | 8 |
+| SIMPLE_PRICE_REPAIR | 4 |
+| GEN_CP_SPLIT_REQUIRED | 2 |
+| ALREADY_CORRECT | 0 |
+| FORMULARY_PENDING_FROM_CONFLICTS | 0 |
+| FUTURE_HIDDEN_REMOVED | 2 |
+| OTHER_BLOCKERS | 0 |
+| NAD_NASAL_BACKEND_STRUCTURE | SPLIT — r84 reuses FVwkzvQqWIZRNAwbslGw @$79; r85 CREATE @$109; one website NAD+ family |
+| ESTRADIOL_BACKEND_STRUCTURE | SPLIT CREATE×4 patch CPs (do not reuse vaginal Estradiol/DHEA CP); one website Estradiol family |
+| WOLVERINE_BACKEND_STRUCTURE | Injection CP iJty… @$159 + Capsule CP omhh… @$29; one website Wolverine family |
+| MINOXIDIL_BACKEND_STRUCTURE | Reuse Dual Combo BboYS… @$79 + Vios r129; not GHK-Cu/Minoxidil |
+| PROGESTERONE_BACKEND_STRUCTURE | Reuse Progesterone CP 5dGk… @$29 with multi-strength IR pairings (all $29) |
+| SELANK_NASAL_EXECUTABLE | NO |
+| SEMAX_NASAL_EXECUTABLE | NO |
+| UNIQUE_GEN_CREATE_REQUIRED | 13 |
+| UNIQUE_GEN_REPAIR_REQUIRED | 14 |
+| UNIQUE_GEN_CPS_REQUIRING_PAIRING_STATUS_ONLY | 1 |
+| MANUAL_GEN_ADMIN_PAIRING_ACTIONS | 64 |
+| REMAINING_PRICE_CONFLICTS | 0 |
+| REMAINING_STRUCTURE_CONFLICTS | 0 |
+| REMAINING_STOP_ITEMS | 0 |
+| FORMULARY_PENDING | 14 |
+| FUTURE_HIDDEN | 53 |
+| EXECUTION_ELIGIBLE_WEBSITE_VARIANTS | 36 |
+| ALL_EXECUTABLE_PRICES_VERIFIED_FROM_COST_SHIPPING | YES |
+| ALL_EXECUTABLE_GEN_CP_IDENTITIES_EXACTLY_SUPPORTED | YES |
+| READY_FOR_GEN_WRITE_EXECUTION | YES |
+| READY_NOTE | READY means resolution cleared STOP items. Owner must still explicitly authorize write execution. Pairings remain MANUAL_GEN_ADMIN. |
+| GEN_MODIFIED | False |
+| GEN_WRITES | 0 |
+| PAIRING_WRITES | 0 |
+| WEBSITE_MODIFIED | False |
+| CHECKOUT_MODIFIED | False |
+| CUTOVER | OFF |
+| UNIQUE_GEN_CPS_REQUIRING_PAIRING | 28 |
+| MANUAL_PAIRING_NOTE | Row-level ADD count includes SEM/TIR membership ladders and multi-strength Prog/SEM dose groups. API writable = 0. |
+
+**STOP FOR OWNER REVIEW. DO NOT EXECUTE THE MANIFEST.**

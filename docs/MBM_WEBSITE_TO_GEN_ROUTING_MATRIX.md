@@ -1,52 +1,27 @@
 # Website → GEN Routing Matrix
 
-**Generated:** 2026-08-25T00:27:41Z  
-**Phase:** MBM-OWNER-ROUTING-DECISION-GATE-2 — OWNER APPROVAL APPLIED  
-**Mode:** READ-ONLY — owner decisions locked into routing; no GEN/website writes  
+**Generated:** 2026-08-25T00:48:39Z  
+**Phase:** MBM-GEN-PRICE-CONFLICT-RESOLUTION-1 applied to routing  
+**Mode:** READ-ONLY — price-conflict resolution applied; no GEN/website writes  
 
-Website architecture: **LOCKED** — one family → selectors/variants → exact GEN backend route.
+Website architecture: **LOCKED**. Owner decisions: **LOCKED 8/8**.
 
-**Owner decisions locked:** `A · A · B · A · A · B · A · A` (see [`MBM_OWNER_ROUTING_DECISIONS_2.md`](./MBM_OWNER_ROUTING_DECISIONS_2.md))
-
-## Status definitions
-
-- **`ROUTING_READY`** — Exact website→GEN CP→formulary→pharmacy→package→price path proven
-- **`GEN_PRODUCT_CREATE_REQUIRED`** — No appropriate GEN CP; create at execution
-- **`GEN_PRODUCT_REPAIR_REQUIRED`** — GEN CP exists but needs correction (price/pairing/name/attachments)
-- **`GEN_PAIRING_REQUIRED`** — CP exists (or identified) but exact formulary attachment missing/unproven
-- **`FORMULARY_PENDING`** — Exact formulary unavailable — sourcing required
-- **`PRICE_PENDING`** — Cost/package incomplete — cannot compute retail
-- **`FUTURE_HIDDEN`** — Not patient-visible yet
-- **`BLOCKED_OWNER_REVIEW`** — Unsafe, transitional, or owner decision required before routing
+See also: [`MBM_GEN_PRICE_CONFLICT_RESOLUTION.md`](./MBM_GEN_PRICE_CONFLICT_RESOLUTION.md)
 
 ## Counts (103 variants)
 
 | Status | Count |
 |---|---:|
 | `ROUTING_READY` | 0 |
-| `GEN_PRODUCT_CREATE_REQUIRED` | 8 |
-| `GEN_PRODUCT_REPAIR_REQUIRED` | 10 |
-| `GEN_PAIRING_REQUIRED` | 20 |
+| `GEN_PRODUCT_CREATE_REQUIRED` | 13 |
+| `GEN_PRODUCT_REPAIR_REQUIRED` | 22 |
+| `GEN_PAIRING_REQUIRED` | 1 |
 | `FORMULARY_PENDING` | 14 |
 | `PRICE_PENDING` | 0 |
-| `FUTURE_HIDDEN` | 51 |
+| `FUTURE_HIDDEN` | 53 |
 | `BLOCKED_OWNER_REVIEW` | 0 |
 | **TOTAL** | **103** |
-
-## Owner-decision effects (applied)
-
-| Decision | Variant | Choice | New status |
-|---:|---|:---:|---|
-| 1 | `sem-current-b6` | A | FUTURE_HIDDEN — remove B6 at cutover |
-| 2 | `tir-current-b6` | A | FUTURE_HIDDEN — remove B6 at cutover |
-| 3 | `nad-inj-selected-r83` | B | FUTURE_HIDDEN — do not substitute 200mg/mL |
-| 4 | `nad-nasal-r81` | A | FUTURE_HIDDEN — use r84 |
-| 5 | `nad-nasal-r82` | A | FUTURE_HIDDEN — use r85 |
-| 6 | `tretinoin-selected-r126` | B | FUTURE_HIDDEN — keep website 0.025/0.05/0.1% |
-| 7 | `tretinoin-selected-r127` | A | FUTURE_HIDDEN — do not map combo to plain |
-| 8 | `scream-cream-pending` | A | FUTURE_HIDDEN — do not activate |
-
-**Also locked:** NAD+ 100mg/mL Injection + Tretinoin website strengths remain `FORMULARY_PENDING` (sourcing). NAD nasal **r84/r85** = `GEN_PAIRING_REQUIRED` under ONE NAD+ family.
+| Execution-eligible (CREATE+REPAIR+PAIRING+READY) | **36** |
 
 ## Full route table
 
@@ -76,33 +51,33 @@ Website architecture: **LOCKED** — one family → selectors/variants → exact
 | NAD+ | `nad-inj-5ml-500` | Injection | 199 | `SHJpGAACUFEeMONdpEbn` | — | `FORMULARY_PENDING` | CURRENT_LIVE |
 | NAD+ | `nad-inj-10ml-1000` | Injection | 229 | `SHJpGAACUFEeMONdpEbn` | — | `FORMULARY_PENDING` | CURRENT_LIVE |
 | NAD+ | `nad-inj-selected-r83` | Injection | 139 | `SHJpGAACUFEeMONdpEbn` | r83 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
-| NAD+ | `nad-nasal-r84` | Nasal Spray | 79 | `FVwkzvQqWIZRNAwbslGw` | r84 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| NAD+ | `nad-nasal-r85` | Nasal Spray | 109 | `FVwkzvQqWIZRNAwbslGw` | r85 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Wolverine / BPC-TB | `wolverine-capsule` | Capsule | 29 | `omhh3NabouO8AsNR5tkD` | r104 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
+| NAD+ | `nad-nasal-r84` | Nasal Spray | 79 | `FVwkzvQqWIZRNAwbslGw` | r84 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
+| NAD+ | `nad-nasal-r85` | Nasal Spray | 109 | `—` | r85 | `GEN_PRODUCT_CREATE_REQUIRED` | CURRENT_LIVE |
+| Wolverine / BPC-TB | `wolverine-capsule` | Capsule | 29 | `omhh3NabouO8AsNR5tkD` | r104 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
 | Wolverine / BPC-TB | `wolverine-injection` | Injection | 159 | `iJtyig611AZEDBGdvRd9` | r103 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
 | NAD+ | `nad-nasal-r81` | Nasal Spray | 79 | `FVwkzvQqWIZRNAwbslGw` | r81 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | NAD+ | `nad-nasal-r82` | Nasal Spray | 109 | `FVwkzvQqWIZRNAwbslGw` | r82 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
-| Minoxidil | `minoxidil-fin-minox-0.1-5` | Topical | 79 | `BboYS4a2Uj7APetrFo6W` | r129 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
+| Minoxidil | `minoxidil-fin-minox-0.1-5` | Topical | 79 | `BboYS4a2Uj7APetrFo6W` | r129 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
 | Minoxidil | `minoxidil-solution` | Topical | 29 | `489YrehNXRlL77fYPkOn` | r128 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Minoxidil | `minoxidil-cream` | Topical | 89 | `489YrehNXRlL77fYPkOn` | r131,r132,r133 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Minoxidil | `fin-minox-tret` | Topical | 89 | `EeWMcfCJf5EU2LkNQmp9` | r134,r135,r136 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
-| Estradiol | `estradiol-patch-r26` | Patch | 119 | `o7dNtf9QsnEqPCrLr2tR` | r26 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Estradiol | `estradiol-patch-r27` | Patch | 129 | `o7dNtf9QsnEqPCrLr2tR` | r27 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Estradiol | `estradiol-patch-r28` | Patch | 139 | `o7dNtf9QsnEqPCrLr2tR` | r28 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Estradiol | `estradiol-patch-r29` | Patch | 149 | `o7dNtf9QsnEqPCrLr2tR` | r29 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
+| Estradiol | `estradiol-patch-r26` | Patch | 119 | `—` | r26 | `GEN_PRODUCT_CREATE_REQUIRED` | CURRENT_LIVE |
+| Estradiol | `estradiol-patch-r27` | Patch | 129 | `—` | r27 | `GEN_PRODUCT_CREATE_REQUIRED` | CURRENT_LIVE |
+| Estradiol | `estradiol-patch-r28` | Patch | 139 | `—` | r28 | `GEN_PRODUCT_CREATE_REQUIRED` | CURRENT_LIVE |
+| Estradiol | `estradiol-patch-r29` | Patch | 149 | `—` | r29 | `GEN_PRODUCT_CREATE_REQUIRED` | CURRENT_LIVE |
 | Estradiol | `estradiol-tablet-r37` | Tablet | 19 | `o7dNtf9QsnEqPCrLr2tR` | r37 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Estradiol | `estradiol-tablet-r38` | Tablet | 19 | `o7dNtf9QsnEqPCrLr2tR` | r38 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Estradiol | `estradiol-tablet-r39` | Tablet | 19 | `o7dNtf9QsnEqPCrLr2tR` | r39 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Estradiol | `estradiol-injection-r40` | Injection | 89 | `o7dNtf9QsnEqPCrLr2tR` | r40 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
-| Progesterone | `prog-ir-r41` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r41 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Progesterone | `prog-ir-r42` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r42 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Progesterone | `prog-ir-r43` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r43 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Progesterone | `prog-ir-r44` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r44 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Progesterone | `prog-ir-r45` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r45 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Progesterone | `prog-ir-r46` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r46 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Progesterone | `prog-ir-r47` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r47 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Progesterone | `prog-ir-r48` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r48 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
-| Progesterone | `prog-ir-r49` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r49 | `GEN_PAIRING_REQUIRED` | CURRENT_LIVE |
+| Progesterone | `prog-ir-r41` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r41 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
+| Progesterone | `prog-ir-r42` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r42 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
+| Progesterone | `prog-ir-r43` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r43 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
+| Progesterone | `prog-ir-r44` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r44 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
+| Progesterone | `prog-ir-r45` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r45 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
+| Progesterone | `prog-ir-r46` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r46 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
+| Progesterone | `prog-ir-r47` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r47 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
+| Progesterone | `prog-ir-r48` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r48 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
+| Progesterone | `prog-ir-r49` | Capsule | 29 | `5dGkjdpLP7DkKKE2iVxh` | r49 | `GEN_PRODUCT_REPAIR_REQUIRED` | CURRENT_LIVE |
 | Progesterone | `prog-sr-r50` | Capsule | 19 | `—` | r50 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Progesterone | `prog-sr-r51` | Capsule | 19 | `—` | r51 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Progesterone | `prog-sr-r52` | Capsule | 19 | `—` | r52 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
@@ -116,9 +91,9 @@ Website architecture: **LOCKED** — one family → selectors/variants → exact
 | Testosterone | `testosterone-inj-r76` | Injection | 59 | `Cm94vp3KgPz0yhqy01gX` | r76 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Testosterone | `testosterone-inj-r77` | Injection | 59 | `Cm94vp3KgPz0yhqy01gX` | r77 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Selank | `selank-current` | Injection | 129 | `Ukctbyh5Yrek3SnGSYA3` | — | `FORMULARY_PENDING` | CURRENT_LIVE |
-| Selank | `selank-nasal-r119` | Nasal Spray | 129 | `Ukctbyh5Yrek3SnGSYA3` | r119 | `GEN_PAIRING_REQUIRED` | FUTURE_HIDDEN |
+| Selank | `selank-nasal-r119` | Nasal Spray | 129 | `Ukctbyh5Yrek3SnGSYA3` | r119 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Semax | `semax-current` | Injection | 129 | `YTHcdrlRICMpt56hdxeJ` | — | `FORMULARY_PENDING` | CURRENT_LIVE |
-| Semax | `semax-nasal-r118` | Nasal Spray | 129 | `YTHcdrlRICMpt56hdxeJ` | r118 | `GEN_PAIRING_REQUIRED` | FUTURE_HIDDEN |
+| Semax | `semax-nasal-r118` | Nasal Spray | 129 | `YTHcdrlRICMpt56hdxeJ` | r118 | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 | Selank + Semax Blend | `selank-semax-blend-current` | Nasal Spray | 169 | `LWkYtwm66dIeLuDSvSfi` | — | `FORMULARY_PENDING` | CURRENT_LIVE |
 | Tesamorelin | `tesamorelin-current` | Injection | 149 | `2cYxVfvwpWyyrANZx06G` | — | `FORMULARY_PENDING` | CURRENT_LIVE |
 | Lash / Brow Growth Serum | `lash-brow-current` | Solution | 89 | `—` | — | `FORMULARY_PENDING` | CURRENT_LIVE |
@@ -156,65 +131,4 @@ Website architecture: **LOCKED** — one family → selectors/variants → exact
 | Sexual Wellness Compound | `sexual-wellness-compound-pending` | — | — | `—` | — | `FORMULARY_PENDING` | FUTURE_HIDDEN |
 | Scream Cream | `scream-cream-pending` | — | — | `—` | — | `FUTURE_HIDDEN` | FUTURE_HIDDEN |
 
-## Family summaries
-
-- **BPC Triple / Quad Blends:** variants=3 · {'FUTURE_HIDDEN': 3}
-- **Custom HRT Cream:** variants=4 · {'FUTURE_HIDDEN': 4}
-- **Custom Hormone Troche:** variants=4 · {'FUTURE_HIDDEN': 4}
-- **Dihexa:** variants=2 · {'FUTURE_HIDDEN': 2}
-- **Estradiol:** variants=8 · {'GEN_PAIRING_REQUIRED': 4, 'FUTURE_HIDDEN': 4}
-- **Fat Burner:** variants=1 · {'FORMULARY_PENDING': 1}
-- **GHK-Cu:** variants=4 · {'FUTURE_HIDDEN': 4}
-- **Glutathione:** variants=2 · {'FUTURE_HIDDEN': 2}
-- **Lash / Brow Growth Serum:** variants=1 · {'FORMULARY_PENDING': 1}
-- **MOTS-c:** variants=1 · {'FUTURE_HIDDEN': 1}
-- **MOTS-c / Tesamorelin:** variants=1 · {'FUTURE_HIDDEN': 1}
-- **Methylene Blue:** variants=4 · {'FUTURE_HIDDEN': 4}
-- **Minoxidil:** variants=4 · {'GEN_PAIRING_REQUIRED': 1, 'FUTURE_HIDDEN': 3}
-- **NAD+:** variants=7 · {'FORMULARY_PENDING': 2, 'FUTURE_HIDDEN': 3, 'GEN_PAIRING_REQUIRED': 2}
-- **Oxytocin:** variants=1 · {'FORMULARY_PENDING': 1}
-- **PT-141:** variants=3 · {'FUTURE_HIDDEN': 3}
-- **Progesterone:** variants=12 · {'GEN_PAIRING_REQUIRED': 9, 'FUTURE_HIDDEN': 3}
-- **Scream Cream:** variants=1 · {'FUTURE_HIDDEN': 1}
-- **Selank:** variants=2 · {'FORMULARY_PENDING': 1, 'GEN_PAIRING_REQUIRED': 1}
-- **Selank + Semax Blend:** variants=1 · {'FORMULARY_PENDING': 1}
-- **Semaglutide:** variants=11 · {'GEN_PRODUCT_REPAIR_REQUIRED': 8, 'GEN_PAIRING_REQUIRED': 1, 'FUTURE_HIDDEN': 2}
-- **Semax:** variants=2 · {'FORMULARY_PENDING': 1, 'GEN_PAIRING_REQUIRED': 1}
-- **Sexual Wellness Compound:** variants=1 · {'FORMULARY_PENDING': 1}
-- **Sildenafil / Testosterone Troche:** variants=1 · {'FUTURE_HIDDEN': 1}
-- **Tesamorelin:** variants=1 · {'FORMULARY_PENDING': 1}
-- **Testosterone:** variants=3 · {'FORMULARY_PENDING': 1, 'FUTURE_HIDDEN': 2}
-- **Thymosin Alpha-1:** variants=1 · {'FUTURE_HIDDEN': 1}
-- **Tirzepatide:** variants=10 · {'GEN_PRODUCT_CREATE_REQUIRED': 8, 'FUTURE_HIDDEN': 1, 'GEN_PRODUCT_REPAIR_REQUIRED': 1}
-- **Tretinoin:** variants=5 · {'FORMULARY_PENDING': 3, 'FUTURE_HIDDEN': 2}
-- **Wolverine / BPC-TB:** variants=2 · {'GEN_PAIRING_REQUIRED': 1, 'GEN_PRODUCT_REPAIR_REQUIRED': 1}
-
-## Final report
-
-| Item | Value |
-|---|---|
-| OWNER_DECISIONS_LOCKED | 8/8 |
-| OWNER_DECISIONS_REMAINING | 0 |
-| TOTAL_WEBSITE_FAMILIES | 30 |
-| TOTAL_WEBSITE_VARIANTS | 103 |
-| ROUTING_READY | 0 |
-| GEN_PRODUCT_CREATE_REQUIRED | 8 |
-| GEN_PRODUCT_REPAIR_REQUIRED | 10 |
-| GEN_PAIRING_REQUIRED | 20 |
-| FORMULARY_PENDING | 14 |
-| PRICE_PENDING | 0 |
-| FUTURE_HIDDEN | 51 |
-| BLOCKED_OWNER_REVIEW | 0 |
-| GEN_EXECUTION_ELIGIBLE_VARIANTS | 38 |
-| GEN_EXECUTION_BLOCKED_VARIANTS | 65 |
-| FORMULARY_SOURCING_ITEMS_STILL_REQUIRED | 14 |
-| WEBSITE_ARCHITECTURE_CHANGED | False |
-| GEN_MODIFIED | False |
-| GEN_WRITES | 0 |
-| PAIRING_WRITES | 0 |
-| WEBSITE_MODIFIED | False |
-| CHECKOUT_MODIFIED | False |
-| CUTOVER | OFF |
-| STOP | STOP FOR OWNER REVIEW — Do not execute GEN. Do not modify website. |
-
-**STOP FOR OWNER REVIEW.** Do not execute GEN. Do not modify website. Cutover OFF.
+**STOP — no GEN/website execution in this phase.**

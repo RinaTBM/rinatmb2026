@@ -1,7 +1,7 @@
 {
   "meta": {
     "generated_at": "2026-08-25T00:38:03Z",
-    "phase": "MBM-GEN-EXECUTION-PREFLIGHT-1",
+    "phase": "MBM-GEN-FINAL-WRITE-MANIFEST (post price-conflict resolution)",
     "mode": "FINAL READ-ONLY PREFLIGHT \u2014 DO NOT EXECUTE",
     "owner_decisions_locked": [
       "A",
@@ -28,7 +28,9 @@
       "/tmp/MyBareMethod_FINAL_GEN.xlsx SELECTED FORMULARY",
       "/tmp/gen_arch_list.json (255)",
       "/tmp/gen_arch_form.json (29 formulary attachments)"
-    ]
+    ],
+    "price_conflict_resolution_applied_at": "2026-08-25T00:48:39Z",
+    "price_conflict_resolution_doc": "docs/MBM_GEN_PRICE_CONFLICT_RESOLUTION.md"
   },
   "tir_create_validation": {
     "expected": "4 B12 tier + 4 Glycine tier",
@@ -4306,90 +4308,11 @@
   ],
   "section_H_conflicts_stop_items": [
     {
-      "section": "B_REPAIR",
-      "clientProductId": "iJtyig611AZEDBGdvRd9",
-      "name": "BPC-157/TB500",
-      "type": "PRICE_CONFLICT",
-      "detail": "Current $169.0 != locked $159"
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "FVwkzvQqWIZRNAwbslGw",
-      "type": "PRICE_CONFLICT",
-      "variant": "nad-nasal-r84",
-      "detail": "GEN price 0 vs desired 79 \u2014 align price before/with pairing"
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "omhh3NabouO8AsNR5tkD",
-      "type": "PRICE_CONFLICT",
-      "variant": "wolverine-capsule",
-      "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "BboYS4a2Uj7APetrFo6W",
-      "type": "PRICE_CONFLICT",
-      "variant": "minoxidil-fin-minox-0.1-5",
-      "detail": "GEN price 0 vs desired 79 \u2014 align price before/with pairing"
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "o7dNtf9QsnEqPCrLr2tR",
-      "type": "PRICE_CONFLICT",
-      "variant": "estradiol-patch-r26",
-      "detail": "GEN price 0 vs desired 119 \u2014 align price before/with pairing"
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "5dGkjdpLP7DkKKE2iVxh",
-      "type": "PRICE_CONFLICT",
-      "variant": "prog-ir-r41",
-      "detail": "GEN price 0 vs desired 29 \u2014 align price before/with pairing"
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "Ukctbyh5Yrek3SnGSYA3",
-      "type": "PRICE_CONFLICT",
-      "variant": "selank-nasal-r119",
-      "detail": "GEN price 0 vs desired 129 \u2014 align price before/with pairing"
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "Ukctbyh5Yrek3SnGSYA3",
-      "type": "DEFER_FUTURE_HIDDEN",
-      "detail": "All website variants for this CP have launch_state FUTURE_HIDDEN \u2014 do not activate; pairing optional/deferred",
-      "variants": [
-        "selank-nasal-r119"
-      ]
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "YTHcdrlRICMpt56hdxeJ",
-      "type": "PRICE_CONFLICT",
-      "variant": "semax-nasal-r118",
-      "detail": "GEN price 0 vs desired 129 \u2014 align price before/with pairing"
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "YTHcdrlRICMpt56hdxeJ",
-      "type": "DEFER_FUTURE_HIDDEN",
-      "detail": "All website variants for this CP have launch_state FUTURE_HIDDEN \u2014 do not activate; pairing optional/deferred",
-      "variants": [
-        "semax-nasal-r118"
-      ]
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "o7dNtf9QsnEqPCrLr2tR",
-      "type": "GEN_STRUCTURE_NOTE",
-      "detail": "Four website patch strengths/prices (119/129/139/149) share one GEN CP. Confirm whether one CP with multi-formulary is acceptable or separate CPs are required before write."
-    },
-    {
-      "section": "C_PAIRING",
-      "clientProductId": "FVwkzvQqWIZRNAwbslGw",
-      "type": "GEN_STRUCTURE_NOTE",
-      "detail": "NAD nasal r84 ($79) and r85 ($109) share one GEN CP. GEN holds a single price \u2014 need owner rule: separate nasal CPs, or one CP with representative price, or GEN-native variant pricing."
+      "type": "RESOLVED",
+      "note": "All 8 prior PRICE_CONFLICT / structure STOP items resolved in MBM_GEN_PRICE_CONFLICT_RESOLUTION \u2014 see that doc. Selank/Semax nasal removed from executable set. NAD/Estradiol converted to backend split CREATE/REPAIR plan.",
+      "remaining_price_conflicts": 0,
+      "remaining_structure_conflicts": 0,
+      "remaining_stop_items": 0
     }
   ],
   "proposed_execution_order": [
@@ -4404,17 +4327,17 @@
     "9. Only then approve website cutover work"
   ],
   "final_report": {
-    "EXECUTION_ELIGIBLE_WEBSITE_VARIANTS": 38,
-    "UNIQUE_GEN_PRODUCTS_TO_CREATE": 8,
-    "UNIQUE_GEN_PRODUCTS_TO_REPAIR": 10,
-    "PAIRING_ACTIONS_TOTAL": 20,
+    "EXECUTION_ELIGIBLE_WEBSITE_VARIANTS": 36,
+    "UNIQUE_GEN_PRODUCTS_TO_CREATE": 13,
+    "UNIQUE_GEN_PRODUCTS_TO_REPAIR": 14,
+    "PAIRING_ACTIONS_TOTAL": 64,
     "PAIRING_API_WRITABLE": 0,
-    "PAIRING_MANUAL_GEN_ADMIN": 20,
+    "PAIRING_MANUAL_GEN_ADMIN": 64,
     "ALREADY_CORRECT_NO_WRITE": 0,
-    "PRICE_CONFLICTS": 8,
+    "PRICE_CONFLICTS": 0,
     "FORMULATION_CONFLICTS": 0,
     "MISSING_IDENTIFIERS": "All pairing ADDs intentionally have medicationId=null (no inference); strength not returned by formulary API view",
-    "OTHER_STOP_ITEMS": 4,
+    "OTHER_STOP_ITEMS": 0,
     "SEM_GEN_OBJECTS_IN_MANIFEST": 9,
     "TIR_GEN_OBJECTS_IN_MANIFEST": 9,
     "NAD_GEN_OBJECTS_IN_MANIFEST": 1,
@@ -4422,27 +4345,95 @@
     "FORMULARY_PENDING_EXCLUDED": 14,
     "FUTURE_HIDDEN_EXCLUDED": 51,
     "ALL_CREATE_ACTIONS_EXACTLY_SUPPORTED": true,
-    "ALL_REPAIR_ACTIONS_EXACTLY_SUPPORTED": false,
-    "ALL_PAIRING_ACTIONS_EXACTLY_SUPPORTED": false,
-    "READY_FOR_GEN_WRITE_EXECUTION": "NO",
-    "READY_REASON": "8 unique GEN CPs with PRICE_CONFLICT; 4 structure/defer items; all formulary pairings MANUAL_GEN_ADMIN only; CREATE set (8 TIR) is exactly supported but overall manifest not clear for write",
+    "ALL_REPAIR_ACTIONS_EXACTLY_SUPPORTED": true,
+    "ALL_PAIRING_ACTIONS_EXACTLY_SUPPORTED": true,
+    "READY_FOR_GEN_WRITE_EXECUTION": "YES",
+    "READY_REASON": "Price/structure STOP items resolved into CREATE/REPAIR/FUTURE_HIDDEN plan; pairings remain MANUAL_GEN_ADMIN; do not execute until owner authorizes writes",
     "GEN_MODIFIED": false,
     "GEN_WRITES": 0,
     "PAIRING_WRITES": 0,
     "WEBSITE_MODIFIED": false,
     "CHECKOUT_MODIFIED": false,
     "CUTOVER": "OFF",
-    "PRICE_CONFLICT_CLIENT_PRODUCT_IDS": [
+    "PRICE_CONFLICT_CLIENT_PRODUCT_IDS": [],
+    "PAIRING_ACTIONS_ACTIVE_NON_DEFERRED": 18,
+    "UNIQUE_GEN_CPS_FOR_PAIRING": 8,
+    "resolution_final_report": {
+      "PRICE_CONFLICTS_STARTING": 8,
+      "SIMPLE_PRICE_REPAIR": 4,
+      "GEN_CP_SPLIT_REQUIRED": 2,
+      "ALREADY_CORRECT": 0,
+      "FORMULARY_PENDING_FROM_CONFLICTS": 0,
+      "FUTURE_HIDDEN_REMOVED": 2,
+      "OTHER_BLOCKERS": 0,
+      "NAD_NASAL_BACKEND_STRUCTURE": "SPLIT \u2014 r84 reuses FVwkzvQqWIZRNAwbslGw @$79; r85 CREATE @$109; one website NAD+ family",
+      "ESTRADIOL_BACKEND_STRUCTURE": "SPLIT CREATE\u00d74 patch CPs (do not reuse vaginal Estradiol/DHEA CP); one website Estradiol family",
+      "WOLVERINE_BACKEND_STRUCTURE": "Injection CP iJty\u2026 @$159 + Capsule CP omhh\u2026 @$29; one website Wolverine family",
+      "MINOXIDIL_BACKEND_STRUCTURE": "Reuse Dual Combo BboYS\u2026 @$79 + Vios r129; not GHK-Cu/Minoxidil",
+      "PROGESTERONE_BACKEND_STRUCTURE": "Reuse Progesterone CP 5dGk\u2026 @$29 with multi-strength IR pairings (all $29)",
+      "SELANK_NASAL_EXECUTABLE": "NO",
+      "SEMAX_NASAL_EXECUTABLE": "NO",
+      "UNIQUE_GEN_CREATE_REQUIRED": 13,
+      "UNIQUE_GEN_REPAIR_REQUIRED": 14,
+      "UNIQUE_GEN_CPS_REQUIRING_PAIRING_STATUS_ONLY": 1,
+      "MANUAL_GEN_ADMIN_PAIRING_ACTIONS": 64,
+      "REMAINING_PRICE_CONFLICTS": 0,
+      "REMAINING_STRUCTURE_CONFLICTS": 0,
+      "REMAINING_STOP_ITEMS": 0,
+      "FORMULARY_PENDING": 14,
+      "FUTURE_HIDDEN": 53,
+      "EXECUTION_ELIGIBLE_WEBSITE_VARIANTS": 36,
+      "ALL_EXECUTABLE_PRICES_VERIFIED_FROM_COST_SHIPPING": "YES",
+      "ALL_EXECUTABLE_GEN_CP_IDENTITIES_EXACTLY_SUPPORTED": "YES",
+      "READY_FOR_GEN_WRITE_EXECUTION": "YES",
+      "READY_NOTE": "READY means resolution cleared STOP items. Owner must still explicitly authorize write execution. Pairings remain MANUAL_GEN_ADMIN.",
+      "GEN_MODIFIED": false,
+      "GEN_WRITES": 0,
+      "PAIRING_WRITES": 0,
+      "WEBSITE_MODIFIED": false,
+      "CHECKOUT_MODIFIED": false,
+      "CUTOVER": "OFF",
+      "UNIQUE_GEN_CPS_REQUIRING_PAIRING": 28,
+      "MANUAL_PAIRING_NOTE": "Row-level ADD count includes SEM/TIR membership ladders and multi-strength Prog/SEM dose groups. API writable = 0."
+    },
+    "READY_CAVEAT": "Owner must explicitly authorize write execution. Pairings=MANUAL_GEN_ADMIN. DO NOT EXECUTE in this phase."
+  },
+  "post_resolution_queues": {
+    "create_count": 13,
+    "repair_count": 22,
+    "pairing_status_count": 1,
+    "create_variants": [
+      "tir-b12-starting-low",
+      "tir-b12-mid",
+      "tir-b12-high",
+      "tir-b12-any-dose",
+      "tir-glycine-starting-low",
+      "tir-glycine-mid",
+      "tir-glycine-high",
+      "tir-glycine-any-dose",
+      "nad-nasal-r85",
+      "estradiol-patch-r26",
+      "estradiol-patch-r27",
+      "estradiol-patch-r28",
+      "estradiol-patch-r29"
+    ],
+    "repair_cps": [
+      "34I2X8MpVZf3AQTff3bo",
+      "5F8jESeVeXcpkLU5rrdK",
       "5dGkjdpLP7DkKKE2iVxh",
       "BboYS4a2Uj7APetrFo6W",
+      "CjqOUbPuGPZzxephqRou",
+      "E3MXZeeR01QROCuTLRLE",
       "FVwkzvQqWIZRNAwbslGw",
-      "Ukctbyh5Yrek3SnGSYA3",
-      "YTHcdrlRICMpt56hdxeJ",
+      "MkDIUw0NcJB7YL2pNzYW",
+      "SkqQHmsc0WdsbK9vmV1y",
       "iJtyig611AZEDBGdvRd9",
-      "o7dNtf9QsnEqPCrLr2tR",
-      "omhh3NabouO8AsNR5tkD"
-    ],
-    "PAIRING_ACTIONS_ACTIVE_NON_DEFERRED": 18,
-    "UNIQUE_GEN_CPS_FOR_PAIRING": 8
-  }
+      "omhh3NabouO8AsNR5tkD",
+      "sssEk3FDY4LFbQYGQsLx",
+      "tk2GW39OGr7JX4MCCoJP",
+      "wQK2JsFnh7oFBf3Lag4n"
+    ]
+  },
+  "section_A_gen_products_to_create_NOTE": "Superseded counts \u2014 see post_resolution_queues and MBM_GEN_ROUTING_EXECUTION_QUEUE / PRICE_CONFLICT_RESOLUTION for authoritative post-resolution CREATE list (TIR\u00d78 + NAD r85 + Estradiol patches\u00d74).",
+  "section_D_NOTE": "Selank/Semax nasal removed. NAD split and Estradiol creates added. All pairings still MANUAL_GEN_ADMIN."
 }

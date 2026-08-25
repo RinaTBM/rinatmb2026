@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated_at": "2026-08-24T22:50:26Z",
-    "phase": "MBM-GEN-ROUTING-COMPLETION-GATE-1",
-    "mode": "READ-ONLY RECONCILIATION",
+    "generated_at": "2026-08-25T00:27:41Z",
+    "phase": "MBM-OWNER-ROUTING-DECISION-GATE-2 \u2014 OWNER APPROVAL APPLIED",
+    "mode": "READ-ONLY \u2014 owner decisions locked into routing; no GEN/website writes",
     "website_architecture": "LOCKED \u2014 one family \u2192 variants \u2192 exact GEN route",
     "approved_docs": [
       "docs/MBM_WEBSITE_PRODUCT_FAMILY_ARCHITECTURE.md",
@@ -17,7 +17,18 @@
     "gen_writes": 0,
     "website_writes": 0,
     "pairing_writes": 0,
-    "cutover": "OFF"
+    "cutover": "OFF",
+    "owner_decisions_doc": "docs/MBM_OWNER_ROUTING_DECISIONS_2.md",
+    "owner_choices_locked": [
+      "A",
+      "A",
+      "B",
+      "A",
+      "A",
+      "B",
+      "A",
+      "A"
+    ]
   },
   "status_definitions": {
     "ROUTING_READY": "Exact website\u2192GEN CP\u2192formulary\u2192pharmacy\u2192package\u2192price path proven",
@@ -525,16 +536,22 @@
       "delivery_form": "Injection",
       "formulation_additive": "Vitamin B6 (legacy)",
       "purchase_model": "one_time",
-      "primary_status": "BLOCKED_OWNER_REVIEW",
+      "primary_status": "FUTURE_HIDDEN",
       "gen_action": null,
-      "launch_state": "CURRENT_LIVE",
+      "launch_state": "CURRENT_LIVE_UNTIL_CUTOVER_THEN_REMOVE",
       "checkout_status": "CURRENT_WEBSITE_ONLY",
-      "notes": "Transitional CURRENT_LIVE website identity. Blocked for new routing.",
+      "notes": "OWNER LOCKED A \u2014 Remove legacy B6 at website cutover. Cutover architecture = B12 + Glycine only. Do not restore B6. No GEN create/repair for B6.",
       "required_actions": [
         "REMOVE_AT_WEBSITE_CUTOVER",
-        "DO_NOT_REINTRODUCE_B6"
+        "DO_NOT_REINTRODUCE_B6",
+        "NO_GEN_ACTION_FOR_B6"
       ],
-      "routing_status": "BLOCKED_OWNER_REVIEW"
+      "routing_status": "FUTURE_HIDDEN",
+      "owner_decision": {
+        "decision": 1,
+        "choice": "A",
+        "locked": true
+      }
     },
     {
       "website_product_family": "Semaglutide",
@@ -1033,14 +1050,21 @@
       "delivery_form": "Injection",
       "formulation_additive": "Vitamin B6 (legacy)",
       "purchase_model": "one_time",
-      "primary_status": "BLOCKED_OWNER_REVIEW",
-      "launch_state": "CURRENT_LIVE",
+      "primary_status": "FUTURE_HIDDEN",
+      "launch_state": "CURRENT_LIVE_UNTIL_CUTOVER_THEN_REMOVE",
       "checkout_status": "CURRENT_WEBSITE_ONLY",
       "required_actions": [
         "REMOVE_AT_WEBSITE_CUTOVER",
-        "DO_NOT_REINTRODUCE_B6"
+        "DO_NOT_REINTRODUCE_B6",
+        "NO_GEN_ACTION_FOR_B6"
       ],
-      "routing_status": "BLOCKED_OWNER_REVIEW"
+      "routing_status": "FUTURE_HIDDEN",
+      "notes": "OWNER LOCKED A \u2014 Remove legacy B6 at website cutover. Cutover architecture = B12 + Glycine only. Do not restore B6. No GEN create/repair for B6.",
+      "owner_decision": {
+        "decision": 2,
+        "choice": "A",
+        "locked": true
+      }
     },
     {
       "website_product_family": "Tirzepatide",
@@ -1086,14 +1110,19 @@
       "gen_action": "REUSE_GEN_PRODUCT_AFTER_FORMULARY_RESOLVED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
-      "notes": "FORMULATION_STRENGTH_CONFLICT vs SELECTED injectable r83 200mg/ml only. Do not silent-substitute.",
+      "notes": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal).",
       "required_actions": [
-        "SOURCE_OR_ADD_SELECTED_100MG_ML_INJECTABLE",
-        "OR_OWNER_DECIDES_WEBSITE_CHANGE_TO_R83_200MG_ML",
-        "DO_NOT_SUBSTITUTE_200_FOR_100"
+        "SOURCE_EXACT_100MG_ML_INJECTABLE_FORMULARY",
+        "DO_NOT_SUBSTITUTE_200_FOR_100",
+        "KEEP_ONE_NAD_WEBSITE_PRODUCT"
       ],
       "routing_status": "FORMULARY_PENDING",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn"
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn",
+      "owner_decision_context": {
+        "decision": 3,
+        "choice": "B",
+        "locked": true
+      }
     },
     {
       "website_product_family": "NAD+",
@@ -1111,20 +1140,25 @@
       "gen_action": "REUSE_GEN_PRODUCT_AFTER_FORMULARY_RESOLVED",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
-      "notes": "FORMULATION_STRENGTH_CONFLICT vs SELECTED injectable r83 200mg/ml only. Do not silent-substitute.",
+      "notes": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal).",
       "required_actions": [
-        "SOURCE_OR_ADD_SELECTED_100MG_ML_INJECTABLE",
-        "OR_OWNER_DECIDES_WEBSITE_CHANGE_TO_R83_200MG_ML",
-        "DO_NOT_SUBSTITUTE_200_FOR_100"
+        "SOURCE_EXACT_100MG_ML_INJECTABLE_FORMULARY",
+        "DO_NOT_SUBSTITUTE_200_FOR_100",
+        "KEEP_ONE_NAD_WEBSITE_PRODUCT"
       ],
       "routing_status": "FORMULARY_PENDING",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn"
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn",
+      "owner_decision_context": {
+        "decision": 3,
+        "choice": "B",
+        "locked": true
+      }
     },
     {
       "website_product_family": "NAD+",
       "family_id": "nad-plus",
       "website_option_id": "nad-inj-selected-r83",
-      "display_label": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 owner option A only",
+      "display_label": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 OWNER REJECTED (keep 100mg/mL)",
       "delivery_form": "Injection",
       "formulation_additive": "NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml",
       "package_size": "5ml vial (1000mg)",
@@ -1146,18 +1180,23 @@
           "one_time_x9": 139
         }
       ],
-      "primary_status": "BLOCKED_OWNER_REVIEW",
+      "primary_status": "FUTURE_HIDDEN",
       "gen_action": "REPAIR_GEN_PRODUCT",
-      "launch_state": "CUTOVER_PENDING_FORMULARY",
+      "launch_state": "FUTURE_HIDDEN",
       "checkout_status": "OFF_PENDING_OWNER",
-      "notes": "Not activated unless owner chooses option A from integrity gate.",
+      "notes": "OWNER LOCKED B \u2014 Do NOT substitute 200mg/mL for website 100mg/mL. r83 excluded from website Injection selectors. Keep on file only; not an active route.",
       "required_actions": [
-        "OWNER_APPROVES_WEBSITE_STRENGTH_CHANGE_TO_200MG_ML",
-        "THEN_GEN_PAIRING_REQUIRED",
-        "VERIFY_PRICE_139"
+        "DO_NOT_USE_AS_WEBSITE_INJECTION",
+        "DO_NOT_SUBSTITUTE_200_FOR_100",
+        "EXCLUDED_BY_OWNER_DECISION_3B"
       ],
-      "routing_status": "BLOCKED_OWNER_REVIEW",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn"
+      "routing_status": "FUTURE_HIDDEN",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn",
+      "owner_decision": {
+        "decision": 3,
+        "choice": "B",
+        "locked": true
+      }
     },
     {
       "website_product_family": "NAD+",
@@ -1186,16 +1225,28 @@
       ],
       "primary_status": "GEN_PAIRING_REQUIRED",
       "gen_action": "REUSE_GEN_PRODUCT",
-      "launch_state": "FUTURE_HIDDEN",
+      "launch_state": "CURRENT_LIVE",
       "checkout_status": "OFF",
-      "notes": "Verified nasal SELECTED rows only (r84/r85). Rows 81/82 are Form=Nasal but Delivery Type mislabeled Injection \u2014 do not use as injectable.",
+      "notes": "OWNER LOCKED Decisions 4\u20135 \u2014 Verified nasal variant under ONE NAD+ website family (Injection + Nasal Spray). Pair exact SELECTED row; never cross-pair with injection; never use r81/r82.",
       "required_actions": [
         "ATTACH_EXACT_NASAL_FORMULARY",
         "ALIGN_GEN_PRICE",
-        "NEVER_CROSS_PAIR_WITH_INJECTION"
+        "NEVER_CROSS_PAIR_WITH_INJECTION",
+        "OWNER_LOCKED_VERIFIED_NASAL"
       ],
       "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw"
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+      "owner_decision_context": {
+        "decisions": [
+          4,
+          5
+        ],
+        "choices": [
+          "A",
+          "A"
+        ],
+        "locked": true
+      }
     },
     {
       "website_product_family": "NAD+",
@@ -1224,16 +1275,28 @@
       ],
       "primary_status": "GEN_PAIRING_REQUIRED",
       "gen_action": "REUSE_GEN_PRODUCT",
-      "launch_state": "FUTURE_HIDDEN",
+      "launch_state": "CURRENT_LIVE",
       "checkout_status": "OFF",
-      "notes": "Verified nasal SELECTED rows only (r84/r85). Rows 81/82 are Form=Nasal but Delivery Type mislabeled Injection \u2014 do not use as injectable.",
+      "notes": "OWNER LOCKED Decisions 4\u20135 \u2014 Verified nasal variant under ONE NAD+ website family (Injection + Nasal Spray). Pair exact SELECTED row; never cross-pair with injection; never use r81/r82.",
       "required_actions": [
         "ATTACH_EXACT_NASAL_FORMULARY",
         "ALIGN_GEN_PRICE",
-        "NEVER_CROSS_PAIR_WITH_INJECTION"
+        "NEVER_CROSS_PAIR_WITH_INJECTION",
+        "OWNER_LOCKED_VERIFIED_NASAL"
       ],
       "routing_status": "GEN_PAIRING_REQUIRED",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw"
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+      "owner_decision_context": {
+        "decisions": [
+          4,
+          5
+        ],
+        "choices": [
+          "A",
+          "A"
+        ],
+        "locked": true
+      }
     },
     {
       "website_product_family": "Wolverine / BPC-TB",
@@ -1336,18 +1399,23 @@
         }
       ],
       "gen_storefrontEligible": true,
-      "primary_status": "BLOCKED_OWNER_REVIEW",
+      "primary_status": "FUTURE_HIDDEN",
       "launch_state": "FUTURE_HIDDEN",
       "checkout_status": "OFF",
-      "notes": "SELECTED rows 81/82 have Form=Nasal Spray but Delivery Type=Injection. Not valid injectable routes; duplicates of r84/r85 nasal. Blocked for website selectors.",
+      "notes": "OWNER LOCKED A \u2014 Exclude r81. Use verified r84 for 50mg/mL nasal. Duplicate/mislabeled.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "DO_NOT_USE_AS_INJECTION",
-        "DUPLICATE_OF_TRUE_NASAL_R84_R85",
-        "EXCLUDE_FROM_WEBSITE_SELECTORS"
+        "EXCLUDE_FROM_WEBSITE_SELECTORS",
+        "USE_R84_INSTEAD",
+        "DO_NOT_USE_AS_INJECTION"
       ],
-      "routing_status": "BLOCKED_OWNER_REVIEW",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw"
+      "routing_status": "FUTURE_HIDDEN",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+      "owner_decision": {
+        "decision": 4,
+        "choice": "A",
+        "locked": true
+      }
     },
     {
       "website_product_family": "NAD+",
@@ -1372,18 +1440,23 @@
         }
       ],
       "gen_storefrontEligible": true,
-      "primary_status": "BLOCKED_OWNER_REVIEW",
+      "primary_status": "FUTURE_HIDDEN",
       "launch_state": "FUTURE_HIDDEN",
       "checkout_status": "OFF",
-      "notes": "SELECTED rows 81/82 have Form=Nasal Spray but Delivery Type=Injection. Not valid injectable routes; duplicates of r84/r85 nasal. Blocked for website selectors.",
+      "notes": "OWNER LOCKED A \u2014 Exclude r82. Use verified r85 for 200mg/mL nasal. Duplicate/mislabeled.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "DO_NOT_USE_AS_INJECTION",
-        "DUPLICATE_OF_TRUE_NASAL_R84_R85",
-        "EXCLUDE_FROM_WEBSITE_SELECTORS"
+        "EXCLUDE_FROM_WEBSITE_SELECTORS",
+        "USE_R85_INSTEAD",
+        "DO_NOT_USE_AS_INJECTION"
       ],
-      "routing_status": "BLOCKED_OWNER_REVIEW",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw"
+      "routing_status": "FUTURE_HIDDEN",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
+      "owner_decision": {
+        "decision": 5,
+        "choice": "A",
+        "locked": true
+      }
     },
     {
       "website_product_family": "Minoxidil",
@@ -2270,13 +2343,18 @@
       "primary_status": "FORMULARY_PENDING",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
-      "notes": "Website explicit strengths. No exact SELECTED match (SELECTED has 0.15% and combo).",
+      "notes": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package.",
       "gen_action": null,
       "required_actions": [
-        "SOURCE_PLAIN_TRETINOIN_WEBSITE_STRENGTHS_OR_OWNER_WEBSITE_CHANGE",
+        "SOURCE_PLAIN_TRETINOIN_EXACT_WEBSITE_STRENGTH",
         "DO_NOT_SILENT_SUBSTITUTE_0_15_OR_COMBO"
       ],
-      "routing_status": "FORMULARY_PENDING"
+      "routing_status": "FORMULARY_PENDING",
+      "owner_decision_context": {
+        "decision": 6,
+        "choice": "B",
+        "locked": true
+      }
     },
     {
       "website_product_family": "Tretinoin",
@@ -2296,13 +2374,18 @@
       "primary_status": "FORMULARY_PENDING",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
-      "notes": "Website explicit strengths. No exact SELECTED match (SELECTED has 0.15% and combo).",
+      "notes": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package.",
       "gen_action": null,
       "required_actions": [
-        "SOURCE_PLAIN_TRETINOIN_WEBSITE_STRENGTHS_OR_OWNER_WEBSITE_CHANGE",
+        "SOURCE_PLAIN_TRETINOIN_EXACT_WEBSITE_STRENGTH",
         "DO_NOT_SILENT_SUBSTITUTE_0_15_OR_COMBO"
       ],
-      "routing_status": "FORMULARY_PENDING"
+      "routing_status": "FORMULARY_PENDING",
+      "owner_decision_context": {
+        "decision": 6,
+        "choice": "B",
+        "locked": true
+      }
     },
     {
       "website_product_family": "Tretinoin",
@@ -2322,13 +2405,18 @@
       "primary_status": "FORMULARY_PENDING",
       "launch_state": "CURRENT_LIVE",
       "checkout_status": "CURRENT_WEBSITE_STRENGTH_PENDING",
-      "notes": "Website explicit strengths. No exact SELECTED match (SELECTED has 0.15% and combo).",
+      "notes": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package.",
       "gen_action": null,
       "required_actions": [
-        "SOURCE_PLAIN_TRETINOIN_WEBSITE_STRENGTHS_OR_OWNER_WEBSITE_CHANGE",
+        "SOURCE_PLAIN_TRETINOIN_EXACT_WEBSITE_STRENGTH",
         "DO_NOT_SILENT_SUBSTITUTE_0_15_OR_COMBO"
       ],
-      "routing_status": "FORMULARY_PENDING"
+      "routing_status": "FORMULARY_PENDING",
+      "owner_decision_context": {
+        "decision": 6,
+        "choice": "B",
+        "locked": true
+      }
     },
     {
       "website_product_family": "Tretinoin",
@@ -2353,17 +2441,22 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "BLOCKED_OWNER_REVIEW",
-      "launch_state": "CUTOVER_PENDING_FORMULARY",
+      "primary_status": "FUTURE_HIDDEN",
+      "launch_state": "FUTURE_HIDDEN",
       "checkout_status": "OFF_PENDING_OWNER_STRENGTH_DECISION",
-      "notes": "Owner option only \u2014 do not silent-substitute for website strengths.",
+      "notes": "OWNER LOCKED B \u2014 Do NOT substitute 0.15% for website 0.025/0.05/0.1%. r126 not mapped to plain Tretinoin website product. May remain future separate strength only if later owner-launched explicitly.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "OWNER_APPROVES_WEBSITE_STRENGTH_CHANGE_FIRST",
-        "THEN_GEN_PAIRING"
+        "DO_NOT_MAP_TO_WEBSITE_PLAIN_TRETINOIN",
+        "EXCLUDED_BY_OWNER_DECISION_6B"
       ],
-      "routing_status": "BLOCKED_OWNER_REVIEW",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9"
+      "routing_status": "FUTURE_HIDDEN",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9",
+      "owner_decision": {
+        "decision": 6,
+        "choice": "B",
+        "locked": true
+      }
     },
     {
       "website_product_family": "Tretinoin",
@@ -2388,17 +2481,23 @@
         }
       ],
       "gen_storefrontEligible": null,
-      "primary_status": "BLOCKED_OWNER_REVIEW",
-      "launch_state": "CUTOVER_PENDING_FORMULARY",
+      "primary_status": "FUTURE_HIDDEN",
+      "launch_state": "FUTURE_HIDDEN",
       "checkout_status": "OFF_PENDING_OWNER_STRENGTH_DECISION",
-      "notes": "Owner option only \u2014 do not silent-substitute for website strengths.",
+      "notes": "OWNER LOCKED A \u2014 Do NOT map combo HA/Niacinamide/Tretinoin to plain Tretinoin. Separate formulation/product. Remain FUTURE_HIDDEN until explicit separate launch.",
       "gen_action": "REUSE_GEN_PRODUCT",
       "required_actions": [
-        "OWNER_APPROVES_WEBSITE_STRENGTH_CHANGE_FIRST",
-        "THEN_GEN_PAIRING"
+        "DO_NOT_MAP_TO_PLAIN_TRETINOIN",
+        "SEPARATE_FORMULATION",
+        "EXCLUDED_BY_OWNER_DECISION_7A"
       ],
-      "routing_status": "BLOCKED_OWNER_REVIEW",
-      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9"
+      "routing_status": "FUTURE_HIDDEN",
+      "gen_clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9",
+      "owner_decision": {
+        "decision": 7,
+        "choice": "A",
+        "locked": true
+      }
     },
     {
       "website_product_family": "Fat Burner",
@@ -3845,399 +3944,233 @@
       "pharmacy": null,
       "exact_formulary_mapping": [],
       "gen_storefrontEligible": null,
-      "primary_status": "BLOCKED_OWNER_REVIEW",
+      "primary_status": "FUTURE_HIDDEN",
       "launch_state": "FUTURE_HIDDEN",
       "checkout_status": "OFF",
-      "notes": "No SELECTED rows / explicit do-not-activate",
+      "notes": "OWNER LOCKED A \u2014 Remain FUTURE_HIDDEN. Do not activate. Do not create live website route. Do not invent formulary mapping.",
       "gen_action": null,
-      "required_actions": [],
-      "routing_status": "BLOCKED_OWNER_REVIEW"
+      "required_actions": [
+        "DO_NOT_ACTIVATE",
+        "NO_WEBSITE_ROUTE",
+        "NO_UNSUPPORTED_FORMULARY_MAPPING"
+      ],
+      "routing_status": "FUTURE_HIDDEN",
+      "owner_decision": {
+        "decision": 8,
+        "choice": "A",
+        "locked": true
+      }
     }
   ],
   "counts": {
+    "ROUTING_READY": 0,
+    "GEN_PRODUCT_CREATE_REQUIRED": 8,
     "GEN_PRODUCT_REPAIR_REQUIRED": 10,
     "GEN_PAIRING_REQUIRED": 20,
-    "BLOCKED_OWNER_REVIEW": 8,
-    "FUTURE_HIDDEN": 43,
-    "GEN_PRODUCT_CREATE_REQUIRED": 8,
-    "FORMULARY_PENDING": 14
+    "FORMULARY_PENDING": 14,
+    "PRICE_PENDING": 0,
+    "FUTURE_HIDDEN": 51,
+    "BLOCKED_OWNER_REVIEW": 0
   },
   "family_summaries": {
-    "semaglutide": {
+    "BPC Triple / Quad Blends": {
+      "variants": 3,
+      "by_status": {
+        "FUTURE_HIDDEN": 3
+      }
+    },
+    "Custom HRT Cream": {
+      "variants": 4,
+      "by_status": {
+        "FUTURE_HIDDEN": 4
+      }
+    },
+    "Custom Hormone Troche": {
+      "variants": 4,
+      "by_status": {
+        "FUTURE_HIDDEN": 4
+      }
+    },
+    "Dihexa": {
+      "variants": 2,
+      "by_status": {
+        "FUTURE_HIDDEN": 2
+      }
+    },
+    "Estradiol": {
+      "variants": 8,
+      "by_status": {
+        "GEN_PAIRING_REQUIRED": 4,
+        "FUTURE_HIDDEN": 4
+      }
+    },
+    "Fat Burner": {
+      "variants": 1,
+      "by_status": {
+        "FORMULARY_PENDING": 1
+      }
+    },
+    "GHK-Cu": {
+      "variants": 4,
+      "by_status": {
+        "FUTURE_HIDDEN": 4
+      }
+    },
+    "Glutathione": {
+      "variants": 2,
+      "by_status": {
+        "FUTURE_HIDDEN": 2
+      }
+    },
+    "Lash / Brow Growth Serum": {
+      "variants": 1,
+      "by_status": {
+        "FORMULARY_PENDING": 1
+      }
+    },
+    "MOTS-c": {
+      "variants": 1,
+      "by_status": {
+        "FUTURE_HIDDEN": 1
+      }
+    },
+    "MOTS-c / Tesamorelin": {
+      "variants": 1,
+      "by_status": {
+        "FUTURE_HIDDEN": 1
+      }
+    },
+    "Methylene Blue": {
+      "variants": 4,
+      "by_status": {
+        "FUTURE_HIDDEN": 4
+      }
+    },
+    "Minoxidil": {
+      "variants": 4,
+      "by_status": {
+        "GEN_PAIRING_REQUIRED": 1,
+        "FUTURE_HIDDEN": 3
+      }
+    },
+    "NAD+": {
+      "variants": 7,
+      "by_status": {
+        "FORMULARY_PENDING": 2,
+        "FUTURE_HIDDEN": 3,
+        "GEN_PAIRING_REQUIRED": 2
+      }
+    },
+    "Oxytocin": {
+      "variants": 1,
+      "by_status": {
+        "FORMULARY_PENDING": 1
+      }
+    },
+    "PT-141": {
+      "variants": 3,
+      "by_status": {
+        "FUTURE_HIDDEN": 3
+      }
+    },
+    "Progesterone": {
+      "variants": 12,
+      "by_status": {
+        "GEN_PAIRING_REQUIRED": 9,
+        "FUTURE_HIDDEN": 3
+      }
+    },
+    "Scream Cream": {
+      "variants": 1,
+      "by_status": {
+        "FUTURE_HIDDEN": 1
+      }
+    },
+    "Selank": {
+      "variants": 2,
+      "by_status": {
+        "FORMULARY_PENDING": 1,
+        "GEN_PAIRING_REQUIRED": 1
+      }
+    },
+    "Selank + Semax Blend": {
+      "variants": 1,
+      "by_status": {
+        "FORMULARY_PENDING": 1
+      }
+    },
+    "Semaglutide": {
       "variants": 11,
       "by_status": {
         "GEN_PRODUCT_REPAIR_REQUIRED": 8,
         "GEN_PAIRING_REQUIRED": 1,
-        "BLOCKED_OWNER_REVIEW": 1,
-        "FUTURE_HIDDEN": 1
-      },
-      "options": [
-        {
-          "id": "sem-b12-starting-low",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "SkqQHmsc0WdsbK9vmV1y",
-          "actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ]
-        },
-        {
-          "id": "sem-b12-mid",
-          "status": "GEN_PAIRING_REQUIRED",
-          "gen": "BLf8inX395YNc7WPCD4O",
-          "actions": [
-            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
-            "VERIFY_PRICE_VS_LOCKED_X9"
-          ]
-        },
-        {
-          "id": "sem-b12-high",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "34I2X8MpVZf3AQTff3bo",
-          "actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ]
-        },
-        {
-          "id": "sem-b12-any-dose",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "MkDIUw0NcJB7YL2pNzYW",
-          "actions": [
-            "REPAIR_FORMULARY_PAIRINGS_DIRX_HUB_ONLY",
-            "REMOVE_NON_SELECTED_PHARMACY_ATTACHMENTS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY",
-            "VERIFY_EXACT_STRENGTH_MED_IDS"
-          ]
-        },
-        {
-          "id": "sem-glycine-starting-low",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "tk2GW39OGr7JX4MCCoJP",
-          "actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ]
-        },
-        {
-          "id": "sem-glycine-mid",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "CjqOUbPuGPZzxephqRou",
-          "actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ]
-        },
-        {
-          "id": "sem-glycine-high",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "sssEk3FDY4LFbQYGQsLx",
-          "actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ]
-        },
-        {
-          "id": "sem-glycine-any-dose",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "wQK2JsFnh7oFBf3Lag4n",
-          "actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ]
-        },
-        {
-          "id": "sem-current-b6",
-          "status": "BLOCKED_OWNER_REVIEW",
-          "gen": null,
-          "actions": [
-            "REMOVE_AT_WEBSITE_CUTOVER",
-            "DO_NOT_REINTRODUCE_B6"
-          ]
-        },
-        {
-          "id": "sem-membership",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "5F8jESeVeXcpkLU5rrdK",
-          "actions": [
-            "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
-            "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
-            "VERIFY_PRICE_149"
-          ]
-        },
-        {
-          "id": "sem-b12-3month",
-          "status": "FUTURE_HIDDEN",
-          "gen": "sN2ggSXRJINjElMYTQjf",
-          "actions": [
-            "REPAIR_PAIRING_WHEN_LAUNCHING",
-            "VERIFY_3MONTH_PRICE_FORMULA"
-          ]
-        }
-      ]
+        "FUTURE_HIDDEN": 2
+      }
     },
-    "tirzepatide": {
+    "Semax": {
+      "variants": 2,
+      "by_status": {
+        "FORMULARY_PENDING": 1,
+        "GEN_PAIRING_REQUIRED": 1
+      }
+    },
+    "Sexual Wellness Compound": {
+      "variants": 1,
+      "by_status": {
+        "FORMULARY_PENDING": 1
+      }
+    },
+    "Sildenafil / Testosterone Troche": {
+      "variants": 1,
+      "by_status": {
+        "FUTURE_HIDDEN": 1
+      }
+    },
+    "Tesamorelin": {
+      "variants": 1,
+      "by_status": {
+        "FORMULARY_PENDING": 1
+      }
+    },
+    "Testosterone": {
+      "variants": 3,
+      "by_status": {
+        "FORMULARY_PENDING": 1,
+        "FUTURE_HIDDEN": 2
+      }
+    },
+    "Thymosin Alpha-1": {
+      "variants": 1,
+      "by_status": {
+        "FUTURE_HIDDEN": 1
+      }
+    },
+    "Tirzepatide": {
       "variants": 10,
       "by_status": {
         "GEN_PRODUCT_CREATE_REQUIRED": 8,
-        "BLOCKED_OWNER_REVIEW": 1,
+        "FUTURE_HIDDEN": 1,
         "GEN_PRODUCT_REPAIR_REQUIRED": 1
-      },
-      "options": [
-        {
-          "id": "tir-b12-starting-low",
-          "status": "GEN_PRODUCT_CREATE_REQUIRED",
-          "gen": null,
-          "actions": [
-            "CREATE_GEN_CP",
-            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
-            "SET_PRICE_FROM_LOCKED_X9",
-            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
-          ]
-        },
-        {
-          "id": "tir-b12-mid",
-          "status": "GEN_PRODUCT_CREATE_REQUIRED",
-          "gen": null,
-          "actions": [
-            "CREATE_GEN_CP",
-            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
-            "SET_PRICE_FROM_LOCKED_X9",
-            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
-          ]
-        },
-        {
-          "id": "tir-b12-high",
-          "status": "GEN_PRODUCT_CREATE_REQUIRED",
-          "gen": null,
-          "actions": [
-            "CREATE_GEN_CP",
-            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
-            "SET_PRICE_FROM_LOCKED_X9",
-            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
-          ]
-        },
-        {
-          "id": "tir-b12-any-dose",
-          "status": "GEN_PRODUCT_CREATE_REQUIRED",
-          "gen": null,
-          "actions": [
-            "CREATE_GEN_CP",
-            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
-            "SET_PRICE_FROM_LOCKED_X9",
-            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
-          ]
-        },
-        {
-          "id": "tir-glycine-starting-low",
-          "status": "GEN_PRODUCT_CREATE_REQUIRED",
-          "gen": null,
-          "actions": [
-            "CREATE_GEN_CP",
-            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
-            "SET_PRICE_FROM_LOCKED_X9",
-            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
-          ]
-        },
-        {
-          "id": "tir-glycine-mid",
-          "status": "GEN_PRODUCT_CREATE_REQUIRED",
-          "gen": null,
-          "actions": [
-            "CREATE_GEN_CP",
-            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
-            "SET_PRICE_FROM_LOCKED_X9",
-            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
-          ]
-        },
-        {
-          "id": "tir-glycine-high",
-          "status": "GEN_PRODUCT_CREATE_REQUIRED",
-          "gen": null,
-          "actions": [
-            "CREATE_GEN_CP",
-            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
-            "SET_PRICE_FROM_LOCKED_X9",
-            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
-          ]
-        },
-        {
-          "id": "tir-glycine-any-dose",
-          "status": "GEN_PRODUCT_CREATE_REQUIRED",
-          "gen": null,
-          "actions": [
-            "CREATE_GEN_CP",
-            "ATTACH_FORMULARY_DIRX_HUB_SELECTED_ROWS",
-            "SET_PRICE_FROM_LOCKED_X9",
-            "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
-          ]
-        },
-        {
-          "id": "tir-current-b6",
-          "status": "BLOCKED_OWNER_REVIEW",
-          "gen": null,
-          "actions": [
-            "REMOVE_AT_WEBSITE_CUTOVER",
-            "DO_NOT_REINTRODUCE_B6"
-          ]
-        },
-        {
-          "id": "tir-membership",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "E3MXZeeR01QROCuTLRLE",
-          "actions": [
-            "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
-            "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
-            "WEBSITE_REPRICE_249_TO_275_AT_CUTOVER"
-          ]
-        }
-      ]
+      }
     },
-    "nad-plus": {
-      "variants": 7,
+    "Tretinoin": {
+      "variants": 5,
       "by_status": {
-        "FORMULARY_PENDING": 2,
-        "BLOCKED_OWNER_REVIEW": 3,
-        "GEN_PAIRING_REQUIRED": 2
-      },
-      "options": [
-        {
-          "id": "nad-inj-5ml-500",
-          "status": "FORMULARY_PENDING",
-          "gen": "SHJpGAACUFEeMONdpEbn",
-          "actions": [
-            "SOURCE_OR_ADD_SELECTED_100MG_ML_INJECTABLE",
-            "OR_OWNER_DECIDES_WEBSITE_CHANGE_TO_R83_200MG_ML",
-            "DO_NOT_SUBSTITUTE_200_FOR_100"
-          ]
-        },
-        {
-          "id": "nad-inj-10ml-1000",
-          "status": "FORMULARY_PENDING",
-          "gen": "SHJpGAACUFEeMONdpEbn",
-          "actions": [
-            "SOURCE_OR_ADD_SELECTED_100MG_ML_INJECTABLE",
-            "OR_OWNER_DECIDES_WEBSITE_CHANGE_TO_R83_200MG_ML",
-            "DO_NOT_SUBSTITUTE_200_FOR_100"
-          ]
-        },
-        {
-          "id": "nad-inj-selected-r83",
-          "status": "BLOCKED_OWNER_REVIEW",
-          "gen": "SHJpGAACUFEeMONdpEbn",
-          "actions": [
-            "OWNER_APPROVES_WEBSITE_STRENGTH_CHANGE_TO_200MG_ML",
-            "THEN_GEN_PAIRING_REQUIRED",
-            "VERIFY_PRICE_139"
-          ]
-        },
-        {
-          "id": "nad-nasal-r84",
-          "status": "GEN_PAIRING_REQUIRED",
-          "gen": "FVwkzvQqWIZRNAwbslGw",
-          "actions": [
-            "ATTACH_EXACT_NASAL_FORMULARY",
-            "ALIGN_GEN_PRICE",
-            "NEVER_CROSS_PAIR_WITH_INJECTION"
-          ]
-        },
-        {
-          "id": "nad-nasal-r85",
-          "status": "GEN_PAIRING_REQUIRED",
-          "gen": "FVwkzvQqWIZRNAwbslGw",
-          "actions": [
-            "ATTACH_EXACT_NASAL_FORMULARY",
-            "ALIGN_GEN_PRICE",
-            "NEVER_CROSS_PAIR_WITH_INJECTION"
-          ]
-        },
-        {
-          "id": "nad-nasal-r81",
-          "status": "BLOCKED_OWNER_REVIEW",
-          "gen": "FVwkzvQqWIZRNAwbslGw",
-          "actions": [
-            "DO_NOT_USE_AS_INJECTION",
-            "DUPLICATE_OF_TRUE_NASAL_R84_R85",
-            "EXCLUDE_FROM_WEBSITE_SELECTORS"
-          ]
-        },
-        {
-          "id": "nad-nasal-r82",
-          "status": "BLOCKED_OWNER_REVIEW",
-          "gen": "FVwkzvQqWIZRNAwbslGw",
-          "actions": [
-            "DO_NOT_USE_AS_INJECTION",
-            "DUPLICATE_OF_TRUE_NASAL_R84_R85",
-            "EXCLUDE_FROM_WEBSITE_SELECTORS"
-          ]
-        }
-      ]
+        "FORMULARY_PENDING": 3,
+        "FUTURE_HIDDEN": 2
+      }
     },
-    "wolverine-bpc-tb": {
+    "Wolverine / BPC-TB": {
       "variants": 2,
       "by_status": {
         "GEN_PAIRING_REQUIRED": 1,
         "GEN_PRODUCT_REPAIR_REQUIRED": 1
-      },
-      "options": [
-        {
-          "id": "wolverine-capsule",
-          "status": "GEN_PAIRING_REQUIRED",
-          "gen": "omhh3NabouO8AsNR5tkD",
-          "actions": [
-            "ATTACH_FORMULARY_R104",
-            "ALIGN_GEN_PRICE_29_OR_OWNER_WEBSITE_PRICE_POLICY",
-            "VERIFY_NOT_USING_TRIPLE_BLEND_CPS"
-          ]
-        },
-        {
-          "id": "wolverine-injection",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "gen": "iJtyig611AZEDBGdvRd9",
-          "actions": [
-            "VERIFY_PAIRING_IS_EXACT_R103_NOT_GHK_OR_KPV_BLEND",
-            "ALIGN_GEN_PRICE",
-            "OPTIONAL_RENAME_DISPLAY_TO_WOLVERINE"
-          ]
-        }
-      ]
-    },
-    "pt-141": {
-      "variants": 3,
-      "by_status": {
-        "FUTURE_HIDDEN": 3
-      },
-      "options": [
-        {
-          "id": "pt141-inj-r115",
-          "status": "FUTURE_HIDDEN",
-          "gen": "7a11W067k20AKLSsL2xM",
-          "actions": [
-            "WHEN_LAUNCHING_ATTACH_EXACT_FORMULARY"
-          ]
-        },
-        {
-          "id": "pt141-nasal-r116",
-          "status": "FUTURE_HIDDEN",
-          "gen": "mSehcuPAbjD70fTWdckF",
-          "actions": [
-            "WHEN_LAUNCHING_ATTACH_EXACT_FORMULARY",
-            "PT141_NASAL_REQUIRES_EXPLICIT_OWNER_ACTIVATION"
-          ]
-        },
-        {
-          "id": "pt141-nasal-r117",
-          "status": "FUTURE_HIDDEN",
-          "gen": "mSehcuPAbjD70fTWdckF",
-          "actions": [
-            "WHEN_LAUNCHING_ATTACH_EXACT_FORMULARY",
-            "PT141_NASAL_REQUIRES_EXPLICIT_OWNER_ACTIVATION"
-          ]
-        }
-      ]
+      }
     }
   },
   "final_report": {
+    "OWNER_DECISIONS_LOCKED": "8/8",
+    "OWNER_DECISIONS_REMAINING": 0,
     "TOTAL_WEBSITE_FAMILIES": 30,
     "TOTAL_WEBSITE_VARIANTS": 103,
     "ROUTING_READY": 0,
@@ -4246,56 +4179,18 @@
     "GEN_PAIRING_REQUIRED": 20,
     "FORMULARY_PENDING": 14,
     "PRICE_PENDING": 0,
-    "FUTURE_HIDDEN": 43,
-    "BLOCKED_OWNER_REVIEW": 8,
-    "SEM": {
-      "website_families": 1,
-      "variants": 11,
-      "by_status": {
-        "GEN_PRODUCT_REPAIR_REQUIRED": 8,
-        "GEN_PAIRING_REQUIRED": 1,
-        "BLOCKED_OWNER_REVIEW": 1,
-        "FUTURE_HIDDEN": 1
-      },
-      "membership_backend_structure": "ONE website offer $149; backend B12/Glycine split allowed if GEN requires \u2014 not exposed as separate cards"
-    },
-    "TIR": {
-      "website_families": 1,
-      "variants": 10,
-      "by_status": {
-        "GEN_PRODUCT_CREATE_REQUIRED": 8,
-        "BLOCKED_OWNER_REVIEW": 1,
-        "GEN_PRODUCT_REPAIR_REQUIRED": 1
-      },
-      "create_confirmed_against_live_inventory": true,
-      "membership_backend_structure": "ONE website offer $275 at cutover; backend B12/Glycine split allowed if GEN requires"
-    },
-    "NAD": {
-      "website_families": 1,
-      "injection_variants": 3,
-      "nasal_variants_selectable": 2,
-      "by_status": {
-        "FORMULARY_PENDING": 2,
-        "BLOCKED_OWNER_REVIEW": 3,
-        "GEN_PAIRING_REQUIRED": 2
-      }
-    },
-    "WOLVERINE": {
-      "website_families": 1,
-      "capsule": "GEN_PAIRING_REQUIRED",
-      "injection": "GEN_PRODUCT_REPAIR_REQUIRED"
-    },
-    "PT141": {
-      "website_families": 1,
-      "injection_routing": "FUTURE_HIDDEN",
-      "nasal_routing": "FUTURE_HIDDEN (explicit owner activation required)"
-    },
+    "FUTURE_HIDDEN": 51,
+    "BLOCKED_OWNER_REVIEW": 0,
+    "GEN_EXECUTION_ELIGIBLE_VARIANTS": 38,
+    "GEN_EXECUTION_BLOCKED_VARIANTS": 65,
+    "FORMULARY_SOURCING_ITEMS_STILL_REQUIRED": 14,
     "WEBSITE_ARCHITECTURE_CHANGED": false,
     "GEN_MODIFIED": false,
     "GEN_WRITES": 0,
-    "FORMULARY_PAIRING_WRITES": 0,
+    "PAIRING_WRITES": 0,
     "WEBSITE_MODIFIED": false,
     "CHECKOUT_MODIFIED": false,
-    "CUTOVER": "OFF"
+    "CUTOVER": "OFF",
+    "STOP": "STOP FOR OWNER REVIEW \u2014 Do not execute GEN. Do not modify website."
   }
 }

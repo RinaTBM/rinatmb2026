@@ -1,325 +1,212 @@
-# Owner Routing Decisions — Pass 2
+# Owner Routing Decisions — Pass 2 (LOCKED)
 
-**For:** Owner review only  
-**Phase:** MBM-OWNER-ROUTING-DECISION-GATE-2  
+**For:** Owner record  
+**Phase:** MBM-OWNER-ROUTING-DECISION-GATE-2 — OWNER APPROVAL LOCKED  
+**Locked at:** 2026-08-25T00:27:41Z  
 **Mode:** Read-only — no GEN, website, pairing, checkout, or cutover changes  
 
 Website product-family architecture remains **LOCKED** (one clean product → variants → exact GEN route).
 
-This document asks you to decide **only 8 blocked items**.  
-It does **not** reopen SEM/TIR membership prices, B12/Glycine distinction, TIR tiers, B6 restoration, or NAD+ as one website product.
+**OWNER CHOICES LOCKED: A · A · B · A · A · B · A · A**  
+**OWNER DECISIONS REMAINING: 0**
+
+Sourcing / missing formulary data is **not** resolved by these approvals.
 
 ---
 
-## How to use
-
-For each decision, mark one box and write your choice at the bottom.
-
-Recommended options are marked clearly. You can choose differently.
-
----
-
-# DECISION 1 OF 8
+# DECISION 1 OF 8 — LOCKED
 
 **PRODUCT:** Semaglutide  
 **VARIANT:** Current website “Semaglutide + B6” one-time (legacy)
 
-**CUSTOMER WOULD SEE:**  
-Semaglutide product page → one-time purchase with B6 formulation (current live storefront until cutover)
+**CUSTOMER WOULD SEE:** Semaglutide one-time with B6 until cutover (then removed)
 
-**CURRENT WEBSITE VERSION:**  
-Semaglutide + B6 Injection — vials from **$119** (0.5mg / 1mg / 2.5mg / 5mg)
+**FORMULARY OPTION:** None for B6 — cutover = B12 + Glycine only  
+**PHARMACY / STRENGTH / PACKAGE / COST / SHIPPING / RETAIL:** —  
+**CURRENT GEN:** No B6 cutover route
 
-**FORMULARY OPTION:**  
-None for B6 (B6 is not in the cutover target). Cutover target is Semaglutide + **B12** or **Glycine** dose groups (already approved).
+**PROBLEM:** B6 transitional only.
 
-**PHARMACY / STRENGTH / PACKAGE:** — (legacy; not SELECTED cutover path)  
-**COST / SHIPPING / MBM RETAIL:** — (do not invent)
+[x] **OPTION A** — Remove B6 at cutover; replace with B12/Glycine  
+[ ] OPTION B — Delay removal only  
+[ ] DEFER
 
-**CURRENT GEN:** No exact B6 cutover route (blocked for new routing)
-
-**PROBLEM:**  
-B6 is transitional only. Cutover architecture already replaces it with B12/Glycine. Need owner confirmation that B6 is removed at cutover and never restored.
-
-[ ] **OPTION A** — At website cutover, remove B6 one-time from Semaglutide; replace with approved B12/Glycine dose selectors (recommended)  
-[ ] **OPTION B** — Keep B6 visible longer after other cutover work (delay only; still do not reintroduce B6 as long-term formulary)  
-[ ] **DEFER** — Decide later; leave blocked
-
-**RECOMMENDATION:** OPTION A  
-**WHY:** Matches locked Semaglutide family architecture; no B6 in SELECTED cutover path; cleanest patient experience.
-
-**OWNER CHOICE:** __________
+**RECOMMENDATION:** A  
+**OWNER CHOICE: A — LOCKED**  
+**EFFECT:** Route status → `FUTURE_HIDDEN` (remove at website cutover). Do not restore B6.
 
 ---
 
-# DECISION 2 OF 8
+# DECISION 2 OF 8 — LOCKED
 
 **PRODUCT:** Tirzepatide  
 **VARIANT:** Current website “Tirzepatide + B6” one-time (legacy)
 
-**CUSTOMER WOULD SEE:**  
-Tirzepatide product page → one-time purchase with B6 (current live storefront until cutover)
+**CUSTOMER WOULD SEE:** Tirzepatide one-time with B6 until cutover (then removed)
 
-**CURRENT WEBSITE VERSION:**  
-Tirzepatide + B6 Injection — vials from **$189** (2.5mg / 7.5mg / 12.5mg / 15mg)
+**FORMULARY OPTION:** None for B6 — cutover = B12 + Glycine (approved tiers)  
+**CURRENT GEN:** No B6 cutover route
 
-**FORMULARY OPTION:**  
-None for B6. Cutover target is Tirzepatide + **B12** or **Glycine** with approved tiers (5+10 / 15+20 / 25+30 / Any Dose).
+**PROBLEM:** B6 transitional only.
 
-**PHARMACY / STRENGTH / PACKAGE:** —  
-**COST / SHIPPING / MBM RETAIL:** —
+[x] **OPTION A** — Remove B6 at cutover; replace with B12/Glycine  
+[ ] OPTION B  
+[ ] DEFER
 
-**CURRENT GEN:** No exact B6 cutover route (blocked for new routing)
-
-**PROBLEM:**  
-Same as Semaglutide B6 — transitional only; must confirm removal at cutover.
-
-[ ] **OPTION A** — At website cutover, remove B6; replace with approved B12/Glycine dose selectors (recommended)  
-[ ] **OPTION B** — Delay B6 removal only (still not long-term)  
-[ ] **DEFER**
-
-**RECOMMENDATION:** OPTION A  
-**WHY:** Matches locked Tirzepatide architecture; B6 not in SELECTED cutover path.
-
-**OWNER CHOICE:** __________
+**RECOMMENDATION:** A  
+**OWNER CHOICE: A — LOCKED**  
+**EFFECT:** Route status → `FUTURE_HIDDEN` (remove at website cutover). Do not restore B6.
 
 ---
 
-# DECISION 3 OF 8
+# DECISION 3 OF 8 — LOCKED
 
-**PRODUCT:** NAD+ *(still ONE website product — Injection vs Nasal)*  
-**VARIANT:** Injection — adopt SELECTED **200mg/mL · 5mL (1000mg)** instead of current website **100mg/mL**
+**PRODUCT:** NAD+ *(ONE website product — Injection vs Nasal)*  
+**VARIANT:** SELECTED r83 200mg/mL · 5mL (1000mg) — **rejected as website Injection**
 
-**CUSTOMER WOULD SEE (if approved):**  
-NAD+ → Delivery: Injection → package/strength based on SELECTED injectable
+**CURRENT WEBSITE VERSION:** Injection **100mg/mL** · 5mL/500mg @ $199 · 10mL/1000mg @ $229  
 
-**CURRENT WEBSITE VERSION:**  
-Injection **100mg/mL** · 5mL / 500mg @ **$199** ··· 10mL / 1000mg @ **$229**  
-*(These current 100mg/mL options remain FORMULARY_PENDING — see sourcing table. Do not silent-substitute.)*
+**FORMULARY OPTION (SELECTED r83 — NOT ADOPTED FOR WEBSITE):**  
+St Luke · 200mg/mL · 5mL (1000mg) · cost $64 · ship $30 · retail **$139**
 
-**FORMULARY OPTION (SELECTED):**  
-`NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml` · Injection Solution  
-Row **83** · St Luke · 5ml vial (1000mg)
+**CURRENT GEN:** `SHJpGAACUFEeMONdpEbn`
 
-| Field | Value |
-|---|---|
-| PHARMACY | St Luke |
-| STRENGTH | **200mg/mL** |
-| PACKAGE | 5mL vial (1000mg total) |
-| COST | $64 |
-| SHIPPING | $30 |
-| **MBM RETAIL** | **$139** |
+**PROBLEM:** Website promises 100mg/mL; cannot silent-substitute 200mg/mL.
 
-**CURRENT GEN:** `SHJpGAACUFEeMONdpEbn` — NAD+ (Injectable) — needs pairing after owner decision
+[ ] OPTION A — Adopt 200mg/mL @ $139  
+[x] **OPTION B** — Keep 100mg/mL; source exact formulary  
+[ ] OPTION C — Nasal only temporarily  
+[ ] DEFER
 
-**PROBLEM:**  
-Website promises **100mg/mL**. SELECTED injectable is only **200mg/mL**. Cannot silently substitute. Nasal stays separate under the same NAD+ page.
-
-[ ] **OPTION A** — Change website Injection options to SELECTED **200mg/mL · 5mL (1000mg) @ $139**; keep Nasal as separate selectors under NAD+ (recommended **if** you accept strength change)  
-[ ] **OPTION B** — Keep website **100mg/mL** Injection as shown; require pharmacy to source matching 100mg/mL injectable (5mL & 10mL) before routing  
-[ ] **OPTION C** — Temporarily offer only Nasal under NAD+ until Injection formulary is resolved (Injection hidden/off)  
-[ ] **DEFER**
-
-**RECOMMENDATION:** OPTION B  
-**WHY:** Closest match to what customers already see (100mg/mL). Avoids changing a published strength without sourcing. Option A is cleaner economically ($139, already SELECTED) only if you explicitly accept a website strength change.
-
-**OWNER CHOICE:** __________
+**RECOMMENDATION:** B  
+**OWNER CHOICE: B — LOCKED**  
+**EFFECT:** r83 → `FUTURE_HIDDEN` (excluded). Website 100mg/mL Injection variants remain `FORMULARY_PENDING` until sourced. NAD+ stays ONE product.
 
 ---
 
-# DECISION 4 OF 8
+# DECISION 4 OF 8 — LOCKED
 
 **PRODUCT:** NAD+  
-**VARIANT:** Workbook row **81** — NAD+ 50mg/mL nasal (mislabeled delivery)
+**VARIANT:** Workbook r81 (duplicate / mislabeled)
 
-**CUSTOMER WOULD SEE:**  
-Should **not** appear as a separate Injection option. True nasal 50mg/mL is already represented by verified row **84**.
+**FORMULARY OPTION:** r81 50mg/mL nasal · $79 — use **r84** instead  
+**CURRENT GEN:** `FVwkzvQqWIZRNAwbslGw`
 
-**FORMULARY OPTION:**  
-Row 81 — Form = Nasal Spray · 50mg/mL · 15mL · St Luke · cost $30 + ship $30 → **$79**  
-*(Delivery Type column incorrectly says “Injection”)*
+[x] **OPTION A** — Exclude r81; use r84  
+[ ] OPTION B — Keep r81  
+[ ] DEFER
 
-**CURRENT GEN:** `FVwkzvQqWIZRNAwbslGw` — NAD + Nasal Spray
-
-**PROBLEM:**  
-Duplicate / dirty workbook row. Same chemistry as r84. Risk of wrongly treating it as injectable.
-
-[ ] **OPTION A** — Exclude r81 from website selectors; use **r84** only for 50mg/mL nasal (recommended)  
-[ ] **OPTION B** — Keep r81 as a selectable nasal variant (not recommended — duplicate of r84)  
-[ ] **DEFER**
-
-**RECOMMENDATION:** OPTION A  
-**WHY:** Same nasal product as r84; avoids injection confusion.
-
-**OWNER CHOICE:** __________
+**OWNER CHOICE: A — LOCKED**  
+**EFFECT:** r81 → `FUTURE_HIDDEN`. r84 remains verified selectable nasal variant.
 
 ---
 
-# DECISION 5 OF 8
+# DECISION 5 OF 8 — LOCKED
 
 **PRODUCT:** NAD+  
-**VARIANT:** Workbook row **82** — NAD+ 200mg/mL nasal (mislabeled delivery)
+**VARIANT:** Workbook r82 (duplicate / mislabeled)
 
-**CUSTOMER WOULD SEE:**  
-Should **not** appear as Injection. True nasal 200mg/mL is already represented by verified row **85**.
+**FORMULARY OPTION:** r82 200mg/mL nasal · $109 — use **r85** instead  
+**CURRENT GEN:** `FVwkzvQqWIZRNAwbslGw`
 
-**FORMULARY OPTION:**  
-Row 82 — Form = Nasal Spray · 200mg/mL · 15mL · St Luke · cost $45 + ship $30 → **$109**  
-*(Delivery Type column incorrectly says “Injection”)*
+[x] **OPTION A** — Exclude r82; use r85  
+[ ] OPTION B — Keep r82  
+[ ] DEFER
 
-**CURRENT GEN:** `FVwkzvQqWIZRNAwbslGw` — NAD + Nasal Spray
+**OWNER CHOICE: A — LOCKED**  
+**EFFECT:** r82 → `FUTURE_HIDDEN`. r85 remains verified selectable nasal variant.
 
-**PROBLEM:**  
-Duplicate of r85 with mislabeled delivery.
-
-[ ] **OPTION A** — Exclude r82 from website selectors; use **r85** only for 200mg/mL nasal (recommended)  
-[ ] **OPTION B** — Keep r82 as a selectable nasal variant (not recommended)  
-[ ] **DEFER**
-
-**RECOMMENDATION:** OPTION A  
-**WHY:** Same as r85; keeps NAD+ nasal selectors clean (r84 + r85 only).
-
-**OWNER CHOICE:** __________
+**NAD+ website architecture (unchanged):**  
+NAD+ → Injection → Nasal Spray  
+Verified nasal selectors: **r84 + r85** only.
 
 ---
 
-# DECISION 6 OF 8
+# DECISION 6 OF 8 — LOCKED
 
 **PRODUCT:** Tretinoin  
-**VARIANT:** Adopt SELECTED plain cream **0.15% · 30g** (instead of current website 0.025 / 0.05 / 0.1% · 20g)
+**VARIANT:** SELECTED r126 0.15% · 30g — **rejected as website substitute**
 
-**CUSTOMER WOULD SEE (if approved):**  
-Tretinoin → strength **0.15%** cream (30g)
+**CURRENT WEBSITE VERSION:** 0.025% @ $79 · 0.05% @ $89 · 0.1% @ $109 (20g)
 
-**CURRENT WEBSITE VERSION:**  
-0.025% @ **$79** · 0.05% @ **$89** · 0.1% @ **$109** — all **20g**
+**FORMULARY OPTION (SELECTED r126 — NOT ADOPTED FOR WEBSITE):**  
+Vios · 0.15% · 30g · cost $25.50 · ship $30 · retail **$79**
 
-**FORMULARY OPTION:**  
-Row **126** — `TRETINOIN 0.15%` · Cream · 30 grams · Vios
+[ ] OPTION A — Change website to 0.15%  
+[x] **OPTION B** — Keep 0.025/0.05/0.1%; source exact  
+[ ] OPTION C — Offer both  
+[ ] DEFER
 
-| Field | Value |
-|---|---|
-| PHARMACY | Vios |
-| STRENGTH | **0.15%** |
-| PACKAGE | 30 grams |
-| COST | $25.50 |
-| SHIPPING | $30 |
-| **MBM RETAIL** | **$79** |
-
-**CURRENT GEN:** `EeWMcfCJf5EU2LkNQmp9` (near-name only — pairing later if approved)
-
-**PROBLEM:**  
-Website lists three strengths that are **not** in SELECTED. SELECTED has 0.15% plain. Do not silent-substitute.
-
-[ ] **OPTION A** — Change website to SELECTED **0.15% · 30g @ $79** (only if you accept strength/package change)  
-[ ] **OPTION B** — Keep website 0.025 / 0.05 / 0.1% · 20g; require pharmacy sourcing for those exact strengths (recommended if you want to keep current storefront claims)  
-[ ] **OPTION C** — Offer both: keep current strengths as pending + add 0.15% as an additional selectable strength once paired  
-[ ] **DEFER**
-
-**RECOMMENDATION:** OPTION B  
-**WHY:** Matches what customers already see. Option A is simpler for GEN/formulary but changes published strengths.
-
-**OWNER CHOICE:** __________
+**OWNER CHOICE: B — LOCKED**  
+**EFFECT:** r126 → `FUTURE_HIDDEN` (not mapped to plain Tretinoin website). Website strengths remain `FORMULARY_PENDING`.
 
 ---
 
-# DECISION 7 OF 8
+# DECISION 7 OF 8 — LOCKED
 
 **PRODUCT:** Tretinoin  
-**VARIANT:** Adopt SELECTED **combo** cream HA / Niacinamide / Tretinoin **0.5 / 4 / 0.025% · 30g**
+**VARIANT:** SELECTED r127 combo HA/Niacinamide/Tretinoin
 
-**CUSTOMER WOULD SEE (if approved):**  
-A combination cream (not plain tretinoin) — either as a separate selector under Tretinoin or as a different product family
+**FORMULARY OPTION:** Vios · 0.5/4/0.025% · 30g · cost $54 · ship $30 · retail **$129**
 
-**CURRENT WEBSITE VERSION:**  
-Plain tretinoin strengths only (no HA/Niacinamide combo promised)
+[x] **OPTION A** — Do not map to plain Tretinoin  
+[ ] OPTION B — Add as explicit combination selector  
+[ ] OPTION C — Replace plain with combo  
+[ ] DEFER
 
-**FORMULARY OPTION:**  
-Row **127** — `HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%` · 30g · Vios
-
-| Field | Value |
-|---|---|
-| PHARMACY | Vios |
-| STRENGTH | 0.5% HA / 4% Niacinamide / 0.025% Tretinoin |
-| PACKAGE | 30 grams |
-| COST | $54 |
-| SHIPPING | $30 |
-| **MBM RETAIL** | **$129** |
-
-**CURRENT GEN:** `EeWMcfCJf5EU2LkNQmp9` (near-name — not proven match)
-
-**PROBLEM:**  
-This is a **different clinical combination**, not a substitute for plain tretinoin 0.025%.
-
-[ ] **OPTION A** — Do **not** map this to current plain Tretinoin website product; keep as FUTURE separate variant/family only (recommended)  
-[ ] **OPTION B** — Add as an explicit “Combination cream” selector under Tretinoin (customer must see it is not plain tretinoin)  
-[ ] **OPTION C** — Replace plain tretinoin website offering with this combo (not recommended)  
-[ ] **DEFER**
-
-**RECOMMENDATION:** OPTION A  
-**WHY:** Website grouping is UX only — not permission to merge different actives. Combo ≠ plain tretinoin.
-
-**OWNER CHOICE:** __________
+**OWNER CHOICE: A — LOCKED**  
+**EFFECT:** r127 → `FUTURE_HIDDEN`. Combo ≠ plain Tretinoin.
 
 ---
 
-# DECISION 8 OF 8
+# DECISION 8 OF 8 — LOCKED
 
 **PRODUCT:** Scream Cream  
-**VARIANT:** Future placeholder (no SELECTED formulary)
+**VARIANT:** Future placeholder
 
-**CUSTOMER WOULD SEE:**  
-Nothing today (FUTURE_HIDDEN). No formulary row to sell against.
+**FORMULARY OPTION:** None
 
-**FORMULARY OPTION:** None in SELECTED  
-**PHARMACY / STRENGTH / PACKAGE / COST / SHIPPING / RETAIL:** —  
-**CURRENT GEN:** None approved for this architecture path
+[x] **OPTION A** — Remain FUTURE_HIDDEN / do not activate  
+[ ] OPTION B — Prioritize sourcing only  
+[ ] DEFER
 
-**PROBLEM:**  
-Prior lock: do not activate without explicit owner approval and formulary source.
-
-[ ] **OPTION A** — Keep **FUTURE_HIDDEN / do not activate** until formulary is sourced and owner explicitly launches (recommended)  
-[ ] **OPTION B** — Prioritize pharmacy sourcing now (still no website launch until sourced)  
-[ ] **DEFER**
-
-**RECOMMENDATION:** OPTION A  
-**WHY:** No SELECTED formulary; activating would invent a product.
-
-**OWNER CHOICE:** __________
+**OWNER CHOICE: A — LOCKED**  
+**EFFECT:** Stay `FUTURE_HIDDEN`. No live website route. No invented formulary mapping.
 
 ---
 
 # SOURCING / FORMULARY INFORMATION NEEDED
 
-These **14** variants are **FORMULARY_PENDING**.  
-They are **not** owner multiple-choice decisions — they need pharmacy / formulary data.
+These **14** variants remain **FORMULARY_PENDING**.  
+Owner approval did **not** invent missing formulary data.
 
 | # | Product family | Variant | Missing information |
 |---:|---|---|---|
-| 1 | NAD+ | Injection 5mL / 500mg (website 100mg/mL) | Exact injectable formulary matching **100mg/mL**; package 5mL; pharmacy; cost; shipping |
-| 2 | NAD+ | Injection 10mL / 1000mg (website 100mg/mL) | Exact injectable formulary matching **100mg/mL**; package 10mL; pharmacy; cost; shipping |
-| 3 | Tretinoin | Cream 0.025% · 20g | Plain tretinoin **0.025%**; package **20g** (or owner-approved package); pharmacy; cost; shipping |
-| 4 | Tretinoin | Cream 0.05% · 20g | Plain tretinoin **0.05%**; package 20g; pharmacy; cost; shipping |
-| 5 | Tretinoin | Cream 0.1% · 20g | Plain tretinoin **0.1%**; package 20g; pharmacy; cost; shipping |
-| 6 | Fat Burner | AOD + MOTS-c + Tesamorelin (no Ipamorelin) | Exact 3-ingredient injectable; target 1.2/2/3 mg/mL · 5mL; pharmacy; cost; shipping |
-| 7 | Testosterone | Cream 5 mg/g | Dedicated testosterone-only cream; strength 5 mg/g; package (e.g. 30g); pharmacy; cost; shipping |
-| 8 | Selank | Injection | Injectable Selank; target 5 mg/mL · 2mL; pharmacy; cost; shipping *(nasal already exists separately — do not substitute)* |
-| 9 | Semax | Injection | Injectable Semax; target 5 mg/mL · 2mL; pharmacy; cost; shipping |
-| 10 | Selank + Semax Blend | Combined nasal | Single combined Selank+Semax nasal compound; target 50mcg/50mcg · 10mL; pharmacy; cost; shipping |
-| 11 | Tesamorelin | Plain injection | Plain Tesamorelin only (not MOTS-c blend); strength/package; pharmacy; cost; shipping |
-| 12 | Lash / Brow | Bimatoprost 0.03% · 2.5mL | Confirmed pharmacy (not TBD); cost; shipping; SELECTED-ready row |
-| 13 | Oxytocin | Nasal (future) | Full SELECTED formulary: strength, package, pharmacy, cost, shipping |
-| 14 | Sexual Wellness Compound | Capsules (future) | Full SELECTED formulary: formulation, strength, package, pharmacy, cost, shipping |
+| 1 | NAD+ | Injection · 5 mL / 500 mg | medication/formulation: NAD+ injectable 100mg/mL (exact); strength: 100mg/mL; dosage form: Injection; package: 5mL / 500mg total; pharmacy; cost; shipping |
+| 2 | NAD+ | Injection · 10 mL / 1000 mg | medication/formulation: NAD+ injectable 100mg/mL (exact); strength: 100mg/mL; dosage form: Injection; package: 10mL / 1000mg total; pharmacy; cost; shipping |
+| 3 | Tretinoin | Tretinoin 0.025% | medication/formulation: plain Tretinoin Tretinoin 0.025%; strength: as website; dosage form: Cream; package: 20g (website) or owner-approved package; pharmacy; cost; shipping |
+| 4 | Tretinoin | Tretinoin 0.05% | medication/formulation: plain Tretinoin Tretinoin 0.05%; strength: as website; dosage form: Cream; package: 20g (website) or owner-approved package; pharmacy; cost; shipping |
+| 5 | Tretinoin | Tretinoin 0.1% | medication/formulation: plain Tretinoin Tretinoin 0.1%; strength: as website; dosage form: Cream; package: 20g (website) or owner-approved package; pharmacy; cost; shipping |
+| 6 | Fat Burner | AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin) | medication/formulation: AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin); strength; dosage form: Injection; package; pharmacy; cost; shipping |
+| 7 | Testosterone | Testosterone-only cream 5 mg/g | medication/formulation: Testosterone-only cream; strength: 5 mg/g; dosage form: Cream; package; pharmacy; cost; shipping |
+| 8 | Selank | Selank injectable | medication/formulation: Selank injectable; strength; dosage form: Injection; package; pharmacy; cost; shipping |
+| 9 | Semax | Semax injectable | medication/formulation: Semax injectable; strength; dosage form: Injection; package; pharmacy; cost; shipping |
+| 10 | Selank + Semax Blend | Combined Selank+Semax nasal | medication/formulation: Combined Selank+Semax nasal; strength; dosage form: Nasal Spray; package; pharmacy; cost; shipping |
+| 11 | Tesamorelin | Plain Tesamorelin | medication/formulation: Plain Tesamorelin (not MOTS-c blend); strength; dosage form: Injection; package; pharmacy; cost; shipping |
+| 12 | Lash / Brow Growth Serum | Bimatoprost 0.03% | medication/formulation: Bimatoprost 0.03%; strength: 0.03%; dosage form: Solution; package: 2.5mL; pharmacy (confirmed); cost; shipping |
+| 13 | Oxytocin | oxytocin-pending | medication/formulation; strength; dosage form; package; pharmacy; cost; shipping |
+| 14 | Sexual Wellness Compound | sexual-wellness-compound-pending | medication/formulation; strength; dosage form; package; pharmacy; cost; shipping |
 
 ---
 
-## FINAL REPORT
+## FINAL REPORT (DECISIONS)
 
 | Item | Value |
 |---|---|
-| OWNER DECISIONS PRESENTED | **8** |
+| OWNER DECISIONS LOCKED | **8/8** |
+| OWNER DECISIONS REMAINING | **0** |
+| OWNER CHOICES | A A B A A B A A |
 | FORMULARY/SOURCING PENDING | **14** |
-| OWNER DECISIONS RESOLVED THIS PASS | **0** (await owner response) |
 | ARCHITECTURE REOPENED | **NO** |
 | SEM/TIR LOCKS CHANGED | **NO** |
 | NAD+ ONE-PRODUCT ARCHITECTURE CHANGED | **NO** |
@@ -329,7 +216,3 @@ They are **not** owner multiple-choice decisions — they need pharmacy / formul
 | WEBSITE MODIFIED | **NO** |
 | CHECKOUT MODIFIED | **NO** |
 | CUTOVER | **OFF** |
-
-**STOP FOR OWNER DECISIONS.**
-
-Do not execute Queues B, C, or D.

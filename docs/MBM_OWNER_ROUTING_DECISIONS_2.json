@@ -1,8 +1,8 @@
 {
   "meta": {
     "generated_at": "2026-08-25T00:14:36Z",
-    "phase": "MBM-OWNER-ROUTING-DECISION-GATE-2",
-    "mode": "READ-ONLY",
+    "phase": "MBM-OWNER-ROUTING-DECISION-GATE-2 \u2014 OWNER APPROVAL LOCKED",
+    "mode": "READ-ONLY \u2014 decisions locked; no GEN/website writes",
     "purpose": "Owner decisions for 8 BLOCKED_OWNER_REVIEW variants only",
     "locks_not_reopened": [
       "website_product_family_architecture",
@@ -17,7 +17,19 @@
     "gen_writes": 0,
     "website_writes": 0,
     "pairing_writes": 0,
-    "cutover": "OFF"
+    "cutover": "OFF",
+    "owner_approval_locked_at": "2026-08-25T00:27:41Z",
+    "owner_choices": [
+      "A",
+      "A",
+      "B",
+      "A",
+      "A",
+      "B",
+      "A",
+      "A"
+    ],
+    "owner_decisions_remaining": 0
   },
   "decisions": [
     {
@@ -45,7 +57,10 @@
       },
       "recommendation": "A",
       "why": "Matches locked Semaglutide architecture; no B6 in SELECTED cutover path",
-      "owner_choice": null
+      "owner_choice": "A",
+      "owner_locked": true,
+      "lock_note": "OWNER LOCKED A \u2014 Remove legacy B6 at website cutover. Replacement = B12 + Glycine. Do not restore B6.",
+      "resolved_at": "2026-08-25T00:27:41Z"
     },
     {
       "decision_number": 2,
@@ -72,7 +87,10 @@
       },
       "recommendation": "A",
       "why": "Matches locked Tirzepatide architecture",
-      "owner_choice": null
+      "owner_choice": "A",
+      "owner_locked": true,
+      "lock_note": "OWNER LOCKED A \u2014 Remove legacy B6 at website cutover. Replacement = B12 + Glycine. Do not restore B6.",
+      "resolved_at": "2026-08-25T00:27:41Z"
     },
     {
       "decision_number": 3,
@@ -118,7 +136,10 @@
       },
       "recommendation": "B",
       "why": "Closest to published website strength; Option A only if owner accepts strength change",
-      "owner_choice": null
+      "owner_choice": "B",
+      "owner_locked": true,
+      "lock_note": "OWNER LOCKED B \u2014 Keep website 100mg/mL injection. Do NOT substitute SELECTED 200mg/mL r83. Source exact 100mg/mL formulary. Until sourced: FORMULARY_PENDING. NAD+ remains ONE website product.",
+      "resolved_at": "2026-08-25T00:27:41Z"
     },
     {
       "decision_number": 4,
@@ -149,7 +170,10 @@
       },
       "recommendation": "A",
       "why": "Same nasal as r84; avoids injection confusion",
-      "owner_choice": null
+      "owner_choice": "A",
+      "owner_locked": true,
+      "lock_note": "OWNER LOCKED A \u2014 Use verified r84. Do not use duplicate/mislabeled r81.",
+      "resolved_at": "2026-08-25T00:27:41Z"
     },
     {
       "decision_number": 5,
@@ -180,7 +204,10 @@
       },
       "recommendation": "A",
       "why": "Same nasal as r85; keeps NAD+ nasal selectors clean (r84+r85)",
-      "owner_choice": null
+      "owner_choice": "A",
+      "owner_locked": true,
+      "lock_note": "OWNER LOCKED A \u2014 Use verified r85. Do not use duplicate/mislabeled r82. NAD+ = Injection + Nasal Spray under ONE family; r84+r85 remain selectable nasal variants.",
+      "resolved_at": "2026-08-25T00:27:41Z"
     },
     {
       "decision_number": 6,
@@ -222,7 +249,10 @@
       },
       "recommendation": "B",
       "why": "Matches published website strengths",
-      "owner_choice": null
+      "owner_choice": "B",
+      "owner_locked": true,
+      "lock_note": "OWNER LOCKED B \u2014 Keep website 0.025%/0.05%/0.1%. Do NOT substitute SELECTED 0.15% r126. Source exact strengths. Until sourced: FORMULARY_PENDING.",
+      "resolved_at": "2026-08-25T00:27:41Z"
     },
     {
       "decision_number": 7,
@@ -254,7 +284,10 @@
       },
       "recommendation": "A",
       "why": "Website grouping is not permission to merge different actives",
-      "owner_choice": null
+      "owner_choice": "A",
+      "owner_locked": true,
+      "lock_note": "OWNER LOCKED A \u2014 Do NOT map r127 combo to plain Tretinoin. Separate formulation.",
+      "resolved_at": "2026-08-25T00:27:41Z"
     },
     {
       "decision_number": 8,
@@ -277,189 +310,265 @@
       },
       "recommendation": "A",
       "why": "No SELECTED formulary; activating would invent a product",
-      "owner_choice": null
+      "owner_choice": "A",
+      "owner_locked": true,
+      "lock_note": "OWNER LOCKED A \u2014 Remain FUTURE_HIDDEN. Do not activate. Do not create live website route. Do not invent formulary mapping.",
+      "resolved_at": "2026-08-25T00:27:41Z"
     }
   ],
   "sourcing_formulary_information_needed": [
     {
-      "id": 1,
+      "id": "nad-inj-5ml-500",
       "family": "NAD+",
-      "variant": "Injection 5mL/500mg website 100mg/mL",
+      "variant": "Injection \u00b7 5 mL / 500 mg",
+      "website_option_id": "nad-inj-5ml-500",
       "missing": [
-        "100mg/mL injectable formulary",
-        "package 5mL",
+        "medication/formulation: NAD+ injectable 100mg/mL (exact)",
+        "strength: 100mg/mL",
+        "dosage form: Injection",
+        "package: 5mL / 500mg total",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal)."
     },
     {
-      "id": 2,
+      "id": "nad-inj-10ml-1000",
       "family": "NAD+",
-      "variant": "Injection 10mL/1000mg website 100mg/mL",
+      "variant": "Injection \u00b7 10 mL / 1000 mg",
+      "website_option_id": "nad-inj-10ml-1000",
       "missing": [
-        "100mg/mL injectable formulary",
-        "package 10mL",
+        "medication/formulation: NAD+ injectable 100mg/mL (exact)",
+        "strength: 100mg/mL",
+        "dosage form: Injection",
+        "package: 10mL / 1000mg total",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal)."
     },
     {
-      "id": 3,
+      "id": "tretinoin-0.025%",
       "family": "Tretinoin",
-      "variant": "0.025% \u00b7 20g",
+      "variant": "Tretinoin 0.025%",
+      "website_option_id": "tretinoin-0.025%",
       "missing": [
-        "plain tretinoin 0.025%",
-        "package 20g",
+        "medication/formulation: plain Tretinoin Tretinoin 0.025%",
+        "strength: as website",
+        "dosage form: Cream",
+        "package: 20g (website) or owner-approved package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package."
     },
     {
-      "id": 4,
+      "id": "tretinoin-0.05%",
       "family": "Tretinoin",
-      "variant": "0.05% \u00b7 20g",
+      "variant": "Tretinoin 0.05%",
+      "website_option_id": "tretinoin-0.05%",
       "missing": [
-        "plain tretinoin 0.05%",
-        "package 20g",
+        "medication/formulation: plain Tretinoin Tretinoin 0.05%",
+        "strength: as website",
+        "dosage form: Cream",
+        "package: 20g (website) or owner-approved package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package."
     },
     {
-      "id": 5,
+      "id": "tretinoin-0.1%",
       "family": "Tretinoin",
-      "variant": "0.1% \u00b7 20g",
+      "variant": "Tretinoin 0.1%",
+      "website_option_id": "tretinoin-0.1%",
       "missing": [
-        "plain tretinoin 0.1%",
-        "package 20g",
+        "medication/formulation: plain Tretinoin Tretinoin 0.1%",
+        "strength: as website",
+        "dosage form: Cream",
+        "package: 20g (website) or owner-approved package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package."
     },
     {
-      "id": 6,
+      "id": "fat-burner-current",
       "family": "Fat Burner",
-      "variant": "AOD+MOTS-c+Tesamorelin no Ipamorelin",
+      "variant": "AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
+      "website_option_id": "fat-burner-current",
       "missing": [
-        "exact 3-ingredient injectable",
-        "1.2/2/3 mg/mL",
-        "5mL package",
+        "medication/formulation: AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
+        "strength",
+        "dosage form: Injection",
+        "package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
     },
     {
-      "id": 7,
+      "id": "testosterone-current",
       "family": "Testosterone",
-      "variant": "Cream 5 mg/g",
+      "variant": "Testosterone-only cream 5 mg/g",
+      "website_option_id": "testosterone-current",
       "missing": [
-        "testosterone-only cream",
-        "5 mg/g",
-        "package e.g. 30g",
+        "medication/formulation: Testosterone-only cream",
+        "strength: 5 mg/g",
+        "dosage form: Cream",
+        "package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
     },
     {
-      "id": 8,
+      "id": "selank-current",
       "family": "Selank",
-      "variant": "Injection",
+      "variant": "Selank injectable",
+      "website_option_id": "selank-current",
       "missing": [
-        "injectable Selank",
-        "5 mg/mL",
-        "2mL",
+        "medication/formulation: Selank injectable",
+        "strength",
+        "dosage form: Injection",
+        "package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
     },
     {
-      "id": 9,
+      "id": "semax-current",
       "family": "Semax",
-      "variant": "Injection",
+      "variant": "Semax injectable",
+      "website_option_id": "semax-current",
       "missing": [
-        "injectable Semax",
-        "5 mg/mL",
-        "2mL",
+        "medication/formulation: Semax injectable",
+        "strength",
+        "dosage form: Injection",
+        "package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
     },
     {
-      "id": 10,
+      "id": "selank-semax-blend-current",
       "family": "Selank + Semax Blend",
-      "variant": "Combined nasal",
+      "variant": "Combined Selank+Semax nasal",
+      "website_option_id": "selank-semax-blend-current",
       "missing": [
-        "single combined nasal compound",
-        "50mcg/50mcg",
-        "10mL",
+        "medication/formulation: Combined Selank+Semax nasal",
+        "strength",
+        "dosage form: Nasal Spray",
+        "package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
     },
     {
-      "id": 11,
+      "id": "tesamorelin-current",
       "family": "Tesamorelin",
-      "variant": "Plain injection",
+      "variant": "Plain Tesamorelin",
+      "website_option_id": "tesamorelin-current",
       "missing": [
-        "plain Tesamorelin (not blend)",
-        "strength/package",
+        "medication/formulation: Plain Tesamorelin (not MOTS-c blend)",
+        "strength",
+        "dosage form: Injection",
+        "package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
     },
     {
-      "id": 12,
-      "family": "Lash / Brow",
-      "variant": "Bimatoprost 0.03% \u00b7 2.5mL",
+      "id": "lash-brow-current",
+      "family": "Lash / Brow Growth Serum",
+      "variant": "Bimatoprost 0.03%",
+      "website_option_id": "lash-brow-current",
       "missing": [
-        "confirmed pharmacy not TBD",
+        "medication/formulation: Bimatoprost 0.03%",
+        "strength: 0.03%",
+        "dosage form: Solution",
+        "package: 2.5mL",
+        "pharmacy (confirmed)",
         "cost",
-        "shipping",
-        "SELECTED-ready row"
-      ]
+        "shipping"
+      ],
+      "launch_state": "CURRENT_LIVE",
+      "notes": "CURRENT_LIVE_FORMULARY_PENDING. Keep protected. No near-match. No removal this phase."
     },
     {
-      "id": 13,
+      "id": "oxytocin-pending",
       "family": "Oxytocin",
-      "variant": "Nasal future",
+      "variant": "oxytocin-pending",
+      "website_option_id": "oxytocin-pending",
       "missing": [
+        "medication/formulation",
         "strength",
-        "package",
-        "pharmacy",
-        "cost",
-        "shipping",
-        "SELECTED row"
-      ]
-    },
-    {
-      "id": 14,
-      "family": "Sexual Wellness Compound",
-      "variant": "Capsules future",
-      "missing": [
-        "formulation",
-        "strength",
+        "dosage form",
         "package",
         "pharmacy",
         "cost",
         "shipping"
-      ]
+      ],
+      "launch_state": "FUTURE_HIDDEN",
+      "notes": "FUTURE_HIDDEN_PENDING"
+    },
+    {
+      "id": "sexual-wellness-compound-pending",
+      "family": "Sexual Wellness Compound",
+      "variant": "sexual-wellness-compound-pending",
+      "website_option_id": "sexual-wellness-compound-pending",
+      "missing": [
+        "medication/formulation",
+        "strength",
+        "dosage form",
+        "package",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ],
+      "launch_state": "FUTURE_HIDDEN",
+      "notes": "FUTURE_HIDDEN_PENDING"
     }
   ],
   "final_report": {
-    "OWNER_DECISIONS_PRESENTED": 8,
-    "FORMULARY_SOURCING_PENDING": 14,
-    "OWNER_DECISIONS_RESOLVED_THIS_PASS": 0,
+    "OWNER_DECISIONS_LOCKED": "8/8",
+    "OWNER_DECISIONS_REMAINING": 0,
+    "OWNER_CHOICES": [
+      "A",
+      "A",
+      "B",
+      "A",
+      "A",
+      "B",
+      "A",
+      "A"
+    ],
     "ARCHITECTURE_REOPENED": false,
     "SEM_TIR_LOCKS_CHANGED": false,
     "NAD_ONE_PRODUCT_ARCHITECTURE_CHANGED": false,
@@ -468,6 +577,8 @@
     "FORMULARY_PAIRING_WRITES": 0,
     "WEBSITE_MODIFIED": false,
     "CHECKOUT_MODIFIED": false,
-    "CUTOVER": "OFF"
+    "CUTOVER": "OFF",
+    "NOTE": "Sourcing/formulary queue remains separate \u2014 owner approval does not invent missing formulary data.",
+    "FORMULARY_SOURCING_PENDING": 14
   }
 }

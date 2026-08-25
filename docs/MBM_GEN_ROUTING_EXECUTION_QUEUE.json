@@ -1,389 +1,46 @@
 {
   "meta": {
-    "generated_at": "2026-08-24T22:50:26Z",
-    "phase": "MBM-GEN-ROUTING-COMPLETION-GATE-1",
-    "mode": "READ-ONLY RECONCILIATION",
+    "generated_at": "2026-08-25T00:27:41Z",
+    "phase": "MBM-OWNER-ROUTING-DECISION-GATE-2 \u2014 OWNER APPROVAL APPLIED",
+    "mode": "QUEUES ONLY \u2014 DO NOT EXECUTE",
     "website_architecture": "LOCKED \u2014 one family \u2192 variants \u2192 exact GEN route",
-    "approved_docs": [
-      "docs/MBM_WEBSITE_PRODUCT_FAMILY_ARCHITECTURE.md",
-      "docs/MBM_WEBSITE_TO_GEN_ROUTING_MATRIX.md"
+    "owner_choices_locked": [
+      "A",
+      "A",
+      "B",
+      "A",
+      "A",
+      "B",
+      "A",
+      "A"
     ],
-    "sources": [
-      "MyBareMethod_FINAL_GEN.xlsx SELECTED FORMULARY",
-      "live GEN client product inventory (255)",
-      "live GEN formulary pairings",
-      "locked architecture / safe execution / integrity gate docs"
-    ],
+    "owner_decisions_remaining": 0,
+    "queue_legend": {
+      "A": "GEN CP CREATE",
+      "B": "GEN CP REPAIR",
+      "C": "FORMULARY PAIRING",
+      "D": "NO GEN ACTION NEEDED (ROUTING_READY)",
+      "E": "FORMULARY/SOURCING PENDING",
+      "F": "FUTURE HIDDEN (includes owner-excluded options + cutover B6 removals)"
+    },
     "gen_writes": 0,
     "website_writes": 0,
     "pairing_writes": 0,
     "cutover": "OFF"
   },
-  "note": "QUEUES ONLY \u2014 DO NOT EXECUTE. No GEN/website/pairing writes in this phase.",
+  "note": "QUEUES ONLY \u2014 DO NOT EXECUTE. Owner decisions locked. No GEN/website/pairing writes.",
+  "status_counts": {
+    "ROUTING_READY": 0,
+    "GEN_PRODUCT_CREATE_REQUIRED": 8,
+    "GEN_PRODUCT_REPAIR_REQUIRED": 10,
+    "GEN_PAIRING_REQUIRED": 20,
+    "FORMULARY_PENDING": 14,
+    "PRICE_PENDING": 0,
+    "FUTURE_HIDDEN": 51,
+    "BLOCKED_OWNER_REVIEW": 0
+  },
   "queues": {
-    "A_EXISTING_GEN_READY": {
-      "count": 0,
-      "items": []
-    },
-    "B_GEN_PRODUCT_REPAIR": {
-      "count": 10,
-      "items": [
-        {
-          "website_family": "Semaglutide",
-          "website_variant": "sem-b12-starting-low",
-          "display_label": "Starting / Low \u00b7 Vitamin B12",
-          "gen_cp_name": "Semaglutide Injection \u2014 Starting / Low (B12)",
-          "gen_productId": "SkqQHmsc0WdsbK9vmV1y",
-          "display_name_intended": "Starting / Low \u00b7 Vitamin B12",
-          "price": "89\u201399",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": true,
-          "exact_formulary": [
-            {
-              "excel_row": 3,
-              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
-              "cost": 50,
-              "shipping": 5,
-              "one_time_x9": 89
-            },
-            {
-              "excel_row": 5,
-              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
-              "cost": 55,
-              "shipping": 5,
-              "one_time_x9": 99
-            }
-          ],
-          "pharmacy": "Dirx-Hub",
-          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
-          "required_actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ],
-          "dependencies": [],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
-        },
-        {
-          "website_family": "Semaglutide",
-          "website_variant": "sem-b12-high",
-          "display_label": "High \u00b7 Vitamin B12",
-          "gen_cp_name": "Semaglutide Injection \u2014 High (B12)",
-          "gen_productId": "34I2X8MpVZf3AQTff3bo",
-          "display_name_intended": "High \u00b7 Vitamin B12",
-          "price": "109\u2013119",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": true,
-          "exact_formulary": [
-            {
-              "excel_row": 9,
-              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
-              "cost": 60,
-              "shipping": 5,
-              "one_time_x9": 109
-            },
-            {
-              "excel_row": 11,
-              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
-              "cost": 65,
-              "shipping": 5,
-              "one_time_x9": 119
-            }
-          ],
-          "pharmacy": "Dirx-Hub",
-          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
-          "required_actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ],
-          "dependencies": [],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
-        },
-        {
-          "website_family": "Semaglutide",
-          "website_variant": "sem-b12-any-dose",
-          "display_label": "Any Dose \u00b7 Vitamin B12",
-          "gen_cp_name": "Semaglutide Injection \u2014 Any Dose (B12)",
-          "gen_productId": "MkDIUw0NcJB7YL2pNzYW",
-          "display_name_intended": "Any Dose \u00b7 Vitamin B12",
-          "price": "89\u2013119",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": true,
-          "exact_formulary": [
-            {
-              "excel_row": 3,
-              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
-              "cost": 50,
-              "shipping": 5,
-              "one_time_x9": 89
-            },
-            {
-              "excel_row": 5,
-              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
-              "cost": 55,
-              "shipping": 5,
-              "one_time_x9": 99
-            },
-            {
-              "excel_row": 7,
-              "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
-              "cost": 58,
-              "shipping": 5,
-              "one_time_x9": 109
-            },
-            {
-              "excel_row": 9,
-              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
-              "cost": 60,
-              "shipping": 5,
-              "one_time_x9": 109
-            },
-            {
-              "excel_row": 11,
-              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
-              "cost": 65,
-              "shipping": 5,
-              "one_time_x9": 119
-            }
-          ],
-          "pharmacy": "Dirx-Hub",
-          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
-          "required_actions": [
-            "REPAIR_FORMULARY_PAIRINGS_DIRX_HUB_ONLY",
-            "REMOVE_NON_SELECTED_PHARMACY_ATTACHMENTS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY",
-            "VERIFY_EXACT_STRENGTH_MED_IDS"
-          ],
-          "dependencies": [],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
-        },
-        {
-          "website_family": "Semaglutide",
-          "website_variant": "sem-glycine-starting-low",
-          "display_label": "Starting / Low \u00b7 Glycine",
-          "gen_cp_name": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
-          "gen_productId": "tk2GW39OGr7JX4MCCoJP",
-          "display_name_intended": "Starting / Low \u00b7 Glycine",
-          "price": "89\u201399",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": true,
-          "exact_formulary": [
-            {
-              "excel_row": 2,
-              "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
-              "cost": 50,
-              "shipping": 5,
-              "one_time_x9": 89
-            },
-            {
-              "excel_row": 4,
-              "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
-              "cost": 55,
-              "shipping": 5,
-              "one_time_x9": 99
-            }
-          ],
-          "pharmacy": "Dirx-Hub",
-          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
-          "required_actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ],
-          "dependencies": [],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
-        },
-        {
-          "website_family": "Semaglutide",
-          "website_variant": "sem-glycine-mid",
-          "display_label": "Mid \u00b7 Glycine",
-          "gen_cp_name": "Semaglutide Injection \u2014 Mid (Glycine)",
-          "gen_productId": "CjqOUbPuGPZzxephqRou",
-          "display_name_intended": "Mid \u00b7 Glycine",
-          "price": 109,
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": true,
-          "exact_formulary": [
-            {
-              "excel_row": 6,
-              "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
-              "cost": 58,
-              "shipping": 5,
-              "one_time_x9": 109
-            }
-          ],
-          "pharmacy": "Dirx-Hub",
-          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
-          "required_actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ],
-          "dependencies": [],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
-        },
-        {
-          "website_family": "Semaglutide",
-          "website_variant": "sem-glycine-high",
-          "display_label": "High \u00b7 Glycine",
-          "gen_cp_name": "Semaglutide Injection \u2014 High (Glycine)",
-          "gen_productId": "sssEk3FDY4LFbQYGQsLx",
-          "display_name_intended": "High \u00b7 Glycine",
-          "price": "109\u2013119",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": true,
-          "exact_formulary": [
-            {
-              "excel_row": 8,
-              "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
-              "cost": 60,
-              "shipping": 5,
-              "one_time_x9": 109
-            },
-            {
-              "excel_row": 10,
-              "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
-              "cost": 65,
-              "shipping": 5,
-              "one_time_x9": 119
-            }
-          ],
-          "pharmacy": "Dirx-Hub",
-          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
-          "required_actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ],
-          "dependencies": [],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
-        },
-        {
-          "website_family": "Semaglutide",
-          "website_variant": "sem-glycine-any-dose",
-          "display_label": "Any Dose \u00b7 Glycine",
-          "gen_cp_name": "Semaglutide Injection \u2014 Any Dose (Glycine)",
-          "gen_productId": "wQK2JsFnh7oFBf3Lag4n",
-          "display_name_intended": "Any Dose \u00b7 Glycine",
-          "price": "89\u2013119",
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": true,
-          "exact_formulary": [
-            {
-              "excel_row": 2,
-              "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
-              "cost": 50,
-              "shipping": 5,
-              "one_time_x9": 89
-            },
-            {
-              "excel_row": 4,
-              "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
-              "cost": 55,
-              "shipping": 5,
-              "one_time_x9": 99
-            },
-            {
-              "excel_row": 6,
-              "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
-              "cost": 58,
-              "shipping": 5,
-              "one_time_x9": 109
-            },
-            {
-              "excel_row": 8,
-              "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
-              "cost": 60,
-              "shipping": 5,
-              "one_time_x9": 109
-            },
-            {
-              "excel_row": 10,
-              "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
-              "cost": 65,
-              "shipping": 5,
-              "one_time_x9": 119
-            }
-          ],
-          "pharmacy": "Dirx-Hub",
-          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
-          "required_actions": [
-            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
-            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
-          ],
-          "dependencies": [],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
-        },
-        {
-          "website_family": "Semaglutide",
-          "website_variant": "sem-membership",
-          "display_label": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE Membership",
-          "gen_cp_name": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
-          "gen_productId": "5F8jESeVeXcpkLU5rrdK",
-          "display_name_intended": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE Membership",
-          "price": 149,
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": true,
-          "exact_formulary": null,
-          "pharmacy": "Dirx-Hub",
-          "reason": "Owner membership price locked $149.",
-          "required_actions": [
-            "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
-            "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
-            "VERIFY_PRICE_149"
-          ],
-          "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
-        },
-        {
-          "website_family": "Tirzepatide",
-          "website_variant": "tir-membership",
-          "display_label": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE Membership",
-          "gen_cp_name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
-          "gen_productId": "E3MXZeeR01QROCuTLRLE",
-          "display_name_intended": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE Membership",
-          "price": 275,
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": true,
-          "exact_formulary": null,
-          "pharmacy": "Dirx-Hub",
-          "reason": null,
-          "required_actions": [
-            "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
-            "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
-            "WEBSITE_REPRICE_249_TO_275_AT_CUTOVER"
-          ],
-          "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
-        },
-        {
-          "website_family": "Wolverine / BPC-TB",
-          "website_variant": "wolverine-injection",
-          "display_label": "Injection",
-          "gen_cp_name": "BPC-157/TB500",
-          "gen_productId": "iJtyig611AZEDBGdvRd9",
-          "display_name_intended": "Injection",
-          "price": 159,
-          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
-          "storefront_eligible_target": null,
-          "exact_formulary": [
-            {
-              "excel_row": 103,
-              "exact": "BPC-157/TB500 3mg/3mg/mL",
-              "cost": 77,
-              "shipping": 25,
-              "one_time_x9": 159
-            }
-          ],
-          "pharmacy": "Greenwich Pharmacy",
-          "reason": "Live pairing exists to BPC-157/TB500 @ Greenwich \u2014 verify exact strength/package equals SELECTED r103.",
-          "required_actions": [
-            "VERIFY_PAIRING_IS_EXACT_R103_NOT_GHK_OR_KPV_BLEND",
-            "ALIGN_GEN_PRICE",
-            "OPTIONAL_RENAME_DISPLAY_TO_WOLVERINE"
-          ],
-          "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
-        }
-      ]
-    },
-    "C_GEN_PRODUCT_CREATE": {
+    "A_GEN_CP_CREATE": {
       "count": 8,
       "items": [
         {
@@ -420,11 +77,9 @@
             "SET_PRICE_FROM_LOCKED_X9",
             "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
           ],
-          "dependencies": [
-            "CREATE_BEFORE_PAIRING",
-            "CUTOVER_OFF"
-          ],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
         },
         {
           "website_family": "Tirzepatide",
@@ -460,11 +115,9 @@
             "SET_PRICE_FROM_LOCKED_X9",
             "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
           ],
-          "dependencies": [
-            "CREATE_BEFORE_PAIRING",
-            "CUTOVER_OFF"
-          ],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
         },
         {
           "website_family": "Tirzepatide",
@@ -500,11 +153,9 @@
             "SET_PRICE_FROM_LOCKED_X9",
             "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
           ],
-          "dependencies": [
-            "CREATE_BEFORE_PAIRING",
-            "CUTOVER_OFF"
-          ],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
         },
         {
           "website_family": "Tirzepatide",
@@ -568,11 +219,9 @@
             "SET_PRICE_FROM_LOCKED_X9",
             "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
           ],
-          "dependencies": [
-            "CREATE_BEFORE_PAIRING",
-            "CUTOVER_OFF"
-          ],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
         },
         {
           "website_family": "Tirzepatide",
@@ -608,11 +257,9 @@
             "SET_PRICE_FROM_LOCKED_X9",
             "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
           ],
-          "dependencies": [
-            "CREATE_BEFORE_PAIRING",
-            "CUTOVER_OFF"
-          ],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
         },
         {
           "website_family": "Tirzepatide",
@@ -648,11 +295,9 @@
             "SET_PRICE_FROM_LOCKED_X9",
             "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
           ],
-          "dependencies": [
-            "CREATE_BEFORE_PAIRING",
-            "CUTOVER_OFF"
-          ],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
         },
         {
           "website_family": "Tirzepatide",
@@ -688,11 +333,9 @@
             "SET_PRICE_FROM_LOCKED_X9",
             "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
           ],
-          "dependencies": [
-            "CREATE_BEFORE_PAIRING",
-            "CUTOVER_OFF"
-          ],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
         },
         {
           "website_family": "Tirzepatide",
@@ -756,15 +399,381 @@
             "SET_PRICE_FROM_LOCKED_X9",
             "SET_STOREFRONT_ELIGIBLE_AT_CUTOVER"
           ],
-          "dependencies": [
-            "CREATE_BEFORE_PAIRING",
-            "CUTOVER_OFF"
-          ],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
         }
       ]
     },
-    "D_FORMULARY_PAIRING": {
+    "B_GEN_CP_REPAIR": {
+      "count": 10,
+      "items": [
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-b12-starting-low",
+          "display_label": "Starting / Low \u00b7 Vitamin B12",
+          "gen_cp_name": "Semaglutide Injection \u2014 Starting / Low (B12)",
+          "gen_productId": "SkqQHmsc0WdsbK9vmV1y",
+          "display_name_intended": "Starting / Low \u00b7 Vitamin B12",
+          "price": "89\u201399",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": true,
+          "exact_formulary": [
+            {
+              "excel_row": 3,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 5,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-b12-high",
+          "display_label": "High \u00b7 Vitamin B12",
+          "gen_cp_name": "Semaglutide Injection \u2014 High (B12)",
+          "gen_productId": "34I2X8MpVZf3AQTff3bo",
+          "display_name_intended": "High \u00b7 Vitamin B12",
+          "price": "109\u2013119",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": true,
+          "exact_formulary": [
+            {
+              "excel_row": 9,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 11,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-b12-any-dose",
+          "display_label": "Any Dose \u00b7 Vitamin B12",
+          "gen_cp_name": "Semaglutide Injection \u2014 Any Dose (B12)",
+          "gen_productId": "MkDIUw0NcJB7YL2pNzYW",
+          "display_name_intended": "Any Dose \u00b7 Vitamin B12",
+          "price": "89\u2013119",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": true,
+          "exact_formulary": [
+            {
+              "excel_row": 3,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 5,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            },
+            {
+              "excel_row": 7,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 9,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 11,
+              "exact": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "REPAIR_FORMULARY_PAIRINGS_DIRX_HUB_ONLY",
+            "REMOVE_NON_SELECTED_PHARMACY_ATTACHMENTS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY",
+            "VERIFY_EXACT_STRENGTH_MED_IDS"
+          ],
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-glycine-starting-low",
+          "display_label": "Starting / Low \u00b7 Glycine",
+          "gen_cp_name": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+          "gen_productId": "tk2GW39OGr7JX4MCCoJP",
+          "display_name_intended": "Starting / Low \u00b7 Glycine",
+          "price": "89\u201399",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": true,
+          "exact_formulary": [
+            {
+              "excel_row": 2,
+              "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 4,
+              "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-glycine-mid",
+          "display_label": "Mid \u00b7 Glycine",
+          "gen_cp_name": "Semaglutide Injection \u2014 Mid (Glycine)",
+          "gen_productId": "CjqOUbPuGPZzxephqRou",
+          "display_name_intended": "Mid \u00b7 Glycine",
+          "price": 109,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": true,
+          "exact_formulary": [
+            {
+              "excel_row": 6,
+              "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-glycine-high",
+          "display_label": "High \u00b7 Glycine",
+          "gen_cp_name": "Semaglutide Injection \u2014 High (Glycine)",
+          "gen_productId": "sssEk3FDY4LFbQYGQsLx",
+          "display_name_intended": "High \u00b7 Glycine",
+          "price": "109\u2013119",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": true,
+          "exact_formulary": [
+            {
+              "excel_row": 8,
+              "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 10,
+              "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-glycine-any-dose",
+          "display_label": "Any Dose \u00b7 Glycine",
+          "gen_cp_name": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+          "gen_productId": "wQK2JsFnh7oFBf3Lag4n",
+          "display_name_intended": "Any Dose \u00b7 Glycine",
+          "price": "89\u2013119",
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": true,
+          "exact_formulary": [
+            {
+              "excel_row": 2,
+              "exact": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+              "cost": 50,
+              "shipping": 5,
+              "one_time_x9": 89
+            },
+            {
+              "excel_row": 4,
+              "exact": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+              "cost": 55,
+              "shipping": 5,
+              "one_time_x9": 99
+            },
+            {
+              "excel_row": 6,
+              "exact": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+              "cost": 58,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 8,
+              "exact": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+              "cost": 60,
+              "shipping": 5,
+              "one_time_x9": 109
+            },
+            {
+              "excel_row": 10,
+              "exact": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+              "cost": 65,
+              "shipping": 5,
+              "one_time_x9": 119
+            }
+          ],
+          "pharmacy": "Dirx-Hub",
+          "reason": "SEM one-time cutover variant. B6 not used. Exact SELECTED Dirx-Hub rows known; GEN CP exists but not proven ROUTING_READY (pairing/price verification incomplete).",
+          "required_actions": [
+            "VERIFY_EXACT_STRENGTH_MED_IDS_MATCH_SELECTED_ROWS",
+            "ALIGN_GEN_PRICE_TO_LOCKED_AUTHORITY"
+          ],
+          "dependencies": [],
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-membership",
+          "display_label": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE Membership",
+          "gen_cp_name": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "gen_productId": "5F8jESeVeXcpkLU5rrdK",
+          "display_name_intended": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE Membership",
+          "price": 149,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": true,
+          "exact_formulary": null,
+          "pharmacy": "Dirx-Hub",
+          "reason": "Owner membership price locked $149.",
+          "required_actions": [
+            "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
+            "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
+            "VERIFY_PRICE_149"
+          ],
+          "dependencies": [],
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-membership",
+          "display_label": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE Membership",
+          "gen_cp_name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+          "gen_productId": "E3MXZeeR01QROCuTLRLE",
+          "display_name_intended": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE Membership",
+          "price": 275,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": true,
+          "exact_formulary": null,
+          "pharmacy": "Dirx-Hub",
+          "reason": null,
+          "required_actions": [
+            "CONFIRM_OR_CREATE_BACKEND_B12_GLYCINE_MEMBERSHIP_SPLIT_IF_GEN_REQUIRES",
+            "KEEP_ONE_WEBSITE_MEMBERSHIP_OFFER",
+            "WEBSITE_REPRICE_249_TO_275_AT_CUTOVER"
+          ],
+          "dependencies": [],
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Wolverine / BPC-TB",
+          "website_variant": "wolverine-injection",
+          "display_label": "Injection",
+          "gen_cp_name": "BPC-157/TB500",
+          "gen_productId": "iJtyig611AZEDBGdvRd9",
+          "display_name_intended": "Injection",
+          "price": 159,
+          "status": "GEN_PRODUCT_REPAIR_REQUIRED",
+          "storefront_eligible_target": null,
+          "exact_formulary": [
+            {
+              "excel_row": 103,
+              "exact": "BPC-157/TB500 3mg/3mg/mL",
+              "cost": 77,
+              "shipping": 25,
+              "one_time_x9": 159
+            }
+          ],
+          "pharmacy": "Greenwich Pharmacy",
+          "reason": "Live pairing exists to BPC-157/TB500 @ Greenwich \u2014 verify exact strength/package equals SELECTED r103.",
+          "required_actions": [
+            "VERIFY_PAIRING_IS_EXACT_R103_NOT_GHK_OR_KPV_BLEND",
+            "ALIGN_GEN_PRICE",
+            "OPTIONAL_RENAME_DISPLAY_TO_WOLVERINE"
+          ],
+          "dependencies": [],
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
+        }
+      ]
+    },
+    "C_FORMULARY_PAIRING": {
       "count": 20,
       "items": [
         {
@@ -793,7 +802,8 @@
             "VERIFY_PRICE_VS_LOCKED_X9"
           ],
           "dependencies": [],
-          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER"
+          "launch_state": "LAUNCH_WITH_WEBSITE_CUTOVER",
+          "owner_decision": null
         },
         {
           "website_family": "NAD+",
@@ -818,14 +828,26 @@
             }
           ],
           "pharmacy": "St Luke",
-          "reason": "Verified nasal SELECTED rows only (r84/r85). Rows 81/82 are Form=Nasal but Delivery Type mislabeled Injection \u2014 do not use as injectable.",
+          "reason": "OWNER LOCKED Decisions 4\u20135 \u2014 Verified nasal variant under ONE NAD+ website family (Injection + Nasal Spray). Pair exact SELECTED row; never cross-pair with injection; never use r81/r82.",
           "required_actions": [
             "ATTACH_EXACT_NASAL_FORMULARY",
             "ALIGN_GEN_PRICE",
-            "NEVER_CROSS_PAIR_WITH_INJECTION"
+            "NEVER_CROSS_PAIR_WITH_INJECTION",
+            "OWNER_LOCKED_VERIFIED_NASAL"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": {
+            "decisions": [
+              4,
+              5
+            ],
+            "choices": [
+              "A",
+              "A"
+            ],
+            "locked": true
+          }
         },
         {
           "website_family": "NAD+",
@@ -850,14 +872,26 @@
             }
           ],
           "pharmacy": "St Luke",
-          "reason": "Verified nasal SELECTED rows only (r84/r85). Rows 81/82 are Form=Nasal but Delivery Type mislabeled Injection \u2014 do not use as injectable.",
+          "reason": "OWNER LOCKED Decisions 4\u20135 \u2014 Verified nasal variant under ONE NAD+ website family (Injection + Nasal Spray). Pair exact SELECTED row; never cross-pair with injection; never use r81/r82.",
           "required_actions": [
             "ATTACH_EXACT_NASAL_FORMULARY",
             "ALIGN_GEN_PRICE",
-            "NEVER_CROSS_PAIR_WITH_INJECTION"
+            "NEVER_CROSS_PAIR_WITH_INJECTION",
+            "OWNER_LOCKED_VERIFIED_NASAL"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": {
+            "decisions": [
+              4,
+              5
+            ],
+            "choices": [
+              "A",
+              "A"
+            ],
+            "locked": true
+          }
         },
         {
           "website_family": "Wolverine / BPC-TB",
@@ -886,7 +920,8 @@
             "VERIFY_NOT_USING_TRIPLE_BLEND_CPS"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Minoxidil",
@@ -916,7 +951,8 @@
             "DO_NOT_USE_GHK_CU_MINOXIDIL_CP"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Estradiol",
@@ -944,7 +980,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Estradiol",
@@ -972,7 +1009,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Estradiol",
@@ -1000,7 +1038,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Estradiol",
@@ -1028,7 +1067,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1056,7 +1096,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1084,7 +1125,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1112,7 +1154,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1140,7 +1183,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1168,7 +1212,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1196,7 +1241,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1224,7 +1270,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1252,7 +1299,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1280,7 +1328,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Selank",
@@ -1308,7 +1357,8 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Semax",
@@ -1336,9 +1386,15 @@
             "VERIFY_PRICE"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         }
       ]
+    },
+    "D_NO_GEN_ACTION_NEEDED": {
+      "count": 0,
+      "items": [],
+      "note": "ROUTING_READY only. Owner-locked B6 removals and rejected formulary options are under FUTURE_HIDDEN (website cutover / do-not-use), not GEN-ready."
     },
     "E_FORMULARY_SOURCING_PENDING": {
       "count": 14,
@@ -1355,14 +1411,19 @@
           "storefront_eligible_target": null,
           "exact_formulary": null,
           "pharmacy": null,
-          "reason": "FORMULATION_STRENGTH_CONFLICT vs SELECTED injectable r83 200mg/ml only. Do not silent-substitute.",
+          "reason": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal).",
           "required_actions": [
-            "SOURCE_OR_ADD_SELECTED_100MG_ML_INJECTABLE",
-            "OR_OWNER_DECIDES_WEBSITE_CHANGE_TO_R83_200MG_ML",
-            "DO_NOT_SUBSTITUTE_200_FOR_100"
+            "SOURCE_EXACT_100MG_ML_INJECTABLE_FORMULARY",
+            "DO_NOT_SUBSTITUTE_200_FOR_100",
+            "KEEP_ONE_NAD_WEBSITE_PRODUCT"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": {
+            "decision": 3,
+            "choice": "B",
+            "locked": true
+          }
         },
         {
           "website_family": "NAD+",
@@ -1376,14 +1437,19 @@
           "storefront_eligible_target": null,
           "exact_formulary": null,
           "pharmacy": null,
-          "reason": "FORMULATION_STRENGTH_CONFLICT vs SELECTED injectable r83 200mg/ml only. Do not silent-substitute.",
+          "reason": "OWNER LOCKED Decision 3B \u2014 Keep website 100mg/mL. Do NOT substitute r83 200mg/mL. Exact formulary support must be sourced. Until then FORMULARY_PENDING. NAD+ remains ONE website product (Injection + Nasal).",
           "required_actions": [
-            "SOURCE_OR_ADD_SELECTED_100MG_ML_INJECTABLE",
-            "OR_OWNER_DECIDES_WEBSITE_CHANGE_TO_R83_200MG_ML",
-            "DO_NOT_SUBSTITUTE_200_FOR_100"
+            "SOURCE_EXACT_100MG_ML_INJECTABLE_FORMULARY",
+            "DO_NOT_SUBSTITUTE_200_FOR_100",
+            "KEEP_ONE_NAD_WEBSITE_PRODUCT"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": {
+            "decision": 3,
+            "choice": "B",
+            "locked": true
+          }
         },
         {
           "website_family": "Tretinoin",
@@ -1397,13 +1463,18 @@
           "storefront_eligible_target": null,
           "exact_formulary": [],
           "pharmacy": null,
-          "reason": "Website explicit strengths. No exact SELECTED match (SELECTED has 0.15% and combo).",
+          "reason": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package.",
           "required_actions": [
-            "SOURCE_PLAIN_TRETINOIN_WEBSITE_STRENGTHS_OR_OWNER_WEBSITE_CHANGE",
+            "SOURCE_PLAIN_TRETINOIN_EXACT_WEBSITE_STRENGTH",
             "DO_NOT_SILENT_SUBSTITUTE_0_15_OR_COMBO"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": {
+            "decision": 6,
+            "choice": "B",
+            "locked": true
+          }
         },
         {
           "website_family": "Tretinoin",
@@ -1417,13 +1488,18 @@
           "storefront_eligible_target": null,
           "exact_formulary": [],
           "pharmacy": null,
-          "reason": "Website explicit strengths. No exact SELECTED match (SELECTED has 0.15% and combo).",
+          "reason": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package.",
           "required_actions": [
-            "SOURCE_PLAIN_TRETINOIN_WEBSITE_STRENGTHS_OR_OWNER_WEBSITE_CHANGE",
+            "SOURCE_PLAIN_TRETINOIN_EXACT_WEBSITE_STRENGTH",
             "DO_NOT_SILENT_SUBSTITUTE_0_15_OR_COMBO"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": {
+            "decision": 6,
+            "choice": "B",
+            "locked": true
+          }
         },
         {
           "website_family": "Tretinoin",
@@ -1437,13 +1513,18 @@
           "storefront_eligible_target": null,
           "exact_formulary": [],
           "pharmacy": null,
-          "reason": "Website explicit strengths. No exact SELECTED match (SELECTED has 0.15% and combo).",
+          "reason": "OWNER LOCKED Decision 6B \u2014 Keep website strength. Do NOT substitute 0.15% r126 or combo r127. Source exact plain tretinoin formulary for this strength/package.",
           "required_actions": [
-            "SOURCE_PLAIN_TRETINOIN_WEBSITE_STRENGTHS_OR_OWNER_WEBSITE_CHANGE",
+            "SOURCE_PLAIN_TRETINOIN_EXACT_WEBSITE_STRENGTH",
             "DO_NOT_SILENT_SUBSTITUTE_0_15_OR_COMBO"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": {
+            "decision": 6,
+            "choice": "B",
+            "locked": true
+          }
         },
         {
           "website_family": "Fat Burner",
@@ -1464,7 +1545,8 @@
             "NO_NEAR_MATCH"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Testosterone",
@@ -1485,7 +1567,8 @@
             "NO_NEAR_MATCH"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Selank",
@@ -1506,7 +1589,8 @@
             "NO_NEAR_MATCH"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Semax",
@@ -1527,7 +1611,8 @@
             "NO_NEAR_MATCH"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Selank + Semax Blend",
@@ -1548,7 +1633,8 @@
             "NO_NEAR_MATCH"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Tesamorelin",
@@ -1569,7 +1655,8 @@
             "NO_NEAR_MATCH"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Lash / Brow Growth Serum",
@@ -1590,7 +1677,8 @@
             "NO_NEAR_MATCH"
           ],
           "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
+          "launch_state": "CURRENT_LIVE",
+          "owner_decision": null
         },
         {
           "website_family": "Oxytocin",
@@ -1609,7 +1697,8 @@
             "SOURCE_SELECTED_FORMULARY"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Sexual Wellness Compound",
@@ -1628,13 +1717,40 @@
             "SOURCE_SELECTED_FORMULARY"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         }
       ]
     },
     "F_FUTURE_HIDDEN": {
-      "count": 43,
+      "count": 51,
       "items": [
+        {
+          "website_family": "Semaglutide",
+          "website_variant": "sem-current-b6",
+          "display_label": "Semaglutide + B6 (legacy until cutover)",
+          "gen_cp_name": "Semaglutide + B6 (legacy until cutover)",
+          "gen_productId": null,
+          "display_name_intended": "Semaglutide + B6 (legacy until cutover)",
+          "price": null,
+          "status": "FUTURE_HIDDEN",
+          "storefront_eligible_target": null,
+          "exact_formulary": null,
+          "pharmacy": null,
+          "reason": "OWNER LOCKED A \u2014 Remove legacy B6 at website cutover. Cutover architecture = B12 + Glycine only. Do not restore B6. No GEN create/repair for B6.",
+          "required_actions": [
+            "REMOVE_AT_WEBSITE_CUTOVER",
+            "DO_NOT_REINTRODUCE_B6",
+            "NO_GEN_ACTION_FOR_B6"
+          ],
+          "dependencies": [],
+          "launch_state": "CURRENT_LIVE_UNTIL_CUTOVER_THEN_REMOVE",
+          "owner_decision": {
+            "decision": 1,
+            "choice": "A",
+            "locked": true
+          }
+        },
         {
           "website_family": "Semaglutide",
           "website_variant": "sem-b12-3month",
@@ -1689,7 +1805,140 @@
             "VERIFY_3MONTH_PRICE_FORMULA"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Tirzepatide",
+          "website_variant": "tir-current-b6",
+          "display_label": "Tirzepatide + B6 (legacy until cutover)",
+          "gen_cp_name": "Tirzepatide + B6 (legacy until cutover)",
+          "gen_productId": null,
+          "display_name_intended": "Tirzepatide + B6 (legacy until cutover)",
+          "price": null,
+          "status": "FUTURE_HIDDEN",
+          "storefront_eligible_target": null,
+          "exact_formulary": null,
+          "pharmacy": null,
+          "reason": "OWNER LOCKED A \u2014 Remove legacy B6 at website cutover. Cutover architecture = B12 + Glycine only. Do not restore B6. No GEN create/repair for B6.",
+          "required_actions": [
+            "REMOVE_AT_WEBSITE_CUTOVER",
+            "DO_NOT_REINTRODUCE_B6",
+            "NO_GEN_ACTION_FOR_B6"
+          ],
+          "dependencies": [],
+          "launch_state": "CURRENT_LIVE_UNTIL_CUTOVER_THEN_REMOVE",
+          "owner_decision": {
+            "decision": 2,
+            "choice": "A",
+            "locked": true
+          }
+        },
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-inj-selected-r83",
+          "display_label": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 OWNER REJECTED (keep 100mg/mL)",
+          "gen_cp_name": "NAD+ (Injectable)",
+          "gen_productId": "SHJpGAACUFEeMONdpEbn",
+          "display_name_intended": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 OWNER REJECTED (keep 100mg/mL)",
+          "price": 139,
+          "status": "FUTURE_HIDDEN",
+          "storefront_eligible_target": null,
+          "exact_formulary": [
+            {
+              "excel_row": 83,
+              "exact": "NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml",
+              "strength": "200mg/ml",
+              "form": "Injection Solution",
+              "package": "5ml vial (1000mg)",
+              "pharmacy": "St Luke",
+              "cost": 64,
+              "shipping": 30,
+              "one_time_x9": 139
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": "OWNER LOCKED B \u2014 Do NOT substitute 200mg/mL for website 100mg/mL. r83 excluded from website Injection selectors. Keep on file only; not an active route.",
+          "required_actions": [
+            "DO_NOT_USE_AS_WEBSITE_INJECTION",
+            "DO_NOT_SUBSTITUTE_200_FOR_100",
+            "EXCLUDED_BY_OWNER_DECISION_3B"
+          ],
+          "dependencies": [],
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": {
+            "decision": 3,
+            "choice": "B",
+            "locked": true
+          }
+        },
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-nasal-r81",
+          "display_label": "NAD+ 50mg/ml",
+          "gen_cp_name": "NAD+ 50mg/ml",
+          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
+          "display_name_intended": "NAD+ 50mg/ml",
+          "price": 79,
+          "status": "FUTURE_HIDDEN",
+          "storefront_eligible_target": true,
+          "exact_formulary": [
+            {
+              "excel_row": 81,
+              "exact": "NAD+ 50mg/ml",
+              "cost": 30,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": "OWNER LOCKED A \u2014 Exclude r81. Use verified r84 for 50mg/mL nasal. Duplicate/mislabeled.",
+          "required_actions": [
+            "EXCLUDE_FROM_WEBSITE_SELECTORS",
+            "USE_R84_INSTEAD",
+            "DO_NOT_USE_AS_INJECTION"
+          ],
+          "dependencies": [],
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": {
+            "decision": 4,
+            "choice": "A",
+            "locked": true
+          }
+        },
+        {
+          "website_family": "NAD+",
+          "website_variant": "nad-nasal-r82",
+          "display_label": "NAD+ 200mg/ml",
+          "gen_cp_name": "NAD+ 200mg/ml",
+          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
+          "display_name_intended": "NAD+ 200mg/ml",
+          "price": 109,
+          "status": "FUTURE_HIDDEN",
+          "storefront_eligible_target": true,
+          "exact_formulary": [
+            {
+              "excel_row": 82,
+              "exact": "NAD+ 200mg/ml",
+              "cost": 45,
+              "shipping": 30,
+              "one_time_x9": 109
+            }
+          ],
+          "pharmacy": "St Luke",
+          "reason": "OWNER LOCKED A \u2014 Exclude r82. Use verified r85 for 200mg/mL nasal. Duplicate/mislabeled.",
+          "required_actions": [
+            "EXCLUDE_FROM_WEBSITE_SELECTORS",
+            "USE_R85_INSTEAD",
+            "DO_NOT_USE_AS_INJECTION"
+          ],
+          "dependencies": [],
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": {
+            "decision": 5,
+            "choice": "A",
+            "locked": true
+          }
         },
         {
           "website_family": "Minoxidil",
@@ -1717,7 +1966,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Minoxidil",
@@ -1759,7 +2009,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Minoxidil",
@@ -1801,7 +2052,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Estradiol",
@@ -1829,7 +2081,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Estradiol",
@@ -1857,7 +2110,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Estradiol",
@@ -1885,7 +2139,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Estradiol",
@@ -1913,7 +2168,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1941,7 +2197,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1969,7 +2226,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Progesterone",
@@ -1997,7 +2255,75 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
+        },
+        {
+          "website_family": "Tretinoin",
+          "website_variant": "tretinoin-selected-r126",
+          "display_label": "TRETINOIN 0.15%",
+          "gen_cp_name": "TRETINOIN 0.15%",
+          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
+          "display_name_intended": "TRETINOIN 0.15%",
+          "price": 79,
+          "status": "FUTURE_HIDDEN",
+          "storefront_eligible_target": null,
+          "exact_formulary": [
+            {
+              "excel_row": 126,
+              "exact": "TRETINOIN 0.15%",
+              "cost": 25.5,
+              "shipping": 30,
+              "one_time_x9": 79
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "OWNER LOCKED B \u2014 Do NOT substitute 0.15% for website 0.025/0.05/0.1%. r126 not mapped to plain Tretinoin website product. May remain future separate strength only if later owner-launched explicitly.",
+          "required_actions": [
+            "DO_NOT_MAP_TO_WEBSITE_PLAIN_TRETINOIN",
+            "EXCLUDED_BY_OWNER_DECISION_6B"
+          ],
+          "dependencies": [],
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": {
+            "decision": 6,
+            "choice": "B",
+            "locked": true
+          }
+        },
+        {
+          "website_family": "Tretinoin",
+          "website_variant": "tretinoin-selected-r127",
+          "display_label": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+          "gen_cp_name": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
+          "display_name_intended": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+          "price": 129,
+          "status": "FUTURE_HIDDEN",
+          "storefront_eligible_target": null,
+          "exact_formulary": [
+            {
+              "excel_row": 127,
+              "exact": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+              "cost": 54,
+              "shipping": 30,
+              "one_time_x9": 129
+            }
+          ],
+          "pharmacy": "Vios",
+          "reason": "OWNER LOCKED A \u2014 Do NOT map combo HA/Niacinamide/Tretinoin to plain Tretinoin. Separate formulation/product. Remain FUTURE_HIDDEN until explicit separate launch.",
+          "required_actions": [
+            "DO_NOT_MAP_TO_PLAIN_TRETINOIN",
+            "SEPARATE_FORMULATION",
+            "EXCLUDED_BY_OWNER_DECISION_7A"
+          ],
+          "dependencies": [],
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": {
+            "decision": 7,
+            "choice": "A",
+            "locked": true
+          }
         },
         {
           "website_family": "Testosterone",
@@ -2025,7 +2351,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Testosterone",
@@ -2053,7 +2380,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "PT-141",
@@ -2080,7 +2408,8 @@
             "WHEN_LAUNCHING_ATTACH_EXACT_FORMULARY"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "PT-141",
@@ -2108,7 +2437,8 @@
             "PT141_NASAL_REQUIRES_EXPLICIT_OWNER_ACTIVATION"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "PT-141",
@@ -2136,7 +2466,8 @@
             "PT141_NASAL_REQUIRES_EXPLICIT_OWNER_ACTIVATION"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Glutathione",
@@ -2164,7 +2495,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Glutathione",
@@ -2192,7 +2524,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "GHK-Cu",
@@ -2220,7 +2553,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "GHK-Cu",
@@ -2248,7 +2582,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "GHK-Cu",
@@ -2276,7 +2611,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "GHK-Cu",
@@ -2304,7 +2640,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "MOTS-c",
@@ -2332,7 +2669,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Thymosin Alpha-1",
@@ -2360,7 +2698,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Dihexa",
@@ -2388,7 +2727,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Dihexa",
@@ -2416,7 +2756,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Methylene Blue",
@@ -2444,7 +2785,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Methylene Blue",
@@ -2472,7 +2814,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Methylene Blue",
@@ -2500,7 +2843,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Methylene Blue",
@@ -2528,7 +2872,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Custom HRT Cream",
@@ -2556,7 +2901,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Custom HRT Cream",
@@ -2584,7 +2930,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Custom HRT Cream",
@@ -2612,7 +2959,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Custom HRT Cream",
@@ -2640,7 +2988,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Custom Hormone Troche",
@@ -2668,7 +3017,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Custom Hormone Troche",
@@ -2696,7 +3046,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Custom Hormone Troche",
@@ -2724,7 +3075,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Custom Hormone Troche",
@@ -2752,7 +3104,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Sildenafil / Testosterone Troche",
@@ -2780,7 +3133,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "BPC Triple / Quad Blends",
@@ -2808,7 +3162,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "BPC Triple / Quad Blends",
@@ -2836,7 +3191,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "BPC Triple / Quad Blends",
@@ -2864,7 +3220,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "MOTS-c / Tesamorelin",
@@ -2892,199 +3249,8 @@
             "GEN_PAIRING_REQUIRED_AT_LAUNCH"
           ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
-        }
-      ]
-    },
-    "G_OWNER_REVIEW": {
-      "count": 8,
-      "items": [
-        {
-          "website_family": "Semaglutide",
-          "website_variant": "sem-current-b6",
-          "display_label": "Semaglutide + B6 (legacy until cutover)",
-          "gen_cp_name": "Semaglutide + B6 (legacy until cutover)",
-          "gen_productId": null,
-          "display_name_intended": "Semaglutide + B6 (legacy until cutover)",
-          "price": null,
-          "status": "BLOCKED_OWNER_REVIEW",
-          "storefront_eligible_target": null,
-          "exact_formulary": null,
-          "pharmacy": null,
-          "reason": "Transitional CURRENT_LIVE website identity. Blocked for new routing.",
-          "required_actions": [
-            "REMOVE_AT_WEBSITE_CUTOVER",
-            "DO_NOT_REINTRODUCE_B6"
-          ],
-          "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
-        },
-        {
-          "website_family": "Tirzepatide",
-          "website_variant": "tir-current-b6",
-          "display_label": "Tirzepatide + B6 (legacy until cutover)",
-          "gen_cp_name": "Tirzepatide + B6 (legacy until cutover)",
-          "gen_productId": null,
-          "display_name_intended": "Tirzepatide + B6 (legacy until cutover)",
-          "price": null,
-          "status": "BLOCKED_OWNER_REVIEW",
-          "storefront_eligible_target": null,
-          "exact_formulary": null,
-          "pharmacy": null,
-          "reason": null,
-          "required_actions": [
-            "REMOVE_AT_WEBSITE_CUTOVER",
-            "DO_NOT_REINTRODUCE_B6"
-          ],
-          "dependencies": [],
-          "launch_state": "CURRENT_LIVE"
-        },
-        {
-          "website_family": "NAD+",
-          "website_variant": "nad-inj-selected-r83",
-          "display_label": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 owner option A only",
-          "gen_cp_name": "NAD+ (Injectable)",
-          "gen_productId": "SHJpGAACUFEeMONdpEbn",
-          "display_name_intended": "Injection \u00b7 SELECTED r83 200mg/ml \u00b7 5ml (1000mg) \u2014 owner option A only",
-          "price": 139,
-          "status": "BLOCKED_OWNER_REVIEW",
-          "storefront_eligible_target": null,
-          "exact_formulary": [
-            {
-              "excel_row": 83,
-              "exact": "NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml",
-              "strength": "200mg/ml",
-              "form": "Injection Solution",
-              "package": "5ml vial (1000mg)",
-              "pharmacy": "St Luke",
-              "cost": 64,
-              "shipping": 30,
-              "one_time_x9": 139
-            }
-          ],
-          "pharmacy": "St Luke",
-          "reason": "Not activated unless owner chooses option A from integrity gate.",
-          "required_actions": [
-            "OWNER_APPROVES_WEBSITE_STRENGTH_CHANGE_TO_200MG_ML",
-            "THEN_GEN_PAIRING_REQUIRED",
-            "VERIFY_PRICE_139"
-          ],
-          "dependencies": [],
-          "launch_state": "CUTOVER_PENDING_FORMULARY"
-        },
-        {
-          "website_family": "NAD+",
-          "website_variant": "nad-nasal-r81",
-          "display_label": "NAD+ 50mg/ml",
-          "gen_cp_name": "NAD+ 50mg/ml",
-          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
-          "display_name_intended": "NAD+ 50mg/ml",
-          "price": 79,
-          "status": "BLOCKED_OWNER_REVIEW",
-          "storefront_eligible_target": true,
-          "exact_formulary": [
-            {
-              "excel_row": 81,
-              "exact": "NAD+ 50mg/ml",
-              "cost": 30,
-              "shipping": 30,
-              "one_time_x9": 79
-            }
-          ],
-          "pharmacy": "St Luke",
-          "reason": "SELECTED rows 81/82 have Form=Nasal Spray but Delivery Type=Injection. Not valid injectable routes; duplicates of r84/r85 nasal. Blocked for website selectors.",
-          "required_actions": [
-            "DO_NOT_USE_AS_INJECTION",
-            "DUPLICATE_OF_TRUE_NASAL_R84_R85",
-            "EXCLUDE_FROM_WEBSITE_SELECTORS"
-          ],
-          "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
-        },
-        {
-          "website_family": "NAD+",
-          "website_variant": "nad-nasal-r82",
-          "display_label": "NAD+ 200mg/ml",
-          "gen_cp_name": "NAD+ 200mg/ml",
-          "gen_productId": "FVwkzvQqWIZRNAwbslGw",
-          "display_name_intended": "NAD+ 200mg/ml",
-          "price": 109,
-          "status": "BLOCKED_OWNER_REVIEW",
-          "storefront_eligible_target": true,
-          "exact_formulary": [
-            {
-              "excel_row": 82,
-              "exact": "NAD+ 200mg/ml",
-              "cost": 45,
-              "shipping": 30,
-              "one_time_x9": 109
-            }
-          ],
-          "pharmacy": "St Luke",
-          "reason": "SELECTED rows 81/82 have Form=Nasal Spray but Delivery Type=Injection. Not valid injectable routes; duplicates of r84/r85 nasal. Blocked for website selectors.",
-          "required_actions": [
-            "DO_NOT_USE_AS_INJECTION",
-            "DUPLICATE_OF_TRUE_NASAL_R84_R85",
-            "EXCLUDE_FROM_WEBSITE_SELECTORS"
-          ],
-          "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
-        },
-        {
-          "website_family": "Tretinoin",
-          "website_variant": "tretinoin-selected-r126",
-          "display_label": "TRETINOIN 0.15%",
-          "gen_cp_name": "TRETINOIN 0.15%",
-          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
-          "display_name_intended": "TRETINOIN 0.15%",
-          "price": 79,
-          "status": "BLOCKED_OWNER_REVIEW",
-          "storefront_eligible_target": null,
-          "exact_formulary": [
-            {
-              "excel_row": 126,
-              "exact": "TRETINOIN 0.15%",
-              "cost": 25.5,
-              "shipping": 30,
-              "one_time_x9": 79
-            }
-          ],
-          "pharmacy": "Vios",
-          "reason": "Owner option only \u2014 do not silent-substitute for website strengths.",
-          "required_actions": [
-            "OWNER_APPROVES_WEBSITE_STRENGTH_CHANGE_FIRST",
-            "THEN_GEN_PAIRING"
-          ],
-          "dependencies": [],
-          "launch_state": "CUTOVER_PENDING_FORMULARY"
-        },
-        {
-          "website_family": "Tretinoin",
-          "website_variant": "tretinoin-selected-r127",
-          "display_label": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
-          "gen_cp_name": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
-          "gen_productId": "EeWMcfCJf5EU2LkNQmp9",
-          "display_name_intended": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
-          "price": 129,
-          "status": "BLOCKED_OWNER_REVIEW",
-          "storefront_eligible_target": null,
-          "exact_formulary": [
-            {
-              "excel_row": 127,
-              "exact": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
-              "cost": 54,
-              "shipping": 30,
-              "one_time_x9": 129
-            }
-          ],
-          "pharmacy": "Vios",
-          "reason": "Owner option only \u2014 do not silent-substitute for website strengths.",
-          "required_actions": [
-            "OWNER_APPROVES_WEBSITE_STRENGTH_CHANGE_FIRST",
-            "THEN_GEN_PAIRING"
-          ],
-          "dependencies": [],
-          "launch_state": "CUTOVER_PENDING_FORMULARY"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": null
         },
         {
           "website_family": "Scream Cream",
@@ -3094,19 +3260,30 @@
           "gen_productId": null,
           "display_name_intended": "scream-cream-pending",
           "price": null,
-          "status": "BLOCKED_OWNER_REVIEW",
+          "status": "FUTURE_HIDDEN",
           "storefront_eligible_target": null,
           "exact_formulary": [],
           "pharmacy": null,
-          "reason": "No SELECTED rows / explicit do-not-activate",
-          "required_actions": [],
+          "reason": "OWNER LOCKED A \u2014 Remain FUTURE_HIDDEN. Do not activate. Do not create live website route. Do not invent formulary mapping.",
+          "required_actions": [
+            "DO_NOT_ACTIVATE",
+            "NO_WEBSITE_ROUTE",
+            "NO_UNSUPPORTED_FORMULARY_MAPPING"
+          ],
           "dependencies": [],
-          "launch_state": "FUTURE_HIDDEN"
+          "launch_state": "FUTURE_HIDDEN",
+          "owner_decision": {
+            "decision": 8,
+            "choice": "A",
+            "locked": true
+          }
         }
       ]
     }
   },
   "final_report": {
+    "OWNER_DECISIONS_LOCKED": "8/8",
+    "OWNER_DECISIONS_REMAINING": 0,
     "TOTAL_WEBSITE_FAMILIES": 30,
     "TOTAL_WEBSITE_VARIANTS": 103,
     "ROUTING_READY": 0,
@@ -3115,56 +3292,18 @@
     "GEN_PAIRING_REQUIRED": 20,
     "FORMULARY_PENDING": 14,
     "PRICE_PENDING": 0,
-    "FUTURE_HIDDEN": 43,
-    "BLOCKED_OWNER_REVIEW": 8,
-    "SEM": {
-      "website_families": 1,
-      "variants": 11,
-      "by_status": {
-        "GEN_PRODUCT_REPAIR_REQUIRED": 8,
-        "GEN_PAIRING_REQUIRED": 1,
-        "BLOCKED_OWNER_REVIEW": 1,
-        "FUTURE_HIDDEN": 1
-      },
-      "membership_backend_structure": "ONE website offer $149; backend B12/Glycine split allowed if GEN requires \u2014 not exposed as separate cards"
-    },
-    "TIR": {
-      "website_families": 1,
-      "variants": 10,
-      "by_status": {
-        "GEN_PRODUCT_CREATE_REQUIRED": 8,
-        "BLOCKED_OWNER_REVIEW": 1,
-        "GEN_PRODUCT_REPAIR_REQUIRED": 1
-      },
-      "create_confirmed_against_live_inventory": true,
-      "membership_backend_structure": "ONE website offer $275 at cutover; backend B12/Glycine split allowed if GEN requires"
-    },
-    "NAD": {
-      "website_families": 1,
-      "injection_variants": 3,
-      "nasal_variants_selectable": 2,
-      "by_status": {
-        "FORMULARY_PENDING": 2,
-        "BLOCKED_OWNER_REVIEW": 3,
-        "GEN_PAIRING_REQUIRED": 2
-      }
-    },
-    "WOLVERINE": {
-      "website_families": 1,
-      "capsule": "GEN_PAIRING_REQUIRED",
-      "injection": "GEN_PRODUCT_REPAIR_REQUIRED"
-    },
-    "PT141": {
-      "website_families": 1,
-      "injection_routing": "FUTURE_HIDDEN",
-      "nasal_routing": "FUTURE_HIDDEN (explicit owner activation required)"
-    },
+    "FUTURE_HIDDEN": 51,
+    "BLOCKED_OWNER_REVIEW": 0,
+    "GEN_EXECUTION_ELIGIBLE_VARIANTS": 38,
+    "GEN_EXECUTION_BLOCKED_VARIANTS": 65,
+    "FORMULARY_SOURCING_ITEMS_STILL_REQUIRED": 14,
     "WEBSITE_ARCHITECTURE_CHANGED": false,
     "GEN_MODIFIED": false,
     "GEN_WRITES": 0,
-    "FORMULARY_PAIRING_WRITES": 0,
+    "PAIRING_WRITES": 0,
     "WEBSITE_MODIFIED": false,
     "CHECKOUT_MODIFIED": false,
-    "CUTOVER": "OFF"
+    "CUTOVER": "OFF",
+    "STOP": "STOP FOR OWNER REVIEW \u2014 Do not execute GEN. Do not modify website."
   }
 }

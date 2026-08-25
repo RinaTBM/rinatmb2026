@@ -1,12 +1,18 @@
 # MBM GEN Final Manual Fix Plan
 
+> **SUPERSEDED_BY_OWNER_DIRECT_GEN_WORKING_SET (MBM-GEN-OWNER-LINKS-AS-WORKING-SET-1):**  
+> This plan targeted the prior **Locked-7** Client Product list. That list is **no longer** the authoritative owner working set.  
+> Active authority: **`docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md`** (22 owner-supplied GEN URLs).  
+> Keep this document as historical fix-plan evidence — do not delete. Do not execute Locked-7-only fixes as if they were still required architecture.
+
 **Owner manual GEN admin actions only.** This agent run does **not** modify GEN, pairings, website routing, or registry.
 
 Generated: `2026-08-25T05:56:59Z`
 
-Authority:
+Authority (historical for this plan; superseded for working-set routing):
 - Diagnostic: `docs/MBM_GEN_SCRIPTful_PAIRING_DISCREPANCY_DIAGNOSTIC.md`
 - Policy: `docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md` (≥1 compatible + no material mismatch; multi-strength OK)
+- **Current working set:** `docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md`
 
 ## Safety locks
 
@@ -15,7 +21,7 @@ Authority:
 - Website routing modified: **NO**
 - New GEN products created: **0**
 - Published: **NO** · Cutover: **OFF** · PR #19: **OPEN / NOT MERGED**
-- GLP-2 TIR product used for membership: **NO**
+- GLP-2 TIR product used for membership: **NO** *(historical lock for this plan)* — **superseded for working-set planning:** owner set prefers REUSE `SvFDJ7…` for TIR membership @$275 after repair (`docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md`)
 - Next 13 create set: **UNCHANGED**
 
 ## Click-by-click — 6 direct fixes

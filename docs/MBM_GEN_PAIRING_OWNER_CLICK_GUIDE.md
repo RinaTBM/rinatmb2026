@@ -1,5 +1,9 @@
 # MBM GEN Pairing — Owner Click-by-Click Guide
 
+> **WORKING-SET AUTHORITY UPDATE (MBM-GEN-OWNER-LINKS-AS-WORKING-SET-1):**  
+> Prefer products from **`docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md`** (22 owner URLs = `OWNER_SELECTED_GEN_WORKING_SET`).  
+> Prior Locked-7-only click targets are **`SUPERSEDED_BY_OWNER_DIRECT_GEN_WORKING_SET`** as required architecture. Historical steps below retained as evidence — re-open the owner working-set map before further GEN admin work.
+
 **Documentation only. Do not skip ahead. Do not invent medications.**
 
 Work top to bottom in GEN Health. For each task: open the named product → Edit → Formulary / Medication → select exactly what is listed → remove extras → Save → check the boxes.
@@ -8,7 +12,7 @@ This guide covers the **15 GEN client products** that already have IDs (23 websi
 
 ## Direct GEN product URLs (owner-proven)
 
-Authority: `docs/MBM_GEN_OWNER_DIRECT_URL_MAP.md`
+Authority: `docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md` (routing/reuse) · inventory: `docs/MBM_GEN_OWNER_DIRECT_URL_MAP.md`
 
 GEN product URL pattern (constant prefix across owner-supplied links):
 

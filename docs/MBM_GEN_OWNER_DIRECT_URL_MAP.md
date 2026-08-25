@@ -1,6 +1,11 @@
 # MBM GEN Owner Direct URL Map
 
-**READ ONLY.** Owner-supplied GEN Health product URLs are authoritative for which Client Product IDs the owner is viewing.
+> **AUTHORITY UPDATE (MBM-GEN-OWNER-LINKS-AS-WORKING-SET-1):**  
+> The 22 owner URLs listed here are now **`OWNER_SELECTED_GEN_WORKING_SET`** — active routing/reuse authority.  
+> Prior Locked-7 Client Product assumptions are **`SUPERSEDED_BY_OWNER_DIRECT_GEN_WORKING_SET`**.  
+> Role labels in this file (`LEGACY_PRODUCT_REFERENCE`, `NOT_USED_BY_NEW_WEBSITE_ARCHITECTURE`, `ROUTING_TARGET_CONFLICT`, etc.) are **historical inventory annotations** — re-evaluated in `docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md`. Do not delete this audit.
+
+**READ ONLY.** Owner-supplied GEN Health product URLs identify which Client Product IDs the owner is viewing.
 
 Generated: `2026-08-25T06:32:18Z`
 

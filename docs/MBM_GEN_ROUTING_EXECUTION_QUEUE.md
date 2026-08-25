@@ -1,5 +1,7 @@
 # MBM GEN Routing Execution Queue
 
+> **WORKING-SET AUTHORITY UPDATE:** Prior queue / Locked-7 assumptions are historical. Active owner working set: **`docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md`** (`OWNER_SELECTED_GEN_WORKING_SET` — 22 URLs). Locked-7: `SUPERSEDED_BY_OWNER_DIRECT_GEN_WORKING_SET`. Do not execute this queue as-is without re-mapping to the owner set.
+
 **Generated:** 2026-08-25T00:48:39Z  
 **Phase:** MBM-GEN-PRICE-CONFLICT-RESOLUTION-1  
 

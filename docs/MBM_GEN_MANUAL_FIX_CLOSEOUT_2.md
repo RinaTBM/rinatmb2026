@@ -1,5 +1,9 @@
 # MBM GEN Manual Fix Closeout 2
 
+> **SUPERSEDED_BY_OWNER_DIRECT_GEN_WORKING_SET (MBM-GEN-OWNER-LINKS-AS-WORKING-SET-1):**  
+> Closeout scored the prior **Locked-7** fix targets. Locked-7 is **no longer** the authoritative owner working set.  
+> Active authority: **`docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md`**. Retain this closeout as historical evidence (live GEN still showed 8/15 on Locked-7 CPs at time of write).
+
 **READ-ONLY live GEN verification** after owner claimed completion of the 7 locked fixes in `docs/MBM_GEN_FINAL_MANUAL_FIX_PLAN.md`.
 
 Generated: `2026-08-25T06:16:13Z`

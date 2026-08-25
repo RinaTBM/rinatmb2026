@@ -1,10 +1,16 @@
 # MBM GEN Next Create Preflight
 
+> **RE-SCOPE REQUIRED (MBM-GEN-OWNER-LINKS-AS-WORKING-SET-1):**  
+> Prior Locked-7 / “do not reuse GLP-2” assumptions are **`SUPERSEDED_BY_OWNER_DIRECT_GEN_WORKING_SET`**.  
+> Owner prefers REUSE of compatible products from the **22** (`docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md`) — e.g. TIR `SvFDJ7…` for membership @$275 and optionally all TIR tiers if collapsed.  
+> This 13-create preflight is **historical**. Do **not** execute until re-scoped against the owner working set. Estradiol ×4 + NAD r85 + Wolverine Capsule + Minoxidil Dual remain likely creates.
+
 **PREFLIGHT ONLY — DO NOT EXECUTE CREATES.**
 
 Generated: `2026-08-25T05:25:13Z`
 
-Authority: `docs/MBM_GEN_FINAL_WRITE_MANIFEST.json` → `post_resolution_queues.create_variants` (13)
+Authority (historical): `docs/MBM_GEN_FINAL_WRITE_MANIFEST.json` → `post_resolution_queues.create_variants` (13)  
+**Current working-set authority:** `docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md`
 
 ## Groups
 

@@ -3,6 +3,8 @@
     "document": "MBM_GEN_OWNER_DIRECT_URL_MAP",
     "generated_at": "2026-08-25T06:32:18Z",
     "mode": "READ_ONLY",
+    "authority_note": "SUPERSEDED_AS_ROUTING_AUTHORITY_BY docs/MBM_OWNER_SELECTED_GEN_WORKING_SET — this file remains historical URL inventory; roles on the 22 IDs are re-evaluated there. OWNER_SELECTED_GEN_WORKING_SET = 22 URLs ACTIVE.",
+    "previous_locked7_authority": "SUPERSEDED_BY_OWNER_DIRECT_GEN_WORKING_SET",
     "owner_direct_urls_received": 22,
     "url_pattern": "https://app.genhealthehr.com/{client}/product/{composite}_{CLIENT_PRODUCT_ID}",
     "proven_prefix": {

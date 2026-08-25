@@ -1,0 +1,673 @@
+{
+  "version": "gen-catalog-1i-pricing-amendment",
+  "generated_at": "2026-08-24T07:31:34Z",
+  "mode": "READ_ONLY",
+  "pricingHierarchy": {
+    "STANDARD_ONE_TIME": {
+      "raw": "(at_cost \u00d7 1.75) + pharmacy_shipping",
+      "final": "nearest $X9 (equidistant \u2192 ROUND UP)"
+    },
+    "THREE_MONTH": {
+      "raw": "((monthly_at_cost \u00d7 1.75) + monthly_pharmacy_shipping) \u00d7 3",
+      "final": "nearest $X9 (equidistant \u2192 ROUND UP)",
+      "not": "Do NOT use single-month total as 3-month price; do NOT use one shipping unless verified 3-month fulfillment differs"
+    },
+    "SIX_MONTH": {
+      "raw": "((monthly_at_cost \u00d7 1.75) + monthly_pharmacy_shipping) \u00d7 6",
+      "final": "nearest $X9 (equidistant \u2192 ROUND UP)"
+    },
+    "SEM_ANY_DOSE_MEMBERSHIP": {
+      "productName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "ownerTargetMonthly": 149,
+      "pricingModel": "OWNER_SET_OVERRIDE \u2014 not automatic 1.75 formula",
+      "doNotChangeWithoutOwnerApproval": true
+    },
+    "TIR_ANY_DOSE_MEMBERSHIP": {
+      "productName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "ownerTargetMonthly": 275,
+      "pricingModel": "OWNER_SET_OVERRIDE \u2014 not automatic 1.75 formula",
+      "doNotChangeWithoutOwnerApproval": true
+    },
+    "oneTimeVsMembership": "Separate purchase/pricing models \u2014 do not overwrite one-time with membership"
+  },
+  "semMembershipEconomics": {
+    "target": 149.0,
+    "doses": [
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "1mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + VITAMIN B12 1MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 50.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 55.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 94.0,
+        "grossMarginPctAtMembership": 63.09,
+        "oneTimeMonthlyRaw": 92.5,
+        "oneTimeMonthlyX9": 89
+      },
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "2mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + VITAMIN B12 2MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 55.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 60.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 89.0,
+        "grossMarginPctAtMembership": 59.73,
+        "oneTimeMonthlyRaw": 101.25,
+        "oneTimeMonthlyX9": 99
+      },
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "4mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + VITAMIN B12 4MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 58.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 63.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 86.0,
+        "grossMarginPctAtMembership": 57.72,
+        "oneTimeMonthlyRaw": 106.5,
+        "oneTimeMonthlyX9": 109
+      },
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "6mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + VITAMIN B12 6MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 60.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 65.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 84.0,
+        "grossMarginPctAtMembership": 56.38,
+        "oneTimeMonthlyRaw": 110.0,
+        "oneTimeMonthlyX9": 109
+      },
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "10mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 65.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 70.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 79.0,
+        "grossMarginPctAtMembership": 53.02,
+        "oneTimeMonthlyRaw": 118.75,
+        "oneTimeMonthlyX9": 119
+      },
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "1mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + GLYCINE 1MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 50.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 55.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 94.0,
+        "grossMarginPctAtMembership": 63.09,
+        "oneTimeMonthlyRaw": 92.5,
+        "oneTimeMonthlyX9": 89
+      },
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "2mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + GLYCINE 2MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 55.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 60.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 89.0,
+        "grossMarginPctAtMembership": 59.73,
+        "oneTimeMonthlyRaw": 101.25,
+        "oneTimeMonthlyX9": 99
+      },
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "4mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + GLYCINE 4MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 58.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 63.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 86.0,
+        "grossMarginPctAtMembership": 57.72,
+        "oneTimeMonthlyRaw": 106.5,
+        "oneTimeMonthlyX9": 109
+      },
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "6mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + GLYCINE 6MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 60.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 65.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 84.0,
+        "grossMarginPctAtMembership": 56.38,
+        "oneTimeMonthlyRaw": 110.0,
+        "oneTimeMonthlyX9": 109
+      },
+      {
+        "membershipProduct": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "sem-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "10mg/0.5mg/mL",
+        "formulation": "SEMAGLUTIDE + GLYCINE 10MG/0.5MG/ML (1ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "1mL",
+        "completeMonthlyAtCost": 65.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 70.0,
+        "membershipRevenue": 149.0,
+        "grossProfitAtMembership": 79.0,
+        "grossMarginPctAtMembership": 53.02,
+        "oneTimeMonthlyRaw": 118.75,
+        "oneTimeMonthlyX9": 119
+      }
+    ],
+    "classification": {
+      "status": "ECONOMICALLY_WORKABLE",
+      "reason": "All eligible doses GP>0 and lowest GM 53.02% \u2265 25%",
+      "highestMonthlyLandedCost": 70.0,
+      "lowestGP": 79.0,
+      "lowestGM": 53.02,
+      "highestCostDose": {
+        "formulation": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+        "strength": "10mg/0.5mg/mL",
+        "additive": "B12",
+        "atCost": 65.0,
+        "shipping": 5.0,
+        "landed": 70.0
+      },
+      "lowestMarginDose": {
+        "formulation": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL)",
+        "strength": "10mg/0.5mg/mL",
+        "additive": "B12",
+        "gp": 79.0,
+        "gm": 53.02,
+        "landed": 70.0
+      }
+    }
+  },
+  "tirMembershipEconomics": {
+    "target": 275.0,
+    "doses": [
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "5mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 65.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 70.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 205.0,
+        "grossMarginPctAtMembership": 74.55,
+        "oneTimeMonthlyRaw": 118.75,
+        "oneTimeMonthlyX9": 119
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "10mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 75.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 80.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 195.0,
+        "grossMarginPctAtMembership": 70.91,
+        "oneTimeMonthlyRaw": 136.25,
+        "oneTimeMonthlyX9": 139
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "15mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 85.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 90.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 185.0,
+        "grossMarginPctAtMembership": 67.27,
+        "oneTimeMonthlyRaw": 153.75,
+        "oneTimeMonthlyX9": 149
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "20mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 90.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 95.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 180.0,
+        "grossMarginPctAtMembership": 65.45,
+        "oneTimeMonthlyRaw": 162.5,
+        "oneTimeMonthlyX9": 159
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "25mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 95.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 100.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 175.0,
+        "grossMarginPctAtMembership": 63.64,
+        "oneTimeMonthlyRaw": 171.25,
+        "oneTimeMonthlyX9": 169
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-b12-any",
+        "additiveLadder": "B12",
+        "doseStrength": "30mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 100.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 105.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 170.0,
+        "grossMarginPctAtMembership": 61.82,
+        "oneTimeMonthlyRaw": 180.0,
+        "oneTimeMonthlyX9": 179
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "5mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 65.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 70.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 205.0,
+        "grossMarginPctAtMembership": 74.55,
+        "oneTimeMonthlyRaw": 118.75,
+        "oneTimeMonthlyX9": 119
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "10mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 75.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 80.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 195.0,
+        "grossMarginPctAtMembership": 70.91,
+        "oneTimeMonthlyRaw": 136.25,
+        "oneTimeMonthlyX9": 139
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "15mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 85.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 90.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 185.0,
+        "grossMarginPctAtMembership": 67.27,
+        "oneTimeMonthlyRaw": 153.75,
+        "oneTimeMonthlyX9": 149
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "20mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 90.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 95.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 180.0,
+        "grossMarginPctAtMembership": 65.45,
+        "oneTimeMonthlyRaw": 162.5,
+        "oneTimeMonthlyX9": 159
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "25mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 95.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 100.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 175.0,
+        "grossMarginPctAtMembership": 63.64,
+        "oneTimeMonthlyRaw": 171.25,
+        "oneTimeMonthlyX9": 169
+      },
+      {
+        "membershipProduct": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "clientProductKey": "tir-glycine-any",
+        "additiveLadder": "Glycine",
+        "doseStrength": "30mg/0.5mg/mL",
+        "formulation": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+        "pharmacy": "Dirx-Hub",
+        "package": "2mL",
+        "completeMonthlyAtCost": 100.0,
+        "monthlyPharmacyShipping": 5.0,
+        "monthlyLandedCost": 105.0,
+        "membershipRevenue": 275.0,
+        "grossProfitAtMembership": 170.0,
+        "grossMarginPctAtMembership": 61.82,
+        "oneTimeMonthlyRaw": 180.0,
+        "oneTimeMonthlyX9": 179
+      }
+    ],
+    "classification": {
+      "status": "ECONOMICALLY_WORKABLE",
+      "reason": "All eligible doses GP>0 and lowest GM 61.82% \u2265 25%",
+      "highestMonthlyLandedCost": 105.0,
+      "lowestGP": 170.0,
+      "lowestGM": 61.82,
+      "highestCostDose": {
+        "formulation": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+        "strength": "30mg/0.5mg/mL",
+        "additive": "B12",
+        "atCost": 100.0,
+        "shipping": 5.0,
+        "landed": 105.0
+      },
+      "lowestMarginDose": {
+        "formulation": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+        "strength": "30mg/0.5mg/mL",
+        "additive": "B12",
+        "gp": 170.0,
+        "gm": 61.82,
+        "landed": 105.0
+      }
+    }
+  },
+  "membershipStructure": {
+    "semPatientFacing": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+    "tirPatientFacing": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+    "internalLaddersRemainSeparate": true,
+    "b12GlycineCrossPairForbidden": true,
+    "routingNote": "Owner economic review assumes one patient-facing membership can route to the appropriate approved dose/additive formulary underneath. Clinical substitution is NOT decided here. GEN limitation flag: if GEN client products cannot multi-pair distinct B12 vs Glycine meds under one membership SKU, separate patient-facing membership products may be required.",
+    "genLimitationFlag": "POSSIBLE_SEPARATE_MEMBERSHIP_SKUS_IF_GEN_CANNOT_MULTI_PAIR_B12_AND_GLYCINE_UNDER_ONE_CLIENT_PRODUCT"
+  },
+  "threeMonthRecalculated": [
+    {
+      "key": "sem-glycine-3month",
+      "product": "Semaglutide Injection \u2014 3-Month (Glycine)",
+      "launchBucket": "LIVE_NOW",
+      "rawBases": [],
+      "recalculated": []
+    },
+    {
+      "key": "sem-b12-3month",
+      "product": "Semaglutide Injection \u2014 3-Month (B12)",
+      "launchBucket": "LIVE_NOW",
+      "rawBases": [
+        {
+          "medication": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) (3 VIALS))",
+          "cost": 50.0,
+          "ship": 30.0,
+          "claims3Vials": true
+        }
+      ],
+      "recalculated": [
+        {
+          "formulation": "SEMAGLUTIDE + VITAMIN B12 10MG/0.5MG/ML (1ML VIAL) (3 VIALS))",
+          "pharmacy": "Dirx-Hub",
+          "monthlyAtCost": null,
+          "monthlyShipping": 30.0,
+          "threeMonthRaw": null,
+          "threeMonthFinalX9": null,
+          "note": "Row claims 3 VIALS with embedded cost \u2014 NOT used as monthly. Need separate monthly vial cost. Stated row cost=$50.0.",
+          "statedRowCost": 50.0
+        },
+        {
+          "formulation": "SEM+B12 escalation 4\u21926\u219210mg (Dirx-Hub)",
+          "pharmacy": "Dirx-Hub",
+          "monthlyAtCost": null,
+          "monthlyShipping": null,
+          "threeMonthRaw_ownerTimes3Using10mgMonthly": 356.25,
+          "threeMonthFinalX9_ownerTimes3Using10mgMonthly": 359,
+          "threeMonthRaw_escalationSumDistinctVials": 335.25,
+          "threeMonthFinalX9_escalationSumDistinctVials": 339,
+          "note": "Owner \u00d73 rule using 10mg monthly ($65+$5) as proxy. Product name is escalation 4\u21926\u219210mg \u2014 alternate evidence-based total = sum of three distinct vial monthlies. Broken SELECTED row ($50 for 3 vials) discarded.",
+          "preferredForOwnerReview": "escalationSumDistinctVials_if_bundle_is_4_6_10_else_times3_10mg"
+        }
+      ]
+    },
+    {
+      "key": "sem-other-glp1weightlossplansemaglutideanydose3mon",
+      "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide (Any Dose) \u2013 3 Month Supply",
+      "launchBucket": "FUTURE_HIDDEN",
+      "rawBases": [],
+      "recalculated": []
+    },
+    {
+      "key": "sem-other-glp1weightlossplansemaglutidehighdose3mo",
+      "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide (High Dose) \u2013 3 Month Supply",
+      "launchBucket": "FUTURE_HIDDEN",
+      "rawBases": [],
+      "recalculated": []
+    },
+    {
+      "key": "sem-other-glp1weightlossplansemaglutidemiddose3mon",
+      "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide (Mid Dose) \u2013 3 Month Supply",
+      "launchBucket": "FUTURE_HIDDEN",
+      "rawBases": [],
+      "recalculated": []
+    },
+    {
+      "key": "sem-other-glp1weightlossplansemaglutidestartingdos",
+      "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide (Starting Dose) \u2013 3 Month Supply",
+      "launchBucket": "FUTURE_HIDDEN",
+      "rawBases": [],
+      "recalculated": []
+    },
+    {
+      "key": "sem-other-glp1weightlossplansemaglutide3monthescal",
+      "product": "Semaglutide Weight Loss Plan \u2013 Semaglutide 3-Month Escalation Bundle (Low: 1\u21922\u21924mg)",
+      "launchBucket": "FUTURE_HIDDEN",
+      "rawBases": [],
+      "recalculated": []
+    },
+    {
+      "key": "tir-glycine-3month",
+      "product": "Tirzepatide Injection \u2014 3-Month (Glycine)",
+      "launchBucket": "FUTURE_HIDDEN",
+      "rawBases": [
+        {
+          "medication": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) (3 PACK))",
+          "cost": 225.0,
+          "ship": 30.0,
+          "claims3Vials": false
+        }
+      ],
+      "recalculated": [
+        {
+          "formulation": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL) (3 PACK))",
+          "pharmacy": "Dirx-Hub",
+          "statedRowCost": 225.0,
+          "statedRowShipping": 30.0,
+          "interpretation": "Formulary name claims 3 PACK \u2014 do NOT apply owner \u00d73 on top of stated row cost without confirming whether $225 is monthly or already 3-month pharmacy cost",
+          "ifStatedCostIsAlready3MonthTotal_rawAsIs": null,
+          "ownerTimes3Using30mgMonthly_raw": 540.0,
+          "ownerTimes3Using30mgMonthly_finalX9": 539,
+          "threeMonthFinalX9": null,
+          "note": "Unresolved package interpretation; owner \u00d73 proxy from highest TIR monthly (30mg $100+$5) = $356.25 \u2192 $359 shown for review only",
+          "costBasisStatus": "PACKAGE_QUANTITY_UNKNOWN"
+        }
+      ]
+    },
+    {
+      "key": "tir-b12-3month",
+      "product": "Tirzepatide Injection \u2014 3-Month (B12)",
+      "launchBucket": "FUTURE_HIDDEN",
+      "rawBases": [],
+      "recalculated": []
+    },
+    {
+      "key": "review-sildenafil3month",
+      "product": "Sildenafil (3 Month)",
+      "launchBucket": "FUTURE_HIDDEN",
+      "rawBases": [
+        {
+          "medication": "Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2%",
+          "cost": 45.0,
+          "ship": 30.0,
+          "claims3Vials": false
+        }
+      ],
+      "recalculated": [
+        {
+          "formulation": "Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2%",
+          "pharmacy": "St Luke",
+          "monthlyAtCost": 45.0,
+          "monthlyShipping": 30.0,
+          "threeMonthRaw": 326.25,
+          "threeMonthFinalX9": 329,
+          "oldWrongSingleMonthAsTotal": 109,
+          "note": "Using row cost as monthly_at_cost under owner \u00d73 rule",
+          "costBasisWarning": "DEFERRED product / Scream Cream formulary mispair per owner Decision #7/#8/#9 \u2014 do not use for LIVE write",
+          "deferred": true
+        }
+      ]
+    }
+  ],
+  "sixMonthRecalculated": [
+    {
+      "key": "sem-other-semaglutideb126months",
+      "product": "Semaglutide/B12 (6 Months)",
+      "launchBucket": "FUTURE_HIDDEN",
+      "recalculated": [
+        {
+          "formulation": "SEMAGLUTIDE/B12 0.6 MG/ 500 MCG/ML (2 ML)",
+          "pharmacy": "Optimal Balance Pharmacy",
+          "monthlyAtCost": 62.0,
+          "monthlyShipping": 20.0,
+          "sixMonthRaw": 771.0,
+          "sixMonthFinalX9": 769,
+          "costBasisWarning": "Confirm source cost is monthly complete dispense before applying \u00d76"
+        }
+      ]
+    },
+    {
+      "key": "review-sildenafil6month",
+      "product": "Sildenafil (6 Month)",
+      "launchBucket": "FUTURE_HIDDEN",
+      "recalculated": [
+        {
+          "formulation": "Scream Cream (Pentoxifylline/Arginine HCl/Sildenafil) 3/6/2%",
+          "pharmacy": "St Luke",
+          "monthlyAtCost": 45.0,
+          "monthlyShipping": 30.0,
+          "sixMonthRaw": 652.5,
+          "sixMonthFinalX9": 649,
+          "costBasisWarning": "DEFERRED product / Scream Cream formulary mispair per owner Decision #7/#8/#9 \u2014 do not use for LIVE write",
+          "deferred": true
+        }
+      ]
+    }
+  ],
+  "finalReport": {
+    "SEM_MEMBERSHIP_TARGET": 149,
+    "SEM_HIGHEST_MONTHLY_LANDED_COST": 70.0,
+    "SEM_LOWEST_GP": 79.0,
+    "SEM_LOWEST_GM_PCT": 53.02,
+    "SEM_149_ECONOMIC_STATUS": "ECONOMICALLY_WORKABLE",
+    "TIRZ_MEMBERSHIP_TARGET": 275,
+    "TIRZ_HIGHEST_MONTHLY_LANDED_COST": 105.0,
+    "TIRZ_LOWEST_GP": 170.0,
+    "TIRZ_LOWEST_GM_PCT": 61.82,
+    "TIRZ_275_ECONOMIC_STATUS": "ECONOMICALLY_WORKABLE",
+    "THREE_MONTH_PRODUCTS_RECALCULATED": 10,
+    "SIX_MONTH_PRODUCTS_RECALCULATED": 2,
+    "STANDARD_PRICING_RULE_LOCKED": "YES",
+    "MULTI_MONTH_PRICING_RULE_LOCKED": "YES",
+    "MEMBERSHIP_OVERRIDE_RULE_LOCKED": "YES",
+    "GEN_MODIFIED": "NO",
+    "GEN_WRITES": 0,
+    "WEBSITE_MODIFIED": "NO",
+    "GEN_WHOP_CUTOVER": "OFF",
+    "THREE_MONTH_NOTE": "SEM 3-Month B12: discarded broken $50/3-vial row; owner \u00d73 on 10mg monthly \u2192 raw $356.25 \u2192 $359; escalation-sum alternate 4+6+10 \u2192 raw $335.25 \u2192 $339. TIR 3-Month: 3 PACK row interpretation unresolved.",
+    "generated_at": "2026-08-24T07:31:34Z"
+  },
+  "stopGate": "OWNER_ECONOMIC_REVIEW"
+}

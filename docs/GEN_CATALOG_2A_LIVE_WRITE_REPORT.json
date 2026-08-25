@@ -1,0 +1,1506 @@
+{
+  "phase": "GEN-CATALOG-2A",
+  "title": "CONTROLLED LIVE GEN CATALOG WRITE",
+  "generated_at": "2026-08-24T08:07:34.542206+00:00",
+  "mode": "GEN_CATALOG_DATA_ONLY",
+  "authority": [
+    "docs/GEN_FINAL_LOCKED_EXECUTION_PLAN.md",
+    "docs/GEN_FINAL_MBM_RETAIL_PRICING.md",
+    "docs/GEN_FINAL_COST_BASIS_REVIEW.md",
+    "docs/GEN_FINAL_LIVE_WRITE_GATE.md",
+    "docs/GEN_OWNER_APPROVAL_PLAN.md",
+    "docs/GEN_CLIENT_PRODUCT_BLUEPRINT.md",
+    "Owner final decision: SEM 3-Month B12 STANDARD \u00d73 \u2192 $359"
+  ],
+  "apiContractDiscovered": {
+    "patch": "PATCH /v2/client/products/{id}",
+    "create": "POST /v2/client/products",
+    "deactivate": "PATCH status=inactive (+ DELETE removes from list)",
+    "supported_patch_fields": [
+      "displayName",
+      "customerPrice",
+      "showPatient",
+      "status",
+      "requiresSyncVisit",
+      "quantityMonths",
+      "supplyUnit",
+      "displayDescription",
+      "displayCategoryIds",
+      "categories",
+      "addOns",
+      "clientPrescribingNote",
+      "prescriptionDirections",
+      "prescriptionFillQuantity",
+      "prescriptionRefills",
+      "showSupplyDetailsOnStorefront",
+      "displaySortOrder"
+    ],
+    "formulary_pairing_write": "UNKNOWN_UNSUPPORTED_VIA_CLIENT_PRODUCTS_API"
+  },
+  "counts": {
+    "AUTHORIZED_LIVE_PRODUCTS": 14,
+    "GEN_PRODUCTS_UPDATED": 10,
+    "GEN_PRODUCTS_CREATED": 4,
+    "GEN_PRODUCTS_DEACTIVATED": 3,
+    "GEN_PRODUCTS_DEACTIVATED_DETAIL": {
+      "Add Sync": "DEACTIVATED (earlier in 2A session during API discovery; confirmed absent)",
+      "Metformin (Metabolic / Weight Support)": "DEACTIVATED (earlier in 2A session; confirmed absent)",
+      "Metformin / Topiramate": "DEACTIVATED (2A orchestrator DELETE)",
+      "BPC-157 (Copy 1)": "SKIPPED_NO_SEPARATE_GEN_OBJECT \u2014 master merge target already KXMm9SsbOEYnFy9phmZn; plain BPC left DEFERRED unchanged"
+    },
+    "GEN_PRODUCTS_SKIPPED_ALREADY_CORRECT": 3,
+    "GEN_PRODUCTS_FAILED": 0
+  },
+  "semPricing": {
+    "SEM_START_LOW_B12": {
+      "id": "SkqQHmsc0WdsbK9vmV1y",
+      "price": 99
+    },
+    "SEM_START_LOW_GLYCINE": {
+      "id": "tk2GW39OGr7JX4MCCoJP",
+      "price": 99
+    },
+    "SEM_MID_B12": {
+      "id": "BLf8inX395YNc7WPCD4O",
+      "price": 109
+    },
+    "SEM_MID_GLYCINE": {
+      "id": "CjqOUbPuGPZzxephqRou",
+      "price": 109
+    },
+    "SEM_HIGH_B12": {
+      "id": "34I2X8MpVZf3AQTff3bo",
+      "price": 119
+    },
+    "SEM_HIGH_GLYCINE": {
+      "id": "sssEk3FDY4LFbQYGQsLx",
+      "price": 119
+    },
+    "SEM_ANY_DOSE_B12": {
+      "id": "MkDIUw0NcJB7YL2pNzYW",
+      "price": 119
+    },
+    "SEM_ANY_DOSE_GLYCINE": {
+      "id": "wQK2JsFnh7oFBf3Lag4n",
+      "price": 119
+    },
+    "SEM_3_MONTH_B12": {
+      "id": "sN2ggSXRJINjElMYTQjf",
+      "price": 359,
+      "model": "STANDARD_MONTHLY_X3",
+      "notEscalation339": true
+    }
+  },
+  "memberships": {
+    "SEM_MEMBERSHIP": {
+      "id": "5F8jESeVeXcpkLU5rrdK",
+      "price": 149
+    },
+    "TIRZ_MEMBERSHIP": {
+      "id": "E3MXZeeR01QROCuTLRLE",
+      "price": 275
+    }
+  },
+  "bpcBlend": {
+    "name": "BPC-157/TB-500/GHK-Cu 3/3/10 mg/mL (5 mL) Injection",
+    "price": 159,
+    "clientProductId": "5iCQzEtTXw90ctEhIhkB",
+    "formulary": "PAIRING_WRITE_API_UNKNOWN \u2014 approved Greenwich BPC-157/TB-500/GHK-CU 3/3/10MG/ML (5ml) not attachable via Client API; 0 pairings on new product",
+    "notConfusedWithPlainBpc": "KXMm9SsbOEYnFy9phmZn left unchanged"
+  },
+  "deferred": {
+    "AOD_9604": {
+      "id": "PRIG7DYPNNgco3lGf1zx",
+      "status": "DEFERRED_COST_UNKNOWN",
+      "unchanged": true,
+      "storefrontEligibleStillTrue": true
+    },
+    "BPC_TB_CAPSULES": {
+      "id": "iJtyig611AZEDBGdvRd9",
+      "status": "DEFERRED_COST_UNKNOWN",
+      "unchanged": true
+    },
+    "PLAIN_BPC_157": {
+      "id": "KXMm9SsbOEYnFy9phmZn",
+      "status": "DEFERRED_COST_UNKNOWN",
+      "unchanged": true,
+      "note": "No blend imported"
+    },
+    "SEM_3_MONTH_GLYCINE": {
+      "status": "DEFERRED_FORMULARY",
+      "notCreated": true
+    }
+  },
+  "cleanup": {
+    "ADD_SYNC": "INACTIVE/ABSENT",
+    "METFORMIN": "INACTIVE/ABSENT",
+    "METFORMIN_TOPIRAMATE": "INACTIVE/ABSENT",
+    "BPC_COPY_1": "NO_SEPARATE_OBJECT"
+  },
+  "changedProductsVerification": [
+    {
+      "displayName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+      "clientProductId": "tk2GW39OGr7JX4MCCoJP",
+      "status": "active",
+      "showPatient": true,
+      "customerPrice": 99,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 1,
+      "pharmacy": "Dirx-Hub",
+      "formulation": "Semaglutide + Glycine",
+      "formularyPairings": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": 1
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Mid (Glycine)",
+      "clientProductId": "CjqOUbPuGPZzxephqRou",
+      "status": "active",
+      "showPatient": null,
+      "customerPrice": 109,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 2,
+      "pharmacy": "Dirx-Hub",
+      "formulation": "Semaglutide + Glycine",
+      "formularyPairings": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 High (Glycine)",
+      "clientProductId": "sssEk3FDY4LFbQYGQsLx",
+      "status": "active",
+      "showPatient": null,
+      "customerPrice": 119,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 1,
+      "pharmacy": "Dirx-Hub",
+      "formulation": "Semaglutide + Glycine",
+      "formularyPairings": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+      "clientProductId": "wQK2JsFnh7oFBf3Lag4n",
+      "status": "active",
+      "showPatient": null,
+      "customerPrice": 119,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 4,
+      "pharmacy": "Dirx-Hub",
+      "formulation": "Semaglutide + Glycine",
+      "formularyPairings": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "WPEBtvCdn2I8l6tRmT9R",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Starting / Low (B12)",
+      "clientProductId": "SkqQHmsc0WdsbK9vmV1y",
+      "status": "active",
+      "showPatient": null,
+      "customerPrice": 99,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 1,
+      "pharmacy": "Dirx-Hub",
+      "formulation": "Semaglutide + Vitamin B12",
+      "formularyPairings": [
+        {
+          "medicationId": "gqe6H8ay1sw6QlS32SMH",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Mid (B12)",
+      "clientProductId": "BLf8inX395YNc7WPCD4O",
+      "status": "active",
+      "showPatient": true,
+      "customerPrice": 109,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 0,
+      "pharmacy": null,
+      "formulation": null,
+      "formularyPairings": [],
+      "writeAction": "CREATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 High (B12)",
+      "clientProductId": "34I2X8MpVZf3AQTff3bo",
+      "status": "active",
+      "showPatient": null,
+      "customerPrice": 119,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 1,
+      "pharmacy": "Dirx-Hub",
+      "formulation": "Semaglutide + Vitamin B12",
+      "formularyPairings": [
+        {
+          "medicationId": "YqrJ1qnOv3U3ecJHuSzr",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 Any Dose (B12)",
+      "clientProductId": "MkDIUw0NcJB7YL2pNzYW",
+      "status": "active",
+      "showPatient": null,
+      "customerPrice": 119,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 8,
+      "pharmacy": "Dirx-Hub",
+      "formulation": "Semaglutide B12 ( , , )",
+      "formularyPairings": [
+        {
+          "medicationId": "99BZowkyXTMiGTu5cosT",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "iXnkfsa6XHugbDanwjUX",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "BmyTz7FPA4wUuojkq2Hy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "Twz0VeW8olCbbL1UAuQr",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "lPPKidpoLhkYCSV1sLse",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "pBAQDkpmfv9FIcpoqhxa",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "vCNPRlelLVcJmimIT7Wy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "Semaglutide Injection \u2014 3-Month (B12)",
+      "clientProductId": "sN2ggSXRJINjElMYTQjf",
+      "status": "active",
+      "showPatient": true,
+      "customerPrice": 359,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 1,
+      "pharmacy": "Dirx-Hub",
+      "formulation": "Semaglutide B12 ( , , )",
+      "formularyPairings": [
+        {
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": 3
+    },
+    {
+      "displayName": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+      "clientProductId": "7Kix55LA15U0lNvY9QXI",
+      "status": "active",
+      "showPatient": null,
+      "customerPrice": 199,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 1,
+      "pharmacy": "Optimal Balance Pharmacy",
+      "formulation": "AOD 9604",
+      "formularyPairings": [
+        {
+          "medicationId": "UvuErUI2gDnbXcr4kqcN",
+          "standardizedMedicationName": "AOD 9604",
+          "pharmacyName": "Optimal Balance Pharmacy"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "BPC-157/TB-500/GHK-Cu 3/3/10 mg/mL (5 mL) Injection",
+      "clientProductId": "5iCQzEtTXw90ctEhIhkB",
+      "status": "active",
+      "showPatient": true,
+      "customerPrice": 159,
+      "storefrontEligible": true,
+      "form": "Injection",
+      "formularyPairingCount": 0,
+      "pharmacy": null,
+      "formulation": null,
+      "formularyPairings": [],
+      "writeAction": "CREATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "GHK-Cu / Minoxidil Topical Combo",
+      "clientProductId": "489YrehNXRlL77fYPkOn",
+      "status": "active",
+      "showPatient": null,
+      "customerPrice": 69,
+      "storefrontEligible": true,
+      "form": "Product",
+      "formularyPairingCount": 1,
+      "pharmacy": "Greenwich Pharmacy",
+      "formulation": "GHK-CU",
+      "formularyPairings": [
+        {
+          "medicationId": "DEu7EzsWmcFP6d60NT9J",
+          "standardizedMedicationName": "GHK-CU",
+          "pharmacyName": "Greenwich Pharmacy"
+        }
+      ],
+      "writeAction": "UPDATED",
+      "quantityMonths": null
+    },
+    {
+      "displayName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "clientProductId": "5F8jESeVeXcpkLU5rrdK",
+      "status": "active",
+      "showPatient": true,
+      "customerPrice": 149,
+      "storefrontEligible": true,
+      "form": "Membership",
+      "formularyPairingCount": 0,
+      "pharmacy": null,
+      "formulation": null,
+      "formularyPairings": [],
+      "writeAction": "CREATED",
+      "quantityMonths": 1
+    },
+    {
+      "displayName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+      "clientProductId": "E3MXZeeR01QROCuTLRLE",
+      "status": "active",
+      "showPatient": true,
+      "customerPrice": 275,
+      "storefrontEligible": true,
+      "form": "Membership",
+      "formularyPairingCount": 0,
+      "pharmacy": null,
+      "formulation": null,
+      "formularyPairings": [],
+      "writeAction": "CREATED",
+      "quantityMonths": 1
+    }
+  ],
+  "postWriteInventory": {
+    "productCount": 255,
+    "formularyPairingCount": 29
+  },
+  "formularyGaps": [
+    "Client Products API cannot create/update formulary pairings (medicationId fields unsupported; pairing routes 404).",
+    "CREATED products Mid B12 / BPC blend / SEM membership / TIR membership have 0 formulary pairings \u2014 attach in GEN admin.",
+    "AOD product 7Kix55LA15U0lNvY9QXI still paired to AOD 9604 only (not full AOD/MOTS/Tesamorelin/Ipamorelin blend) \u2014 correct blend pairing exists on yearpPaLo5H0k0FU5Ej8 but was not moved (pairing API unknown).",
+    "GHK-Cu / Minoxidil product still paired to Greenwich GHK-CU \u2014 approved Epiq Minoxidil/GHK/Apigenin/Fisetin pairing not writable via API."
+  ],
+  "safety": {
+    "GEN_WHOP_CUTOVER": "OFF",
+    "WEBSITE_MODIFIED": "NO",
+    "TAGADA_MODIFIED": "NO",
+    "PAYMENT_CREATED": "NO",
+    "FUTURE_HIDDEN_WRITTEN": "NO",
+    "GEN_CATALOG_2B_STARTED": "NO"
+  },
+  "verificationCommands": {
+    "TYPECHECK": "PASS (tsc --noEmit -p tsconfig.app.json)",
+    "TESTS": "PASS (vitest run \u2014 42 files / 517 tests)",
+    "BUILD": "PASS (vite build + SSR prerender)",
+    "LINT": "PREEXISTING_FAIL (1 unused-var error in src/lib/genHealth/genHealth.ts \u2014 unrelated to 2A)"
+  },
+  "writeResultsRaw": [
+    {
+      "key": "sem-glycine-starting",
+      "action": "update",
+      "intended": {
+        "displayName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+        "customerPrice": 99,
+        "showPatient": true,
+        "status": "active",
+        "productId": "tk2GW39OGr7JX4MCCoJP"
+      },
+      "before": {
+        "list": {
+          "productId": "tk2GW39OGr7JX4MCCoJP",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_tk2GW39OGr7JX4MCCoJP",
+          "name": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (Starting Dose)",
+          "displayName": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (Starting Dose)",
+          "pricing": {
+            "amount": 119,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "productId": "tk2GW39OGr7JX4MCCoJP",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "tk2GW39OGr7JX4MCCoJP",
+        "clientProductId": "tk2GW39OGr7JX4MCCoJP",
+        "name": null,
+        "displayName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+        "customerPrice": 99,
+        "pricing": {
+          "amount": 99,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": 1,
+        "quantityWeeks": null,
+        "supplyUnit": "months",
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "tk2GW39OGr7JX4MCCoJP",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_tk2GW39OGr7JX4MCCoJP",
+          "name": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+          "displayName": "Semaglutide Injection \u2014 Starting / Low (Glycine)",
+          "pricing": {
+            "amount": 99,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "sem-glycine-mid",
+      "action": "update",
+      "intended": {
+        "displayName": "Semaglutide Injection \u2014 Mid (Glycine)",
+        "customerPrice": 109,
+        "showPatient": true,
+        "status": "active",
+        "productId": "CjqOUbPuGPZzxephqRou"
+      },
+      "before": {
+        "list": {
+          "productId": "CjqOUbPuGPZzxephqRou",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CjqOUbPuGPZzxephqRou",
+          "name": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (Mid Dose)",
+          "displayName": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (Mid Dose)",
+          "pricing": {
+            "amount": 109,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "productId": "CjqOUbPuGPZzxephqRou",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "CjqOUbPuGPZzxephqRou",
+        "clientProductId": "CjqOUbPuGPZzxephqRou",
+        "name": null,
+        "displayName": "Semaglutide Injection \u2014 Mid (Glycine)",
+        "customerPrice": 109,
+        "pricing": {
+          "amount": 109,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": 1,
+        "quantityWeeks": null,
+        "supplyUnit": "months",
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "CjqOUbPuGPZzxephqRou",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_CjqOUbPuGPZzxephqRou",
+          "name": "Semaglutide Injection \u2014 Mid (Glycine)",
+          "displayName": "Semaglutide Injection \u2014 Mid (Glycine)",
+          "pricing": {
+            "amount": 109,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "sem-glycine-high",
+      "action": "update",
+      "intended": {
+        "displayName": "Semaglutide Injection \u2014 High (Glycine)",
+        "customerPrice": 119,
+        "showPatient": true,
+        "status": "active",
+        "productId": "sssEk3FDY4LFbQYGQsLx"
+      },
+      "before": {
+        "list": {
+          "productId": "sssEk3FDY4LFbQYGQsLx",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_sssEk3FDY4LFbQYGQsLx",
+          "name": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (High Dose)",
+          "displayName": "GLP-1 Weight Loss Plan \u2013 Semaglutide / Glycine (High Dose)",
+          "pricing": {
+            "amount": 129,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "productId": "sssEk3FDY4LFbQYGQsLx",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "sssEk3FDY4LFbQYGQsLx",
+        "clientProductId": "sssEk3FDY4LFbQYGQsLx",
+        "name": null,
+        "displayName": "Semaglutide Injection \u2014 High (Glycine)",
+        "customerPrice": 119,
+        "pricing": {
+          "amount": 119,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": 1,
+        "quantityWeeks": null,
+        "supplyUnit": "months",
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "sssEk3FDY4LFbQYGQsLx",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_sssEk3FDY4LFbQYGQsLx",
+          "name": "Semaglutide Injection \u2014 High (Glycine)",
+          "displayName": "Semaglutide Injection \u2014 High (Glycine)",
+          "pricing": {
+            "amount": 119,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "sem-glycine-any",
+      "action": "update",
+      "intended": {
+        "displayName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+        "customerPrice": 119,
+        "showPatient": true,
+        "status": "active",
+        "productId": "wQK2JsFnh7oFBf3Lag4n"
+      },
+      "before": {
+        "list": {
+          "productId": "wQK2JsFnh7oFBf3Lag4n",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_wQK2JsFnh7oFBf3Lag4n",
+          "name": "GLP-1 Weight Loss Membership \u2013 Semaglutide / Glycine (Any Dose)",
+          "displayName": "GLP-1 Weight Loss Membership \u2013 Semaglutide / Glycine (Any Dose)",
+          "pricing": {
+            "amount": 149,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "productId": "wQK2JsFnh7oFBf3Lag4n",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "wQK2JsFnh7oFBf3Lag4n",
+        "clientProductId": "wQK2JsFnh7oFBf3Lag4n",
+        "name": null,
+        "displayName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+        "customerPrice": 119,
+        "pricing": {
+          "amount": 119,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": 1,
+        "quantityWeeks": null,
+        "supplyUnit": "months",
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "wQK2JsFnh7oFBf3Lag4n",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_wQK2JsFnh7oFBf3Lag4n",
+          "name": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+          "displayName": "Semaglutide Injection \u2014 Any Dose (Glycine)",
+          "pricing": {
+            "amount": 119,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "IHYsg7nVwVWB2LjoAR6a",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "KFVdP0FaVZHpXt9ewjiV",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "SX8kyR4siUDVAUrm9CvN",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "WPEBtvCdn2I8l6tRmT9R",
+          "standardizedMedicationName": "Semaglutide + Glycine",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "sem-b12-starting",
+      "action": "update",
+      "intended": {
+        "displayName": "Semaglutide Injection \u2014 Starting / Low (B12)",
+        "customerPrice": 99,
+        "showPatient": true,
+        "status": "active",
+        "productId": "SkqQHmsc0WdsbK9vmV1y"
+      },
+      "before": {
+        "list": {
+          "productId": "SkqQHmsc0WdsbK9vmV1y",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y",
+          "name": "GLP-1 Weight Loss Plan \u2013 Semaglutide + B12 (Starting Dose / Micro-Dose)",
+          "displayName": "GLP-1 Weight Loss Plan \u2013 Semaglutide + B12 (Starting Dose / Micro-Dose)",
+          "pricing": {
+            "amount": 0,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "productId": "SkqQHmsc0WdsbK9vmV1y",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "SkqQHmsc0WdsbK9vmV1y",
+        "clientProductId": "SkqQHmsc0WdsbK9vmV1y",
+        "name": null,
+        "displayName": "Semaglutide Injection \u2014 Starting / Low (B12)",
+        "customerPrice": 99,
+        "pricing": {
+          "amount": 99,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": 1,
+        "quantityWeeks": null,
+        "supplyUnit": "months",
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "SkqQHmsc0WdsbK9vmV1y",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SkqQHmsc0WdsbK9vmV1y",
+          "name": "Semaglutide Injection \u2014 Starting / Low (B12)",
+          "displayName": "Semaglutide Injection \u2014 Starting / Low (B12)",
+          "pricing": {
+            "amount": 99,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "gqe6H8ay1sw6QlS32SMH",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "sem-b12-mid",
+      "action": "create",
+      "intended": {
+        "displayName": "Semaglutide Injection \u2014 Mid (B12)",
+        "customerPrice": 109,
+        "showPatient": true,
+        "status": "active",
+        "productId": null
+      },
+      "before": {
+        "list": null
+      },
+      "createStatus": 201,
+      "productId": "BLf8inX395YNc7WPCD4O",
+      "afterAdmin": {
+        "productId": "BLf8inX395YNc7WPCD4O",
+        "clientProductId": "BLf8inX395YNc7WPCD4O",
+        "name": "Semaglutide Injection \u2014 Mid (B12)",
+        "displayName": "Semaglutide Injection \u2014 Mid (B12)",
+        "customerPrice": 109,
+        "pricing": {
+          "amount": 109,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": null,
+        "quantityWeeks": null,
+        "supplyUnit": null,
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "client"
+      },
+      "writeAction": "CREATED"
+    },
+    {
+      "key": "sem-b12-high",
+      "action": "update",
+      "intended": {
+        "displayName": "Semaglutide Injection \u2014 High (B12)",
+        "customerPrice": 119,
+        "showPatient": true,
+        "status": "active",
+        "productId": "34I2X8MpVZf3AQTff3bo"
+      },
+      "before": {
+        "list": {
+          "productId": "34I2X8MpVZf3AQTff3bo",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_34I2X8MpVZf3AQTff3bo",
+          "name": "GLP-1 Weight Loss Plan \u2013 Semaglutide / B12 (High Dose)",
+          "displayName": "GLP-1 Weight Loss Plan \u2013 Semaglutide / B12 (High Dose)",
+          "pricing": {
+            "amount": 199,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "productId": "34I2X8MpVZf3AQTff3bo",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "34I2X8MpVZf3AQTff3bo",
+        "clientProductId": "34I2X8MpVZf3AQTff3bo",
+        "name": null,
+        "displayName": "Semaglutide Injection \u2014 High (B12)",
+        "customerPrice": 119,
+        "pricing": {
+          "amount": 119,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": 1,
+        "quantityWeeks": null,
+        "supplyUnit": "months",
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "34I2X8MpVZf3AQTff3bo",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_34I2X8MpVZf3AQTff3bo",
+          "name": "Semaglutide Injection \u2014 High (B12)",
+          "displayName": "Semaglutide Injection \u2014 High (B12)",
+          "pricing": {
+            "amount": 119,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "YqrJ1qnOv3U3ecJHuSzr",
+          "standardizedMedicationName": "Semaglutide + Vitamin B12",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "sem-b12-any",
+      "action": "update",
+      "intended": {
+        "displayName": "Semaglutide Injection \u2014 Any Dose (B12)",
+        "customerPrice": 119,
+        "showPatient": true,
+        "status": "active",
+        "productId": "MkDIUw0NcJB7YL2pNzYW"
+      },
+      "before": {
+        "list": {
+          "productId": "MkDIUw0NcJB7YL2pNzYW",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MkDIUw0NcJB7YL2pNzYW",
+          "name": "GLP-1 Weight Loss Membership \u2013 Semaglutide / B12 (Any Dose)",
+          "displayName": "GLP-1 Weight Loss Membership \u2013 Semaglutide / B12 (Any Dose)",
+          "pricing": {
+            "amount": 189,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "productId": "MkDIUw0NcJB7YL2pNzYW",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "MkDIUw0NcJB7YL2pNzYW",
+        "clientProductId": "MkDIUw0NcJB7YL2pNzYW",
+        "name": null,
+        "displayName": "Semaglutide Injection \u2014 Any Dose (B12)",
+        "customerPrice": 119,
+        "pricing": {
+          "amount": 119,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": 1,
+        "quantityWeeks": null,
+        "supplyUnit": "months",
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "MkDIUw0NcJB7YL2pNzYW",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MkDIUw0NcJB7YL2pNzYW",
+          "name": "Semaglutide Injection \u2014 Any Dose (B12)",
+          "displayName": "Semaglutide Injection \u2014 Any Dose (B12)",
+          "pricing": {
+            "amount": 119,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "99BZowkyXTMiGTu5cosT",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "iXnkfsa6XHugbDanwjUX",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        },
+        {
+          "medicationId": "BmyTz7FPA4wUuojkq2Hy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "Twz0VeW8olCbbL1UAuQr",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "lPPKidpoLhkYCSV1sLse",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "pBAQDkpmfv9FIcpoqhxa",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        },
+        {
+          "medicationId": "vCNPRlelLVcJmimIT7Wy",
+          "standardizedMedicationName": "Semaglutide + B12",
+          "pharmacyName": "Greenwich Pharmacy"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "sem-b12-3month",
+      "action": "update",
+      "intended": {
+        "displayName": "Semaglutide Injection \u2014 3-Month (B12)",
+        "customerPrice": 359,
+        "showPatient": true,
+        "status": "active",
+        "productId": "sN2ggSXRJINjElMYTQjf"
+      },
+      "before": {
+        "list": {
+          "productId": "sN2ggSXRJINjElMYTQjf",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_sN2ggSXRJINjElMYTQjf",
+          "name": "GLP-1 Weight Loss Plan \u2013 Semaglutide 3-Month Escalation Bundle (High: 4\u21926\u219210mg)",
+          "displayName": "GLP-1 Weight Loss Plan \u2013 Semaglutide 3-Month Escalation Bundle (High: 4\u21926\u219210mg)",
+          "pricing": {
+            "amount": 799,
+            "currency": "USD"
+          },
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "description": ""
+        }
+      },
+      "productId": "sN2ggSXRJINjElMYTQjf",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "sN2ggSXRJINjElMYTQjf",
+        "clientProductId": "sN2ggSXRJINjElMYTQjf",
+        "name": null,
+        "displayName": "Semaglutide Injection \u2014 3-Month (B12)",
+        "customerPrice": 359,
+        "pricing": {
+          "amount": 359,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": 3,
+        "quantityWeeks": null,
+        "supplyUnit": "months",
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "sN2ggSXRJINjElMYTQjf",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_sN2ggSXRJINjElMYTQjf",
+          "name": "Semaglutide Injection \u2014 3-Month (B12)",
+          "displayName": "Semaglutide Injection \u2014 3-Month (B12)",
+          "pricing": {
+            "amount": 359,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": ""
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "ekw92avqC0Uf2thW7fA9",
+          "standardizedMedicationName": "Semaglutide B12 ( , , )",
+          "pharmacyName": "Dirx-Hub"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "aod-mots-tesa-blend-injection",
+      "action": "update",
+      "intended": {
+        "displayName": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+        "customerPrice": 199,
+        "showPatient": true,
+        "status": "active",
+        "productId": "7Kix55LA15U0lNvY9QXI"
+      },
+      "before": {
+        "list": {
+          "productId": "7Kix55LA15U0lNvY9QXI",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI",
+          "name": "AOD-9604/MOTS-C",
+          "displayName": "",
+          "pricing": {
+            "amount": 0,
+            "currency": "USD"
+          },
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "description": "1.2MG/2MG/ML\t5ML"
+        }
+      },
+      "productId": "7Kix55LA15U0lNvY9QXI",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "7Kix55LA15U0lNvY9QXI",
+        "clientProductId": "7Kix55LA15U0lNvY9QXI",
+        "name": null,
+        "displayName": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+        "customerPrice": 199,
+        "pricing": {
+          "amount": 199,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": null,
+        "quantityWeeks": null,
+        "supplyUnit": null,
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "7Kix55LA15U0lNvY9QXI",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI",
+          "name": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+          "displayName": "AOD-9604 / MOTS-C / Tesamorelin Injection",
+          "pricing": {
+            "amount": 199,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": "1.2MG/2MG/ML\t5ML"
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "UvuErUI2gDnbXcr4kqcN",
+          "standardizedMedicationName": "AOD 9604",
+          "pharmacyName": "Optimal Balance Pharmacy"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "bpc-blend-bpc157tb500ghkcu3310mgml5ml",
+      "action": "create",
+      "intended": {
+        "displayName": "BPC-157/TB-500/GHK-Cu 3/3/10 mg/mL (5 mL) Injection",
+        "customerPrice": 159,
+        "showPatient": true,
+        "status": "active",
+        "productId": null
+      },
+      "before": {
+        "list": null
+      },
+      "createStatus": 201,
+      "productId": "5iCQzEtTXw90ctEhIhkB",
+      "afterAdmin": {
+        "productId": "5iCQzEtTXw90ctEhIhkB",
+        "clientProductId": "5iCQzEtTXw90ctEhIhkB",
+        "name": "BPC-157/TB-500/GHK-Cu 3/3/10 mg/mL (5 mL) Injection",
+        "displayName": "BPC-157/TB-500/GHK-Cu 3/3/10 mg/mL (5 mL) Injection",
+        "customerPrice": 159,
+        "pricing": {
+          "amount": 159,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": null,
+        "quantityWeeks": null,
+        "supplyUnit": null,
+        "description": "BPC-157/TB-500/GHK-Cu 3/3/10 mg/mL (5 mL) \u2014 Greenwich Pharmacy formulary",
+        "displayDescription": "BPC-157/TB-500/GHK-Cu 3/3/10 mg/mL (5 mL) \u2014 Greenwich Pharmacy formulary",
+        "catalogScope": "client"
+      },
+      "writeAction": "CREATED",
+      "formularyNote": "PAIRING_WRITE_API_UNKNOWN \u2014 attach Greenwich BPC-157/TB-500/GHK-CU 3/3/10MG/ML (5ml) manually if required"
+    },
+    {
+      "key": "ghk-minoxidil-topical-combo",
+      "action": "update",
+      "intended": {
+        "displayName": "GHK-Cu / Minoxidil Topical Combo",
+        "customerPrice": 69,
+        "showPatient": true,
+        "status": "active",
+        "productId": "489YrehNXRlL77fYPkOn"
+      },
+      "before": {
+        "list": {
+          "productId": "489YrehNXRlL77fYPkOn",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_489YrehNXRlL77fYPkOn",
+          "name": "GHK-Cu",
+          "displayName": "GHK-Cu",
+          "pricing": {
+            "amount": 149,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": "Copper peptide (GHK-Cu) supports collagen production, wound healing, and skin rejuvenation. A peptide-based approach to anti-aging skincare."
+        }
+      },
+      "productId": "489YrehNXRlL77fYPkOn",
+      "patchStatus": 200,
+      "afterAdmin": {
+        "productId": "489YrehNXRlL77fYPkOn",
+        "clientProductId": "489YrehNXRlL77fYPkOn",
+        "name": null,
+        "displayName": "GHK-Cu / Minoxidil Topical Combo",
+        "customerPrice": 69,
+        "pricing": {
+          "amount": 69,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": 1,
+        "quantityWeeks": null,
+        "supplyUnit": "months",
+        "description": null,
+        "displayDescription": "Copper peptide (GHK-Cu) supports collagen production, wound healing, and skin rejuvenation. A peptide-based approach to anti-aging skincare.",
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": {
+          "productId": "489YrehNXRlL77fYPkOn",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_489YrehNXRlL77fYPkOn",
+          "name": "GHK-Cu / Minoxidil Topical Combo",
+          "displayName": "GHK-Cu / Minoxidil Topical Combo",
+          "pricing": {
+            "amount": 69,
+            "currency": "USD"
+          },
+          "storefrontEligible": true,
+          "requiresSyncVisit": true,
+          "description": "Copper peptide (GHK-Cu) supports collagen production, wound healing, and skin rejuvenation. A peptide-based approach to anti-aging skincare."
+        }
+      },
+      "formularyPairings": [
+        {
+          "medicationId": "DEu7EzsWmcFP6d60NT9J",
+          "standardizedMedicationName": "GHK-CU",
+          "pharmacyName": "Greenwich Pharmacy"
+        }
+      ],
+      "writeAction": "UPDATED"
+    },
+    {
+      "key": "sem-membership",
+      "action": "create",
+      "intended": {
+        "displayName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "customerPrice": 149,
+        "showPatient": true,
+        "status": "active",
+        "productId": null
+      },
+      "before": {
+        "list": null
+      },
+      "createStatus": 201,
+      "productId": "5F8jESeVeXcpkLU5rrdK",
+      "afterAdmin": {
+        "productId": "5F8jESeVeXcpkLU5rrdK",
+        "clientProductId": "5F8jESeVeXcpkLU5rrdK",
+        "name": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "displayName": "SEMAGLUTIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "customerPrice": 149,
+        "pricing": {
+          "amount": 149,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": null,
+        "quantityWeeks": null,
+        "supplyUnit": null,
+        "description": "Any Dose membership \u2014 B12 and Glycine ladders remain separate internally. Owner-set $149/mo.",
+        "displayDescription": "Any Dose membership \u2014 B12 and Glycine ladders remain separate internally. Owner-set $149/mo.",
+        "catalogScope": "client"
+      },
+      "writeAction": "CREATED"
+    },
+    {
+      "key": "tirz-membership",
+      "action": "create",
+      "intended": {
+        "displayName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "customerPrice": 275,
+        "showPatient": true,
+        "status": "active",
+        "productId": null
+      },
+      "before": {
+        "list": null
+      },
+      "createStatus": 201,
+      "productId": "E3MXZeeR01QROCuTLRLE",
+      "afterAdmin": {
+        "productId": "E3MXZeeR01QROCuTLRLE",
+        "clientProductId": "E3MXZeeR01QROCuTLRLE",
+        "name": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "displayName": "TIRZEPATIDE COMPOUND \u2014 ANY DOSE MEMBERSHIP",
+        "customerPrice": 275,
+        "pricing": {
+          "amount": 275,
+          "currency": "USD"
+        },
+        "status": "active",
+        "active": true,
+        "showPatient": true,
+        "requiresSyncVisit": true,
+        "quantityMonths": null,
+        "quantityWeeks": null,
+        "supplyUnit": null,
+        "description": "Any Dose membership \u2014 B12 and Glycine ladders remain separate internally. Owner-set $275/mo. Ambiguous Tirzepatide/B12/Glycine labels deferred.",
+        "displayDescription": "Any Dose membership \u2014 B12 and Glycine ladders remain separate internally. Owner-set $275/mo. Ambiguous Tirzepatide/B12/Glycine labels deferred.",
+        "catalogScope": "client"
+      },
+      "writeAction": "CREATED"
+    },
+    {
+      "key": "cleanup-add-sync",
+      "action": "deactivate",
+      "intended": {
+        "displayName": "Add Sync",
+        "productId": "t1JOySXRCJBAeXbkEXW4"
+      },
+      "before": {
+        "list": null
+      },
+      "writeAction": "SKIPPED_ALREADY_CORRECT",
+      "note": "Not present in active list (already inactive/removed)"
+    },
+    {
+      "key": "cleanup-metformin",
+      "action": "deactivate",
+      "intended": {
+        "displayName": "Metformin (Metabolic / Weight Support)",
+        "productId": "aWmuj8jNPv0S1vsLaMnN"
+      },
+      "before": {
+        "list": null
+      },
+      "writeAction": "SKIPPED_ALREADY_CORRECT",
+      "note": "Not present in active list (already inactive/removed)"
+    },
+    {
+      "key": "cleanup-metformin-topiramate",
+      "action": "deactivate",
+      "intended": {
+        "displayName": "Metformin / Topiramate",
+        "productId": "XHU8xCrpXQmFzJGce7d7"
+      },
+      "before": {
+        "list": {
+          "productId": "XHU8xCrpXQmFzJGce7d7",
+          "clientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_XHU8xCrpXQmFzJGce7d7",
+          "name": "Metformin / Topiramate",
+          "displayName": "",
+          "pricing": {
+            "amount": 0,
+            "currency": "USD"
+          },
+          "storefrontEligible": false,
+          "requiresSyncVisit": false,
+          "description": "Oral medication that improves insulin sensitivity and supports metabolic health. Often used off-label for weight management and blood sugar regulation in non-diabetic patients."
+        }
+      },
+      "patchStatus": 200,
+      "deleteStatus": 200,
+      "afterAdmin": {
+        "productId": "XHU8xCrpXQmFzJGce7d7",
+        "clientProductId": "XHU8xCrpXQmFzJGce7d7",
+        "name": null,
+        "displayName": "Metformin / Topiramate",
+        "customerPrice": 0,
+        "pricing": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "status": "inactive",
+        "active": false,
+        "showPatient": false,
+        "requiresSyncVisit": false,
+        "quantityMonths": null,
+        "quantityWeeks": null,
+        "supplyUnit": null,
+        "description": null,
+        "displayDescription": null,
+        "catalogScope": "provider_network"
+      },
+      "after": {
+        "list": null
+      },
+      "writeAction": "DEACTIVATED"
+    },
+    {
+      "key": "cleanup-bpc-copy1",
+      "action": "noop_report",
+      "intended": {
+        "note": "BPC-157 (Copy 1) is a master-row merge target into KXMm9SsbOEYnFy9phmZn; no separate live GEN product named Copy 1 found. Plain BPC left DEFERRED (unchanged). No blend imported."
+      },
+      "writeAction": "SKIPPED_NO_SEPARATE_OBJECT",
+      "note": "BPC-157 (Copy 1) is a master-row merge target into KXMm9SsbOEYnFy9phmZn; no separate live GEN product named Copy 1 found. Plain BPC left DEFERRED (unchanged). No blend imported."
+    }
+  ]
+}

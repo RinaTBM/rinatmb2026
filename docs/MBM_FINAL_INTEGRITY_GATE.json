@@ -1,0 +1,436 @@
+{
+  "meta": {
+    "generated_at": "2026-08-24T22:31:51Z",
+    "phase": "MBM-FINAL-INTEGRITY-GATE",
+    "mode": "READ-ONLY",
+    "launch_map": {
+      "CURRENT_LIVE": 17,
+      "LAUNCH_WITH_WEBSITE_CUTOVER": 16,
+      "FUTURE_HIDDEN": 32,
+      "TOTAL": 65
+    },
+    "locked_do_not_reopen": [
+      "launch_map_17_16_32_65",
+      "cutover_ready_16",
+      "memberships_sem_149_tir_275",
+      "minoxidil_fin_minox_0.1_5_vios_r129_79",
+      "frozen_7_current_live_formulary_pending"
+    ],
+    "gen_modified": false,
+    "gen_writes": 0,
+    "website_modified": false,
+    "cutover": "OFF"
+  },
+  "issue_1_wolverine": {
+    "current_website_structure": "ONE patient-facing product (slug bpc-157-tb-500, displayName Wolverine: BPC-157/TB-500) with TWO variants: Capsule + Injection",
+    "evidence": {
+      "source": "src/data/products.ts",
+      "product_id": "p41",
+      "slug": "bpc-157-tb-500",
+      "variants": [
+        {
+          "dosageForm": "Capsule",
+          "strength": "Blend",
+          "price": 99,
+          "sku": "MBM-RP-BPC-CAP-001"
+        },
+        {
+          "dosageForm": "Injection",
+          "strength": "Blend",
+          "price": 199,
+          "sku": "MBM-RP-BPC-INJ-001"
+        }
+      ],
+      "legacy_slug_aliases_map_to_same_product": [
+        "bpc-157-tb-500-injection-40",
+        "bpc-157-tb-500-injection",
+        "bpc-157-tb-500-capsules-41"
+      ]
+    },
+    "determination": "A_ONE_PATIENT_FACING_WEBSITE_PRODUCT_WITH_TWO_VARIANTS",
+    "patient_facing_product_count": 1,
+    "variant_count": 2,
+    "locked_current_live_count_still_valid": true,
+    "owner_decision_required": false,
+    "architecture_fix": "Merged prior bpc-tb-inj + bpc-tb-cap CURRENT_LIVE objects into single id bpc-157-tb-500 with two dosage-form formulary routes (r103 injection, r104 capsule). Architecture product total now 65 with CURRENT_LIVE objects 17.",
+    "formulary_routes": [
+      {
+        "variant": "Injection",
+        "excel_row": 103,
+        "exact": "BPC-157/TB500 3mg/3mg/mL",
+        "pharmacy": "Greenwich Pharmacy",
+        "cost": 77,
+        "shipping": 25,
+        "one_time_x9": 159
+      },
+      {
+        "variant": "Capsule",
+        "excel_row": 104,
+        "exact": "BPC-157/TB500 capsules 500MCG/500MCG",
+        "pharmacy": "Greenwich Pharmacy",
+        "cost": 3.2,
+        "shipping": 25,
+        "one_time_x9": 29
+      }
+    ]
+  },
+  "issue_2_nad": {
+    "classification": "FORMULATION_STRENGTH_CONFLICT",
+    "website_strength": "100mg/mL (explicit on both variants: 500mg/5mL and 1000mg/10mL)",
+    "website_prices": [
+      199,
+      229
+    ],
+    "selected_options": [
+      {
+        "excel_row": 83,
+        "exact": "NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml",
+        "form": "Injection Solution",
+        "package": "5ml vial (1000mg)",
+        "pharmacy": "St Luke",
+        "cost": 64,
+        "shipping": 30,
+        "one_time_x9": 139
+      }
+    ],
+    "nasal_excluded": [
+      81,
+      82,
+      84,
+      85
+    ],
+    "owner_decision_required": true,
+    "final_formulary_status": "CURRENT_LIVE_STRENGTH_PENDING"
+  },
+  "issue_3_tretinoin": {
+    "classification": "FORMULATION_STRENGTH_CONFLICT",
+    "website_strength": "0.025% / 0.05% / 0.1% cream \u00b7 20g",
+    "website_prices": [
+      79,
+      89,
+      109
+    ],
+    "selected_options": [
+      {
+        "excel_row": 126,
+        "exact": "TRETINOIN 0.15%",
+        "package": "30 grams",
+        "pharmacy": "Vios",
+        "cost": 25.5,
+        "shipping": 30,
+        "one_time_x9": 79
+      },
+      {
+        "excel_row": 127,
+        "exact": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%",
+        "package": "30 grams",
+        "pharmacy": "Vios",
+        "cost": 54,
+        "shipping": 30,
+        "one_time_x9": 129,
+        "note": "Combo \u2014 not plain tretinoin substitute"
+      }
+    ],
+    "owner_decision_required": true,
+    "final_formulary_status": "CURRENT_LIVE_STRENGTH_PENDING"
+  },
+  "tir_gen_gap": {
+    "cutover_ready_count": 8,
+    "existing_gen_client_products": 0,
+    "gen_action": "CREATE_REQUIRED_AT_EXECUTION",
+    "products": [
+      {
+        "id": "tir-b12-starting-low",
+        "display_name": "Tirzepatide Injection \u2014 Starting / Low (B12)",
+        "status": "FORMULARY_VERIFIED / ARCHITECTURE_APPROVED / CUTOVER_READY",
+        "gen_action": "CREATE_REQUIRED_AT_EXECUTION",
+        "selected_rows": [
+          {
+            "excel_row": 14,
+            "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+            "cost": 65,
+            "shipping": 5,
+            "one_time_x9": 119
+          },
+          {
+            "excel_row": 16,
+            "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+            "cost": 75,
+            "shipping": 5,
+            "one_time_x9": 139
+          }
+        ],
+        "pharmacy": "Dirx-Hub",
+        "do_not_create_now": true
+      },
+      {
+        "id": "tir-b12-mid",
+        "display_name": "Tirzepatide Injection \u2014 Mid (B12)",
+        "status": "FORMULARY_VERIFIED / ARCHITECTURE_APPROVED / CUTOVER_READY",
+        "gen_action": "CREATE_REQUIRED_AT_EXECUTION",
+        "selected_rows": [
+          {
+            "excel_row": 18,
+            "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+            "cost": 85,
+            "shipping": 5,
+            "one_time_x9": 149
+          },
+          {
+            "excel_row": 20,
+            "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+            "cost": 90,
+            "shipping": 5,
+            "one_time_x9": 159
+          }
+        ],
+        "pharmacy": "Dirx-Hub",
+        "do_not_create_now": true
+      },
+      {
+        "id": "tir-b12-high",
+        "display_name": "Tirzepatide Injection \u2014 High (B12)",
+        "status": "FORMULARY_VERIFIED / ARCHITECTURE_APPROVED / CUTOVER_READY",
+        "gen_action": "CREATE_REQUIRED_AT_EXECUTION",
+        "selected_rows": [
+          {
+            "excel_row": 22,
+            "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+            "cost": 95,
+            "shipping": 5,
+            "one_time_x9": 169
+          },
+          {
+            "excel_row": 24,
+            "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+            "cost": 100,
+            "shipping": 5,
+            "one_time_x9": 179
+          }
+        ],
+        "pharmacy": "Dirx-Hub",
+        "do_not_create_now": true
+      },
+      {
+        "id": "tir-b12-any-dose",
+        "display_name": "Tirzepatide Injection \u2014 Any Dose (B12)",
+        "status": "FORMULARY_VERIFIED / ARCHITECTURE_APPROVED / CUTOVER_READY",
+        "gen_action": "CREATE_REQUIRED_AT_EXECUTION",
+        "selected_rows": [
+          {
+            "excel_row": 14,
+            "exact": "TIRZEPATIDE + VITAMIN B12 5MG/0.5MG/ML (2ML VIAL)",
+            "cost": 65,
+            "shipping": 5,
+            "one_time_x9": 119
+          },
+          {
+            "excel_row": 16,
+            "exact": "TIRZEPATIDE + VITAMIN B12 10MG/0.5MG/ML (2ML VIAL)",
+            "cost": 75,
+            "shipping": 5,
+            "one_time_x9": 139
+          },
+          {
+            "excel_row": 18,
+            "exact": "TIRZEPATIDE + VITAMIN B12 15MG/0.5MG/ML (2ML VIAL)",
+            "cost": 85,
+            "shipping": 5,
+            "one_time_x9": 149
+          },
+          {
+            "excel_row": 20,
+            "exact": "TIRZEPATIDE + VITAMIN B12 20MG/0.5MG/ML (2ML VIAL)",
+            "cost": 90,
+            "shipping": 5,
+            "one_time_x9": 159
+          },
+          {
+            "excel_row": 22,
+            "exact": "TIRZEPATIDE + VITAMIN B12 25MG/0.5MG/ML (2ML VIAL)",
+            "cost": 95,
+            "shipping": 5,
+            "one_time_x9": 169
+          },
+          {
+            "excel_row": 24,
+            "exact": "TIRZEPATIDE + VITAMIN B12 30MG/0.5MG/ML (2ML VIAL)",
+            "cost": 100,
+            "shipping": 5,
+            "one_time_x9": 179
+          }
+        ],
+        "pharmacy": "Dirx-Hub",
+        "do_not_create_now": true
+      },
+      {
+        "id": "tir-glycine-starting-low",
+        "display_name": "Tirzepatide Injection \u2014 Starting / Low (Glycine)",
+        "status": "FORMULARY_VERIFIED / ARCHITECTURE_APPROVED / CUTOVER_READY",
+        "gen_action": "CREATE_REQUIRED_AT_EXECUTION",
+        "selected_rows": [
+          {
+            "excel_row": 13,
+            "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+            "cost": 65,
+            "shipping": 5,
+            "one_time_x9": 119
+          },
+          {
+            "excel_row": 15,
+            "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+            "cost": 75,
+            "shipping": 5,
+            "one_time_x9": 139
+          }
+        ],
+        "pharmacy": "Dirx-Hub",
+        "do_not_create_now": true
+      },
+      {
+        "id": "tir-glycine-mid",
+        "display_name": "Tirzepatide Injection \u2014 Mid (Glycine)",
+        "status": "FORMULARY_VERIFIED / ARCHITECTURE_APPROVED / CUTOVER_READY",
+        "gen_action": "CREATE_REQUIRED_AT_EXECUTION",
+        "selected_rows": [
+          {
+            "excel_row": 17,
+            "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+            "cost": 85,
+            "shipping": 5,
+            "one_time_x9": 149
+          },
+          {
+            "excel_row": 19,
+            "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+            "cost": 90,
+            "shipping": 5,
+            "one_time_x9": 159
+          }
+        ],
+        "pharmacy": "Dirx-Hub",
+        "do_not_create_now": true
+      },
+      {
+        "id": "tir-glycine-high",
+        "display_name": "Tirzepatide Injection \u2014 High (Glycine)",
+        "status": "FORMULARY_VERIFIED / ARCHITECTURE_APPROVED / CUTOVER_READY",
+        "gen_action": "CREATE_REQUIRED_AT_EXECUTION",
+        "selected_rows": [
+          {
+            "excel_row": 21,
+            "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+            "cost": 95,
+            "shipping": 5,
+            "one_time_x9": 169
+          },
+          {
+            "excel_row": 23,
+            "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+            "cost": 100,
+            "shipping": 5,
+            "one_time_x9": 179
+          }
+        ],
+        "pharmacy": "Dirx-Hub",
+        "do_not_create_now": true
+      },
+      {
+        "id": "tir-glycine-any-dose",
+        "display_name": "Tirzepatide Injection \u2014 Any Dose (Glycine)",
+        "status": "FORMULARY_VERIFIED / ARCHITECTURE_APPROVED / CUTOVER_READY",
+        "gen_action": "CREATE_REQUIRED_AT_EXECUTION",
+        "selected_rows": [
+          {
+            "excel_row": 13,
+            "exact": "TIRZEPATIDE + GLYCINE 5MG/0.5MG/ML (2ML VIAL)",
+            "cost": 65,
+            "shipping": 5,
+            "one_time_x9": 119
+          },
+          {
+            "excel_row": 15,
+            "exact": "TIRZEPATIDE + GLYCINE 10MG/0.5MG/ML (2ML VIAL)",
+            "cost": 75,
+            "shipping": 5,
+            "one_time_x9": 139
+          },
+          {
+            "excel_row": 17,
+            "exact": "TIRZEPATIDE + GLYCINE 15MG/0.5MG/ML (2ML VIAL)",
+            "cost": 85,
+            "shipping": 5,
+            "one_time_x9": 149
+          },
+          {
+            "excel_row": 19,
+            "exact": "TIRZEPATIDE + GLYCINE 20MG/0.5MG/ML (2ML VIAL)",
+            "cost": 90,
+            "shipping": 5,
+            "one_time_x9": 159
+          },
+          {
+            "excel_row": 21,
+            "exact": "TIRZEPATIDE + GLYCINE 25MG/0.5MG/ML (2ML VIAL)",
+            "cost": 95,
+            "shipping": 5,
+            "one_time_x9": 169
+          },
+          {
+            "excel_row": 23,
+            "exact": "TIRZEPATIDE + GLYCINE 30MG/0.5MG/ML (2ML VIAL)",
+            "cost": 100,
+            "shipping": 5,
+            "one_time_x9": 179
+          }
+        ],
+        "pharmacy": "Dirx-Hub",
+        "do_not_create_now": true
+      }
+    ]
+  },
+  "gen_safety_preserved": {
+    "KEEP_PROTECTED": 13,
+    "SAFE_TO_REPAIR_LATER": 13,
+    "SAFE_DEACTIVATION_CANDIDATE": 89,
+    "AMBIGUOUS_DO_NOT_TOUCH": 140,
+    "deactivations_this_phase": 0
+  },
+  "final_report": {
+    "WOLVERINE_CURRENT_WEBSITE_STRUCTURE": "ONE product / TWO variants (Capsule + Injection)",
+    "WOLVERINE_PATIENT_FACING_PRODUCT_COUNT": 1,
+    "WOLVERINE_VARIANT_COUNT": 2,
+    "LOCKED_CURRENT_LIVE_COUNT_STILL_VALID": true,
+    "WOLVERINE_OWNER_DECISION_REQUIRED": false,
+    "NAD_CLASSIFICATION": "FORMULATION_STRENGTH_CONFLICT",
+    "NAD_OWNER_DECISION_REQUIRED": true,
+    "NAD_FINAL_FORMULARY_STATUS": "CURRENT_LIVE_STRENGTH_PENDING",
+    "TRETINOIN_CLASSIFICATION": "FORMULATION_STRENGTH_CONFLICT",
+    "TRETINOIN_OWNER_DECISION_REQUIRED": true,
+    "TRETINOIN_FINAL_FORMULARY_STATUS": "CURRENT_LIVE_STRENGTH_PENDING",
+    "CURRENT_LIVE": 17,
+    "VERIFIED_CURRENT_LIVE": 4,
+    "CURRENT_LIVE_FORMULARY_PENDING": 7,
+    "CURRENT_LIVE_STRENGTH_PENDING": 2,
+    "CUTOVER_READY": 16,
+    "CUTOVER_BLOCKED": 0,
+    "TIR_GEN_EXISTING": 0,
+    "TIR_GEN_CREATE_REQUIRED": 8,
+    "MEMBERSHIP_READY": 2,
+    "FUTURE_HIDDEN_READY": 28,
+    "FUTURE_HIDDEN_PENDING": 4,
+    "KEEP_PROTECTED": 13,
+    "SAFE_TO_REPAIR_LATER": 13,
+    "SAFE_DEACTIVATION_CANDIDATE": 89,
+    "AMBIGUOUS_DO_NOT_TOUCH": 140,
+    "GEN_MODIFIED": false,
+    "GEN_WRITES": 0,
+    "WEBSITE_MODIFIED": false,
+    "CUTOVER": "OFF",
+    "FINAL_EXECUTION_PLAN_READY": false,
+    "execution_plan_blockers": [
+      "NAD+ FORMULATION_STRENGTH_CONFLICT \u2014 owner decision required before safe pairing/pricing lock",
+      "Tretinoin FORMULATION_STRENGTH_CONFLICT \u2014 owner decision required before safe pairing/pricing lock"
+    ]
+  }
+}

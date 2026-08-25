@@ -41,7 +41,15 @@ function formatPrice(amount: number, membership: boolean): string {
 }
 
 function variantLabel(v: WebsiteProductVariant): string {
-  return v.displayLabel || [v.form, v.additive, v.doseTier].filter(Boolean).join(' · ');
+  const raw =
+    v.displayLabel || [v.form, v.additive, v.doseTier].filter(Boolean).join(' · ');
+  return raw
+    .replace(/\s*\(\d+\+\d+\)/g, '')
+    .replace(/\s*\(\d+[–-]\d+\)/g, '')
+    .replace(/COMPOUND — ANY DOSE\s*/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s·\s·/g, ' · ')
+    .trim();
 }
 
 export function isFamilyStorefrontSlug(slug: string): boolean {
@@ -458,8 +466,8 @@ function FamilySelectors({
                       setRequestedFormulation(next);
                       setDoseError(null);
                     }}
-                    error={doseError}
                   />
+                  {doseError ? <p className="mt-2 text-xs text-red-700">{doseError}</p> : null}
                 </div>
               )}
 

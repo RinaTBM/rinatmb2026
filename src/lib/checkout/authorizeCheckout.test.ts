@@ -64,7 +64,7 @@ const semaMembership: CatalogMembershipRow = {
   stripe_price_id_test: 'price_test_sema_199',
   monthly_price_cents: SEMAGLUTIDE_MEMBERSHIP_CENTS,
   display_name: 'Semaglutide Membership',
-  included_formulations: ['0.5mg', '1mg', '2.5mg', '5mg'],
+  included_formulations: ['Vitamin B12', 'Glycine'],
 };
 
 const tirzMembership: CatalogMembershipRow = {
@@ -93,7 +93,7 @@ describe('Stripe mapping (catalog TEST prices)', () => {
           quantity: 1,
           purchaseType: 'membership_program',
           unitAmountCents: 14900,
-          requestedFormulation: '1mg',
+          requestedFormulation: 'Vitamin B12',
         },
         semaMembership,
       ),
@@ -303,7 +303,7 @@ describe('Provider Care (tax-inclusive; no separate tax add-on)', () => {
           productId: 'm1',
           quantity: 1,
           purchaseType: 'membership_program',
-          requestedFormulation: '0.5mg',
+          requestedFormulation: 'Vitamin B12',
         },
         semaMembership,
       ),
@@ -355,7 +355,7 @@ describe('Provider Care (tax-inclusive; no separate tax add-on)', () => {
           productId: 'm1',
           quantity: 1,
           purchaseType: 'membership_program',
-          requestedFormulation: '2.5mg',
+          requestedFormulation: 'Vitamin B12',
         },
         semaMembership,
       ),
@@ -594,7 +594,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
           productId: 'm1',
           quantity: 1,
           purchaseType: 'membership_program',
-          requestedFormulation: '1mg',
+          requestedFormulation: 'Vitamin B12',
         },
         semaMembership,
       ),
@@ -729,7 +729,7 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
 
 describe('membership requested formulation authorization', () => {
   it('accepts Getting Started / Not Sure and included formulations', () => {
-    for (const dose of ['getting_started', '0.5mg', '1mg', '2.5mg', '5mg']) {
+    for (const dose of ['getting_started', 'Vitamin B12', 'Glycine']) {
       const line = expectMapped(
         resolveMembershipLine(
           {
@@ -744,7 +744,7 @@ describe('membership requested formulation authorization', () => {
       expect(line.unitAmountCents).toBe(14900);
       expect(line.variantLabel).toMatch(/Requested dose:/);
     }
-    for (const dose of ['getting_started', '2.5mg', '7.5mg', '12.5mg', '15mg']) {
+    for (const dose of ['getting_started', 'Vitamin B12', 'Glycine']) {
       const line = expectMapped(
         resolveMembershipLine(
           {

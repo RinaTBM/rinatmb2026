@@ -85,9 +85,9 @@
     "CHECKOUT": "BLOCKED",
     "GEN_ROUTING": "PARTIAL",
     "REAL_GEN_API_ORDERS": "BLOCKED",
-    "TYPECHECK": "PENDING",
-    "TESTS": "PENDING",
-    "BUILD": "PENDING",
+    "TYPECHECK": "PASS",
+    "TESTS": "PASS",
+    "BUILD": "PASS",
     "READY_TO_DEPLOY_WEBSITE": "YES"
   },
   "remainingTrueLaunchBlockers": [

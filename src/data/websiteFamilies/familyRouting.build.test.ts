@@ -36,9 +36,9 @@ describe('MBM website family → GEN routing build', () => {
     const total = WEBSITE_PRODUCT_FAMILIES.reduce((n, f) => n + f.variants.length, 0);
     expect(total).toBe(103);
     const counts = countByRoutingStatus();
-    expect(counts.ROUTING_READY).toBe(7);
+    expect(counts.ROUTING_READY).toBe(8);
     expect(counts.FORMULARY_PENDING).toBe(14);
-    expect(counts.GEN_PAIRING_PENDING).toBe(16);
+    expect(counts.GEN_PAIRING_PENDING).toBe(15);
     expect(counts.FUTURE_HIDDEN).toBe(51);
     expect(counts.BLOCKED).toBe(15);
     expect(
@@ -225,12 +225,12 @@ describe('MBM website family → GEN routing build', () => {
     expect(nadVisible.some((v) => v.websiteVariantId.includes('r82'))).toBe(false);
   });
 
-  it('amended pairing registry marks 7 compatible CPs verified; apply is idempotent', () => {
-    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(7);
+  it('postcheck-3 registry marks 8 compatible CPs verified; apply is idempotent', () => {
+    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(8);
     const verifiedVariants = WEBSITE_PRODUCT_FAMILIES.flatMap((f) =>
       f.variants.filter((v) => v.genPairingVerified),
     );
-    expect(verifiedVariants).toHaveLength(7);
+    expect(verifiedVariants).toHaveLength(8);
     expect(verifiedVariants.every((v) => v.routingStatus === 'ROUTING_READY')).toBe(true);
     // Mid B12 still missing pairing — not verified
     const midB12 = resolveFamilyVariant('semaglutide', {
@@ -247,6 +247,21 @@ describe('MBM website family → GEN routing build', () => {
       doseTier: 'Mid',
     });
     expect(midGly.variant?.genPairingVerified).toBe(true);
+    // SEM Any Dose B12 + NAD nasal r84 verified (owner corrections); Wolverine injection not
+    const anyB12 = resolveFamilyVariant('semaglutide', {
+      purchaseType: 'one_time',
+      additive: 'Vitamin B12',
+      doseTier: 'Any Dose',
+    });
+    expect(anyB12.variant?.genPairingVerified).toBe(true);
+    const nadR84 = WEBSITE_PRODUCT_FAMILIES.flatMap((f) => f.variants).find(
+      (v) => v.websiteVariantId === 'nad-nasal-r84',
+    );
+    expect(nadR84?.genPairingVerified).toBe(true);
+    const wolInj = WEBSITE_PRODUCT_FAMILIES.flatMap((f) => f.variants).find(
+      (v) => v.websiteVariantId === 'wolverine-injection',
+    );
+    expect(wolInj?.genPairingVerified).toBe(false);
     const { result } = applyOwnerVerifiedPairingsToFamilies(WEBSITE_PRODUCT_FAMILIES);
     // Already applied in generated data — no additional flips
     expect(result.variantsFlippedToTrue).toBe(0);

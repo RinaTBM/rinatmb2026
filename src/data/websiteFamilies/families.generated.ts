@@ -102,8 +102,8 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
         "startingPrice": 89,
         "genProductId": "MkDIUw0NcJB7YL2pNzYW",
         "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MkDIUw0NcJB7YL2pNzYW",
-        "genPairingVerified": false,
-        "routingStatus": "GEN_PAIRING_PENDING",
+        "genPairingVerified": true,
+        "routingStatus": "ROUTING_READY",
         "launchState": "LAUNCH_WITH_WEBSITE_CUTOVER",
         "checkoutStatus": "OFF_UNTIL_CUTOVER",
         "availabilityStatus": "preview_only",
@@ -632,8 +632,8 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
         "startingPrice": 79,
         "genProductId": "FVwkzvQqWIZRNAwbslGw",
         "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw",
-        "genPairingVerified": false,
-        "routingStatus": "GEN_PAIRING_PENDING",
+        "genPairingVerified": true,
+        "routingStatus": "ROUTING_READY",
         "launchState": "CURRENT_LIVE",
         "checkoutStatus": "OFF_UNTIL_CUTOVER",
         "availabilityStatus": "preview_only",
@@ -760,8 +760,8 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
         "startingPrice": 159,
         "genProductId": "iJtyig611AZEDBGdvRd9",
         "genClientProductId": "f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9",
-        "genPairingVerified": true,
-        "routingStatus": "ROUTING_READY",
+        "genPairingVerified": false,
+        "routingStatus": "GEN_PAIRING_PENDING",
         "launchState": "CURRENT_LIVE",
         "checkoutStatus": "OFF_UNTIL_CUTOVER",
         "availabilityStatus": "preview_only",
@@ -2772,7 +2772,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
 ];
 
 export const WEBSITE_FAMILY_BUILD_META = {
-  "phase": "MBM-GEN-PAIRING-POLICY-AMENDMENT-1",
+  "phase": "MBM-GEN-PAIRING-POSTCHECK-3",
   "cutover": "OFF",
   "genPairingVerifiedDefault": false,
   "realGenOrderSubmissionEnabled": false,
@@ -2782,7 +2782,7 @@ export const WEBSITE_FAMILY_BUILD_META = {
     "docs/MBM_WEBSITE_TO_GEN_ROUTING_MATRIX.json",
     "docs/MBM_GEN_PRICE_CONFLICT_RESOLUTION.json"
   ],
-  "note": "genClientProductId only from matrix. genPairingVerified true only for registry CPs under amended policy (\u22651 compatible formulary option, no material mismatches; multiple same-family strengths allowed). Cutover still OFF.",
+  "note": "Postcheck-3 live GEN read. genPairingVerified true only for registry CPs with \u22651 compatible formulary option and no material mismatches. Cutover OFF.",
   "pairingPolicy": "amended_compatible_family_multi_option",
   "requiresExactStrengthPackage": false
 } as const;

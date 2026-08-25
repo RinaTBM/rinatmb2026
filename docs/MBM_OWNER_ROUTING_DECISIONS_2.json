@@ -1,0 +1,473 @@
+{
+  "meta": {
+    "generated_at": "2026-08-25T00:14:36Z",
+    "phase": "MBM-OWNER-ROUTING-DECISION-GATE-2",
+    "mode": "READ-ONLY",
+    "purpose": "Owner decisions for 8 BLOCKED_OWNER_REVIEW variants only",
+    "locks_not_reopened": [
+      "website_product_family_architecture",
+      "sem_membership_149",
+      "tir_membership_275",
+      "b12_glycine_backend_distinction",
+      "no_b6_restoration",
+      "tir_approved_tiers",
+      "nad_one_website_product",
+      "sem_tir_one_family_each"
+    ],
+    "gen_writes": 0,
+    "website_writes": 0,
+    "pairing_writes": 0,
+    "cutover": "OFF"
+  },
+  "decisions": [
+    {
+      "decision_number": 1,
+      "website_product_family": "Semaglutide",
+      "website_variant": "sem-current-b6",
+      "customer_would_see": "Semaglutide one-time with B6 (current live until cutover)",
+      "current_website": {
+        "name": "Semaglutide + B6 Injection",
+        "from_price": 119
+      },
+      "formulary_option": null,
+      "pharmacy": null,
+      "strength": null,
+      "package": null,
+      "cost": null,
+      "shipping": null,
+      "mbm_retail": null,
+      "current_gen": null,
+      "problem": "B6 transitional; cutover replaces with B12/Glycine; confirm removal at cutover",
+      "options": {
+        "A": "Remove B6 at cutover; replace with approved B12/Glycine selectors",
+        "B": "Delay B6 removal only",
+        "DEFER": "Decide later"
+      },
+      "recommendation": "A",
+      "why": "Matches locked Semaglutide architecture; no B6 in SELECTED cutover path",
+      "owner_choice": null
+    },
+    {
+      "decision_number": 2,
+      "website_product_family": "Tirzepatide",
+      "website_variant": "tir-current-b6",
+      "customer_would_see": "Tirzepatide one-time with B6 (current live until cutover)",
+      "current_website": {
+        "name": "Tirzepatide + B6 Injection",
+        "from_price": 189
+      },
+      "formulary_option": null,
+      "pharmacy": null,
+      "strength": null,
+      "package": null,
+      "cost": null,
+      "shipping": null,
+      "mbm_retail": null,
+      "current_gen": null,
+      "problem": "B6 transitional; confirm removal at cutover",
+      "options": {
+        "A": "Remove B6 at cutover; replace with approved B12/Glycine selectors",
+        "B": "Delay B6 removal only",
+        "DEFER": "Decide later"
+      },
+      "recommendation": "A",
+      "why": "Matches locked Tirzepatide architecture",
+      "owner_choice": null
+    },
+    {
+      "decision_number": 3,
+      "website_product_family": "NAD+",
+      "website_variant": "nad-inj-selected-r83",
+      "customer_would_see": "NAD+ \u2192 Injection (if 200mg/mL adopted)",
+      "current_website": {
+        "injection": [
+          {
+            "strength": "100mg/mL \u00b7 500mg",
+            "size": "5mL",
+            "price": 199
+          },
+          {
+            "strength": "100mg/mL \u00b7 1000mg",
+            "size": "10mL",
+            "price": 229
+          }
+        ],
+        "note": "NAD+ remains ONE website product with Injection/Nasal selectors"
+      },
+      "formulary_option": {
+        "excel_row": 83,
+        "exact": "NAD+ (Nicotinamide Adenine Dinucleotide) 200mg/ml",
+        "form": "Injection Solution"
+      },
+      "pharmacy": "St Luke",
+      "strength": "200mg/mL",
+      "package": "5ml vial (1000mg)",
+      "cost": 64,
+      "shipping": 30,
+      "mbm_retail": 139,
+      "current_gen": {
+        "productId": "SHJpGAACUFEeMONdpEbn",
+        "name": "NAD+ (Injectable)"
+      },
+      "problem": "Website 100mg/mL vs SELECTED injectable 200mg/mL \u2014 do not silent-substitute",
+      "options": {
+        "A": "Change website Injection to SELECTED 200mg/mL 5mL @ $139; keep Nasal separate under NAD+",
+        "B": "Keep website 100mg/mL; source matching injectable formulary",
+        "C": "Offer Nasal only under NAD+ until Injection resolved",
+        "DEFER": "Decide later"
+      },
+      "recommendation": "B",
+      "why": "Closest to published website strength; Option A only if owner accepts strength change",
+      "owner_choice": null
+    },
+    {
+      "decision_number": 4,
+      "website_product_family": "NAD+",
+      "website_variant": "nad-nasal-r81",
+      "customer_would_see": "Should not appear as separate selector (duplicate of r84)",
+      "formulary_option": {
+        "excel_row": 81,
+        "exact": "NAD+ 50mg/ml",
+        "form": "Nasal Spray",
+        "note": "Delivery Type mislabeled Injection"
+      },
+      "pharmacy": "St Luke",
+      "strength": "50mg/ml",
+      "package": "15ml",
+      "cost": 30,
+      "shipping": 30,
+      "mbm_retail": 79,
+      "current_gen": {
+        "productId": "FVwkzvQqWIZRNAwbslGw",
+        "name": "NAD + Nasal Spray"
+      },
+      "problem": "Duplicate of verified nasal r84; mislabeled delivery",
+      "options": {
+        "A": "Exclude r81; use r84 for 50mg/mL nasal",
+        "B": "Keep r81 as selectable (not recommended)",
+        "DEFER": "Decide later"
+      },
+      "recommendation": "A",
+      "why": "Same nasal as r84; avoids injection confusion",
+      "owner_choice": null
+    },
+    {
+      "decision_number": 5,
+      "website_product_family": "NAD+",
+      "website_variant": "nad-nasal-r82",
+      "customer_would_see": "Should not appear as separate selector (duplicate of r85)",
+      "formulary_option": {
+        "excel_row": 82,
+        "exact": "NAD+ 200mg/ml",
+        "form": "Nasal Spray",
+        "note": "Delivery Type mislabeled Injection"
+      },
+      "pharmacy": "St Luke",
+      "strength": "200mg/ml",
+      "package": "15ml",
+      "cost": 45,
+      "shipping": 30,
+      "mbm_retail": 109,
+      "current_gen": {
+        "productId": "FVwkzvQqWIZRNAwbslGw",
+        "name": "NAD + Nasal Spray"
+      },
+      "problem": "Duplicate of verified nasal r85; mislabeled delivery",
+      "options": {
+        "A": "Exclude r82; use r85 for 200mg/mL nasal",
+        "B": "Keep r82 as selectable (not recommended)",
+        "DEFER": "Decide later"
+      },
+      "recommendation": "A",
+      "why": "Same nasal as r85; keeps NAD+ nasal selectors clean (r84+r85)",
+      "owner_choice": null
+    },
+    {
+      "decision_number": 6,
+      "website_product_family": "Tretinoin",
+      "website_variant": "tretinoin-selected-r126",
+      "customer_would_see": "Tretinoin 0.15% cream 30g (if adopted)",
+      "current_website": {
+        "strengths": [
+          "0.025%",
+          "0.05%",
+          "0.1%"
+        ],
+        "package": "20g",
+        "prices": [
+          79,
+          89,
+          109
+        ]
+      },
+      "formulary_option": {
+        "excel_row": 126,
+        "exact": "TRETINOIN 0.15%"
+      },
+      "pharmacy": "Vios",
+      "strength": "0.15%",
+      "package": "30 grams",
+      "cost": 25.5,
+      "shipping": 30,
+      "mbm_retail": 79,
+      "current_gen": {
+        "productId": "EeWMcfCJf5EU2LkNQmp9"
+      },
+      "problem": "Website strengths not in SELECTED; do not silent-substitute 0.15%",
+      "options": {
+        "A": "Change website to SELECTED 0.15% 30g @ $79",
+        "B": "Keep website 0.025/0.05/0.1% 20g; source those strengths",
+        "C": "Keep current + add 0.15% as additional selector later",
+        "DEFER": "Decide later"
+      },
+      "recommendation": "B",
+      "why": "Matches published website strengths",
+      "owner_choice": null
+    },
+    {
+      "decision_number": 7,
+      "website_product_family": "Tretinoin",
+      "website_variant": "tretinoin-selected-r127",
+      "customer_would_see": "HA/Niacinamide/Tretinoin combo cream (if added explicitly)",
+      "current_website": {
+        "note": "Plain tretinoin only \u2014 no combo promised"
+      },
+      "formulary_option": {
+        "excel_row": 127,
+        "exact": "HYALURONIC/NIACINAMIDE/TRETINOIN 0.5/4/0.025%"
+      },
+      "pharmacy": "Vios",
+      "strength": "0.5/4/0.025%",
+      "package": "30 grams",
+      "cost": 54,
+      "shipping": 30,
+      "mbm_retail": 129,
+      "current_gen": {
+        "productId": "EeWMcfCJf5EU2LkNQmp9"
+      },
+      "problem": "Different clinical combination \u2014 not plain tretinoin substitute",
+      "options": {
+        "A": "Do not map to plain Tretinoin; keep FUTURE separate only",
+        "B": "Add explicit Combination cream selector under Tretinoin",
+        "C": "Replace plain tretinoin with combo (not recommended)",
+        "DEFER": "Decide later"
+      },
+      "recommendation": "A",
+      "why": "Website grouping is not permission to merge different actives",
+      "owner_choice": null
+    },
+    {
+      "decision_number": 8,
+      "website_product_family": "Scream Cream",
+      "website_variant": "scream-cream-pending",
+      "customer_would_see": "Nothing (FUTURE_HIDDEN)",
+      "formulary_option": null,
+      "pharmacy": null,
+      "strength": null,
+      "package": null,
+      "cost": null,
+      "shipping": null,
+      "mbm_retail": null,
+      "current_gen": null,
+      "problem": "No SELECTED formulary; prior do-not-activate without explicit approval",
+      "options": {
+        "A": "Keep FUTURE_HIDDEN / do not activate until sourced + explicit launch",
+        "B": "Prioritize pharmacy sourcing now (still no launch until sourced)",
+        "DEFER": "Decide later"
+      },
+      "recommendation": "A",
+      "why": "No SELECTED formulary; activating would invent a product",
+      "owner_choice": null
+    }
+  ],
+  "sourcing_formulary_information_needed": [
+    {
+      "id": 1,
+      "family": "NAD+",
+      "variant": "Injection 5mL/500mg website 100mg/mL",
+      "missing": [
+        "100mg/mL injectable formulary",
+        "package 5mL",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 2,
+      "family": "NAD+",
+      "variant": "Injection 10mL/1000mg website 100mg/mL",
+      "missing": [
+        "100mg/mL injectable formulary",
+        "package 10mL",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 3,
+      "family": "Tretinoin",
+      "variant": "0.025% \u00b7 20g",
+      "missing": [
+        "plain tretinoin 0.025%",
+        "package 20g",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 4,
+      "family": "Tretinoin",
+      "variant": "0.05% \u00b7 20g",
+      "missing": [
+        "plain tretinoin 0.05%",
+        "package 20g",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 5,
+      "family": "Tretinoin",
+      "variant": "0.1% \u00b7 20g",
+      "missing": [
+        "plain tretinoin 0.1%",
+        "package 20g",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 6,
+      "family": "Fat Burner",
+      "variant": "AOD+MOTS-c+Tesamorelin no Ipamorelin",
+      "missing": [
+        "exact 3-ingredient injectable",
+        "1.2/2/3 mg/mL",
+        "5mL package",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 7,
+      "family": "Testosterone",
+      "variant": "Cream 5 mg/g",
+      "missing": [
+        "testosterone-only cream",
+        "5 mg/g",
+        "package e.g. 30g",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 8,
+      "family": "Selank",
+      "variant": "Injection",
+      "missing": [
+        "injectable Selank",
+        "5 mg/mL",
+        "2mL",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 9,
+      "family": "Semax",
+      "variant": "Injection",
+      "missing": [
+        "injectable Semax",
+        "5 mg/mL",
+        "2mL",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 10,
+      "family": "Selank + Semax Blend",
+      "variant": "Combined nasal",
+      "missing": [
+        "single combined nasal compound",
+        "50mcg/50mcg",
+        "10mL",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 11,
+      "family": "Tesamorelin",
+      "variant": "Plain injection",
+      "missing": [
+        "plain Tesamorelin (not blend)",
+        "strength/package",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    },
+    {
+      "id": 12,
+      "family": "Lash / Brow",
+      "variant": "Bimatoprost 0.03% \u00b7 2.5mL",
+      "missing": [
+        "confirmed pharmacy not TBD",
+        "cost",
+        "shipping",
+        "SELECTED-ready row"
+      ]
+    },
+    {
+      "id": 13,
+      "family": "Oxytocin",
+      "variant": "Nasal future",
+      "missing": [
+        "strength",
+        "package",
+        "pharmacy",
+        "cost",
+        "shipping",
+        "SELECTED row"
+      ]
+    },
+    {
+      "id": 14,
+      "family": "Sexual Wellness Compound",
+      "variant": "Capsules future",
+      "missing": [
+        "formulation",
+        "strength",
+        "package",
+        "pharmacy",
+        "cost",
+        "shipping"
+      ]
+    }
+  ],
+  "final_report": {
+    "OWNER_DECISIONS_PRESENTED": 8,
+    "FORMULARY_SOURCING_PENDING": 14,
+    "OWNER_DECISIONS_RESOLVED_THIS_PASS": 0,
+    "ARCHITECTURE_REOPENED": false,
+    "SEM_TIR_LOCKS_CHANGED": false,
+    "NAD_ONE_PRODUCT_ARCHITECTURE_CHANGED": false,
+    "GEN_MODIFIED": false,
+    "GEN_WRITES": 0,
+    "FORMULARY_PAIRING_WRITES": 0,
+    "WEBSITE_MODIFIED": false,
+    "CHECKOUT_MODIFIED": false,
+    "CUTOVER": "OFF"
+  }
+}

@@ -21,13 +21,15 @@ export interface SubmitInvoiceOrderItem {
   variantLabel?: string;
   /** Retail variant SKU or membership PROGRAM SKU. */
   sku?: string;
-  /** Membership dose → retail medication fulfillment SKU. */
+  /** Membership formulation → retail medication fulfillment SKU (not weekly dose). */
   fulfillmentSku?: string;
   section?: string;
   /** Product slug (required for HRT / therapy-family detection server-side). */
   slug?: string;
   membershipSlug?: string;
   requestedFormulation?: string;
+  /** Patient current/weekly dose — provider-review metadata only. */
+  requestedDose?: string;
   memberPricingEligible?: boolean;
 }
 

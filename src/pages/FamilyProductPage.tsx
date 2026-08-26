@@ -10,7 +10,7 @@ import {
 import { useCart } from '@/context/CartContext';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductDescriptionSections, ProductHighlights } from '@/components/ProductDescriptionSections';
-import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
+import { Glp1FormulationSelector, Glp1PatientDoseSelector } from '@/components/Glp1PatientDoseSelector';
 import {
   getWebsiteFamilyBySlug,
   listPatientVisibleVariants,
@@ -22,10 +22,18 @@ import {
   type WebsiteProductFamily,
   type WebsiteProductVariant,
 } from '@/data/websiteFamilies';
+import { buildGlp1MembershipCartFields } from '@/lib/glp1/membershipCart';
 import {
-  labelRequestedFormulation,
-  validateMembershipRequestedFormulation,
-} from '@/lib/membership/requestedFormulation';
+  ONE_TIME_GETTING_STARTED_BLOCKER,
+  isGettingStartedDose,
+  patientSafeOneTimeCartLabel,
+  resolveOneTimeVial,
+} from '@/lib/glp1/oneTimeVialMapping';
+import {
+  validateGlp1Formulation,
+  validateRequestedDose,
+  type Glp1FamilyId,
+} from '@/lib/glp1/patientRequestedDose';
 
 function unique(values: Array<string | null | undefined>): string[] {
   const out: string[] = [];
@@ -42,7 +50,7 @@ function formatPrice(amount: number, membership: boolean): string {
 
 function variantLabel(v: WebsiteProductVariant): string {
   const raw =
-    v.displayLabel || [v.form, v.additive, v.doseTier].filter(Boolean).join(' · ');
+    v.displayLabel || [v.form, v.additive].filter(Boolean).join(' · ');
   return raw
     .replace(/\s*\(\d+\+\d+\)/g, '')
     .replace(/\s*\(\d+[–-]\d+\)/g, '')
@@ -134,29 +142,24 @@ function FamilySelectors({
         : 'membership',
   );
   const [additive, setAdditive] = useState(additives[0] || 'Vitamin B12');
-  const doseOptions = unique(
-    oneTime.filter((v) => !additive || (v.additive || '') === additive).map((v) => v.doseTier),
-  );
-  const [doseTier, setDoseTier] = useState(doseOptions[0] || 'Starting / Low');
   const [form, setForm] = useState(forms[0] || '');
   const [nasalOption, setNasalOption] = useState<'r84' | 'r85'>(
     nasalOptions.includes('nad-nasal-r85') && !nasalOptions.includes('nad-nasal-r84') ? 'r85' : 'r84',
   );
   const [injPackage, setInjPackage] = useState<'5mL' | '10mL'>('5mL');
   const [quantity, setQuantity] = useState(1);
-  const [requestedFormulation, setRequestedFormulation] = useState('');
+  const [requestedDose, setRequestedDose] = useState('');
   const [doseError, setDoseError] = useState<string | null>(null);
-
-  const availableDoses = unique(
-    oneTime.filter((v) => !additive || (v.additive || '') === additive).map((v) => v.doseTier),
-  );
+  const glp1FamilyId: Glp1FamilyId | null =
+    familyId === 'semaglutide' || familyId === 'tirzepatide' ? familyId : null;
 
   const selectors: FamilySelectorState = useMemo(() => {
     if (isWeight) {
       return {
         purchaseType,
         additive: purchaseType === 'membership' ? undefined : additive,
-        doseTier: purchaseType === 'membership' ? undefined : doseTier,
+        requestedDose:
+          purchaseType === 'one_time' && requestedDose ? requestedDose : undefined,
       };
     }
     if (isNad) {
@@ -166,7 +169,7 @@ function FamilySelectors({
       return { form };
     }
     return {};
-  }, [isWeight, isNad, isWolverine, purchaseType, additive, doseTier, form, nasalOption, injPackage]);
+  }, [isWeight, isNad, isWolverine, purchaseType, additive, requestedDose, form, nasalOption, injPackage]);
 
   const resolution = useMemo(
     () => resolveFamilyVariant(familyId, selectors),
@@ -185,46 +188,93 @@ function FamilySelectors({
   const r85Ready = visible.some((v) => v.websiteVariantId === 'nad-nasal-r85');
 
   const handleAdd = () => {
-    if (!variant || price == null) return;
+    if (glp1FamilyId) {
+      if (isMembership) {
+        if (!membership) return;
+        const built = buildGlp1MembershipCartFields({
+          membership,
+          formulation: additive,
+          requestedDose,
+        });
+        if (!built.ok) {
+          setDoseError(built.error);
+          return;
+        }
+        setDoseError(null);
+        addItem(
+          {
+            productId: membership.checkoutProductId || membership.id,
+            slug: membership.slug,
+            name: membership.displayName,
+            price: built.monthlyPrice,
+            standardPrice: built.monthlyPrice,
+            image: membership.image,
+            subscription: true,
+            section: 'membership',
+            requiresIntake: true,
+            isMembership: true,
+            billingFrequency: 'monthly',
+            purchaseType: 'membership_program',
+            discountPercent: 0,
+            appliedDiscount: 'none',
+            requestedFormulation: built.requestedFormulation,
+            requestedDose: built.requestedDose,
+            variantLabel: built.variantLabel,
+          },
+          1,
+        );
+        openCart();
+        return;
+      }
 
-    if (isMembership && membership) {
-      const included = membership.includedFormulations;
-      const validated = validateMembershipRequestedFormulation({
-        requestedFormulation,
-        includedFormulations: included,
+      const formulation = validateGlp1Formulation(additive);
+      if (!formulation.ok) {
+        setDoseError(formulation.error);
+        return;
+      }
+      const vial = resolveOneTimeVial({
+        familyId: glp1FamilyId,
+        formulation: formulation.value,
+        requestedDose,
       });
-      if (!validated.ok) {
-        setDoseError(validated.error);
+      if (!vial.ok) {
+        setDoseError(vial.error);
         return;
       }
       setDoseError(null);
-      const doseLabel = labelRequestedFormulation(validated.value);
+      const mappedPrice = vial.mapping.retailPriceCents / 100;
+
       addItem(
         {
-          productId: membership.checkoutProductId || membership.id,
-          slug: membership.slug,
-          name: membership.displayName,
-          price: membership.monthlyPrice,
-          standardPrice: membership.monthlyPrice,
-          image: membership.image,
-          subscription: true,
-          section: 'membership',
-          requiresIntake: true,
-          isMembership: true,
-          billingFrequency: 'monthly',
-          purchaseType: 'membership_program',
+          productId: product.id,
+          slug: product.slug,
+          name: product.displayName,
+          price: mappedPrice,
+          standardPrice: mappedPrice,
+          image: product.image,
+          subscription: false,
+          section: product.category,
+          requiresIntake: product.requiresProviderReview,
+          variantId: vial.mapping.websiteVariantId,
+          variantLabel: patientSafeOneTimeCartLabel({
+            formulation: formulation.value,
+            requestedDose: vial.mapping.requestedDose,
+          }),
+          purchaseType: 'one_time',
           discountPercent: 0,
           appliedDiscount: 'none',
-          requestedFormulation: validated.value,
-          variantLabel: `Requested formulation: ${doseLabel}`,
+          requestedFormulation: formulation.value,
+          requestedDose: vial.mapping.requestedDose,
         },
-        1,
+        quantity,
       );
+      void skuForFamilyVariantId(vial.mapping.websiteVariantId);
       openCart();
       return;
     }
 
-    const sku = skuForFamilyVariantId(variant.websiteVariantId);
+    if (!variant || price == null) return;
+
     addItem(
       {
         productId: product.id,
@@ -244,11 +294,35 @@ function FamilySelectors({
       },
       quantity,
     );
-    void sku;
     openCart();
   };
 
-  const canAdd = Boolean(variant && price != null && resolution.ok);
+  const oneTimeVial =
+    glp1FamilyId && !isMembership
+      ? resolveOneTimeVial({
+          familyId: glp1FamilyId,
+          formulation: additive,
+          requestedDose,
+        })
+      : null;
+  const oneTimeGettingStarted = Boolean(
+    glp1FamilyId && !isMembership && isGettingStartedDose(requestedDose),
+  );
+  const glp1Ready =
+    !glp1FamilyId ||
+    (validateGlp1Formulation(additive).ok &&
+      validateRequestedDose({ requestedDose, familyId: glp1FamilyId }).ok);
+  const displayPrice =
+    isMembership && membership
+      ? membership.monthlyPrice
+      : oneTimeVial?.ok
+        ? oneTimeVial.mapping.retailPriceCents / 100
+        : price;
+  const canAdd = isMembership
+    ? Boolean(membership && resolution.ok && glp1Ready)
+    : glp1FamilyId
+      ? Boolean(oneTimeVial?.ok && glp1Ready)
+      : Boolean(variant && price != null && resolution.ok);
 
   return (
     <div className="bg-cream-50 pt-28 md:pt-32">
@@ -331,46 +405,29 @@ function FamilySelectors({
                   </fieldset>
                 )}
 
-                {isWeight && purchaseType === 'one_time' && additives.length > 0 && (
-                  <fieldset>
-                    <legend className="text-sm font-medium text-ink-900 mb-2">Formulation</legend>
-                    <div className="flex flex-wrap gap-2">
-                      {additives.map((opt) => (
-                        <SelectorChip
-                          key={opt}
-                          selected={additive === opt}
-                          onClick={() => {
-                            setAdditive(opt);
-                            const nextDoses = unique(
-                              oneTime.filter((v) => (v.additive || '') === opt).map((v) => v.doseTier),
-                            );
-                            if (nextDoses[0]) setDoseTier(nextDoses[0]);
-                          }}
-                          label={opt}
-                        />
-                      ))}
-                    </div>
-                  </fieldset>
+                {isWeight && (
+                  <Glp1FormulationSelector
+                    value={additive}
+                    onChange={opt => {
+                      setAdditive(opt);
+                      setDoseError(null);
+                    }}
+                  />
                 )}
 
-                {isWeight && purchaseType === 'one_time' && availableDoses.length > 0 && (
-                  <fieldset>
-                    <legend className="text-sm font-medium text-ink-900 mb-2">Dose option</legend>
-                    <div className="flex flex-wrap gap-2">
-                      {availableDoses.map((opt) => (
-                        <SelectorChip
-                          key={opt}
-                          selected={doseTier === opt}
-                          onClick={() => setDoseTier(opt)}
-                          label={opt}
-                        />
-                      ))}
-                    </div>
-                    <p className="mt-2 text-xs text-ink-500 leading-relaxed">
-                      Your licensed provider confirms the exact strength after review. Pharmacy
-                      fulfillment is included in this price. Delivery method is selected at checkout.
-                    </p>
-                  </fieldset>
+                {glp1FamilyId && (
+                  <Glp1PatientDoseSelector
+                    familyId={glp1FamilyId}
+                    value={requestedDose}
+                    onChange={next => {
+                      setRequestedDose(next);
+                      setDoseError(null);
+                    }}
+                  />
+                )}
+
+                {oneTimeGettingStarted && (
+                  <p className="text-xs text-ink-600 leading-relaxed">{ONE_TIME_GETTING_STARTED_BLOCKER}</p>
                 )}
 
                 {isNad && (
@@ -458,27 +515,16 @@ function FamilySelectors({
                 )}
               </div>
 
-              {isMembership && membership && (
-                <div className="mb-6 rounded-xl border border-cream-300 bg-cream-50/80 p-4">
-                  <MembershipRequestedDoseField
-                    id={`family-requested-${membership.slug}`}
-                    includedFormulations={membership.includedFormulations}
-                    value={requestedFormulation}
-                    onChange={(next) => {
-                      setRequestedFormulation(next);
-                      setDoseError(null);
-                    }}
-                  />
-                  {doseError ? <p className="mt-2 text-xs text-red-700">{doseError}</p> : null}
-                </div>
-              )}
+              {doseError ? (
+                <p className="mb-4 text-xs text-red-700">{doseError}</p>
+              ) : null}
 
               <div className="rounded-2xl border border-cream-300 bg-white p-5 mb-6">
                 <div className="flex items-end justify-between gap-4 mb-4">
                   <div>
                     <p className="text-sm text-ink-500">{isMembership ? 'Membership' : 'Due today'}</p>
                     <p className="font-serif text-3xl text-ink-900">
-                      {price != null ? formatPrice(price, isMembership) : '—'}
+                      {displayPrice != null ? formatPrice(displayPrice, isMembership) : '—'}
                     </p>
                     {!isMembership && (
                       <p className="mt-1 text-xs text-ink-500">Pharmacy fulfillment included in this price</p>
@@ -514,9 +560,11 @@ function FamilySelectors({
                 >
                   {isMembership
                     ? membership?.cta || 'Join membership'
-                    : canAdd
-                      ? `Add to Cart — $${((price || 0) * quantity).toFixed(2)}`
-                      : 'Select an option'}
+                    : oneTimeGettingStarted
+                      ? 'Choose a weekly dose or join membership'
+                      : canAdd
+                        ? `Add to Cart — $${((displayPrice || 0) * quantity).toFixed(2)}`
+                        : 'Select an option'}
                 </button>
                 <p className="mt-3 text-xs text-ink-500 leading-relaxed">
                   Provider review is required. Purchasing does not guarantee a prescription. Applicable taxes are

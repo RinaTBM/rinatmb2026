@@ -3,7 +3,7 @@
  * Never invent IDs. Real GEN order submission stays fail-closed.
  */
 
-import { WEBSITE_PRODUCT_FAMILIES } from '../../data/websiteFamilies/families.generated';
+import { WEBSITE_PRODUCT_FAMILIES } from '../../data/websiteFamilies/appliedFamilies';
 import { FAMILY_VARIANT_SKU_BY_ID } from '../../data/websiteFamilies/familyVariantSkus';
 import { effectiveGenPairingVerified } from '../../data/websiteFamilies/applyPairingVerification';
 import { classifyVariant } from '../../data/websiteFamilies/launchClassification';

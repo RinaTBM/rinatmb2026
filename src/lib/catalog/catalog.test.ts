@@ -38,7 +38,7 @@ describe('catalog normalization', () => {
     expect(toCents(138.98)).toBe(13898);
     const sema = syncableProducts().find(p => p.slug === 'semaglutide')!;
     expect(sema.variants.map(v => v.priceCents)).toEqual([
-      8900, 10900, 10900, 8900, 8900, 10900, 10900, 8900,
+      8900, 9900, 10900, 10900, 11900, 8900, 8900, 9900, 10900, 10900, 11900, 8900,
     ]);
   });
 

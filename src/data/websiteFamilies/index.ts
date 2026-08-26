@@ -1,6 +1,7 @@
-import { WEBSITE_PRODUCT_FAMILIES, WEBSITE_FAMILY_BUILD_META } from './families.generated';
+import { WEBSITE_PRODUCT_FAMILIES, WEBSITE_FAMILY_BUILD_META } from './appliedFamilies';
 import { isLaunchReadyVariant } from './launchClassification';
 import { isOwnerVerifiedGenClientProductId } from './pairingVerificationRegistry';
+import { resolveOneTimeVial } from '../../lib/glp1/oneTimeVialMapping';
 import type {
   FamilyRouteResolution,
   FamilySelectorState,
@@ -114,6 +115,21 @@ export function resolveFamilyVariant(
       return { ok: true, familyId, variant: membership };
     }
     const oneTime = candidates.filter((v) => v.purchaseType === 'one_time');
+    if (selectors.requestedDose) {
+      const vial = resolveOneTimeVial({
+        familyId,
+        formulation: selectors.additive || '',
+        requestedDose: selectors.requestedDose,
+      });
+      if (!vial.ok) {
+        return { ok: false, familyId, variant: null, reason: vial.error };
+      }
+      const mapped = oneTime.find((v) => v.websiteVariantId === vial.mapping.websiteVariantId);
+      if (!mapped) {
+        return { ok: false, familyId, variant: null, reason: 'NO_MATCHING_ONE_TIME_VARIANT' };
+      }
+      return { ok: true, familyId, variant: mapped };
+    }
     const match = oneTime.find(
       (v) =>
         additiveMatches(v.additive, selectors.additive) &&

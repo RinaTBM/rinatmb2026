@@ -105,6 +105,19 @@ describe('membership PROGRAM vs FULFILLMENT crosswalk', () => {
     );
   });
 
+  it('does not map patient weekly dose to a pharmacy vial SKU', () => {
+    expect(resolveMembershipFulfillmentSku('m1', '0.25 mg')).toBeNull();
+    expect(resolveMembershipFulfillmentSku('m1', '2 mg')).toBeNull();
+    expect(resolveMembershipFulfillmentSku('m2', '2.5 mg')).toBeNull();
+    expect(resolveMembershipFulfillmentSku('m2', '15 mg')).toBeNull();
+    expect(resolveMembershipFulfillmentSku('m1', 'Vitamin B12')?.fulfillmentVariantId).toBe(
+      'sem-b12-any-dose',
+    );
+    expect(resolveMembershipFulfillmentSku('m2', 'Glycine')?.fulfillmentVariantId).toBe(
+      'tir-glycine-any-dose',
+    );
+  });
+
   it('does not invent separate membership-medication SKUs', () => {
     for (const row of MEMBERSHIP_FULFILLMENT_CROSSWALK) {
       expect(row.programSku.startsWith('MBM-MEM-')).toBe(true);

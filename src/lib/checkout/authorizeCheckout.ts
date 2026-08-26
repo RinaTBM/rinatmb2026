@@ -48,6 +48,8 @@ export interface CheckoutCartItem {
   memberPricingEligible?: boolean;
   /** Normalized membership requested formulation (request only). */
   requestedFormulation?: string;
+  /** Patient current/weekly dose — provider-review metadata only. */
+  requestedDose?: string;
   membershipSlug?: string;
 }
 
@@ -274,7 +276,7 @@ export function resolveMembershipLine(
     source: 'catalog_memberships',
     productId: item.productId,
     productName: item.productName ?? membership.display_name,
-    variantLabel: item.variantLabel ?? `Requested dose: ${doseLabel}`,
+    variantLabel: item.variantLabel ?? `Formulation: ${doseLabel}`,
   };
 }
 

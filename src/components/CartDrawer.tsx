@@ -2,6 +2,7 @@ import { X, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link, navigate } from '@/router';
 import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
+import { labelRequestedDose } from '@/lib/glp1/patientRequestedDose';
 import { labelRequestedFormulation } from '@/lib/membership/requestedFormulation';
 
 export function CartDrawer() {
@@ -69,11 +70,21 @@ export function CartDrawer() {
                           {item.variantLabel && !item.isMembership && (
                             <span className="block mt-0.5 text-xs text-ink-500">{item.variantLabel}</span>
                           )}
+                          {!item.isMembership && item.requestedDose && (
+                            <span className="block mt-0.5 text-xs text-ink-700">
+                              Current dose: {labelRequestedDose(item.requestedDose)}
+                            </span>
+                          )}
                           {item.isMembership ? (
                             <div className="mt-1 space-y-0.5 text-xs text-ink-500">
                               {item.requestedFormulation && (
                                 <p className="font-medium text-ink-800">
-                                  Requested dose: {labelRequestedFormulation(item.requestedFormulation)}
+                                  Formulation: {labelRequestedFormulation(item.requestedFormulation)}
+                                </p>
+                              )}
+                              {item.requestedDose && (
+                                <p className="font-medium text-ink-800">
+                                  Current dose: {labelRequestedDose(item.requestedDose)}
                                 </p>
                               )}
                               <p className="text-gold-600 font-medium">Billed monthly · 3-month initial term</p>

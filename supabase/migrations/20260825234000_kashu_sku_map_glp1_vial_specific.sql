@@ -1,5 +1,5 @@
 -- MBM-TAGADA-MANUAL-VARIANT-CREATION-1
--- Additive kashu_sku_map upsert for vial-specific one-time SKUs.
+-- Additive kashu_sku_map upsert for 10 vial-specific one-time SKUs.
 --
 -- Live-verified 2026-08-26 via Edge tagada-product-sync GET (read-only) on
 -- existing families:
@@ -8,21 +8,16 @@
 --   product_74cd4752c9d6  (TIR B12)
 --   product_861e0edd8ab2  (TIR Glycine)
 --
--- 8 / 10 SKUs verified. Still missing live Tagada variants:
---   MBM-WM-SEM-B12-006  (10 mg vial · $119)
---   MBM-WM-SEM-GLY-006  (10 mg vial · $119)
+-- 10 / 10 SKUs verified. No Tagada writes. No GEN changes.
 --
 -- Rules:
---   - these SKUs only (no unrelated rows)
+--   - these 10 SKUs only (no unrelated rows)
 --   - INSERT ... ON CONFLICT (mbm_sku) DO UPDATE
 --   - no deletes, no truncates
 --   - no historical price deletion
---   - no GEN changes
---   - do not invent Tagada IDs
 --
 -- DO NOT APPLY from Cursor. Apply via Bolt/Supabase only after explicit
--- owner approval. Prefer waiting until SEM-006 variants exist so all 10
--- rows can be upserted together.
+-- owner approval.
 
 insert into public.kashu_sku_map (
   mbm_sku, mbm_product_id, mbm_variant_id,
@@ -39,6 +34,16 @@ insert into public.kashu_sku_map (
     'MBM-TAGADA-MANUAL-VARIANT-CREATION-1 SEM B12 2mg vial live-verified 2026-08-26',
     now()
   ),
+  -- SEM B12 · 10 mg vial · $119 · website weekly doses 1.75 mg, 2 mg
+  (
+    'MBM-WM-SEM-B12-006', 'p1', 'sem-b12-10mg',
+    'product_6b750325addf',
+    'variant_23afe7061b26',
+    'price_013a62e05b77',
+    11900, 11900, true,
+    'MBM-TAGADA-MANUAL-VARIANT-CREATION-1 SEM B12 10mg vial live-verified 2026-08-26',
+    now()
+  ),
   -- SEM Glycine · 2 mg vial · $99 · website weekly dose 0.5 mg
   (
     'MBM-WM-SEM-GLY-005', 'p1', 'sem-glycine-2mg',
@@ -47,6 +52,16 @@ insert into public.kashu_sku_map (
     'price_cea49d485af6',
     9900, 9900, true,
     'MBM-TAGADA-MANUAL-VARIANT-CREATION-1 SEM GLY 2mg vial live-verified 2026-08-26',
+    now()
+  ),
+  -- SEM Glycine · 10 mg vial · $119 · website weekly doses 1.75 mg, 2 mg
+  (
+    'MBM-WM-SEM-GLY-006', 'p1', 'sem-glycine-10mg',
+    'product_dcc64482bbbf',
+    'variant_6db94a24e1ad',
+    'price_49a9a6e85d5a',
+    11900, 11900, true,
+    'MBM-TAGADA-MANUAL-VARIANT-CREATION-1 SEM GLY 10mg vial live-verified 2026-08-26',
     now()
   ),
   -- TIR B12 · 20 mg vial · $139 · website weekly dose 5 mg
@@ -120,7 +135,3 @@ on conflict (mbm_sku) do update set
   is_active = true,
   notes = excluded.notes,
   updated_at = now();
-
--- Still missing from live Tagada GET/list (do not invent IDs):
---   MBM-WM-SEM-B12-006  p1  sem-b12-10mg      product_6b750325addf  PASTE_TAGADA_VARIANT_ID  PASTE_TAGADA_PRICE_ID  11900
---   MBM-WM-SEM-GLY-006  p1  sem-glycine-10mg  product_dcc64482bbbf  PASTE_TAGADA_VARIANT_ID  PASTE_TAGADA_PRICE_ID  11900

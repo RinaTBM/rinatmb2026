@@ -323,7 +323,7 @@ export function isGettingStartedDose(raw: string | null | undefined): boolean {
   return normalizeRequestedDose(raw) === GETTING_STARTED_DOSE;
 }
 
-/** New vial-specific SKUs. 8/10 live-mapped 2026-08-26; SEM-*-006 still need Tagada variants. */
+/** New vial-specific SKUs. 10/10 live-mapped 2026-08-26 via Tagada GET. */
 export const NEW_ONE_TIME_VIAL_SKUS = [
   'MBM-WM-SEM-B12-005',
   'MBM-WM-SEM-B12-006',

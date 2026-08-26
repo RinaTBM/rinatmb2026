@@ -250,14 +250,14 @@ Membership is unchanged and is not part of this checklist: SEM **$149/month**, T
 
 ## Task 3 — Reconciliation table (paste live IDs after creation)
 
-Do not fill unknown IDs. Owner pastes live `variant_…` and `price_…` after dashboard create. Confirm Tagada price cents equal MBM price cents before mapping. Leave VARIANT ID, PRICE ID, TAGADA PRICE CENTS, and ACTIVE empty until the dashboard values are copied.
+Live-verified 2026-08-26 via Edge `tagada-product-sync` GET (read-only). Confirm Tagada price cents equal MBM price cents before applying the Kashu SQL.
 
 | MBM SKU | TAGADA PRODUCT ID | TAGADA VARIANT ID | TAGADA PRICE ID | MBM PRICE CENTS | TAGADA PRICE CENTS | ACTIVE |
 | --- | --- | --- | --- | --- | --- | --- |
 | MBM-WM-SEM-B12-005 | product_6b750325addf | variant_a726bfe758b3 | price_1c3c8051e3b5 | 9900 | 9900 | YES |
-| MBM-WM-SEM-B12-006 | product_6b750325addf | | | 11900 | | MISSING FROM LIVE TAGADA GET/LIST |
+| MBM-WM-SEM-B12-006 | product_6b750325addf | variant_23afe7061b26 | price_013a62e05b77 | 11900 | 11900 | YES |
 | MBM-WM-SEM-GLY-005 | product_dcc64482bbbf | variant_1f6e4f4d2cb4 | price_cea49d485af6 | 9900 | 9900 | YES |
-| MBM-WM-SEM-GLY-006 | product_dcc64482bbbf | | | 11900 | | MISSING FROM LIVE TAGADA GET/LIST |
+| MBM-WM-SEM-GLY-006 | product_dcc64482bbbf | variant_6db94a24e1ad | price_49a9a6e85d5a | 11900 | 11900 | YES |
 | MBM-WM-TIR-B12-005 | product_74cd4752c9d6 | variant_1f1dab8b6177 | price_ea84cec6ed40 | 13900 | 13900 | YES |
 | MBM-WM-TIR-B12-006 | product_74cd4752c9d6 | variant_dd351c9f2fd1 | price_e6ef11aa3bd1 | 15900 | 15900 | YES |
 | MBM-WM-TIR-B12-007 | product_74cd4752c9d6 | variant_56e8f07d6ab2 | price_bc09750e5e79 | 17900 | 17900 | YES |
@@ -280,30 +280,26 @@ After all 10 rows are filled:
 
 Prepared, **not executed**: `supabase/migrations/20260825234000_kashu_sku_map_glp1_vial_specific.sql`
 
-- Additive upsert of these 10 SKUs only
+- Additive upsert of these 10 SKUs only, with live-verified Tagada IDs
 - No deletes, truncates, or unrelated rows
 - No historical price deletion
 - No GEN changes
-- Applying the file as committed is a **no-op** until live IDs are pasted and the insert is uncommented
+- Do not apply from Cursor. Apply via Bolt/Supabase after owner approval.
 
 ---
 
 ## Task 5 — Status
 
 ```
-MISSING TAGADA VARIANTS: 10
-SEM B12: 2
-SEM GLYCINE: 2
-TIR B12: 3
-TIR GLYCINE: 3
+MISSING TAGADA VARIANTS: 0
+LIVE-VERIFIED: 10 / 10
 DUPLICATE PRODUCT FAMILIES REQUIRED: NO
-OWNER MANUAL TAGADA ACTION REQUIRED: YES
-KASHU MAP MIGRATION PREPARED: YES (8/10 live IDs filled; SEM-006 placeholders remain)
+KASHU MAP MIGRATION PREPARED: YES (10/10 live IDs filled; not executed)
+PR #23 TECHNICALLY READY FOR SUPABASE MAPPING STEP: YES
 PR #23 DEPLOYABLE NOW: NO
-PR #23 DEPLOYABLE AFTER VARIANTS + MAP: YES (blocked on SEM-B12-006 and SEM-GLY-006 live Tagada variants)
 GEN API ORDERS: OFF
 GEN HANDOFF: OFF
-STOP.
+STOP BEFORE DATABASE WRITE OR DEPLOY.
 ```
 
 After variants + map, also fill `LAUNCH_READY_KASHU_MAP` in `src/lib/payments/launchReadyKashuMap.ts` and `supabase/functions/_shared/launchReadyKashuMap.ts`, then re-run typecheck / tests / build. Do not apply the Kashu SQL from Cursor. Do not deploy until the owner says so.

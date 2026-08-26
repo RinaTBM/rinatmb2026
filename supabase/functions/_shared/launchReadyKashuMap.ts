@@ -3,7 +3,7 @@
  *
  * IDs were read from Tagada via Edge `tagada-product-sync` list/get on 2026-08-25
  * (store bound to checkout.mybaremethod.com). GLP-1 vial-specific SKUs 005/006/007
- * re-read 2026-08-26: 8/10 live; SEM-B12-006 and SEM-GLY-006 still missing.
+ * re-read 2026-08-26: 10/10 live on the four existing product families.
  * Do not invent IDs.
  *
  * One-time family products are isTaxable=false, isShippable=false, one-time USD.
@@ -89,6 +89,18 @@ export const LAUNCH_READY_KASHU_MAP_ROWS: readonly LaunchReadyKashuMapRow[] = [
     website_variant_id: 'sem-b12-2mg',
   },
   {
+    mbm_sku: 'MBM-WM-SEM-B12-006',
+    mbm_product_id: 'p1',
+    mbm_variant_id: 'sem-b12-10mg',
+    tagada_product_id: 'product_6b750325addf',
+    tagada_variant_id: 'variant_23afe7061b26',
+    tagada_price_id: 'price_013a62e05b77',
+    mbm_price_cents: 11900,
+    tagada_price_cents: 11900,
+    website_family: 'semaglutide',
+    website_variant_id: 'sem-b12-10mg',
+  },
+  {
     mbm_sku: 'MBM-WM-SEM-GLY-001',
     mbm_product_id: 'p1',
     mbm_variant_id: 'sem-glycine-starting-low',
@@ -147,6 +159,18 @@ export const LAUNCH_READY_KASHU_MAP_ROWS: readonly LaunchReadyKashuMapRow[] = [
     tagada_price_cents: 9900,
     website_family: 'semaglutide',
     website_variant_id: 'sem-glycine-2mg',
+  },
+  {
+    mbm_sku: 'MBM-WM-SEM-GLY-006',
+    mbm_product_id: 'p1',
+    mbm_variant_id: 'sem-glycine-10mg',
+    tagada_product_id: 'product_dcc64482bbbf',
+    tagada_variant_id: 'variant_6db94a24e1ad',
+    tagada_price_id: 'price_49a9a6e85d5a',
+    mbm_price_cents: 11900,
+    tagada_price_cents: 11900,
+    website_family: 'semaglutide',
+    website_variant_id: 'sem-glycine-10mg',
   },
   {
     mbm_sku: 'MBM-WM-TIR-B12-001',

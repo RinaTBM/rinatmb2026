@@ -177,13 +177,13 @@ async function ensureTagadaOneTimePrice(input: {
 /** Base membership display amounts (customer-facing). Kept; not deleted. */
 const MEM_BASE_BY_SKU: Record<string, { basePriceId: string; baseCents: number; type: string }> = {
   "MBM-MEM-SEM-MEM-001": {
-    basePriceId: "price_344d3dacb4ab",
-    baseCents: 14900,
+    basePriceId: "price_fc83af356019",
+    baseCents: 12500,
     type: "semaglutide",
   },
   "MBM-MEM-TIR-MEM-001": {
-    basePriceId: "price_2d2dd07b2f73",
-    baseCents: 27500,
+    basePriceId: "price_da1063335965",
+    baseCents: 17900,
     type: "tirzepatide",
   },
 };
@@ -194,12 +194,12 @@ const MEM_COMBO_BY_SKU_SHIP: Record<
   Record<number, { priceId: string; monthlyCents: number; method: "two_day" | "next_day" }>
 > = {
   "MBM-MEM-SEM-MEM-001": {
-    3000: { priceId: "price_41179f7cafe2", monthlyCents: 17900, method: "two_day" },
-    5000: { priceId: "price_7ce0f74a7509", monthlyCents: 19900, method: "next_day" },
+    3000: { priceId: "price_f89402dcbe76", monthlyCents: 15500, method: "two_day" },
+    5000: { priceId: "price_fc83af356019", monthlyCents: 17500, method: "next_day" },
   },
   "MBM-MEM-TIR-MEM-001": {
-    3000: { priceId: "price_94c92b6e5749", monthlyCents: 30500, method: "two_day" },
-    5000: { priceId: "price_d6941e334598", monthlyCents: 32500, method: "next_day" },
+    3000: { priceId: "price_dd3f65ebcee2", monthlyCents: 20900, method: "two_day" },
+    5000: { priceId: "price_da1063335965", monthlyCents: 22900, method: "next_day" },
   },
 };
 
@@ -470,7 +470,7 @@ Deno.serve(async (req) => {
       skuList.push(`${sku}×${qty}`);
       if (isMembershipCheckout) {
         if (membershipCombo && sku === membershipCombo.memSku) {
-          // Combo recurring priceId (membership + shipping). Map base cents stay 14900/27500
+          // Combo recurring priceId (membership + shipping). Map base cents stay 12500/17900
           // for display; Tagada charge uses combo monthly cents.
           if (Math.trunc(unit) !== membershipCombo.baseCents) {
             return json({

@@ -401,7 +401,10 @@ const DISCOUNT_EXCLUDED_CATEGORIES: ReadonlySet<Category> = new Set(['provider-c
 
 function mk(seed: ProductSeed): Product {
   const variants = buildVariants(seed.slug, seed.variants);
-  const startingPrice = variants.reduce((min, v) => Math.min(min, v.price), Infinity);
+  // Internal `*-any-dose` variants support membership fulfillment crosswalks only.
+  // They are never patient dose choices and must not lower customer-facing starting prices.
+  const customerPricedVariants = variants.filter(v => !v.id.endsWith('-any-dose'));
+  const startingPrice = customerPricedVariants.reduce((min, v) => Math.min(min, v.price), Infinity);
   const forms = Array.from(new Set(variants.map(v => v.dosageForm))) as DosageForm[];
   const status = seed.status ?? 'active';
   const isVisible = seed.isVisible ?? (status === 'active');
@@ -523,17 +526,17 @@ export const products: Product[] = [
     bestSeller: true,
     memberPricingEligible: false,
     variants: [
-      { id: 'sem-b12-starting-low', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 89 },
-      { id: 'sem-b12-2mg', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 99 },
-      { id: 'sem-b12-mid', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 109 },
-      { id: 'sem-b12-high', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 109 },
-      { id: 'sem-b12-10mg', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 119 },
+      { id: 'sem-b12-starting-low', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 109 },
+      { id: 'sem-b12-2mg', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 119 },
+      { id: 'sem-b12-mid', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 119 },
+      { id: 'sem-b12-high', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 129 },
+      { id: 'sem-b12-10mg', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 139 },
       { id: 'sem-b12-any-dose', dosageForm: 'Injection', strength: 'Vitamin B12', size: '1mL vials', price: 89 },
-      { id: 'sem-glycine-starting-low', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 89 },
-      { id: 'sem-glycine-2mg', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 99 },
-      { id: 'sem-glycine-mid', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 109 },
-      { id: 'sem-glycine-high', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 109 },
-      { id: 'sem-glycine-10mg', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 119 },
+      { id: 'sem-glycine-starting-low', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 109 },
+      { id: 'sem-glycine-2mg', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 119 },
+      { id: 'sem-glycine-mid', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 119 },
+      { id: 'sem-glycine-high', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 129 },
+      { id: 'sem-glycine-10mg', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 139 },
       { id: 'sem-glycine-any-dose', dosageForm: 'Injection', strength: 'Glycine', size: '1mL vials', price: 89 },
     ],
   }),
@@ -553,19 +556,19 @@ export const products: Product[] = [
     bestSeller: true,
     memberPricingEligible: false,
     variants: [
-      { id: 'tir-b12-starting-low', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 119 },
-      { id: 'tir-b12-10mg-ml', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 139 },
-      { id: 'tir-b12-mid', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 149 },
-      { id: 'tir-b12-20mg-ml', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 159 },
-      { id: 'tir-b12-high', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 169 },
-      { id: 'tir-b12-30mg-ml', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 179 },
+      { id: 'tir-b12-starting-low', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 139 },
+      { id: 'tir-b12-10mg-ml', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 159 },
+      { id: 'tir-b12-mid', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 179 },
+      { id: 'tir-b12-20mg-ml', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 189 },
+      { id: 'tir-b12-high', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 199 },
+      { id: 'tir-b12-30mg-ml', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 209 },
       { id: 'tir-b12-any-dose', dosageForm: 'Injection', strength: 'Vitamin B12', size: '2mL vials', price: 119 },
-      { id: 'tir-glycine-starting-low', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 119 },
-      { id: 'tir-glycine-10mg-ml', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 139 },
-      { id: 'tir-glycine-mid', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 149 },
-      { id: 'tir-glycine-20mg-ml', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 159 },
-      { id: 'tir-glycine-high', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 169 },
-      { id: 'tir-glycine-30mg-ml', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 179 },
+      { id: 'tir-glycine-starting-low', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 139 },
+      { id: 'tir-glycine-10mg-ml', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 159 },
+      { id: 'tir-glycine-mid', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 179 },
+      { id: 'tir-glycine-20mg-ml', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 189 },
+      { id: 'tir-glycine-high', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 199 },
+      { id: 'tir-glycine-30mg-ml', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 209 },
       { id: 'tir-glycine-any-dose', dosageForm: 'Injection', strength: 'Glycine', size: '2mL vials', price: 119 },
     ],
     needsDedicatedImage: true,
@@ -1267,7 +1270,7 @@ export const memberships: Membership[] = [
     slug: 'semaglutide-membership',
     displayName: 'Semaglutide Membership',
     brandName: 'Bare Balance',
-    monthlyPrice: 149,
+    monthlyPrice: 125,
     billingFrequency: 'monthly',
     initialTermMonths: 3,
     lockedRate: true,
@@ -1302,7 +1305,7 @@ export const memberships: Membership[] = [
     faq: [
       {
         q: 'Will my price increase if my treatment changes?',
-        a: 'Your Semaglutide membership remains $149 per month while your membership stays continuously active and your provider-selected treatment remains within the included program.',
+        a: 'Your Semaglutide membership remains $125 per month while your membership stays continuously active and your provider-selected treatment remains within the included program.',
       },
       {
         q: 'Is the membership the same as buying a retail vial?',
@@ -1310,7 +1313,7 @@ export const memberships: Membership[] = [
       },
       {
         q: 'How is membership billed?',
-        a: 'Join with Credit / Debit Card. Your card is charged monthly for the $149 membership plus selected shipping ($179 Two-Day or $199 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
+        a: 'Join with Credit / Debit Card. Your card is charged monthly for the $125 membership plus selected shipping ($155 Two-Day or $175 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
       },
       {
         q: PHARMACY_503A_FAQ.q,
@@ -1328,7 +1331,7 @@ export const memberships: Membership[] = [
     imageAlt: 'Semaglutide Membership — provider-directed Semaglutide injection program',
 
     name: 'Semaglutide Membership',
-    price: 149,
+    price: 125,
     priceLabel: '/month',
     tagline: 'Bare Balance',
     description: MEMBERSHIP_COPY['semaglutide-membership'].about,
@@ -1339,7 +1342,7 @@ export const memberships: Membership[] = [
     slug: 'tirzepatide-membership',
     displayName: 'Tirzepatide Membership',
     brandName: 'Bare Momentum',
-    monthlyPrice: 275,
+    monthlyPrice: 179,
     billingFrequency: 'monthly',
     initialTermMonths: 3,
     lockedRate: true,
@@ -1372,16 +1375,16 @@ export const memberships: Membership[] = [
     exclusions: [],
     termsSummary: [
       ...sharedTerms(3),
-      'The $275 locked rate includes eligible provider-selected formulations through 15mg.',
+      'The $179 locked rate includes eligible provider-selected formulations through 15mg.',
     ],
     faq: [
       {
         q: 'Will my price increase if my treatment changes?',
-        a: 'Your Tirzepatide membership remains $275 per month while your membership stays continuously active and your provider-selected treatment remains within the included program through 15mg.',
+        a: 'Your Tirzepatide membership remains $179 per month while your membership stays continuously active and your provider-selected treatment remains within the included program through 15mg.',
       },
       {
         q: 'Is the highest Tirzepatide formulation included?',
-        a: 'The $275 membership includes eligible provider-selected formulations through 15mg. 30mg is not part of this program.',
+        a: '$179 membership includes eligible provider-selected formulations through 15mg. 30mg is not part of this program.',
       },
       {
         q: 'Is membership the same as a retail vial purchase?',
@@ -1389,7 +1392,7 @@ export const memberships: Membership[] = [
       },
       {
         q: 'How is membership billed?',
-        a: 'Join with Credit / Debit Card. Your card is charged monthly for the $275 membership plus selected shipping ($305 Two-Day or $325 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
+        a: 'Join with Credit / Debit Card. Your card is charged monthly for the $179 membership plus selected shipping ($209 Two-Day or $229 Next-Day). A one-time Initial Provider Visit ($75) may apply when required and does not recur. A 3-month minimum commitment applies.',
       },
       {
         q: PHARMACY_503A_FAQ.q,
@@ -1408,7 +1411,7 @@ export const memberships: Membership[] = [
     highlighted: true,
 
     name: 'Tirzepatide Membership',
-    price: 275,
+    price: 179,
     priceLabel: '/month',
     tagline: 'Bare Momentum',
     description: MEMBERSHIP_COPY['tirzepatide-membership'].about,

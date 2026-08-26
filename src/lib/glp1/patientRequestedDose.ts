@@ -2,7 +2,7 @@
  * Patient-facing GLP-1 current/weekly dose — provider-review metadata only.
  *
  * Does NOT select pharmacy vial strength, MBM SKU, Tagada price, or GEN CP.
- * Membership Any Dose pricing stays flat ($149 SEM / $275 TIR).
+ * Membership pricing stays flat by program ($125 SEM / $179 TIR).
  */
 
 export const GETTING_STARTED_DOSE = 'getting_started';

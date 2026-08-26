@@ -380,7 +380,7 @@ export const BPC_OWNER_PRICING = Object.freeze({
 
 /**
  * Membership launch classification (Phase 12I.3).
- * Prices: $149 SEM / $275 TIR website. Recurring rebill never auto-creates GEN meds.
+ * Prices: $125 SEM / $179 TIR website. Recurring rebill never auto-creates GEN meds.
  */
 export type MembershipLaunchStatus =
   | 'SAFE_AS_IS'
@@ -401,7 +401,7 @@ export const MEMBERSHIP_LAUNCH_AUDIT = Object.freeze({
     monthlyCents: 27500,
     status: 'BLOCKED_PENDING_GEN' as MembershipLaunchStatus,
     notes:
-      'TIR website membership is $275. New enrollments use Tagada $275 / $305 / $325. GEN fulfillment remains blocked (API Orders / external-paid OFF). Rebill auto-med: NO.',
+      'TIR website membership is $179. New enrollments use Tagada $179 / $209 / $229. GEN fulfillment remains blocked (API Orders / external-paid OFF). Rebill auto-med: NO.',
   },
 });
 

@@ -396,8 +396,8 @@ function FamilySelectors({
                           onClick={() => setPurchaseType('membership')}
                           label={
                             familyId === 'semaglutide'
-                              ? 'Membership · $149/month'
-                              : 'Membership · $275/month'
+                              ? 'Membership · $125/month'
+                              : 'Membership · $179/month'
                           }
                         />
                       )}

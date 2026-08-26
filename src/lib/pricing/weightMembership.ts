@@ -8,14 +8,14 @@
 import { getMembership, type Membership, type Product, type ProductVariant } from '../../data/products';
 
 /** Authoritative monthly rates (dollars). */
-export const SEMAGLUTIDE_MEMBERSHIP_MONTHLY = 149;
-export const TIRZEPATIDE_MEMBERSHIP_MONTHLY = 275;
+export const SEMAGLUTIDE_MEMBERSHIP_MONTHLY = 125;
+export const TIRZEPATIDE_MEMBERSHIP_MONTHLY = 179;
 /** Provider/admin-gated; not a public self-serve upgrade. */
 export const TIRZEPATIDE_30MG_MEMBER_ONLY_MONTHLY = 350;
 
 /** Authoritative monthly rates (integer cents). */
-export const SEMAGLUTIDE_MEMBERSHIP_CENTS = 14900;
-export const TIRZEPATIDE_MEMBERSHIP_CENTS = 27500;
+export const SEMAGLUTIDE_MEMBERSHIP_CENTS = 12500;
+export const TIRZEPATIDE_MEMBERSHIP_CENTS = 17900;
 export const TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS = 35000;
 
 /** Legacy strength label retained only for rejecting obsolete self-serve attempts. */
@@ -114,7 +114,7 @@ export function getWeightMembershipProgram(
     cartLabel: `Tirzepatide Wellness Membership — $${TIRZEPATIDE_MEMBERSHIP_MONTHLY}/month`,
     cta: `Join Tirzepatide Membership — $${TIRZEPATIDE_MEMBERSHIP_MONTHLY}/month`,
     supportingCopy: show30mgNotice
-      ? 'The standard $275/month membership includes provider-selected formulations only through 15mg.'
+      ? 'The standard $179/month membership includes provider-selected formulations only through 15mg.'
       : 'One predictable monthly price through the included Tirzepatide program maximum.',
     customerNote: 'Includes eligible provider-selected formulations through 15mg.',
     includedFormulations: membership?.includedFormulations?.length

@@ -81,8 +81,8 @@ export function validateCatalog(
   }
 
   const semaMem = memberships.find(m => m.slug === 'semaglutide-membership');
-  if (semaMem && semaMem.status === 'active' && semaMem.monthlyPriceCents !== 14900) {
-    warnings.push('Semaglutide membership monthly price should be 14900 cents ($149).');
+  if (semaMem && semaMem.status === 'active' && semaMem.monthlyPriceCents !== 12500) {
+    warnings.push('Semaglutide membership monthly price should be 12500 cents ($125).');
   }
 
   return { errors, warnings };

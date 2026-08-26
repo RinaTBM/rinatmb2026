@@ -1,5 +1,9 @@
 # MBM-GLP1-VIAL-SPECIFIC-PRICE-RECALC-1
 
+> Historical pricing record. Superseded for new purchases by
+> `MBM-GLP1-MODEL-B-PRICING` on 2026-08-26. Do not reuse the prices below
+> for new checkout sessions. Historical Tagada prices remain preserved.
+
 **Mode:** pricing analysis only.  
 **Do not create Tagada variants.**  
 **Do not modify website, Tagada, GEN, or Supabase.**

@@ -132,23 +132,23 @@ const faqCategories = [
     faqs: [
       {
         q: 'How does the Semaglutide membership work?',
-        a: 'Semaglutide Membership is $149/month base. You select Two-Day (+$30/month) or Next-Day (+$50/month) shipping at enrollment; that shipping recurs with each monthly card charge ($179 or $199/month). A one-time Initial Provider Visit ($75) may apply when required. Provider review is required; payment does not guarantee a prescription.',
+        a: 'Semaglutide Membership is $125/month base. You select Two-Day (+$30/month) or Next-Day (+$50/month) shipping at enrollment; that shipping recurs with each monthly card charge ($155 or $175/month). A one-time Initial Provider Visit ($75) may apply when required. Provider review is required; payment does not guarantee a prescription.',
       },
       {
         q: 'How does the Tirzepatide membership work?',
-        a: 'Tirzepatide Membership is $275/month base. Selected shipping recurs monthly (+$30 Two-Day or +$50 Next-Day). A one-time Initial Provider Visit ($75) may apply when required. The program includes eligible formulations through 15mg. Provider review is required; payment does not guarantee a prescription.',
+        a: 'Tirzepatide Membership is $179/month base. Selected shipping recurs monthly (+$30 Two-Day or +$50 Next-Day). A one-time Initial Provider Visit ($75) may apply when required. The program includes eligible formulations through 15mg. Provider review is required; payment does not guarantee a prescription.',
       },
       {
         q: 'What is charged today when I join a membership?',
-        a: 'Due today typically includes membership base + selected shipping + the $75 Initial Provider Visit when required. Examples: Semaglutide + Two-Day $254; Semaglutide + Next-Day $274; Tirzepatide + Two-Day $380; Tirzepatide + Next-Day $400. Those due-today totals are not the ongoing monthly rate.',
+        a: 'Due today typically includes membership base + selected shipping + the $75 Initial Provider Visit when required. Examples: Semaglutide + Two-Day $230; Semaglutide + Next-Day $250; Tirzepatide + Two-Day $284; Tirzepatide + Next-Day $304. Those due-today totals are not the ongoing monthly rate.',
       },
       {
         q: 'What is charged every month?',
-        a: 'Monthly renewal is membership base plus your selected shipping only: Semaglutide $179 or $199/month; Tirzepatide $305 or $325/month. The Initial Provider Visit does not recur.',
+        a: 'Monthly renewal is membership base plus your selected shipping only: Semaglutide $155 or $175/month; Tirzepatide $209 or $229/month. The Initial Provider Visit does not recur.',
       },
       {
         q: 'Is shipping included in the membership price?',
-        a: 'No. Shipping is not included in the base $149 / $275 membership price. You select shipping at enrollment and it is billed with each monthly renewal.',
+        a: 'No. Shipping is not included in the base $125 / $179 membership price. You select shipping at enrollment and it is billed with each monthly renewal.',
       },
       {
         q: 'Is membership shipping recurring?',

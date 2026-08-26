@@ -24,29 +24,29 @@ export const TIRZ_MEMBERSHIP_SKU: TagadaMembershipProgramSku = 'MBM-MEM-TIR-MEM-
 
 /**
  * Verified live Tagada BASE recurring priceIds.
- * Customer-facing base membership display remains $149 SEM / $275 TIR.
+ * Customer-facing base membership display is $125 SEM / $179 TIR for new enrollments.
  * Historical TIR $249 / $279 / $299 price objects remain in Tagada for old subscriptions
  * (price_5cf1fa89610c / price_e0ebef9851a8 / price_ef9ea132d6cf) — do not delete.
- * New TIR enrollments use $275-based priceIds below.
+ * Historical SEM $149 and TIR $275 price objects remain for existing subscriptions; new enrollments use the priceIds below.
  */
-export const SEM_TAGADA_PRICE_ID = 'price_344d3dacb4ab';
-export const TIRZ_TAGADA_PRICE_ID = 'price_2d2dd07b2f73';
+export const SEM_TAGADA_PRICE_ID = 'price_fc83af356019';
+export const TIRZ_TAGADA_PRICE_ID = 'price_da1063335965';
 
 /** Combo recurring prices (membership + selected shipping). */
-export const SEM_TWO_DAY_COMBO_PRICE_ID = 'price_41179f7cafe2';
-export const SEM_NEXT_DAY_COMBO_PRICE_ID = 'price_7ce0f74a7509';
-export const TIRZ_TWO_DAY_COMBO_PRICE_ID = 'price_94c92b6e5749';
-export const TIRZ_NEXT_DAY_COMBO_PRICE_ID = 'price_d6941e334598';
+export const SEM_TWO_DAY_COMBO_PRICE_ID = 'price_f89402dcbe76';
+export const SEM_NEXT_DAY_COMBO_PRICE_ID = 'price_fc83af356019';
+export const TIRZ_TWO_DAY_COMBO_PRICE_ID = 'price_dd3f65ebcee2';
+export const TIRZ_NEXT_DAY_COMBO_PRICE_ID = 'price_da1063335965';
 
 /** Historical TIR prices — not used for new enrollments. */
 export const TIRZ_HISTORICAL_249_PRICE_ID = 'price_5cf1fa89610c';
 export const TIRZ_HISTORICAL_279_PRICE_ID = 'price_e0ebef9851a8';
 export const TIRZ_HISTORICAL_299_PRICE_ID = 'price_ef9ea132d6cf';
 
-export const SEM_TWO_DAY_MONTHLY_CENTS = 17900;
-export const SEM_NEXT_DAY_MONTHLY_CENTS = 19900;
-export const TIRZ_TWO_DAY_MONTHLY_CENTS = 30500;
-export const TIRZ_NEXT_DAY_MONTHLY_CENTS = 32500;
+export const SEM_TWO_DAY_MONTHLY_CENTS = 15500;
+export const SEM_NEXT_DAY_MONTHLY_CENTS = 17500;
+export const TIRZ_TWO_DAY_MONTHLY_CENTS = 20900;
+export const TIRZ_NEXT_DAY_MONTHLY_CENTS = 22900;
 
 export const SEM_TAGADA_VARIANT_ID = 'variant_6973906c4bd6';
 export const TIRZ_TAGADA_VARIANT_ID = 'variant_b3890c799e09';

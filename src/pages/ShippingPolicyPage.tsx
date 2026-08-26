@@ -96,7 +96,7 @@ export function ShippingPolicyPage() {
                 'Next-Day Shipping — +$50 per month',
               ]} />
               <p>
-                Shipping is not included in the base Semaglutide ($149) or Tirzepatide ($275) membership price.
+                Shipping is not included in the base Semaglutide ($125) or Tirzepatide ($179) membership price.
                 Payment may be collected at enrollment and on each renewal, but medication fulfillment and shipment
                 still depend on applicable provider review and approval.
               </p>

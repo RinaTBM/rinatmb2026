@@ -1,0 +1,447 @@
+{
+  "meta": {
+    "audit": "MBM-GLP1-MODEL-B-PRICING",
+    "generatedAt": "2026-08-26",
+    "tagadaProductsCreated": 0,
+    "tagadaVariantsCreated": 0,
+    "tagadaPricesCreated": 28,
+    "historicalPricesPreserved": true,
+    "genChanged": false
+  },
+  "membershipShipping": {
+    "architecture": "base + selected recurring customer shipping inside combo Tagada priceId",
+    "semBaseCents": 12500,
+    "semTwoDayCents": 15500,
+    "semNextDayCents": 17500,
+    "tirBaseCents": 17900,
+    "tirTwoDayCents": 20900,
+    "tirNextDayCents": 22900,
+    "oneTimeCustomerShippingCents": [
+      3000,
+      5000
+    ],
+    "highDoseCompleteTotalComparison": {
+      "semOneTimeTwoDayCents": 16900,
+      "semMembershipTwoDayCents": 15500,
+      "semSavingsCents": 1400,
+      "tirOneTimeTwoDayCents": 23900,
+      "tirMembershipTwoDayCents": 20900,
+      "tirSavingsCents": 3000
+    }
+  },
+  "rows": [
+    {
+      "sku": "MBM-WM-SEM-B12-001",
+      "productId": "product_6b750325addf",
+      "variantId": "variant_f9ac5ea25184",
+      "currentPriceId": "price_e31ac583370d",
+      "currentCents": 8900,
+      "newPriceId": "price_7ca4c3abc69a",
+      "newCents": 10900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_e31ac583370d"
+      ]
+    },
+    {
+      "sku": "MBM-WM-SEM-B12-002",
+      "productId": "product_6b750325addf",
+      "variantId": "variant_d839f0aab609",
+      "currentPriceId": "price_0bf0b622fd45",
+      "currentCents": 10900,
+      "newPriceId": "price_11ec89ad646a",
+      "newCents": 11900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_0bf0b622fd45"
+      ]
+    },
+    {
+      "sku": "MBM-WM-SEM-B12-003",
+      "productId": "product_6b750325addf",
+      "variantId": "variant_d9dac92d2f71",
+      "currentPriceId": "price_3c22af390881",
+      "currentCents": 10900,
+      "newPriceId": "price_755359fc40cc",
+      "newCents": 12900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_3c22af390881"
+      ]
+    },
+    {
+      "sku": "MBM-WM-SEM-B12-005",
+      "productId": "product_6b750325addf",
+      "variantId": "variant_a726bfe758b3",
+      "currentPriceId": "price_1c3c8051e3b5",
+      "currentCents": 9900,
+      "newPriceId": "price_80723e21469c",
+      "newCents": 11900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_1c3c8051e3b5"
+      ]
+    },
+    {
+      "sku": "MBM-WM-SEM-B12-006",
+      "productId": "product_6b750325addf",
+      "variantId": "variant_23afe7061b26",
+      "currentPriceId": "price_013a62e05b77",
+      "currentCents": 11900,
+      "newPriceId": "price_9dead884531e",
+      "newCents": 13900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_013a62e05b77"
+      ]
+    },
+    {
+      "sku": "MBM-WM-SEM-GLY-001",
+      "productId": "product_dcc64482bbbf",
+      "variantId": "variant_c51c894cfee6",
+      "currentPriceId": "price_74822644bb1f",
+      "currentCents": 8900,
+      "newPriceId": "price_6c22c5bf103d",
+      "newCents": 10900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_74822644bb1f"
+      ]
+    },
+    {
+      "sku": "MBM-WM-SEM-GLY-002",
+      "productId": "product_dcc64482bbbf",
+      "variantId": "variant_398f72f8ca6b",
+      "currentPriceId": "price_9113997a5445",
+      "currentCents": 10900,
+      "newPriceId": "price_18ffbabbc121",
+      "newCents": 11900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_9113997a5445"
+      ]
+    },
+    {
+      "sku": "MBM-WM-SEM-GLY-003",
+      "productId": "product_dcc64482bbbf",
+      "variantId": "variant_a71889d8f2e1",
+      "currentPriceId": "price_0c321507201f",
+      "currentCents": 10900,
+      "newPriceId": "price_1499a5df1238",
+      "newCents": 12900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_0c321507201f"
+      ]
+    },
+    {
+      "sku": "MBM-WM-SEM-GLY-005",
+      "productId": "product_dcc64482bbbf",
+      "variantId": "variant_1f6e4f4d2cb4",
+      "currentPriceId": "price_cea49d485af6",
+      "currentCents": 9900,
+      "newPriceId": "price_c433061826aa",
+      "newCents": 11900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_cea49d485af6"
+      ]
+    },
+    {
+      "sku": "MBM-WM-SEM-GLY-006",
+      "productId": "product_dcc64482bbbf",
+      "variantId": "variant_6db94a24e1ad",
+      "currentPriceId": "price_49a9a6e85d5a",
+      "currentCents": 11900,
+      "newPriceId": "price_a1f4ee6101c1",
+      "newCents": 13900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_49a9a6e85d5a"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-B12-001",
+      "productId": "product_74cd4752c9d6",
+      "variantId": "variant_2d96cc588f51",
+      "currentPriceId": "price_ed0142289010",
+      "currentCents": 11900,
+      "newPriceId": "price_296f17fe8611",
+      "newCents": 13900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_ed0142289010"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-B12-002",
+      "productId": "product_74cd4752c9d6",
+      "variantId": "variant_0acda4e3b2d7",
+      "currentPriceId": "price_3db063ba334a",
+      "currentCents": 14900,
+      "newPriceId": "price_4ccf56c8f7e0",
+      "newCents": 17900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_3db063ba334a"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-B12-003",
+      "productId": "product_74cd4752c9d6",
+      "variantId": "variant_5e13db7812ee",
+      "currentPriceId": "price_fb5946461765",
+      "currentCents": 16900,
+      "newPriceId": "price_86e638aabe8e",
+      "newCents": 19900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_fb5946461765"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-B12-005",
+      "productId": "product_74cd4752c9d6",
+      "variantId": "variant_1f1dab8b6177",
+      "currentPriceId": "price_ea84cec6ed40",
+      "currentCents": 13900,
+      "newPriceId": "price_d2f5088bdb5a",
+      "newCents": 15900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_ea84cec6ed40"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-B12-006",
+      "productId": "product_74cd4752c9d6",
+      "variantId": "variant_dd351c9f2fd1",
+      "currentPriceId": "price_e6ef11aa3bd1",
+      "currentCents": 15900,
+      "newPriceId": "price_6471bd5ade2a",
+      "newCents": 18900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_e6ef11aa3bd1"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-B12-007",
+      "productId": "product_74cd4752c9d6",
+      "variantId": "variant_56e8f07d6ab2",
+      "currentPriceId": "price_bc09750e5e79",
+      "currentCents": 17900,
+      "newPriceId": "price_4039f14c59dd",
+      "newCents": 20900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_bc09750e5e79"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-GLY-001",
+      "productId": "product_861e0edd8ab2",
+      "variantId": "variant_ddd60b897d66",
+      "currentPriceId": "price_5e4581d60278",
+      "currentCents": 11900,
+      "newPriceId": "price_4ae8c421cf18",
+      "newCents": 13900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_5e4581d60278"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-GLY-002",
+      "productId": "product_861e0edd8ab2",
+      "variantId": "variant_b7e1562ee522",
+      "currentPriceId": "price_0e41d6b0aeab",
+      "currentCents": 14900,
+      "newPriceId": "price_993d0d4616fd",
+      "newCents": 17900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_0e41d6b0aeab"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-GLY-003",
+      "productId": "product_861e0edd8ab2",
+      "variantId": "variant_121e6d8cd921",
+      "currentPriceId": "price_9803c9a96da8",
+      "currentCents": 16900,
+      "newPriceId": "price_7c361359593f",
+      "newCents": 19900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_9803c9a96da8"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-GLY-005",
+      "productId": "product_861e0edd8ab2",
+      "variantId": "variant_7726800f83dd",
+      "currentPriceId": "price_33457ae01ee9",
+      "currentCents": 13900,
+      "newPriceId": "price_f8f8e7b07150",
+      "newCents": 15900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_33457ae01ee9"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-GLY-006",
+      "productId": "product_861e0edd8ab2",
+      "variantId": "variant_57cd2414aabf",
+      "currentPriceId": "price_2a8c8629ae5c",
+      "currentCents": 15900,
+      "newPriceId": "price_b4a459a9223c",
+      "newCents": 18900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_2a8c8629ae5c"
+      ]
+    },
+    {
+      "sku": "MBM-WM-TIR-GLY-007",
+      "productId": "product_861e0edd8ab2",
+      "variantId": "variant_1446f75121d7",
+      "currentPriceId": "price_5bcb6c9f666c",
+      "currentCents": 17900,
+      "newPriceId": "price_0f7eac35ed15",
+      "newCents": 20900,
+      "recurring": false,
+      "active": true,
+      "historicalPriceIds": [
+        "price_5bcb6c9f666c"
+      ]
+    },
+    {
+      "sku": "MBM-MEM-SEM-MEM-001",
+      "productId": "product_e5fe772b62d6",
+      "variantId": "variant_6973906c4bd6",
+      "currentPriceId": "price_344d3dacb4ab",
+      "currentCents": 14900,
+      "newPriceId": "price_307f4d84658d",
+      "newCents": 12500,
+      "recurring": true,
+      "active": true,
+      "historicalPriceIds": [
+        "price_41179f7cafe2",
+        "price_7ce0f74a7509",
+        "price_344d3dacb4ab"
+      ]
+    },
+    {
+      "sku": "MBM-MEM-SEM-MEM-001",
+      "productId": "product_e5fe772b62d6",
+      "variantId": "variant_6973906c4bd6",
+      "currentPriceId": "price_344d3dacb4ab",
+      "currentCents": 14900,
+      "newPriceId": "price_f89402dcbe76",
+      "newCents": 15500,
+      "recurring": true,
+      "active": true,
+      "historicalPriceIds": [
+        "price_41179f7cafe2",
+        "price_7ce0f74a7509",
+        "price_344d3dacb4ab"
+      ]
+    },
+    {
+      "sku": "MBM-MEM-SEM-MEM-001",
+      "productId": "product_e5fe772b62d6",
+      "variantId": "variant_6973906c4bd6",
+      "currentPriceId": "price_344d3dacb4ab",
+      "currentCents": 14900,
+      "newPriceId": "price_fc83af356019",
+      "newCents": 17500,
+      "recurring": true,
+      "active": true,
+      "historicalPriceIds": [
+        "price_41179f7cafe2",
+        "price_7ce0f74a7509",
+        "price_344d3dacb4ab"
+      ]
+    },
+    {
+      "sku": "MBM-MEM-TIR-MEM-001",
+      "productId": "product_8b3bfb6614c4",
+      "variantId": "variant_b3890c799e09",
+      "currentPriceId": "price_2d2dd07b2f73",
+      "currentCents": 27500,
+      "newPriceId": "price_321bc7a3ea7e",
+      "newCents": 17900,
+      "recurring": true,
+      "active": true,
+      "historicalPriceIds": [
+        "price_e0ebef9851a8",
+        "price_ef9ea132d6cf",
+        "price_2d2dd07b2f73",
+        "price_d6941e334598",
+        "price_5cf1fa89610c",
+        "price_94c92b6e5749"
+      ]
+    },
+    {
+      "sku": "MBM-MEM-TIR-MEM-001",
+      "productId": "product_8b3bfb6614c4",
+      "variantId": "variant_b3890c799e09",
+      "currentPriceId": "price_2d2dd07b2f73",
+      "currentCents": 27500,
+      "newPriceId": "price_dd3f65ebcee2",
+      "newCents": 20900,
+      "recurring": true,
+      "active": true,
+      "historicalPriceIds": [
+        "price_e0ebef9851a8",
+        "price_ef9ea132d6cf",
+        "price_2d2dd07b2f73",
+        "price_d6941e334598",
+        "price_5cf1fa89610c",
+        "price_94c92b6e5749"
+      ]
+    },
+    {
+      "sku": "MBM-MEM-TIR-MEM-001",
+      "productId": "product_8b3bfb6614c4",
+      "variantId": "variant_b3890c799e09",
+      "currentPriceId": "price_2d2dd07b2f73",
+      "currentCents": 27500,
+      "newPriceId": "price_da1063335965",
+      "newCents": 22900,
+      "recurring": true,
+      "active": true,
+      "historicalPriceIds": [
+        "price_e0ebef9851a8",
+        "price_ef9ea132d6cf",
+        "price_2d2dd07b2f73",
+        "price_d6941e334598",
+        "price_5cf1fa89610c",
+        "price_94c92b6e5749"
+      ]
+    }
+  ]
+}

@@ -143,7 +143,7 @@ export function normalizeVariantKey(variantId: string | undefined | null): strin
 
 /**
  * Reject self-serve attempts to charge the Tirzepatide 30mg member-only $350 rate.
- * Public membership checkout is only $149 / $275 via catalog_memberships.
+ * Public membership checkout uses owner-set $125 / $179 program prices via catalog_memberships.
  */
 export function isForbiddenSelfServeMemberOnly350(item: CheckoutCartItem): boolean {
   if (!isProgramMembership(item)) return false;

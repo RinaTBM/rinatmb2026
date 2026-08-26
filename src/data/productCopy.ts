@@ -1103,9 +1103,9 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
   'semaglutide-membership': {
     benefitHeadline: 'One Membership. One Predictable Monthly Price.',
     shortDescription:
-      'Semaglutide Membership is a flat $149/month program for provider-guided Semaglutide care with Vitamin B12 or Glycine options. You get structured support, a locked rate while continuously enrolled, and clear separation between the membership program and medication fulfillment.',
+      'Semaglutide Membership is a flat $125/month program for provider-guided Semaglutide care with Vitamin B12 or Glycine options. You get structured support, a locked rate while continuously enrolled, and clear separation between the membership program and medication fulfillment.',
     highlights: [
-      '$149 Flat Monthly Rate',
+      '$125 Flat Monthly Rate',
       'Provider-Guided Care',
       'Included Dose Range',
       'Member Product Savings',
@@ -1113,17 +1113,17 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     about: [
       'This is a membership program purchase — not a one-off retail vial checkout. Your monthly rate stays predictable while you remain continuously enrolled and your provider-selected treatment stays within the included Semaglutide formulations.',
       'When you join, you share a requested dose for intake. Your licensed provider still decides whether treatment is appropriate and which dose is approved. Medication fulfillment uses the matching retail Semaglutide vial SKU.',
-      'Selected shipping renews monthly with your card charge and is not included in the base $149 membership price. A one-time Initial Provider Visit ($75) may apply when required.',
+      'Selected shipping renews monthly with your card charge and is not included in the base $125 membership price. A one-time Initial Provider Visit ($75) may apply when required.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Predictable $149 monthly program pricing',
+      'Predictable $125 monthly program pricing',
       'Provider-directed adjustments within included Semaglutide options while enrolled',
       'Locked rate while membership stays continuously active and in good standing',
       'Save 15% on other eligible wellness products and accessories per program terms',
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'You enroll in the membership PROGRAM, select a requested dose, and choose Two-Day or Next-Day shipping. Your card is charged monthly for the $149 membership plus selected shipping ($179 or $199/month). A one-time Initial Provider Visit ($75) may apply when required. After provider review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU. Payment does not guarantee a prescription.',
+      'You enroll in the membership PROGRAM, select a requested dose, and choose Two-Day or Next-Day shipping. Your card is charged monthly for the $125 membership plus selected shipping ($155 or $175/month). A one-time Initial Provider Visit ($75) may apply when required. After provider review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU. Payment does not guarantee a prescription.',
     whyPeopleChooseIt: [
       'Prefer flat monthly budgeting over paying per retail vial strength',
       'Want ongoing provider-guided Semaglutide care with a clear program maximum',
@@ -1135,7 +1135,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     importantInformation:
       'Membership enrollment and payment do not guarantee a prescription. Availability depends on provider judgment, pharmacy fulfillment, and applicable requirements.',
     benefits: [
-      'Flat $149 monthly program rate for Semaglutide membership',
+      'Flat $125 monthly program rate for Semaglutide membership',
       'Locked membership pricing while continuously enrolled in good standing',
       'Provider-directed formulation adjustments within included Semaglutide options',
       'Save 15% on other eligible wellness products',
@@ -1153,9 +1153,9 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
   'tirzepatide-membership': {
     benefitHeadline: 'Flat Monthly Tirzepatide Care Through the Included Maximum',
     shortDescription:
-      'Tirzepatide Membership is a flat $275/month program for provider-guided Tirzepatide care with Vitamin B12 or Glycine options through the included dose maximum (formulations through 15mg). It is built for customers who want dual-pathway medication support with predictable membership pricing — not per-vial retail checkout.',
+      'Tirzepatide Membership is a flat $179/month program for provider-guided Tirzepatide care with Vitamin B12 or Glycine options through the included dose maximum (formulations through 15mg). It is built for customers who want dual-pathway medication support with predictable membership pricing — not per-vial retail checkout.',
     highlights: [
-      '$275 Flat Monthly Rate',
+      '$179 Flat Monthly Rate',
       'Through 15mg Maximum',
       'Provider-Guided Care',
       'Member Product Savings',
@@ -1163,17 +1163,17 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     about: [
       'This membership is a program purchase with one predictable monthly rate through the included Tirzepatide maximum. It is not interchangeable with Semaglutide Membership, and 30mg is not part of this program.',
       'You choose a requested dose when joining. A licensed provider reviews eligibility and may approve a different dose. Fulfillment uses the retail Tirzepatide vial SKU that matches the approved medication strength.',
-      'Selected shipping renews monthly with your card charge and is not included in the base $275 membership price. A one-time Initial Provider Visit ($75) may apply when required.',
+      'Selected shipping renews monthly with your card charge and is not included in the base $179 membership price. A one-time Initial Provider Visit ($75) may apply when required.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Predictable $275 monthly program pricing through the included maximum',
+      'Predictable $179 monthly program pricing through the included maximum',
       'Provider-directed adjustments within listed Tirzepatide formulations while enrolled',
       'Locked rate while membership stays continuously active and in good standing',
       'Save 15% on other eligible wellness products and accessories per program terms',
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'Enrollment purchases the membership PROGRAM. You select a requested formulation and shipping. Your card is charged monthly for the $275 membership plus selected shipping. A one-time Initial Provider Visit ($75) may apply when required. Requested formulation informs intake; approved treatment drives fulfillment. Payment does not guarantee a prescription.',
+      'Enrollment purchases the membership PROGRAM. You select a requested formulation and shipping. Your card is charged monthly for the $179 membership plus selected shipping. A one-time Initial Provider Visit ($75) may apply when required. Requested formulation informs intake; approved treatment drives fulfillment. Payment does not guarantee a prescription.',
     whyPeopleChooseIt: [
       'Want Tirzepatide’s dual-pathway option with flat monthly budgeting',
       'Prefer a clear included maximum through 15mg',
@@ -1185,7 +1185,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     importantInformation:
       'Payment and enrollment do not guarantee a prescription. Tirzepatide Membership is not interchangeable with Semaglutide Membership. 30mg is not included.',
     benefits: [
-      'Flat $275 monthly program rate through included Tirzepatide maximum',
+      'Flat $179 monthly program rate through included Tirzepatide maximum',
       'Locked membership pricing while continuously enrolled in good standing',
       'Provider-directed adjustments within included formulations through 15mg',
       'Save 15% on other eligible wellness products',

@@ -31,16 +31,16 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Kashu/Tagada gate: `resolveKashuCardEnabledFlag` — explicit `VITE_KASHU_CARD_ENABLED=false` kills card; `true` forces on; **undefined/empty defaults ON** (do not key off `import.meta.env.PROD` — Bolt Preview often builds non-PROD without reliable VITE injection). Prefer Tagada hosted checkout/init over Pay V2. If hosted init fails, show contact/retry copy — do **not** auto-fall back to public ACH/Wire.
 - Card eligibility: one-time carts (no membership+ordinary-merchandise mix), **or** SEM/TIRZ membership recurring carts with optional required provider-visit SKU (IPV/FUV) as a one-time enrollment line; unsupported shipping, unmapped SKUs, and **any unexpected `tax_cents > 0`** (`TAGADA_UNEXPECTED_TAX_AMOUNT` fail-safe). Do not re-enable separate MBM tax add-ons without an explicit product decision.
 - **Membership Tagada card recurring (SEM / TIRZ):**
-  - Semaglutide Membership `MBM-MEM-SEM-MEM-001` — **$149/month base** (display) — base Tagada `price_344d3dacb4ab` (`variant_6973906c4bd6`) — keep; do not delete
-  - Tirzepatide Membership `MBM-MEM-TIR-MEM-001` — **$275/month base** (display) — base Tagada `price_2d2dd07b2f73` (`variant_b3890c799e09`). Historical $249 `price_5cf1fa89610c` remains in Tagada for old subscriptions — do not delete; do not use for new enrollments
+  - Semaglutide Membership `MBM-MEM-SEM-MEM-001` — **$125/month base** (display) — base Tagada `price_307f4d84658d` (`variant_6973906c4bd6`) — keep; do not delete
+  - Tirzepatide Membership `MBM-MEM-TIR-MEM-001` — **$179/month base** (display) — base Tagada `price_321bc7a3ea7e` (`variant_b3890c799e09`). Historical $249 `price_5cf1fa89610c` remains in Tagada for old subscriptions — do not delete; do not use for new enrollments. Historical SEM $149/$179/$199 and TIR $275/$305/$325 price objects also remain for existing subscriptions; do not use for new enrollments
   - **Combo recurring prices (membership + selected shipping)** — enrollment uses these `priceId`s (not base):
-    - SEM + Two-Day `$179/mo` → `price_41179f7cafe2` (17900)
-    - SEM + Next-Day `$199/mo` → `price_7ce0f74a7509` (19900)
-    - TIRZ + Two-Day `$305/mo` → `price_94c92b6e5749` (30500)
-    - TIRZ + Next-Day `$325/mo` → `price_d6941e334598` (32500)
+    - SEM + Two-Day `$155/mo` → `price_f89402dcbe76` (15500)
+    - SEM + Next-Day `$175/mo` → `price_fc83af356019` (17500)
+    - TIRZ + Two-Day `$209/mo` → `price_dd3f65ebcee2` (20900)
+    - TIRZ + Next-Day `$229/mo` → `price_da1063335965` (22900)
     - Historical TIR combos `price_e0ebef9851a8` (27900) / `price_ef9ea132d6cf` (29900) remain for old subscriptions only
   - Hosted recurring init **must** send both `variantId` + **combo** `priceId` (priceId authoritative). Do not recreate Tagada store ShippingRates. Do not use `addDeliveryOnRebill`.
-  - Tagada handles automatic monthly rebill; MBM `customer_memberships` + `tagada-webhook` `subscription/*` events are authoritative for status. Rebill amount validation uses stored `monthly_amount_cents` (combo), not always 14900/27500.
+  - Tagada handles automatic monthly rebill; MBM `customer_memberships` + `tagada-webhook` `subscription/*` events are authoritative for status. Rebill amount validation uses stored `monthly_amount_cents` (combo), not always the current base amount.
   - **Browser return never activates membership.** Activate only on Tagada payment/subscription evidence.
   - **3-month minimum** is MBM-enforced (`minimum_term_ends_at`) — do not assume Tagada-native cancel lock.
   - Recurring program product remains **not shippable** (`isShippable=false`, `addDeliveryOnRebill=false`). Shipping dollars are inside the combo recurring price — **do not** append `MBM-SHIP-*` on membership enrollment (prevents duplicate shipping). Membership value stays excluded from the **$500** free-shipping merchandise threshold.
@@ -53,7 +53,7 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Tagada credentials: keep real `TAGADA_API_KEY` / `TAGADA_STORE_ID` in **BSG Edge secrets**. Agent env may only see Management API digests — call Tagada via Edge (`tagada-product-sync`) instead of treating digests as keys. Store binding uses `checkout.mybaremethod.com`.
 - Public `public_order_number` values are allocated server-side via Postgres `generate_public_order_number()` (`nextval` on `order_number_seq`). If the sequence drifts behind existing `MBM-YYYY-######` rows, insert can hit `orders_public_order_number_key` — repair with migration `20260819120000_repair_public_order_number_allocator.sql` (collision-skipping allocator + sequence resync). `create-invoice-order` also retries allocation on 23505 and never returns raw Postgres errors to customers.
 - Payment instructions: `/order/payment/:publicOrderNumber?token=...` (token issued at order creation). Admin marks funds received via Orders UI / `mark-payment-received` after verification (ACH/Wire emergency path).
-- Shared pricing authorization still lives in `src/lib/checkout/` (membership $149/$275, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold). Accessory/Provider Care **add-on tax rates are 0** (tax-inclusive).
+- Shared pricing authorization still lives in `src/lib/checkout/` (membership $125/$179, Auto-Refill 10%, member 15%, accessory 15% non-stacking, Two-Day $30 / Next-Day $50, memberships excluded from $500 free-shipping merchandise threshold). Accessory/Provider Care **add-on tax rates are 0** (tax-inclusive).
 - Legacy Stripe Edge Functions remain in repo but must not be deployed for launch. **Do not re-enable Stripe.**
 
 ### Promo code OGTBM (pre-production)
@@ -61,7 +61,7 @@ There is a single service (the Vite frontend). Standard commands live in `packag
 - Code: **`OGTBM`** — **$50 off each eligible unit** (quantity-aware). Not $50 off the order. Never discounts a line below $0.
 - Authoritative math: `src/lib/promo/ogtbmPromo.ts` (+ Edge `_shared/ogtbmPromo.ts`). Applied in `buildAuthoritativeOrderLines` / `create-invoice-order`; persists `orders.promo_code` + `discount_cents`.
 - **Excluded** (structured category/SKU/productId — not display-name): accessories, dermatology (`prescription-skin-hair` / `MBM-SH-*`), all provider care (`pc*` / `MBM-PC-*` including Lab Kit + Lab Review), shipping (`MBM-SHIP-*`), memberships (`m1`/`m2` / `MBM-MEM-*`).
-- **Membership:** OGTBM must never alter combo recurring amounts (SEM Two-Day 17900 / SEM Next-Day 19900 / TIRZ Two-Day 30500 / TIRZ Next-Day 32500). Checkout UI blocks promo on membership carts; `create-kashu-checkout-session` rejects membership enrollment when `discount_cents > 0`.
+- **Membership:** OGTBM must never alter combo recurring amounts (SEM Two-Day 15500 / SEM Next-Day 17500 / TIRZ Two-Day 20900 / TIRZ Next-Day 22900). Checkout UI blocks promo on membership carts; `create-kashu-checkout-session` rejects membership enrollment when `discount_cents > 0`.
 - Card path: when OGTBM applies, Edge binds discounted one-time Tagada `priceId`s on eligible variants so hosted total equals MBM `orders.total_cents`. Do not rely on Tagada dashboard promo rules for eligibility.
 
 ### HRT Lab Kit + Lab Review (pre-production)
@@ -185,8 +185,8 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
   - **Standard one-time:** `(cost × 1.75) + pharmacy shipping` → nearest whole-dollar **$X9** (equidistant → round UP).
   - **3-month:** `((monthly cost × 1.75) + monthly shipping) × 3` → nearest $X9.
   - **6-month:** `((monthly cost × 1.75) + monthly shipping) × 6` → nearest $X9.
-  - **Semaglutide Compound Any Dose Membership:** **$149/month** (owner-set; not auto 1.75).
-  - **Tirzepatide Compound Any Dose Membership:** **$275/month** (owner-set; not auto 1.75).
+  - **Semaglutide Compound Any Dose Membership:** **$125/month** (owner-set; not auto 1.75).
+  - **Tirzepatide Compound Any Dose Membership:** **$179/month** (owner-set; not auto 1.75).
   - Medication shipping is **included** in retail — do not add pharmacy shipping again at website checkout. Accessory shipping is separate. Provider visits separate.
   - Never treat per-unit / per-capsule / per-mL cost as complete dispense cost without verified quantity.
   - Newest verified pharmacy/formulary cost is cost authority. Current GEN and website retail are reference only.
@@ -202,9 +202,9 @@ Before the customer account portal can be fully tested in Bolt, manually verify:
 - Flags stay OFF: `WEBSITE_FAMILY_CUTOVER_ENABLED`, `REAL_GEN_ORDER_SUBMISSION_ENABLED`. Do not publish new architecture, remove legacy B6, enable GEN/Whop cutover, or invent GEN `clientProductId`s.
 - **Product family UX (locked):** ONE patient-facing product family with selectors/variants underneath. Multiple website variants may route to **one** GEN Client Product. Do **not** expose GEN IDs, pharmacy names, internal routing state, or QA panels on the patient storefront.
 - **Pairing policy (amended):** `docs/MBM_GEN_PAIRING_POLICY_AMENDMENT_1.md`. Provider may choose among compatible attached formulations/strengths. `genPairingVerified` may be true when the GEN CP has ≥1 **compatible** formulary medication (correct family/additive/form + approved pharmacy) and **no material mismatches**. Exact strength/package equality is **not** required when clinically compatible. Still reject B12↔Glycine cross-wire on single-ladder CPs, inj/nasal mismatch, wrong pharmacy family, **B6 in new SEM/TIR architecture**, unrelated blends.
-- **Pricing authority (locked):** Patient-facing price comes from **MBM architecture** (standard ×1.75+$ship→$X9; SEM membership **$149**; TIR membership **$275**). Backend GEN price/title does **not** automatically control storefront display.
+- **Pricing authority (locked):** Patient-facing price comes from **MBM architecture** (standard non-GLP pricing remains owner-locked; GLP-1 one-time uses ×2+$ship clean pricing; SEM membership **$125**; TIR membership **$179**). Backend GEN price/title does **not** automatically control storefront display.
 - **Owner working-set authority:** `docs/MBM_OWNER_SELECTED_GEN_WORKING_SET.md` (+ `.json`) — **22 owner-supplied GEN URLs** = `OWNER_SELECTED_GEN_WORKING_SET` (active). Prior Locked-7 = `SUPERSEDED_BY_OWNER_DIRECT_GEN_WORKING_SET`.
-- **Final routing preflight (OWNER APPROVED):** `docs/MBM_OWNER_SET_FINAL_ROUTING_PREFLIGHT.md` (+ `.json`). **TIR_SINGLE_BACKEND_CP_APPROVED=YES** — all TIR selectors (incl. membership @$275) may use `SvFDJ7W4nmWL2bkLUMMS` (tier CREATEs=0; remove Glycine 3-PACK before READY). Do not use GEN $279 as storefront price.
+- **Final routing preflight (OWNER APPROVED):** `docs/MBM_OWNER_SET_FINAL_ROUTING_PREFLIGHT.md` (+ `.json`). **TIR_SINGLE_BACKEND_CP_APPROVED=YES** — all TIR selectors (incl. membership @$179) may use `SvFDJ7W4nmWL2bkLUMMS` (tier CREATEs=0; remove Glycine 3-PACK before READY). Do not use GEN $279 as storefront price.
 - **Backend completion:** `docs/MBM_GEN_BACKEND_COMPLETION_1.md` (+ `.json`). Formulary pairing writes are **manual GEN admin** (Client Products API cannot attach/remove medications).
 - **PR #19:** must remain **OPEN / NOT MERGED**. Publish / cutover / real GEN orders require **separate owner authorization**.
 - Registry: `pairingVerificationRegistry.ts` → apply via `applyPairingVerification.ts`. Do not set `genPairingVerified=true` unless live GEN read confirms acceptable pairing. Do not activate FORMULARY_PENDING or FUTURE_HIDDEN variants.

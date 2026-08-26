@@ -9,7 +9,7 @@ import { buildGlp1MembershipCartFields } from '@/lib/glp1/membershipCart';
 import { glp1FamilyIdFromSlug } from '@/lib/glp1/patientRequestedDose';
 
 const howItWorks = [
-  { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($149/month) or Tirzepatide ($275/month) membership, your requested dose, and shipping (Two-Day or Next-Day).' },
+  { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($125/month) or Tirzepatide ($179/month) membership, your requested dose, and shipping (Two-Day or Next-Day).' },
   { icon: PackageCheck, title: 'Review due today vs monthly', description: 'Confirm membership, selected shipping, and any one-time Initial Provider Visit ($75 when required). Due-today totals are not the ongoing monthly rate.' },
   { icon: Lock, title: 'Pay by Credit / Debit Card', description: 'Complete enrollment through secure hosted card checkout. Your card is charged monthly for membership plus selected shipping while active.' },
   { icon: ClipboardList, title: 'Complete intake', description: 'After payment is confirmed, complete a secure medical intake so a licensed provider can review your information.' },
@@ -18,12 +18,12 @@ const howItWorks = [
 ];
 
 const faqs = [
-  { q: 'Will my price increase if my treatment changes?', a: 'Your Semaglutide membership remains $149 per month while your membership stays continuously active and your provider-selected treatment remains within the included program. Your Tirzepatide membership remains $275 per month while your provider-selected treatment remains within the included program through 15mg.' },
+  { q: 'Will my price increase if my treatment changes?', a: 'Your Semaglutide membership remains $125 per month while your membership stays continuously active and your provider-selected treatment remains within the included program. Your Tirzepatide membership remains $179 per month while your provider-selected treatment remains within the included program through 15mg.' },
   { q: 'Can I choose my dose?', a: 'No. Your licensed provider determines the appropriate formulation, strength, and treatment plan based on your eligibility and clinical information.' },
   { q: 'Does joining guarantee a prescription?', a: 'No. Membership enrollment and payment do not guarantee prescribing. A licensed provider must review your information and determine whether treatment is appropriate.' },
   { q: 'What happens if I cancel?', a: 'Canceling ends your locked membership rate. Future enrollment is subject to the membership price available at that time.' },
   { q: 'Can I switch programs?', a: 'Yes, when clinically appropriate. Switching programs requires enrollment at the current price for the new membership.' },
-  { q: 'Is the highest Tirzepatide formulation included?', a: 'The $275 membership includes eligible provider-selected formulations through 15mg.' },
+  { q: 'Is the highest Tirzepatide formulation included?', a: 'The $179 membership includes eligible provider-selected formulations through 15mg.' },
   { q: 'Are labs included?', a: 'Laboratory testing is not included unless the current workflow specifically states otherwise. A provider may request labs before or during treatment.' },
   { q: 'Is shipping included?', a: 'Two-Day Shipping ($30) and Next-Day Shipping ($50) are selected at checkout and included with each monthly membership renewal. Medication fulfillment remains subject to required provider review and approval. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Certain medications may require temperature-controlled packaging.' },
   { q: 'How do I pay for my membership?', a: 'Join with Credit / Debit Card. Your card is charged monthly while your membership stays active. A 3-month minimum commitment applies. Your selected shipping method is included with each monthly membership renewal.' },
@@ -31,7 +31,7 @@ const faqs = [
 ];
 
 const comparisonRows: { feature: string; sema: string | boolean; tirz: string | boolean; onetime: string | boolean }[] = [
-  { feature: 'Monthly price', sema: '$149', tirz: '$275', onetime: 'Varies by selected product' },
+  { feature: 'Monthly price', sema: '$125', tirz: '$179', onetime: 'Varies by selected product' },
   { feature: '15% off eligible wellness products', sema: true, tirz: true, onetime: false },
   { feature: '15% off accessories', sema: true, tirz: true, onetime: false },
   { feature: 'Included program', sema: 'Eligible included Semaglutide formulations', tirz: 'Eligible formulations through 15mg', onetime: 'Selected purchased formulation' },
@@ -296,7 +296,7 @@ export function MembershipsPage() {
               <div>
                 <h3 className="font-serif text-lg text-ink-900 mb-1">Tirzepatide program maximum</h3>
                 <p className="text-sm text-ink-500">
-                  The $275 Tirzepatide rate includes eligible provider-selected formulations through 15mg.
+                  The $179 Tirzepatide rate includes eligible provider-selected formulations through 15mg.
                 </p>
               </div>
             </div>
@@ -375,7 +375,7 @@ export function MembershipsPage() {
             ))}
             <li className="flex items-start gap-3 text-sm text-ink-600">
               <Check size={16} className="flex-shrink-0 mt-0.5 text-gold-500" />
-              <span>The $275 Tirzepatide locked rate includes eligible provider-selected formulations through 15mg.</span>
+              <span>The $179 Tirzepatide locked rate includes eligible provider-selected formulations through 15mg.</span>
             </li>
           </ul>
           <div className="mt-8 text-center">

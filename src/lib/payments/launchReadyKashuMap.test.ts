@@ -41,6 +41,31 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
     expect(resolveGenApiOrdersEnabled({})).toBe(false);
   });
 
+  it('maps 8 live-verified vial-specific SKUs and leaves SEM-006 unmapped', () => {
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-005']).toMatchObject({
+      tagada_product_id: 'product_6b750325addf',
+      tagada_variant_id: 'variant_a726bfe758b3',
+      tagada_price_id: 'price_1c3c8051e3b5',
+      mbm_price_cents: 9900,
+      tagada_price_cents: 9900,
+    });
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-GLY-005']).toMatchObject({
+      tagada_product_id: 'product_dcc64482bbbf',
+      tagada_variant_id: 'variant_1f6e4f4d2cb4',
+      tagada_price_id: 'price_cea49d485af6',
+      mbm_price_cents: 9900,
+      tagada_price_cents: 9900,
+    });
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-005']?.tagada_price_cents).toBe(13900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-006']?.tagada_price_cents).toBe(15900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-007']?.tagada_price_cents).toBe(17900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-GLY-005']?.tagada_price_cents).toBe(13900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-GLY-006']?.tagada_price_cents).toBe(15900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-GLY-007']?.tagada_price_cents).toBe(17900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-006']).toBeUndefined();
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-GLY-006']).toBeUndefined();
+  });
+
   it('inventories live-verified Tagada maps for every family SKU that is not a pending vial split', () => {
     const pending = new Set<string>(NEW_ONE_TIME_VIAL_SKUS);
     const mapped = LAUNCH_READY_ONE_TIME_SKUS.filter((sku) => !pending.has(sku));

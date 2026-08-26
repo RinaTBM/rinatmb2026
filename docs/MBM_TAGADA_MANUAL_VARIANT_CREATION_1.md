@@ -254,16 +254,16 @@ Do not fill unknown IDs. Owner pastes live `variant_…` and `price_…` after d
 
 | MBM SKU | TAGADA PRODUCT ID | TAGADA VARIANT ID | TAGADA PRICE ID | MBM PRICE CENTS | TAGADA PRICE CENTS | ACTIVE |
 | --- | --- | --- | --- | --- | --- | --- |
-| MBM-WM-SEM-B12-005 | product_6b750325addf | | | 9900 | | |
-| MBM-WM-SEM-B12-006 | product_6b750325addf | | | 11900 | | |
-| MBM-WM-SEM-GLY-005 | product_dcc64482bbbf | | | 9900 | | |
-| MBM-WM-SEM-GLY-006 | product_dcc64482bbbf | | | 11900 | | |
-| MBM-WM-TIR-B12-005 | product_74cd4752c9d6 | | | 13900 | | |
-| MBM-WM-TIR-B12-006 | product_74cd4752c9d6 | | | 15900 | | |
-| MBM-WM-TIR-B12-007 | product_74cd4752c9d6 | | | 17900 | | |
-| MBM-WM-TIR-GLY-005 | product_861e0edd8ab2 | | | 13900 | | |
-| MBM-WM-TIR-GLY-006 | product_861e0edd8ab2 | | | 15900 | | |
-| MBM-WM-TIR-GLY-007 | product_861e0edd8ab2 | | | 17900 | | |
+| MBM-WM-SEM-B12-005 | product_6b750325addf | variant_a726bfe758b3 | price_1c3c8051e3b5 | 9900 | 9900 | YES |
+| MBM-WM-SEM-B12-006 | product_6b750325addf | | | 11900 | | MISSING FROM LIVE TAGADA GET/LIST |
+| MBM-WM-SEM-GLY-005 | product_dcc64482bbbf | variant_1f6e4f4d2cb4 | price_cea49d485af6 | 9900 | 9900 | YES |
+| MBM-WM-SEM-GLY-006 | product_dcc64482bbbf | | | 11900 | | MISSING FROM LIVE TAGADA GET/LIST |
+| MBM-WM-TIR-B12-005 | product_74cd4752c9d6 | variant_1f1dab8b6177 | price_ea84cec6ed40 | 13900 | 13900 | YES |
+| MBM-WM-TIR-B12-006 | product_74cd4752c9d6 | variant_dd351c9f2fd1 | price_e6ef11aa3bd1 | 15900 | 15900 | YES |
+| MBM-WM-TIR-B12-007 | product_74cd4752c9d6 | variant_56e8f07d6ab2 | price_bc09750e5e79 | 17900 | 17900 | YES |
+| MBM-WM-TIR-GLY-005 | product_861e0edd8ab2 | variant_7726800f83dd | price_33457ae01ee9 | 13900 | 13900 | YES |
+| MBM-WM-TIR-GLY-006 | product_861e0edd8ab2 | variant_57cd2414aabf | price_2a8c8629ae5c | 15900 | 15900 | YES |
+| MBM-WM-TIR-GLY-007 | product_861e0edd8ab2 | variant_1446f75121d7 | price_5bcb6c9f666c | 17900 | 17900 | YES |
 
 After all 10 rows are filled:
 
@@ -298,9 +298,9 @@ TIR B12: 3
 TIR GLYCINE: 3
 DUPLICATE PRODUCT FAMILIES REQUIRED: NO
 OWNER MANUAL TAGADA ACTION REQUIRED: YES
-KASHU MAP MIGRATION PREPARED: YES
+KASHU MAP MIGRATION PREPARED: YES (8/10 live IDs filled; SEM-006 placeholders remain)
 PR #23 DEPLOYABLE NOW: NO
-PR #23 DEPLOYABLE AFTER VARIANTS + MAP: YES
+PR #23 DEPLOYABLE AFTER VARIANTS + MAP: YES (blocked on SEM-B12-006 and SEM-GLY-006 live Tagada variants)
 GEN API ORDERS: OFF
 GEN HANDOFF: OFF
 STOP.

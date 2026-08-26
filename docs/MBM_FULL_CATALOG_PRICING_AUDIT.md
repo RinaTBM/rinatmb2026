@@ -1,8 +1,8 @@
 # MBM Full Catalog Pricing Audit
 
-**Audit:** `MBM-FULL-CATALOG-PRICING-AUDIT-1`  
-**Mode:** READ-ONLY analysis; no implementation.  
-**Generated:** 2026-08-26  
+**Audit:** `MBM-FULL-CATALOG-PRICING-AUDIT-1`
+**Mode:** READ-ONLY analysis; no implementation.
+**Generated:** 2026-08-26
 
 ## Executive decision
 
@@ -64,7 +64,7 @@ Suggested monthly prices use nearest whole-dollar `$X9`, ties up. Locked multi-m
 
 ### Semaglutide
 
-Current: **$89 / $99 / $109 / $109 / $109 / $109 / $119 / $119**  
+Current: **$89 / $99 / $109 / $109 / $109 / $109 / $119 / $119**
 Model B suggested: **$109 / $119 / $119 / $119 / $129 / $129 / $139 / $139**
 
 | Formulation | Weekly dose | Monthly mg | Vial | Cost | Ship | Total cost | Website | Tagada | A raw | A suggested | A profit | A margin | B raw | B suggested | B profit | B margin | Δ profit |
@@ -90,7 +90,7 @@ All current SEM B12/Glycine dose prices conform to Model A. Matching formulation
 
 ### Tirzepatide
 
-Current: **$119 / $139 / $149 / $159 / $169 / $179**  
+Current: **$119 / $139 / $149 / $159 / $169 / $179**
 Model B suggested: **$139 / $159 / $179 / $189 / $199 / $209**
 
 | Formulation | Weekly dose | Monthly mg | Vial | Cost | Ship | Total cost | Website | Tagada | A raw | A suggested | A profit | A margin | B raw | B suggested | B profit | B margin | Δ profit |

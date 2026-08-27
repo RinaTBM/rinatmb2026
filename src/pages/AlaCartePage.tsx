@@ -11,10 +11,10 @@ export function AlaCartePage() {
       {/* Hero */}
       <section className="py-16 md:py-20 text-center">
         <div className="container-lux max-w-2xl">
-          <p className="eyebrow mb-3">No membership required</p>
-          <h1 className="font-serif text-5xl md:text-6xl text-ink-900 mb-4">Shop Without a Membership</h1>
+          <p className="eyebrow mb-3">Buy once</p>
+          <h1 className="font-serif text-5xl md:text-6xl text-ink-900 mb-4">One-Time Purchases</h1>
           <p className="text-ink-500 mb-8">
-            Purchase eligible products individually — no membership commitment. Each product displays its approved
+            Purchase eligible products individually with no recurring commitment. Each product displays its approved
             starting price and any intake or provider requirements.
           </p>
         </div>
@@ -71,13 +71,13 @@ export function AlaCartePage() {
       {/* CTA */}
       <section className="py-16 bg-cream-100/50">
         <div className="container-lux text-center max-w-lg">
-          <h2 className="font-serif text-3xl text-ink-900 mb-3">Want to lock in your pricing?</h2>
+          <h2 className="font-serif text-3xl text-ink-900 mb-3">Prefer convenient monthly renewals?</h2>
           <p className="text-ink-500 mb-6">
-            Memberships offer locked-in monthly pricing, provider support, and member-only discounts on accessories
-            and wellness products.
+            Eligible prescription products offer Subscribe &amp; Save with 15% medication savings. Your selected
+            $30 or $50 shipping method renews with every monthly order.
           </p>
-          <Link to="/memberships" className="btn-primary">
-            Explore Memberships <ArrowRight size={16} />
+          <Link to="/subscriptions" className="btn-primary">
+            Explore Subscribe &amp; Save <ArrowRight size={16} />
           </Link>
         </div>
       </section>

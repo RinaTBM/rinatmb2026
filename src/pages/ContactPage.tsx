@@ -119,7 +119,7 @@ export function ContactPage() {
                       <option value="order">Order Question</option>
                       <option value="product">Product Inquiry</option>
                       <option value="therapy">Therapy & Intake</option>
-                      <option value="membership">Membership</option>
+                      <option value="subscription">Subscription</option>
                       <option value="other">Other</option>
                     </select>
                   </div>

@@ -2,7 +2,7 @@ import { AccountShell } from './AccountShell';
 import { useAccountNoIndex } from './useAccountNoIndex';
 
 type AccountComingSoonPageProps = {
-  active: 'orders' | 'membership' | 'auto-refill' | 'requests';
+  active: 'orders' | 'membership' | 'requests';
   title: string;
   description: string;
 };

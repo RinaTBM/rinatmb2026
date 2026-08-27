@@ -313,8 +313,6 @@ export function resolveProductLine(
   }
 
   const qty = Math.max(1, Math.round(item.quantity) || 1);
-  const purchaseType: PurchaseType =
-    item.purchaseType ?? (item.subscription ? 'auto_refill' : 'one_time');
 
   if (isAccessoryLine(item)) {
     const unit = authorizeAccessoryUnitCents(item, isActiveMember);

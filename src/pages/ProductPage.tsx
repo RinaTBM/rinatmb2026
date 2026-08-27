@@ -30,13 +30,18 @@ import { RxAvailabilityBanner } from '@/components/RxAvailabilityBanner';
 
 function customerVariantLabel(productSlug: string, fallback: string): string {
   const peptideLabels: Record<string, string> = {
-    'fat-burner': 'AOD-9604 + MOTS-C + Tesamorelin',
+    'fat-burner': 'Fat Burner Peptide',
     'selank': 'Selank',
     'semax': 'Semax',
     'selank-semax-nasal-spray': 'Selank + Semax',
     'tesamorelin': 'Tesamorelin',
     'bpc-157-tb-500': 'BPC-157 + TB-500',
   };
+  if (productSlug === 'nad-plus') {
+    if (/10\s*mL/i.test(fallback)) return 'NAD+ Injection · 10 mL';
+    if (/5\s*mL/i.test(fallback)) return 'NAD+ Injection · 5 mL';
+    return 'NAD+ Nasal Spray';
+  }
   return peptideLabels[productSlug] ?? fallback;
 }
 
@@ -243,9 +248,9 @@ function WellnessProductPage({ slug }: { slug: string }) {
                   {product.bestSeller && (
                     <span className="rounded-full bg-ink-900 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-50">Best Seller</span>
                   )}
-                  {product.memberPricingEligible && !product.excludedFromDiscounts && (
+                  {options.some(option => option.kind === 'auto_refill') && (
                     <span className="rounded-full bg-gold-400 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-ink-900">
-                      Members Save {settings.memberDiscountPercent}%
+                      Subscribe &amp; Save {settings.memberDiscountPercent}%
                     </span>
                   )}
                   {product.requiresProviderReview && (

@@ -12,7 +12,7 @@ const faqCategories = [
       },
       {
         q: 'How much is shipping?',
-        a: 'For eligible one-time medication/product orders: Two-Day Shipping is $30 and Next-Day Shipping is $50 (fixed fees). Membership shipping is selected at enrollment and recurs monthly (+$30 Two-Day or +$50 Next-Day). Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping; membership value is excluded from that threshold.',
+        a: 'For eligible one-time medication/product orders: Two-Day Shipping is $30 and Next-Day Shipping is $50 (fixed fees). For Subscribe & Save, the selected $30 or $50 shipping method renews with each monthly order. Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping; subscription value is excluded from that threshold.',
       },
       {
         q: 'When will my order ship?',
@@ -20,7 +20,7 @@ const faqCategories = [
       },
       {
         q: 'Do you offer free shipping?',
-        a: 'Orders of $500 or more in eligible ordinary merchandise are eligible for free shipping. Membership value is excluded from the $500 free-shipping threshold. Standard Shipping is not offered.',
+        a: 'Orders of $500 or more in eligible ordinary merchandise are eligible for free shipping. Prescription subscription value is excluded from the $500 free-shipping threshold. Standard Shipping is not offered.',
       },
       { q: 'Can I track my order?', a: 'Yes. Track from the Track Order page using your order number, or from your account dashboard.' },
       { q: 'Do you ship internationally?', a: 'We currently ship within the United States. International shipping is coming soon.' },
@@ -47,7 +47,7 @@ const faqCategories = [
       },
       {
         q: 'Can I use OGTBM?',
-        a: 'Yes, when the promotion is available. Enter OGTBM at checkout. It provides $50 off each eligible item (not $50 off the entire order). Quantity applies per eligible item/unit where supported. A promo cannot reduce an item below $0. Promotions are generally non-stackable. OGTBM does not change ongoing recurring membership renewal amounts.',
+        a: 'Yes, when the promotion is available. Enter OGTBM at checkout. It provides $50 off each eligible item (not $50 off the entire order). Quantity applies per eligible item/unit where supported. A promo cannot reduce an item below $0. Promotions are generally non-stackable. OGTBM does not change recurring subscription renewal amounts.',
       },
       {
         q: 'What does OGTBM exclude?',
@@ -55,7 +55,7 @@ const faqCategories = [
       },
       {
         q: 'Can I pay over time with Cherry?',
-        a: 'Financing options may be available through Cherry. Approval and terms are determined by Cherry. Cherry is a financing discovery option and does not replace My Bare Method checkout or recurring membership card billing.',
+        a: 'Financing options may be available through Cherry. Approval and terms are determined by Cherry. Cherry is a financing discovery option and does not replace My Bare Method checkout or recurring subscription card billing.',
       },
     ],
   },
@@ -64,18 +64,18 @@ const faqCategories = [
     faqs: [
       {
         q: 'What purchasing options do you offer?',
-        a: 'New purchases are One-Time Purchase or, where explicitly eligible (Semaglutide and Tirzepatide), Wellness Membership. Active Wellness Members save 15% on eligible wellness products and accessories. Discounts never stack. Provider care, shipping, and taxes are never discounted.',
+        a: 'Eligible prescription products offer One-Time Purchase or Subscribe & Save. Subscribe & Save applies 15% medication savings and renews monthly with the selected $30 or $50 shipping method. Provider care, labs, services, and accessories remain one-time purchases.',
       },
       {
         q: 'Can I change my medication myself?',
-        a: 'Medication strength and provider-directed treatment cannot be modified by customers in the account portal. Submit a request or contact support if you need help with an existing order or membership.',
+        a: 'Medication strength and provider-directed treatment cannot be modified by customers in the account portal. Submit a request or contact support if you need help with an existing order or subscription.',
       },
     ],
   },
   {
     title: 'Telemedicine & Provider Care',
     faqs: [
-      { q: 'What is Provider Care?', a: 'Provider Care includes services such as the Initial Provider Visit, Follow-Up Visit, and Laboratory Review. These involve scheduling and/or medical intake and review by a licensed provider when applicable. Provider Care is never discounted by membership savings.' },
+      { q: 'What is Provider Care?', a: 'Provider Care includes services such as the Initial Provider Visit, Follow-Up Visit, and Laboratory Review. These involve scheduling and/or medical intake and review by a licensed provider when applicable. Provider Care is not included in prescription subscription savings.' },
       { q: 'What happens after I order a Provider Care product?', a: 'After payment has been received, you will receive an email link to complete a secure medical intake when required. A licensed provider reviews your case within 2 business days.' },
       { q: 'What if I am not approved?', a: 'If a licensed provider determines that a requested treatment is not medically appropriate, the provider-directed product will not be fulfilled. If payment for that product has already been received, eligible charges will be refunded in accordance with our refund policy.' },
       { q: 'Do you offer telemedicine appointments?', a: 'Yes. We offer telemedicine services via Zoom. Appointments are booked directly on our website by the patient.' },
@@ -119,55 +119,55 @@ const faqCategories = [
     ],
   },
   {
-    title: 'Memberships',
+    title: 'Subscribe & Save',
     faqs: [
       {
-        q: 'How does the Semaglutide membership work?',
-        a: 'Semaglutide Membership is $125/month base. You select Two-Day (+$30/month) or Next-Day (+$50/month) shipping at enrollment; that shipping recurs with each monthly card charge ($155 or $175/month). A one-time Initial Provider Visit ($75) may apply when required. Provider review is required; payment does not guarantee a prescription.',
+        q: 'How does Subscribe & Save work?',
+        a: 'Choose Subscribe & Save on an eligible prescription product to receive 15% off its authoritative one-time medication price. Your selected $30 Two-Day or $50 Next-Day shipping method is included in every monthly renewal. Provider review is required; payment does not guarantee a prescription.',
       },
       {
-        q: 'How does the Tirzepatide membership work?',
-        a: 'Tirzepatide Membership is $179/month base. Selected shipping recurs monthly (+$30 Two-Day or +$50 Next-Day). A one-time Initial Provider Visit ($75) may apply when required. The program includes eligible formulations through 15mg. Provider review is required; payment does not guarantee a prescription.',
+        q: 'What receives the 15% savings?',
+        a: 'The 15% savings applies to the eligible prescription medication price. Shipping, provider visits, labs, services, and accessories are not discounted.',
       },
       {
-        q: 'What is charged today when I join a membership?',
-        a: 'Due today typically includes membership base + selected shipping + the $75 Initial Provider Visit when required. Examples: Semaglutide + Two-Day $230; Semaglutide + Next-Day $250; Tirzepatide + Two-Day $284; Tirzepatide + Next-Day $304. Those due-today totals are not the ongoing monthly rate.',
+        q: 'What is charged when I subscribe?',
+        a: 'The monthly total is the eligible prescription price after the 15% savings plus the selected $30 or $50 shipping method. Any required provider service is charged separately and does not renew.',
       },
       {
         q: 'What is charged every month?',
-        a: 'Monthly renewal is membership base plus your selected shipping only: Semaglutide $155 or $175/month; Tirzepatide $209 or $229/month. The Initial Provider Visit does not recur.',
+        a: 'Each monthly renewal is the discounted prescription medication amount plus your selected $30 or $50 shipping method. Provider visits, labs, services, and accessories do not recur.',
       },
       {
-        q: 'Is shipping included in the membership price?',
-        a: 'No. Shipping is not included in the base $125 / $179 membership price. You select shipping at enrollment and it is billed with each monthly renewal.',
+        q: 'Does shipping renew?',
+        a: 'Yes. The shipping method selected at enrollment is billed with every monthly medication renewal.',
       },
       {
-        q: 'Is membership shipping recurring?',
-        a: 'Yes. Selected membership shipping is included in each monthly card charge (+$30 Two-Day or +$50 Next-Day) until a valid cancellation becomes effective.',
+        q: 'Can accessories be subscribed to?',
+        a: 'No. Accessories, provider visits, labs, and other services remain one-time purchases.',
       },
       {
-        q: 'What is the 3-month minimum?',
-        a: 'Both memberships require a 3-month minimum commitment under My Bare Method membership rules. Normal self-service cancellation is not available before that term ends.',
+        q: 'Is there a minimum subscription term?',
+        a: 'Subscribe & Save renews monthly until canceled under the Subscription & Cancellation Terms.',
       },
       {
         q: 'When can I cancel?',
-        a: 'After the initial three-month commitment, you may cancel according to the current cancellation process (account, email, or cancellation form). Recurring billing continues until a valid cancellation becomes effective.',
+        a: 'You may request cancellation under the Subscription & Cancellation Terms. Recurring billing continues until a valid cancellation becomes effective.',
       },
       {
-        q: 'What happens if a membership payment fails?',
-        a: 'A failed payment may place your membership in past-due or payment-issue status. Benefits may pause, fulfillment may delay, and the membership may be canceled after notice if payment is not resolved.',
+        q: 'What happens if a subscription payment fails?',
+        a: 'A failed payment may place the subscription in past-due or payment-issue status. Fulfillment may pause or delay until payment is resolved.',
       },
       {
-        q: 'Will I keep my same price if I cancel and rejoin?',
-        a: 'No guarantee. Pricing remains locked while continuously active and in good standing. Cancellation or lapse does not guarantee the same prior price on re-enrollment.',
+        q: 'Will I keep the same price if the retail price changes?',
+        a: 'The subscription discount remains 15%, but the underlying prescription price may change with notice as permitted by the Subscription & Cancellation Terms.',
       },
       {
-        q: 'Can I buy products without a membership?',
-        a: 'Yes. Eligible products can be purchased as a One-Time Purchase at standard pricing without a Wellness Membership. Semaglutide and Tirzepatide also offer Wellness Membership as a separate recurring option.',
+        q: 'Can I buy without subscribing?',
+        a: 'Yes. Eligible products can be purchased as a One-Time Purchase at standard pricing without a recurring commitment.',
       },
       {
-        q: 'How do I cancel a membership?',
-        a: 'Submit a cancellation request from your account, or use the channels listed in Membership & Cancellation Terms. Requests are reviewed and processed by our team.',
+        q: 'How do I cancel a subscription?',
+        a: 'Submit a cancellation request from your account or contact us using the channels listed in the Subscription & Cancellation Terms.',
       },
     ],
   },
@@ -198,7 +198,7 @@ export function FaqPage() {
         <div className="container-lux max-w-2xl">
           <p className="eyebrow mb-3">We are here to help</p>
           <h1 className="font-serif text-5xl md:text-6xl text-ink-900 mb-4">Frequently Asked</h1>
-          <p className="text-ink-500 mb-8">Find answers to common questions about orders, payment, purchasing options, Provider Care, memberships, and more.</p>
+          <p className="text-ink-500 mb-8">Find answers to common questions about orders, payment, purchasing options, Provider Care, subscriptions, and more.</p>
           <div className="relative max-w-md mx-auto">
             <input
               type="text"

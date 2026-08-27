@@ -578,14 +578,14 @@ export const products: Product[] = [
     slug: 'fat-burner',
     displayName: 'Fat Burner',
     shortName: 'Fat Burner',
-    subtitle: 'AOD-9604 + MOTS-C + Tesamorelin',
+    subtitle: 'Provider-directed body-composition peptide',
     category: 'weight-management',
     goals: ['weight-management'],
     shortDescription:
-      'A provider-directed peptide blend featuring AOD-9604, MOTS-C, and Tesamorelin for body-composition and metabolic wellness programs.',
+      'A provider-directed compounded peptide option for body-composition and metabolic wellness programs.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'Fat Burner compounded injection — AOD-9604, MOTS-C, and Tesamorelin',
+    imageAlt: 'Fat Burner provider-directed compounded peptide injection',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     // Visible for browse; checkout remains unavailable until routing/payment is ready.
     status: 'active',

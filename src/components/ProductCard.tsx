@@ -2,28 +2,16 @@ import { Link } from '@/router';
 import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import type { Product } from '@/data/products';
 import { sections } from '@/data/products';
-import { useMember } from '@/context/MemberContext';
-import {
-  DEFAULT_MEMBER_DISCOUNT_PERCENT,
-  isMemberPricingEligible,
-} from '@/lib/pricing/purchaseOptions';
-import { isAccessoryMemberDiscountEligible } from '@/lib/pricing/accessoryMemberDiscount';
-import { DEFAULT_ACCESSORY_MEMBER_DISCOUNT_PERCENT } from '@/lib/pricing/settings';
+import { isAutoRefillEligible } from '@/lib/pricing/purchaseOptions';
 import { skuForVariantId } from '@/data/variantSkus';
 import { resolveStorefrontRxAvailability } from '@/lib/commerce/rxCatalogReadiness';
 
 export function ProductCard({ product }: { product: Product }) {
-  const { isActiveMember, status: membershipStatus } = useMember();
   const section = sections.find(s => s.id === product.category);
   const primaryForm = product.dosageForms[0];
   /** All Accessories use contain-fit so product photos are never cropped. */
   const containFit = product.category === 'accessories';
-  const memberEligible = isMemberPricingEligible(product);
-  const showAccessoryMemberBadge =
-    product.category === 'accessories' &&
-    isActiveMember &&
-    membershipStatus === 'active' &&
-    isAccessoryMemberDiscountEligible(product);
+  const subscriptionEligible = isAutoRefillEligible(product);
   const firstSku = product.variants[0]?.sku || skuForVariantId(product.variants[0]?.id);
   const rxAvailability = resolveStorefrontRxAvailability({ mbmSku: firstSku });
   const browseUnavailable =
@@ -47,19 +35,15 @@ export function ProductCard({ product }: { product: Product }) {
             loading="lazy"
           />
           <div className="absolute left-3 top-3 flex flex-col gap-1.5">
-            {showAccessoryMemberBadge ? (
-              <span className="rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-900">
-                Members Save {DEFAULT_ACCESSORY_MEMBER_DISCOUNT_PERCENT}%
-              </span>
-            ) : browseUnavailable ? (
+            {browseUnavailable ? (
               <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-amber-900">
                 {rxAvailability?.customerFacingStatus === 'COMING_SOON'
                   ? 'Coming soon'
                   : 'Temporarily unavailable'}
               </span>
-            ) : memberEligible ? (
+            ) : subscriptionEligible ? (
               <span className="rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-900">
-                Members Save {DEFAULT_MEMBER_DISCOUNT_PERCENT}%
+                Subscribe &amp; Save 15%
               </span>
             ) : product.bestSeller ? (
               <span className="rounded-full bg-ink-900 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-50">

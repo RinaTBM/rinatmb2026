@@ -65,7 +65,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     ],
     about: [
       'Semaglutide is a GLP-1 medication option used in provider-directed weight-management care. On My Bare Method, it is offered as a compounded injection with Vitamin B12 or Glycine formulation selectors.',
-      'This page is for the retail injectable product with selectable vial strengths. If you prefer one predictable monthly program rate instead of paying per vial strength, see Semaglutide Membership.',
+      'Choose a one-time purchase or Subscribe & Save when available. Your provider determines the appropriate treatment after review.',
       'Treatment is personalized. Ordering begins a clinical review — it does not automatically mean a prescription will be issued.',
     ].join('\n\n'),
     potentialBenefits: [
@@ -81,7 +81,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Clear injectable format with labeled strength options on this page',
       'Choose Vitamin B12 or Glycine in a provider-directed compounded preparation',
       'Fits customers who want medication support alongside lifestyle changes',
-      'Can be purchased à la carte or explored through Semaglutide Membership for flat monthly pricing',
+      'Available as a one-time purchase or eligible prescription subscription',
     ],
     whatToExpect:
       'Choose your preferred strength from the options below. After checkout you complete a medical intake. A licensed provider reviews your information and determines eligibility, dose, and follow-up. Use only as directed if approved. Do not change your dose on your own.',
@@ -105,7 +105,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     ],
     about: [
       'Tirzepatide acts on GLP-1 and GIP pathways involved in appetite, fullness, and blood-sugar regulation. That dual-pathway design is what sets it apart from semaglutide alone — not a promise that it is automatically “better” for everyone.',
-      'This listing is the retail injectable product. For a flat monthly program through the included dose maximum, see Tirzepatide Membership.',
+      'Choose a one-time purchase or Subscribe & Save when available. Your provider determines the appropriate treatment after review.',
       'A licensed provider reviews whether Tirzepatide, Semaglutide, or another plan is the right fit for you.',
     ].join('\n\n'),
     potentialBenefits: [
@@ -121,7 +121,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Distinct from Semaglutide — dual-pathway option when clinically appropriate',
       'Injectable strengths listed clearly for transparent shopping and clinical matching',
       'Designed for customers ready for structured, provider-guided weight-management care',
-      'Membership alternative available for flat monthly pricing through the included maximum',
+      'Eligible prescription subscription available with 15% medication savings',
     ],
     whatToExpect:
       'Select a vial strength, complete intake after order, and wait for licensed-provider review. Exact dose, schedule, and follow-up are clinical decisions. Storefront selection informs the conversation — it does not override medical judgment.',
@@ -133,30 +133,30 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'fat-burner': {
-    benefitHeadline: 'Provider-Guided Three-Peptide Body-Composition Support',
+    benefitHeadline: 'Provider-Guided Body-Composition Support',
     shortDescription:
-      'Fat Burner is a compounded injectable combining AOD-9604, MOTS-C, and Tesamorelin for provider-guided body-composition and metabolic wellness support. Your licensed clinician decides whether this blend belongs in your plan.',
+      'Fat Burner Peptide is a provider-directed compounded option for body-composition and metabolic wellness support. Your licensed clinician decides whether it belongs in your plan.',
     highlights: [
-      'AOD-9604 + MOTS-C + Tesamorelin',
+      'Body-Composition Peptide',
       'Compounded Injection',
       'Body-Composition Focus',
       'Provider-Guided Care',
     ],
     about: [
-      'This provider-directed blend features AOD-9604, MOTS-C, and Tesamorelin. Exact formulation details are determined by the prescribing provider and dispensing pharmacy.',
+      'This is a provider-directed compounded peptide option. Exact formulation details are determined by the prescribing provider and dispensing pharmacy.',
       'Providers may consider it when discussing supervised body-composition or metabolic wellness goals. Results vary, and no fat-loss or metabolic outcome is guaranteed.',
       'A licensed provider reviews your history and goals before anything is dispensed.',
     ].join('\n\n'),
     potentialBenefits: [
       'May be considered in provider-guided body-composition programs',
-      'Combines three named peptides in one provider-directed compounded option',
+      'Provider-directed compounded peptide option',
       'Keeps pharmacy-level formulation details within the clinical review process',
       'Supports an individualized plan — responses vary and are not guaranteed',
     ],
     howItWorks:
-      'AOD-9604, MOTS-C, and Tesamorelin are each discussed in metabolic and body-composition wellness settings. Combining them in one compounded vial does not create an FDA-approved weight-loss drug or guarantee clinical fat-loss outcomes. Your provider explains whether this approach may be appropriate and how it should be used if approved.',
+      'This compounded peptide option may be discussed in metabolic and body-composition wellness settings. It is not an FDA-approved weight-loss drug and does not guarantee clinical fat-loss outcomes. Your provider explains whether it may be appropriate and how it should be used if approved.',
     whyPeopleChooseIt: [
-      'Want a clearly labeled AOD-9604 + MOTS-C + Tesamorelin injectable under clinical review',
+      'Want a provider-guided peptide option under clinical review',
       'Prefer provider-guided body-composition care over unsupervised supplement shopping',
       'Prefer a simple product choice without pharmacy-level formulation details',
       'Value realistic expectations with licensed-provider oversight',
@@ -459,7 +459,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Compounded Injectable',
     ],
     about: [
-      'Tesamorelin is a growth hormone–releasing factor analog offered here as a compounded lyophilized injectable totaling 10 mg in a 2 mL vial (5 mg/mL).',
+      'Tesamorelin is offered as a provider-directed compounded injectable. Exact formulation details remain part of clinical review and pharmacy fulfillment.',
       'Tesamorelin has an FDA-approved indication related to reducing excess abdominal fat in adults with HIV-associated lipodystrophy. Outside that labeled context, broader body-composition or wellness interest is provider-guided and may be considered off-label — it is not an FDA-approved general weight-loss indication.',
       'A licensed provider reviews whether this option fits your history and goals before anything is dispensed.',
     ].join('\n\n'),
@@ -473,12 +473,12 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'As a growth hormone–releasing factor analog, Tesamorelin is designed to interact with pathways involved in the body’s own growth-hormone release signaling. How any one person responds varies. Your licensed provider decides whether this option may fit your history, goals, and safety profile — including whether any discussion is within labeled use or a carefully considered off-label wellness conversation.',
     whyPeopleChooseIt: [
       'Want a GHRH-analog option under licensed-provider review',
-      'Prefer transparent vial labeling (10 mg total · 5 mg/mL · 2 mL)',
+      'Prefer a clearly identified main peptide with clinical formulation review',
       'Value provider review before compounded options are dispensed',
       'Appreciate clear education about labeled indication versus broader wellness interest',
     ],
     whatToExpect:
-      'One option is listed: 10 mg total · 5 mg/mL · 2 mL vial for subcutaneous injection as directed. After order, complete intake for licensed-provider review. Exact use instructions come from your clinician and pharmacy if approved. Do not self-adjust dosing.',
+      'After ordering, complete intake for licensed-provider review. Exact formulation and use instructions come from your clinician and pharmacy if approved. Do not self-adjust dosing.',
     importantInformation: [
       DEFAULT_COMPOUNDED_IMPORTANT,
       'Tesamorelin’s FDA-approved indication relates to excess abdominal fat in adults with HIV-associated lipodystrophy. This compounded listing is not marketed as FDA-approved therapy for general weight loss, general obesity, anti-aging, guaranteed abdominal fat reduction in the general population, or guaranteed muscle growth.',
@@ -662,7 +662,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'initial-provider-consultation': {
     benefitHeadline: 'Start With Clarity — A Personalized First Visit',
     shortDescription:
-      'Your Initial Provider Visit is dedicated time with a licensed clinician to review goals, health history, and whether treatment options make sense for you. It is the clearest first step when you want guidance before committing to a medication or membership.',
+      'Your Initial Provider Visit is dedicated time with a licensed clinician to review goals, health history, and whether treatment options make sense for you. It is the clearest first step when you want guidance before choosing a medication or subscription.',
     highlights: [
       'Personalized First Visit',
       'Goal & History Review',
@@ -675,7 +675,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     ].join('\n\n'),
     potentialBenefits: [
       'Helps you start care with a clear clinical conversation',
-      'Reduces guesswork before choosing a medication or membership',
+      'Reduces guesswork before choosing a medication or subscription',
       'Creates space to ask questions about options and expectations',
       'May identify whether labs or follow-up should come next',
     ],

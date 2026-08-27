@@ -103,7 +103,7 @@ export function ProductDescriptionSections({
         </Section>
       )}
 
-      <Section title="Available Options">
+      {(isAccessory || isProviderCare) && <Section title="Available Options">
         {product.variants.length === 0 ? (
           <p className="text-ink-600">Options are shown above.</p>
         ) : (
@@ -115,22 +115,19 @@ export function ProductDescriptionSections({
               >
                 <span className="text-ink-800">
                   <span className="font-medium">{v.label}</span>
-                  {v.sku ? (
-                    <span className="ml-2 font-mono text-xs text-ink-400">{v.sku}</span>
-                  ) : null}
                 </span>
                 <span className="text-ink-600">${v.price.toFixed(2)}</span>
               </li>
             ))}
           </ul>
         )}
-        {!isAccessory && (
+        {isProviderCare && (
           <p className="mt-3 text-xs text-ink-500">
             Exact formulation details may be finalized by your prescribing provider and dispensing
             pharmacy when applicable.
           </p>
         )}
-      </Section>
+      </Section>}
 
       {product.whatToExpect.trim() && (
         <Section title={isProviderCare ? 'What Happens Next' : 'What to Expect'}>

@@ -27,7 +27,9 @@ export function ConcernPage({ concernId }: { concernId: string }) {
   }
 
   const concernProducts = getProductsByConcern(concern.id as ConcernId);
-  const concernMemberships = getMembershipsForConcern(concern.id as ConcernId);
+  // Historical membership records remain available to existing accounts, but
+  // new storefront enrollment has been replaced by prescription subscriptions.
+  const concernMemberships: ReturnType<typeof getMembershipsForConcern> = [];
 
   const providerGuided = concernProducts;
   const hasProvider = providerGuided.length > 0;

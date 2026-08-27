@@ -153,24 +153,13 @@ function App() {
         </AccountGate>
       );
     }
-    if (path === '/account/membership') {
+    if (path === '/account/subscriptions' || path === '/account/membership' || path === '/account/auto-refill') {
       return (
         <AccountGate>
           <AccountComingSoonPage
             active="membership"
-            title="Membership"
-            description="Membership details will appear here in a future update."
-          />
-        </AccountGate>
-      );
-    }
-    if (path === '/account/auto-refill') {
-      return (
-        <AccountGate>
-          <AccountComingSoonPage
-            active="auto-refill"
-            title="Past subscriptions"
-            description="Auto-Refill is no longer offered for new purchases. Historical subscription details will appear here in a future update."
+            title="Subscriptions"
+            description="Recurring prescription subscription details will appear here in a future update."
           />
         </AccountGate>
       );

@@ -191,8 +191,8 @@ export function MedicalDirectorPage() {
               <Link to="/section/provider-care" className="btn-primary">
                 Explore Provider Care <ArrowRight size={16} aria-hidden />
               </Link>
-              <Link to="/memberships" className="btn-outline">
-                View Memberships
+              <Link to="/subscriptions" className="btn-outline">
+                View Subscribe &amp; Save
               </Link>
             </div>
           </div>

@@ -94,44 +94,38 @@ export function TermsPage() {
         },
         {
           id: 'subscriptions',
-          title: 'Memberships and Recurring Periods',
+          title: 'Subscriptions and Recurring Periods',
           body: (
             <>
               <p>
-                Certain products are available as Wellness Memberships. Memberships are billed monthly to your
-                card while active. Selected membership shipping is included in each monthly card charge.
-                Auto-Refill is not offered for new purchases.
+                Eligible prescription products are available through Subscribe &amp; Save. Subscriptions are billed
+                monthly to your card while active. The selected $30 or $50 shipping method is included in each
+                monthly charge.
               </p>
               <LegalBulletList items={[
-                'You may submit a cancellation request from your account or by contacting support after any applicable minimum term. Requests are reviewed by our team and do not reverse a payment that has already been received, or stop an order that has already entered provider, pharmacy, or fulfillment processing.',
-                'We may change membership pricing with at least 30 days notice when required.',
-                'Failed or past-due payments may result in pause or suspension of benefits until payment is resolved.',
+                'You may submit a cancellation request from your account or by contacting support. Requests do not reverse a payment already received or stop an order already in provider, pharmacy, or fulfillment processing.',
+                'We may change the underlying retail price with notice when required; the Subscribe & Save discount remains 15% unless the terms are amended.',
+                'Failed or past-due payments may pause fulfillment until payment is resolved.',
               ]} />
             </>
           ),
         },
         {
-          id: 'memberships',
-          title: 'Memberships and 3-Month Commitment',
+          id: 'subscription-pricing',
+          title: 'Subscribe & Save Pricing',
           body: (
             <>
               <p>
-                Semaglutide Membership is $125/month and Tirzepatide Membership is $179/month. Selected shipping
-                recurs monthly (Two-Day +$30/month or Next-Day +$50/month). A one-time Initial Provider Visit ($75)
-                may apply on enrollment when required and does not recur. See Membership &amp; Cancellation Terms for
-                due-today versus monthly renewal examples.
+                Eligible prescription subscriptions receive 15% off the authoritative one-time medication price.
+                Selected shipping recurs monthly (Two-Day +$30/month or Next-Day +$50/month). Provider visits,
+                labs, services, and accessories are separate one-time purchases.
               </p>
               <p>
-                <strong>3-Month Commitment:</strong> By purchasing a membership, you commit to a minimum of three (3)
-                consecutive monthly billing cycles. Normal self-service cancellation is not available before the end of
-                this commitment period. After the 3-month commitment is fulfilled, your membership continues
-                month-to-month and may be cancelled according to the current cancellation process, taking effect when
-                a valid cancellation becomes effective.
+                Subscriptions continue month-to-month until a valid cancellation becomes effective. Medication
+                fulfillment remains subject to provider approval and pharmacy availability.
               </p>
               <p>
-                Pricing remains locked while your membership stays continuously active and in good standing.
-                Cancellation or lapse does not guarantee the same prior price on re-enrollment. Membership benefits are
-                non-transferable and may not be shared.
+                The underlying medication price may change with notice as permitted by law and these terms.
               </p>
             </>
           ),

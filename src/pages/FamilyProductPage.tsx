@@ -438,14 +438,14 @@ function FamilySelectors({
                         <SelectorChip
                           selected={nasalOption === 'r84'}
                           onClick={() => setNasalOption('r84')}
-                          label="50 mg/mL · 15 mL"
+                          label="Nasal Spray Option 1"
                         />
                       )}
                       {r85Ready && (
                         <SelectorChip
                           selected={nasalOption === 'r85'}
                           onClick={() => setNasalOption('r85')}
-                          label="200 mg/mL · 15 mL"
+                          label="Nasal Spray Option 2"
                         />
                       )}
                     </div>

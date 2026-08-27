@@ -136,6 +136,7 @@ export function CheckoutPage() {
   const hasMembership = items.some(
     i => i.isMembership || i.purchaseType === 'membership_program' || i.purchaseType === 'auto_refill',
   );
+  const prescriptionSubscriptionItems = items.filter(i => i.purchaseType === 'auto_refill');
   const allAccepted =
     acknowledged.terms &&
     acknowledged.privacy &&
@@ -969,7 +970,7 @@ export function CheckoutPage() {
                     {freeShippingEligible ? (
                       <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
                         Orders of $500 or more in eligible ordinary merchandise qualify for free shipping.
-                        Membership medication value does not count toward this threshold.
+                        Prescription subscription value does not count toward this threshold.
                       </div>
                     ) : (
                       <div className="space-y-2">
@@ -999,7 +1000,7 @@ export function CheckoutPage() {
                         </label>
                         <p className="text-xs text-ink-500">
                           {hasMembership
-                            ? 'Membership value is excluded from the $500 free-shipping merchandise threshold. Medication ships after required provider review and approval.'
+                            ? 'Prescription subscription value is excluded from the $500 free-shipping merchandise threshold. Medication ships after required provider review and approval.'
                             : 'Orders of $500 or more in merchandise are eligible for free shipping. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'}
                         </p>
                       </div>
@@ -1120,7 +1121,7 @@ export function CheckoutPage() {
                           <p className="text-sm text-ink-500">
                             {paymentMethod === KASHU_PAYMENT_METHOD
                               ? hasMembershipItems
-                                ? 'You will be redirected to complete card enrollment securely. Your membership stays inactive until payment and subscription are confirmed.'
+                                ? 'You will be redirected to complete recurring card enrollment securely. Your subscription stays inactive until payment and subscription are confirmed.'
                                 : 'You will be redirected to complete card payment securely. Your order stays unpaid until payment is confirmed.'
                               : CHECKOUT_SUBMIT_SUPPORTING_COPY}
                           </p>
@@ -1132,7 +1133,7 @@ export function CheckoutPage() {
                             <p className="text-xs">
                               Applicable taxes are included in displayed prices where required. Monthly rate:{' '}
                               {items
-                                .filter(i => i.isMembership || i.purchaseType === 'membership_program')
+                                .filter(i => i.isMembership || i.purchaseType === 'membership_program' || i.purchaseType === 'auto_refill')
                                 .map(i => `${i.name} $${i.price.toFixed(0)}/month`)
                                 .join(' · ')}
                             </p>
@@ -1478,7 +1479,12 @@ export function CheckoutPage() {
                         <span>{membershipProgram.displayName}</span>
                         <span>${(membershipBaseCents / 100).toFixed(2)}</span>
                       </div>
-                    ) : null}
+                    ) : prescriptionSubscriptionItems.map(item => (
+                      <div key={item.key} className="flex justify-between text-ink-600">
+                        <span>{item.name} · Subscribe &amp; Save</span>
+                        <span>${(item.price * item.quantity).toFixed(2)}</span>
+                      </div>
+                    ))}
                     {membershipEnrollmentVisitCents > 0 && requiredVisit ? (
                       <div className="flex justify-between text-ink-600">
                         <span>{requiredVisit.name}</span>
@@ -1505,7 +1511,12 @@ export function CheckoutPage() {
                           <span>{membershipProgram.displayName}</span>
                           <span>${(membershipBaseCents / 100).toFixed(2)}</span>
                         </div>
-                      ) : null}
+                      ) : prescriptionSubscriptionItems.map(item => (
+                        <div key={item.key} className="flex justify-between text-sm text-ink-700">
+                          <span>{item.name} · Subscribe &amp; Save</span>
+                          <span>${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                      ))}
                       {shippingCents > 0 && (
                         <div className="flex justify-between text-sm text-ink-700">
                           <span>

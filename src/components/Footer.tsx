@@ -35,7 +35,7 @@ export function Footer() {
             <ul className="space-y-2.5 text-sm text-cream-100/70">
               <li><Link to="/shop-all" className="hover:text-gold-300 transition-colors">Shop All</Link></li>
               <li><Link to="/subscriptions" className="hover:text-gold-300 transition-colors">Subscribe &amp; Save</Link></li>
-              <li><Link to="/alacarte" className="hover:text-gold-300 transition-colors">Shop Without a Membership</Link></li>
+              <li><Link to="/alacarte" className="hover:text-gold-300 transition-colors">One-Time Purchases</Link></li>
               <li><Link to="/section/accessories" className="hover:text-gold-300 transition-colors">Accessories</Link></li>
               <li><Link to="/best-sellers" className="hover:text-gold-300 transition-colors">Best Sellers</Link></li>
               <li><Link to="/section/weight-management" className="hover:text-gold-300 transition-colors">Weight Management</Link></li>
@@ -66,7 +66,7 @@ export function Footer() {
               <li><Link to="/terms" className="hover:text-gold-300 transition-colors">Terms & Conditions</Link></li>
               <li><Link to="/refund-policy" className="hover:text-gold-300 transition-colors">Refund & Replacement Policy</Link></li>
               <li><Link to="/shipping-policy" className="hover:text-gold-300 transition-colors">Shipping Policy</Link></li>
-              <li><Link to="/membership-terms" className="hover:text-gold-300 transition-colors">Membership & Cancellation Terms</Link></li>
+              <li><Link to="/subscription-terms" className="hover:text-gold-300 transition-colors">Subscription &amp; Cancellation Terms</Link></li>
               <li><Link to="/accessibility" className="hover:text-gold-300 transition-colors">Accessibility Statement</Link></li>
               <li><Link to="/consumer-data" className="hover:text-gold-300 transition-colors">Consumer Health Data Notice</Link></li>
               <li><Link to="/medical-director" className="hover:text-gold-300 transition-colors">Meet Our Medical Director</Link></li>

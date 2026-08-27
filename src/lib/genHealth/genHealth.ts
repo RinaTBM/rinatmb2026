@@ -1222,6 +1222,7 @@ export function verifyGenWebhookSignature(_input: {
   signatureHeader: string | null;
   secret: string | null;
 }): { ok: false; code: 'GEN_WEBHOOK_VERIFY_UNSUPPORTED'; message: string } {
+  void _input;
   return {
     ok: false,
     code: 'GEN_WEBHOOK_VERIFY_UNSUPPORTED',

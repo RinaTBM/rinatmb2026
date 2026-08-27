@@ -67,8 +67,8 @@ export function ShippingPolicyPage() {
                 'Next-Day Shipping — $50',
               ]} />
               <p>
-                Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping. Membership
-                value is excluded from the $500 free-shipping threshold. Standard Shipping is not offered.
+                Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping. Prescription
+                subscription value is excluded from the $500 free-shipping threshold. Standard Shipping is not offered.
               </p>
               <p>
                 Carrier transit times begin after payment has been received, any required provider review/approval has
@@ -83,20 +83,20 @@ export function ShippingPolicyPage() {
           ),
         },
         {
-          id: 'membership-shipping',
-          title: 'Membership Shipping',
+          id: 'subscription-shipping',
+          title: 'Subscription Shipping',
           body: (
             <>
               <p>
-                When you join a membership, you select Two-Day or Next-Day shipping at enrollment. That selected
-                shipping is billed with each monthly membership renewal on your card:
+                When you choose Subscribe &amp; Save, you select Two-Day or Next-Day shipping at enrollment. That
+                selected shipping method is billed with every monthly renewal:
               </p>
               <LegalBulletList items={[
                 'Two-Day Shipping — +$30 per month',
                 'Next-Day Shipping — +$50 per month',
               ]} />
               <p>
-                Shipping is not included in the base Semaglutide ($125) or Tirzepatide ($179) membership price.
+                The prescription medication receives the 15% subscription savings; shipping is not discounted.
                 Payment may be collected at enrollment and on each renewal, but medication fulfillment and shipment
                 still depend on applicable provider review and approval.
               </p>

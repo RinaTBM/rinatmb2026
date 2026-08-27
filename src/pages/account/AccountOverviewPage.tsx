@@ -54,32 +54,17 @@ export function AccountOverviewPage() {
         </Link>
 
         <Link
-          to="/account/membership"
+          to="/account/subscriptions"
           className="group rounded-2xl border border-cream-300 bg-white p-6 shadow-sm hover:border-gold-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
         >
           <div className="flex items-start justify-between gap-3 mb-3">
-            <h2 className="font-serif text-xl text-ink-900">Membership</h2>
+            <h2 className="font-serif text-xl text-ink-900">Subscriptions</h2>
             <span className="shrink-0 text-[10px] uppercase tracking-[0.16em] text-gold-700 border border-gold-300 rounded-full px-2.5 py-1">
               Coming Soon
             </span>
           </div>
           <p className="text-sm text-ink-500 leading-relaxed">
-            Review membership details and plan information.
-          </p>
-        </Link>
-
-        <Link
-          to="/account/auto-refill"
-          className="group rounded-2xl border border-cream-300 bg-white p-6 shadow-sm hover:border-gold-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
-        >
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <h2 className="font-serif text-xl text-ink-900">Past subscriptions</h2>
-            <span className="shrink-0 text-[10px] uppercase tracking-[0.16em] text-gold-700 border border-gold-300 rounded-full px-2.5 py-1">
-              Coming Soon
-            </span>
-          </div>
-          <p className="text-sm text-ink-500 leading-relaxed">
-            Auto-Refill is no longer offered for new purchases. Historical subscription details can appear here later.
+            Review recurring prescription orders and subscription details.
           </p>
         </Link>
 

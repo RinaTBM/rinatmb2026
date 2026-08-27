@@ -222,7 +222,7 @@ export function HomePage() {
             <p className="eyebrow mb-3">Personalized wellness</p>
             <h2 className="font-serif text-4xl md:text-5xl text-ink-900 mb-4">Shop by Concern</h2>
             <p className="text-lg text-ink-500 max-w-xl mx-auto">
-              Whatever you're working toward, we've curated the right products, memberships, and accessories for your journey.
+              Whatever you're working toward, we've curated the right products, subscription options, and accessories for your journey.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

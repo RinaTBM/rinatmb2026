@@ -40,13 +40,13 @@ const detailSections = [
           'Compounded medications and therapies.',
           'Customized or personalized products.',
           'Temperature-sensitive items that have left our controlled storage.',
-          'Subscription and membership fees after the applicable billing period has begun and payment has been received.',
+          'Subscription charges after the applicable billing period has begun and payment has been received.',
         ]} />
         <p>
           If funds have already been received, any refund that is approved under this policy follows the applicable
           refund/cancellation rules and is returned to the original payment method or another method we specify.
-          Provider services, lab services, membership charges, and recurring shipping charges are not automatically
-          refundable; see the sections below and our Membership &amp; Cancellation Terms.
+          Provider services, lab services, subscription charges, and recurring shipping charges are not automatically
+          refundable; see the sections below and our Subscription &amp; Cancellation Terms.
         </p>
       </>
     ),
@@ -99,14 +99,14 @@ const detailSections = [
     ),
   },
   {
-    id: 'membership-and-shipping-charges',
-    title: 'Membership and Recurring Shipping Charges',
+    id: 'subscription-and-shipping-charges',
+    title: 'Subscription and Recurring Shipping Charges',
     body: (
       <>
         <p>
-          Membership fees and selected recurring shipping charges are generally nonrefundable once the applicable
-          billing period begins and payment has been received. Cancellation after the minimum term does not
-          retroactively refund prior membership or shipping charges except where required by law or expressly approved.
+          Subscription medication and selected recurring shipping charges are generally nonrefundable once the
+          applicable billing period begins and payment has been received. Cancellation does not retroactively refund
+          prior subscription or shipping charges except where required by law or expressly approved.
         </p>
       </>
     ),

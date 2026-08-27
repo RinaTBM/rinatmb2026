@@ -111,6 +111,7 @@ export function ConcernPage({ concernId }: { concernId: string }) {
                         <Glp1PatientDoseSelector
                           familyId={glp1FamilyIdFromSlug(m.slug)!}
                           value={doseBySlug[m.slug] ?? ''}
+                          allowGettingStarted
                           onChange={v => {
                             setDoseBySlug(prev => ({ ...prev, [m.slug]: v }));
                             setDoseErrors(prev => {

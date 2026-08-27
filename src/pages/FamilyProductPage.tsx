@@ -30,6 +30,8 @@ import {
   resolveOneTimeVial,
 } from '@/lib/glp1/oneTimeVialMapping';
 import {
+  doseSelectionAfterPurchaseTypeChange,
+  ONE_TIME_WEEKLY_DOSE_REQUIRED,
   validateGlp1Formulation,
   validateRequestedDose,
   type Glp1FamilyId,
@@ -311,7 +313,11 @@ function FamilySelectors({
   const glp1Ready =
     !glp1FamilyId ||
     (validateGlp1Formulation(additive).ok &&
-      validateRequestedDose({ requestedDose, familyId: glp1FamilyId }).ok);
+      validateRequestedDose({
+        requestedDose,
+        familyId: glp1FamilyId,
+        allowGettingStarted: isMembership,
+      }).ok);
   const displayPrice =
     isMembership && membership
       ? membership.monthlyPrice
@@ -386,14 +392,29 @@ function FamilySelectors({
                       {purchaseTypes.includes('one_time') && (
                         <SelectorChip
                           selected={purchaseType === 'one_time'}
-                          onClick={() => setPurchaseType('one_time')}
+                          onClick={() => {
+                            setPurchaseType('one_time');
+                            const nextDose = doseSelectionAfterPurchaseTypeChange({
+                              nextPurchaseType: 'one_time',
+                              requestedDose,
+                            });
+                            if (nextDose !== requestedDose) {
+                              setRequestedDose(nextDose);
+                              setDoseError(ONE_TIME_WEEKLY_DOSE_REQUIRED);
+                            } else {
+                              setDoseError(null);
+                            }
+                          }}
                           label="One-Time Purchase"
                         />
                       )}
                       {purchaseTypes.includes('membership') && (
                         <SelectorChip
                           selected={purchaseType === 'membership'}
-                          onClick={() => setPurchaseType('membership')}
+                          onClick={() => {
+                            setPurchaseType('membership');
+                            setDoseError(null);
+                          }}
                           label={
                             familyId === 'semaglutide'
                               ? 'Wellness Membership · $125/month'
@@ -419,6 +440,7 @@ function FamilySelectors({
                   <Glp1PatientDoseSelector
                     familyId={glp1FamilyId}
                     value={requestedDose}
+                    allowGettingStarted={isMembership}
                     onChange={next => {
                       setRequestedDose(next);
                       setDoseError(null);

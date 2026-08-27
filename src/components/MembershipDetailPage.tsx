@@ -138,6 +138,7 @@ export function MembershipDetailPage({ membership }: { membership: Membership })
                     <Glp1PatientDoseSelector
                       familyId={familyId}
                       value={requestedDose}
+                      allowGettingStarted
                       onChange={v => {
                         setRequestedDose(v);
                         setDoseError(null);

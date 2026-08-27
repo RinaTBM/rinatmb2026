@@ -42,12 +42,15 @@ export function Glp1PatientDoseSelector({
   familyId,
   value,
   onChange,
+  allowGettingStarted = true,
 }: {
   familyId: Glp1FamilyId;
   value: string;
   onChange: (value: string) => void;
+  /** Membership only. One-time purchase must choose an actual weekly dose. */
+  allowGettingStarted?: boolean;
 }) {
-  const options = patientDoseOptions(familyId);
+  const options = patientDoseOptions(familyId, { allowGettingStarted });
   return (
     <fieldset>
       <legend className="text-sm font-medium text-ink-900 mb-2">{PATIENT_DOSE_FIELD_LABEL}</legend>
@@ -68,7 +71,9 @@ export function Glp1PatientDoseSelector({
           </button>
         ))}
       </div>
-      <p className="mt-2 text-xs text-ink-500 leading-relaxed">{PATIENT_DOSE_HINT}</p>
+      {allowGettingStarted && (
+        <p className="mt-2 text-xs text-ink-500 leading-relaxed">{PATIENT_DOSE_HINT}</p>
+      )}
       <p className="mt-1 text-xs text-ink-500 leading-relaxed">{PATIENT_DOSE_DISCLAIMER}</p>
     </fieldset>
   );

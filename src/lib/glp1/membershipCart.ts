@@ -25,7 +25,11 @@ export function buildGlp1MembershipCartFields(input: {
   }
   const formulation = validateGlp1Formulation(input.formulation);
   if (!formulation.ok) return formulation;
-  const dose = validateRequestedDose({ requestedDose: input.requestedDose, familyId });
+  const dose = validateRequestedDose({
+    requestedDose: input.requestedDose,
+    familyId,
+    allowGettingStarted: true,
+  });
   if (!dose.ok) return dose;
   return {
     ok: true,

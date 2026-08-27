@@ -24,23 +24,23 @@ import {
 } from './oneTimeVialMapping';
 
 const SEM_PRICES: Record<string, number> = {
-  '0.25 mg': 89,
-  '0.5 mg': 99,
-  '0.75 mg': 109,
-  '1 mg': 109,
-  '1.25 mg': 109,
-  '1.5 mg': 109,
-  '1.75 mg': 119,
-  '2 mg': 119,
+  '0.25 mg': 109,
+  '0.5 mg': 119,
+  '0.75 mg': 119,
+  '1 mg': 119,
+  '1.25 mg': 129,
+  '1.5 mg': 129,
+  '1.75 mg': 139,
+  '2 mg': 139,
 };
 
 const TIR_PRICES: Record<string, number> = {
-  '2.5 mg': 119,
-  '5 mg': 139,
-  '7.5 mg': 149,
-  '10 mg': 159,
-  '12.5 mg': 169,
-  '15 mg': 179,
+  '2.5 mg': 139,
+  '5 mg': 159,
+  '7.5 mg': 179,
+  '10 mg': 189,
+  '12.5 mg': 199,
+  '15 mg': 209,
 };
 
 describe('GLP-1 patient weekly dose (provider-review metadata)', () => {
@@ -86,17 +86,17 @@ describe('GLP-1 patient weekly dose (provider-review metadata)', () => {
     expect(validateGlp1Formulation(GETTING_STARTED_DOSE).ok).toBe(false);
   });
 
-  it('SEM membership stays $149 and TIR $275 for every patient dose', () => {
+  it('SEM membership stays $125 and TIR $179 for every patient dose', () => {
     const sem = getMembership('semaglutide-membership')!;
     const tir = getMembership('tirzepatide-membership')!;
-    expect(sem.monthlyPrice).toBe(149);
-    expect(tir.monthlyPrice).toBe(275);
+    expect(sem.monthlyPrice).toBe(125);
+    expect(tir.monthlyPrice).toBe(179);
     for (const dose of [GETTING_STARTED_DOSE, ...SEM_PATIENT_WEEKLY_DOSES]) {
-      expect(sem.monthlyPrice).toBe(149);
+      expect(sem.monthlyPrice).toBe(125);
       expect(isAllowedRequestedDose(dose, 'semaglutide')).toBe(true);
     }
     for (const dose of [GETTING_STARTED_DOSE, ...TIR_PATIENT_WEEKLY_DOSES]) {
-      expect(tir.monthlyPrice).toBe(275);
+      expect(tir.monthlyPrice).toBe(179);
       expect(isAllowedRequestedDose(dose, 'tirzepatide')).toBe(true);
     }
   });
@@ -190,7 +190,7 @@ describe('owner-approved one-time vial mapping', () => {
       purchaseType: 'one_time',
       requestedFormulation: 'Vitamin B12',
       requestedDose: GETTING_STARTED_DOSE,
-      unitAmountCents: 8900,
+      unitAmountCents: 10900,
     });
     expect(auth.ok).toBe(false);
   });
@@ -204,8 +204,8 @@ describe('owner-approved one-time vial mapping', () => {
       purchaseType: 'membership',
       requestedDose: GETTING_STARTED_DOSE,
     });
-    expect(sem.variant?.finalRetailPrice).toBe(149);
-    expect(tir.variant?.finalRetailPrice).toBe(275);
+    expect(sem.variant?.finalRetailPrice).toBe(125);
+    expect(tir.variant?.finalRetailPrice).toBe(179);
   });
 
   it('covers 28 one-time dose/formulation pairs and 10 new SKUs', () => {
@@ -214,9 +214,9 @@ describe('owner-approved one-time vial mapping', () => {
   });
 
   it('reuses existing Tagada prices when the vial SKU already exists', () => {
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-001']?.mbm_price_cents).toBe(8900);
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-002']?.mbm_price_cents).toBe(10900);
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-001']?.mbm_price_cents).toBe(11900);
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-002']?.mbm_price_cents).toBe(14900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-001']?.mbm_price_cents).toBe(10900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-002']?.mbm_price_cents).toBe(11900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-001']?.mbm_price_cents).toBe(13900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-002']?.mbm_price_cents).toBe(17900);
   });
 });

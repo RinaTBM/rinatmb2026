@@ -66,15 +66,15 @@ describe('MBM website family → GEN routing build', () => {
     expect(b12.variant?.websiteVariantId).toBe('sem-b12-starting-low');
     expect(gly.variant?.websiteVariantId).toBe('sem-glycine-starting-low');
     expect(mem.variant?.websiteVariantId).toBe('sem-membership');
-    expect(mem.variant?.finalRetailPrice).toBe(149);
+    expect(mem.variant?.finalRetailPrice).toBe(125);
     expect(b12.variant?.genClientProductId).toBeTruthy();
     expect(gly.variant?.genClientProductId).toBeTruthy();
     expect(b12.variant?.genClientProductId).not.toBe(gly.variant?.genClientProductId);
   });
 
-  it('TIR membership is $275 and one-time tiers share approved SvFDJ7 backend', () => {
+  it('TIR membership is $179 and one-time tiers share approved SvFDJ7 backend', () => {
     const mem = resolveFamilyVariant('tirzepatide', { purchaseType: 'membership' });
-    expect(mem.variant?.finalRetailPrice).toBe(275);
+    expect(mem.variant?.finalRetailPrice).toBe(179);
     expect(mem.variant?.genProductId).toBe('SvFDJ7W4nmWL2bkLUMMS');
     expect(mem.variant?.genPairingVerified).toBe(true);
     const tier = resolveFamilyVariant('tirzepatide', {

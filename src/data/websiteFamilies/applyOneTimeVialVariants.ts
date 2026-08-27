@@ -76,6 +76,12 @@ function lockOneTimeGroupPrices(family: WebsiteProductFamily): WebsiteProductFam
       if (v.websiteVariantId === 'tir-glycine-high') {
         return { ...v, displayLabel: 'Glycine', finalRetailPrice: 199, startingPrice: 199, exactFormularyRows: [21] };
       }
+      if (v.websiteVariantId === 'sem-membership') {
+        return { ...v, finalRetailPrice: 125, startingPrice: 125 };
+      }
+      if (v.websiteVariantId === 'tir-membership') {
+        return { ...v, finalRetailPrice: 179, startingPrice: 179 };
+      }
       return v;
     }),
   };

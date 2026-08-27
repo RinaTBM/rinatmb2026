@@ -4,7 +4,7 @@ import { buildGlp1MembershipCartFields } from './membershipCart';
 import { GETTING_STARTED_DOSE, GETTING_STARTED_DOSE_LABEL } from './patientRequestedDose';
 
 describe('GLP-1 membership cart fields', () => {
-  it('SEM membership price stays $149 across weekly doses including Getting Started', () => {
+  it('SEM membership price stays $125 across weekly doses including Getting Started', () => {
     const membership = getMembership('semaglutide-membership')!;
     for (const dose of [GETTING_STARTED_DOSE, '0.25 mg', '2 mg']) {
       const built = buildGlp1MembershipCartFields({
@@ -14,7 +14,7 @@ describe('GLP-1 membership cart fields', () => {
       });
       expect(built.ok).toBe(true);
       if (!built.ok) return;
-      expect(built.monthlyPrice).toBe(149);
+      expect(built.monthlyPrice).toBe(125);
       expect(built.requestedFormulation).toBe('Vitamin B12');
       expect(built.requestedDose).toBe(dose);
       expect(built.variantLabel).toContain('Formulation: Vitamin B12');
@@ -22,7 +22,7 @@ describe('GLP-1 membership cart fields', () => {
     }
   });
 
-  it('TIR membership price stays $275 and stores Getting Started intent', () => {
+  it('TIR membership price stays $179 and stores Getting Started intent', () => {
     const membership = getMembership('tirzepatide-membership')!;
     const built = buildGlp1MembershipCartFields({
       membership,
@@ -31,7 +31,7 @@ describe('GLP-1 membership cart fields', () => {
     });
     expect(built.ok).toBe(true);
     if (!built.ok) return;
-    expect(built.monthlyPrice).toBe(275);
+    expect(built.monthlyPrice).toBe(179);
     expect(built.requestedDose).toBe(GETTING_STARTED_DOSE);
     expect(built.variantLabel).toContain(GETTING_STARTED_DOSE_LABEL);
     expect(built.variantLabel).not.toMatch(/30 mg|25\+30|B6/);

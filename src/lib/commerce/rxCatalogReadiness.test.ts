@@ -266,8 +266,8 @@ describe('Phase 12I.3 rx catalog readiness', () => {
 
   it('membership rebill behavior unchanged', () => {
     expect(shouldCreateGenOrderOnMembershipRebill()).toBe(false);
-    expect(MEMBERSHIP_LAUNCH_AUDIT.semaglutide.monthlyCents).toBe(14900);
-    expect(MEMBERSHIP_LAUNCH_AUDIT.tirzepatide.monthlyCents).toBe(27500);
+    expect(MEMBERSHIP_LAUNCH_AUDIT.semaglutide.monthlyCents).toBe(12500);
+    expect(MEMBERSHIP_LAUNCH_AUDIT.tirzepatide.monthlyCents).toBe(17900);
     expect(MEMBERSHIP_LAUNCH_AUDIT.semaglutide.status).toBe('BLOCKED_PENDING_GEN');
     expect(MEMBERSHIP_LAUNCH_AUDIT.tirzepatide.status).toBe('BLOCKED_PENDING_GEN');
   });

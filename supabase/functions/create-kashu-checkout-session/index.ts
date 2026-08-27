@@ -177,12 +177,12 @@ async function ensureTagadaOneTimePrice(input: {
 /** Base membership display amounts (customer-facing). Kept; not deleted. */
 const MEM_BASE_BY_SKU: Record<string, { basePriceId: string; baseCents: number; type: string }> = {
   "MBM-MEM-SEM-MEM-001": {
-    basePriceId: "price_fc83af356019",
+    basePriceId: "price_307f4d84658d",
     baseCents: 12500,
     type: "semaglutide",
   },
   "MBM-MEM-TIR-MEM-001": {
-    basePriceId: "price_da1063335965",
+    basePriceId: "price_321bc7a3ea7e",
     baseCents: 17900,
     type: "tirzepatide",
   },

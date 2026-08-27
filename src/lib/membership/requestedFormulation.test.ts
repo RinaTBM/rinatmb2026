@@ -12,7 +12,7 @@ import {
 describe('membership requested formulation options', () => {
   it('Semaglutide offers Getting Started / Not Sure + Vitamin B12 and Glycine', () => {
     const m = getMembership('semaglutide-membership')!;
-    expect(m.monthlyPrice).toBe(149);
+    expect(m.monthlyPrice).toBe(125);
     const opts = requestedFormulationOptions(m.includedFormulations);
     expect(opts.map(o => o.value)).toEqual([
       GETTING_STARTED_FORMULATION,
@@ -24,7 +24,7 @@ describe('membership requested formulation options', () => {
 
   it('Tirzepatide offers Getting Started / Not Sure + Vitamin B12 and Glycine', () => {
     const m = getMembership('tirzepatide-membership')!;
-    expect(m.monthlyPrice).toBe(275);
+    expect(m.monthlyPrice).toBe(179);
     const opts = requestedFormulationOptions(m.includedFormulations);
     expect(opts.map(o => o.value)).toEqual([
       GETTING_STARTED_FORMULATION,
@@ -83,7 +83,7 @@ describe('membership requested formulation options', () => {
     };
     expect(cartItem.requestedFormulation).toBe('Vitamin B12');
     expect(cartItem.variantLabel).toBe('Requested dose: Vitamin B12');
-    expect(cartItem.price).toBe(149);
+    expect(cartItem.price).toBe(125);
 
     const checkoutPayload = {
       requested_formulation: cartItem.requestedFormulation,

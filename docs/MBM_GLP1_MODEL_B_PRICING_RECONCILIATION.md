@@ -1,7 +1,7 @@
 # MBM GLP-1 Model B + Membership Pricing Reconciliation
 
-**Cutover:** `MBM-GLP1-MODEL-B-PRICING`  
-**Date:** 2026-08-26  
+**Cutover:** `MBM-GLP1-MODEL-B-PRICING`
+**Date:** 2026-08-26
 **Scope:** 22 one-time vial SKUs + 2 membership base prices + 4 membership combo prices.
 
 ## Membership shipping architecture
@@ -50,6 +50,10 @@ All new prices were appended to existing variants. No products or variants were 
 | `MBM-MEM-TIR-MEM-001` | base membership | Program | `product_8b3bfb6614c4` | `variant_b3890c799e09` | `price_2d2dd07b2f73` | 27500 | `price_321bc7a3ea7e` | 17900 | recurring | YES |
 | `MBM-MEM-TIR-MEM-001` | base + Two-Day | Program | `product_8b3bfb6614c4` | `variant_b3890c799e09` | `price_2d2dd07b2f73` | 27500 | `price_dd3f65ebcee2` | 20900 | recurring | YES |
 | `MBM-MEM-TIR-MEM-001` | base + Next-Day | Program | `product_8b3bfb6614c4` | `variant_b3890c799e09` | `price_2d2dd07b2f73` | 27500 | `price_da1063335965` | 22900 | recurring | YES |
+
+## Base vs combo price IDs
+
+Membership Kashu map rows store the **base** recurring price (`price_307f4d84658d` / `price_321bc7a3ea7e`). Enrollment checkout binds the **combo** price for the selected shipping method. Base IDs must never be swapped with Next-Day combo IDs (`price_fc83af356019` / `price_da1063335965`).
 
 ## Safety status
 

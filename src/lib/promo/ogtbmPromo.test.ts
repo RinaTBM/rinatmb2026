@@ -258,25 +258,25 @@ describe('OGTBM promo code', () => {
     expect(
       assertOgtbmDoesNotAlterMembershipRebill({
         monthlyAmountCents: SEM_TWO_DAY_MONTHLY_CENTS,
-        expectedMonthlyAmountCents: 17900,
+        expectedMonthlyAmountCents: 15500,
       }),
     ).toBe(true);
     expect(
       assertOgtbmDoesNotAlterMembershipRebill({
         monthlyAmountCents: SEM_NEXT_DAY_MONTHLY_CENTS,
-        expectedMonthlyAmountCents: 19900,
+        expectedMonthlyAmountCents: 17500,
       }),
     ).toBe(true);
     expect(
       assertOgtbmDoesNotAlterMembershipRebill({
         monthlyAmountCents: TIRZ_TWO_DAY_MONTHLY_CENTS,
-        expectedMonthlyAmountCents: 30500,
+        expectedMonthlyAmountCents: 20900,
       }),
     ).toBe(true);
     expect(
       assertOgtbmDoesNotAlterMembershipRebill({
         monthlyAmountCents: TIRZ_NEXT_DAY_MONTHLY_CENTS,
-        expectedMonthlyAmountCents: 32500,
+        expectedMonthlyAmountCents: 22900,
       }),
     ).toBe(true);
   });

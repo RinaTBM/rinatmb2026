@@ -38,17 +38,17 @@ describe('catalog normalization', () => {
     expect(toCents(138.98)).toBe(13898);
     const sema = syncableProducts().find(p => p.slug === 'semaglutide')!;
     expect(sema.variants.map(v => v.priceCents)).toEqual([
-      8900, 9900, 10900, 10900, 11900, 8900, 8900, 9900, 10900, 10900, 11900, 8900,
+      10900, 11900, 11900, 12900, 13900, 8900, 10900, 11900, 11900, 12900, 13900, 8900,
     ]);
   });
 
-  it('exposes exactly 2 syncable memberships at $149 and $275, monthly recurring', () => {
+  it('exposes exactly 2 syncable memberships at $125 and $179, monthly recurring', () => {
     const mems = syncableMemberships();
     expect(mems).toHaveLength(2);
     const sema = mems.find(m => m.slug === 'semaglutide-membership')!;
     const tirz = mems.find(m => m.slug === 'tirzepatide-membership')!;
-    expect(sema.monthlyPriceCents).toBe(14900);
-    expect(tirz.monthlyPriceCents).toBe(27500);
+    expect(sema.monthlyPriceCents).toBe(12500);
+    expect(tirz.monthlyPriceCents).toBe(17900);
     expect(sema.billingInterval).toBe('month');
     expect(tirz.billingInterval).toBe('month');
     expect(sema.initialTermMonths).toBe(3);
@@ -119,7 +119,7 @@ describe('sync plan', () => {
     // exactly one recurring membership price each
     const recurringCreates = plan.filter(i => i.op === 'create_price' && i.billingType === 'recurring');
     expect(recurringCreates).toHaveLength(2);
-    expect(recurringCreates.map(i => i.amountCents).sort()).toEqual([14900, 27500]);
+    expect(recurringCreates.map(i => i.amountCents).sort()).toEqual([12500, 17900]);
   });
 
   it('reuses product + price when they already exist (idempotent)', () => {

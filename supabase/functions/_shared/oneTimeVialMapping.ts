@@ -4,7 +4,7 @@
  * If no exact vial, use the next larger approved Dirx-Hub vial.
  * Vial-specific retail prices are locked from the workbook (not shared group prices).
  *
- * Membership is separate ($149 SEM / $275 TIR) and is not mapped here.
+ * Membership is separate ($125 SEM / $179 TIR) and is not mapped here.
  * Getting Started / Not Sure does not assign a one-time vial.
  *
  * Do not expose concentration math to customers.

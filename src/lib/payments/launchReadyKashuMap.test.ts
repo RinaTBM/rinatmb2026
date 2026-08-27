@@ -22,6 +22,7 @@ import { evaluateKashuCardCartEligibility } from '@/lib/payments/kashuTagada';
 import {
   SEM_MEMBERSHIP_SKU,
   SEM_NEXT_DAY_COMBO_PRICE_ID,
+  SEM_TAGADA_PRICE_ID,
   SEM_TWO_DAY_COMBO_PRICE_ID,
   TIRZ_HISTORICAL_249_PRICE_ID,
   TIRZ_MEMBERSHIP_SKU,
@@ -45,37 +46,37 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
     expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-005']).toMatchObject({
       tagada_product_id: 'product_6b750325addf',
       tagada_variant_id: 'variant_a726bfe758b3',
-      tagada_price_id: 'price_1c3c8051e3b5',
-      mbm_price_cents: 9900,
-      tagada_price_cents: 9900,
+      tagada_price_id: 'price_80723e21469c',
+      mbm_price_cents: 11900,
+      tagada_price_cents: 11900,
     });
     expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-B12-006']).toMatchObject({
       tagada_product_id: 'product_6b750325addf',
       tagada_variant_id: 'variant_23afe7061b26',
-      tagada_price_id: 'price_013a62e05b77',
+      tagada_price_id: 'price_9dead884531e',
       mbm_price_cents: 11900,
       tagada_price_cents: 11900,
     });
     expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-GLY-005']).toMatchObject({
       tagada_product_id: 'product_dcc64482bbbf',
       tagada_variant_id: 'variant_1f6e4f4d2cb4',
-      tagada_price_id: 'price_cea49d485af6',
-      mbm_price_cents: 9900,
-      tagada_price_cents: 9900,
+      tagada_price_id: 'price_c433061826aa',
+      mbm_price_cents: 11900,
+      tagada_price_cents: 11900,
     });
     expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-GLY-006']).toMatchObject({
       tagada_product_id: 'product_dcc64482bbbf',
       tagada_variant_id: 'variant_6db94a24e1ad',
-      tagada_price_id: 'price_49a9a6e85d5a',
+      tagada_price_id: 'price_a1f4ee6101c1',
       mbm_price_cents: 11900,
       tagada_price_cents: 11900,
     });
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-005']?.tagada_price_cents).toBe(13900);
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-006']?.tagada_price_cents).toBe(15900);
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-007']?.tagada_price_cents).toBe(17900);
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-GLY-005']?.tagada_price_cents).toBe(13900);
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-GLY-006']?.tagada_price_cents).toBe(15900);
-    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-GLY-007']?.tagada_price_cents).toBe(17900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-005']?.tagada_price_cents).toBe(15900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-006']?.tagada_price_cents).toBe(18900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-007']?.tagada_price_cents).toBe(20900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-GLY-005']?.tagada_price_cents).toBe(15900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-GLY-006']?.tagada_price_cents).toBe(18900);
+    expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-GLY-007']?.tagada_price_cents).toBe(20900);
     for (const sku of NEW_ONE_TIME_VIAL_SKUS) {
       expect(LAUNCH_READY_KASHU_MAP[sku]).toBeTruthy();
     }
@@ -150,7 +151,34 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
     }
   });
 
-  it('SEM membership 149 / 179 / 199 and TIR 275 / 305 / 325', () => {
+  it('membership Kashu map uses BASE Tagada price IDs, not combo shipping prices', () => {
+    expect(LAUNCH_READY_KASHU_MAP['MBM-MEM-SEM-MEM-001']).toMatchObject({
+      tagada_price_id: SEM_TAGADA_PRICE_ID,
+      mbm_price_cents: 12500,
+      tagada_price_cents: 12500,
+    });
+    expect(LAUNCH_READY_KASHU_MAP['MBM-MEM-TIR-MEM-001']).toMatchObject({
+      tagada_price_id: TIRZ_TAGADA_PRICE_ID,
+      mbm_price_cents: 17900,
+      tagada_price_cents: 17900,
+    });
+    expect(SEM_TAGADA_PRICE_ID).toBe('price_307f4d84658d');
+    expect(TIRZ_TAGADA_PRICE_ID).toBe('price_321bc7a3ea7e');
+    expect(LAUNCH_READY_KASHU_MAP['MBM-MEM-SEM-MEM-001'].tagada_price_id).not.toBe(
+      SEM_TWO_DAY_COMBO_PRICE_ID,
+    );
+    expect(LAUNCH_READY_KASHU_MAP['MBM-MEM-SEM-MEM-001'].tagada_price_id).not.toBe(
+      SEM_NEXT_DAY_COMBO_PRICE_ID,
+    );
+    expect(LAUNCH_READY_KASHU_MAP['MBM-MEM-TIR-MEM-001'].tagada_price_id).not.toBe(
+      TIRZ_TWO_DAY_COMBO_PRICE_ID,
+    );
+    expect(LAUNCH_READY_KASHU_MAP['MBM-MEM-TIR-MEM-001'].tagada_price_id).not.toBe(
+      TIRZ_NEXT_DAY_COMBO_PRICE_ID,
+    );
+  });
+
+  it('SEM membership 125 / 155 / 175 and TIR 179 / 209 / 229', () => {
     expect(
       membershipEnrollmentDueTodayCents({
         membershipSku: SEM_MEMBERSHIP_SKU,
@@ -158,8 +186,8 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
       }),
     ).toMatchObject({
       ok: true,
-      baseMembershipAmountCents: 14900,
-      monthlyRebillCents: 17900,
+      baseMembershipAmountCents: 12500,
+      monthlyRebillCents: 15500,
       tagadaPriceId: SEM_TWO_DAY_COMBO_PRICE_ID,
     });
     expect(
@@ -169,7 +197,7 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
       }),
     ).toMatchObject({
       ok: true,
-      monthlyRebillCents: 19900,
+      monthlyRebillCents: 17500,
       tagadaPriceId: SEM_NEXT_DAY_COMBO_PRICE_ID,
     });
     expect(
@@ -179,8 +207,8 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
       }),
     ).toMatchObject({
       ok: true,
-      baseMembershipAmountCents: 27500,
-      monthlyRebillCents: 30500,
+      baseMembershipAmountCents: 17900,
+      monthlyRebillCents: 20900,
       tagadaPriceId: TIRZ_TWO_DAY_COMBO_PRICE_ID,
     });
     expect(
@@ -190,7 +218,7 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
       }),
     ).toMatchObject({
       ok: true,
-      monthlyRebillCents: 32500,
+      monthlyRebillCents: 22900,
       tagadaPriceId: TIRZ_NEXT_DAY_COMBO_PRICE_ID,
     });
     expect(TIRZ_TAGADA_PRICE_ID).not.toBe(TIRZ_HISTORICAL_249_PRICE_ID);
@@ -215,8 +243,8 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
       tagada_price_cents: 24900,
     };
     const resolved = resolveKashuSkuMapRow('MBM-MEM-TIR-MEM-001', stale);
-    expect(resolved?.tagada_price_id).toBe('price_2d2dd07b2f73');
-    expect(resolved?.tagada_price_cents).toBe(27500);
+    expect(resolved?.tagada_price_id).toBe('price_321bc7a3ea7e');
+    expect(resolved?.tagada_price_cents).toBe(17900);
   });
 
   it('does not map FORMULARY_PENDING or FUTURE_HIDDEN variants', () => {

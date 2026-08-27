@@ -391,14 +391,14 @@ export type MembershipLaunchStatus =
 export const MEMBERSHIP_LAUNCH_AUDIT = Object.freeze({
   semaglutide: {
     programSku: 'MBM-MEM-SEM-MEM-001',
-    monthlyCents: 14900,
+    monthlyCents: 12500,
     status: 'BLOCKED_PENDING_GEN' as MembershipLaunchStatus,
     notes:
-      'SEM medication maps are NEW_SKU_REQUIRED — membership join must not imply immediate GEN fulfillment. Prices unchanged. Rebill auto-med: NO.',
+      'SEM medication maps are NEW_SKU_REQUIRED — membership join must not imply immediate GEN fulfillment. Website membership is $125. Rebill auto-med: NO.',
   },
   tirzepatide: {
     programSku: 'MBM-MEM-TIR-MEM-001',
-    monthlyCents: 27500,
+    monthlyCents: 17900,
     status: 'BLOCKED_PENDING_GEN' as MembershipLaunchStatus,
     notes:
       'TIR website membership is $179. New enrollments use Tagada $179 / $209 / $229. GEN fulfillment remains blocked (API Orders / external-paid OFF). Rebill auto-med: NO.',

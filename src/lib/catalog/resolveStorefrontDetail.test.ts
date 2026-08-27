@@ -12,7 +12,7 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
     if (detail.kind !== 'membership') return;
     expect(detail.membership.slug).toBe('semaglutide-membership');
     expect(detail.membership.checkoutProductId).toBe('m1');
-    expect(detail.membership.monthlyPrice).toBe(149);
+    expect(detail.membership.monthlyPrice).toBe(125);
     expect(detail.membership.includedFormulations).toEqual(['Vitamin B12', 'Glycine']);
     expect(detail.membership.initialTermMonths).toBe(3);
     expect(detail.membership.providerReviewRequired).toBe(true);
@@ -25,21 +25,21 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
     if (detail.kind !== 'membership') return;
     expect(detail.membership.slug).toBe('tirzepatide-membership');
     expect(detail.membership.checkoutProductId).toBe('m2');
-    expect(detail.membership.monthlyPrice).toBe(275);
+    expect(detail.membership.monthlyPrice).toBe(179);
     expect(detail.membership.includedFormulations).toEqual(['Vitamin B12', 'Glycine']);
   });
 
-  it('Semaglutide detail displays $149/month (never $199)', () => {
+  it('Semaglutide detail displays $125/month (never $199)', () => {
     const m = getMembership('semaglutide-membership')!;
-    expect(m.monthlyPrice).toBe(149);
+    expect(m.monthlyPrice).toBe(125);
     expect(m.monthlyPrice).not.toBe(199);
     const detail = resolveStorefrontDetail('semaglutide-membership');
-    expect(detail.kind === 'membership' && detail.membership.monthlyPrice).toBe(149);
+    expect(detail.kind === 'membership' && detail.membership.monthlyPrice).toBe(125);
   });
 
-  it('Tirzepatide detail displays $275/month', () => {
+  it('Tirzepatide detail displays $179/month', () => {
     const detail = resolveStorefrontDetail('tirzepatide-membership');
-    expect(detail.kind === 'membership' && detail.membership.monthlyPrice).toBe(275);
+    expect(detail.kind === 'membership' && detail.membership.monthlyPrice).toBe(179);
   });
 
   it('membership cart links resolve to /product/:membership-slug', () => {
@@ -84,7 +84,7 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
       isMembership: true,
     };
     expect(cartLine.purchaseType).toBe('membership_program');
-    expect(cartLine.price).toBe(149);
+    expect(cartLine.price).toBe(125);
     expect(cartLine.name).toBe('Semaglutide Membership');
     expect(resolveStorefrontDetail(cartLine.slug).kind).toBe('membership');
   });

@@ -29,8 +29,8 @@ export const TIRZ_MEMBERSHIP_SKU: TagadaMembershipProgramSku = 'MBM-MEM-TIR-MEM-
  * (price_5cf1fa89610c / price_e0ebef9851a8 / price_ef9ea132d6cf) — do not delete.
  * Historical SEM $149 and TIR $275 price objects remain for existing subscriptions; new enrollments use the priceIds below.
  */
-export const SEM_TAGADA_PRICE_ID = 'price_fc83af356019';
-export const TIRZ_TAGADA_PRICE_ID = 'price_da1063335965';
+export const SEM_TAGADA_PRICE_ID = 'price_307f4d84658d';
+export const TIRZ_TAGADA_PRICE_ID = 'price_321bc7a3ea7e';
 
 /** Combo recurring prices (membership + selected shipping). */
 export const SEM_TWO_DAY_COMBO_PRICE_ID = 'price_f89402dcbe76';

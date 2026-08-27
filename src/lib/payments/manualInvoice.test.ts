@@ -206,8 +206,8 @@ describe('recurring manual payment disclosure', () => {
     expect(MEMBERSHIP_MANUAL_BILLING_NOTE.toLowerCase()).not.toContain('payment method on file');
     expect(AUTO_REFILL_MANUAL_BILLING_NOTE).toContain('10%');
     expect(AUTO_REFILL_MANUAL_BILLING_NOTE.toLowerCase()).toContain('selected payment method');
-    expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
-    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(27500);
+    expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(12500);
+    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(17900);
     expect(TWO_DAY_SHIPPING_CENTS).toBe(3000);
     expect(NEXT_DAY_SHIPPING_CENTS).toBe(5000);
     expect(CHECKOUT_SUBMIT_CTA).toBe('Submit Order & Continue to Payment');

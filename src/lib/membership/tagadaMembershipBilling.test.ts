@@ -40,23 +40,23 @@ import { isFreeShippingEligibleMerchandiseLine } from '@/lib/checkout/authorizeC
 import { getMembership } from '@/data/products';
 
 describe('Tagada membership recurring billing', () => {
-  it('SEM membership price = 14900', () => {
-    expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(14900);
-    expect(TAGADA_MEMBERSHIP_PROGRAMS[SEM_MEMBERSHIP_SKU].monthlyAmountCents).toBe(14900);
+  it('SEM membership price = 12500', () => {
+    expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(12500);
+    expect(TAGADA_MEMBERSHIP_PROGRAMS[SEM_MEMBERSHIP_SKU].monthlyAmountCents).toBe(12500);
   });
 
-  it('TIRZ membership price = 27500', () => {
-    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(27500);
-    expect(TAGADA_MEMBERSHIP_PROGRAMS[TIRZ_MEMBERSHIP_SKU].monthlyAmountCents).toBe(27500);
+  it('TIRZ membership price = 17900', () => {
+    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(17900);
+    expect(TAGADA_MEMBERSHIP_PROGRAMS[TIRZ_MEMBERSHIP_SKU].monthlyAmountCents).toBe(17900);
   });
 
   it('includes verified base + combo recurring priceIds', () => {
-    expect(SEM_TAGADA_PRICE_ID).toBe('price_344d3dacb4ab');
-    expect(TIRZ_TAGADA_PRICE_ID).toBe('price_2d2dd07b2f73');
-    expect(SEM_TWO_DAY_COMBO_PRICE_ID).toBe('price_41179f7cafe2');
-    expect(SEM_NEXT_DAY_COMBO_PRICE_ID).toBe('price_7ce0f74a7509');
-    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).toBe('price_94c92b6e5749');
-    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).toBe('price_d6941e334598');
+    expect(SEM_TAGADA_PRICE_ID).toBe('price_307f4d84658d');
+    expect(TIRZ_TAGADA_PRICE_ID).toBe('price_321bc7a3ea7e');
+    expect(SEM_TWO_DAY_COMBO_PRICE_ID).toBe('price_f89402dcbe76');
+    expect(SEM_NEXT_DAY_COMBO_PRICE_ID).toBe('price_fc83af356019');
+    expect(TIRZ_TWO_DAY_COMBO_PRICE_ID).toBe('price_dd3f65ebcee2');
+    expect(TIRZ_NEXT_DAY_COMBO_PRICE_ID).toBe('price_da1063335965');
   });
 
   it('builds init with variantId + priceId (never variant alone)', () => {
@@ -154,7 +154,7 @@ describe('Tagada membership recurring billing', () => {
       ok: true,
       enrollmentVisitSku: 'MBM-PC-IPV-SRV-001',
       dueTodayCents: 22400,
-      monthlyRebillCents: 14900,
+      monthlyRebillCents: 12500,
     });
     expect(
       evaluateKashuCardCartEligibility({
@@ -174,7 +174,7 @@ describe('Tagada membership recurring billing', () => {
     ).toEqual({ ok: true, membershipRecurring: true });
   });
 
-  it('SEM + IPV + Two-Day: due today 25400; rebill 17900; combo price; no MBM-SHIP line', () => {
+  it('SEM + IPV + Two-Day: due today 23000; rebill 15500; combo price; no MBM-SHIP line', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: SEM_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
@@ -182,9 +182,9 @@ describe('Tagada membership recurring billing', () => {
     });
     expect(due).toEqual({
       ok: true,
-      dueTodayCents: 25400,
-      monthlyRebillCents: 17900,
-      baseMembershipAmountCents: 14900,
+      dueTodayCents: 23000,
+      monthlyRebillCents: 15500,
+      baseMembershipAmountCents: 12500,
       visitCents: 7500,
       shippingCents: 3000,
       selectedShippingMethod: 'two_day',
@@ -202,8 +202,8 @@ describe('Tagada membership recurring billing', () => {
     });
     expect(init.ok).toBe(true);
     if (!init.ok) return;
-    expect(init.dueTodayCents).toBe(25400);
-    expect(init.monthlyRebillCents).toBe(17900);
+    expect(init.dueTodayCents).toBe(23000);
+    expect(init.monthlyRebillCents).toBe(15500);
     expect(init.shippingCents).toBe(3000);
     expect(init.shippingSku).toBeNull();
     expect(init.items).toHaveLength(2);
@@ -212,7 +212,7 @@ describe('Tagada membership recurring billing', () => {
     expect(init.items.some((i) => i.priceId === 'price_c65bb478d609')).toBe(false);
   });
 
-  it('SEM + IPV + Next-Day: due today 27400; rebill 19900', () => {
+  it('SEM + IPV + Next-Day: due today 25000; rebill 17500', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: SEM_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
@@ -220,14 +220,14 @@ describe('Tagada membership recurring billing', () => {
     });
     expect(due).toMatchObject({
       ok: true,
-      dueTodayCents: 27400,
-      monthlyRebillCents: 19900,
+      dueTodayCents: 25000,
+      monthlyRebillCents: 17500,
       shippingCents: 5000,
       tagadaPriceId: SEM_NEXT_DAY_COMBO_PRICE_ID,
     });
   });
 
-  it('TIRZ $275 + IPV + Two-Day: due today 38000; rebill 30500; combo price; no MBM-SHIP line', () => {
+  it('TIRZ $179 + IPV + Two-Day: due today 28400; rebill 20900; combo price; no MBM-SHIP line', () => {
     const due = membershipEnrollmentDueTodayCents({
       membershipSku: TIRZ_MEMBERSHIP_SKU,
       visitSku: 'MBM-PC-IPV-SRV-001',
@@ -235,9 +235,9 @@ describe('Tagada membership recurring billing', () => {
     });
     expect(due).toEqual({
       ok: true,
-      dueTodayCents: 38000,
-      monthlyRebillCents: 30500,
-      baseMembershipAmountCents: 27500,
+      dueTodayCents: 28400,
+      monthlyRebillCents: 20900,
+      baseMembershipAmountCents: 17900,
       visitCents: 7500,
       shippingCents: 3000,
       selectedShippingMethod: 'two_day',
@@ -250,8 +250,8 @@ describe('Tagada membership recurring billing', () => {
     });
     expect(nextDay).toMatchObject({
       ok: true,
-      dueTodayCents: 40000,
-      monthlyRebillCents: 32500,
+      dueTodayCents: 30400,
+      monthlyRebillCents: 22900,
       shippingCents: 5000,
       tagadaPriceId: TIRZ_NEXT_DAY_COMBO_PRICE_ID,
     });
@@ -267,7 +267,7 @@ describe('Tagada membership recurring billing', () => {
     });
     expect(init.ok).toBe(true);
     if (!init.ok) return;
-    expect(init.monthlyRebillCents).toBe(32500);
+    expect(init.monthlyRebillCents).toBe(22900);
     expect(init.shippingSku).toBeNull();
     expect(init.items[0].priceId).toBe(TIRZ_NEXT_DAY_COMBO_PRICE_ID);
     expect(init.items.some((i) => i.priceId === 'price_53861f3e4cad')).toBe(false);
@@ -307,19 +307,19 @@ describe('Tagada membership recurring billing', () => {
     expect(bad).toEqual({ ok: false, reason: 'one_time_must_not_use_membership_price' });
   });
 
-  it('validates rebill against stored combo monthly amount (not base 14900)', () => {
+  it('validates rebill against stored combo monthly amount (not base 12500)', () => {
     expect(
       assertMembershipRebillAmountMatches({
-        expectedMonthlyAmountCents: 17900,
-        paidAmountCents: 17900,
+        expectedMonthlyAmountCents: 15500,
+        paidAmountCents: 15500,
       }),
     ).toEqual({ ok: true });
     expect(
       assertMembershipRebillAmountMatches({
-        expectedMonthlyAmountCents: 17900,
-        paidAmountCents: 14900,
+        expectedMonthlyAmountCents: 15500,
+        paidAmountCents: 12500,
       }),
-    ).toEqual({ ok: false, expected: 17900, paid: 14900 });
+    ).toEqual({ ok: false, expected: 15500, paid: 12500 });
   });
 
   it('blocks unmapped MBM-MEM-* (not broadly all MEM SKUs)', () => {
@@ -447,7 +447,7 @@ describe('Tagada membership recurring billing', () => {
     expect(FREE_SHIPPING_THRESHOLD_CENTS).toBe(50000);
     const membershipLine = {
       kind: 'price_data' as const,
-      unitAmountCents: 14900,
+      unitAmountCents: 12500,
       quantity: 1,
       name: 'Semaglutide Membership',
       recurring: true,
@@ -488,6 +488,6 @@ describe('Tagada membership recurring billing', () => {
     if (!enrollment.ok) return;
     expect(enrollment.items).toHaveLength(2);
     expect(enrollment.shippingSku).toBeNull();
-    expect(enrollment.monthlyRebillCents).toBe(17900);
+    expect(enrollment.monthlyRebillCents).toBe(15500);
   });
 });

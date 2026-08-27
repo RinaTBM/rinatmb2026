@@ -28,7 +28,11 @@ describe('MBM-FINAL-WEBSITE-LAUNCH-1 gate', () => {
     expect(held.some((r) => r.websiteVariantId.startsWith('nad-inj-'))).toBe(true);
     const nadFamily = WEBSITE_PRODUCT_FAMILIES.find((f) => f.familyId === 'nad')!;
     const visible = listPatientVisibleVariants(nadFamily);
-    expect(visible.map((v) => v.websiteVariantId)).toEqual(['nad-nasal-r84']);
+    expect(visible.map((v) => v.websiteVariantId)).toEqual([
+      'nad-inj-5ml-500',
+      'nad-inj-10ml-1000',
+      'nad-nasal-r84',
+    ]);
   });
 
   it('lists FORMULARY_PENDING current variants', () => {

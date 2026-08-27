@@ -34,15 +34,23 @@ export const FAMILY_VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
   'nad-nasal-r84': 'MBM-LON-NAD-NS-001',
 };
 
+const PAYMENT_ONLY_VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
+  'nad-inj-5ml-500': 'MBM-LON-NAD-INJ-001',
+  'nad-inj-10ml-1000': 'MBM-LON-NAD-INJ-002',
+};
+
 export function skuForFamilyVariantId(websiteVariantId: string | null | undefined): string | null {
   if (!websiteVariantId) return null;
-  return FAMILY_VARIANT_SKU_BY_ID[websiteVariantId] ?? null;
+  return FAMILY_VARIANT_SKU_BY_ID[websiteVariantId] ?? PAYMENT_ONLY_VARIANT_SKU_BY_ID[websiteVariantId] ?? null;
 }
 
 export function familyVariantIdForSku(sku: string | null | undefined): string | null {
   const want = (sku || '').trim().toUpperCase();
   if (!want) return null;
   for (const [id, mapped] of Object.entries(FAMILY_VARIANT_SKU_BY_ID)) {
+    if (mapped === want) return id;
+  }
+  for (const [id, mapped] of Object.entries(PAYMENT_ONLY_VARIANT_SKU_BY_ID)) {
     if (mapped === want) return id;
   }
   return null;

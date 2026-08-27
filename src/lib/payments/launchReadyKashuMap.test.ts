@@ -247,7 +247,8 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
     expect(resolved?.tagada_price_cents).toBe(17900);
   });
 
-  it('does not map FORMULARY_PENDING or FUTURE_HIDDEN variants', () => {
+  it('maps only approved payment-ready exceptions among held variants', () => {
+    const paymentOnly = new Set(['nad-inj-5ml-500', 'nad-inj-10ml-1000']);
     const pending = formularyPendingVariantIds();
     expect(pending.length).toBeGreaterThan(0);
     for (const family of WEBSITE_PRODUCT_FAMILIES) {
@@ -258,12 +259,16 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
           variant.routingStatus === 'FORMULARY_PENDING';
         if (!hidden) continue;
         const sku = skuForFamilyVariantId(variant.websiteVariantId);
-        if (sku) expect(LAUNCH_READY_KASHU_MAP[sku]).toBeUndefined();
+        if (sku && !paymentOnly.has(variant.websiteVariantId)) {
+          expect(LAUNCH_READY_KASHU_MAP[sku]).toBeUndefined();
+        }
       }
     }
-    expect(LAUNCH_READY_KASHU_MAP_ROWS.some((r) => r.website_variant_id.startsWith('nad-inj-'))).toBe(
-      false,
-    );
+    expect(
+      LAUNCH_READY_KASHU_MAP_ROWS.filter((r) => r.website_variant_id.startsWith('nad-inj-')).map(
+        (r) => r.website_variant_id,
+      ),
+    ).toEqual(['nad-inj-5ml-500', 'nad-inj-10ml-1000']);
     expect(LAUNCH_READY_KASHU_MAP_ROWS.some((r) => r.website_variant_id.startsWith('wolverine-'))).toBe(
       false,
     );

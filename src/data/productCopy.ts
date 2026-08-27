@@ -143,14 +143,14 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Provider-Guided Care',
     ],
     about: [
-      'This compounded injection combines AOD-9604 6 mg, MOTS-C 10 mg, and Tesamorelin 15 mg in a 5 mL vial (about 1.2 mg/mL, 2 mg/mL, and 3 mg/mL).',
+      'This provider-directed blend features AOD-9604, MOTS-C, and Tesamorelin. Exact formulation details are determined by the prescribing provider and dispensing pharmacy.',
       'Providers may consider it when discussing supervised body-composition or metabolic wellness goals. Results vary, and no fat-loss or metabolic outcome is guaranteed.',
       'A licensed provider reviews your history and goals before anything is dispensed.',
     ].join('\n\n'),
     potentialBenefits: [
       'May be considered in provider-guided body-composition programs',
-      'Combines three peptides in one clearly labeled compounded vial',
-      'Transparent formulary amounts and concentrations for informed clinical discussion',
+      'Combines three named peptides in one provider-directed compounded option',
+      'Keeps pharmacy-level formulation details within the clinical review process',
       'Supports an individualized plan — responses vary and are not guaranteed',
     ],
     howItWorks:
@@ -158,11 +158,11 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     whyPeopleChooseIt: [
       'Want a clearly labeled AOD-9604 + MOTS-C + Tesamorelin injectable under clinical review',
       'Prefer provider-guided body-composition care over unsupervised supplement shopping',
-      'Appreciate transparent vial strengths and concentrations on this page',
+      'Prefer a simple product choice without pharmacy-level formulation details',
       'Value realistic expectations with licensed-provider oversight',
     ],
     whatToExpect:
-      'One option is listed: the AOD-9604 / MOTS-C / Tesamorelin 5 mL vial. After checkout you complete intake. A licensed provider determines eligibility and instructions. Use only as directed if approved. Do not combine with other peptide products unless your clinician specifically directs you to.',
+      'After checkout you complete intake. A licensed provider determines eligibility, the final formulation, and instructions. Use only as directed if approved. Do not combine with other peptide products unless your clinician specifically directs you to.',
     importantInformation: [
       DEFAULT_COMPOUNDED_IMPORTANT,
       'This compounded blend is not FDA-approved as a weight-loss or fat-loss drug. The name “Fat Burner” does not guarantee fat burning, abdominal fat reduction, weight loss, metabolic improvement, or muscle gain.',
@@ -299,7 +299,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'nad-plus': {
     benefitHeadline: 'Provider-Guided NAD+ Wellness Support',
     shortDescription:
-      'NAD+ is a provider-directed compounded option for customers exploring cellular energy and longevity-focused wellness care. Nasal spray is available now. It is available only after eligibility review, with clear expectations and no hype-driven promises.',
+      'NAD+ is a provider-directed compounded option for customers exploring cellular energy and longevity-focused wellness care. Injection and nasal spray options are available after eligibility review, with clear expectations and no hype-driven promises.',
     highlights: [
       'Provider-Directed',
       'Nasal Spray',
@@ -307,7 +307,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Compounded Option',
     ],
     about: [
-      'NAD+ (nicotinamide adenine dinucleotide) is a molecule found naturally in the body and often discussed in wellness and longevity care. This listing offers a compounded nasal-spray form after a licensed provider reviews your eligibility.',
+      'NAD+ (nicotinamide adenine dinucleotide) is a molecule found naturally in the body and often discussed in wellness and longevity care. This listing offers compounded injection and nasal-spray options after a licensed provider reviews your eligibility.',
       'Wellness interest is not the same as an established medical claim. NAD+ may be considered as part of a supervised plan — not as an anti-aging cure or guaranteed energy fix.',
     ].join('\n\n'),
     potentialBenefits: [

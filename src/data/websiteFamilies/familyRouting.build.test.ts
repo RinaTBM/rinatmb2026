@@ -87,11 +87,13 @@ describe('MBM website family → GEN routing build', () => {
     expect(tier.variant?.routingStatus).toBe('ROUTING_READY');
   });
 
-  it('NAD launch selectors expose nasal r84 only; injection and r85 stay held', () => {
+  it('NAD selectors expose Tagada-ready injections and nasal r84; r85 stays held', () => {
     const inj = resolveFamilyVariant('nad', { form: 'Injection', package: '5mL' });
     const nasalA = resolveFamilyVariant('nad', { form: 'Nasal Spray', nasalOption: 'r84' });
     const nasalB = resolveFamilyVariant('nad', { form: 'Nasal Spray', nasalOption: 'r85' });
-    expect(inj.ok).toBe(false);
+    expect(inj.ok).toBe(true);
+    expect(inj.variant?.websiteVariantId).toBe('nad-inj-5ml-500');
+    expect(inj.variant?.finalRetailPrice).toBe(199);
     expect(nasalA.variant?.websiteVariantId).toBe('nad-nasal-r84');
     expect(nasalA.variant?.finalRetailPrice).toBe(79);
     expect(nasalA.variant?.genClientProductId).toContain('FVwkzvQqWIZRNAwbslGw');

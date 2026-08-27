@@ -28,6 +28,27 @@ import {
 } from '@/lib/commerce/rxCatalogReadiness';
 import { RxAvailabilityBanner } from '@/components/RxAvailabilityBanner';
 
+function customerVariantLabel(productSlug: string, fallback: string): string {
+  const peptideLabels: Record<string, string> = {
+    'fat-burner': 'AOD-9604 + MOTS-C + Tesamorelin',
+    'selank': 'Selank',
+    'semax': 'Semax',
+    'selank-semax-nasal-spray': 'Selank + Semax',
+    'tesamorelin': 'Tesamorelin',
+    'bpc-157-tb-500': 'BPC-157 + TB-500',
+  };
+  return peptideLabels[productSlug] ?? fallback;
+}
+
+const MAIN_PEPTIDE_LABEL_SLUGS = new Set([
+  'fat-burner',
+  'selank',
+  'semax',
+  'selank-semax-nasal-spray',
+  'tesamorelin',
+  'bpc-157-tb-500',
+]);
+
 /** Router — accessories get a simplified ecommerce page; wellness keeps existing purchase logic. */
 export function ProductPage({ slug }: { slug: string }) {
   const detail = resolveStorefrontDetail(slug);
@@ -127,6 +148,7 @@ function WellnessProductPage({ slug }: { slug: string }) {
     !!rxAvailability &&
     !rxAvailability.productionPurchasable &&
     selected?.kind !== 'membership_program';
+  const publicVariantLabel = customerVariantLabel(product.slug, variant.label);
 
   const handlePrimaryAction = () => {
     if (!selected) return;
@@ -180,8 +202,8 @@ function WellnessProductPage({ slug }: { slug: string }) {
       variantId: variant.id,
       variantLabel:
         selected.appliedDiscount === 'member'
-          ? `${variant.label} · Member price`
-          : variant.label,
+          ? `${publicVariantLabel} · Member price`
+          : publicVariantLabel,
       purchaseType: selected.kind === 'auto_refill' ? 'auto_refill' : 'one_time',
       discountPercent: selected.discountPercent,
       appliedDiscount: selected.appliedDiscount,
@@ -257,6 +279,8 @@ function WellnessProductPage({ slug }: { slug: string }) {
                 <p className="text-sm font-medium text-ink-900 mb-2">
                   {isProgramMembership
                     ? 'Formulations in this program'
+                    : MAIN_PEPTIDE_LABEL_SLUGS.has(product.slug)
+                      ? 'Product'
                     : product.dosageForms.length > 1
                       ? 'Select form & strength'
                       : 'Select strength'}
@@ -285,7 +309,7 @@ function WellnessProductPage({ slug }: { slug: string }) {
                           <span className={`flex h-4 w-4 items-center justify-center rounded-full border-2 ${selectedVariant ? 'border-gold-500' : 'border-ink-300'}`}>
                             {selectedVariant && <span className="h-2 w-2 rounded-full bg-gold-500" />}
                           </span>
-                          <span className="text-sm text-ink-800">{v.label}</span>
+                          <span className="text-sm text-ink-800">{customerVariantLabel(product.slug, v.label)}</span>
                         </span>
                         <span className="font-medium text-ink-900">${v.price}</span>
                       </button>

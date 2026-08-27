@@ -582,7 +582,7 @@ export const products: Product[] = [
     category: 'weight-management',
     goals: ['weight-management'],
     shortDescription:
-      'A provider-directed compounded injection combining AOD-9604, MOTS-C, and Tesamorelin for body-composition and metabolic wellness programs.',
+      'A provider-directed peptide blend featuring AOD-9604, MOTS-C, and Tesamorelin for body-composition and metabolic wellness programs.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
     imageAlt: 'Fat Burner compounded injection — AOD-9604, MOTS-C, and Tesamorelin',
@@ -669,10 +669,10 @@ export const products: Product[] = [
     subtitle: 'Provider-directed compounded formulation',
     category: 'longevity-cognitive',
     goals: ['longevity'],
-    shortDescription: 'A provider-directed compounded NAD+ nasal spray, available after eligibility review.',
+    shortDescription: 'Provider-directed NAD+ injection and nasal spray options, available after eligibility review.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_NASAL,
-    imageAlt: 'NAD+ nasal spray, a provider-directed compounded formulation',
+    imageAlt: 'NAD+, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     bestSeller: true,
     variants: [

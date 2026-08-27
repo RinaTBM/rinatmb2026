@@ -42,6 +42,15 @@ export const WEBSITE_FAMILY_CUTOVER_ENABLED = true;
 /** Real GEN order submission stays OFF until API Orders / external-paid is enabled. */
 export const REAL_GEN_ORDER_SUBMISSION_ENABLED = false;
 
+/**
+ * Exact-price Tagada variants that may be sold while fulfillment stays in the
+ * admin-controlled clinical/GEN queue. They do not imply GEN API readiness.
+ */
+const PAYMENT_ONLY_STOREFRONT_VARIANT_IDS = new Set([
+  'nad-inj-5ml-500',
+  'nad-inj-10ml-1000',
+]);
+
 export function getWebsiteFamily(familyId: string): WebsiteProductFamily | undefined {
   return WEBSITE_PRODUCT_FAMILIES.find((f) => f.familyId === familyId);
 }
@@ -56,10 +65,9 @@ export function listPatientVisibleVariants(
   return family.variants.filter(
     (v) =>
       v.routingStatus !== 'FUTURE_HIDDEN' &&
-      v.routingStatus !== 'FORMULARY_PENDING' &&
       v.websiteVariantId !== 'sem-current-b6' &&
       v.websiteVariantId !== 'tir-current-b6' &&
-      isLaunchReadyVariant(v),
+      (isLaunchReadyVariant(v) || PAYMENT_ONLY_STOREFRONT_VARIANT_IDS.has(v.websiteVariantId)),
   );
 }
 

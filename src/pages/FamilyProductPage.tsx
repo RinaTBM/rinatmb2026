@@ -389,10 +389,10 @@ function FamilySelectors({
                     <legend className="text-sm font-medium text-ink-900 mb-2">Delivery method</legend>
                     <div className="flex flex-wrap gap-2">
                       <SelectorChip
-                        selected={false}
-                        disabled
-                        onClick={() => undefined}
-                        label="Injection · Temporarily unavailable"
+                        selected={form === 'Injection'}
+                        disabled={!injReady}
+                        onClick={() => setForm('Injection')}
+                        label={injReady ? 'Injection' : 'Injection · Temporarily unavailable'}
                       />
                       {nasalReady && (
                         <SelectorChip
@@ -403,7 +403,7 @@ function FamilySelectors({
                       )}
                     </div>
                     <p className="mt-2 text-xs text-ink-500 leading-relaxed">
-                      Injection is temporarily unavailable. Nasal spray remains available after provider review.
+                      Select your preferred delivery method. Final formulation and directions are determined after provider review.
                     </p>
                   </fieldset>
                 )}
@@ -416,14 +416,14 @@ function FamilySelectors({
                         <SelectorChip
                           selected={injPackage === '5mL'}
                           onClick={() => setInjPackage('5mL')}
-                          label="5 mL / 500 mg"
+                          label="5 mL vial"
                         />
                       )}
                       {visible.some((v) => v.websiteVariantId === 'nad-inj-10ml-1000') && (
                         <SelectorChip
                           selected={injPackage === '10mL'}
                           onClick={() => setInjPackage('10mL')}
-                          label="10 mL / 1000 mg"
+                          label="10 mL vial"
                         />
                       )}
                     </div>

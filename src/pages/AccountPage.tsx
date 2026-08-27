@@ -262,8 +262,9 @@ export function AccountPage() {
                   {autoRefills.length === 0 ? (
                     <div className="card-lux p-6 text-center">
                       <RefreshCw size={28} className="mx-auto text-ink-300 mb-3" />
-                      <p className="text-ink-500 mb-4">You have no Auto-Refill subscriptions.</p>
-                      <Link to="/shop-all" className="btn-primary">Shop Auto-Refill & Save</Link>
+                      <p className="text-ink-500 mb-2">You have no Auto-Refill subscriptions.</p>
+                      <p className="text-sm text-ink-400 mb-4">Auto-Refill is no longer offered for new purchases. Choose One-Time Purchase or Wellness Membership.</p>
+                      <Link to="/shop-all" className="btn-primary">Shop products</Link>
                     </div>
                   ) : (
                     <div className="space-y-3">

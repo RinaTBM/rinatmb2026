@@ -387,7 +387,7 @@ function FamilySelectors({
                         <SelectorChip
                           selected={purchaseType === 'one_time'}
                           onClick={() => setPurchaseType('one_time')}
-                          label="One-time"
+                          label="One-Time Purchase"
                         />
                       )}
                       {purchaseTypes.includes('membership') && (
@@ -396,8 +396,8 @@ function FamilySelectors({
                           onClick={() => setPurchaseType('membership')}
                           label={
                             familyId === 'semaglutide'
-                              ? 'Membership · $125/month'
-                              : 'Membership · $179/month'
+                              ? 'Wellness Membership · $125/month'
+                              : 'Wellness Membership · $179/month'
                           }
                         />
                       )}

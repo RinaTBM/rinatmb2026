@@ -354,6 +354,21 @@ Deno.serve(async (req) => {
     if (rawItems.length === 0) return json({ error: "Your cart is empty." }, 400);
 
     for (const item of rawItems) {
+      const purchaseType = typeof item.purchaseType === "string" ? item.purchaseType : "";
+      const isMembershipLine =
+        Boolean(item.isMembership) || purchaseType === "membership_program";
+      if (
+        !isMembershipLine &&
+        (purchaseType === "auto_refill" || item.subscription === true)
+      ) {
+        return json({
+          error:
+            "Auto-Refill is not available for new purchases. Choose One-Time Purchase or Wellness Membership.",
+        }, 400);
+      }
+    }
+
+    for (const item of rawItems) {
       const slug =
         (typeof item.membershipSlug === "string" && item.membershipSlug) ||
         (typeof item.slug === "string" && item.slug) ||

@@ -62,10 +62,7 @@ import {
   CHECKOUT_SUBMIT_SUPPORTING_COPY,
 } from '@/lib/payments/manualInvoice';
 import {
-  AUTO_REFILL_MANUAL_BILLING_NOTE,
-  cartHasRecurringItems,
   MEMBERSHIP_MANUAL_BILLING_NOTE,
-  RECURRING_MANUAL_PAYMENT_DISCLOSURE,
 } from '@/lib/payments/recurringCopy';
 import { submitInvoiceOrder } from '@/lib/payments/submitInvoiceOrder';
 import { createKashuCheckoutSession } from '@/lib/payments/createKashuCheckoutSession';
@@ -130,7 +127,6 @@ export function CheckoutPage() {
   const [promoInput, setPromoInput] = useState('');
   const [appliedPromoCode, setAppliedPromoCode] = useState<string | null>(null);
   const checkoutEnabled = isManualCheckoutEnabled();
-  const hasRecurring = cartHasRecurringItems(items);
 
   const hasProviderCare = items.some(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId));
   const hasMembership = items.some(
@@ -601,21 +597,6 @@ export function CheckoutPage() {
           unitPrice: item.price,
           standardPrice: item.standardPrice ?? item.price,
           discountPercent: 0,
-          billingFrequency: 'monthly',
-          renewalDate,
-          status: 'active',
-          createdAt: new Date().toISOString(),
-        });
-      } else if (item.purchaseType === 'auto_refill' || item.subscription) {
-        upsertManagedSubscription({
-          id: `refill_${item.key}`,
-          kind: 'auto_refill',
-          name: item.name,
-          productId: item.productId,
-          slug: item.slug,
-          unitPrice: item.price,
-          standardPrice: item.standardPrice ?? item.price,
-          discountPercent: item.discountPercent ?? 0,
           billingFrequency: 'monthly',
           renewalDate,
           status: 'active',
@@ -1137,12 +1118,6 @@ export function CheckoutPage() {
                               : CHECKOUT_SUBMIT_SUPPORTING_COPY}
                           </p>
                         ) : null}
-                        {hasRecurring && !hasMembershipItems ? (
-                          <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 leading-relaxed space-y-2">
-                            <p className="font-medium">{RECURRING_MANUAL_PAYMENT_DISCLOSURE}</p>
-                            <p>{AUTO_REFILL_MANUAL_BILLING_NOTE}</p>
-                          </div>
-                        ) : null}
                         {hasMembershipItems && selectablePaymentMethods.length > 0 ? (
                           <div className="rounded-lg bg-gold-50 p-4 text-sm text-gold-800 leading-relaxed space-y-2">
                             <p className="font-medium">{MEMBERSHIP_CARD_RECURRING_DISCLOSURE}</p>
@@ -1359,9 +1334,7 @@ export function CheckoutPage() {
                               <p className="text-xs text-ink-500">Quantity: {item.quantity}</p>
                             ) : (
                               <p className="text-xs text-ink-500">
-                                {item.purchaseType === 'auto_refill'
-                                  ? '○ Auto-Refill & Save · Monthly'
-                                  : '○ One-Time Purchase'}
+                                ○ One-Time Purchase
                               </p>
                             )}
                             {standard > item.price && (
@@ -1369,9 +1342,6 @@ export function CheckoutPage() {
                                 Standard ${standard.toFixed(2)}
                                 {savings > 0 ? ` · Savings $${savings.toFixed(2)}` : ''}
                               </p>
-                            )}
-                            {item.purchaseType === 'auto_refill' && (
-                              <p className="text-xs text-gold-600">Recurring price ${item.price.toFixed(2)}/mo</p>
                             )}
                             {item.requiresIntake && <p className="text-xs text-ink-400">Provider review required</p>}
                           </>
@@ -1384,7 +1354,6 @@ export function CheckoutPage() {
                       ) : (
                         <span className="text-sm font-medium text-ink-900">
                           ${(item.price * item.quantity).toFixed(2)}
-                          {item.purchaseType === 'auto_refill' ? '/mo' : ''}
                         </span>
                       )}
                     </div>

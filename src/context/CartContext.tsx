@@ -13,7 +13,7 @@ export interface CartItem {
   standardPrice?: number;
   image: string;
   quantity: number;
-  /** True when Auto-Refill or program membership (recurring). */
+  /** True for Wellness Membership (recurring). Auto-Refill is not offered for new carts. */
   subscription: boolean;
   section: string;
   requiresIntake?: boolean;
@@ -70,6 +70,51 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = 'mybaremethod_cart';
 
+function isMembershipCartLine(item: Pick<CartItem, 'isMembership' | 'purchaseType'>): boolean {
+  return Boolean(item.isMembership) || item.purchaseType === 'membership_program';
+}
+
+/** Convert leftover Auto-Refill cart lines to one-time so they cannot check out as a subscription. */
+export function normalizeCartItemAwayFromAutoRefill(item: CartItem): CartItem {
+  if (isMembershipCartLine(item)) {
+    return {
+      ...item,
+      purchaseType: 'membership_program',
+      subscription: true,
+    };
+  }
+  const isAuto = item.purchaseType === 'auto_refill' || item.subscription === true;
+  const purchaseType: CartPurchaseType =
+    !isAuto && item.purchaseType && item.purchaseType !== 'auto_refill'
+      ? item.purchaseType
+      : 'one_time';
+  const variantId = item.variantId?.replace(/-refill$/i, '') ?? item.variantId;
+  const standard = item.standardPrice ?? item.price;
+  const appliedDiscount = item.appliedDiscount === 'auto_refill' ? 'none' : (item.appliedDiscount ?? 'none');
+  const price = isAuto && item.appliedDiscount === 'auto_refill' ? standard : item.price;
+  const variantLabel = (item.variantLabel ?? '').replace(/^Auto-Refill\s*·\s*/i, '');
+  return {
+    ...item,
+    subscription: false,
+    purchaseType,
+    appliedDiscount,
+    discountPercent: appliedDiscount === 'none' ? 0 : item.discountPercent,
+    price,
+    standardPrice: standard,
+    variantId,
+    variantLabel: variantLabel || item.variantLabel,
+    billingFrequency: purchaseType === 'one_time' ? undefined : item.billingFrequency,
+    key: lineKey(
+      item.productId,
+      variantId,
+      false,
+      purchaseType,
+      item.requestedFormulation,
+      item.requestedDose,
+    ),
+  };
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -84,7 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             const purchaseType: CartPurchaseType =
               i.purchaseType ??
               (i.isMembership ? 'membership_program' : i.subscription ? 'auto_refill' : 'one_time');
-            return {
+            return normalizeCartItemAwayFromAutoRefill({
               ...i,
               purchaseType,
               standardPrice: i.standardPrice ?? i.price,
@@ -100,7 +145,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                   i.requestedFormulation,
                   i.requestedDose,
                 ),
-            };
+            });
           }),
         );
       }
@@ -120,15 +165,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addItem: CartContextValue['addItem'] = (item, quantity = 1) => {
     const purchaseType: CartPurchaseType =
       item.purchaseType ??
-      (item.isMembership ? 'membership_program' : item.subscription ? 'auto_refill' : 'one_time');
-    const key = lineKey(
-      item.productId,
-      item.variantId,
-      item.subscription,
+      (item.isMembership ? 'membership_program' : 'one_time');
+    const normalized = normalizeCartItemAwayFromAutoRefill({
+      ...item,
+      quantity: quantity,
       purchaseType,
-      item.requestedFormulation,
-      item.requestedDose,
-    );
+      standardPrice: item.standardPrice ?? item.price,
+      discountPercent: item.discountPercent ?? 0,
+      appliedDiscount: item.appliedDiscount ?? 'none',
+      key: lineKey(
+        item.productId,
+        item.variantId,
+        item.subscription,
+        purchaseType,
+        item.requestedFormulation,
+        item.requestedDose,
+      ),
+    });
+    const key = normalized.key;
     setItems(prev => {
       const existing = prev.find(i => i.key === key);
       if (existing) {
@@ -137,12 +191,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return [
         ...prev,
         {
-          ...item,
-          purchaseType,
-          standardPrice: item.standardPrice ?? item.price,
-          discountPercent: item.discountPercent ?? 0,
-          appliedDiscount: item.appliedDiscount ?? 'none',
-          key,
+          ...normalized,
           quantity,
         },
       ];

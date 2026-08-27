@@ -169,8 +169,8 @@ function App() {
         <AccountGate>
           <AccountComingSoonPage
             active="auto-refill"
-            title="Auto-Refill"
-            description="Auto-Refill preferences will appear here in a future update."
+            title="Past subscriptions"
+            description="Auto-Refill is no longer offered for new purchases. Historical subscription details will appear here in a future update."
           />
         </AccountGate>
       );

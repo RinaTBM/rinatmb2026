@@ -7,7 +7,7 @@ const NAV = [
   { id: 'overview', label: 'Overview', path: '/account' },
   { id: 'orders', label: 'Orders', path: '/account/orders' },
   { id: 'membership', label: 'Membership', path: '/account/membership' },
-  { id: 'auto-refill', label: 'Auto-Refill', path: '/account/auto-refill' },
+  { id: 'auto-refill', label: 'Past subscriptions', path: '/account/auto-refill' },
   { id: 'requests', label: 'Requests', path: '/account/requests' },
   { id: 'profile', label: 'Profile', path: '/account/profile' },
 ] as const;

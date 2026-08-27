@@ -54,8 +54,8 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
       tagada_product_id: 'product_6b750325addf',
       tagada_variant_id: 'variant_23afe7061b26',
       tagada_price_id: 'price_9dead884531e',
-      mbm_price_cents: 11900,
-      tagada_price_cents: 11900,
+      mbm_price_cents: 13900,
+      tagada_price_cents: 13900,
     });
     expect(LAUNCH_READY_KASHU_MAP['MBM-WM-SEM-GLY-005']).toMatchObject({
       tagada_product_id: 'product_dcc64482bbbf',
@@ -68,8 +68,8 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
       tagada_product_id: 'product_dcc64482bbbf',
       tagada_variant_id: 'variant_6db94a24e1ad',
       tagada_price_id: 'price_a1f4ee6101c1',
-      mbm_price_cents: 11900,
-      tagada_price_cents: 11900,
+      mbm_price_cents: 13900,
+      tagada_price_cents: 13900,
     });
     expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-005']?.tagada_price_cents).toBe(15900);
     expect(LAUNCH_READY_KASHU_MAP['MBM-WM-TIR-B12-006']?.tagada_price_cents).toBe(18900);

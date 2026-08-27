@@ -153,7 +153,7 @@ describe('Tagada membership recurring billing', () => {
     expect(cart).toMatchObject({
       ok: true,
       enrollmentVisitSku: 'MBM-PC-IPV-SRV-001',
-      dueTodayCents: 22400,
+      dueTodayCents: 20000,
       monthlyRebillCents: 12500,
     });
     expect(

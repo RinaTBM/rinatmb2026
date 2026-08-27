@@ -7,6 +7,7 @@ import { Glp1FormulationSelector, Glp1PatientDoseSelector } from '@/components/G
 import { useCart } from '@/context/CartContext';
 import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
 import { buildGlp1MembershipCartFields } from '@/lib/glp1/membershipCart';
+import { MEMBERSHIP_ENROLLMENT_ENABLED } from '@/lib/commerce/controlledLaunch';
 import { glp1FamilyIdFromSlug } from '@/lib/glp1/patientRequestedDose';
 
 export function ConcernPage({ concernId }: { concernId: string }) {
@@ -128,7 +129,9 @@ export function ConcernPage({ concernId }: { concernId: string }) {
                     )}
                   </div>
                   <button
+                    disabled={!MEMBERSHIP_ENROLLMENT_ENABLED}
                     onClick={() => {
+                      if (!MEMBERSHIP_ENROLLMENT_ENABLED) return;
                       const built = buildGlp1MembershipCartFields({
                         membership: m,
                         formulation: formulationBySlug[m.slug],
@@ -160,7 +163,9 @@ export function ConcernPage({ concernId }: { concernId: string }) {
                     }}
                     className={membershipJoinButtonClassName({ highlighted: m.highlighted })}
                   >
-                    Join {m.displayName.split(' ')[0]} <ArrowRight size={16} aria-hidden="true" />
+                    {MEMBERSHIP_ENROLLMENT_ENABLED
+                      ? <>Join {m.displayName.split(' ')[0]} <ArrowRight size={16} aria-hidden="true" /></>
+                      : 'Enrollment temporarily unavailable'}
                   </button>
                 </div>
               ))}

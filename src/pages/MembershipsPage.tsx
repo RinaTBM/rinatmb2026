@@ -7,6 +7,7 @@ import { Glp1FormulationSelector, Glp1PatientDoseSelector } from '@/components/G
 import { membershipJoinButtonClassName } from '@/lib/ui/membershipCta';
 import { buildGlp1MembershipCartFields } from '@/lib/glp1/membershipCart';
 import { glp1FamilyIdFromSlug } from '@/lib/glp1/patientRequestedDose';
+import { MEMBERSHIP_ENROLLMENT_ENABLED } from '@/lib/commerce/controlledLaunch';
 
 const howItWorks = [
   { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($125/month) or Tirzepatide ($179/month) membership, your requested dose, and shipping (Two-Day or Next-Day).' },
@@ -110,6 +111,15 @@ export function MembershipsPage() {
           <p className="text-base text-gold-700 font-medium">
             Active Wellness Members save 15% on eligible wellness products and accessories.
           </p>
+          {!MEMBERSHIP_ENROLLMENT_ENABLED && (
+            <div className="mt-6 rounded-xl border border-gold-200 bg-gold-50 px-5 py-4 text-left text-sm text-gold-900">
+              <p className="font-semibold">New membership enrollment is temporarily unavailable.</p>
+              <p className="mt-1">One-time purchases remain available while we complete final recurring-billing verification.</p>
+              <Link to="/shop-all" className="mt-3 inline-flex font-semibold underline underline-offset-4">
+                Shop one-time options
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
@@ -238,9 +248,11 @@ export function MembershipsPage() {
 
                 <button
                   onClick={() => handleJoin(m)}
+                  disabled={!MEMBERSHIP_ENROLLMENT_ENABLED}
                   className={membershipJoinButtonClassName({ highlighted: m.highlighted })}
                 >
-                  {m.cta} <ArrowRight size={16} aria-hidden="true" />
+                  {MEMBERSHIP_ENROLLMENT_ENABLED ? m.cta : 'Enrollment temporarily unavailable'}
+                  {MEMBERSHIP_ENROLLMENT_ENABLED && <ArrowRight size={16} aria-hidden="true" />}
                 </button>
               </div>
             ))}

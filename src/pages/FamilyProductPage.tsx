@@ -23,6 +23,7 @@ import {
   type WebsiteProductVariant,
 } from '@/data/websiteFamilies';
 import { buildGlp1MembershipCartFields } from '@/lib/glp1/membershipCart';
+import { MEMBERSHIP_ENROLLMENT_ENABLED } from '@/lib/commerce/controlledLaunch';
 import {
   ONE_TIME_GETTING_STARTED_BLOCKER,
   isGettingStartedDose,
@@ -128,7 +129,9 @@ function FamilySelectors({
   const isNad = familyId === 'nad';
   const isWolverine = familyId === 'wolverine-bpc-tb';
 
-  const purchaseTypes = unique(visible.map((v) => v.purchaseType));
+  const purchaseTypes = unique(visible.map((v) => v.purchaseType)).filter(
+    purchaseType => purchaseType !== 'membership' || MEMBERSHIP_ENROLLMENT_ENABLED,
+  );
   const oneTime = visible.filter((v) => v.purchaseType === 'one_time');
   const additives = unique(oneTime.map((v) => v.additive));
   const forms = unique(visible.map((v) => v.form));
@@ -408,7 +411,7 @@ function FamilySelectors({
                           label="One-Time Purchase"
                         />
                       )}
-                      {purchaseTypes.includes('membership') && (
+                      {MEMBERSHIP_ENROLLMENT_ENABLED && purchaseTypes.includes('membership') && (
                         <SelectorChip
                           selected={purchaseType === 'membership'}
                           onClick={() => {
@@ -421,6 +424,11 @@ function FamilySelectors({
                               : 'Wellness Membership · $179/month'
                           }
                         />
+                      )}
+                      {!MEMBERSHIP_ENROLLMENT_ENABLED && isWeight && (
+                        <span className="rounded-full border border-gold-200 bg-gold-50 px-4 py-2 text-sm text-gold-800">
+                          Membership enrollment is temporarily unavailable. One-time purchase remains available.
+                        </span>
                       )}
                     </div>
                   </fieldset>

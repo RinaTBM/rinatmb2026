@@ -295,9 +295,13 @@ export function resolveOneTimeVial(input: {
 }): { ok: true; mapping: OneTimeVialMapping } | { ok: false; error: string } {
   const formulation = validateGlp1Formulation(input.formulation);
   if (!formulation.ok) return formulation;
+  if (normalizeRequestedDose(input.requestedDose) === GETTING_STARTED_DOSE) {
+    return { ok: false, error: ONE_TIME_GETTING_STARTED_BLOCKER };
+  }
   const dose = validateRequestedDose({
     requestedDose: input.requestedDose,
     familyId: input.familyId,
+    allowGettingStarted: false,
   });
   if (!dose.ok) return dose;
   if (dose.value === GETTING_STARTED_DOSE) {

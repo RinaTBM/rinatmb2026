@@ -284,6 +284,7 @@ export function CheckoutPage() {
         const dose = validateRequestedDose({
           requestedDose: i.requestedDose,
           familyId,
+          allowGettingStarted: true,
         });
         if (!dose.ok) {
           issues.push({

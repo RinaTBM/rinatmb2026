@@ -70,17 +70,45 @@ export function glp1FamilyIdFromProductId(productId: string | null | undefined):
   return null;
 }
 
+export const ONE_TIME_WEEKLY_DOSE_REQUIRED =
+  'Please select a weekly dose for a one-time purchase.';
+
 export function patientWeeklyDosesForFamily(
   familyId: Glp1FamilyId,
 ): readonly string[] {
   return familyId === 'semaglutide' ? SEM_PATIENT_WEEKLY_DOSES : TIR_PATIENT_WEEKLY_DOSES;
 }
 
-export function patientDoseOptions(familyId: Glp1FamilyId): PatientDoseOption[] {
+export function patientDoseOptions(
+  familyId: Glp1FamilyId,
+  input?: { allowGettingStarted?: boolean },
+): PatientDoseOption[] {
+  const weekly = patientWeeklyDosesForFamily(familyId).map(d => ({ value: d, label: d }));
+  if (input?.allowGettingStarted === false) return weekly;
   return [
     { value: GETTING_STARTED_DOSE, label: GETTING_STARTED_DOSE_LABEL },
-    ...patientWeeklyDosesForFamily(familyId).map(d => ({ value: d, label: d })),
+    ...weekly,
   ];
+}
+
+/** Getting Started / Not Sure is membership-only. One-time must pick a weekly dose. */
+export function allowGettingStartedForPurchaseType(
+  purchaseType: 'one_time' | 'membership' | string | null | undefined,
+): boolean {
+  return purchaseType === 'membership' || purchaseType === 'membership_program';
+}
+
+/**
+ * Switching Membership → One-Time must not keep Getting Started / Not Sure.
+ * Do not map it onto a weekly dose.
+ */
+export function doseSelectionAfterPurchaseTypeChange(input: {
+  nextPurchaseType: 'one_time' | 'membership';
+  requestedDose: string;
+}): string {
+  if (input.nextPurchaseType !== 'one_time') return input.requestedDose;
+  if (normalizeRequestedDose(input.requestedDose) === GETTING_STARTED_DOSE) return '';
+  return input.requestedDose;
 }
 
 export function normalizeRequestedDose(raw: string | null | undefined): string | null {
@@ -107,10 +135,13 @@ export function normalizeRequestedDose(raw: string | null | undefined): string |
 export function isAllowedRequestedDose(
   value: string | null | undefined,
   familyId: Glp1FamilyId,
+  input?: { allowGettingStarted?: boolean },
 ): boolean {
   const normalized = normalizeRequestedDose(value);
   if (!normalized) return false;
-  if (normalized === GETTING_STARTED_DOSE) return true;
+  if (normalized === GETTING_STARTED_DOSE) {
+    return input?.allowGettingStarted !== false;
+  }
   return (patientWeeklyDosesForFamily(familyId) as readonly string[]).includes(normalized);
 }
 
@@ -124,15 +155,22 @@ export function labelRequestedDose(value: string | null | undefined): string {
 export function validateRequestedDose(input: {
   requestedDose: string | null | undefined;
   familyId: Glp1FamilyId;
+  allowGettingStarted?: boolean;
 }): { ok: true; value: string } | { ok: false; error: string } {
+  const allowGettingStarted = input.allowGettingStarted !== false;
   const normalized = normalizeRequestedDose(input.requestedDose);
   if (!normalized) {
     return {
       ok: false,
-      error: 'Please select your current dose or Getting Started / Not Sure.',
+      error: allowGettingStarted
+        ? 'Please select your current dose or Getting Started / Not Sure.'
+        : ONE_TIME_WEEKLY_DOSE_REQUIRED,
     };
   }
-  if (!isAllowedRequestedDose(normalized, input.familyId)) {
+  if (normalized === GETTING_STARTED_DOSE && !allowGettingStarted) {
+    return { ok: false, error: ONE_TIME_WEEKLY_DOSE_REQUIRED };
+  }
+  if (!isAllowedRequestedDose(normalized, input.familyId, { allowGettingStarted })) {
     return {
       ok: false,
       error: `Unsupported current dose: ${input.requestedDose}`,

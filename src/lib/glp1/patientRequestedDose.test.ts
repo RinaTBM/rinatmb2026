@@ -5,8 +5,11 @@ import { LAUNCH_READY_KASHU_MAP } from '@/lib/payments/launchReadyKashuMap';
 import {
   GETTING_STARTED_DOSE,
   GETTING_STARTED_DOSE_LABEL,
+  ONE_TIME_WEEKLY_DOSE_REQUIRED,
   SEM_PATIENT_WEEKLY_DOSES,
   TIR_PATIENT_WEEKLY_DOSES,
+  allowGettingStartedForPurchaseType,
+  doseSelectionAfterPurchaseTypeChange,
   formatProviderReviewSnapshot,
   isAllowedRequestedDose,
   labelRequestedDose,
@@ -44,30 +47,86 @@ const TIR_PRICES: Record<string, number> = {
 };
 
 describe('GLP-1 patient weekly dose (provider-review metadata)', () => {
-  it('SEM shows Getting Started plus 0.25–2 mg and never B6 / Pyridoxine / Any Dose', () => {
-    const opts = patientDoseOptions('semaglutide');
+  it('SEM membership shows Getting Started plus 8 weekly doses and never B6 / Pyridoxine / Any Dose', () => {
+    const opts = patientDoseOptions('semaglutide', { allowGettingStarted: true });
     expect(opts.map(o => o.label)).toEqual([
       GETTING_STARTED_DOSE_LABEL,
       ...SEM_PATIENT_WEEKLY_DOSES,
     ]);
+    expect(opts).toHaveLength(9);
     const blob = opts.map(o => o.label).join(' ');
     expect(blob).not.toMatch(/B6|Pyridoxine|Any Dose|Starting \/ Low|Mid|High/i);
   });
 
-  it('TIR shows Getting Started plus 2.5–15 mg and never grouping labels', () => {
-    const opts = patientDoseOptions('tirzepatide');
+  it('SEM one-time hides Getting Started and shows only the 8 weekly doses', () => {
+    const opts = patientDoseOptions('semaglutide', { allowGettingStarted: false });
+    expect(opts.map(o => o.label)).toEqual([...SEM_PATIENT_WEEKLY_DOSES]);
+    expect(opts).toHaveLength(8);
+    expect(opts.some(o => o.value === GETTING_STARTED_DOSE)).toBe(false);
+  });
+
+  it('TIR membership shows Getting Started plus 6 weekly doses and never grouping labels', () => {
+    const opts = patientDoseOptions('tirzepatide', { allowGettingStarted: true });
     expect(opts.map(o => o.label)).toEqual([
       GETTING_STARTED_DOSE_LABEL,
       ...TIR_PATIENT_WEEKLY_DOSES,
     ]);
+    expect(opts).toHaveLength(7);
     const blob = opts.map(o => o.label).join(' ');
     expect(blob).not.toMatch(/B6|Pyridoxine|5\+10|15\+20|25\+30|Any Dose/i);
+  });
+
+  it('TIR one-time hides Getting Started and shows only the 6 weekly doses', () => {
+    const opts = patientDoseOptions('tirzepatide', { allowGettingStarted: false });
+    expect(opts.map(o => o.label)).toEqual([...TIR_PATIENT_WEEKLY_DOSES]);
+    expect(opts).toHaveLength(6);
+    expect(opts.some(o => o.value === GETTING_STARTED_DOSE)).toBe(false);
+  });
+
+  it('Getting Started is membership-only', () => {
+    expect(allowGettingStartedForPurchaseType('membership')).toBe(true);
+    expect(allowGettingStartedForPurchaseType('membership_program')).toBe(true);
+    expect(allowGettingStartedForPurchaseType('one_time')).toBe(false);
+  });
+
+  it('clears Getting Started when switching Membership → One-Time and does not map it to a dose', () => {
+    expect(
+      doseSelectionAfterPurchaseTypeChange({
+        nextPurchaseType: 'one_time',
+        requestedDose: GETTING_STARTED_DOSE,
+      }),
+    ).toBe('');
+    expect(
+      doseSelectionAfterPurchaseTypeChange({
+        nextPurchaseType: 'one_time',
+        requestedDose: GETTING_STARTED_DOSE_LABEL,
+      }),
+    ).toBe('');
+    expect(
+      doseSelectionAfterPurchaseTypeChange({
+        nextPurchaseType: 'one_time',
+        requestedDose: '0.25 mg',
+      }),
+    ).toBe('0.25 mg');
+    expect(
+      doseSelectionAfterPurchaseTypeChange({
+        nextPurchaseType: 'membership',
+        requestedDose: '',
+      }),
+    ).toBe('');
+    const oneTimeRejected = validateRequestedDose({
+      requestedDose: GETTING_STARTED_DOSE,
+      familyId: 'semaglutide',
+      allowGettingStarted: false,
+    });
+    expect(oneTimeRejected).toEqual({ ok: false, error: ONE_TIME_WEEKLY_DOSE_REQUIRED });
   });
 
   it('stores Getting Started as getting_started intent, not a vial strength', () => {
     const v = validateRequestedDose({
       requestedDose: GETTING_STARTED_DOSE_LABEL,
       familyId: 'semaglutide',
+      allowGettingStarted: true,
     });
     expect(v).toEqual({ ok: true, value: GETTING_STARTED_DOSE });
     expect(labelRequestedDose(GETTING_STARTED_DOSE)).toBe(GETTING_STARTED_DOSE_LABEL);

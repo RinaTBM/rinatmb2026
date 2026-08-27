@@ -52,9 +52,6 @@ import {
   type PaymentMethod,
 } from '@/lib/payments/paymentMethods';
 import {
-  MEMBERSHIP_CARD_RECURRING_DISCLOSURE,
-  MEMBERSHIP_CARD_SHIPPING_NOTE,
-  MEMBERSHIP_TERMS_ACCEPTANCE_LABEL,
   getTagadaMembershipProgram,
 } from '@/lib/membership/tagadaMembershipBilling';
 import {
@@ -100,6 +97,13 @@ import {
   shouldAutoAddHrtLabPackage,
 } from '@/lib/provider/hrtLabPackage';
 
+const MEMBERSHIP_CARD_RECURRING_DISCLOSURE =
+  'Your card will be charged monthly for the selected prescription at 15% off plus your selected recurring shipping.';
+const MEMBERSHIP_CARD_SHIPPING_NOTE =
+  'Your selected Two-Day ($30) or Next-Day ($50) shipping method is included with every monthly renewal. Provider visits, labs, and services are one-time charges.';
+const MEMBERSHIP_TERMS_ACCEPTANCE_LABEL =
+  'I authorize monthly card billing for my prescription subscription and selected recurring shipping until canceled.';
+
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
   const { isActiveMember, activateMembership } = useMember();
@@ -130,7 +134,7 @@ export function CheckoutPage() {
 
   const hasProviderCare = items.some(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId));
   const hasMembership = items.some(
-    i => i.isMembership || i.purchaseType === 'membership_program',
+    i => i.isMembership || i.purchaseType === 'membership_program' || i.purchaseType === 'auto_refill',
   );
   const allAccepted =
     acknowledged.terms &&
@@ -504,7 +508,9 @@ export function CheckoutPage() {
     .map(i => programSkuForMembershipAppId(i.productId))
     .find((s): s is string => Boolean(s));
   const membershipProgram = getTagadaMembershipProgram(membershipProgramSku);
-  const membershipBaseCents = membershipProgram?.monthlyAmountCents ?? 0;
+  const membershipBaseCents = items
+    .filter(i => i.purchaseType === 'auto_refill' || i.isMembership || i.purchaseType === 'membership_program')
+    .reduce((sum, item) => sum + Math.round(item.price * 100) * item.quantity, 0);
   const membershipMonthlyCents =
     hasMembership && shippingCents > 0
       ? membershipBaseCents + shippingCents
@@ -707,7 +713,7 @@ export function CheckoutPage() {
           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || '',
           subtotalCents,
           discountCents:
-            !hasMembership && isOgtbmPromoCode(appliedPromoCode)
+            hasMembership || isOgtbmPromoCode(appliedPromoCode)
               ? 0
               : Math.round(totalSavings * 100),
           promoCode: hasMembership ? null : appliedPromoCode,
@@ -1217,8 +1223,8 @@ export function CheckoutPage() {
                       />
                       <span className="text-xs text-ink-600">
                         {MEMBERSHIP_TERMS_ACCEPTANCE_LABEL}{' '}
-                        <Link to="/membership-terms" className="text-gold-600 hover:text-gold-700">
-                          Membership &amp; Cancellation Terms
+                        <Link to="/subscription-terms" className="text-gold-600 hover:text-gold-700">
+                          Subscription &amp; Cancellation Terms
                         </Link>
                         .
                       </span>

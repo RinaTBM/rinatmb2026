@@ -67,6 +67,38 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
     expect(r).toEqual({ ok: true, membershipRecurring: true });
   });
 
+  it('allows one prescription subscription plus a one-time provider visit', () => {
+    expect(evaluateKashuCardCartEligibility({
+      flagEnabled: true,
+      shippingCents: 5000,
+      taxCents: 0,
+      items: [
+        { purchaseType: 'auto_refill', quantity: 1, sku: 'MBM-WM-SEM-B12-001', productId: 'p1' },
+        { purchaseType: 'one_time', quantity: 1, sku: 'MBM-PC-IPV-SRV-001', productId: 'pc1' },
+      ],
+    })).toEqual({ ok: true, membershipRecurring: true });
+  });
+
+  it('blocks accessories and multiple prescriptions in a subscription checkout', () => {
+    for (const items of [
+      [
+        { purchaseType: 'auto_refill', quantity: 1, sku: 'MBM-WM-SEM-B12-001', productId: 'p1' },
+        { purchaseType: 'one_time', quantity: 1, sku: 'MBM-ACC-BAG-001', productId: 'a1' },
+      ],
+      [
+        { purchaseType: 'auto_refill', quantity: 1, sku: 'MBM-WM-SEM-B12-001', productId: 'p1' },
+        { purchaseType: 'auto_refill', quantity: 1, sku: 'MBM-WM-TIR-B12-001', productId: 'p5' },
+      ],
+    ]) {
+      expect(evaluateKashuCardCartEligibility({
+        flagEnabled: true,
+        shippingCents: 3000,
+        taxCents: 0,
+        items,
+      }).ok).toBe(false);
+    }
+  });
+
   it('blocks mixed membership + ordinary one-time merchandise from becoming a one-time card purchase', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,

@@ -13,7 +13,7 @@ import { HomePage } from '@/pages/HomePage';
 import { GoalsPage } from '@/pages/GoalsPage';
 import { ShopAllPage } from '@/pages/ShopAllPage';
 import { BestSellersPage } from '@/pages/BestSellersPage';
-import { MembershipsPage } from '@/pages/MembershipsPage';
+import { SubscriptionsPage } from '@/pages/SubscriptionsPage';
 import { AlaCartePage } from '@/pages/AlaCartePage';
 import { AboutPage } from '@/pages/AboutPage';
 import { MedicalDirectorPage } from '@/pages/MedicalDirectorPage';
@@ -26,7 +26,7 @@ import { ConcernPage } from '@/pages/ConcernPage';
 import { ProductPage } from '@/pages/ProductPage';
 import { RefundPolicyPage } from '@/pages/RefundPolicyPage';
 import { ShippingPolicyPage } from '@/pages/ShippingPolicyPage';
-import { MembershipTermsPage } from '@/pages/MembershipTermsPage';
+import { SubscriptionTermsPage } from '@/pages/SubscriptionTermsPage';
 import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
@@ -78,13 +78,13 @@ function buildRoutes() {
       path: '/',
       component: createElement(HomePage),
       title: 'My Bare Method — Wellness, Elevated. Beautifully Personalized.',
-      description: 'Premium wellness products and provider-guided care, thoughtfully curated to help you feel your best—delivered with discretion, quality, and care. Semaglutide and Tirzepatide memberships, HRT, longevity, and more.',
+      description: 'Premium wellness products and provider-guided care with optional Subscribe & Save pricing on eligible prescriptions.',
     },
     {
       path: '/shop-all',
       component: createElement(ShopAllPage),
       title: 'Shop All — My Bare Method',
-      description: 'Browse our complete catalog of premium wellness products, memberships, and accessories.',
+      description: 'Browse our complete catalog of prescription wellness products, provider care, and accessories.',
     },
     {
       path: '/best-sellers',
@@ -93,10 +93,10 @@ function buildRoutes() {
       description: 'Our most loved wellness products, curated by thousands of happy customers.',
     },
     {
-      path: '/memberships',
-      component: createElement(MembershipsPage),
-      title: 'Memberships — My Bare Method',
-      description: 'Locked-price, provider-guided Semaglutide ($125/mo) and Tirzepatide ($179/mo) memberships. One membership, one predictable monthly price. Provider review required.',
+      path: '/subscriptions',
+      component: createElement(SubscriptionsPage),
+      title: 'Subscribe & Save — My Bare Method',
+      description: 'Save 15% on eligible monthly prescription renewals. Selected Two-Day or Next-Day shipping recurs with every renewal. Provider review required.',
     },
     {
       path: '/alacarte',
@@ -161,9 +161,9 @@ function buildRoutes() {
     },
     {
       path: '/membership-terms',
-      component: createElement(MembershipTermsPage),
-      title: 'Membership & Cancellation Terms — My Bare Method',
-      description: 'Terms and conditions for My Bare Method memberships and cancellations.',
+      component: createElement(SubscriptionTermsPage),
+      title: 'Subscription & Cancellation Terms — My Bare Method',
+      description: 'Recurring billing, shipping, and cancellation terms for My Bare Method prescription subscriptions.',
     },
     {
       path: '/accessibility',

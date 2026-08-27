@@ -445,6 +445,35 @@ export function evaluateKashuCardCartEligibility(input: {
     return { ok: false, reason: 'empty', message: 'Your cart is empty.' };
   }
 
+  const prescriptionSubscriptionLines = input.items.filter(item =>
+    item.purchaseType === 'auto_refill'
+  );
+  if (prescriptionSubscriptionLines.length > 0) {
+    const recurring = prescriptionSubscriptionLines[0];
+    const otherUnsupported = input.items.filter(item =>
+      item !== recurring && !String(item.sku || '').startsWith('MBM-PC-')
+    );
+    if (
+      prescriptionSubscriptionLines.length !== 1 ||
+      Number(recurring.quantity) !== 1 ||
+      otherUnsupported.length > 0
+    ) {
+      return {
+        ok: false,
+        reason: 'membership_mixed',
+        message: 'Subscribe & Save allows one prescription (quantity 1) plus required one-time provider services.',
+      };
+    }
+    const ship = evaluateMembershipEnrollmentShipping(Math.trunc(input.shippingCents));
+    if (!ship.ok) {
+      return { ok: false, reason: 'shipping_parity', blockerCode: TAGADA_SHIPPING_PARITY_BLOCKER, message: ship.message.replace(/membership/gi, 'subscription') };
+    }
+    if (Math.trunc(Number(input.taxCents ?? 0) || 0) > 0) {
+      return { ok: false, reason: 'unexpected_tax', blockerCode: TAGADA_UNEXPECTED_TAX_AMOUNT, message: 'This order has an unexpected tax amount for card checkout.' };
+    }
+    return { ok: true, membershipRecurring: true };
+  }
+
   const hasMembership = input.items.some(isMembershipLineItem);
   if (hasMembership) {
     const membershipCart = evaluateMembershipCardCheckoutCart(input.items);

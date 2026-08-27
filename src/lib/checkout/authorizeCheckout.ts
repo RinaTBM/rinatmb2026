@@ -28,7 +28,6 @@ import {
   WEIGHT_MED_PRODUCT_IDS,
   WELLNESS_MEMBER_DISCOUNT_PERCENT,
 } from './checkoutConstants';
-import { NEW_PURCHASE_AUTO_REFILL_BLOCKER } from '../pricing/purchaseOptions';
 
 export type PurchaseType = 'one_time' | 'auto_refill' | 'membership_program' | 'active_membership';
 
@@ -188,7 +187,11 @@ export function authorizeWellnessUnitCents(
     item.purchaseType ?? (item.subscription ? 'auto_refill' : 'one_time');
 
   if (purchaseType === 'auto_refill' || item.subscription) {
-    return null;
+    return {
+      unitAmountCents: applyPercentOffCents(standard, 15),
+      reason: 'auto_refill',
+      discountPercent: 15,
+    };
   }
 
   const wantsMember =
@@ -312,10 +315,6 @@ export function resolveProductLine(
   const qty = Math.max(1, Math.round(item.quantity) || 1);
   const purchaseType: PurchaseType =
     item.purchaseType ?? (item.subscription ? 'auto_refill' : 'one_time');
-
-  if (purchaseType === 'auto_refill' || item.subscription) {
-    return { error: NEW_PURCHASE_AUTO_REFILL_BLOCKER };
-  }
 
   if (isAccessoryLine(item)) {
     const unit = authorizeAccessoryUnitCents(item, isActiveMember);

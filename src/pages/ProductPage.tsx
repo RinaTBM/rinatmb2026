@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, navigate } from '@/router';
+import { Link } from '@/router';
 import { Minus, Plus, ShieldCheck, RefreshCw, Truck, Check } from 'lucide-react';
 import { getMembership, getProduct, getRelatedProducts, sections } from '@/data/products';
 import { useCart } from '@/context/CartContext';
@@ -70,7 +70,7 @@ function WellnessProductPage({ slug }: { slug: string }) {
   const { isActiveMember } = useMember();
   const [variantIndex, setVariantIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  /** null = use preferred default (Wellness Membership / Active Wellness when available). */
+  /** null = default to Subscribe & Save when eligible. */
   const [selectedKind, setSelectedKind] = useState<PurchaseOptionKind | null>(null);
   const [requestedFormulation, setRequestedFormulation] = useState('');
   const [doseError, setDoseError] = useState<string | null>(null);
@@ -90,10 +90,8 @@ function WellnessProductPage({ slug }: { slug: string }) {
     });
   }, [product, variant, isActiveMember, settings]);
 
-  const preferredDefault: PurchaseOptionKind = options.some(o => o.kind === 'membership_program')
-    ? 'membership_program'
-    : options.some(o => o.kind === 'active_membership')
-      ? 'active_membership'
+  const preferredDefault: PurchaseOptionKind = options.some(o => o.kind === 'auto_refill')
+    ? 'auto_refill'
       : options.some(o => o.kind === 'one_time')
         ? 'one_time'
         : (options[0]?.kind ?? 'one_time');
@@ -169,34 +167,6 @@ function WellnessProductPage({ slug }: { slug: string }) {
       return;
     }
 
-    if (selected.kind === 'active_membership' && !isActiveMember) {
-      navigate('/memberships');
-      return;
-    }
-
-    if (selected.kind === 'active_membership' && isActiveMember) {
-      // Member price display only — default cart action is one-time at member price.
-      const oneTime = options.find(o => o.kind === 'one_time');
-      if (!oneTime) return;
-      addItem({
-        productId: product.id,
-        slug: product.slug,
-        name: product.displayName,
-        price: oneTime.finalPrice,
-        standardPrice: variant.price,
-        image: product.image,
-        subscription: false,
-        section: product.category,
-        requiresIntake: product.requiresProviderReview,
-        variantId: variant.id,
-        variantLabel: `${variant.label} · Member price`,
-        purchaseType: 'one_time',
-        discountPercent: oneTime.discountPercent,
-        appliedDiscount: oneTime.appliedDiscount,
-      }, quantity);
-      return;
-    }
-
     addItem({
       productId: product.id,
       slug: product.slug,
@@ -204,7 +174,7 @@ function WellnessProductPage({ slug }: { slug: string }) {
       price: selected.finalPrice,
       standardPrice: variant.price,
       image: product.image,
-      subscription: false,
+      subscription: selected.kind === 'auto_refill',
       section: product.category,
       requiresIntake: product.requiresProviderReview,
       variantId: variant.id,
@@ -212,17 +182,16 @@ function WellnessProductPage({ slug }: { slug: string }) {
         selected.appliedDiscount === 'member'
           ? `${variant.label} · Member price`
           : variant.label,
-      purchaseType: selected.kind === 'membership_program' ? 'membership_program' : 'one_time',
+      purchaseType: selected.kind === 'auto_refill' ? 'auto_refill' : 'one_time',
       discountPercent: selected.discountPercent,
       appliedDiscount: selected.appliedDiscount,
-      billingFrequency: selected.kind === 'membership_program' ? 'monthly' : undefined,
+      billingFrequency: selected.kind === 'auto_refill' ? 'monthly' : undefined,
     }, quantity);
   };
 
   const primaryLabel = () => {
     if (!selected) return 'Add to Cart';
     if (selected.kind === 'membership_program') return selected.cta;
-    if (selected.kind === 'active_membership' && !isActiveMember) return 'Become a Member';
     return `${selected.cta} — $${(selected.finalPrice * quantity).toFixed(2)}`;
   };
 

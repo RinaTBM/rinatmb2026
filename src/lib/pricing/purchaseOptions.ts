@@ -1,10 +1,7 @@
 /**
- * New-purchase pricing: One-Time Purchase and (where eligible) Wellness Membership.
- * Auto-Refill is retired for new enrollments — types remain for historical records.
- * Discounts never stack. Maximum automatic savings = member discount (default 15%).
- *
- * Semaglutide / Tirzepatide product pages use a separate flat-rate
- * `membership_program` option ($125 / $179) — never a 15% dose discount.
+ * New-purchase pricing: One-Time Purchase or Subscribe & Save 15%.
+ * Subscriptions are available only for active prescription products. Provider
+ * visits, labs, services, and accessories are always one-time purchases.
  */
 import type { Category, Product, ProductVariant } from '../../data/products';
 import {
@@ -13,11 +10,7 @@ import {
   type PurchaseDiscountSettings,
   getDefaultPurchaseDiscountSettings,
 } from './settings';
-import {
-  getWeightMembershipProgram,
-  isWeightMedicationSlug,
-  type WeightMembershipProgramMeta,
-} from './weightMembership';
+import type { WeightMembershipProgramMeta } from './weightMembership';
 
 export type PurchaseOptionKind =
   | 'membership_program'
@@ -26,10 +19,10 @@ export type PurchaseOptionKind =
   | 'one_time';
 export type AppliedDiscount = 'member' | 'auto_refill' | 'none';
 
-/** Storefront no longer offers Auto-Refill for new purchases. */
-export const NEW_PURCHASE_AUTO_REFILL_OFFERED = false;
+/** Historical storage value retained; customer-facing label is Subscribe & Save. */
+export const NEW_PURCHASE_AUTO_REFILL_OFFERED = true;
 export const NEW_PURCHASE_AUTO_REFILL_BLOCKER =
-  'Auto-Refill is not available for new purchases. Choose One-Time Purchase or Wellness Membership.';
+  'Subscriptions are available only for active prescription products.';
 
 export const EXCLUDED_DISCOUNT_CATEGORIES: ReadonlySet<Category> = new Set([
   'provider-care',
@@ -58,7 +51,7 @@ export interface ResolvePriceInput {
   product: Pick<
     Product,
     'category' | 'autoRefillEligible' | 'memberPricingEligible' | 'excludedFromDiscounts' | 'status'
-  >;
+  > & Partial<Pick<Product, 'requiresPrescription'>>;
   /** Customer already has an Active Wellness Membership (Semaglutide or Tirzepatide). */
   isActiveMember: boolean;
   /** Selected storefront option (membership CTA is navigational; pricing uses member/auto/one-time). */
@@ -88,11 +81,12 @@ export function isMemberPricingEligible(
  * Catalog flag only (admin / historical). Does not offer Auto-Refill on the storefront.
  */
 export function isAutoRefillEligible(
-  product: Pick<Product, 'category' | 'autoRefillEligible' | 'excludedFromDiscounts' | 'status'>,
+  product: Pick<Product, 'category' | 'autoRefillEligible' | 'excludedFromDiscounts' | 'status'> &
+    Partial<Pick<Product, 'requiresPrescription'>>,
 ): boolean {
   if (isExcludedFromDiscounts(product)) return false;
   if (product.status === 'future') return false;
-  return product.autoRefillEligible === true;
+  return product.requiresPrescription !== false && product.autoRefillEligible === true;
 }
 
 export function isAutoRefillNewPurchaseAttempt(item: {
@@ -159,37 +153,20 @@ export function resolveUnitPrice(input: ResolvePriceInput): {
     };
   }
 
-  // Auto-Refill is not offered for new purchases — treat as one-time (no 10%).
+  if (option === 'auto_refill' && isAutoRefillEligible(product)) {
+    return {
+      finalPrice: applyDiscount(standardPrice, settings.memberDiscountPercent),
+      discountPercent: settings.memberDiscountPercent,
+      appliedDiscount: 'auto_refill',
+      recurring: true,
+    };
+  }
 
   return {
     finalPrice: standardPrice,
     discountPercent: 0,
     appliedDiscount: 'none',
     recurring: false,
-  };
-}
-
-function buildWeightMembershipOption(
-  product: Product,
-  selectedVariant?: Pick<ProductVariant, 'strength' | 'size'> | null,
-): PricedPurchaseOption | null {
-  const program = getWeightMembershipProgram(product, selectedVariant);
-  if (!program) return null;
-
-  return {
-    kind: 'membership_program',
-    label: 'Wellness Membership',
-    badge: 'BEST VALUE',
-    description: program.supportingCopy,
-    cta: program.cta,
-    standardPrice: program.monthlyPrice,
-    finalPrice: program.monthlyPrice,
-    discountPercent: 0,
-    appliedDiscount: 'none',
-    recurring: true,
-    billingFrequency: 'monthly',
-    savingsAmount: 0,
-    program,
   };
 }
 
@@ -202,42 +179,29 @@ export function buildPurchaseOptions(input: {
   selectedVariant?: Pick<ProductVariant, 'strength' | 'size'> | null;
 }): PricedPurchaseOption[] {
   const settings = input.settings ?? getDefaultPurchaseDiscountSettings();
-  const { standardPrice, product, isActiveMember, selectedVariant } = input;
+  const { standardPrice, product, isActiveMember } = input;
   const options: PricedPurchaseOption[] = [];
 
-  const weightProgram = isWeightMedicationSlug(product.slug)
-    ? buildWeightMembershipOption(product, selectedVariant)
-    : null;
-  if (weightProgram) {
-    options.push(weightProgram);
-  }
-
-  // Percentage member pricing CTA for other eligible wellness products only.
-  // Semaglutide / Tirzepatide keep memberPricingEligible: false so this stays off.
-  const memberEligible = !weightProgram && isMemberPricingEligible(product);
-
-  if (memberEligible) {
+  if (isAutoRefillEligible(product)) {
     const priced = resolveUnitPrice({
       standardPrice,
       product,
-      isActiveMember,
-      option: 'active_membership',
+      isActiveMember: false,
+      option: 'auto_refill',
       settings,
     });
     options.push({
-      kind: 'active_membership',
-      label: isActiveMember ? 'Active Member Price' : 'Active Wellness Membership',
-      badge: isActiveMember ? 'Save 15%'.replace('15', String(settings.memberDiscountPercent)) : 'BEST VALUE',
-      description: isActiveMember
-        ? 'You are receiving our best available pricing.'
-        : 'Members receive our lowest available pricing on eligible wellness products.',
-      cta: isActiveMember ? 'Active Member Price' : 'Become a Member',
+      kind: 'auto_refill',
+      label: 'Subscribe & Save',
+      badge: `Save ${settings.memberDiscountPercent}%`,
+      description: 'Delivered monthly after provider approval. Your selected $30 or $50 shipping method renews with every order.',
+      cta: 'Subscribe',
       standardPrice,
       finalPrice: priced.finalPrice,
       discountPercent: priced.discountPercent,
       appliedDiscount: priced.appliedDiscount,
-      recurring: false,
-      billingFrequency: null,
+      recurring: true,
+      billingFrequency: 'monthly',
       savingsAmount: Math.max(0, Math.round((standardPrice - priced.finalPrice) * 100) / 100),
     });
   }

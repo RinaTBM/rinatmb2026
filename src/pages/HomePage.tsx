@@ -16,7 +16,6 @@ import {
   concerns,
   sections,
   getBestSellers,
-  visibleMemberships,
   getProductsBySection,
 } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
@@ -56,11 +55,11 @@ const howItWorksSteps = [
 
 
 const faqs = [
-  { q: 'Do I need a membership to purchase?', a: 'No. You can make a one-time purchase. Semaglutide and Tirzepatide also offer Wellness Membership. Active Wellness Members save 15% on eligible wellness products and accessories. Provider care, shipping, and taxes are never discounted. Already-discounted accessory bundles do not automatically receive an additional member discount.' },
+  { q: 'Do I need a subscription to purchase?', a: 'No. Every eligible prescription can be purchased once. Subscribe & Save is optional and takes 15% off the prescription medication only.' },
   { q: 'Is provider approval guaranteed?', a: 'No. Provider review and approval are required for certain products. Payment and order submission do not guarantee approval. If not approved after payment has been received, eligible paid amounts for the unapproved product are refunded in accordance with our Refund Policy.' },
-  { q: 'What is the 3-month commitment?', a: 'Active Wellness Memberships require a 3-month minimum commitment. Your card is billed monthly for membership plus selected recurring shipping. After the commitment period, you may submit a cancellation request.' },
+  { q: 'What renews with a subscription?', a: 'The selected prescription medication and your selected Two-Day ($30) or Next-Day ($50) shipping renew monthly. Provider visits, labs, services, and accessories remain one-time purchases.' },
   { q: 'How do I pay?', a: 'Public checkout uses Credit / Debit Card through our secure hosted card checkout. Applicable taxes are included in displayed prices where required.' },
-  { q: 'How is shipping handled?', a: 'One-time eligible orders: Two-Day $30 or Next-Day $50. Membership shipping recurs monthly with your card charge. Processing and shipping timelines begin only after payment has been received and any required provider review/approval has been completed. Orders ship in plain, discreet packaging.' },
+  { q: 'How is shipping handled?', a: 'Choose Two-Day ($30) or Next-Day ($50). For Subscribe & Save, that selected shipping charge recurs with each monthly medication renewal. Processing starts only after payment and required provider approval.' },
 ];
 
 export function HomePage() {
@@ -309,9 +308,9 @@ export function HomePage() {
         <div className="container-lux">
           <div className="text-center mb-12">
             <p className="eyebrow text-gold-300 mb-3">Ways to shop</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-cream-50 mb-4">Members Save More</h2>
+            <h2 className="font-serif text-4xl md:text-5xl text-cream-50 mb-4">Subscribe &amp; Save 15%</h2>
             <p className="text-lg text-cream-100/70 max-w-2xl mx-auto">
-              Active Wellness Members receive our best pricing, exclusive savings, and convenient ongoing wellness support.
+              Choose monthly renewal on any eligible prescription and keep your selected shipping method with every order.
             </p>
           </div>
           <div className="grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
@@ -319,14 +318,14 @@ export function HomePage() {
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold-400 px-4 py-1 text-xs font-semibold text-ink-900 whitespace-nowrap">
                 BEST VALUE
               </span>
-              <h3 className="font-serif text-2xl text-cream-50 mb-2">Active Wellness Membership</h3>
-              <p className="text-sm text-gold-300 mb-4 font-medium">Members Save 15%</p>
+              <h3 className="font-serif text-2xl text-cream-50 mb-2">Prescription Subscription</h3>
+              <p className="text-sm text-gold-300 mb-4 font-medium">Save 15% on medication</p>
               <ul className="space-y-3 mb-8">
                 {[
-                  'Save 15% on eligible wellness products and accessories',
-                  'Locked membership pricing',
-                  'Priority access to new products',
-                  'Convenient monthly wellness',
+                  'Save 15% on the selected prescription',
+                  'Monthly medication renewal',
+                  '$30 or $50 shipping renews with every order',
+                  'Visits, labs, services, and accessories stay one-time',
                   'Provider-guided care',
                 ].map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-cream-100/80">
@@ -335,15 +334,7 @@ export function HomePage() {
                   </li>
                 ))}
               </ul>
-              <div className="space-y-3 mb-6">
-                {visibleMemberships.map(m => (
-                  <div key={m.id} className="flex items-baseline justify-between rounded-lg bg-ink-700/50 px-4 py-3">
-                    <span className="text-sm text-cream-100/80">{m.name}</span>
-                    <span className="font-serif text-lg text-gold-300">{m.price > 0 ? `$${m.price}${m.priceLabel}` : 'Starting at $—/month'}</span>
-                  </div>
-                ))}
-              </div>
-              <Link to="/memberships" className="btn-primary w-full">Become a Member <ArrowRight size={16} /></Link>
+              <Link to="/subscriptions" className="btn-primary w-full">Choose a Prescription <ArrowRight size={16} /></Link>
             </div>
 
             <div className="rounded-2xl border border-cream-100/20 bg-ink-800/30 p-8">

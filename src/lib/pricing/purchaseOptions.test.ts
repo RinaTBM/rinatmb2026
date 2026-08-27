@@ -71,18 +71,18 @@ describe('resolveUnitPrice — hierarchy & no stacking', () => {
     expect(r.appliedDiscount).toBe('none');
   });
 
-  it('auto-refill is not offered and does not apply 10% for new purchases', () => {
-    expect(NEW_PURCHASE_AUTO_REFILL_OFFERED).toBe(false);
+  it('subscription applies 15% and recurs monthly', () => {
+    expect(NEW_PURCHASE_AUTO_REFILL_OFFERED).toBe(true);
     const r = resolveUnitPrice({
       standardPrice: 200,
       product: wellness,
       isActiveMember: false,
       option: 'auto_refill',
     });
-    expect(r.finalPrice).toBe(200);
-    expect(r.discountPercent).toBe(0);
-    expect(r.appliedDiscount).toBe('none');
-    expect(r.recurring).toBe(false);
+    expect(r.finalPrice).toBe(170);
+    expect(r.discountPercent).toBe(15);
+    expect(r.appliedDiscount).toBe('auto_refill');
+    expect(r.recurring).toBe(true);
   });
 
   it('active member receives 15% even if a leftover auto-refill option is requested (no stacking, no 10%)', () => {
@@ -136,9 +136,8 @@ describe('resolveUnitPrice — hierarchy & no stacking', () => {
     });
     expect(one.finalPrice).toBe(199);
     expect(one.appliedDiscount).toBe('none');
-    // Auto-Refill 10% is not applied for new purchases.
-    expect(auto.finalPrice).toBe(199);
-    expect(auto.appliedDiscount).toBe('none');
+    expect(auto.finalPrice).toBe(169.15);
+    expect(auto.appliedDiscount).toBe('auto_refill');
   });
 
   it('applyDiscount rounds to cents', () => {
@@ -155,24 +154,23 @@ describe('buildPurchaseOptions', () => {
     displayName: 'NAD+',
   } as Product;
 
-  it('orders membership → one-time and never offers Auto-Refill', () => {
+  it('orders Subscribe & Save before one-time', () => {
     const nonMember = buildPurchaseOptions({
       standardPrice: 199,
       product,
       isActiveMember: false,
     });
-    expect(nonMember.map(o => o.kind)).toEqual(['active_membership', 'one_time']);
-    expect(nonMember.some(o => o.kind === 'auto_refill')).toBe(false);
-    expect(nonMember[0].cta).toBe('Become a Member');
-    expect(nonMember[0].badge).toBe('BEST VALUE');
+    expect(nonMember.map(o => o.kind)).toEqual(['auto_refill', 'one_time']);
+    expect(nonMember[0].cta).toBe('Subscribe');
+    expect(nonMember[0].badge).toBe('Save 15%');
 
     const member = buildPurchaseOptions({
       standardPrice: 199,
       product,
       isActiveMember: true,
     });
-    expect(member[0].label).toBe('Active Member Price');
-    expect(member[0].cta).toBe('Active Member Price');
+    expect(member[0].label).toBe('Subscribe & Save');
+    expect(member[0].cta).toBe('Subscribe');
     expect(member[1].kind).toBe('one_time');
     expect(member[1].finalPrice).toBe(member[0].finalPrice);
   });
@@ -187,7 +185,7 @@ describe('buildPurchaseOptions', () => {
     expect(opts[0].finalPrice).toBe(12);
   });
 
-  it('uses flat-rate Wellness Membership (not 15%) on Semaglutide and Tirzepatide', () => {
+  it('offers 15% subscriptions on Semaglutide and Tirzepatide', () => {
     // Full catalog products are covered in weightMembership.test.ts.
     // Synthetic products with weight slugs still must not get the % CTA.
     for (const slug of ['semaglutide', 'tirzepatide'] as const) {
@@ -205,13 +203,13 @@ describe('buildPurchaseOptions', () => {
       // Without catalog membership linkage via getMembership, flat option still
       // resolves when slug matches; getMembership looks up real program data.
       expect(opts.some(o => o.kind === 'active_membership')).toBe(false);
-      expect(opts.map(o => o.kind)).not.toContain('auto_refill');
+      expect(opts.map(o => o.kind)).toContain('auto_refill');
       expect(opts.map(o => o.kind)).toContain('one_time');
     }
   });
 
-  it('never emits Auto-Refill as a selectable new-purchase option', () => {
-    expect(NEW_PURCHASE_AUTO_REFILL_OFFERED).toBe(false);
+  it('emits subscriptions only for eligible prescriptions', () => {
+    expect(NEW_PURCHASE_AUTO_REFILL_OFFERED).toBe(true);
     expect(isAutoRefillNewPurchaseAttempt({ purchaseType: 'auto_refill' })).toBe(true);
     expect(isAutoRefillNewPurchaseAttempt({ subscription: true })).toBe(true);
     expect(isAutoRefillNewPurchaseAttempt({ isMembership: true, subscription: true })).toBe(false);
@@ -222,7 +220,7 @@ describe('buildPurchaseOptions', () => {
         product: catalogProduct,
         isActiveMember: false,
       });
-      expect(opts.some(o => o.kind === 'auto_refill')).toBe(false);
+      expect(opts.some(o => o.kind === 'auto_refill')).toBe(isAutoRefillEligible(catalogProduct));
     }
   });
 });

@@ -353,19 +353,28 @@ Deno.serve(async (req) => {
     const rawItems: RawOrderLine[] = Array.isArray(body.items) ? body.items : [];
     if (rawItems.length === 0) return json({ error: "Your cart is empty." }, 400);
 
+    const subscriptionItems = rawItems.filter((item) =>
+      item.purchaseType === "auto_refill" || item.subscription === true
+    );
     for (const item of rawItems) {
       const purchaseType = typeof item.purchaseType === "string" ? item.purchaseType : "";
       const isMembershipLine =
         Boolean(item.isMembership) || purchaseType === "membership_program";
       if (
         !isMembershipLine &&
-        (purchaseType === "auto_refill" || item.subscription === true)
+        (purchaseType === "auto_refill" || item.subscription === true) &&
+        paymentMethod !== "kashu_card"
       ) {
         return json({
           error:
-            "Auto-Refill is not available for new purchases. Choose One-Time Purchase or Wellness Membership.",
+            "Prescription subscriptions require Credit / Debit Card checkout.",
         }, 400);
       }
+    }
+    if (subscriptionItems.length > 1 || subscriptionItems.some((item) => Number(item.quantity) !== 1)) {
+      return json({
+        error: "Subscribe & Save checkout supports one prescription at a time with quantity 1.",
+      }, 400);
     }
 
     for (const item of rawItems) {
@@ -404,7 +413,10 @@ Deno.serve(async (req) => {
         return json({ error: auth.error }, 400);
       }
       if (!auth.skipped) {
-        item.unitAmountCents = auth.mapping.retailPriceCents;
+        const isSubscription = item.purchaseType === "auto_refill" || item.subscription === true;
+        item.unitAmountCents = isSubscription
+          ? Math.round(auth.mapping.retailPriceCents * 0.85)
+          : auth.mapping.retailPriceCents;
         item.sku = auth.mapping.mbmSku;
         item.variantId = auth.mapping.websiteVariantId;
         item.variantLabel = formatOneTimeProviderSnapshot(
@@ -489,6 +501,9 @@ Deno.serve(async (req) => {
     const totalCents = built.totalCents;
     const promoCode = built.promoCode;
     const items = built.items;
+    const subscriptionLine = items.find((item) =>
+      item.purchaseType === "auto_refill" || item.subscription === true
+    );
     const shippingMethod =
       built.shippingMethod ||
       (typeof body.shippingMethod === "string" ? body.shippingMethod : "two_day");
@@ -550,6 +565,12 @@ Deno.serve(async (req) => {
         requested_variant_sku: built.requirement.requestedVariantSku,
         required_provider_product_id: built.requirement.requiredProviderProductId,
         provider_workflow_status: providerWorkflowStatus,
+        subscription_sku: subscriptionLine?.sku || null,
+        subscription_base_amount_cents: subscriptionLine?.unitAmountCents || null,
+        subscription_shipping_cents: subscriptionLine ? shippingCents : null,
+        subscription_monthly_amount_cents: subscriptionLine
+          ? Number(subscriptionLine.unitAmountCents) + shippingCents
+          : null,
       };
 
       const orderRes = await fetch(`${supabaseUrl}/rest/v1/orders`, {

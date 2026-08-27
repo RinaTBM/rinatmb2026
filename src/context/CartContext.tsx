@@ -74,7 +74,7 @@ function isMembershipCartLine(item: Pick<CartItem, 'isMembership' | 'purchaseTyp
   return Boolean(item.isMembership) || item.purchaseType === 'membership_program';
 }
 
-/** Convert leftover Auto-Refill cart lines to one-time so they cannot check out as a subscription. */
+/** Normalize historical cart records while preserving valid prescription subscriptions. */
 export function normalizeCartItemAwayFromAutoRefill(item: CartItem): CartItem {
   if (isMembershipCartLine(item)) {
     return {
@@ -84,14 +84,30 @@ export function normalizeCartItemAwayFromAutoRefill(item: CartItem): CartItem {
     };
   }
   const isAuto = item.purchaseType === 'auto_refill' || item.subscription === true;
+  if (isAuto) {
+    return {
+      ...item,
+      subscription: true,
+      purchaseType: 'auto_refill',
+      billingFrequency: 'monthly',
+      key: lineKey(
+        item.productId,
+        item.variantId,
+        true,
+        'auto_refill',
+        item.requestedFormulation,
+        item.requestedDose,
+      ),
+    };
+  }
   const purchaseType: CartPurchaseType =
-    !isAuto && item.purchaseType && item.purchaseType !== 'auto_refill'
+    item.purchaseType && item.purchaseType !== 'auto_refill'
       ? item.purchaseType
       : 'one_time';
   const variantId = item.variantId?.replace(/-refill$/i, '') ?? item.variantId;
   const standard = item.standardPrice ?? item.price;
   const appliedDiscount = item.appliedDiscount === 'auto_refill' ? 'none' : (item.appliedDiscount ?? 'none');
-  const price = isAuto && item.appliedDiscount === 'auto_refill' ? standard : item.price;
+  const price = item.price;
   const variantLabel = (item.variantLabel ?? '').replace(/^Auto-Refill\s*·\s*/i, '');
   return {
     ...item,

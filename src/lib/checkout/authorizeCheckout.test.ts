@@ -38,7 +38,6 @@ import {
   type CatalogVariantRow,
   type LineResolution,
 } from './authorizeCheckout';
-import { NEW_PURCHASE_AUTO_REFILL_BLOCKER } from '../pricing/purchaseOptions';
 
 function expectMapped(
   line: LineResolution | { error: string },
@@ -175,12 +174,12 @@ describe('membership / savings rules', () => {
     expect('error' in line).toBe(true);
   });
 
-  it('rejects Auto-Refill on new purchases and does not apply 10%', () => {
+  it('authorizes Subscribe & Save at exactly 15%', () => {
     const auth = authorizeWellnessUnitCents(
       { productId: 'p1', quantity: 1, purchaseType: 'auto_refill', subscription: true, standardPriceCents: 11900, unitAmountCents: 100 },
       false,
     );
-    expect(auth).toBeNull();
+    expect(auth).toEqual({ unitAmountCents: 10115, reason: 'auto_refill', discountPercent: 15 });
     const line = resolveProductLine(
       {
         productId: 'p1',
@@ -194,9 +193,11 @@ describe('membership / savings rules', () => {
       false,
       semaVariant,
     );
-    expect('error' in line).toBe(true);
-    if ('error' in line) {
-      expect(line.error).toBe(NEW_PURCHASE_AUTO_REFILL_BLOCKER);
+    expect('error' in line).toBe(false);
+    if (!('error' in line)) {
+      expect(line.kind).toBe('price_data');
+      expect(line.unitAmountCents).toBe(10115);
+      expect(line.recurring).toBe(true);
     }
     expect(normalizeVariantKey('semaglutide-v1-refill')).toBe('semaglutide-v1');
   });

@@ -1,144 +1,50 @@
 import { describe, expect, it } from 'vitest';
 import { getProduct } from '../../data/products';
-import {
-  buildPurchaseOptions,
-  isMemberPricingEligible,
-  resolveUnitPrice,
-} from './purchaseOptions';
-import {
-  SEMAGLUTIDE_MEMBERSHIP_CENTS,
-  SEMAGLUTIDE_MEMBERSHIP_MONTHLY,
-  TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS,
-  TIRZEPATIDE_30MG_MEMBER_ONLY_MONTHLY,
-  TIRZEPATIDE_MEMBERSHIP_CENTS,
-  TIRZEPATIDE_MEMBERSHIP_MONTHLY,
-  getWeightMembershipProgram,
-  isTirzepatide30mgVariant,
-} from './weightMembership';
+import { applyDiscount, buildPurchaseOptions, resolveUnitPrice } from './purchaseOptions';
+import { isTirzepatide30mgVariant } from './weightMembership';
 
 const semaglutide = getProduct('semaglutide')!;
 const tirzepatide = getProduct('tirzepatide')!;
 
-describe('weight membership flat-rate program', () => {
-  it('uses authoritative Semaglutide membership $125/month', () => {
-    expect(SEMAGLUTIDE_MEMBERSHIP_MONTHLY).toBe(125);
-    expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(12500);
-  });
-
-  it('uses authoritative Tirzepatide membership $179/month', () => {
-    expect(TIRZEPATIDE_MEMBERSHIP_MONTHLY).toBe(179);
-    expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(17900);
-    expect(TIRZEPATIDE_30MG_MEMBER_ONLY_MONTHLY).toBe(350);
-    expect(TIRZEPATIDE_30MG_MEMBER_ONLY_CENTS).toBe(35000);
-  });
-
-  it('Semaglutide page shows $125/month flat membership first', () => {
-    const v1 = semaglutide.variants[0];
-    const opts = buildPurchaseOptions({
-      standardPrice: v1.price,
-      product: semaglutide,
-      isActiveMember: false,
-      selectedVariant: v1,
-    });
-    expect(opts.map(o => o.kind)).toEqual(['membership_program', 'one_time']);
-    expect(opts[0].finalPrice).toBe(125);
-    expect(opts[0].cta).toContain('$125/month');
-    expect(opts[0].program?.cartLabel).toBe('Semaglutide Wellness Membership — $125/month');
-    expect(opts[0].program?.includedFormulations).toEqual(['Vitamin B12', 'Glycine']);
-  });
-
-  it('Semaglutide membership is not calculated from the selected dose', () => {
-    const prices = semaglutide.variants.map(v =>
-      buildPurchaseOptions({
-        standardPrice: v.price,
-        product: semaglutide,
-        isActiveMember: false,
-        selectedVariant: v,
-      })[0].finalPrice,
-    );
-    expect(prices.every((p) => p === 125)).toBe(true);
-    expect(new Set(prices).size).toBe(1);
-  });
-
-  it('Tirzepatide page shows $179/month flat membership through 15mg', () => {
-    for (const v of tirzepatide.variants) {
-      const opts = buildPurchaseOptions({
-        standardPrice: v.price,
-        product: tirzepatide,
-        isActiveMember: false,
-        selectedVariant: v,
-      });
-      expect(opts[0].finalPrice).toBe(179);
-      expect(opts[0].program?.memberOnlyNotice).toBeNull();
-      expect(opts[0].program?.cartLabel).toBe('Tirzepatide Wellness Membership — $179/month');
+describe('weight prescription subscriptions', () => {
+  it('offers Subscribe & Save 15% plus one-time purchase for every active variant', () => {
+    for (const product of [semaglutide, tirzepatide]) {
+      for (const variant of product.variants) {
+        const options = buildPurchaseOptions({
+          standardPrice: variant.price,
+          product,
+          isActiveMember: false,
+          selectedVariant: variant,
+        });
+        expect(options.map(option => option.kind)).toEqual(['auto_refill', 'one_time']);
+        expect(options[0].finalPrice).toBe(applyDiscount(variant.price, 15));
+        expect(options[0].billingFrequency).toBe('monthly');
+        expect(options[1].finalPrice).toBe(variant.price);
+      }
     }
   });
 
-  it('authoritative Semaglutide retail variants preserve locked family prices', () => {
+  it('keeps authoritative retail variants unchanged', () => {
     expect(semaglutide.variants.map(v => v.price)).toEqual([
       109, 119, 119, 129, 139, 89, 109, 119, 119, 129, 139, 89,
     ]);
-  });
-
-  it('authoritative Tirzepatide retail variants preserve locked family prices', () => {
     expect(tirzepatide.variants.map(v => v.price)).toEqual([
       139, 159, 179, 189, 199, 209, 119, 139, 159, 179, 189, 199, 209, 119,
     ]);
   });
 
-  it('obsolete Tirzepatide 30mg SKU is not in retail catalog', () => {
+  it('does not expose the obsolete Tirzepatide 30mg SKU', () => {
     expect(tirzepatide.variants.some(v => isTirzepatide30mgVariant(v))).toBe(false);
   });
 
-  it('does not offer Auto-Refill on Semaglutide or Tirzepatide', () => {
-    for (const product of [semaglutide, tirzepatide]) {
-      const variant = product.variants[0];
-      const opts = buildPurchaseOptions({
-        standardPrice: variant.price,
-        product,
-        isActiveMember: false,
-        selectedVariant: variant,
-      });
-      expect(opts.some(o => o.kind === 'auto_refill')).toBe(false);
-      expect(opts.map(o => o.kind)).toEqual(['membership_program', 'one_time']);
-      const leftover = resolveUnitPrice({
-        standardPrice: variant.price,
-        product,
-        isActiveMember: false,
-        option: 'auto_refill',
-      });
-      expect(leftover.appliedDiscount).toBe('none');
-      expect(leftover.finalPrice).toBe(variant.price);
-    }
-  });
-
-  it('customers cannot activate a $350 member-only rate via membership program', () => {
-    const program = getWeightMembershipProgram(tirzepatide, tirzepatide.variants[0]);
-    expect(program?.monthlyPrice).toBe(179);
-    expect(program?.memberOnlyPurchasable).toBe(false);
-    expect(program?.checkoutProductId).toBe('m2');
-  });
-
-  it('applies no 15% percentage discount to Semaglutide or Tirzepatide medication', () => {
-    expect(isMemberPricingEligible(semaglutide)).toBe(false);
-    expect(isMemberPricingEligible(tirzepatide)).toBe(false);
-    for (const product of [semaglutide, tirzepatide]) {
-      for (const option of ['one_time', 'auto_refill', 'active_membership'] as const) {
-        const r = resolveUnitPrice({
-          standardPrice: 429,
-          product,
-          isActiveMember: true,
-          option,
-        });
-        if (option === 'auto_refill') {
-          expect(r.appliedDiscount).toBe('none');
-          expect(r.discountPercent).toBe(0);
-          expect(r.finalPrice).toBe(429);
-        } else {
-          expect(r.appliedDiscount).toBe('none');
-          expect(r.finalPrice).toBe(429);
-        }
-      }
-    }
+  it('does not discount one-time weight prescriptions', () => {
+    const resolved = resolveUnitPrice({
+      standardPrice: 199,
+      product: tirzepatide,
+      isActiveMember: false,
+      option: 'one_time',
+    });
+    expect(resolved.finalPrice).toBe(199);
+    expect(resolved.appliedDiscount).toBe('none');
   });
 });

@@ -190,7 +190,7 @@ describe('accessory checkout authorization (server-side price math)', () => {
   });
 });
 
-describe('unchanged membership / medication pricing (Auto-Refill retired for new purchases)', () => {
+describe('historical membership constants and new prescription subscriptions', () => {
   it('Semaglutide flat membership remains $125', () => {
     expect(SEMAGLUTIDE_MEMBERSHIP_MONTHLY).toBe(125);
     const m = memberships.find(x => x.slug === 'semaglutide-membership')!;
@@ -207,7 +207,7 @@ describe('unchanged membership / medication pricing (Auto-Refill retired for new
     expect(TIRZEPATIDE_30MG_MEMBER_ONLY_MONTHLY).toBe(350);
   });
 
-  it('Auto-Refill 10% is not applied for new purchases', () => {
+  it('Subscribe & Save applies 15% only to eligible prescriptions', () => {
     expect(DEFAULT_AUTO_REFILL_DISCOUNT_PERCENT).toBe(10);
     const wellness = products.find(
       p => p.category === 'weight-management' && p.autoRefillEligible && !p.slug.includes('semaglutide') && !p.slug.includes('tirzepatide'),
@@ -220,9 +220,9 @@ describe('unchanged membership / medication pricing (Auto-Refill retired for new
         isActiveMember: false,
         option: 'auto_refill',
       });
-      expect(priced.discountPercent).toBe(0);
-      expect(priced.appliedDiscount).toBe('none');
-      expect(priced.finalPrice).toBe(wellness.startingPrice);
+      expect(priced.discountPercent).toBe(15);
+      expect(priced.appliedDiscount).toBe('auto_refill');
+      expect(priced.finalPrice).toBe(Math.round(wellness.startingPrice * 0.85 * 100) / 100);
     }
     const opts = buildPurchaseOptions({
       standardPrice: travelBag.startingPrice,

@@ -174,6 +174,71 @@ async function ensureTagadaOneTimePrice(input: {
   return null;
 }
 
+async function ensureTagadaMonthlyPrice(input: {
+  apiKey: string;
+  productId: string;
+  variantId: string;
+  amountCents: number;
+}): Promise<string | null> {
+  const base = Deno.env.get("TAGADA_API_BASE")?.trim()?.replace(/\/$/, "") || "https://api.tagada.io";
+  const headers = { Authorization: `Bearer ${input.apiKey}`, Accept: "application/json" };
+  const got = await fetch(`${base}/api/public/v1/products/${encodeURIComponent(input.productId)}`, { headers });
+  if (!got.ok) return null;
+  const product = await got.json();
+  const variant = (Array.isArray(product?.variants) ? product.variants : [])
+    .find((v: { id?: string }) => v.id === input.variantId);
+  if (!variant) return null;
+  const prices = Array.isArray(variant.prices) ? variant.prices : [];
+  const matching = prices.find((price: Record<string, unknown>) =>
+    price.recurring === true &&
+    String(price.interval || "").toLowerCase() === "month" &&
+    Number((price.currencyOptions as { USD?: { amount?: number } })?.USD?.amount) === input.amountCents
+  );
+  if (typeof matching?.id === "string") return matching.id;
+  const nextPrices = [
+    ...prices.map((price: Record<string, unknown>, index: number) => ({
+      id: price.id,
+      default: price.default === true || index === 0,
+      currencyOptions: price.currencyOptions,
+      recurring: price.recurring === true,
+      billingTiming: price.billingTiming ?? "usage",
+      interval: price.interval ?? null,
+      intervalCount: price.intervalCount ?? 1,
+    })),
+    {
+      default: false,
+      currencyOptions: { USD: { amount: input.amountCents } },
+      recurring: true,
+      billingTiming: "advance",
+      interval: "month",
+      intervalCount: 1,
+    },
+  ];
+  const put = await fetch(`${base}/api/public/v1/variants/${encodeURIComponent(input.variantId)}`, {
+    method: "PUT",
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify({ updatedData: {
+      name: variant.name,
+      description: variant.description ?? undefined,
+      sku: variant.sku,
+      active: variant.active !== false,
+      default: variant.default === true,
+      prices: nextPrices,
+    } }),
+  });
+  if (!put.ok) return null;
+  const refreshed = await fetch(`${base}/api/public/v1/products/${encodeURIComponent(input.productId)}`, { headers });
+  if (!refreshed.ok) return null;
+  const refreshedProduct = await refreshed.json();
+  const refreshedVariant = (Array.isArray(refreshedProduct?.variants) ? refreshedProduct.variants : [])
+    .find((v: { id?: string }) => v.id === input.variantId);
+  return (Array.isArray(refreshedVariant?.prices) ? refreshedVariant.prices : [])
+    .find((price: Record<string, unknown>) =>
+      price.recurring === true && String(price.interval || "").toLowerCase() === "month" &&
+      Number((price.currencyOptions as { USD?: { amount?: number } })?.USD?.amount) === input.amountCents
+    )?.id ?? null;
+}
+
 /** Base membership display amounts (customer-facing). Kept; not deleted. */
 const MEM_BASE_BY_SKU: Record<string, { basePriceId: string; baseCents: number; type: string }> = {
   "MBM-MEM-SEM-MEM-001": {
@@ -258,7 +323,7 @@ Deno.serve(async (req) => {
     }
 
     const itemsRes = await fetch(
-      `${supabaseUrl}/rest/v1/order_items?order_id=eq.${order.id}&select=sku,variant_id,quantity,product_name_snapshot`,
+      `${supabaseUrl}/rest/v1/order_items?order_id=eq.${order.id}&select=sku,variant_id,quantity,unit_price_cents,product_name_snapshot`,
       {
         headers: {
           Authorization: `Bearer ${serviceKey}`,
@@ -291,6 +356,43 @@ Deno.serve(async (req) => {
       (s: string) => !String(s).startsWith("MBM-MEM-") && !ENROLLMENT_VISIT_SKUS.has(String(s)),
     );
     const isMembershipCheckout = membershipSkus.length > 0;
+    const subscriptionSku = typeof order.subscription_sku === "string"
+      ? order.subscription_sku.trim()
+      : "";
+    const isPrescriptionSubscription = subscriptionSku.length > 0;
+    if (isMembershipCheckout && isPrescriptionSubscription) {
+      return json({ error: "Membership and prescription subscription checkout cannot be combined." }, 409);
+    }
+    if (isPrescriptionSubscription) {
+      const recurringLines = orderItems.filter((line: { sku?: string; quantity?: number }) =>
+        line.sku === subscriptionSku
+      );
+      const unsupported = orderItems.filter((line: { sku?: string }) =>
+        line.sku !== subscriptionSku && !String(line.sku || "").startsWith("MBM-PC-")
+      );
+      if (recurringLines.length !== 1 || Number(recurringLines[0]?.quantity) !== 1 || unsupported.length > 0) {
+        return json({
+          error: "Subscribe & Save allows one prescription (quantity 1) plus required one-time provider services.",
+          code: "SUBSCRIPTION_CART_INVALID",
+        }, 409);
+      }
+      const email = String(order.customer_email || "").trim().toLowerCase();
+      if (email) {
+        const duplicate = await fetch(
+          `${supabaseUrl}/rest/v1/customer_prescription_subscriptions?prescription_sku=eq.${encodeURIComponent(subscriptionSku)}&customer_email=ilike.${encodeURIComponent(email)}&status=in.(active,past_due,paused,cancel_scheduled,payment_issue)&select=id,status&limit=1`,
+          { headers: { Authorization: `Bearer ${serviceKey}`, apikey: serviceKey } },
+        );
+        if (duplicate.ok) {
+          const rows = await duplicate.json();
+          if (Array.isArray(rows) && rows.length > 0) {
+            return json({
+              error: "You already have an open subscription for this prescription. Manage it from your account or contact support.",
+              existingSubscriptionId: rows[0].id,
+            }, 409);
+          }
+        }
+      }
+    }
     let membershipCombo:
       | {
           memSku: string;
@@ -402,7 +504,9 @@ Deno.serve(async (req) => {
     // Membership: do NOT append MBM-SHIP (shipping is in combo recurring price).
     // One-time carts: append mapped MBM-SHIP when shipping > 0.
     const shipSku =
-      !isMembershipCheckout && shippingCents > 0 ? shippingSkuForCents(shippingCents) : null;
+      !isMembershipCheckout && !isPrescriptionSubscription && shippingCents > 0
+        ? shippingSkuForCents(shippingCents)
+        : null;
     const mapSkus = shipSku ? [...skus, shipSku] : skus;
 
     const mapRes = await fetch(
@@ -448,6 +552,8 @@ Deno.serve(async (req) => {
     const tagadaItems: { variantId: string; quantity: number; priceId?: string }[] = [];
     const skuList: string[] = [];
     let calculatedTagadaMerchandiseCents = 0;
+    let subscriptionPriceId: string | null = null;
+    let subscriptionMonthlyCents = 0;
     for (const line of orderItems) {
       const sku = line.sku as string | null;
       const qty = Number(line.quantity) || 1;
@@ -468,7 +574,37 @@ Deno.serve(async (req) => {
       }
       calculatedTagadaMerchandiseCents += Math.trunc(unit) * qty;
       skuList.push(`${sku}×${qty}`);
-      if (isMembershipCheckout) {
+      if (isPrescriptionSubscription && sku === subscriptionSku) {
+        const retailCents = Math.trunc(unit);
+        const discountedCents = Math.round(retailCents * 0.85);
+        const storedBase = Math.trunc(Number(order.subscription_base_amount_cents) || 0);
+        const storedMonthly = Math.trunc(Number(order.subscription_monthly_amount_cents) || 0);
+        subscriptionMonthlyCents = discountedCents + shippingCents;
+        const storedLineCents = Math.trunc(Number(line.unit_price_cents) || 0);
+        if (storedLineCents !== discountedCents || storedBase !== discountedCents || storedMonthly !== subscriptionMonthlyCents) {
+          return json({
+            error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+            blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+            message: "Subscription price must equal 15% off the authoritative prescription price plus selected recurring shipping.",
+            sku,
+          }, 409);
+        }
+        const tagadaApiKey = Deno.env.get("TAGADA_API_KEY")?.trim();
+        if (!tagadaApiKey || !mapped.tagada_product_id) {
+          return json({ error: "Prescription subscription catalog setup is unavailable." }, 503);
+        }
+        subscriptionPriceId = await ensureTagadaMonthlyPrice({
+          apiKey: tagadaApiKey,
+          productId: mapped.tagada_product_id,
+          variantId: mapped.tagada_variant_id,
+          amountCents: subscriptionMonthlyCents,
+        });
+        if (!subscriptionPriceId) {
+          return json({ error: "Unable to create the verified monthly Tagada subscription price." }, 502);
+        }
+        calculatedTagadaMerchandiseCents += subscriptionMonthlyCents - retailCents;
+        tagadaItems.push({ variantId: mapped.tagada_variant_id, quantity: 1, priceId: subscriptionPriceId });
+      } else if (isMembershipCheckout) {
         if (membershipCombo && sku === membershipCombo.memSku) {
           // Combo recurring priceId (membership + shipping). Map base cents stay 12500/17900
           // for display; Tagada charge uses combo monthly cents.
@@ -532,7 +668,7 @@ Deno.serve(async (req) => {
     // MBM is shipping source of truth.
     // Membership: $30/$50 required (baked into combo recurring price — no MBM-SHIP Tagada line).
     // One-time card: $0 / $30 / $50 via mapped MBM-SHIP line when > 0.
-    const allowedShipping = isMembershipCheckout
+    const allowedShipping = isMembershipCheckout || isPrescriptionSubscription
       ? new Set([3000, 5000])
       : new Set([0, 3000, 5000]);
     if (!allowedShipping.has(shippingCents)) {
@@ -547,7 +683,7 @@ Deno.serve(async (req) => {
     }
 
     let calculatedShippingCents = 0;
-    if (!isMembershipCheckout && shippingCents > 0) {
+    if (!isMembershipCheckout && !isPrescriptionSubscription && shippingCents > 0) {
       if (!shipSku) {
         return json({
           error:
@@ -798,12 +934,42 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (isPrescriptionSubscription && subscriptionPriceId) {
+      const mapped = resolveKashuSkuMapRow(subscriptionSku, bySku.get(subscriptionSku) ?? null);
+      await fetch(`${supabaseUrl}/rest/v1/customer_prescription_subscriptions`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${serviceKey}`,
+          apikey: serviceKey,
+          "Content-Type": "application/json",
+          Prefer: "resolution=merge-duplicates,return=minimal",
+        },
+        body: JSON.stringify({
+          customer_user_id: order.customer_user_id || null,
+          customer_email: order.customer_email || null,
+          enrollment_order_id: order.id,
+          enrollment_public_order_number: publicOrderNumber,
+          prescription_sku: subscriptionSku,
+          status: "pending_payment",
+          tagada_price_id: subscriptionPriceId,
+          tagada_variant_id: mapped?.tagada_variant_id || null,
+          medication_amount_cents: Number(order.subscription_base_amount_cents) || 0,
+          shipping_cents: Number(order.subscription_shipping_cents) || 0,
+          selected_shipping_method: Number(order.subscription_shipping_cents) === 5000 ? "next_day" : "two_day",
+          monthly_amount_cents: subscriptionMonthlyCents,
+          discount_percent: 15,
+          currency: "USD",
+          updated_at: new Date().toISOString(),
+        }),
+      });
+    }
+
     return json({
       ok: true,
       redirectUrl,
       checkoutToken,
       publicOrderNumber,
-      membershipRecurring: isMembershipCheckout,
+      subscriptionRecurring: isMembershipCheckout || isPrescriptionSubscription,
       // Authoritative total for client display only — Kashu charges Tagada catalog prices.
       orderTotalCents: order.total_cents,
     });

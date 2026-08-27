@@ -262,11 +262,19 @@ Deno.serve(async (req) => {
       const fields = extractSubscriptionFields(payload);
       const orderNumber = extractOrderNumber(payload);
 
-      // Resolve membership by Tagada subscription id first, then by enrollment order.
+      // Resolve new prescription subscriptions first, then historical memberships.
       let membership: Record<string, unknown> | null = null;
-      if (fields.subscriptionId) {
-        const bySub = await fetch(
-          `${supabaseUrl}/rest/v1/customer_memberships?tagada_subscription_id=eq.${encodeURIComponent(fields.subscriptionId)}&select=*&limit=1`,
+      let subscriptionTable = "customer_prescription_subscriptions";
+      for (const table of ["customer_prescription_subscriptions", "customer_memberships"]) {
+        if (membership) break;
+        const filter = fields.subscriptionId
+          ? `tagada_subscription_id=eq.${encodeURIComponent(fields.subscriptionId)}`
+          : orderNumber
+            ? `enrollment_public_order_number=eq.${encodeURIComponent(orderNumber)}`
+            : "";
+        if (!filter) continue;
+        const found = await fetch(
+          `${supabaseUrl}/rest/v1/${table}?${filter}&select=*&order=created_at.desc&limit=1`,
           {
             headers: {
               Authorization: `Bearer ${serviceKey}`,
@@ -274,21 +282,10 @@ Deno.serve(async (req) => {
             },
           },
         );
-        const rows = await bySub.json();
+        if (!found.ok) continue;
+        const rows = await found.json();
         membership = Array.isArray(rows) ? rows[0] : null;
-      }
-      if (!membership && orderNumber) {
-        const byOrder = await fetch(
-          `${supabaseUrl}/rest/v1/customer_memberships?enrollment_public_order_number=eq.${encodeURIComponent(orderNumber)}&select=*&order=created_at.desc&limit=1`,
-          {
-            headers: {
-              Authorization: `Bearer ${serviceKey}`,
-              apikey: serviceKey,
-            },
-          },
-        );
-        const rows = await byOrder.json();
-        membership = Array.isArray(rows) ? rows[0] : null;
+        if (membership) subscriptionTable = table;
       }
 
       if (!membership) {
@@ -384,7 +381,7 @@ Deno.serve(async (req) => {
         patch.canceled_at = now;
       }
 
-      await fetch(`${supabaseUrl}/rest/v1/customer_memberships?id=eq.${membership.id}`, {
+      await fetch(`${supabaseUrl}/rest/v1/${subscriptionTable}?id=eq.${membership.id}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${serviceKey}`,
@@ -400,7 +397,8 @@ Deno.serve(async (req) => {
         eventType === "subscription/rebillDeclined" ||
         eventType === "subscription/rebillCaptureFailed"
       ) {
-        await fetch(`${supabaseUrl}/rest/v1/membership_rebill_events`, {
+        const isPrescriptionSubscription = subscriptionTable === "customer_prescription_subscriptions";
+        await fetch(`${supabaseUrl}/rest/v1/${isPrescriptionSubscription ? "prescription_subscription_rebill_events" : "membership_rebill_events"}`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${serviceKey}`,
@@ -409,7 +407,7 @@ Deno.serve(async (req) => {
             Prefer: "resolution=ignore-duplicates,return=minimal",
           },
           body: JSON.stringify({
-            customer_membership_id: membership.id,
+            [isPrescriptionSubscription ? "customer_subscription_id" : "customer_membership_id"]: membership.id,
             tagada_event_id: eventId,
             tagada_payment_id: fields.paymentId,
             event_type: eventType,
@@ -419,6 +417,35 @@ Deno.serve(async (req) => {
               : `applied_${effectiveSubStatus}`,
           }),
         });
+
+        // GEN API Orders remains fail-closed. A successful prescription rebill
+        // creates an idempotent paid renewal queue row for clinical approval and
+        // admin-controlled GEN handoff; the webhook never calls GEN directly.
+        if (
+          isPrescriptionSubscription &&
+          eventType === "subscription/rebillSucceeded" &&
+          !rebillAmountMismatch
+        ) {
+          await fetch(`${supabaseUrl}/rest/v1/prescription_subscription_renewals`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${serviceKey}`,
+              apikey: serviceKey,
+              "Content-Type": "application/json",
+              Prefer: "resolution=ignore-duplicates,return=minimal",
+            },
+            body: JSON.stringify({
+              customer_subscription_id: membership.id,
+              tagada_event_id: eventId,
+              tagada_payment_id: fields.paymentId,
+              prescription_sku: membership.prescription_sku,
+              medication_amount_cents: membership.medication_amount_cents,
+              shipping_cents: membership.shipping_cents,
+              total_paid_cents: rebillPaidCents ?? membership.monthly_amount_cents,
+              fulfillment_status: "paid_awaiting_clinical_review",
+            }),
+          });
+        }
       }
 
       // Initial activation: also mark enrollment order paid when subscription/created
@@ -453,8 +480,8 @@ Deno.serve(async (req) => {
       return json({
         ok: !rebillAmountMismatch,
         eventType,
-        membershipStatus: effectiveSubStatus,
-        membershipId: membership.id,
+        subscriptionStatus: effectiveSubStatus,
+        subscriptionId: membership.id,
         ...(rebillAmountMismatch
           ? {
               error: "rebill_amount_mismatch",

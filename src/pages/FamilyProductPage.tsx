@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { Minus, Plus, ShieldCheck } from 'lucide-react';
 import { Link } from '@/router';
 import {
-  getMembership,
   getRelatedProducts,
   sections,
   type Product,
@@ -22,8 +21,7 @@ import {
   type WebsiteProductFamily,
   type WebsiteProductVariant,
 } from '@/data/websiteFamilies';
-import { buildGlp1MembershipCartFields } from '@/lib/glp1/membershipCart';
-import { MEMBERSHIP_ENROLLMENT_ENABLED } from '@/lib/commerce/controlledLaunch';
+import { applyDiscount, isAutoRefillEligible } from '@/lib/pricing/purchaseOptions';
 import {
   ONE_TIME_GETTING_STARTED_BLOCKER,
   isGettingStartedDose,
@@ -31,8 +29,6 @@ import {
   resolveOneTimeVial,
 } from '@/lib/glp1/oneTimeVialMapping';
 import {
-  doseSelectionAfterPurchaseTypeChange,
-  ONE_TIME_WEEKLY_DOSE_REQUIRED,
   validateGlp1Formulation,
   validateRequestedDose,
   type Glp1FamilyId,
@@ -47,8 +43,8 @@ function unique(values: Array<string | null | undefined>): string[] {
   return out;
 }
 
-function formatPrice(amount: number, membership: boolean): string {
-  return membership ? `$${amount.toFixed(0)}/mo` : `$${amount.toFixed(2)}`;
+function formatPrice(amount: number, recurring: boolean): string {
+  return recurring ? `$${amount.toFixed(2)}/mo` : `$${amount.toFixed(2)}`;
 }
 
 function variantLabel(v: WebsiteProductVariant): string {
@@ -129,9 +125,7 @@ function FamilySelectors({
   const isNad = familyId === 'nad';
   const isWolverine = familyId === 'wolverine-bpc-tb';
 
-  const purchaseTypes = unique(visible.map((v) => v.purchaseType)).filter(
-    purchaseType => purchaseType !== 'membership' || MEMBERSHIP_ENROLLMENT_ENABLED,
-  );
+  const subscriptionEligible = isAutoRefillEligible(product);
   const oneTime = visible.filter((v) => v.purchaseType === 'one_time');
   const additives = unique(oneTime.map((v) => v.additive));
   const forms = unique(visible.map((v) => v.form));
@@ -139,12 +133,8 @@ function FamilySelectors({
     visible.filter((v) => (v.form || '').toLowerCase().includes('nasal')).map((v) => v.websiteVariantId),
   );
 
-  const [purchaseType, setPurchaseType] = useState<'one_time' | 'membership'>(
-    initialPurchaseType === 'membership' && purchaseTypes.includes('membership')
-      ? 'membership'
-      : purchaseTypes.includes('one_time')
-        ? 'one_time'
-        : 'membership',
+  const [purchaseType, setPurchaseType] = useState<'one_time' | 'subscription'>(
+    initialPurchaseType === 'membership' && subscriptionEligible ? 'subscription' : 'one_time',
   );
   const [additive, setAdditive] = useState(additives[0] || 'Vitamin B12');
   const [form, setForm] = useState(forms[0] || '');
@@ -161,10 +151,9 @@ function FamilySelectors({
   const selectors: FamilySelectorState = useMemo(() => {
     if (isWeight) {
       return {
-        purchaseType,
-        additive: purchaseType === 'membership' ? undefined : additive,
-        requestedDose:
-          purchaseType === 'one_time' && requestedDose ? requestedDose : undefined,
+        purchaseType: 'one_time',
+        additive,
+        requestedDose: requestedDose || undefined,
       };
     }
     if (isNad) {
@@ -174,7 +163,7 @@ function FamilySelectors({
       return { form };
     }
     return {};
-  }, [isWeight, isNad, isWolverine, purchaseType, additive, requestedDose, form, nasalOption, injPackage]);
+  }, [isWeight, isNad, isWolverine, additive, requestedDose, form, nasalOption, injPackage]);
 
   const resolution = useMemo(
     () => resolveFamilyVariant(familyId, selectors),
@@ -182,10 +171,7 @@ function FamilySelectors({
   );
   const variant = resolution.variant;
   const price = variant ? lockedRetailPrice(variant) : null;
-  const isMembership = isWeight && purchaseType === 'membership';
-  const membership = isMembership
-    ? getMembership(familyId === 'semaglutide' ? 'semaglutide-membership' : 'tirzepatide-membership')
-    : undefined;
+  const isSubscription = purchaseType === 'subscription';
 
   const injReady = visible.some((v) => v.websiteVariantId.startsWith('nad-inj-'));
   const nasalReady = visible.some((v) => v.websiteVariantId.startsWith('nad-nasal-'));
@@ -194,44 +180,6 @@ function FamilySelectors({
 
   const handleAdd = () => {
     if (glp1FamilyId) {
-      if (isMembership) {
-        if (!membership) return;
-        const built = buildGlp1MembershipCartFields({
-          membership,
-          formulation: additive,
-          requestedDose,
-        });
-        if (!built.ok) {
-          setDoseError(built.error);
-          return;
-        }
-        setDoseError(null);
-        addItem(
-          {
-            productId: membership.checkoutProductId || membership.id,
-            slug: membership.slug,
-            name: membership.displayName,
-            price: built.monthlyPrice,
-            standardPrice: built.monthlyPrice,
-            image: membership.image,
-            subscription: true,
-            section: 'membership',
-            requiresIntake: true,
-            isMembership: true,
-            billingFrequency: 'monthly',
-            purchaseType: 'membership_program',
-            discountPercent: 0,
-            appliedDiscount: 'none',
-            requestedFormulation: built.requestedFormulation,
-            requestedDose: built.requestedDose,
-            variantLabel: built.variantLabel,
-          },
-          1,
-        );
-        openCart();
-        return;
-      }
-
       const formulation = validateGlp1Formulation(additive);
       if (!formulation.ok) {
         setDoseError(formulation.error);
@@ -254,20 +202,21 @@ function FamilySelectors({
           productId: product.id,
           slug: product.slug,
           name: product.displayName,
-          price: mappedPrice,
+          price: isSubscription ? applyDiscount(mappedPrice, 15) : mappedPrice,
           standardPrice: mappedPrice,
           image: product.image,
-          subscription: false,
+          subscription: isSubscription,
           section: product.category,
           requiresIntake: product.requiresProviderReview,
           variantId: vial.mapping.websiteVariantId,
-          variantLabel: patientSafeOneTimeCartLabel({
+          variantLabel: `${patientSafeOneTimeCartLabel({
             formulation: formulation.value,
             requestedDose: vial.mapping.requestedDose,
-          }),
-          purchaseType: 'one_time',
-          discountPercent: 0,
-          appliedDiscount: 'none',
+          })}${isSubscription ? ' · Subscribe & Save 15%' : ''}`,
+          purchaseType: isSubscription ? 'auto_refill' : 'one_time',
+          discountPercent: isSubscription ? 15 : 0,
+          appliedDiscount: isSubscription ? 'auto_refill' : 'none',
+          billingFrequency: isSubscription ? 'monthly' : undefined,
           requestedFormulation: formulation.value,
           requestedDose: vial.mapping.requestedDose,
         },
@@ -285,17 +234,18 @@ function FamilySelectors({
         productId: product.id,
         slug: product.slug,
         name: product.displayName,
-        price,
+        price: isSubscription ? applyDiscount(price, 15) : price,
         standardPrice: price,
         image: product.image,
-        subscription: false,
+        subscription: isSubscription,
         section: product.category,
         requiresIntake: product.requiresProviderReview,
         variantId: variant.websiteVariantId,
-        variantLabel: variantLabel(variant),
-        purchaseType: 'one_time',
-        discountPercent: 0,
-        appliedDiscount: 'none',
+        variantLabel: `${variantLabel(variant)}${isSubscription ? ' · Subscribe & Save 15%' : ''}`,
+        purchaseType: isSubscription ? 'auto_refill' : 'one_time',
+        discountPercent: isSubscription ? 15 : 0,
+        appliedDiscount: isSubscription ? 'auto_refill' : 'none',
+        billingFrequency: isSubscription ? 'monthly' : undefined,
       },
       quantity,
     );
@@ -303,7 +253,7 @@ function FamilySelectors({
   };
 
   const oneTimeVial =
-    glp1FamilyId && !isMembership
+    glp1FamilyId
       ? resolveOneTimeVial({
           familyId: glp1FamilyId,
           formulation: additive,
@@ -311,7 +261,7 @@ function FamilySelectors({
         })
       : null;
   const oneTimeGettingStarted = Boolean(
-    glp1FamilyId && !isMembership && isGettingStartedDose(requestedDose),
+    glp1FamilyId && isGettingStartedDose(requestedDose),
   );
   const glp1Ready =
     !glp1FamilyId ||
@@ -319,17 +269,13 @@ function FamilySelectors({
       validateRequestedDose({
         requestedDose,
         familyId: glp1FamilyId,
-        allowGettingStarted: isMembership,
+        allowGettingStarted: false,
       }).ok);
   const displayPrice =
-    isMembership && membership
-      ? membership.monthlyPrice
-      : oneTimeVial?.ok
-        ? oneTimeVial.mapping.retailPriceCents / 100
-        : price;
-  const canAdd = isMembership
-    ? Boolean(membership && resolution.ok && glp1Ready)
-    : glp1FamilyId
+    oneTimeVial?.ok
+      ? (isSubscription ? applyDiscount(oneTimeVial.mapping.retailPriceCents / 100, 15) : oneTimeVial.mapping.retailPriceCents / 100)
+      : price == null ? price : (isSubscription ? applyDiscount(price, 15) : price);
+  const canAdd = glp1FamilyId
       ? Boolean(oneTimeVial?.ok && glp1Ready)
       : Boolean(variant && price != null && resolution.ok);
 
@@ -388,48 +334,26 @@ function FamilySelectors({
               <ProductHighlights highlights={product.highlights} />
 
               <div className="mb-6 space-y-5">
-                {isWeight && purchaseTypes.length > 1 && (
+                {subscriptionEligible && (
                   <fieldset>
                     <legend className="text-sm font-medium text-ink-900 mb-2">Purchase type</legend>
                     <div className="flex flex-wrap gap-2">
-                      {purchaseTypes.includes('one_time') && (
-                        <SelectorChip
+                      <SelectorChip
                           selected={purchaseType === 'one_time'}
                           onClick={() => {
                             setPurchaseType('one_time');
-                            const nextDose = doseSelectionAfterPurchaseTypeChange({
-                              nextPurchaseType: 'one_time',
-                              requestedDose,
-                            });
-                            if (nextDose !== requestedDose) {
-                              setRequestedDose(nextDose);
-                              setDoseError(ONE_TIME_WEEKLY_DOSE_REQUIRED);
-                            } else {
-                              setDoseError(null);
-                            }
+                            setDoseError(null);
                           }}
                           label="One-Time Purchase"
                         />
-                      )}
-                      {MEMBERSHIP_ENROLLMENT_ENABLED && purchaseTypes.includes('membership') && (
                         <SelectorChip
-                          selected={purchaseType === 'membership'}
+                          selected={purchaseType === 'subscription'}
                           onClick={() => {
-                            setPurchaseType('membership');
+                            setPurchaseType('subscription');
                             setDoseError(null);
                           }}
-                          label={
-                            familyId === 'semaglutide'
-                              ? 'Wellness Membership · $125/month'
-                              : 'Wellness Membership · $179/month'
-                          }
+                          label="Subscribe & Save 15% · monthly"
                         />
-                      )}
-                      {!MEMBERSHIP_ENROLLMENT_ENABLED && isWeight && (
-                        <span className="rounded-full border border-gold-200 bg-gold-50 px-4 py-2 text-sm text-gold-800">
-                          Membership enrollment is temporarily unavailable. One-time purchase remains available.
-                        </span>
-                      )}
                     </div>
                   </fieldset>
                 )}
@@ -448,7 +372,7 @@ function FamilySelectors({
                   <Glp1PatientDoseSelector
                     familyId={glp1FamilyId}
                     value={requestedDose}
-                    allowGettingStarted={isMembership}
+                    allowGettingStarted={false}
                     onChange={next => {
                       setRequestedDose(next);
                       setDoseError(null);
@@ -552,15 +476,15 @@ function FamilySelectors({
               <div className="rounded-2xl border border-cream-300 bg-white p-5 mb-6">
                 <div className="flex items-end justify-between gap-4 mb-4">
                   <div>
-                    <p className="text-sm text-ink-500">{isMembership ? 'Membership' : 'Due today'}</p>
+                    <p className="text-sm text-ink-500">{isSubscription ? 'Monthly medication' : 'Due today'}</p>
                     <p className="font-serif text-3xl text-ink-900">
-                      {displayPrice != null ? formatPrice(displayPrice, isMembership) : '—'}
+                      {displayPrice != null ? formatPrice(displayPrice, isSubscription) : '—'}
                     </p>
-                    {!isMembership && (
-                      <p className="mt-1 text-xs text-ink-500">Pharmacy fulfillment included in this price</p>
-                    )}
+                    <p className="mt-1 text-xs text-ink-500">
+                      {isSubscription ? '15% subscription savings; selected shipping renews separately' : 'Pharmacy fulfillment included in this price'}
+                    </p>
                   </div>
-                  {!isMembership && (
+                  {!isSubscription && (
                     <div className="flex items-center gap-3">
                       <button
                         type="button"
@@ -588,12 +512,10 @@ function FamilySelectors({
                   disabled={!canAdd}
                   onClick={handleAdd}
                 >
-                  {isMembership
-                    ? membership?.cta || 'Join membership'
-                    : oneTimeGettingStarted
-                      ? 'Choose a weekly dose or join membership'
+                  {oneTimeGettingStarted
+                      ? 'Choose a weekly dose'
                       : canAdd
-                        ? `Add to Cart — $${((displayPrice || 0) * quantity).toFixed(2)}`
+                        ? `${isSubscription ? 'Subscribe' : 'Add to Cart'} — $${((displayPrice || 0) * quantity).toFixed(2)}${isSubscription ? '/mo' : ''}`
                         : 'Select an option'}
                 </button>
                 <p className="mt-3 text-xs text-ink-500 leading-relaxed">

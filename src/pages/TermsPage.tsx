@@ -94,17 +94,17 @@ export function TermsPage() {
         },
         {
           id: 'subscriptions',
-          title: 'Memberships, Auto-Refill, and Recurring Periods',
+          title: 'Memberships and Recurring Periods',
           body: (
             <>
               <p>
-                Certain products are available as memberships or Auto-Refill. Memberships are billed monthly to your
-                card while active. Selected membership shipping is included in each monthly card charge. Auto-Refill
-                savings apply per eligible refill period according to the option selected at checkout.
+                Certain products are available as Wellness Memberships. Memberships are billed monthly to your
+                card while active. Selected membership shipping is included in each monthly card charge.
+                Auto-Refill is not offered for new purchases.
               </p>
               <LegalBulletList items={[
                 'You may submit a cancellation request from your account or by contacting support after any applicable minimum term. Requests are reviewed by our team and do not reverse a payment that has already been received, or stop an order that has already entered provider, pharmacy, or fulfillment processing.',
-                'We may change subscription or membership pricing with at least 30 days notice when required.',
+                'We may change membership pricing with at least 30 days notice when required.',
                 'Failed or past-due payments may result in pause or suspension of benefits until payment is resolved.',
               ]} />
             </>

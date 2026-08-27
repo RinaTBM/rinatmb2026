@@ -4,9 +4,7 @@ import type { Product } from '@/data/products';
 import { sections } from '@/data/products';
 import { useMember } from '@/context/MemberContext';
 import {
-  DEFAULT_AUTO_REFILL_DISCOUNT_PERCENT,
   DEFAULT_MEMBER_DISCOUNT_PERCENT,
-  isAutoRefillEligible,
   isMemberPricingEligible,
 } from '@/lib/pricing/purchaseOptions';
 import { isAccessoryMemberDiscountEligible } from '@/lib/pricing/accessoryMemberDiscount';
@@ -21,7 +19,6 @@ export function ProductCard({ product }: { product: Product }) {
   /** All Accessories use contain-fit so product photos are never cropped. */
   const containFit = product.category === 'accessories';
   const memberEligible = isMemberPricingEligible(product);
-  const autoEligible = isAutoRefillEligible(product);
   const showAccessoryMemberBadge =
     product.category === 'accessories' &&
     isActiveMember &&
@@ -63,10 +60,6 @@ export function ProductCard({ product }: { product: Product }) {
             ) : memberEligible ? (
               <span className="rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-900">
                 Members Save {DEFAULT_MEMBER_DISCOUNT_PERCENT}%
-              </span>
-            ) : autoEligible ? (
-              <span className="rounded-full bg-ink-900/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-50">
-                Auto-Refill {DEFAULT_AUTO_REFILL_DISCOUNT_PERCENT}%
               </span>
             ) : product.bestSeller ? (
               <span className="rounded-full bg-ink-900 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-50">

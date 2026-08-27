@@ -187,7 +187,7 @@ function Dashboard() {
         ))}
       </div>
       <p className="mt-4 text-xs text-ink-400">
-        Membership / Auto-Refill counts reflect local portal activity until Stripe webhooks write authoritative rows.
+        Membership counts reflect local portal activity. Auto-Refill is not offered for new storefront purchases; remaining counts are historical only.
         Discounts Applied tracking is available once checkout metadata is persisted.
       </p>
     </div>
@@ -297,7 +297,7 @@ function ProductEditor({ slug, canWrite }: { slug: string; canWrite: boolean }) 
             <input type="checkbox" checked={draft.excludedFromDiscounts} onChange={e => set({ excludedFromDiscounts: e.target.checked })} />
             Excluded From Discounts
           </label>
-          <p className="text-xs text-ink-400">Future products default Auto-Refill OFF until manually approved. Provider care &amp; accessories stay excluded.</p>
+          <p className="text-xs text-ink-400">Storefront no longer offers Auto-Refill for new purchases. These flags remain for historical catalog records. Provider care &amp; accessories stay excluded.</p>
         </div>
 
         <div>
@@ -410,6 +410,7 @@ function PurchasePricingSettings() {
         Configure automatic savings. Discounts never stack. Maximum automatic savings is the member rate.
         Membership base prices ($125 / $179), provider care, shipping, and taxes are not edited here.
         Accessory member savings are separate from wellness-product member savings.
+        Auto-Refill is not offered for new storefront purchases; the Auto-Refill % setting is retained for historical records only.
       </p>
       <div className="card-lux p-5 space-y-4">
         <label className="block">

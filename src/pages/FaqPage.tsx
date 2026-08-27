@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
-import { CANCELLATION_POLICY_COPY } from '@/lib/account/subscriptions';
 import { COMPOUNDED_FDA_FAQ, PHARMACY_503A_FAQ } from '@/data/pharmacyFulfillmentCopy';
 
 const faqCategories = [
@@ -65,26 +64,18 @@ const faqCategories = [
     faqs: [
       {
         q: 'What purchasing options do you offer?',
-        a: 'Eligible wellness products support three options: Active Wellness Membership (best value — members save 15%), Auto-Refill & Save (10% off with monthly deliveries), and One-Time Purchase (standard pricing). Discounts never stack.',
+        a: 'New purchases are One-Time Purchase or, where explicitly eligible (Semaglutide and Tirzepatide), Wellness Membership. Active Wellness Members save 15% on eligible wellness products and accessories. Discounts never stack. Provider care, shipping, and taxes are never discounted.',
       },
       {
-        q: 'How does Auto-Refill & Save work?',
-        a: 'Auto-Refill saves 10% on eligible products with scheduled monthly deliveries. Each refill period is billed according to your selected payment method. Provider appointments, accessories, shipping, and taxes are never discounted by Auto-Refill.',
-      },
-      {
-        q: 'Can I pause or cancel Auto-Refill?',
-        a: `${CANCELLATION_POLICY_COPY} Cancellation is a request reviewed by our team. Submitting a request does not by itself end the next billing period until it is processed.`,
-      },
-      {
-        q: 'Can I change my Auto-Refill products myself?',
-        a: 'You can view Auto-Refill subscriptions, renewal dates, and submit cancellation requests from your account. Medication strength and provider-directed treatment cannot be modified by customers in the account portal.',
+        q: 'Can I change my medication myself?',
+        a: 'Medication strength and provider-directed treatment cannot be modified by customers in the account portal. Submit a request or contact support if you need help with an existing order or membership.',
       },
     ],
   },
   {
     title: 'Telemedicine & Provider Care',
     faqs: [
-      { q: 'What is Provider Care?', a: 'Provider Care includes services such as the Initial Provider Visit, Follow-Up Visit, and Laboratory Review. These involve scheduling and/or medical intake and review by a licensed provider when applicable. Provider Care is never discounted by membership or Auto-Refill savings.' },
+      { q: 'What is Provider Care?', a: 'Provider Care includes services such as the Initial Provider Visit, Follow-Up Visit, and Laboratory Review. These involve scheduling and/or medical intake and review by a licensed provider when applicable. Provider Care is never discounted by membership savings.' },
       { q: 'What happens after I order a Provider Care product?', a: 'After payment has been received, you will receive an email link to complete a secure medical intake when required. A licensed provider reviews your case within 2 business days.' },
       { q: 'What if I am not approved?', a: 'If a licensed provider determines that a requested treatment is not medically appropriate, the provider-directed product will not be fulfilled. If payment for that product has already been received, eligible charges will be refunded in accordance with our refund policy.' },
       { q: 'Do you offer telemedicine appointments?', a: 'Yes. We offer telemedicine services via Zoom. Appointments are booked directly on our website by the patient.' },
@@ -172,7 +163,7 @@ const faqCategories = [
       },
       {
         q: 'Can I buy products without a membership?',
-        a: 'Yes. Eligible products can be purchased as a One-Time Purchase at standard pricing, or with Auto-Refill & Save at 10% off, without an Active Wellness Membership.',
+        a: 'Yes. Eligible products can be purchased as a One-Time Purchase at standard pricing without a Wellness Membership. Semaglutide and Tirzepatide also offer Wellness Membership as a separate recurring option.',
       },
       {
         q: 'How do I cancel a membership?',

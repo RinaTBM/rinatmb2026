@@ -40,7 +40,7 @@ describe('weight membership flat-rate program', () => {
       isActiveMember: false,
       selectedVariant: v1,
     });
-    expect(opts.map(o => o.kind)).toEqual(['membership_program', 'auto_refill', 'one_time']);
+    expect(opts.map(o => o.kind)).toEqual(['membership_program', 'one_time']);
     expect(opts[0].finalPrice).toBe(125);
     expect(opts[0].cta).toContain('$125/month');
     expect(opts[0].program?.cartLabel).toBe('Semaglutide Wellness Membership — $125/month');
@@ -90,24 +90,25 @@ describe('weight membership flat-rate program', () => {
     expect(tirzepatide.variants.some(v => isTirzepatide30mgVariant(v))).toBe(false);
   });
 
-  it('Auto-Refill remains 10% off the selected dose price', () => {
-    const cases = [
-      { product: semaglutide, price: 129, expected: 116.1 },
-      { product: semaglutide, price: 129, expected: 116.1 },
-      { product: tirzepatide, price: 139, expected: 125.1 },
-      { product: tirzepatide, price: 199, expected: 179.1 },
-    ];
-    for (const c of cases) {
-      const variant = c.product.variants.find(v => v.price === c.price)!;
+  it('does not offer Auto-Refill on Semaglutide or Tirzepatide', () => {
+    for (const product of [semaglutide, tirzepatide]) {
+      const variant = product.variants[0];
       const opts = buildPurchaseOptions({
         standardPrice: variant.price,
-        product: c.product,
+        product,
         isActiveMember: false,
         selectedVariant: variant,
       });
-      const auto = opts.find(o => o.kind === 'auto_refill')!;
-      expect(auto.finalPrice).toBe(c.expected);
-      expect(auto.discountPercent).toBe(10);
+      expect(opts.some(o => o.kind === 'auto_refill')).toBe(false);
+      expect(opts.map(o => o.kind)).toEqual(['membership_program', 'one_time']);
+      const leftover = resolveUnitPrice({
+        standardPrice: variant.price,
+        product,
+        isActiveMember: false,
+        option: 'auto_refill',
+      });
+      expect(leftover.appliedDiscount).toBe('none');
+      expect(leftover.finalPrice).toBe(variant.price);
     }
   });
 
@@ -130,8 +131,9 @@ describe('weight membership flat-rate program', () => {
           option,
         });
         if (option === 'auto_refill') {
-          expect(r.appliedDiscount).toBe('auto_refill');
-          expect(r.discountPercent).toBe(10);
+          expect(r.appliedDiscount).toBe('none');
+          expect(r.discountPercent).toBe(0);
+          expect(r.finalPrice).toBe(429);
         } else {
           expect(r.appliedDiscount).toBe('none');
           expect(r.finalPrice).toBe(429);

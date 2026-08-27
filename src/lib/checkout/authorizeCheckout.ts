@@ -18,7 +18,6 @@ import {
   ACCESSORY_MEMBER_DISCOUNT_PERCENT,
   ACCESSORY_SALES_TAX_RATE,
   ACCESSORY_SALES_TAX_RATE_PERCENT,
-  AUTO_REFILL_DISCOUNT_PERCENT,
   MEMBERSHIP_FIXED_CENTS,
   PROVIDER_CARE_FIXED_CENTS,
   PROVIDER_CARE_TAX_RATE,
@@ -29,6 +28,7 @@ import {
   WEIGHT_MED_PRODUCT_IDS,
   WELLNESS_MEMBER_DISCOUNT_PERCENT,
 } from './checkoutConstants';
+import { NEW_PURCHASE_AUTO_REFILL_BLOCKER } from '../pricing/purchaseOptions';
 
 export type PurchaseType = 'one_time' | 'auto_refill' | 'membership_program' | 'active_membership';
 
@@ -174,7 +174,7 @@ export function authorizeAccessoryUnitCents(
 
 /**
  * Authorize a single non-stacked discount for wellness products.
- * Member 15% wins over Auto-Refill when both are somehow claimed on one_time.
+ * Auto-Refill 10% is not applied to new purchases.
  */
 export function authorizeWellnessUnitCents(
   item: CheckoutCartItem,
@@ -188,11 +188,7 @@ export function authorizeWellnessUnitCents(
     item.purchaseType ?? (item.subscription ? 'auto_refill' : 'one_time');
 
   if (purchaseType === 'auto_refill' || item.subscription) {
-    return {
-      unitAmountCents: applyPercentOffCents(standard, AUTO_REFILL_DISCOUNT_PERCENT),
-      reason: 'auto_refill',
-      discountPercent: AUTO_REFILL_DISCOUNT_PERCENT,
-    };
+    return null;
   }
 
   const wantsMember =
@@ -316,6 +312,10 @@ export function resolveProductLine(
   const qty = Math.max(1, Math.round(item.quantity) || 1);
   const purchaseType: PurchaseType =
     item.purchaseType ?? (item.subscription ? 'auto_refill' : 'one_time');
+
+  if (purchaseType === 'auto_refill' || item.subscription) {
+    return { error: NEW_PURCHASE_AUTO_REFILL_BLOCKER };
+  }
 
   if (isAccessoryLine(item)) {
     if (purchaseType === 'auto_refill' || item.subscription) {

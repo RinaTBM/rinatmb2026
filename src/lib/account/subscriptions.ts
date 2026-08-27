@@ -145,4 +145,4 @@ export function updateCancellationStatus(
 }
 
 export const CANCELLATION_POLICY_COPY =
-  'Active Wellness memberships have a 3-month minimum commitment. After the initial term, cancellation may be scheduled through your account. Auto-Refill continues on a per-period schedule. To help us process Auto-Refill requests before the next billing period, please submit at least 7 calendar days before your renewal date.';
+  'Active Wellness memberships have a 3-month minimum commitment. After the initial term, cancellation may be scheduled through your account. Auto-Refill is not offered for new purchases. If you have a historical Auto-Refill subscription, submit a cancellation request at least 7 calendar days before your renewal date.';

@@ -204,20 +204,18 @@ function WellnessProductPage({ slug }: { slug: string }) {
       price: selected.finalPrice,
       standardPrice: variant.price,
       image: product.image,
-      subscription: selected.kind === 'auto_refill',
+      subscription: false,
       section: product.category,
       requiresIntake: product.requiresProviderReview,
-      variantId: selected.kind === 'auto_refill' ? `${variant.id}-refill` : variant.id,
+      variantId: variant.id,
       variantLabel:
-        selected.kind === 'auto_refill'
-          ? `Auto-Refill · ${variant.label}`
-          : selected.appliedDiscount === 'member'
-            ? `${variant.label} · Member price`
-            : variant.label,
-      purchaseType: selected.kind,
+        selected.appliedDiscount === 'member'
+          ? `${variant.label} · Member price`
+          : variant.label,
+      purchaseType: selected.kind === 'membership_program' ? 'membership_program' : 'one_time',
       discountPercent: selected.discountPercent,
       appliedDiscount: selected.appliedDiscount,
-      billingFrequency: selected.kind === 'auto_refill' ? 'monthly' : undefined,
+      billingFrequency: selected.kind === 'membership_program' ? 'monthly' : undefined,
     }, quantity);
   };
 
@@ -225,9 +223,6 @@ function WellnessProductPage({ slug }: { slug: string }) {
     if (!selected) return 'Add to Cart';
     if (selected.kind === 'membership_program') return selected.cta;
     if (selected.kind === 'active_membership' && !isActiveMember) return 'Become a Member';
-    if (selected.kind === 'auto_refill') {
-      return `Auto-Refill & Save — $${(selected.finalPrice * quantity).toFixed(2)}/mo`;
-    }
     return `${selected.cta} — $${(selected.finalPrice * quantity).toFixed(2)}`;
   };
 
@@ -301,7 +296,7 @@ function WellnessProductPage({ slug }: { slug: string }) {
                   <p className="mb-3 text-xs text-ink-500 leading-relaxed">
                     Wellness Membership is a flat monthly rate. Customers do not select a membership dose — your
                     licensed provider determines the appropriate formulation and strength. Strength selection below
-                    only affects Auto-Refill and One-Time Purchase pricing.
+                    only affects One-Time Purchase pricing.
                   </p>
                 )}
                 <div className="space-y-2">
@@ -488,7 +483,7 @@ function WellnessProductPage({ slug }: { slug: string }) {
                 <div className="mt-2 grid grid-cols-3 gap-2 text-center text-xs text-ink-500">
                   <div className="flex flex-col items-center gap-1"><Truck size={16} className="text-gold-500" /> Discreet shipping</div>
                   <div className="flex flex-col items-center gap-1"><ShieldCheck size={16} className="text-gold-500" /> Secure checkout</div>
-                  <div className="flex flex-col items-center gap-1"><RefreshCw size={16} className="text-gold-500" /> {selected?.kind === 'auto_refill' || selected?.kind === 'membership_program' ? 'Easy subscription management' : 'Provider-reviewed'}</div>
+                  <div className="flex flex-col items-center gap-1"><RefreshCw size={16} className="text-gold-500" /> {selected?.kind === 'membership_program' ? 'Monthly membership billing' : 'Provider-reviewed'}</div>
                 </div>
               </div>
             </div>

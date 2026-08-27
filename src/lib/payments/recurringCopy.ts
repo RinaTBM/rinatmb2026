@@ -1,6 +1,6 @@
 /**
- * Recurring billing copy for membership / Auto-Refill.
- * Membership card path uses Tagada native monthly rebilling when enabled.
+ * Recurring billing copy for Wellness Membership.
+ * Auto-Refill is not offered for new purchases.
  */
 
 export const PAYMENT_MODEL_OVERVIEW =
@@ -16,16 +16,13 @@ export const PROCESSING_AFTER_PAYMENT_NOTE =
   'Processing begins after payment has been received and, where applicable, required provider review has been completed.';
 
 export const RECURRING_MANUAL_PAYMENT_DISCLOSURE =
-  'Payment is required for each billing period while Auto-Refill remains active.';
+  'Payment is required for each billing period while your membership remains active.';
 
 export const MEMBERSHIP_MANUAL_BILLING_NOTE =
   'Membership pricing is billed monthly. When card enrollment is unavailable for this cart, contact support for assistance. Membership remains inactive until payment is confirmed.';
 
 export const MEMBERSHIP_CARD_BILLING_NOTE =
   'Your card will be charged monthly while your membership is active, including your selected shipping. A 3-month minimum commitment applies.';
-
-export const AUTO_REFILL_MANUAL_BILLING_NOTE =
-  'Auto-Refill saves 10% on eligible products. Each refill period is billed according to your selected payment method. Provider appointments, accessories, shipping, and taxes are never discounted by Auto-Refill.';
 
 export function cartHasRecurringItems(items: Array<{
   isMembership?: boolean;
@@ -35,8 +32,6 @@ export function cartHasRecurringItems(items: Array<{
   return items.some(
     i =>
       i.isMembership ||
-      i.purchaseType === 'membership_program' ||
-      i.purchaseType === 'auto_refill' ||
-      i.subscription === true,
+      i.purchaseType === 'membership_program',
   );
 }

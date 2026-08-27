@@ -16,6 +16,7 @@ import {
 } from './settings';
 import {
   applyDiscount,
+  buildPurchaseOptions,
   isAutoRefillEligible,
   resolveUnitPrice,
 } from './purchaseOptions';
@@ -189,7 +190,7 @@ describe('accessory checkout authorization (server-side price math)', () => {
   });
 });
 
-describe('unchanged membership / medication / auto-refill pricing', () => {
+describe('unchanged membership / medication pricing (Auto-Refill retired for new purchases)', () => {
   it('Semaglutide flat membership remains $125', () => {
     expect(SEMAGLUTIDE_MEMBERSHIP_MONTHLY).toBe(125);
     const m = memberships.find(x => x.slug === 'semaglutide-membership')!;
@@ -206,12 +207,11 @@ describe('unchanged membership / medication / auto-refill pricing', () => {
     expect(TIRZEPATIDE_30MG_MEMBER_ONLY_MONTHLY).toBe(350);
   });
 
-  it('Auto-Refill remains 10% for eligible wellness products only', () => {
+  it('Auto-Refill 10% is not applied for new purchases', () => {
     expect(DEFAULT_AUTO_REFILL_DISCOUNT_PERCENT).toBe(10);
     const wellness = products.find(
       p => p.category === 'weight-management' && p.autoRefillEligible && !p.slug.includes('semaglutide') && !p.slug.includes('tirzepatide'),
     );
-    // NAD+ or similar — if present, auto-refill 10%. Accessories never.
     expect(isAutoRefillEligible(travelBag)).toBe(false);
     if (wellness) {
       const priced = resolveUnitPrice({
@@ -220,9 +220,16 @@ describe('unchanged membership / medication / auto-refill pricing', () => {
         isActiveMember: false,
         option: 'auto_refill',
       });
-      expect(priced.discountPercent).toBe(10);
-      expect(priced.appliedDiscount).toBe('auto_refill');
+      expect(priced.discountPercent).toBe(0);
+      expect(priced.appliedDiscount).toBe('none');
+      expect(priced.finalPrice).toBe(wellness.startingPrice);
     }
+    const opts = buildPurchaseOptions({
+      standardPrice: travelBag.startingPrice,
+      product: travelBag,
+      isActiveMember: false,
+    });
+    expect(opts.some(o => o.kind === 'auto_refill')).toBe(false);
   });
 
   it('One-Time medication pricing remains unchanged (no 15% on Sema/Tirz)', () => {

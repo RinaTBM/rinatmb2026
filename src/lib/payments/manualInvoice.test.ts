@@ -17,7 +17,6 @@ import {
 } from './manualInvoice';
 import { canAdvanceFulfillment } from './fulfillmentGuards';
 import {
-  AUTO_REFILL_MANUAL_BILLING_NOTE,
   cartHasRecurringItems,
   MEMBERSHIP_MANUAL_BILLING_NOTE,
   RECURRING_MANUAL_PAYMENT_DISCLOSURE,
@@ -197,15 +196,14 @@ describe('bank instructions secrets mapping', () => {
 });
 
 describe('recurring manual payment disclosure', () => {
-  it('detects membership/auto-refill and keeps pricing constants', () => {
+  it('detects membership recurring carts only (Auto-Refill is not a new-purchase path)', () => {
     expect(cartHasRecurringItems([{ isMembership: true }])).toBe(true);
-    expect(cartHasRecurringItems([{ purchaseType: 'auto_refill' }])).toBe(true);
+    expect(cartHasRecurringItems([{ purchaseType: 'membership_program' }])).toBe(true);
+    expect(cartHasRecurringItems([{ purchaseType: 'auto_refill' }])).toBe(false);
     expect(cartHasRecurringItems([{ purchaseType: 'one_time' }])).toBe(false);
     expect(RECURRING_MANUAL_PAYMENT_DISCLOSURE.toLowerCase()).toContain('each billing period');
     expect(MEMBERSHIP_MANUAL_BILLING_NOTE.toLowerCase()).toContain('card enrollment');
     expect(MEMBERSHIP_MANUAL_BILLING_NOTE.toLowerCase()).not.toContain('payment method on file');
-    expect(AUTO_REFILL_MANUAL_BILLING_NOTE).toContain('10%');
-    expect(AUTO_REFILL_MANUAL_BILLING_NOTE.toLowerCase()).toContain('selected payment method');
     expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(12500);
     expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(17900);
     expect(TWO_DAY_SHIPPING_CENTS).toBe(3000);

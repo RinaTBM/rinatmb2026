@@ -318,9 +318,6 @@ export function resolveProductLine(
   }
 
   if (isAccessoryLine(item)) {
-    if (purchaseType === 'auto_refill' || item.subscription) {
-      return { error: 'Auto-Refill is not available on accessories.' };
-    }
     const unit = authorizeAccessoryUnitCents(item, isActiveMember);
     if (unit == null || unit <= 0) {
       return { error: `Missing unit amount for accessory ${item.productId}` };

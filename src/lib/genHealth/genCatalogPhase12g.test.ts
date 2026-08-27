@@ -77,7 +77,7 @@ describe('Phase 12G GEN catalog + handoff gate', () => {
     ).toBe(true);
   });
 
-  it('missing GEN mapping blocks production Rx; accessories bypass', () => {
+  it('missing GEN mapping allows manual checkout but blocks API automation', () => {
     const requireGen = resolveRequireGenMappingForRx({ MBM_RUNTIME_ENV: 'production' });
     expect(requireGen).toBe(true);
     const rx = {
@@ -90,9 +90,12 @@ describe('Phase 12G GEN catalog + handoff gate', () => {
       hasActiveTagadaMapping: true,
       genMappingStatus: 'EXCLUDED' as const,
     };
-    expect(assertCartEligibleForCheckout({ lines: [rx], requireGenMappingForRx: requireGen }).ok).toBe(
-      false,
-    );
+    expect(assertCartEligibleForCheckout({ lines: [rx], requireGenMappingForRx: requireGen }).ok).toBe(true);
+    expect(assertCartEligibleForCheckout({
+      lines: [rx],
+      requireGenMappingForRx: requireGen,
+      genApiOrdersEnabled: true,
+    }).ok).toBe(false);
     expect(assertCartEligibleForCheckout({ lines: [acc], requireGenMappingForRx: requireGen }).ok).toBe(
       true,
     );

@@ -25,7 +25,7 @@ describe('Phase 12I.3 rx catalog readiness', () => {
     expect(s.catalogReady).toBe(1);
     expect(s.temporarilyUnavailable).toBe(18);
     expect(s.newSkuRequired).toBe(9);
-    expect(s.productionRxReady).toBe(0);
+    expect(s.productionRxReady).toBe(28);
     expect(
       CATALOG_READY_RX_SKUS.length +
         TEMPORARILY_UNAVAILABLE_RX_SKUS.length +
@@ -49,14 +49,14 @@ describe('Phase 12I.3 rx catalog readiness', () => {
     ).toBe(true);
   });
 
-  it('BPC catalog READY but production blocked when API Orders=false', () => {
+  it('BPC checkout remains available when API Orders=false', () => {
     const a = resolveStorefrontRxAvailability({
       mbmSku: 'MBM-RP-BPC-INJ-001',
       genApiOrdersEnabled: false,
     });
     expect(a?.catalogReady).toBe(true);
-    expect(a?.productionPurchasable).toBe(false);
-    expect(a?.customerFacingStatus).toBe('COMING_SOON');
+    expect(a?.productionPurchasable).toBe(true);
+    expect(a?.customerFacingStatus).toBe('AVAILABLE');
     expect(a?.websiteAction).toBe('KEEP_READY');
   });
 
@@ -69,12 +69,12 @@ describe('Phase 12I.3 rx catalog readiness', () => {
     expect(a?.customerFacingStatus).toBe('AVAILABLE');
   });
 
-  it('BLOCKED Rx cannot checkout (storefront + server when guard on)', () => {
+  it('Rx with pending GEN mapping can checkout into manual handoff', () => {
     const sku = 'MBM-LON-NAD-INJ-001';
     const store = resolveStorefrontRxAvailability({ mbmSku: sku, genApiOrdersEnabled: false });
-    expect(store?.customerFacingStatus).toBe('TEMPORARILY_UNAVAILABLE');
-    expect(store?.productionPurchasable).toBe(false);
-    const blocked = assertCartEligibleForCheckout({
+    expect(store?.customerFacingStatus).toBe('AVAILABLE');
+    expect(store?.productionPurchasable).toBe(true);
+    const allowed = assertCartEligibleForCheckout({
       lines: [
         {
           mbmSku: sku,
@@ -85,15 +85,15 @@ describe('Phase 12I.3 rx catalog readiness', () => {
       requireGenMappingForRx: true,
       genApiOrdersEnabled: false,
     });
-    expect(blocked.ok).toBe(false);
+    expect(allowed.ok).toBe(true);
   });
 
-  it('NEW_SKU_REQUIRED old SKU cannot checkout', () => {
+  it('active Tagada SKU can checkout but automated GEN remains fail-closed', () => {
     const sku = 'MBM-WM-SEM-INJ-001';
     const store = resolveStorefrontRxAvailability({ mbmSku: sku });
-    expect(store?.websiteAction).toBe('PREPARE_REPLACEMENT_SKU');
-    expect(store?.productionPurchasable).toBe(false);
-    expect(store?.proposedNewSku).toBe('MBM-WM-SEM-INJ-005');
+    expect(store?.websiteAction).toBe('KEEP_READY');
+    expect(store?.productionPurchasable).toBe(true);
+    expect(store?.proposedNewSku).toBeNull();
     const blocked = assertCartEligibleForCheckout({
       lines: [
         {
@@ -126,7 +126,7 @@ describe('Phase 12I.3 rx catalog readiness', () => {
     ).toBeNull();
   });
 
-  it('server guard cannot be bypassed by frontend (API Orders false blocks READY Rx)', () => {
+  it('API Orders off routes READY Rx to manual handoff', () => {
     const requireGen = resolveRequireGenMappingForRx({ MBM_RUNTIME_ENV: 'production' });
     expect(resolveGenApiOrdersEnabled({})).toBe(false);
     const result = assertCartEligibleForCheckout({
@@ -138,13 +138,12 @@ describe('Phase 12I.3 rx catalog readiness', () => {
         },
       ],
       requireGenMappingForRx: requireGen,
-      // Frontend might claim available — server still requires this true.
       genApiOrdersEnabled: false,
     });
-    expect(result.ok).toBe(false);
+    expect(result.ok).toBe(true);
   });
 
-  it('API Orders false blocks production Rx; true + READY map allows eligibility', () => {
+  it('API Orders false allows manual handoff; true + READY map allows automation', () => {
     const line = {
       mbmSku: 'MBM-RP-BPC-INJ-001',
       hasActiveTagadaMapping: true,
@@ -156,7 +155,7 @@ describe('Phase 12I.3 rx catalog readiness', () => {
         requireGenMappingForRx: true,
         genApiOrdersEnabled: false,
       }).ok,
-    ).toBe(false);
+    ).toBe(true);
     expect(
       assertCartEligibleForCheckout({
         lines: [line],
@@ -166,7 +165,7 @@ describe('Phase 12I.3 rx catalog readiness', () => {
     ).toBe(true);
   });
 
-  it('PRODUCTION_CHECKOUT_TEST_SKU allowlists only BPC; SEM still blocked', () => {
+  it('payment-only checkout does not require a temporary SKU allowlist', () => {
     const bpc = {
       mbmSku: 'MBM-RP-BPC-INJ-001',
       hasActiveTagadaMapping: true,
@@ -197,7 +196,7 @@ describe('Phase 12I.3 rx catalog readiness', () => {
         genApiOrdersEnabled: false,
         productionCheckoutTestSku: 'MBM-RP-BPC-INJ-001',
       }).ok,
-    ).toBe(false);
+    ).toBe(true);
     expect(
       assertCartEligibleForCheckout({
         lines: [bpc, sem],
@@ -205,7 +204,7 @@ describe('Phase 12I.3 rx catalog readiness', () => {
         genApiOrdersEnabled: false,
         productionCheckoutTestSku: 'MBM-RP-BPC-INJ-001',
       }).ok,
-    ).toBe(false);
+    ).toBe(true);
   });
 
   it('unknown cost displays TBD / UNKNOWN band', () => {

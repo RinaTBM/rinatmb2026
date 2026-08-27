@@ -131,14 +131,10 @@ async function assertRxGenMappingsReady(input: {
     return { ok: true };
   }
 
-  // Production Rx also requires GEN API Orders capability (distinct from mapping READY).
+  // GEN API Orders is fulfillment automation, not a Tagada payment gate. While
+  // disabled, paid Rx orders remain in the admin-controlled clinical/GEN queue.
   if (!resolveGenApiOrdersEnabled()) {
-    return {
-      ok: false,
-      message:
-        "This medication is temporarily unavailable for checkout. Please contact support.",
-      blockedSku: otherRx[0],
-    };
+    return { ok: true };
   }
 
   const unresolved = otherRx.filter((s) => !resolveGenClientProductIdForSku(s));

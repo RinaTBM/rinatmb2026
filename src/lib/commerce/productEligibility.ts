@@ -211,19 +211,15 @@ export function assertCartEligibleForCheckout(input: {
         // Launch-ready family SKUs: Tagada payment allowed; GEN API Orders / handoff stay OFF.
         continue;
       }
+      // With GEN API Orders off, payment proceeds and the paid order stays in
+      // the admin-controlled clinical/GEN handoff workflow. Mapping becomes
+      // mandatory only when automated GEN order creation is explicitly on.
+      if (!apiOrders) continue;
       if (!el.genHandoffAllowed) {
         return {
           ok: false,
           message:
             'This medication cannot be checked out until clinical product mapping is ready. Please contact support.',
-          blockedSku: line.mbmSku || undefined,
-        };
-      }
-      if (!apiOrders) {
-        return {
-          ok: false,
-          message:
-            'This medication is temporarily unavailable for checkout. Please contact support.',
           blockedSku: line.mbmSku || undefined,
         };
       }

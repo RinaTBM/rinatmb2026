@@ -49,21 +49,28 @@ describe('productEligibility', () => {
     expect(el.tagadaCheckoutAllowed).toBe(false);
   });
 
-  it('cart gate allows GEN_BLOCKED Rx unless requireGenMappingForRx', () => {
+  it('cart gate allows manual handoff but blocks missing mapping when API Orders is on', () => {
     const line = {
       mbmSku: 'MBM-WM-SEM-INJ-001',
       hasActiveTagadaMapping: true,
       genMappingStatus: 'MISSING' as const,
     };
     expect(assertCartEligibleForCheckout({ lines: [line] }).ok).toBe(true);
-    const blocked = assertCartEligibleForCheckout({
+    const manual = assertCartEligibleForCheckout({
       lines: [line],
       requireGenMappingForRx: true,
+      genApiOrdersEnabled: false,
     });
-    expect(blocked.ok).toBe(false);
+    expect(manual.ok).toBe(true);
+    const automated = assertCartEligibleForCheckout({
+      lines: [line],
+      requireGenMappingForRx: true,
+      genApiOrdersEnabled: true,
+    });
+    expect(automated.ok).toBe(false);
   });
 
-  it('production env policy fail-closes Rx without GEN mapping; accessories still ok', () => {
+  it('production allows manual Rx handoff; API automation stays fail-closed', () => {
     const requireGen = resolveRequireGenMappingForRx({ MBM_RUNTIME_ENV: 'production' });
     expect(requireGen).toBe(true);
     const rx = {
@@ -76,9 +83,7 @@ describe('productEligibility', () => {
       hasActiveTagadaMapping: true,
       genMappingStatus: 'EXCLUDED' as const,
     };
-    expect(assertCartEligibleForCheckout({ lines: [rx], requireGenMappingForRx: requireGen }).ok).toBe(
-      false,
-    );
+    expect(assertCartEligibleForCheckout({ lines: [rx], requireGenMappingForRx: requireGen }).ok).toBe(true);
     expect(
       assertCartEligibleForCheckout({ lines: [acc], requireGenMappingForRx: requireGen }).ok,
     ).toBe(true);
@@ -86,14 +91,14 @@ describe('productEligibility', () => {
       ...rx,
       genMappingStatus: 'READY' as const,
     };
-    // READY map alone is not enough — API Orders required when production guard is on.
+    // With API Orders off, payment is followed by admin-controlled manual handoff.
     expect(
       assertCartEligibleForCheckout({
         lines: [readyRx],
         requireGenMappingForRx: requireGen,
         genApiOrdersEnabled: false,
       }).ok,
-    ).toBe(false);
+    ).toBe(true);
     expect(
       assertCartEligibleForCheckout({
         lines: [readyRx],
@@ -127,7 +132,7 @@ describe('productEligibility', () => {
         requireGenMappingForRx: true,
         genApiOrdersEnabled: false,
       }).ok,
-    ).toBe(false);
+    ).toBe(true);
   });
 
   it('membership rebill never creates GEN medication orders', () => {

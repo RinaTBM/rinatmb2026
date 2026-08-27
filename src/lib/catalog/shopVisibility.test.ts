@@ -35,7 +35,7 @@ describe('shop visibility vs purchase readiness', () => {
     expect(slugs).not.toContain('minoxidil-tablets');
   });
 
-  it('allows purchase only for launch-ready family SKUs', () => {
+  it('allows purchase for every active storefront product', () => {
     const shop = visibleProducts.filter((p) => SHOP_CATEGORY_IDS.has(p.category));
     const purchasable: string[] = [];
     const unavailable: string[] = [];
@@ -45,7 +45,7 @@ describe('shop visibility vs purchase readiness', () => {
       if (!rx || rx.productionPurchasable) purchasable.push(p.slug);
       else unavailable.push(p.slug);
     }
-    expect(purchasable.sort()).toEqual(['nad-plus', 'semaglutide', 'tirzepatide']);
-    expect(unavailable).toHaveLength(12);
+    expect(purchasable.sort()).toEqual([...EXPECTED_SHOP_SLUGS].sort());
+    expect(unavailable).toHaveLength(0);
   });
 });

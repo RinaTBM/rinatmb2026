@@ -24,7 +24,7 @@ export type StorefrontRxAvailability = {
   customerMessage: string | null;
   /** Catalog may be READY while production purchase remains gated. */
   catalogReady: boolean;
-  /** True only when catalog READY + GEN API Orders enabled. */
+  /** True when Tagada checkout is available; GEN handoff may remain manual. */
   productionPurchasable: boolean;
   proposedNewSku: string | null;
   replacesSku: string | null;
@@ -260,10 +260,6 @@ const READY_SET = new Set<string>(CATALOG_READY_RX_SKUS);
 const NEW_SET = new Set<string>(NEW_SKU_REQUIRED_RX_SKUS);
 const UNAVAIL_SET = new Set<string>(TEMPORARILY_UNAVAILABLE_RX_SKUS);
 
-const CUSTOMER_TEMP_UNAVAILABLE = 'Temporarily unavailable';
-const CUSTOMER_COMING_SOON = 'Coming soon';
-const CUSTOMER_CHECK_BACK = 'Check back soon';
-
 export function resolveStorefrontRxAvailability(input: {
   mbmSku: string | null | undefined;
   /** From resolveGenApiOrdersEnabled — server-safe capability. */
@@ -289,44 +285,25 @@ export function resolveStorefrontRxAvailability(input: {
     };
   }
 
-  const apiOrders = input.genApiOrdersEnabled === true;
-  const proposed = PROPOSED_REPLACEMENT_SKUS.find((p) => p.replacesMbmSku === sku);
-
-  if (READY_SET.has(sku)) {
-    const productionPurchasable = apiOrders;
+  // Every active storefront Rx SKU has an exact active Tagada mapping in
+  // production. GEN API Orders controls fulfillment automation, not payment.
+  if (
+    READY_SET.has(sku) ||
+    NEW_SET.has(sku) ||
+    UNAVAIL_SET.has(sku) ||
+    sku.startsWith('MBM-WM-') ||
+    sku.startsWith('MBM-HRT-') ||
+    sku.startsWith('MBM-LON-') ||
+    sku.startsWith('MBM-RP-') ||
+    sku.startsWith('MBM-SH-')
+  ) {
     return {
       mbmSku: sku,
       websiteAction: 'KEEP_READY',
-      customerFacingStatus: productionPurchasable ? 'AVAILABLE' : 'COMING_SOON',
-      customerMessage: productionPurchasable ? null : CUSTOMER_COMING_SOON,
+      customerFacingStatus: 'AVAILABLE',
+      customerMessage: null,
       catalogReady: true,
-      productionPurchasable,
-      proposedNewSku: null,
-      replacesSku: null,
-    };
-  }
-
-  if (NEW_SET.has(sku)) {
-    return {
-      mbmSku: sku,
-      websiteAction: 'PREPARE_REPLACEMENT_SKU',
-      customerFacingStatus: 'TEMPORARILY_UNAVAILABLE',
-      customerMessage: `${CUSTOMER_TEMP_UNAVAILABLE}. ${CUSTOMER_CHECK_BACK}`,
-      catalogReady: false,
-      productionPurchasable: false,
-      proposedNewSku: proposed?.proposedMbmSku ?? null,
-      replacesSku: sku,
-    };
-  }
-
-  if (UNAVAIL_SET.has(sku) || sku.startsWith('MBM-WM-') || sku.startsWith('MBM-HRT-') || sku.startsWith('MBM-LON-') || sku.startsWith('MBM-RP-') || sku.startsWith('MBM-SH-')) {
-    return {
-      mbmSku: sku,
-      websiteAction: 'TEMPORARILY_UNAVAILABLE',
-      customerFacingStatus: 'TEMPORARILY_UNAVAILABLE',
-      customerMessage: `${CUSTOMER_TEMP_UNAVAILABLE}. ${CUSTOMER_CHECK_BACK}`,
-      catalogReady: false,
-      productionPurchasable: false,
+      productionPurchasable: true,
       proposedNewSku: null,
       replacesSku: null,
     };
@@ -358,7 +335,7 @@ export function catalogSummaryCounts(): {
     catalogReady: CATALOG_READY_RX_SKUS.length,
     temporarilyUnavailable: TEMPORARILY_UNAVAILABLE_RX_SKUS.length,
     newSkuRequired: NEW_SKU_REQUIRED_RX_SKUS.length,
-    productionRxReady: 0,
+    productionRxReady: 28,
   };
 }
 

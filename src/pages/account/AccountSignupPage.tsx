@@ -77,7 +77,7 @@ export function AccountSignupPage() {
   return (
     <AccountAuthLayout
       title="Create Your Account"
-      subtitle="Manage your account and access available order and membership information."
+      subtitle="Manage your account and access available order and subscription information."
       footer={
         <>
           Already have an account?{' '}

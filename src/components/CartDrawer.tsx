@@ -94,7 +94,7 @@ export function CartDrawer() {
                               )}
                               <p className="text-gold-600 font-medium">Billed monthly · 3-month initial term</p>
                               <p>Provider review required · prescription not guaranteed</p>
-                              <p>Selected shipping renews monthly with membership</p>
+                              <p>Selected shipping renews with each subscription order</p>
                               <p>After the 3-month minimum, you may cancel (canceling ends the locked rate)</p>
                             </div>
                           ) : (

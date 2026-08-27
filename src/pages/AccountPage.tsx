@@ -81,7 +81,7 @@ export function AccountPage() {
           </div>
           {member.isActiveMember && (
             <div className="rounded-full bg-gold-100 px-4 py-2 text-sm text-gold-800 flex items-center gap-2">
-              <Crown size={16} /> Active Wellness Member · Save 15% on products and accessories
+              <Crown size={16} /> Subscribe &amp; Save · 15% off eligible prescription medication
             </div>
           )}
         </div>
@@ -148,20 +148,20 @@ export function AccountPage() {
             {activeTab === 'subscriptions' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="font-serif text-2xl text-ink-900 mb-2">Active Wellness Membership</h2>
-                  <p className="text-sm text-ink-500 mb-4">Members receive our best available pricing on eligible wellness products.</p>
+                  <h2 className="font-serif text-2xl text-ink-900 mb-2">Subscriptions</h2>
+                  <p className="text-sm text-ink-500 mb-4">Subscribe &amp; Save applies 15% off eligible prescription medication. Shipping and services are excluded.</p>
                   {memberships.length === 0 && !member.isActiveMember ? (
                     <div className="card-lux p-6 text-center">
                       <Crown size={28} className="mx-auto text-ink-300 mb-3" />
-                      <p className="text-ink-500 mb-4">You do not have an Active Wellness Membership.</p>
-                      <Link to="/memberships" className="btn-primary">Become a Member</Link>
+                      <p className="text-ink-500 mb-4">You do not have an active subscription.</p>
+                      <Link to="/subscriptions" className="btn-primary">Explore Subscribe &amp; Save</Link>
                       <div className="mt-4 pt-4 border-t border-cream-200">
                         <button
                           type="button"
                           className="text-xs text-gold-700 underline"
                           onClick={() => member.setDemoActiveMember(true, 'tirzepatide')}
                         >
-                          Demo: simulate active Tirzepatide membership (for pricing tests)
+                              Demo: simulate legacy subscription (for pricing tests)
                         </button>
                       </div>
                     </div>
@@ -173,7 +173,7 @@ export function AccountPage() {
                           <p className="text-sm text-gold-700">
                             Status: {(memberships[0]?.status ?? 'active').replace(/_/g, ' ')}
                             {memberships[0]?.status === 'active' || !memberships[0]
-                              ? ' · Preferred Member Pricing (15% on eligible products and accessories)'
+                              ? ' · Subscribe & Save pricing (15% on eligible prescriptions)'
                               : ''}
                           </p>
                           <p className="text-sm text-ink-500">
@@ -205,7 +205,7 @@ export function AccountPage() {
                             </p>
                           ) : (
                             <p className="text-sm text-ink-500">
-                              3-month minimum commitment applies from membership start.
+                              Historical minimum-term details apply only to legacy records.
                             </p>
                           )}
                           {memberships[0]?.cancelScheduledAt ? (
@@ -219,7 +219,7 @@ export function AccountPage() {
                           {(memberships[0]?.status ?? 'active').replace(/_/g, ' ')}
                         </span>
                       </div>
-                      <p className="text-xs text-ink-500">Customers cannot modify medication strength or provider-directed treatment from this portal. Full server-backed membership portal sync is a follow-up phase.</p>
+                      <p className="text-xs text-ink-500">Customers cannot modify medication strength or provider-directed treatment from this portal. Full server-backed subscription sync is a follow-up phase.</p>
                       <div className="flex flex-wrap gap-2">
                         <Link to="/track" className="btn-outline text-xs inline-flex items-center gap-1">
                           <FileText size={14} /> Payment Status
@@ -250,7 +250,7 @@ export function AccountPage() {
                           </button>
                         )}
                         <button type="button" className="btn-ghost text-xs" onClick={() => member.setDemoActiveMember(false)}>
-                          Clear demo membership
+                          Clear demo subscription
                         </button>
                       </div>
                     </div>

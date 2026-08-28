@@ -1,10 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   applyMbmtest90Promo,
-  discountForEligibleUnit,
-  evaluateMbmtest90Line,
+  isMbmtest90CartEligible,
   isMbmtest90EmailAuthorized,
-  isMbmtest90EligibleLine,
   isMbmtest90PromoCode,
   MBMTEST90_DISCOUNT_RATE,
   MBMTEST90_PROMO_CODE,
@@ -38,168 +36,77 @@ describe('MBMTEST90 promo code', () => {
   });
 });
 
-describe('MBMTEST90 eligibility', () => {
-  it('allows one-time prescription medications', () => {
-    expect(isMbmtest90EligibleLine({ productId: 'p1', section: 'weight-management' })).toEqual({
-      eligible: true,
-      reason: 'eligible',
-    });
+describe('MBMTEST90 cart eligibility', () => {
+  it('allows one-time carts with medications and provider visits', () => {
+    expect(
+      isMbmtest90CartEligible([
+        { productId: 'p1', purchaseType: 'one_time' },
+        { productId: 'pc1', purchaseType: 'one_time' },
+      ]),
+    ).toBe(true);
   });
 
-  it('excludes subscriptions', () => {
+  it('excludes carts with memberships', () => {
     expect(
-      isMbmtest90EligibleLine({
-        productId: 'p1',
-        section: 'weight-management',
-        subscription: true,
-      }),
-    ).toEqual({ eligible: false, reason: 'subscription' });
+      isMbmtest90CartEligible([
+        { productId: 'm1', purchaseType: 'membership_program' },
+      ]),
+    ).toBe(false);
     expect(
-      isMbmtest90EligibleLine({
-        productId: 'p1',
-        section: 'weight-management',
-        purchaseType: 'auto_refill',
-      }),
-    ).toEqual({ eligible: false, reason: 'subscription' });
+      isMbmtest90CartEligible([
+        { sku: 'MBM-MEM-SEM-MEM-001' },
+      ]),
+    ).toBe(false);
   });
 
-  it('excludes memberships', () => {
+  it('excludes carts with subscriptions', () => {
     expect(
-      isMbmtest90EligibleLine({ productId: 'm1', section: 'memberships' }),
-    ).toEqual({ eligible: false, reason: 'membership' });
+      isMbmtest90CartEligible([
+        { productId: 'p1', subscription: true },
+      ]),
+    ).toBe(false);
     expect(
-      isMbmtest90EligibleLine({
-        productId: 'x',
-        sku: 'MBM-MEM-SEM-MEM-001',
-        section: 'memberships',
-      }),
-    ).toEqual({ eligible: false, reason: 'membership' });
-  });
-
-  it('excludes accessories', () => {
-    expect(
-      isMbmtest90EligibleLine({ productId: 'a1', section: 'accessories' }),
-    ).toEqual({ eligible: false, reason: 'accessory' });
-    expect(
-      isMbmtest90EligibleLine({ sku: 'MBM-ACC-001', section: 'accessories' }),
-    ).toEqual({ eligible: false, reason: 'accessory' });
-  });
-
-  it('excludes provider care', () => {
-    expect(
-      isMbmtest90EligibleLine({ productId: 'pc1', section: 'provider-care' }),
-    ).toEqual({ eligible: false, reason: 'provider_care' });
-    expect(
-      isMbmtest90EligibleLine({ sku: 'MBM-PC-IPV-SRV-001', section: 'provider-care' }),
-    ).toEqual({ eligible: false, reason: 'provider_care' });
-  });
-
-  it('excludes dermatology / skin-hair', () => {
-    expect(
-      isMbmtest90EligibleLine({ productId: 'p5', section: 'prescription-skin-hair' }),
-    ).toEqual({ eligible: false, reason: 'dermatology' });
-    expect(
-      isMbmtest90EligibleLine({ sku: 'MBM-SH-001', section: 'prescription-skin-hair' }),
-    ).toEqual({ eligible: false, reason: 'dermatology' });
-  });
-
-  it('excludes shipping', () => {
-    expect(
-      isMbmtest90EligibleLine({ sku: 'MBM-SHIP-TWO-DAY-001', section: 'shipping' }),
-    ).toEqual({ eligible: false, reason: 'shipping' });
-  });
-
-  it('excludes lab package', () => {
-    expect(
-      isMbmtest90EligibleLine({ productId: 'pc4', section: 'provider-care' }),
-    ).toEqual({ eligible: false, reason: 'lab_package' });
-    expect(
-      isMbmtest90EligibleLine({ sku: 'MBM-PC-LAB-KIT-001', section: 'provider-care' }),
-    ).toEqual({ eligible: false, reason: 'lab_package' });
-  });
-});
-
-describe('MBMTEST90 line evaluation', () => {
-  it('computes 90% discount per eligible unit', () => {
-    const result = evaluateMbmtest90Line({
-      productId: 'p1',
-      section: 'weight-management',
-      quantity: 2,
-      unitAmountCents: 14900,
-    });
-    expect(result.eligible).toBe(true);
-    expect(result.discountPerUnitCents).toBe(13410);
-    expect(result.lineDiscountCents).toBe(26820);
-  });
-
-  it('returns zero discount for ineligible lines', () => {
-    const result = evaluateMbmtest90Line({
-      productId: 'a1',
-      section: 'accessories',
-      quantity: 1,
-      unitAmountCents: 5000,
-    });
-    expect(result.eligible).toBe(false);
-    expect(result.lineDiscountCents).toBe(0);
-    expect(result.reason).toBe('accessory');
-  });
-
-  it('handles invalid quantity', () => {
-    const result = evaluateMbmtest90Line({
-      productId: 'p1',
-      section: 'weight-management',
-      quantity: 0,
-      unitAmountCents: 10000,
-    });
-    expect(result.eligible).toBe(false);
-    expect(result.reason).toBe('invalid_qty');
-  });
-
-  it('handles zero price', () => {
-    const result = evaluateMbmtest90Line({
-      productId: 'p1',
-      section: 'weight-management',
-      quantity: 1,
-      unitAmountCents: 0,
-    });
-    expect(result.eligible).toBe(false);
-    expect(result.reason).toBe('zero_price');
-  });
-
-  it('discountForEligibleUnit rounds correctly', () => {
-    expect(discountForEligibleUnit(10000)).toBe(9000);
-    expect(discountForEligibleUnit(14900)).toBe(13410);
-    expect(discountForEligibleUnit(0)).toBe(0);
+      isMbmtest90CartEligible([
+        { productId: 'p1', purchaseType: 'auto_refill' },
+      ]),
+    ).toBe(false);
   });
 });
 
 describe('MBMTEST90 apply', () => {
-  const eligibleLines = [
-    {
-      productId: 'p1',
-      section: 'weight-management',
-      quantity: 2,
-      unitAmountCents: 14900,
-    },
-    {
-      productId: 'a1',
-      section: 'accessories',
-      quantity: 1,
-      unitAmountCents: 5000,
-    },
+  const eligibleItems = [
+    { productId: 'p1', purchaseType: 'one_time' },
+    { productId: 'pc1', purchaseType: 'one_time' },
   ];
 
-  it('applies discount with authorized email', () => {
+  it('applies 90% off subtotal + shipping', () => {
     const result = applyMbmtest90Promo({
       code: 'MBMTEST90',
       customerEmail: 'info@thebaremethodmn.com',
-      lines: eligibleLines,
+      subtotalCents: 14900,
+      shippingCents: 3000,
+      items: eligibleItems,
     });
     expect(result.ok).toBe(true);
     if (result.ok) {
       expect(result.code).toBe('MBMTEST90');
-      expect(result.discountCents).toBe(26820);
-      expect(result.eligibleUnitCount).toBe(2);
+      expect(result.discountCents).toBe(16110);
+      expect(result.discountedTotalCents).toBe(1790);
+    }
+  });
+
+  it('applies 90% off with zero shipping', () => {
+    const result = applyMbmtest90Promo({
+      code: 'MBMTEST90',
+      customerEmail: 'info@thebaremethodmn.com',
+      subtotalCents: 10000,
+      shippingCents: 0,
+      items: eligibleItems,
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.discountCents).toBe(9000);
+      expect(result.discountedTotalCents).toBe(1000);
     }
   });
 
@@ -207,7 +114,9 @@ describe('MBMTEST90 apply', () => {
     const result = applyMbmtest90Promo({
       code: 'MBMTEST90',
       customerEmail: 'someone@example.com',
-      lines: eligibleLines,
+      subtotalCents: 14900,
+      shippingCents: 3000,
+      items: eligibleItems,
     });
     expect(result.ok).toBe(false);
     if (!result.ok) {
@@ -219,7 +128,9 @@ describe('MBMTEST90 apply', () => {
     const result = applyMbmtest90Promo({
       code: 'OGTBM',
       customerEmail: 'info@thebaremethodmn.com',
-      lines: eligibleLines,
+      subtotalCents: 14900,
+      shippingCents: 3000,
+      items: eligibleItems,
     });
     expect(result.ok).toBe(false);
     if (!result.ok) {
@@ -227,43 +138,31 @@ describe('MBMTEST90 apply', () => {
     }
   });
 
-  it('does not discount shipping', () => {
+  it('rejects membership carts', () => {
     const result = applyMbmtest90Promo({
       code: 'MBMTEST90',
       customerEmail: 'info@thebaremethodmn.com',
-      lines: [
-        {
-          sku: 'MBM-SHIP-TWO-DAY-001',
-          section: 'shipping',
-          quantity: 1,
-          unitAmountCents: 3000,
-        },
-      ],
+      subtotalCents: 12500,
+      shippingCents: 3000,
+      items: [{ productId: 'm1', purchaseType: 'membership_program' }],
     });
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.discountCents).toBe(0);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.reason).toBe('cart_ineligible');
     }
   });
 
-  it('does not discount subscriptions', () => {
+  it('rejects subscription carts', () => {
     const result = applyMbmtest90Promo({
       code: 'MBMTEST90',
       customerEmail: 'info@thebaremethodmn.com',
-      lines: [
-        {
-          productId: 'p1',
-          section: 'weight-management',
-          purchaseType: 'auto_refill',
-          subscription: true,
-          quantity: 1,
-          unitAmountCents: 12500,
-        },
-      ],
+      subtotalCents: 12500,
+      shippingCents: 3000,
+      items: [{ productId: 'p1', subscription: true }],
     });
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.discountCents).toBe(0);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.reason).toBe('cart_ineligible');
     }
   });
 });

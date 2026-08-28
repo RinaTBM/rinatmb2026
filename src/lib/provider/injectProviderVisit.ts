@@ -229,32 +229,43 @@ export function buildAuthoritativeOrderLines(input: {
   // (member/auto-refill savings already baked into unit prices — typically 0 here).
   let discountCents = 0;
   let promoCode: string | null = null;
-  const promoLines = items.map(i => ({
+  const promoItems = items.map(i => ({
     productId: i.productId,
     sku: i.sku,
-    section: i.section,
-    category: typeof i.category === 'string' ? i.category : i.section,
     purchaseType: typeof i.purchaseType === 'string' ? i.purchaseType : null,
     isMembership: Boolean(i.isMembership) || i.purchaseType === 'membership_program',
     subscription: i.subscription === true,
-    quantity: i.quantity,
-    unitAmountCents: i.unitAmountCents,
   }));
   const ogtbm = applyOgtbmPromo({
     code: input.promoCode,
-    lines: promoLines,
+    lines: items.map(i => ({
+      productId: i.productId,
+      sku: i.sku,
+      section: i.section,
+      category: typeof i.category === 'string' ? i.category : i.section,
+      purchaseType: typeof i.purchaseType === 'string' ? i.purchaseType : null,
+      isMembership: Boolean(i.isMembership) || i.purchaseType === 'membership_program',
+      subscription: i.subscription === true,
+      quantity: i.quantity,
+      unitAmountCents: i.unitAmountCents,
+    })),
   });
+
+  const shippingCents = Math.max(0, Number(input.shippingCents) || 0);
+
   const mbmtest90 = applyMbmtest90Promo({
     code: input.promoCode,
     customerEmail: input.customerEmail,
-    lines: promoLines,
+    subtotalCents,
+    shippingCents,
+    items: promoItems,
   });
   if (ogtbm.ok) {
     promoCode = ogtbm.code;
     discountCents = Math.min(ogtbm.discountCents, subtotalCents);
   } else if (mbmtest90.ok) {
     promoCode = mbmtest90.code;
-    discountCents = Math.min(mbmtest90.discountCents, subtotalCents);
+    discountCents = mbmtest90.discountCents;
   } else {
     discountCents = Math.max(
       0,
@@ -265,8 +276,6 @@ export function buildAuthoritativeOrderLines(input: {
       discountCents = 0;
     }
   }
-
-  const shippingCents = Math.max(0, Number(input.shippingCents) || 0);
 
   const providerCareSubtotal = items
     .filter(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId))

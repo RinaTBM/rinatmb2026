@@ -444,11 +444,23 @@ export function CheckoutPage() {
       if (!isMbmtest90EmailAuthorized(customerEmail)) {
         return { discountCents: 0, eligibleUnitCount: 0, code: null };
       }
-      const applied = applyMbmtest90Promo({ code: appliedPromoCode, customerEmail, lines });
+      const applied = applyMbmtest90Promo({
+        code: appliedPromoCode,
+        customerEmail,
+        subtotalCents: displaySubtotalCents,
+        shippingCents: Math.round(shipping * 100),
+        items: lines.map(l => ({
+          productId: l.productId,
+          sku: l.sku,
+          purchaseType: l.purchaseType,
+          isMembership: l.isMembership,
+          subscription: l.subscription,
+        })),
+      });
       if (!applied.ok) return { discountCents: 0, eligibleUnitCount: 0, code: null };
       return {
         discountCents: applied.discountCents,
-        eligibleUnitCount: applied.eligibleUnitCount,
+        eligibleUnitCount: 1,
         code: applied.code,
       };
     }

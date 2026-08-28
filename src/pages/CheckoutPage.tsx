@@ -379,6 +379,55 @@ export function CheckoutPage() {
     merchandiseSubtotalCents + requiredVisitCents + hrtLabPreview.cents;
   const subtotalCents = displaySubtotalCents;
 
+  const cartItemsForAuth = items
+    .filter(
+      i =>
+        !isProviderVisitLine({
+          productId: i.productId,
+          sku: skuForVariantId(i.variantId) ?? null,
+        }),
+    )
+    .map(i => ({
+      productId: i.productId,
+      section: i.section,
+      quantity: i.quantity,
+      unitAmountCents: Math.round(i.price * 100),
+      purchaseType: i.purchaseType,
+      subscription: i.subscription,
+    }));
+  if (requiredVisit && user?.id) {
+    cartItemsForAuth.push({
+      productId: requiredVisit.productId,
+      section: requiredVisit.section,
+      quantity: 1,
+      unitAmountCents: requiredVisit.priceCents,
+      purchaseType: 'one_time',
+      subscription: false,
+    });
+  }
+  const requiresPhysicalShipping = cartRequiresPhysicalShippingFromItems(cartItemsForAuth);
+  const freeShippingMerchandiseSubtotalCents =
+    cartFreeShippingMerchandiseSubtotalCents(cartItemsForAuth);
+  const freeShippingEligible =
+    requiresPhysicalShipping &&
+    !hasMembership &&
+    isFreeShippingEligible(freeShippingMerchandiseSubtotalCents);
+  const resolvedShippingMethod: ShippingMethod = !requiresPhysicalShipping
+    ? 'none'
+    : freeShippingEligible
+      ? 'free_over_500'
+      : shippingMethod;
+  const shipping = !requiresPhysicalShipping
+    ? 0
+    : hasMembership
+      ? shippingCentsForMethod(
+          resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day',
+          0,
+        ) / 100
+      : freeShippingEligible
+        ? 0
+        : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
+
   const promoPreview = useMemo(() => {
     if (hasMembership) {
       return { discountCents: 0, eligibleUnitCount: 0, code: null as string | null };
@@ -477,36 +526,6 @@ export function CheckoutPage() {
   ]);
 
   const promoDiscountCents = promoPreview.discountCents;
-  const cartItemsForAuth = items
-    .filter(
-      i =>
-        !isProviderVisitLine({
-          productId: i.productId,
-          sku: skuForVariantId(i.variantId) ?? null,
-        }),
-    )
-    .map(i => ({
-      productId: i.productId,
-      section: i.section,
-      quantity: i.quantity,
-      unitAmountCents: Math.round(i.price * 100),
-      purchaseType: i.purchaseType,
-      subscription: i.subscription,
-    }));
-  if (requiredVisit && user?.id) {
-    cartItemsForAuth.push({
-      productId: requiredVisit.productId,
-      section: requiredVisit.section,
-      quantity: 1,
-      unitAmountCents: requiredVisit.priceCents,
-      purchaseType: 'one_time',
-      subscription: false,
-    });
-  }
-  const requiresPhysicalShipping = cartRequiresPhysicalShippingFromItems(cartItemsForAuth);
-  // $500 free-shipping threshold uses ordinary merchandise ONLY — never membership value.
-  const freeShippingMerchandiseSubtotalCents =
-    cartFreeShippingMerchandiseSubtotalCents(cartItemsForAuth);
   const providerCareTaxableCents = cartProviderCareSubtotalCents(cartItemsForAuth);
   const accessoryTaxableCents = cartAccessorySubtotalCents(cartItemsForAuth);
   const providerCareTaxAuth = authorizeProviderCareTax({
@@ -515,28 +534,6 @@ export function CheckoutPage() {
   const accessoryTaxAuth = authorizeAccessorySalesTax({
     accessoryTaxableSubtotalCents: accessoryTaxableCents,
   });
-  const freeShippingEligible =
-    requiresPhysicalShipping &&
-    !hasMembership &&
-    isFreeShippingEligible(freeShippingMerchandiseSubtotalCents);
-  const resolvedShippingMethod: ShippingMethod = !requiresPhysicalShipping
-    ? 'none'
-    : freeShippingEligible
-      ? 'free_over_500'
-      : shippingMethod;
-  // Membership: collect Two-Day ($30) / Next-Day ($50); shipping is included in combo monthly rebill.
-  // Never free-ship membership enrollment via the $500 merchandise threshold.
-  // One-time carts: $500 free-shipping threshold uses ordinary merchandise ONLY.
-  const shipping = !requiresPhysicalShipping
-    ? 0
-    : hasMembership
-      ? shippingCentsForMethod(
-          resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day',
-          0,
-        ) / 100
-      : freeShippingEligible
-        ? 0
-        : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
   const displaySubtotal = displaySubtotalCents / 100;
   const total = Math.max(
     0,

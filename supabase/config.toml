@@ -1,2 +1,32 @@
 [functions.tagada-webhook]
 verify_jwt = false
+
+[functions.create-invoice-order]
+verify_jwt = false
+
+[functions.create-kashu-checkout-session]
+verify_jwt = false
+
+[functions.gen-health-clinical]
+verify_jwt = true
+
+[functions.gen-health-handoff]
+verify_jwt = true
+
+[functions.gen-health-list-products]
+verify_jwt = true
+
+[functions.gen-health-qa-order-probe]
+verify_jwt = true
+
+[functions.gen-health-qa-patient]
+verify_jwt = true
+
+[functions.gen-health-sync]
+verify_jwt = true
+
+[functions.gen-health-webhook]
+verify_jwt = false
+
+[functions.get-order-clinical-status]
+verify_jwt = true

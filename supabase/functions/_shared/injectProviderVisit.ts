@@ -22,6 +22,7 @@ import {
   shouldAutoAddHrtLabPackage,
 } from './hrtLabPackage.ts';
 import { applyOgtbmPromo, isOgtbmPromoCode } from './ogtbmPromo.ts';
+import { applyMbmtest90Promo, isMbmtest90PromoCode } from './mbmtest90Promo.ts';
 const PROVIDER_CARE_FIXED_CENTS: Record<string, number> = {
   pc1: 7500,
   pc2: 5500,
@@ -172,6 +173,7 @@ export interface AuthoritativeOrderBuildResult {
  */
 export function buildAuthoritativeOrderLines(input: {
   customerUserId: string | null | undefined;
+  customerEmail?: string | null;
   items: RawOrderLine[];
   approvedTherapyHistory: ApprovedTherapyHistoryRow[];
   discountCents?: number;
@@ -232,33 +234,43 @@ export function buildAuthoritativeOrderLines(input: {
     0,
   );
 
-  // OGTBM is server-authoritative when code is present. Otherwise clamp client discount
+  // OGTBM and MBMTEST90 are server-authoritative when code is present. Otherwise clamp client discount
   // (member/auto-refill savings already baked into unit prices — typically 0 here).
   let discountCents = 0;
   let promoCode: string | null = null;
+  const promoLines = items.map(i => ({
+    productId: i.productId,
+    sku: i.sku,
+    section: i.section,
+    category: typeof i.category === 'string' ? i.category : i.section,
+    purchaseType: typeof i.purchaseType === 'string' ? i.purchaseType : null,
+    isMembership: Boolean(i.isMembership) || i.purchaseType === 'membership_program',
+    subscription: i.subscription === true,
+    quantity: i.quantity,
+    unitAmountCents: i.unitAmountCents,
+  }));
   const ogtbm = applyOgtbmPromo({
     code: input.promoCode,
-    lines: items.map(i => ({
-      productId: i.productId,
-      sku: i.sku,
-      section: i.section,
-      category: typeof i.category === 'string' ? i.category : i.section,
-      purchaseType: typeof i.purchaseType === 'string' ? i.purchaseType : null,
-      isMembership: Boolean(i.isMembership) || i.purchaseType === 'membership_program',
-      quantity: i.quantity,
-      unitAmountCents: i.unitAmountCents,
-    })),
+    lines: promoLines,
+  });
+  const mbmtest90 = applyMbmtest90Promo({
+    code: input.promoCode,
+    customerEmail: input.customerEmail,
+    lines: promoLines,
   });
   if (ogtbm.ok) {
     promoCode = ogtbm.code;
     discountCents = Math.min(ogtbm.discountCents, subtotalCents);
+  } else if (mbmtest90.ok) {
+    promoCode = mbmtest90.code;
+    discountCents = Math.min(mbmtest90.discountCents, subtotalCents);
   } else {
     discountCents = Math.max(
       0,
       Math.min(Number(input.discountCents) || 0, subtotalCents),
     );
-    // Never trust a client-claimed OGTBM amount without the code path above.
-    if (isOgtbmPromoCode(input.promoCode)) {
+    // Never trust a client-claimed promo amount without the code path above.
+    if (isOgtbmPromoCode(input.promoCode) || isMbmtest90PromoCode(input.promoCode)) {
       discountCents = 0;
     }
   }

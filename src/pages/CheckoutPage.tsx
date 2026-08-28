@@ -89,6 +89,12 @@ import {
   OGTBM_PROMO_CODE,
 } from '@/lib/promo/ogtbmPromo';
 import {
+  applyMbmtest90Promo,
+  isMbmtest90PromoCode,
+  isMbmtest90EmailAuthorized,
+  MBMTEST90_PROMO_CODE,
+} from '@/lib/promo/mbmtest90Promo';
+import {
   buildHrtLabPackageLines,
   HRT_LAB_PACKAGE_HEADING,
   HRT_LAB_PACKAGE_TOTAL_CENTS,
@@ -373,9 +379,9 @@ export function CheckoutPage() {
     merchandiseSubtotalCents + requiredVisitCents + hrtLabPreview.cents;
   const subtotalCents = displaySubtotalCents;
 
-  const ogtbmPreview = useMemo(() => {
-    if (!isOgtbmPromoCode(appliedPromoCode) || hasMembership) {
-      return { discountCents: 0, eligibleUnitCount: 0 };
+  const promoPreview = useMemo(() => {
+    if (hasMembership) {
+      return { discountCents: 0, eligibleUnitCount: 0, code: null as string | null };
     }
     const lines = [
       ...items
@@ -393,6 +399,7 @@ export function CheckoutPage() {
           category: i.section,
           purchaseType: i.purchaseType,
           isMembership: Boolean(i.isMembership),
+          subscription: i.subscription === true,
           quantity: i.quantity,
           unitAmountCents: Math.round(i.price * 100),
         })),
@@ -405,6 +412,7 @@ export function CheckoutPage() {
               category: 'provider-care',
               purchaseType: 'one_time' as const,
               isMembership: false,
+              subscription: false,
               quantity: 1,
               unitAmountCents: requiredVisit.priceCents,
             },
@@ -417,26 +425,46 @@ export function CheckoutPage() {
         category: 'provider-care',
         purchaseType: 'one_time' as const,
         isMembership: false,
+        subscription: false,
         quantity: l.quantity,
         unitAmountCents: l.unitAmountCents,
       })),
     ];
-    const applied = applyOgtbmPromo({ code: appliedPromoCode, lines });
-    if (!applied.ok) return { discountCents: 0, eligibleUnitCount: 0 };
-    return {
-      discountCents: applied.discountCents,
-      eligibleUnitCount: applied.eligibleUnitCount,
-    };
+    if (isOgtbmPromoCode(appliedPromoCode)) {
+      const applied = applyOgtbmPromo({ code: appliedPromoCode, lines });
+      if (!applied.ok) return { discountCents: 0, eligibleUnitCount: 0, code: null };
+      return {
+        discountCents: applied.discountCents,
+        eligibleUnitCount: applied.eligibleUnitCount,
+        code: applied.code,
+      };
+    }
+    if (isMbmtest90PromoCode(appliedPromoCode)) {
+      const customerEmail = form.email || user?.email || '';
+      if (!isMbmtest90EmailAuthorized(customerEmail)) {
+        return { discountCents: 0, eligibleUnitCount: 0, code: null };
+      }
+      const applied = applyMbmtest90Promo({ code: appliedPromoCode, customerEmail, lines });
+      if (!applied.ok) return { discountCents: 0, eligibleUnitCount: 0, code: null };
+      return {
+        discountCents: applied.discountCents,
+        eligibleUnitCount: applied.eligibleUnitCount,
+        code: applied.code,
+      };
+    }
+    return { discountCents: 0, eligibleUnitCount: 0, code: null };
   }, [
     appliedPromoCode,
     hasMembership,
     items,
     requiredVisit,
     user?.id,
+    user?.email,
+    form.email,
     hrtLabPreview.lines,
   ]);
 
-  const promoDiscountCents = ogtbmPreview.discountCents;
+  const promoDiscountCents = promoPreview.discountCents;
   const cartItemsForAuth = items
     .filter(
       i =>
@@ -714,7 +742,7 @@ export function CheckoutPage() {
           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || '',
           subtotalCents,
           discountCents:
-            hasMembership || isOgtbmPromoCode(appliedPromoCode)
+            hasMembership || isOgtbmPromoCode(appliedPromoCode) || isMbmtest90PromoCode(appliedPromoCode)
               ? 0
               : Math.round(totalSavings * 100),
           promoCode: hasMembership ? null : appliedPromoCode,
@@ -1431,6 +1459,9 @@ export function CheckoutPage() {
                         if (isOgtbmPromoCode(code)) {
                           setAppliedPromoCode(OGTBM_PROMO_CODE);
                           setError(null);
+                        } else if (isMbmtest90PromoCode(code)) {
+                          setAppliedPromoCode(MBMTEST90_PROMO_CODE);
+                          setError(null);
                         } else if (code) {
                           setAppliedPromoCode(null);
                           setError('That promo code is not valid.');
@@ -1445,9 +1476,11 @@ export function CheckoutPage() {
                   {appliedPromoCode ? (
                     <p className="mt-1 text-xs text-gold-700">
                       {appliedPromoCode} applied
-                      {ogtbmPreview.eligibleUnitCount > 0
-                        ? ` — $${(promoDiscountCents / 100).toFixed(2)} off (${ogtbmPreview.eligibleUnitCount} eligible item${ogtbmPreview.eligibleUnitCount === 1 ? '' : 's'})`
-                        : ' — no eligible items in this cart'}
+                      {promoPreview.eligibleUnitCount > 0
+                        ? ` — ${(promoDiscountCents / 100).toFixed(2)} off (${promoPreview.eligibleUnitCount} eligible item${promoPreview.eligibleUnitCount === 1 ? '' : 's'})`
+                        : isMbmtest90PromoCode(appliedPromoCode) && !isMbmtest90EmailAuthorized(form.email || user?.email || '')
+                          ? ' — authorized email required'
+                          : ' — no eligible items in this cart'}
                     </p>
                   ) : null}
                 </div>
@@ -1467,7 +1500,7 @@ export function CheckoutPage() {
                 )}
                 {promoDiscountCents > 0 && !hasMembershipItems && (
                   <div className="flex justify-between text-gold-700">
-                    <span>Promo ({OGTBM_PROMO_CODE})</span>
+                    <span>Promo ({promoPreview.code})</span>
                     <span>−${(promoDiscountCents / 100).toFixed(2)}</span>
                   </div>
                 )}

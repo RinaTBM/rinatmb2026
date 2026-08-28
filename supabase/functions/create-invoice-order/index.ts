@@ -459,6 +459,7 @@ Deno.serve(async (req) => {
 
     const built = buildAuthoritativeOrderLines({
       customerUserId,
+      customerEmail,
       items: rawItems,
       approvedTherapyHistory: history,
       discountCents: discountCentsIn,

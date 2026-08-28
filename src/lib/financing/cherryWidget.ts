@@ -30,13 +30,13 @@ export const CHERRY_SECONDARY_COLOR = '#38200a';
 export const CHERRY_FONT_FAMILY = 'Playfair Display';
 
 /**
- * bottom-middle keeps clear of LeadConnector chat (typically bottom-right).
- * Modest upward offset avoids mobile browser chrome / chat overlap without
- * covering checkout CTAs (which sit mid-page / above the fold on scroll).
+ * bottom-right keeps the estimator clear of checkout CTAs.
+ * Minimal upward offset avoids mobile browser chrome without
+ * covering page content.
  */
 export const CHERRY_FLOATING_ESTIMATOR_STYLES = {
-  position: 'bottom-middle' as const,
-  offset: { x: '0px', y: '72px' },
+  position: 'bottom-right' as const,
+  offset: { x: '0px', y: '24px' },
   zIndex: 9999,
   ctaColor: CHERRY_PRIMARY_COLOR,
   ctaTextColor: '#FFFFFF',

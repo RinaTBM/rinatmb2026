@@ -21,7 +21,7 @@ import {
   isLabPackageLine,
   shouldAutoAddHrtLabPackage,
 } from './hrtLabPackage.ts';
-import { applyOgtbmPromo, isOgtbmPromoCode } from './ogtbmPromo.ts';
+import { applyMbmTest90Promo, applyOgtbmPromo, isMbmTest90PromoCode, isOgtbmPromoCode } from './ogtbmPromo.ts';
 const PROVIDER_CARE_FIXED_CENTS: Record<string, number> = {
   pc1: 7500,
   pc2: 5500,
@@ -179,6 +179,7 @@ export function buildAuthoritativeOrderLines(input: {
   /** Customer-selected method: two_day | next_day (free_over_500 derived server-side). */
   shippingMethod?: string | null;
   promoCode?: string | null;
+  customerEmail?: string | null;
   /** Optional client accessory tax; recomputed from accessory lines when possible. */
   accessorySalesTaxRate?: number;
 }): AuthoritativeOrderBuildResult {
@@ -236,20 +237,29 @@ export function buildAuthoritativeOrderLines(input: {
   // (member/auto-refill savings already baked into unit prices — typically 0 here).
   let discountCents = 0;
   let promoCode: string | null = null;
+  const promoLines = items.map(i => ({
+    productId: i.productId,
+    sku: i.sku,
+    section: i.section,
+    category: typeof i.category === 'string' ? i.category : i.section,
+    purchaseType: typeof i.purchaseType === 'string' ? i.purchaseType : null,
+    isMembership: Boolean(i.isMembership) || i.purchaseType === 'membership_program',
+    quantity: i.quantity,
+    unitAmountCents: i.unitAmountCents,
+  }));
+  const test90 = applyMbmTest90Promo({
+    code: input.promoCode,
+    customerEmail: input.customerEmail,
+    lines: promoLines,
+  });
   const ogtbm = applyOgtbmPromo({
     code: input.promoCode,
-    lines: items.map(i => ({
-      productId: i.productId,
-      sku: i.sku,
-      section: i.section,
-      category: typeof i.category === 'string' ? i.category : i.section,
-      purchaseType: typeof i.purchaseType === 'string' ? i.purchaseType : null,
-      isMembership: Boolean(i.isMembership) || i.purchaseType === 'membership_program',
-      quantity: i.quantity,
-      unitAmountCents: i.unitAmountCents,
-    })),
+    lines: promoLines,
   });
-  if (ogtbm.ok) {
+  if (test90.ok) {
+    promoCode = test90.code;
+    discountCents = Math.min(test90.discountCents, subtotalCents);
+  } else if (ogtbm.ok) {
     promoCode = ogtbm.code;
     discountCents = Math.min(ogtbm.discountCents, subtotalCents);
   } else {
@@ -258,7 +268,7 @@ export function buildAuthoritativeOrderLines(input: {
       Math.min(Number(input.discountCents) || 0, subtotalCents),
     );
     // Never trust a client-claimed OGTBM amount without the code path above.
-    if (isOgtbmPromoCode(input.promoCode)) {
+    if (isOgtbmPromoCode(input.promoCode) || isMbmTest90PromoCode(input.promoCode)) {
       discountCents = 0;
     }
   }

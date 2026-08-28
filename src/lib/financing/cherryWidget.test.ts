@@ -27,7 +27,8 @@ describe('Cherry financing widget config', () => {
     expect(config.styles.secondaryColor).toBe('#38200a');
     expect(config.styles.fontFamily).toBe('Playfair Display');
     expect(config.styles.headerFontFamily).toBe('Playfair Display');
-    expect(config.styles.floatingEstimator.position).toBe('bottom-middle');
+    expect(config.styles.floatingEstimator.position).toBe('bottom-right');
+    expect(config.styles.floatingEstimator.offset).toEqual({ x: '0px', y: '24px' });
     expect(config.styles.floatingEstimator.zIndex).toBe(9999);
     expect(config.styles.floatingEstimator.ctaColor).toBe('#c5ac96');
     expect(config.styles.floatingEstimator.ctaTextColor).toBe('#FFFFFF');

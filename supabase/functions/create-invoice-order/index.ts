@@ -465,6 +465,7 @@ Deno.serve(async (req) => {
       shippingCents: shippingCentsIn,
       shippingMethod: shippingMethodIn,
       promoCode: promoCodeIn,
+      customerEmail,
     });
 
     if (built.shippingError) {

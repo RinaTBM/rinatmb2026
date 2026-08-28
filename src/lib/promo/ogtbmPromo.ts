@@ -16,6 +16,9 @@ import type { Category } from '@/data/products';
 
 export const OGTBM_PROMO_CODE = 'OGTBM' as const;
 export const OGTBM_DISCOUNT_PER_ELIGIBLE_UNIT_CENTS = 5000 as const;
+export const MBM_TEST_90_PROMO_CODE = 'MBMTEST90' as const;
+export const MBM_TEST_90_EMAIL = 'info@thebaremethodmn.com' as const;
+export const MBM_TEST_90_EXPIRES_AT = '2026-09-01T06:00:00.000Z' as const;
 
 /** Categories that never receive OGTBM. */
 export const OGTBM_EXCLUDED_CATEGORIES: ReadonlySet<Category | string> = new Set([
@@ -80,6 +83,38 @@ export function normalizePromoCode(code: string | null | undefined): string {
 
 export function isOgtbmPromoCode(code: string | null | undefined): boolean {
   return normalizePromoCode(code) === OGTBM_PROMO_CODE;
+}
+
+export function isMbmTest90PromoCode(code: string | null | undefined): boolean {
+  return normalizePromoCode(code) === MBM_TEST_90_PROMO_CODE;
+}
+
+export function applyMbmTest90Promo(input: {
+  code?: string | null;
+  customerEmail?: string | null;
+  lines: OgtbmLineInput[];
+  now?: Date;
+}) {
+  if (!isMbmTest90PromoCode(input.code)) return { ok: false as const, reason: 'not_test_code' as const };
+  if (String(input.customerEmail || '').trim().toLowerCase() !== MBM_TEST_90_EMAIL) {
+    return { ok: false as const, reason: 'email_not_allowed' as const };
+  }
+  if ((input.now ?? new Date()).getTime() >= Date.parse(MBM_TEST_90_EXPIRES_AT)) {
+    return { ok: false as const, reason: 'expired' as const };
+  }
+  let discountCents = 0;
+  let eligibleUnitCount = 0;
+  for (const line of input.lines) {
+    const purchaseType = String(line.purchaseType || '');
+    if (purchaseType === 'auto_refill' || purchaseType === 'membership_program') continue;
+    const gate = isOgtbmEligibleLine(line);
+    const qty = Math.max(0, Math.trunc(Number(line.quantity) || 0));
+    const unit = Math.max(0, Math.trunc(Number(line.unitAmountCents) || 0));
+    if (!gate.eligible || qty < 1 || unit < 1) continue;
+    discountCents += Math.round(unit * 0.9) * qty;
+    eligibleUnitCount += qty;
+  }
+  return { ok: true as const, code: MBM_TEST_90_PROMO_CODE, discountCents, eligibleUnitCount };
 }
 
 export function isOgtbmEligibleLine(input: {

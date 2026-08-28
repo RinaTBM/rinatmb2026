@@ -84,11 +84,8 @@ import {
 } from '@/lib/provider/providerVisits';
 import { isProviderGuidedPrescriptionLine } from '@/lib/provider/therapyFamilies';
 import {
-  applyMbmTest90Promo,
   applyOgtbmPromo,
-  isMbmTest90PromoCode,
   isOgtbmPromoCode,
-  MBM_TEST_90_PROMO_CODE,
   OGTBM_PROMO_CODE,
 } from '@/lib/promo/ogtbmPromo';
 import {
@@ -377,10 +374,7 @@ export function CheckoutPage() {
   const subtotalCents = displaySubtotalCents;
 
   const ogtbmPreview = useMemo(() => {
-    if (
-      (!isOgtbmPromoCode(appliedPromoCode) && !isMbmTest90PromoCode(appliedPromoCode)) ||
-      hasMembership
-    ) {
+    if (!isOgtbmPromoCode(appliedPromoCode) || hasMembership) {
       return { discountCents: 0, eligibleUnitCount: 0 };
     }
     const lines = [
@@ -427,13 +421,7 @@ export function CheckoutPage() {
         unitAmountCents: l.unitAmountCents,
       })),
     ];
-    const applied = isMbmTest90PromoCode(appliedPromoCode)
-      ? applyMbmTest90Promo({
-          code: appliedPromoCode,
-          customerEmail: form.email || user?.email || '',
-          lines,
-        })
-      : applyOgtbmPromo({ code: appliedPromoCode, lines });
+    const applied = applyOgtbmPromo({ code: appliedPromoCode, lines });
     if (!applied.ok) return { discountCents: 0, eligibleUnitCount: 0 };
     return {
       discountCents: applied.discountCents,
@@ -446,8 +434,6 @@ export function CheckoutPage() {
     requiredVisit,
     user?.id,
     hrtLabPreview.lines,
-    form.email,
-    user?.email,
   ]);
 
   const promoDiscountCents = ogtbmPreview.discountCents;
@@ -728,7 +714,7 @@ export function CheckoutPage() {
           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || '',
           subtotalCents,
           discountCents:
-            hasMembership || isOgtbmPromoCode(appliedPromoCode) || isMbmTest90PromoCode(appliedPromoCode)
+            hasMembership || isOgtbmPromoCode(appliedPromoCode)
               ? 0
               : Math.round(totalSavings * 100),
           promoCode: hasMembership ? null : appliedPromoCode,
@@ -1442,21 +1428,7 @@ export function CheckoutPage() {
                       className="rounded-md bg-ink-900 px-3 py-2 text-sm text-cream-50"
                       onClick={() => {
                         const code = promoInput.trim().toUpperCase();
-                        if (isMbmTest90PromoCode(code)) {
-                          const checkoutEmail = (form.email || user?.email || '').trim().toLowerCase();
-                          if (checkoutEmail !== 'info@thebaremethodmn.com') {
-                            setAppliedPromoCode(null);
-                            setError('MBMTEST90 is restricted to the approved testing email.');
-                            return;
-                          }
-                          if (items.some(item => item.purchaseType === 'auto_refill' || item.subscription)) {
-                            setAppliedPromoCode(null);
-                            setError('MBMTEST90 is available for one-time medication checkout testing only.');
-                            return;
-                          }
-                          setAppliedPromoCode(MBM_TEST_90_PROMO_CODE);
-                          setError(null);
-                        } else if (isOgtbmPromoCode(code)) {
+                        if (isOgtbmPromoCode(code)) {
                           setAppliedPromoCode(OGTBM_PROMO_CODE);
                           setError(null);
                         } else if (code) {
@@ -1495,7 +1467,7 @@ export function CheckoutPage() {
                 )}
                 {promoDiscountCents > 0 && !hasMembershipItems && (
                   <div className="flex justify-between text-gold-700">
-                    <span>Promo ({appliedPromoCode || OGTBM_PROMO_CODE})</span>
+                    <span>Promo ({OGTBM_PROMO_CODE})</span>
                     <span>−${(promoDiscountCents / 100).toFixed(2)}</span>
                   </div>
                 )}

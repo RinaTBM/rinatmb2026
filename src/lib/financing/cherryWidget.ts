@@ -30,12 +30,13 @@ export const CHERRY_SECONDARY_COLOR = '#38200a';
 export const CHERRY_FONT_FAMILY = 'Playfair Display';
 
 /**
- * Keep the financing entry point on the lower-right edge of the viewport.
- * The modest upward offset keeps it clear of mobile browser chrome.
+ * bottom-middle keeps clear of LeadConnector chat (typically bottom-right).
+ * Modest upward offset avoids mobile browser chrome / chat overlap without
+ * covering checkout CTAs (which sit mid-page / above the fold on scroll).
  */
 export const CHERRY_FLOATING_ESTIMATOR_STYLES = {
-  position: 'bottom-right' as const,
-  offset: { x: '0px', y: '24px' },
+  position: 'bottom-middle' as const,
+  offset: { x: '0px', y: '72px' },
   zIndex: 9999,
   ctaColor: CHERRY_PRIMARY_COLOR,
   ctaTextColor: '#FFFFFF',

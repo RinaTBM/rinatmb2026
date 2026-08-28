@@ -189,7 +189,7 @@ export function HomePage() {
               {/* Floating Glassmorphism Trust card */}
               <div className="hero-card-fade absolute -bottom-5 -left-5 sm:-left-8 lg:-left-10 glass-card rounded-2xl p-5 w-56 sm:w-60">
                 <p className="text-xs font-semibold tracking-wide mb-3" style={{ color: '#1F3A32' }}>
-                  Why Clients Trust Us
+                  Why Members Trust Us
                 </p>
                 <ul className="space-y-2.5">
                   {floatingCardItems.map(item => (

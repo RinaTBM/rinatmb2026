@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  applyMbmTest90Promo,
-  MBM_TEST_90_PROMO_CODE,
   OGTBM_DISCOUNT_PER_ELIGIBLE_UNIT_CENTS,
   OGTBM_PROMO_CODE,
   applyOgtbmPromo,
@@ -19,37 +17,6 @@ import {
 } from '@/lib/membership/tagadaMembershipBilling';
 
 describe('OGTBM promo code', () => {
-  it('restricts MBMTEST90 to the approved email and one-time medication lines', () => {
-    const lines = [{
-      productId: 'p10',
-      sku: 'MBM-WM-NAD-INJ-001',
-      section: 'longevity',
-      purchaseType: 'one_time',
-      quantity: 1,
-      unitAmountCents: 19900,
-    }];
-    expect(applyMbmTest90Promo({
-      code: MBM_TEST_90_PROMO_CODE,
-      customerEmail: 'customer@example.com',
-      lines,
-      now: new Date('2026-08-28T00:00:00Z'),
-    }).ok).toBe(false);
-    const applied = applyMbmTest90Promo({
-      code: MBM_TEST_90_PROMO_CODE,
-      customerEmail: 'info@thebaremethodmn.com',
-      lines,
-      now: new Date('2026-08-28T00:00:00Z'),
-    });
-    expect(applied.ok && applied.discountCents).toBe(17910);
-    const subscription = applyMbmTest90Promo({
-      code: MBM_TEST_90_PROMO_CODE,
-      customerEmail: 'info@thebaremethodmn.com',
-      lines: [{ ...lines[0], purchaseType: 'auto_refill' }],
-      now: new Date('2026-08-28T00:00:00Z'),
-    });
-    expect(subscription.ok && subscription.discountCents).toBe(0);
-  });
-
   it('recognizes OGTBM case-insensitively', () => {
     expect(isOgtbmPromoCode('OGTBM')).toBe(true);
     expect(isOgtbmPromoCode('ogtbm')).toBe(true);

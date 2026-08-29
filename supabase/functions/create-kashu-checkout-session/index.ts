@@ -48,6 +48,15 @@ function buildInitUrl(params: {
   customerEmail?: string;
   customerFirstName?: string;
   customerLastName?: string;
+  customerPhone?: string;
+  shippingAddress?: {
+    line1: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  shippingCountry?: string;
   customerTags?: string[];
 }): string {
   const q = new URLSearchParams();
@@ -59,6 +68,9 @@ function buildInitUrl(params: {
   if (params.customerEmail) q.set("customerEmail", params.customerEmail);
   if (params.customerFirstName) q.set("customerFirstName", params.customerFirstName);
   if (params.customerLastName) q.set("customerLastName", params.customerLastName);
+  if (params.customerPhone) q.set("customerPhone", params.customerPhone);
+  if (params.shippingAddress) q.set("shippingAddress", JSON.stringify(params.shippingAddress));
+  if (params.shippingCountry) q.set("shippingCountry", params.shippingCountry);
   if (params.customerTags?.length) q.set("customerTags", params.customerTags.join(","));
   return `${apiBase()}/api/public/v1/checkout/init?${q.toString()}`;
 }
@@ -852,6 +864,24 @@ Deno.serve(async (req) => {
       `${siteOrigin}/order/card-result/${encodeURIComponent(publicOrderNumber)}` +
       `?token=${encodeURIComponent(paymentAccessToken)}`;
 
+    const prefill = body.customerPrefill && typeof body.customerPrefill === "object"
+      ? body.customerPrefill as Record<string, unknown>
+      : {};
+    const addressInput = prefill.shippingAddress && typeof prefill.shippingAddress === "object"
+      ? prefill.shippingAddress as Record<string, unknown>
+      : {};
+    const clean = (value: unknown, max: number) =>
+      typeof value === "string" ? value.trim().slice(0, max) : "";
+    const customerPhone = clean(prefill.phone, 40) || undefined;
+    const line1 = clean(addressInput.line1, 200);
+    const city = clean(addressInput.city, 100);
+    const state = clean(addressInput.state, 100);
+    const postalCode = clean(addressInput.postalCode, 30);
+    const country = clean(addressInput.country, 2).toUpperCase() || "US";
+    const shippingAddress = line1 && city && state && postalCode
+      ? { line1, city, state, postalCode, country }
+      : undefined;
+
     const initUrl = buildInitUrl({
       storeId,
       items: tagadaItems,
@@ -861,6 +891,9 @@ Deno.serve(async (req) => {
       customerEmail: order.customer_email || undefined,
       customerFirstName: firstName,
       customerLastName: lastName,
+      customerPhone,
+      shippingAddress,
+      shippingCountry: shippingAddress?.country,
       customerTags: [`mbmOrder:${publicOrderNumber}`],
     });
 

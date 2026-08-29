@@ -19,12 +19,24 @@ export interface CreateKashuCheckoutFailure {
   missingSkus?: string[];
 }
 
+export interface KashuCustomerPrefill {
+  phone?: string;
+  shippingAddress?: {
+    line1: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+}
+
 export async function createKashuCheckoutSession(input: {
   supabaseUrl: string;
   anonKey: string;
   accessToken?: string | null;
   publicOrderNumber: string;
   paymentAccessToken: string;
+  customerPrefill?: KashuCustomerPrefill;
 }): Promise<CreateKashuCheckoutSuccess | CreateKashuCheckoutFailure> {
   try {
     const res = await fetch(`${input.supabaseUrl}/functions/v1/create-kashu-checkout-session`, {
@@ -37,6 +49,7 @@ export async function createKashuCheckoutSession(input: {
       body: JSON.stringify({
         publicOrderNumber: input.publicOrderNumber,
         paymentAccessToken: input.paymentAccessToken,
+        customerPrefill: input.customerPrefill,
       }),
     });
     const data = await res.json().catch(() => ({}));

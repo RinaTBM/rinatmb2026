@@ -160,6 +160,15 @@ describe('Tagada checkout init URL builder', () => {
         checkoutUrl: 'https://checkout.mybaremethod.com/checkout',
         returnUrl: 'https://mybaremethod.com/order/card-result/MBM-1?token=abc',
         customerEmail: 'a@b.com',
+        customerPhone: '6125550100',
+        shippingAddress: {
+          line1: '123 Main St',
+          city: 'Minneapolis',
+          state: 'MN',
+          postalCode: '55401',
+          country: 'US',
+        },
+        shippingCountry: 'US',
         customerTags: [mbmOrderCustomerTag('MBM-1')],
       },
     });
@@ -170,6 +179,15 @@ describe('Tagada checkout init URL builder', () => {
     expect(u.searchParams.get('checkoutUrl')).toBe('https://checkout.mybaremethod.com/checkout');
     expect(JSON.parse(u.searchParams.get('items')!)).toEqual([{ variantId: 'var_1', quantity: 2 }]);
     expect(u.searchParams.get('customerTags')).toBe('mbmOrder:MBM-1');
+    expect(u.searchParams.get('customerPhone')).toBe('6125550100');
+    expect(JSON.parse(u.searchParams.get('shippingAddress')!)).toEqual({
+      line1: '123 Main St',
+      city: 'Minneapolis',
+      state: 'MN',
+      postalCode: '55401',
+      country: 'US',
+    });
+    expect(u.searchParams.get('shippingCountry')).toBe('US');
   });
 
   it('extracts checkout token from redirect URLs', () => {

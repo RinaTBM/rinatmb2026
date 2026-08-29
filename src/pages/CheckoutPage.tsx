@@ -717,6 +717,16 @@ export function CheckoutPage() {
           accessToken: session?.access_token ?? null,
           publicOrderNumber: pendingCardOrder.publicOrderNumber,
           paymentAccessToken: pendingCardOrder.paymentAccessToken,
+          customerPrefill: {
+            phone: form.phone,
+            shippingAddress: {
+              line1: form.address,
+              city: form.city,
+              state: form.state,
+              postalCode: form.zip,
+              country: 'US',
+            },
+          },
         });
         if (!kashu.ok) {
           throw new Error(
@@ -815,6 +825,16 @@ export function CheckoutPage() {
           accessToken: session?.access_token ?? null,
           publicOrderNumber: result.publicOrderNumber,
           paymentAccessToken: result.paymentAccessToken,
+          customerPrefill: {
+            phone: form.phone,
+            shippingAddress: {
+              line1: form.address,
+              city: form.city,
+              state: form.state,
+              postalCode: form.zip,
+              country: 'US',
+            },
+          },
         });
         if (!kashu.ok) {
           throw new Error(

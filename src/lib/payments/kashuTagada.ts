@@ -564,6 +564,14 @@ export interface TagadaCreateSessionParams {
   customerFirstName?: string;
   customerLastName?: string;
   customerPhone?: string;
+  shippingAddress?: {
+    line1: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  shippingCountry?: string;
   customerTags?: string[];
   cartToken?: string;
   draft?: string | boolean;
@@ -717,6 +725,10 @@ export function buildTagadaCheckoutInitUrl(input: {
   if (input.params.customerFirstName) q.set('customerFirstName', input.params.customerFirstName);
   if (input.params.customerLastName) q.set('customerLastName', input.params.customerLastName);
   if (input.params.customerPhone) q.set('customerPhone', input.params.customerPhone);
+  if (input.params.shippingAddress) {
+    q.set('shippingAddress', JSON.stringify(input.params.shippingAddress));
+  }
+  if (input.params.shippingCountry) q.set('shippingCountry', input.params.shippingCountry);
   if (input.params.customerTags?.length) q.set('customerTags', input.params.customerTags.join(','));
   if (input.params.cartToken) q.set('cartToken', input.params.cartToken);
   if (input.params.draft != null) q.set('draft', String(input.params.draft));

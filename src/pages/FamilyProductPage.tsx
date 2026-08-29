@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react';
-import { Minus, Plus, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import { Link } from '@/router';
 import {
   getRelatedProducts,
   sections,
   type Product,
 } from '@/data/products';
-import { useCart } from '@/context/CartContext';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductDescriptionSections, ProductHighlights } from '@/components/ProductDescriptionSections';
 import { Glp1FormulationSelector, Glp1PatientDoseSelector } from '@/components/Glp1PatientDoseSelector';
@@ -15,17 +14,17 @@ import {
   listPatientVisibleVariants,
   lockedRetailPrice,
   resolveFamilyVariant,
-  skuForFamilyVariantId,
   WEBSITE_FAMILY_CUTOVER_ENABLED,
   type FamilySelectorState,
   type WebsiteProductFamily,
-  type WebsiteProductVariant,
 } from '@/data/websiteFamilies';
-import { applyDiscount, isAutoRefillEligible } from '@/lib/pricing/purchaseOptions';
+import {
+  navigateToGenProductFirstCheckout,
+  resolveGenProductFirstCheckout,
+} from '@/lib/commerce/genHostedCheckout';
 import {
   ONE_TIME_GETTING_STARTED_BLOCKER,
   isGettingStartedDose,
-  patientSafeOneTimeCartLabel,
   resolveOneTimeVial,
 } from '@/lib/glp1/oneTimeVialMapping';
 import {
@@ -43,20 +42,8 @@ function unique(values: Array<string | null | undefined>): string[] {
   return out;
 }
 
-function formatPrice(amount: number, recurring: boolean): string {
-  return recurring ? `$${amount.toFixed(2)}/mo` : `$${amount.toFixed(2)}`;
-}
-
-function variantLabel(v: WebsiteProductVariant): string {
-  const raw =
-    v.displayLabel || [v.form, v.additive].filter(Boolean).join(' · ');
-  return raw
-    .replace(/\s*\(\d+\+\d+\)/g, '')
-    .replace(/\s*\(\d+[–-]\d+\)/g, '')
-    .replace(/COMPOUND — ANY DOSE\s*/gi, '')
-    .replace(/\s{2,}/g, ' ')
-    .replace(/\s·\s·/g, ' · ')
-    .trim();
+function formatPrice(amount: number): string {
+  return `$${amount.toFixed(2)}`;
 }
 
 export function isFamilyStorefrontSlug(slug: string): boolean {
@@ -74,7 +61,6 @@ export function FamilyProductPage({
   initialPurchaseType?: 'one_time' | 'membership';
 }) {
   const family = getWebsiteFamilyBySlug(product.slug);
-  const { addItem, openCart } = useCart();
   const related = getRelatedProducts(product);
   const section = sections.find((s) => s.id === product.category);
 
@@ -95,8 +81,6 @@ export function FamilyProductPage({
       family={family}
       related={related}
       sectionLabel={section?.label}
-      addItem={addItem}
-      openCart={openCart}
       initialPurchaseType={initialPurchaseType}
     />
   );
@@ -107,16 +91,12 @@ function FamilySelectors({
   family,
   related,
   sectionLabel,
-  addItem,
-  openCart,
   initialPurchaseType,
 }: {
   product: Product;
   family: WebsiteProductFamily;
   related: Product[];
   sectionLabel?: string;
-  addItem: ReturnType<typeof useCart>['addItem'];
-  openCart: () => void;
   initialPurchaseType?: 'one_time' | 'membership';
 }) {
   const visible = listPatientVisibleVariants(family);
@@ -125,7 +105,6 @@ function FamilySelectors({
   const isNad = familyId === 'nad';
   const isWolverine = familyId === 'wolverine-bpc-tb';
 
-  const subscriptionEligible = isAutoRefillEligible(product);
   const oneTime = visible.filter((v) => v.purchaseType === 'one_time');
   const additives = unique(oneTime.map((v) => v.additive));
   const forms = unique(visible.map((v) => v.form));
@@ -133,16 +112,13 @@ function FamilySelectors({
     visible.filter((v) => (v.form || '').toLowerCase().includes('nasal')).map((v) => v.websiteVariantId),
   );
 
-  const [purchaseType, setPurchaseType] = useState<'one_time' | 'subscription'>(
-    initialPurchaseType === 'membership' && subscriptionEligible ? 'subscription' : 'one_time',
-  );
+  void initialPurchaseType;
   const [additive, setAdditive] = useState(additives[0] || 'Vitamin B12');
   const [form, setForm] = useState(forms[0] || '');
   const [nasalOption, setNasalOption] = useState<'r84' | 'r85'>(
     nasalOptions.includes('nad-nasal-r85') && !nasalOptions.includes('nad-nasal-r84') ? 'r85' : 'r84',
   );
   const [injPackage, setInjPackage] = useState<'5mL' | '10mL'>('5mL');
-  const [quantity, setQuantity] = useState(1);
   const [requestedDose, setRequestedDose] = useState('');
   const [doseError, setDoseError] = useState<string | null>(null);
   const glp1FamilyId: Glp1FamilyId | null =
@@ -171,14 +147,13 @@ function FamilySelectors({
   );
   const variant = resolution.variant;
   const price = variant ? lockedRetailPrice(variant) : null;
-  const isSubscription = purchaseType === 'subscription';
 
   const injReady = visible.some((v) => v.websiteVariantId.startsWith('nad-inj-'));
   const nasalReady = visible.some((v) => v.websiteVariantId.startsWith('nad-nasal-'));
   const r84Ready = visible.some((v) => v.websiteVariantId === 'nad-nasal-r84');
   const r85Ready = visible.some((v) => v.websiteVariantId === 'nad-nasal-r85');
 
-  const handleAdd = () => {
+  const handleGenCheckout = () => {
     if (glp1FamilyId) {
       const formulation = validateGlp1Formulation(additive);
       if (!formulation.ok) {
@@ -195,61 +170,15 @@ function FamilySelectors({
         return;
       }
       setDoseError(null);
-      const mappedPrice = vial.mapping.retailPriceCents / 100;
-
-      addItem(
-        {
-          productId: product.id,
-          slug: product.slug,
-          name: product.displayName,
-          price: isSubscription ? applyDiscount(mappedPrice, 15) : mappedPrice,
-          standardPrice: mappedPrice,
-          image: product.image,
-          subscription: isSubscription,
-          section: product.category,
-          requiresIntake: product.requiresProviderReview,
-          variantId: vial.mapping.websiteVariantId,
-          variantLabel: `${patientSafeOneTimeCartLabel({
-            formulation: formulation.value,
-            requestedDose: vial.mapping.requestedDose,
-          })}${isSubscription ? ' · Subscribe & Save 15%' : ''}`,
-          purchaseType: isSubscription ? 'auto_refill' : 'one_time',
-          discountPercent: isSubscription ? 15 : 0,
-          appliedDiscount: isSubscription ? 'auto_refill' : 'none',
-          billingFrequency: isSubscription ? 'monthly' : undefined,
-          requestedFormulation: formulation.value,
-          requestedDose: vial.mapping.requestedDose,
-        },
-        quantity,
-      );
-      void skuForFamilyVariantId(vial.mapping.websiteVariantId);
-      openCart();
+      const checkout = resolveGenProductFirstCheckout(vial.mapping.genClientProductId);
+      if (!checkout.ok) return;
+      navigateToGenProductFirstCheckout(checkout.url);
       return;
     }
 
-    if (!variant || price == null) return;
-
-    addItem(
-      {
-        productId: product.id,
-        slug: product.slug,
-        name: product.displayName,
-        price: isSubscription ? applyDiscount(price, 15) : price,
-        standardPrice: price,
-        image: product.image,
-        subscription: isSubscription,
-        section: product.category,
-        requiresIntake: product.requiresProviderReview,
-        variantId: variant.websiteVariantId,
-        variantLabel: `${variantLabel(variant)}${isSubscription ? ' · Subscribe & Save 15%' : ''}`,
-        purchaseType: isSubscription ? 'auto_refill' : 'one_time',
-        discountPercent: isSubscription ? 15 : 0,
-        appliedDiscount: isSubscription ? 'auto_refill' : 'none',
-        billingFrequency: isSubscription ? 'monthly' : undefined,
-      },
-      quantity,
-    );
-    openCart();
+    const checkout = resolveGenProductFirstCheckout(variant?.genClientProductId);
+    if (!checkout.ok) return;
+    navigateToGenProductFirstCheckout(checkout.url);
   };
 
   const oneTimeVial =
@@ -271,13 +200,17 @@ function FamilySelectors({
         familyId: glp1FamilyId,
         allowGettingStarted: false,
       }).ok);
-  const displayPrice =
-    oneTimeVial?.ok
-      ? (isSubscription ? applyDiscount(oneTimeVial.mapping.retailPriceCents / 100, 15) : oneTimeVial.mapping.retailPriceCents / 100)
-      : price == null ? price : (isSubscription ? applyDiscount(price, 15) : price);
-  const canAdd = glp1FamilyId
-      ? Boolean(oneTimeVial?.ok && glp1Ready)
-      : Boolean(variant && price != null && resolution.ok);
+  const displayPrice = oneTimeVial?.ok
+    ? oneTimeVial.mapping.retailPriceCents / 100
+    : price;
+  const genCheckout = resolveGenProductFirstCheckout(
+    glp1FamilyId && oneTimeVial?.ok
+      ? oneTimeVial.mapping.genClientProductId
+      : variant?.genClientProductId,
+  );
+  const canPurchase = glp1FamilyId
+    ? Boolean(oneTimeVial?.ok && glp1Ready && genCheckout.ok)
+    : Boolean(variant && price != null && resolution.ok && genCheckout.ok);
 
   return (
     <div className="bg-cream-50 pt-28 md:pt-32">
@@ -334,30 +267,6 @@ function FamilySelectors({
               <ProductHighlights highlights={product.highlights} />
 
               <div className="mb-6 space-y-5">
-                {subscriptionEligible && (
-                  <fieldset>
-                    <legend className="text-sm font-medium text-ink-900 mb-2">Purchase type</legend>
-                    <div className="flex flex-wrap gap-2">
-                      <SelectorChip
-                          selected={purchaseType === 'one_time'}
-                          onClick={() => {
-                            setPurchaseType('one_time');
-                            setDoseError(null);
-                          }}
-                          label="One-Time Purchase"
-                        />
-                        <SelectorChip
-                          selected={purchaseType === 'subscription'}
-                          onClick={() => {
-                            setPurchaseType('subscription');
-                            setDoseError(null);
-                          }}
-                          label="Subscribe & Save 15% · monthly"
-                        />
-                    </div>
-                  </fieldset>
-                )}
-
                 {isWeight && (
                   <Glp1FormulationSelector
                     value={additive}
@@ -476,51 +385,30 @@ function FamilySelectors({
               <div className="rounded-2xl border border-cream-300 bg-white p-5 mb-6">
                 <div className="flex items-end justify-between gap-4 mb-4">
                   <div>
-                    <p className="text-sm text-ink-500">{isSubscription ? 'Monthly medication' : 'Due today'}</p>
+                    <p className="text-sm text-ink-500">Due today in GEN Health</p>
                     <p className="font-serif text-3xl text-ink-900">
-                      {displayPrice != null ? formatPrice(displayPrice, isSubscription) : '—'}
+                      {displayPrice != null ? formatPrice(displayPrice) : '—'}
                     </p>
                     <p className="mt-1 text-xs text-ink-500">
-                      {isSubscription ? '15% subscription savings; selected shipping renews separately' : 'Pharmacy fulfillment included in this price'}
+                      Final payment total and any applicable visit charge are shown by GEN Health before payment.
                     </p>
                   </div>
-                  {!isSubscription && (
-                    <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        className="rounded-full border border-ink-200 p-2"
-                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                        aria-label="Decrease quantity"
-                      >
-                        <Minus size={16} />
-                      </button>
-                      <span className="w-6 text-center text-ink-900">{quantity}</span>
-                      <button
-                        type="button"
-                        className="rounded-full border border-ink-200 p-2"
-                        onClick={() => setQuantity((q) => q + 1)}
-                        aria-label="Increase quantity"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    </div>
-                  )}
                 </div>
                 <button
                   type="button"
                   className="btn-primary w-full"
-                  disabled={!canAdd}
-                  onClick={handleAdd}
+                  disabled={!canPurchase}
+                  onClick={handleGenCheckout}
                 >
                   {oneTimeGettingStarted
                       ? 'Choose a weekly dose'
-                      : canAdd
-                        ? `${isSubscription ? 'Subscribe' : 'Add to Cart'} — $${((displayPrice || 0) * quantity).toFixed(2)}${isSubscription ? '/mo' : ''}`
-                        : 'Select an option'}
+                      : canPurchase
+                        ? 'Continue to Secure Payment & Intake'
+                        : 'Temporarily unavailable'}
                 </button>
                 <p className="mt-3 text-xs text-ink-500 leading-relaxed">
-                  Provider review is required. Purchasing does not guarantee a prescription. Applicable taxes are
-                  included in displayed prices where required.
+                  You’ll continue securely in GEN Health for payment, intake, assessment, and provider review.
+                  Purchasing does not guarantee that a prescription will be issued.
                 </p>
               </div>
             </div>

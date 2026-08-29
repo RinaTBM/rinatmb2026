@@ -143,9 +143,6 @@ export function Header() {
               <Link to="/section/accessories" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 Accessories
               </Link>
-              <Link to="/subscriptions" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
-                Subscribe &amp; Save
-              </Link>
               <Link to="/contact" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 Contact
               </Link>
@@ -306,13 +303,6 @@ export function Header() {
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
               >
                 Accessories
-              </Link>
-              <Link
-                to="/subscriptions"
-                onClick={closeAll}
-                className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
-              >
-                Subscribe &amp; Save
               </Link>
               <Link
                 to="/contact"

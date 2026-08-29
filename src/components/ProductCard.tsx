@@ -2,19 +2,27 @@ import { Link } from '@/router';
 import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import type { Product } from '@/data/products';
 import { sections } from '@/data/products';
-import { isAutoRefillEligible } from '@/lib/pricing/purchaseOptions';
 import { skuForVariantId } from '@/data/variantSkus';
 import { resolveStorefrontRxAvailability } from '@/lib/commerce/rxCatalogReadiness';
+import { getWebsiteFamilyBySlug, listPatientVisibleVariants } from '@/data/websiteFamilies';
+import { resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
 
 export function ProductCard({ product }: { product: Product }) {
   const section = sections.find(s => s.id === product.category);
   const primaryForm = product.dosageForms[0];
   /** All Accessories use contain-fit so product photos are never cropped. */
   const containFit = product.category === 'accessories';
-  const subscriptionEligible = isAutoRefillEligible(product);
+  const family = getWebsiteFamilyBySlug(product.slug);
+  const hasGenHostedRoute = Boolean(
+    family &&
+      listPatientVisibleVariants(family).some(
+        variant => resolveGenProductFirstCheckout(variant.genClientProductId).ok,
+      ),
+  );
   const firstSku = product.variants[0]?.sku || skuForVariantId(product.variants[0]?.id);
   const rxAvailability = resolveStorefrontRxAvailability({ mbmSku: firstSku });
   const browseUnavailable =
+    !hasGenHostedRoute &&
     !!rxAvailability &&
     !rxAvailability.productionPurchasable &&
     product.category !== 'accessories' &&
@@ -40,10 +48,6 @@ export function ProductCard({ product }: { product: Product }) {
                 {rxAvailability?.customerFacingStatus === 'COMING_SOON'
                   ? 'Coming soon'
                   : 'Temporarily unavailable'}
-              </span>
-            ) : subscriptionEligible ? (
-              <span className="rounded-full bg-gold-400 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-900">
-                Subscribe &amp; Save 15%
               </span>
             ) : product.bestSeller ? (
               <span className="rounded-full bg-ink-900 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-50">

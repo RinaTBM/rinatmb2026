@@ -139,6 +139,9 @@ export function CheckoutPage() {
   const checkoutEnabled = isManualCheckoutEnabled();
 
   const hasProviderCare = items.some(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId));
+  const hasPrescriptionItems = items.some(
+    i => i.requiresIntake && i.section !== 'provider-care' && !/^pc\d+$/i.test(i.productId),
+  );
   const hasMembership = items.some(
     i => i.isMembership || i.purchaseType === 'membership_program' || i.purchaseType === 'auto_refill',
   );
@@ -653,6 +656,12 @@ export function CheckoutPage() {
 
   const handleSubmitInvoiceOrder = async () => {
     // Stripe checkout is permanently disabled — never call create-checkout-session.
+    if (hasPrescriptionItems) {
+      setError(
+        'Prescription checkout has moved to GEN Health. Please return to the product page and select Continue to Secure Payment & Intake.',
+      );
+      return;
+    }
     if (isStripeCheckoutEnabled()) {
       setError(PAYMENTS_UNAVAILABLE_MESSAGE);
       return;

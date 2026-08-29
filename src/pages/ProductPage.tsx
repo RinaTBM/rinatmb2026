@@ -149,10 +149,14 @@ function WellnessProductPage({ slug }: { slug: string }) {
     // UX-only mirror — server GEN_API_ORDERS_ENABLED remains authoritative.
     genApiOrdersEnabled: resolveClientGenApiOrdersEnabledForUx(),
   });
+  // Prescription products that do not yet have an owner-verified GEN hosted
+  // route must never fall back to the historical Tagada checkout.
+  const genNativeCheckoutUnavailable = true;
   const purchaseBlocked =
-    !!rxAvailability &&
-    !rxAvailability.productionPurchasable &&
-    selected?.kind !== 'membership_program';
+    genNativeCheckoutUnavailable ||
+    (!!rxAvailability &&
+      !rxAvailability.productionPurchasable &&
+      selected?.kind !== 'membership_program');
   const publicVariantLabel = customerVariantLabel(product.slug, variant.label);
 
   const handlePrimaryAction = () => {
@@ -277,6 +281,15 @@ function WellnessProductPage({ slug }: { slug: string }) {
                     status={rxAvailability.customerFacingStatus}
                     message={rxAvailability.customerMessage}
                   />
+                </div>
+              ) : null}
+
+              {genNativeCheckoutUnavailable && !rxAvailability ? (
+                <div className="mb-6 rounded-xl border border-gold-200 bg-gold-50 p-4">
+                  <p className="text-sm font-medium text-ink-900">Online enrollment is being connected</p>
+                  <p className="mt-1 text-sm text-ink-600">
+                    This prescription product is not yet available through the secure GEN Health payment and intake flow.
+                  </p>
                 </div>
               ) : null}
 

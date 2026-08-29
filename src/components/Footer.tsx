@@ -34,7 +34,6 @@ export function Footer() {
             <p className="eyebrow text-gold-300 mb-4">Shop</p>
             <ul className="space-y-2.5 text-sm text-cream-100/70">
               <li><Link to="/shop-all" className="hover:text-gold-300 transition-colors">Shop All</Link></li>
-              <li><Link to="/subscriptions" className="hover:text-gold-300 transition-colors">Subscribe &amp; Save</Link></li>
               <li><Link to="/alacarte" className="hover:text-gold-300 transition-colors">One-Time Purchases</Link></li>
               <li><Link to="/section/accessories" className="hover:text-gold-300 transition-colors">Accessories</Link></li>
               <li><Link to="/best-sellers" className="hover:text-gold-300 transition-colors">Best Sellers</Link></li>

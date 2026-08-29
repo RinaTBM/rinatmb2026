@@ -40,6 +40,8 @@ export const OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS: ReadonlySet<string> = new Se
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw',
   // TIR Any Dose B12/Glycine — owner-approved single backend
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SvFDJ7W4nmWL2bkLUMMS',
+  // Recovery Stack — owner-provided GEN Product-first checkout
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p',
 ]);
 
 export function isOwnerVerifiedGenClientProductId(

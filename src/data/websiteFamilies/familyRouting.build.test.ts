@@ -236,7 +236,7 @@ describe('MBM website family → GEN routing build', () => {
   });
 
   it('launch registry marks 10 compatible CPs verified including TIR SvFDJ7; apply is idempotent', () => {
-    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(10);
+    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(11);
     const verifiedVariants = WEBSITE_PRODUCT_FAMILIES.flatMap((f) =>
       f.variants.filter((v) => v.genPairingVerified),
     );

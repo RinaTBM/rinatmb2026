@@ -132,6 +132,12 @@ export interface Product {
   /** Internal only — must never be rendered to customers. */
   internalNotes?: string;
   needsDedicatedImage?: boolean;
+  /** Owner-verified GEN client product ID for Product-first hosted checkout (GEN Health). */
+  genClientProductId?: string;
+  /** Flat total price including shipping, shown as "$X due today" for GEN-routed products. */
+  genDisplayTotalCents?: number;
+  /** Shipping amount included in genDisplayTotalCents. */
+  genShippingCents?: number;
 
   // --- Backward-compatible fields consumed by existing pages/components ---
   name: string;               // === displayName
@@ -395,6 +401,9 @@ interface ProductSeed {
   autoRefillEligible?: boolean;
   memberPricingEligible?: boolean;
   excludedFromDiscounts?: boolean;
+  genClientProductId?: string;
+  genDisplayTotalCents?: number;
+  genShippingCents?: number;
 }
 
 const DISCOUNT_EXCLUDED_CATEGORIES: ReadonlySet<Category> = new Set(['provider-care', 'accessories']);
@@ -473,6 +482,9 @@ function mk(seed: ProductSeed): Product {
     providerDisclaimer: seed.providerDisclaimer,
     internalNotes: seed.internalNotes,
     needsDedicatedImage: seed.needsDedicatedImage,
+    genClientProductId: seed.genClientProductId,
+    genDisplayTotalCents: seed.genDisplayTotalCents,
+    genShippingCents: seed.genShippingCents,
 
     // Backward-compatible / derived
     name: seed.displayName,
@@ -779,6 +791,35 @@ export const products: Product[] = [
       { dosageForm: 'Capsule', strength: 'Blend', size: 'Capsule', price: 99 },
       { dosageForm: 'Injection', strength: 'Blend', size: 'Injection', price: 199 },
     ],
+  }),
+  mk({
+    id: 'p75',
+    slug: 'recovery-stack',
+    displayName: 'Recovery Stack',
+    shortName: 'Recovery Stack',
+    subtitle: 'Provider-directed compounded recovery injection',
+    category: 'recovery-performance',
+    goals: ['recovery', 'performance'],
+    shortDescription:
+      'A provider-directed compounded recovery injection, available after eligibility review.',
+    longDescription: COMPOUNDED_DISCLAIMER,
+    image: IMG_INJECTION,
+    imageAlt: 'Recovery Stack, a provider-directed compounded recovery injection in a 5mL vial',
+    providerDisclaimer: COMPOUNDED_DISCLAIMER,
+    status: 'active',
+    isVisible: true,
+    autoRefillEligible: false,
+    memberPricingEligible: false,
+    genClientProductId:
+      'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p',
+    genDisplayTotalCents: 18900,
+    genShippingCents: 3000,
+    variants: [
+      { dosageForm: 'Injection', strength: 'Compounded blend', size: '5mL vial', price: 159 },
+    ],
+    needsDedicatedImage: true,
+    internalNotes:
+      'GEN Health Product-first checkout. $159 medication + $30 shipping = $189 due today. Provider visit shown by GEN at checkout. No subscription/auto-refill. Do not display formulation names or concentrations.',
   }),
 
   // ===== PRESCRIPTION SKIN & HAIR =====

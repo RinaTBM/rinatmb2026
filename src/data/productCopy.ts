@@ -1199,6 +1199,47 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
       'Customer copy: card monthly billing with recurring shipping; do not imply ACH-primary public checkout.',
     ],
   },
+
+  'recovery-stack': {
+    benefitHeadline: 'Provider-Directed Compounded Recovery Injection',
+    shortDescription:
+      'A provider-directed compounded recovery injection, available after eligibility review. Payment, intake, and provider review continue securely in GEN Health.',
+    highlights: [
+      'Compounded Recovery Injection',
+      '5mL Vial',
+      'Provider-Guided Care',
+      'GEN Health Checkout',
+    ],
+    about: [
+      'Recovery Stack is a provider-directed compounded recovery injection available in a 5mL vial. Exact formulation and concentration are determined by the prescribing provider and dispensing pharmacy — not displayed on this page.',
+      'The $189 total includes $30 shipping. Payment, medical intake, and provider review all continue securely in GEN Health after you click continue.',
+      'A provider visit is required and will be shown by GEN Health at checkout. Purchasing does not guarantee a prescription.',
+    ].join('\n\n'),
+    potentialBenefits: [
+      'Provider-directed compounded recovery injection option',
+      'Available as a 5mL vial after eligibility review',
+      'Secure payment, intake, and provider review through GEN Health',
+      'Individualized treatment determined by your prescribing provider',
+    ],
+    howItWorks:
+      'Recovery Stack is a provider-directed compounded formulation. After you continue to GEN Health, you complete a secure medical intake and a licensed provider reviews your information to determine eligibility. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy. A provider visit is required and will be presented during the GEN Health checkout flow.',
+    whyPeopleChooseIt: [
+      'Want a provider-guided compounded recovery injection',
+      'Prefer a simple $189 total that includes $30 shipping',
+      'Value secure payment and intake through GEN Health',
+      'Want provider review before any medication is dispensed',
+    ],
+    whatToExpect:
+      'Click "Continue to GEN Health" to go to the secure GEN Health Product-first checkout. You will complete payment, medical intake, and a provider visit. If approved, your prescription is sent to the dispensing pharmacy. Use only as directed if approved.',
+    importantInformation: [
+      DEFAULT_COMPOUNDED_IMPORTANT,
+      'The $189 total includes $30 shipping. Payment, intake, and provider review continue securely in GEN Health.',
+    ].join(' '),
+    regulatoryNotes: [
+      'Do not display exact formulation names or concentrations on the website.',
+      'No subscription or auto-refill for this product.',
+    ],
+  },
 };
 
 export function paragraphs(text: string): string[] {

@@ -2,10 +2,10 @@
 verify_jwt = false
 
 [functions.create-invoice-order]
-verify_jwt = false
+verify_jwt = true
 
 [functions.create-kashu-checkout-session]
-verify_jwt = false
+verify_jwt = true
 
 [functions.gen-health-clinical]
 verify_jwt = true

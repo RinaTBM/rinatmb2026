@@ -22,6 +22,7 @@ export const SHOP_CATEGORY_IDS = new Set(SHOP_CATEGORIES.map(c => c.id));
 export const FORM_FILTER_OPTIONS: DosageForm[] = [
   'Injection',
   'Capsule',
+  'Orally disintegrating tablet',
   'Cream',
   'Patch',
   'Nasal Spray',

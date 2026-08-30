@@ -52,6 +52,7 @@ export type DosageForm =
   | 'Injection'
   | 'Nasal Spray'
   | 'Capsule'
+  | 'Orally disintegrating tablet'
   | 'Patch'
   | 'Cream'
   | 'Topical Solution'
@@ -608,7 +609,7 @@ export const products: Product[] = [
   mk({ id: 'p102', slug: 'metabolic-triple', displayName: 'Metabolic Triple Protocol', shortName: 'Metabolic Triple', subtitle: 'Provider-directed metabolic support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed metabolic-support protocol available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed metabolic protocol injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 219 }] }),
   mk({ id: 'p103', slug: 'bpc-157', displayName: 'BPC-157', shortName: 'BPC-157', subtitle: 'Provider-directed recovery support', category: 'recovery-performance', goals: ['recovery', 'performance'], shortDescription: 'A provider-directed recovery peptide option available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed recovery injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 199 }] }),
   mk({ id: 'p104', slug: 'ghk-cu-minoxidil', displayName: 'GHK-Cu / Minoxidil Topical Combo', shortName: 'GHK-Cu / Minoxidil', subtitle: 'Provider-directed topical care', category: 'prescription-skin-hair', goals: ['beauty'], shortDescription: 'A provider-directed topical option for scalp and skin support, available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CREAM, imageAlt: 'Provider-directed topical care', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Cream', strength: 'Provider-directed', size: 'Monthly supply', price: 69 }] }),
-  mk({ id: 'p105', slug: 'ondansetron-odt', displayName: 'Ondansetron ODT', shortName: 'Ondansetron', subtitle: 'Provider-directed weight-management support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed supportive-care option available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CAPSULE, imageAlt: 'Provider-directed supportive care tablets', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Capsule', strength: 'Provider-directed', size: 'Monthly supply', price: 59 }] }),
+  mk({ id: 'p105', slug: 'ondansetron-odt', displayName: 'Ondansetron ODT', shortName: 'Ondansetron', subtitle: 'Provider-directed supportive care', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed supportive-care option available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CAPSULE, imageAlt: 'Provider-directed orally disintegrating tablet', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Orally disintegrating tablet', strength: 'Provider-directed', size: 'Monthly supply', price: 59 }] }),
 
   // ===== WOMEN'S HORMONE THERAPY =====
   mk({

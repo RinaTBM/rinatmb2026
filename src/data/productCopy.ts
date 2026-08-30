@@ -55,17 +55,17 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   semaglutide: {
     benefitHeadline: 'Appetite & Metabolic Support for Provider-Guided Weight Management',
     shortDescription:
-      'Semaglutide is a provider-guided injectable option designed to support appetite control and metabolic balance as part of a structured weight-management plan. Choose Vitamin B12 or Glycine, then a dose option. Many people explore it when they want help feeling fuller sooner and staying satisfied longer.',
+      'Semaglutide is a provider-guided injectable option for structured weight-management care. Choose the low-dose, high-dose, or monthly option shown on this page; your provider confirms the appropriate treatment after clinical review.',
     highlights: [
       'Appetite Support',
       'Feel Fuller Longer',
       'Metabolic Support',
       'Provider-Guided Care',
-      'Multiple Strengths',
+      'Low, High & Monthly Options',
     ],
     about: [
-      'Semaglutide is a GLP-1 medication option used in provider-directed weight-management care. On My Bare Method, it is offered as a compounded injection with Vitamin B12 or Glycine formulation selectors.',
-      'Choose a one-time purchase or Subscribe & Save when available. Your provider determines the appropriate treatment after review.',
+      'Semaglutide is a GLP-1 medication option used in provider-directed weight-management care. On My Bare Method, the storefront presents low-dose, high-dose, and monthly prescription options linked to the corresponding GEN Health product pages.',
+      'Your provider determines the appropriate treatment after review. A selected program option starts the conversation; it does not override clinical judgment.',
       'Treatment is personalized. Ordering begins a clinical review — it does not automatically mean a prescription will be issued.',
     ].join('\n\n'),
     potentialBenefits: [
@@ -73,18 +73,18 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'May support staying satisfied longer between meals',
       'May make it easier to reduce overall food intake as part of a supervised plan',
       'Supports a structured, provider-guided approach to weight management',
-      'Available in multiple strengths so your clinician can match treatment to your needs',
+      'Offers clearly labeled low-dose, high-dose, and monthly program options for clinical matching',
     ],
     howItWorks:
       'Semaglutide works with GLP-1 receptors involved in appetite and blood-sugar regulation. In everyday terms, those pathways help your body register fullness and manage metabolic signals after eating. Many people notice they are less driven to overeat and can stick with smaller portions more comfortably. Individual responses vary. Your provider decides whether this approach fits your health history and how to advance treatment over time.',
     whyPeopleChooseIt: [
       'Clear injectable format with labeled strength options on this page',
-      'Choose Vitamin B12 or Glycine in a provider-directed compounded preparation',
+      'Choose the program option that best matches the care conversation you want to start',
       'Fits customers who want medication support alongside lifestyle changes',
       'Available as a one-time purchase or eligible prescription subscription',
     ],
     whatToExpect:
-      'Choose your preferred strength from the options below. After checkout you complete a medical intake. A licensed provider reviews your information and determines eligibility, dose, and follow-up. Use only as directed if approved. Do not change your dose on your own.',
+      'Choose a low-dose, high-dose, or monthly option, then complete medical intake after checkout. A licensed provider reviews your information and determines eligibility, dose, and follow-up. Use only as directed if approved. Do not change your dose on your own.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'No guaranteed weight-loss amount.',
@@ -95,36 +95,36 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   tirzepatide: {
     benefitHeadline: 'Dual-Pathway Appetite Support for Provider-Guided Metabolic Goals',
     shortDescription:
-      'Tirzepatide is a provider-guided injectable option that engages two related pathways involved in appetite and metabolic regulation. Choose Vitamin B12 or Glycine, then a dose option. People often consider it when they want strong fullness support under clinical care.',
+      'Tirzepatide is a provider-guided injectable option that engages two related pathways involved in appetite and metabolic regulation. Choose the low-dose, high-dose, or monthly option shown on this page; your provider confirms the appropriate treatment after clinical review.',
     highlights: [
       'Dual-Pathway Support',
       'Appetite Control',
       'Fullness Support',
       'Provider-Guided Care',
-      'Multiple Strengths',
+      'Low, High & Monthly Options',
     ],
     about: [
       'Tirzepatide acts on GLP-1 and GIP pathways involved in appetite, fullness, and blood-sugar regulation. That dual-pathway design is what sets it apart from semaglutide alone — not a promise that it is automatically “better” for everyone.',
-      'Choose a one-time purchase or Subscribe & Save when available. Your provider determines the appropriate treatment after review.',
+      'Choose a low-dose, high-dose, or monthly prescription option. Your provider determines the appropriate treatment after review.',
       'A licensed provider reviews whether Tirzepatide, Semaglutide, or another plan is the right fit for you.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support stronger feelings of fullness after meals for some people',
       'May help reduce interest in large portions as part of a supervised plan',
       'Engages two metabolic pathways (GLP-1 and GIP) under provider direction',
-      'Offers multiple vial strengths for individualized clinical titration',
-      'Choose Vitamin B12 or Glycine in this compounded injectable format',
+      'Offers clearly labeled program options for individualized clinical matching',
+      'Supports a provider-directed compounded injectable format',
     ],
     howItWorks:
       'Tirzepatide works with receptors tied to appetite and blood-sugar regulation — commonly described as GLP-1 and GIP pathways. Together, those signals can influence how quickly you feel satisfied and how your body manages metabolic cues after eating. Many people experience a quieter “food noise” and an easier time with portion control, though results vary. Your provider sets expectations and adjusts treatment based on your response and safety profile.',
     whyPeopleChooseIt: [
       'Distinct from Semaglutide — dual-pathway option when clinically appropriate',
-      'Injectable strengths listed clearly for transparent shopping and clinical matching',
+      'Low-dose, high-dose, and monthly options listed clearly for transparent shopping and clinical matching',
       'Designed for customers ready for structured, provider-guided weight-management care',
       'Eligible prescription subscription available with 15% medication savings',
     ],
     whatToExpect:
-      'Select a vial strength, complete intake after order, and wait for licensed-provider review. Exact dose, schedule, and follow-up are clinical decisions. Storefront selection informs the conversation — it does not override medical judgment.',
+      'Select a low-dose, high-dose, or monthly option, complete intake after order, and wait for licensed-provider review. Exact dose, schedule, and follow-up are clinical decisions. Storefront selection informs the conversation — it does not override medical judgment.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Distinguish clearly from Semaglutide; not interchangeable.',
@@ -175,6 +175,187 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Do not imply the blend is FDA-approved.',
       'Do not claim clinically proven weight loss, fat burning, or metabolic improvement.',
       'Not SLU-PP-332 / Fat Burner+ capsules.',
+    ],
+  },
+
+  'aod-9604': {
+    benefitHeadline: 'Provider-Guided Metabolic Wellness Support',
+    shortDescription:
+      'AOD-9604 is a provider-directed compounded peptide option for customers exploring metabolic and body-composition goals. Availability, formulation, and instructions are determined after intake and licensed-provider review.',
+    highlights: [
+      'Metabolic Wellness Support',
+      'Compounded Peptide',
+      'Injection Format',
+      'Provider-Directed Care',
+    ],
+    about: [
+      'AOD-9604 is offered as a provider-directed compounded peptide option. My Bare Method keeps pharmacy-level formulation details within the clinical workflow so your provider and dispensing pharmacy can determine what is appropriate for you.',
+      'This listing is for a supervised clinical conversation, not a promise of weight loss, fat loss, or any particular outcome.',
+    ].join('\\n\\n'),
+    potentialBenefits: [
+      'May be considered in a provider-guided metabolic wellness plan',
+      'Offers an injectable format for individualized clinical discussion',
+      'Keeps formulation and treatment decisions with the provider and pharmacy',
+      'Supports realistic expectations and follow-up care',
+    ],
+    howItWorks:
+      'This option is discussed in provider-directed metabolic wellness settings. Exact strength, formulation, schedule, and instructions are determined after clinical review. Individual responses vary, and this page does not guarantee a specific metabolic or body-composition result.',
+    whyPeopleChooseIt: [
+      'Want a provider-guided metabolic peptide option',
+      'Prefer an injectable format under clinical oversight',
+      'Value a simple storefront choice with details finalized after intake',
+    ],
+    whatToExpect:
+      'Complete intake after checkout. A licensed provider determines whether this option is appropriate and provides the final clinical instructions if approved.',
+    importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
+    regulatoryNotes: [
+      'No guaranteed weight-loss, fat-loss, or body-composition outcomes.',
+      'Do not imply FDA approval of this specific compounded product.',
+    ],
+  },
+
+  'metabolic-triple': {
+    benefitHeadline: 'Provider-Guided Metabolic Protocol',
+    shortDescription:
+      'A provider-directed compounded metabolic-support protocol available after eligibility review. Your provider and dispensing pharmacy determine the final formulation and treatment instructions.',
+    highlights: [
+      'Metabolic Protocol',
+      'Compounded Injection',
+      'Provider-Directed',
+      'Clinical Review Required',
+    ],
+    about: [
+      'Metabolic Triple Protocol is a provider-directed compounded option for customers exploring structured metabolic and body-composition care.',
+      'The storefront intentionally does not publish pharmacy-level formulation details. Those details, along with eligibility and instructions, are finalized by the prescribing provider and dispensing pharmacy.',
+    ].join('\\n\\n'),
+    potentialBenefits: [
+      'May be considered as part of a supervised metabolic wellness plan',
+      'Provides one coordinated protocol for provider discussion',
+      'Keeps formulation decisions within the clinical review process',
+      'Supports individualized follow-up rather than one-size-fits-all use',
+    ],
+    howItWorks:
+      'This protocol is reviewed as part of a provider-directed care plan. The provider determines whether it fits your history and goals, while the dispensing pharmacy confirms the final preparation and use instructions.',
+    whyPeopleChooseIt: [
+      'Prefer a coordinated metabolic protocol',
+      'Want provider oversight from intake through fulfillment',
+      'Value clear pricing with clinical details finalized after review',
+    ],
+    whatToExpect:
+      'Complete intake after checkout and wait for licensed-provider review. Approval, formulation, and instructions are not guaranteed by purchase.',
+    importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
+    regulatoryNotes: [
+      'No guaranteed weight-loss or metabolic outcomes.',
+      'Do not expose unverified formulation or concentration details.',
+    ],
+  },
+
+  'bpc-157': {
+    benefitHeadline: 'Provider-Guided Recovery Support',
+    shortDescription:
+      'BPC-157 is a provider-directed compounded peptide option for recovery-oriented wellness discussions. Eligibility, formulation, and instructions are determined after licensed-provider review.',
+    highlights: [
+      'Recovery-Oriented Support',
+      'Compounded Peptide',
+      'Injection Format',
+      'Provider Review Required',
+    ],
+    about: [
+      'BPC-157 is offered as a compounded peptide option for customers discussing recovery and performance-support goals with a licensed provider.',
+      'Research interest should not be confused with an established treatment or guarantee of injury healing, tissue repair, or performance improvement.',
+    ].join('\\n\\n'),
+    potentialBenefits: [
+      'May be discussed in a provider-guided recovery plan',
+      'Offers an injectable format for individualized clinical review',
+      'Keeps treatment decisions connected to your health history and goals',
+      'Supports realistic expectations around developing evidence',
+    ],
+    howItWorks:
+      'BPC-157 is discussed in research-oriented wellness settings. This page does not claim a proven mechanism or guaranteed recovery outcome. If approved, your provider and pharmacy provide the final preparation and directions.',
+    whyPeopleChooseIt: [
+      'Want a dedicated recovery-oriented peptide option',
+      'Prefer provider oversight before using a compounded product',
+      'Value clear distinction between wellness interest and established treatment',
+    ],
+    whatToExpect:
+      'Complete intake after checkout. A licensed provider determines eligibility and provides instructions only if the option is approved for you.',
+    importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
+    reviewFlags: [RESEARCH_FLAG],
+    regulatoryNotes: [
+      'No guaranteed healing, tissue-repair, or performance outcomes.',
+      'Do not imply FDA approval of this specific compounded product.',
+    ],
+  },
+
+  'ghk-cu-minoxidil': {
+    benefitHeadline: 'Personalized Topical Scalp & Skin Support',
+    shortDescription:
+      'A provider-directed topical combination featuring GHK-Cu and minoxidil for scalp and skin-care goals. Your provider and dispensing pharmacy determine the final strength and companion ingredients after review.',
+    highlights: [
+      'Topical Combination',
+      'Scalp & Skin Support',
+      'Provider-Personalized',
+      'Prescription Review Required',
+    ],
+    about: [
+      'This compounded topical option combines GHK-Cu and minoxidil in a provider-directed preparation for customers discussing scalp and skin-care goals.',
+      'The final strength, vehicle, and any companion ingredients are determined by the prescribing provider and dispensing pharmacy. Results vary and are not guaranteed.',
+    ].join('\\n\\n'),
+    potentialBenefits: [
+      'May support provider-guided scalp-care goals',
+      'Offers a topical format for an at-home routine',
+      'Combines familiar topical-care discussion points in one prescription option',
+      'Keeps exact formulation details within clinical review',
+    ],
+    howItWorks:
+      'Minoxidil is commonly used in topical hair-care plans, while GHK-Cu may be discussed in skin and scalp wellness settings. Your provider determines whether this combination is appropriate and explains the final preparation and directions if approved.',
+    whyPeopleChooseIt: [
+      'Prefer a topical scalp-and-skin option',
+      'Want one provider-guided combination instead of separate products',
+      'Value a personalized prescription pathway',
+    ],
+    whatToExpect:
+      'Complete intake and wait for provider review. Apply only as directed if approved, and ask your care team for the final ingredient and strength details for your preparation.',
+    importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
+    regulatoryNotes: [
+      'No guaranteed hair-growth, skin, or scalp outcomes.',
+      'Do not invent companion ingredients, strengths, or application schedules.',
+    ],
+  },
+
+  'ondansetron-odt': {
+    benefitHeadline: 'Provider-Guided Support in an Orally Disintegrating Format',
+    shortDescription:
+      'Ondansetron ODT is a provider-directed orally disintegrating tablet option that may be considered for supportive care during a weight-management plan. Your provider determines whether it is appropriate after intake.',
+    highlights: [
+      'Orally Disintegrating Format',
+      'Supportive Care Option',
+      'Weight-Management Context',
+      'Provider-Reviewed',
+    ],
+    about: [
+      'Ondansetron ODT is an orally disintegrating tablet option that may be discussed for nausea-related supportive care when clinically appropriate.',
+      'It is not a weight-loss medication and does not guarantee that nausea or other symptoms will improve. Your provider reviews your history, current medications, and goals before deciding whether it belongs in your plan.',
+    ].join('\\n\\n'),
+    potentialBenefits: [
+      'May be considered for nausea-related supportive care under provider direction',
+      'Orally disintegrating format does not require swallowing a conventional tablet',
+      'Can be discussed alongside a supervised weight-management plan',
+      'Keeps medication decisions connected to clinical review',
+    ],
+    howItWorks:
+      'The orally disintegrating tablet is designed to dissolve in the mouth. Your provider determines whether ondansetron is appropriate, how it should be used, and whether other causes of symptoms need attention.',
+    whyPeopleChooseIt: [
+      'Prefer an orally disintegrating format',
+      'Want a provider-guided supportive-care option',
+      'Value a clear distinction between symptom support and weight-loss treatment',
+    ],
+    whatToExpect:
+      'Complete intake after checkout. Use only as directed if approved, and contact your care team if symptoms are severe, persistent, or concerning.',
+    importantInformation: DEFAULT_RX_IMPORTANT,
+    regulatoryNotes: [
+      'Do not market Ondansetron ODT as a weight-loss medication.',
+      'Do not guarantee nausea relief or any other clinical outcome.',
     ],
   },
 
@@ -1197,47 +1378,6 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
     regulatoryNotes: [
       'No 30mg offering.',
       'Customer copy: card monthly billing with recurring shipping; do not imply ACH-primary public checkout.',
-    ],
-  },
-
-  'recovery-stack': {
-    benefitHeadline: 'Provider-Directed Compounded Recovery Injection',
-    shortDescription:
-      'A provider-directed compounded recovery injection, available after eligibility review. Payment, intake, and provider review continue securely in GEN Health.',
-    highlights: [
-      'Compounded Recovery Injection',
-      '5mL Vial',
-      'Provider-Guided Care',
-      'GEN Health Checkout',
-    ],
-    about: [
-      'Recovery Stack is a provider-directed compounded recovery injection available in a 5mL vial. Exact formulation and concentration are determined by the prescribing provider and dispensing pharmacy — not displayed on this page.',
-      'The $189 total includes $30 shipping. Payment, medical intake, and provider review all continue securely in GEN Health after you click continue.',
-      'A provider visit is required and will be shown by GEN Health at checkout. Purchasing does not guarantee a prescription.',
-    ].join('\n\n'),
-    potentialBenefits: [
-      'Provider-directed compounded recovery injection option',
-      'Available as a 5mL vial after eligibility review',
-      'Secure payment, intake, and provider review through GEN Health',
-      'Individualized treatment determined by your prescribing provider',
-    ],
-    howItWorks:
-      'Recovery Stack is a provider-directed compounded formulation. After you continue to GEN Health, you complete a secure medical intake and a licensed provider reviews your information to determine eligibility. Exact formulation, concentration, and treatment plan are determined by the prescribing provider and dispensing pharmacy. A provider visit is required and will be presented during the GEN Health checkout flow.',
-    whyPeopleChooseIt: [
-      'Want a provider-guided compounded recovery injection',
-      'Prefer a simple $189 total that includes $30 shipping',
-      'Value secure payment and intake through GEN Health',
-      'Want provider review before any medication is dispensed',
-    ],
-    whatToExpect:
-      'Click "Continue to GEN Health" to go to the secure GEN Health Product-first checkout. You will complete payment, medical intake, and a provider visit. If approved, your prescription is sent to the dispensing pharmacy. Use only as directed if approved.',
-    importantInformation: [
-      DEFAULT_COMPOUNDED_IMPORTANT,
-      'The $189 total includes $30 shipping. Payment, intake, and provider review continue securely in GEN Health.',
-    ].join(' '),
-    regulatoryNotes: [
-      'Do not display exact formulation names or concentrations on the website.',
-      'No subscription or auto-refill for this product.',
     ],
   },
 };

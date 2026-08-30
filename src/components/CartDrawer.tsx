@@ -1,4 +1,4 @@
-import { X, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
+import { X, Plus, Minus, ShoppingCart, ArrowRight } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link, navigate } from '@/router';
 import { cartItemDetailPath } from '@/lib/catalog/resolveStorefrontDetail';
@@ -17,7 +17,7 @@ export function CartDrawer() {
             {/* Header */}
             <div className="flex items-center justify-between border-b border-cream-300 px-5 py-4">
               <div className="flex items-center gap-2">
-                <ShoppingBag size={20} className="text-ink-800" />
+                <ShoppingCart size={20} className="text-ink-800" />
                 <span className="font-serif text-lg font-medium">Your Cart</span>
                 <span className="text-sm text-ink-400">({itemCount})</span>
               </div>
@@ -35,7 +35,7 @@ export function CartDrawer() {
             {items.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
                 <div className="mb-4 rounded-full bg-cream-200 p-6">
-                  <ShoppingBag size={32} className="text-ink-400" />
+                  <ShoppingCart size={32} className="text-ink-400" />
                 </div>
                 <p className="font-serif text-xl text-ink-900 mb-2">Your cart is empty</p>
                 <p className="text-sm text-ink-500 mb-6">Discover products crafted for your wellness journey.</p>

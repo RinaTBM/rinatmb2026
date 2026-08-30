@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
-import { ShieldCheck } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ShieldCheck, X } from 'lucide-react';
 import { Link } from '@/router';
+import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
 import {
   getRelatedProducts,
   sections,
@@ -21,6 +22,7 @@ import {
   navigateToGenProductFirstCheckout,
   resolveGenProductFirstCheckout,
 } from '@/lib/commerce/genHostedCheckout';
+import { GEN_HOSTED_PRODUCTS } from '@/lib/commerce/genHostedProducts';
 
 const LIVE_GLP1_PROGRAMS = {
   semaglutide: {
@@ -124,6 +126,9 @@ function FamilySelectors({
   );
   const [injPackage, setInjPackage] = useState<'5mL' | '10mL'>('5mL');
   const [glp1Program, setGlp1Program] = useState<Glp1ProgramChoice>('low');
+  const { addItem, openBasket, items: prescriptionItems } = usePrescriptionBasket();
+  const [recommendationsOpen, setRecommendationsOpen] = useState(false);
+  const [recommendationOffset, setRecommendationOffset] = useState(0);
   const glp1FamilyId = familyId === 'semaglutide' || familyId === 'tirzepatide' ? familyId : null;
   const liveGlp1Program = glp1FamilyId ? LIVE_GLP1_PROGRAMS[glp1FamilyId][glp1Program] : null;
 
@@ -156,28 +161,52 @@ function FamilySelectors({
   const r84Ready = visible.some((v) => v.websiteVariantId === 'nad-nasal-r84');
   const r85Ready = visible.some((v) => v.websiteVariantId === 'nad-nasal-r85');
 
-  const handleGenCheckout = () => {
-    if (liveGlp1Program) {
-      const checkout = resolveGenProductFirstCheckout(liveGlp1Program.id);
-      if (!checkout.ok) return;
-      navigateToGenProductFirstCheckout(checkout.url);
-      return;
-    }
-
-    const checkout = resolveGenProductFirstCheckout(variant?.genClientProductId);
-    if (!checkout.ok) return;
-    navigateToGenProductFirstCheckout(checkout.url);
-  };
-
   const displayPrice = liveGlp1Program?.price ?? price;
   // Recovery Stack has a fixed, separately disclosed $30 shipping charge in
   // GEN. Keep the website total equal to the GEN checkout total.
   const fixedShipping = familyId === 'bpc-advanced-blends' ? 30 : 0;
   const dueToday = displayPrice == null ? null : displayPrice + fixedShipping;
   const genCheckout = resolveGenProductFirstCheckout(liveGlp1Program?.id ?? variant?.genClientProductId);
+  const selectedGenClientProductId = liveGlp1Program?.id ?? variant?.genClientProductId;
+  const basketSlug = `${product.slug}:${selectedGenClientProductId || 'unresolved'}`;
+  const currentInBasket = prescriptionItems.some(item => item.slug === basketSlug);
+  const recommendations = useMemo(
+    () =>
+      getRelatedProducts(product, 8)
+        .filter(candidate => candidate.category !== 'accessories' && candidate.category !== 'provider-care')
+        .filter(candidate => {
+          const candidateRoute = GEN_HOSTED_PRODUCTS[candidate.slug];
+          return Boolean(candidateRoute && resolveGenProductFirstCheckout(candidateRoute.genClientProductId).ok);
+        })
+        .slice(0, 3),
+    [product],
+  );
+  const orderedRecommendations = recommendations.length
+    ? recommendations.map((_, index) => recommendations[(index + recommendationOffset) % recommendations.length])
+    : [];
   const canPurchase = glp1FamilyId
     ? Boolean(liveGlp1Program && genCheckout.ok)
     : Boolean(variant && price != null && resolution.ok && genCheckout.ok);
+
+  const addCurrentToBasket = () => {
+    if (!genCheckout.ok || displayPrice == null || !selectedGenClientProductId) return;
+    addItem({
+      slug: basketSlug,
+      displayName: family.displayName,
+      subtitle: liveGlp1Program?.label ?? variant?.displayLabel ?? product.subtitle,
+      image: product.image,
+      imageAlt: product.imageAlt,
+      price: displayPrice,
+      genClientProductId: selectedGenClientProductId,
+      category: product.category,
+    });
+    setRecommendationOffset(0);
+    setRecommendationsOpen(true);
+  };
+
+  const continueToGen = () => {
+    if (genCheckout.ok) navigateToGenProductFirstCheckout(genCheckout.url);
+  };
 
   return (
     <div className="bg-cream-50 pt-28 md:pt-32">
@@ -352,14 +381,21 @@ function FamilySelectors({
                   type="button"
                   className="btn-primary w-full"
                   disabled={!canPurchase}
-                  onClick={handleGenCheckout}
+                  onClick={addCurrentToBasket}
                 >
-                    {canPurchase
-                        ? 'Continue to Checkout'
-                        : 'Temporarily unavailable'}
+                  {canPurchase
+                    ? currentInBasket
+                      ? 'Added — review prescription bag'
+                      : 'Add to Prescription Bag'
+                    : 'Temporarily unavailable'}
                 </button>
+                {currentInBasket && (
+                  <button type="button" onClick={openBasket} className="btn-ghost mt-2 w-full">
+                    Open prescription bag
+                  </button>
+                )}
                 <p className="mt-3 text-xs text-ink-500 leading-relaxed">
-                  You’ll continue securely in GEN Health for payment, intake, assessment, and provider review.
+                  Add prescriptions to your bag while you shop. GEN Health handles payment, intake, assessment, and provider review separately for each prescription.
                   Purchasing does not guarantee that a prescription will be issued.
                 </p>
               </div>
@@ -385,6 +421,86 @@ function FamilySelectors({
             </div>
           </div>
         </section>
+      )}
+
+      {recommendationsOpen && (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-ink-950/45 px-5 py-8 backdrop-blur-sm animate-fade-in"
+          onClick={() => setRecommendationsOpen(false)}
+        >
+          <div
+            className="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-cream-300 bg-cream-50 p-5 shadow-2xl animate-scale-in md:p-7"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="family-commonly-purchased-title"
+            onClick={event => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wider-2 text-gold-600">Added to your prescription bag</p>
+                <h2 id="family-commonly-purchased-title" className="mt-1 font-serif text-2xl text-ink-900 md:text-3xl">Commonly purchased with...</h2>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-600">Explore other provider-reviewed options before checkout. Each prescription is purchased separately through GEN Health and requires its own eligibility review.</p>
+              </div>
+              <button type="button" onClick={() => setRecommendationsOpen(false)} aria-label="Close recommendations" className="p-1">
+                <X size={22} className="text-ink-500 hover:text-ink-900" />
+              </button>
+            </div>
+
+            {orderedRecommendations.length > 0 && (
+              <div className="relative mt-6">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {orderedRecommendations.map(candidate => {
+                    const candidateRoute = GEN_HOSTED_PRODUCTS[candidate.slug];
+                    if (!candidateRoute) return null;
+                    return (
+                      <Link
+                        key={candidate.slug}
+                        to={`/product/${candidate.slug}`}
+                        onClick={() => setRecommendationsOpen(false)}
+                        className="group overflow-hidden rounded-2xl border border-cream-300 bg-white transition-shadow hover:shadow-lg"
+                      >
+                        <img src={candidate.image} alt={candidate.imageAlt} className="aspect-[4/3] w-full object-cover" />
+                        <div className="p-4">
+                          <p className="text-[10px] uppercase tracking-wider text-gold-600">{candidate.subtitle}</p>
+                          <h3 className="mt-1 font-serif text-xl leading-tight text-ink-900 group-hover:text-gold-700">{candidate.displayName}</h3>
+                          <p className="mt-2 text-sm text-ink-500">Starting at ${candidateRoute.price.toFixed(2)}</p>
+                          <p className="mt-3 text-xs font-medium text-gold-700">View details <span aria-hidden="true">→</span></p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+                {recommendations.length > 1 && (
+                  <div className="mt-4 flex items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setRecommendationOffset(offset => (offset - 1 + recommendations.length) % recommendations.length)}
+                      aria-label="Previous recommendations"
+                      className="rounded-full border border-cream-300 bg-white p-2 text-ink-700 hover:border-gold-400 hover:text-gold-700"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                    <span className="text-xs text-ink-400">{recommendations.length} prescription options</span>
+                    <button
+                      type="button"
+                      onClick={() => setRecommendationOffset(offset => (offset + 1) % recommendations.length)}
+                      aria-label="Next recommendations"
+                      className="rounded-full border border-cream-300 bg-white p-2 text-ink-700 hover:border-gold-400 hover:text-gold-700"
+                    >
+                      <ChevronRight size={18} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="mt-7 flex flex-col-reverse gap-2 border-t border-cream-300 pt-5 sm:flex-row sm:justify-end">
+              <button type="button" onClick={() => setRecommendationsOpen(false)} className="btn-ghost w-full sm:w-auto">Keep shopping</button>
+              <button type="button" onClick={() => { setRecommendationsOpen(false); openBasket(); }} className="btn-ghost w-full sm:w-auto">Review prescription bag</button>
+              <button type="button" onClick={continueToGen} className="btn-primary w-full sm:w-auto">Continue with this prescription</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Search, ShoppingBag, Plus, Menu, X, ChevronDown, ChevronRight, UserRound } from 'lucide-react';
+import { Search, ShoppingBag, ShoppingCart, Menu, X, ChevronDown, ChevronRight, UserRound } from 'lucide-react';
 import { Link, navigate } from '@/router';
 import { useCart } from '@/context/CartContext';
 import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
@@ -174,7 +174,7 @@ export function Header() {
                 aria-label="Accessories cart"
                 title="Accessories cart"
               >
-                <ShoppingBag size={20} />
+                <ShoppingCart size={20} />
                 {itemCount > 0 && (
                   <span className="absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full bg-gold-400 text-[10px] font-semibold text-ink-900" style={{ height: 18, width: 18 }}>
                     {itemCount}
@@ -187,12 +187,7 @@ export function Header() {
                 aria-label="Open prescription care basket"
                 title="Prescription care basket — purchased separately through GEN Health"
               >
-                <span className="relative inline-flex">
-                  <ShoppingBag size={20} />
-                  <span className="absolute -bottom-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gold-400 text-ink-900">
-                    <Plus size={10} strokeWidth={3} />
-                  </span>
-                </span>
+                <ShoppingBag size={20} />
                 {prescriptionItemCount > 0 && (
                   <span className="absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full bg-gold-400 text-[10px] font-semibold text-ink-900" style={{ height: 18, width: 18 }}>
                     {prescriptionItemCount}

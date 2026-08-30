@@ -20,7 +20,7 @@ import { OGTBM_PROMO_CODE } from '@/lib/promo/ogtbmPromo';
 
 const estradiolLine = {
   productId: 'p16',
-  productName: 'Estradiol Patch',
+  productName: 'Estrogen Support Patch',
   sku: 'MBM-HRT-EST-PTC-001',
   slug: 'estradiol-patch',
   quantity: 1,
@@ -130,7 +130,7 @@ describe('HRT lab package auto-add', () => {
         },
         {
           productId: 'pc3',
-          productName: 'Laboratory Review',
+          productName: 'Lab Review',
           sku: LAB_REVIEW.sku,
           quantity: 2,
           unitAmountCents: 1,
@@ -276,7 +276,7 @@ describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Da
 
   const estradiol129 = {
     productId: 'p16',
-    productName: 'Estradiol Patch',
+    productName: 'Estrogen Support Patch',
     sku: 'MBM-HRT-EST-PAT-001',
     slug: 'estradiol-patch',
     quantity: 1,

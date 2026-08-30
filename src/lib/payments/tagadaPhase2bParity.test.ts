@@ -135,7 +135,7 @@ describe('Phase 2B exact-SKU remapping (23 stale IDs)', () => {
       },
       liveByExactSku: {
         // Wrong key — display-name style key must not remap IPV
-        'Initial Provider Visit': {
+        'Initial Clinical Consultation': {
           productId: 'product_0a40b08c46f5',
           variantId: 'variant_3b859fb20d65',
         },

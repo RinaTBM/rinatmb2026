@@ -606,7 +606,7 @@ export const products: Product[] = [
   }),
 
   mk({ id: 'p101', slug: 'aod-9604', displayName: 'AOD-9604', shortName: 'AOD-9604', subtitle: 'Provider-directed metabolic support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed metabolic-support peptide option available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed metabolic support injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 179 }] }),
-  mk({ id: 'p102', slug: 'metabolic-triple', displayName: 'Metabolic Triple Protocol', shortName: 'Metabolic Triple', subtitle: 'Provider-directed metabolic support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed metabolic-support protocol available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed metabolic protocol injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 219 }] }),
+  mk({ id: 'p102', slug: 'metabolic-triple', displayName: 'Metabolic Triple Protocol', shortName: 'Metabolic Triple', subtitle: 'Provider-directed metabolic support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed metabolic-support protocol available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed metabolic protocol injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 219 }], status: 'future', isVisible: false }),
   mk({ id: 'p103', slug: 'bpc-157', displayName: 'BPC-157', shortName: 'BPC-157', subtitle: 'Provider-directed recovery support', category: 'recovery-performance', goals: ['recovery', 'performance'], shortDescription: 'A provider-directed recovery peptide option available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed recovery injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 199 }] }),
   mk({ id: 'p104', slug: 'ghk-cu-minoxidil', displayName: 'GHK-Cu / Minoxidil Topical Combo', shortName: 'GHK-Cu / Minoxidil', subtitle: 'Provider-directed topical care', category: 'prescription-skin-hair', goals: ['beauty'], shortDescription: 'A provider-directed topical option for scalp and skin support, available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CREAM, imageAlt: 'Provider-directed topical care', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Cream', strength: 'Provider-directed', size: 'Monthly supply', price: 69 }] }),
   mk({ id: 'p105', slug: 'ondansetron-odt', displayName: 'Ondansetron ODT', shortName: 'Ondansetron', subtitle: 'Provider-directed supportive care', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed supportive-care option available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CAPSULE, imageAlt: 'Provider-directed orally disintegrating tablet', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Orally disintegrating tablet', strength: 'Provider-directed', size: 'Monthly supply', price: 59 }] }),
@@ -615,8 +615,8 @@ export const products: Product[] = [
   mk({
     id: 'p16', // preserves previous Estrogen Transdermal Patch app_product_id
     slug: 'estradiol-patch',
-    displayName: 'Estradiol Patch',
-    shortName: 'Estradiol Patch',
+    displayName: 'Estrogen Support Patch',
+    shortName: 'Estrogen Support Patch',
     subtitle: 'Provider-directed hormone therapy',
     category: 'womens-hormone-therapy',
     goals: ['hrt-women'],
@@ -657,8 +657,8 @@ export const products: Product[] = [
   mk({
     id: 'p27', // preserves previous Testosterone Cream app_product_id
     slug: 'testosterone-cream',
-    displayName: 'Hormone Therapy Cream',
-    shortName: 'Hormone Therapy Cream',
+    displayName: 'Testosterone Cream',
+    shortName: 'Testosterone Cream',
     subtitle: 'Provider-directed hormone therapy',
     category: 'womens-hormone-therapy',
     goals: ['hrt-women'],
@@ -708,8 +708,8 @@ export const products: Product[] = [
   mk({
     id: 'p9', // preserves previous NAD+ Injection app_product_id
     slug: 'nad-plus',
-    displayName: 'NAD+',
-    shortName: 'NAD+',
+    displayName: 'NAD+ Cellular Energy Support',
+    shortName: 'NAD+ Cellular Energy Support',
     subtitle: 'Provider-directed compounded formulation',
     category: 'longevity-cognitive',
     goals: ['longevity'],
@@ -720,14 +720,16 @@ export const products: Product[] = [
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     bestSeller: true,
     variants: [
+      { id: 'nad-plus-v1', dosageForm: 'Injection', strength: '100mg/mL', size: '5 mL', price: 199 },
+      { id: 'nad-plus-v2', dosageForm: 'Injection', strength: '100mg/mL', size: '10 mL', price: 229 },
       { id: 'nad-nasal-r84', dosageForm: 'Nasal Spray', strength: '50mg/mL', size: '15mL', price: 79 },
     ],
   }),
   mk({
     id: 'p48', // preserves the previous Selank app_product_id
     slug: 'selank',
-    displayName: 'Selank Injection',
-    shortName: 'Selank',
+    displayName: 'Calm-Focus Support Injection',
+    shortName: 'Calm-Focus Support',
     subtitle: 'Provider-directed compounded formulation',
     category: 'longevity-cognitive',
     goals: ['longevity', 'focus'],
@@ -745,8 +747,8 @@ export const products: Product[] = [
   mk({
     id: 'p47', // preserves the previous Semax app_product_id
     slug: 'semax',
-    displayName: 'Semax Injection',
-    shortName: 'Semax',
+    displayName: 'Cognitive Support Injection',
+    shortName: 'Cognitive Support',
     subtitle: 'Provider-directed compounded formulation',
     category: 'longevity-cognitive',
     goals: ['longevity', 'focus'],
@@ -764,8 +766,8 @@ export const products: Product[] = [
   mk({
     id: 'p68',
     slug: 'selank-semax-nasal-spray',
-    displayName: 'Selank + Semax Blend Nasal Spray',
-    shortName: 'Selank + Semax Blend',
+    displayName: 'Calm-Focus Support Nasal Spray',
+    shortName: 'Calm-Focus Support Nasal',
     subtitle: 'Provider-directed compounded formulation',
     category: 'longevity-cognitive',
     goals: ['longevity', 'focus'],
@@ -787,8 +789,8 @@ export const products: Product[] = [
   mk({
     id: 'p73',
     slug: 'tesamorelin',
-    displayName: 'Tesamorelin Injection',
-    shortName: 'Tesamorelin',
+    displayName: 'Metabolic Support Injection',
+    shortName: 'Metabolic Support',
     subtitle: 'Provider-directed compounded formulation',
     category: 'longevity-cognitive',
     goals: ['longevity'],
@@ -820,9 +822,9 @@ export const products: Product[] = [
   mk({
     id: 'p41', // preserves the previous BPC-157/TB-500 Injection app_product_id
     slug: 'bpc-157-tb-500',
-    displayName: 'Wolverine: BPC-157/TB-500',
-    shortName: 'Wolverine',
-    subtitle: 'BPC-157/TB-500 Blend',
+    displayName: 'Recovery Support',
+    shortName: 'Recovery Support',
+    subtitle: 'Provider-directed recovery support',
     category: 'recovery-performance',
     goals: ['recovery', 'performance'],
     shortDescription: 'A provider-directed compounded recovery injection, available after eligibility review.',
@@ -882,8 +884,8 @@ export const products: Product[] = [
   mk({
     id: 'p69',
     slug: 'tretinoin-cream',
-    displayName: 'Tretinoin Cream',
-    shortName: 'Tretinoin',
+    displayName: 'Skin Renewal Cream',
+    shortName: 'Skin Renewal',
     subtitle: 'Prescription skin care',
     category: 'prescription-skin-hair',
     goals: ['beauty'],
@@ -906,8 +908,8 @@ export const products: Product[] = [
   mk({
     id: 'p70',
     slug: 'minoxidil-topical',
-    displayName: 'Minoxidil Topical',
-    shortName: 'Minoxidil Topical',
+    displayName: 'Hair Support Solution',
+    shortName: 'Hair Support',
     subtitle: 'Prescription hair care',
     category: 'prescription-skin-hair',
     goals: ['beauty'],
@@ -964,8 +966,8 @@ export const products: Product[] = [
   mk({
     id: 'pc1',
     slug: 'initial-provider-consultation',
-    displayName: 'Initial Provider Visit',
-    shortName: 'Initial Visit',
+    displayName: 'Initial Clinical Consultation',
+    shortName: 'Initial Consultation',
     subtitle: 'Your first step toward personalized care.',
     category: 'provider-care',
     goals: ['hrt-women', 'weight-management', 'longevity'],
@@ -980,7 +982,7 @@ export const products: Product[] = [
   mk({
     id: 'pc2',
     slug: 'follow-up-appointment',
-    displayName: 'Follow-Up Visit',
+    displayName: 'Follow-Up Clinical Visit',
     shortName: 'Follow-Up Visit',
     subtitle: 'Review progress and adjust your treatment plan.',
     category: 'provider-care',
@@ -995,7 +997,7 @@ export const products: Product[] = [
   mk({
     id: 'pc3',
     slug: 'laboratory-review',
-    displayName: 'Laboratory Review',
+    displayName: 'Lab Review',
     shortName: 'Lab Review',
     subtitle: 'Provider interpretation of your lab results.',
     category: 'provider-care',

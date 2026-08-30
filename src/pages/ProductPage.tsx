@@ -11,6 +11,7 @@ import { FamilyProductPage, isFamilyStorefrontSlug } from '@/pages/FamilyProduct
 import { WEBSITE_FAMILY_CUTOVER_ENABLED } from '@/data/websiteFamilies';
 import { MembershipRequestedDoseField } from '@/components/MembershipRequestedDoseField';
 import { ProductDescriptionSections, ProductHighlights } from '@/components/ProductDescriptionSections';
+import { paragraphs } from '@/data/productCopy';
 import { resolveStorefrontDetail } from '@/lib/catalog/resolveStorefrontDetail';
 import {
   labelRequestedFormulation,
@@ -33,11 +34,11 @@ import { GenHostedProductPage } from '@/components/GenHostedProductPage';
 function customerVariantLabel(productSlug: string, fallback: string): string {
   const peptideLabels: Record<string, string> = {
     'fat-burner': 'Fat Burner Peptide',
-    'selank': 'Selank',
-    'semax': 'Semax',
-    'selank-semax-nasal-spray': 'Selank + Semax',
-    'tesamorelin': 'Tesamorelin',
-    'bpc-157-tb-500': 'BPC-157 + TB-500',
+    'selank': 'Calm-Focus Support',
+    'semax': 'Cognitive Support',
+    'selank-semax-nasal-spray': 'Calm-Focus Support Nasal',
+    'tesamorelin': 'Metabolic Support',
+    'bpc-157-tb-500': 'Recovery Support',
   };
   if (productSlug === 'nad-plus') {
     if (/10\s*mL/i.test(fallback)) return 'NAD+ Injection · 10 mL';
@@ -279,6 +280,15 @@ function WellnessProductPage({ slug }: { slug: string }) {
               <p className="text-ink-600 leading-relaxed mb-5">{product.shortDescription}</p>
               <ProductHighlights highlights={product.highlights} />
 
+              <div className="mb-6">
+                <h2 className="font-serif text-2xl text-ink-900 mb-3">About This Product</h2>
+                <div className="space-y-3">
+                  {paragraphs(product.longDescription).map((p, i) => (
+                    <p key={i} className="text-ink-600 leading-relaxed">{p}</p>
+                  ))}
+                </div>
+              </div>
+
               {rxAvailability && rxAvailability.customerFacingStatus !== 'AVAILABLE' ? (
                 <div className="mb-6">
                   <RxAvailabilityBanner
@@ -508,7 +518,7 @@ function WellnessProductPage({ slug }: { slug: string }) {
 
       <section className="py-12 md:py-16 border-t border-cream-300">
         <div className="container-lux max-w-4xl">
-          <ProductDescriptionSections product={product} />
+          <ProductDescriptionSections product={product} showAbout={false} />
         </div>
       </section>
 

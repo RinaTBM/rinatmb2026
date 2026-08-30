@@ -69,9 +69,11 @@ export function ProductHighlights({ highlights }: { highlights: string[] }) {
 export function ProductDescriptionSections({
   product,
   showEligibility = true,
+  showAbout = true,
 }: {
   product: Product;
   showEligibility?: boolean;
+  showAbout?: boolean;
 }) {
   const isAccessory = product.category === 'accessories';
   const isProviderCare = product.category === 'provider-care';
@@ -81,9 +83,11 @@ export function ProductDescriptionSections({
 
   return (
     <div className="space-y-10 md:space-y-12">
-      <Section title="About This Product">
-        <ParagraphBlock text={product.longDescription} />
-      </Section>
+      {showAbout && (
+        <Section title="About This Product">
+          <ParagraphBlock text={product.longDescription} />
+        </Section>
+      )}
 
       {potentialBenefits.length > 0 && (
         <Section title="Potential Benefits">

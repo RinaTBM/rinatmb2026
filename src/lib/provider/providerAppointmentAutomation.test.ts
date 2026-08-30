@@ -332,7 +332,7 @@ describe('server-side visit injection', () => {
         },
         {
           productId: 'pc1',
-          productName: 'Initial Provider Visit',
+          productName: 'Initial Clinical Consultation',
           sku: INITIAL_PROVIDER_VISIT.sku,
           quantity: 1,
           unitAmountCents: 1,
@@ -364,7 +364,7 @@ describe('server-side visit injection', () => {
         },
         {
           productId: 'pc1',
-          productName: 'Initial Provider Visit',
+          productName: 'Initial Clinical Consultation',
           sku: INITIAL_PROVIDER_VISIT.sku,
           quantity: 1,
           unitAmountCents: 7500,

@@ -363,7 +363,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'estradiol-patch': {
     benefitHeadline: 'Steady Estrogen Support Through a Simple Skin Patch',
     shortDescription:
-      'The Estradiol Patch delivers estradiol — a primary form of estrogen — through the skin as part of provider-directed hormone therapy. Many women explore this option when they want steady support without an oral tablet, personalized after clinical review.',
+      'The Estrogen Support Patch delivers estradiol — a primary form of estrogen — through the skin as part of provider-directed hormone therapy. Many women explore this option when they want steady support without an oral tablet, personalized after clinical review.',
     highlights: [
       'Through-the-Skin Delivery',
       'Steady Hormone Support',
@@ -439,7 +439,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'testosterone-cream': {
-    benefitHeadline: 'Targeted Topical Testosterone, Personalized to You',
+    benefitHeadline: 'Targeted Topical Testosterone Cream, Personalized to You',
     shortDescription:
       'Testosterone Cream is a topical option for provider-directed hormone therapy when clinically appropriate. Carefully dosed testosterone may be discussed as part of certain women’s hormone plans after a thorough review of goals, history, and — when needed — labs.',
     highlights: [
@@ -478,13 +478,13 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== LONGEVITY & COGNITIVE =====
   'nad-plus': {
-    benefitHeadline: 'Provider-Guided NAD+ Wellness Support',
+    benefitHeadline: 'Provider-Guided NAD+ Cellular Energy Support',
     shortDescription:
-      'NAD+ is a provider-directed compounded option for customers exploring cellular energy and longevity-focused wellness care. Injection and nasal spray options are available after eligibility review, with clear expectations and no hype-driven promises.',
+      'NAD+ is a provider-directed compounded option for customers exploring cellular energy and longevity-focused wellness care. Choose from injection and nasal spray options after eligibility review, with clear expectations and no hype-driven promises.',
     highlights: [
-      'Provider-Directed',
-      'Nasal Spray',
+      'Injection & Nasal Spray Options',
       'Cellular Energy Support',
+      'Provider-Directed',
       'Compounded Option',
     ],
     about: [
@@ -518,9 +518,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   selank: {
-    benefitHeadline: 'Provider-Guided Selank for Calm-Focus Wellness Support',
+    benefitHeadline: 'Provider-Guided Calm-Focus Support Injection',
     shortDescription:
-      'Selank Injection is a provider-directed compounded peptide some people discuss when exploring calm, focus, or stress-related wellness goals. Evidence in this area is still developing, and use is available only after eligibility review.',
+      'Calm-Focus Support Injection is a provider-directed compounded peptide option some people discuss when exploring calm, focus, or stress-related wellness goals. Evidence in this area is still developing, and use is available only after eligibility review.',
     highlights: [
       'Calm-Focus Support',
       'Compounded Peptide',
@@ -555,9 +555,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   semax: {
-    benefitHeadline: 'Provider-Guided Semax for Focus-Oriented Wellness Support',
+    benefitHeadline: 'Provider-Guided Cognitive Support Injection',
     shortDescription:
-      'Semax Injection is a provider-directed compounded peptide some people explore when focus, attention, or cognitive wellness is on their mind. Interest is research-oriented — not presented as a proven treatment for ADHD, dementia, or other diagnoses.',
+      'Cognitive Support Injection is a provider-directed compounded peptide some people explore when focus, attention, or cognitive wellness is on their mind. Interest is research-oriented — not presented as a proven treatment for ADHD, dementia, or other diagnoses.',
     highlights: [
       'Focus-Oriented Support',
       'Compounded Peptide',
@@ -592,9 +592,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'selank-semax-nasal-spray': {
-    benefitHeadline: 'Selank + Semax Together — A Convenient Nasal Blend',
+    benefitHeadline: 'Calm-Focus Support Nasal Spray — A Convenient Blend',
     shortDescription:
-      'This compounded nasal spray combines Selank and Semax in one provider-directed blend for customers who prefer a nose spray over injections. It is a distinct formulation from ordering each injectable separately.',
+      'This compounded nasal spray combines calm-focus and cognitive support peptides in one provider-directed blend for customers who prefer a nose spray over injections. It is a distinct formulation from ordering each injectable separately.',
     highlights: [
       'Nasal Spray Convenience',
       'Combined Blend',
@@ -630,9 +630,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   tesamorelin: {
-    benefitHeadline: 'Provider-Guided Tesamorelin for Body-Composition Support',
+    benefitHeadline: 'Provider-Guided Metabolic Support Injection',
     shortDescription:
-      'Tesamorelin Injection is a provider-directed compounded option featuring Tesamorelin, a growth hormone–releasing factor (GHRH) analog. It supports supervised conversations about body composition under clinical review.',
+      'Metabolic Support Injection is a provider-directed compounded option featuring a growth hormone–releasing factor (GHRH) analog. It supports supervised conversations about body composition under clinical review.',
     highlights: [
       'GHRH Analog',
       '10mg / 2mL Vial',
@@ -676,9 +676,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== RECOVERY & PERFORMANCE =====
   'bpc-157-tb-500': {
-    benefitHeadline: 'Recovery-Oriented Peptide Blend — Capsule or Injection',
+    benefitHeadline: 'Provider-Guided Recovery Support — Capsule or Injection',
     shortDescription:
-      'Wolverine combines BPC-157 and TB-500 in a provider-directed compounded blend available as capsule or injection. These peptides are often discussed in recovery and performance wellness settings — with realistic expectations and no guaranteed injury healing.',
+      'Recovery Support is a provider-directed compounded blend available as capsule or injection. These peptides are often discussed in recovery and performance wellness settings — with realistic expectations and no guaranteed injury healing.',
     highlights: [
       'Capsule or Injection',
       'Two-Peptide Blend',
@@ -721,9 +721,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== SKIN & HAIR =====
   'tretinoin-cream': {
-    benefitHeadline: 'Prescription Skin Renewal for Smoother, Clearer-Looking Skin',
+    benefitHeadline: 'Prescription Skin Renewal Cream for Smoother, Clearer-Looking Skin',
     shortDescription:
-      'Tretinoin Cream is a prescription retinoid used to support skin renewal, help address breakouts, and improve the look of uneven texture over time. Multiple strengths let your provider match treatment to your skin — with guidance that keeps irritation in check.',
+      'Skin Renewal Cream is a prescription retinoid used to support skin renewal, help address breakouts, and improve the look of uneven texture over time. Your provider matches treatment to your skin — with guidance that keeps irritation in check.',
     highlights: [
       'Supports Skin Renewal',
       'Smoother-Looking Texture',
@@ -759,9 +759,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'minoxidil-topical': {
-    benefitHeadline: 'Personalized Topical Hair Support Featuring Minoxidil',
+    benefitHeadline: 'Personalized Hair Support Solution Featuring Minoxidil',
     shortDescription:
-      'This compounded topical formula features minoxidil and is personalized based on provider evaluation and the formulation selected for you. It supports prescription hair-care goals after clinical review.',
+      'Hair Support Solution is a compounded topical formula featuring minoxidil, personalized based on provider evaluation and the formulation selected for you. It supports prescription hair-care goals after clinical review.',
     highlights: [
       'Features Minoxidil',
       'Compounded & Personalized',
@@ -841,9 +841,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== PROVIDER CARE =====
   'initial-provider-consultation': {
-    benefitHeadline: 'Start With Clarity — A Personalized First Visit',
+    benefitHeadline: 'Start With Clarity — A Personalized Initial Clinical Consultation',
     shortDescription:
-      'Your Initial Provider Visit is dedicated time with a licensed clinician to review goals, health history, and whether treatment options make sense for you. It is the clearest first step when you want guidance before choosing a medication or subscription.',
+      'Your Initial Clinical Consultation is dedicated time with a licensed clinician to review goals, health history, and whether treatment options make sense for you. It is the clearest first step when you want guidance before choosing a medication or subscription.',
     highlights: [
       'Personalized First Visit',
       'Goal & History Review',
@@ -875,9 +875,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'follow-up-appointment': {
-    benefitHeadline: 'Stay On Track With a Focused Provider Check-In',
+    benefitHeadline: 'Stay On Track With a Focused Follow-Up Clinical Visit',
     shortDescription:
-      'A Follow-Up Visit gives you time to review progress, talk through side effects or questions, and refine your plan with a licensed provider. It is built for people already in care — or advised to return — who want thoughtful adjustments, not automatic refills.',
+      'A Follow-Up Clinical Visit gives you time to review progress, talk through side effects or questions, and refine your plan with a licensed provider. It is built for people already in care — or advised to return — who want thoughtful adjustments, not automatic refills.',
     highlights: [
       'Progress Review',
       'Plan Adjustments',
@@ -911,7 +911,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'laboratory-review': {
     benefitHeadline: 'Understand Your Labs — Then Decide What Comes Next',
     shortDescription:
-      'Laboratory Review is a provider visit focused on interpreting your results in plain language and recommending sensible next steps. It turns numbers into a clearer plan — without automatically promising a prescription.',
+      'Lab Review is a provider visit focused on interpreting your results in plain language and recommending sensible next steps. It turns numbers into a clearer plan — without automatically promising a prescription.',
     highlights: [
       'Plain-Language Lab Review',
       'Personalized Takeaways',

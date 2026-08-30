@@ -84,13 +84,17 @@ describe('variant SKU registry', () => {
     expect(fat.variants[0].price).toBe(199);
   });
 
-  it('does not assign SKUs to future products or inactive memberships (bimatoprost-solution retains its SKU for order history)', () => {
+  it('does not assign SKUs to future products or inactive memberships (bimatoprost-solution and metabolic-triple retain their SKUs for order history)', () => {
     const future = products.filter(p => p.status === 'future');
+    const retainedSkus: Record<string, string> = {
+      'bimatoprost-solution': 'MBM-SH-BIM-SOL-001',
+      'metabolic-triple': 'MBM-WM-MTP-INJ-001',
+    };
     for (const p of future) {
       for (const v of p.variants) {
-        if (p.slug === 'bimatoprost-solution') {
-          expect(v.sku).toBe('MBM-SH-BIM-SOL-001');
-          expect(VARIANT_SKU_BY_ID[v.id]).toBe('MBM-SH-BIM-SOL-001');
+        if (retainedSkus[p.slug]) {
+          expect(v.sku).toBe(retainedSkus[p.slug]);
+          expect(VARIANT_SKU_BY_ID[v.id]).toBe(retainedSkus[p.slug]);
         } else {
           expect(v.sku).toBeUndefined();
           expect(VARIANT_SKU_BY_ID[v.id]).toBeUndefined();

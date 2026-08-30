@@ -64,12 +64,17 @@ describe('variant SKU registry', () => {
     expect(fat.variants[0].price).toBe(259);
   });
 
-  it('does not assign SKUs to future products or inactive memberships', () => {
+  it('does not assign SKUs to future products or inactive memberships (bimatoprost-solution retains its SKU for order history)', () => {
     const future = products.filter(p => p.status === 'future');
     for (const p of future) {
       for (const v of p.variants) {
-        expect(v.sku).toBeUndefined();
-        expect(VARIANT_SKU_BY_ID[v.id]).toBeUndefined();
+        if (p.slug === 'bimatoprost-solution') {
+          expect(v.sku).toBe('MBM-SH-BIM-SOL-001');
+          expect(VARIANT_SKU_BY_ID[v.id]).toBe('MBM-SH-BIM-SOL-001');
+        } else {
+          expect(v.sku).toBeUndefined();
+          expect(VARIANT_SKU_BY_ID[v.id]).toBeUndefined();
+        }
       }
     }
     const elite = memberships.find(m => m.slug === 'elite-wellness-membership');

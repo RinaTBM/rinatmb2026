@@ -20,20 +20,20 @@ const EXPECTED_SHOP_SLUGS = [
   'recovery-stack',
   'tretinoin-cream',
   'minoxidil-topical',
-  'bimatoprost-solution',
 ] as const;
 
 describe('shop visibility vs purchase readiness', () => {
   it('shows the restored public wellness catalog on Shop All', () => {
     const shop = visibleProducts.filter((p) => SHOP_CATEGORY_IDS.has(p.category));
     expect(shop.map((p) => p.slug).sort()).toEqual([...EXPECTED_SHOP_SLUGS].sort());
-    expect(shop).toHaveLength(16);
+    expect(shop).toHaveLength(15);
   });
 
   it('keeps future-hidden products off the storefront', () => {
     const slugs = visibleProducts.map((p) => p.slug);
     expect(slugs).not.toContain('sermorelin');
     expect(slugs).not.toContain('minoxidil-tablets');
+    expect(slugs).not.toContain('bimatoprost-solution');
   });
 
   it('allows purchase for every active storefront product', () => {

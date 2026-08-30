@@ -852,8 +852,8 @@ export const products: Product[] = [
   mk({
     id: 'p82',
     slug: 'recovery-stack',
-    displayName: 'KLOW',
-    shortName: 'KLOW',
+    displayName: 'Wolverine',
+    shortName: 'Wolverine',
     subtitle: 'Provider-directed recovery support',
     category: 'recovery-performance',
     goals: ['recovery', 'performance'],
@@ -861,7 +861,7 @@ export const products: Product[] = [
       'A provider-directed compounded recovery injection, available after eligibility review. Medication price is $159 plus $30 shipping at checkout.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'Amber injection vial for provider-directed KLOW support',
+    imageAlt: 'Amber injection vial for provider-directed Wolverine support',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     memberPricingEligible: false,
     autoRefillEligible: false,
@@ -869,7 +869,7 @@ export const products: Product[] = [
       {
         id: 'bpc-ghk-kpv-tb-r101',
         dosageForm: 'Injection',
-        strength: 'KLOW',
+        strength: 'Wolverine',
         size: '5 mL vial',
         price: 159,
       },

@@ -676,9 +676,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== RECOVERY & PERFORMANCE =====
   'recovery-stack': {
-    benefitHeadline: 'KLOW Recovery & Wellness Support',
+    benefitHeadline: 'Wolverine Recovery & Wellness Support',
     shortDescription:
-      'KLOW is a provider-directed compounded recovery and wellness option available after eligibility review. Your provider and dispensing pharmacy determine the final preparation and instructions.',
+      'Wolverine is a provider-directed compounded recovery and wellness option available after eligibility review. Your provider and dispensing pharmacy determine the final preparation and instructions.',
     highlights: [
       'Recovery & Wellness Support',
       'Compounded Injection',
@@ -686,7 +686,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Pharmacy-Fulfilled',
     ],
     about: [
-      'KLOW is designed as a single provider-directed pathway for customers discussing recovery and wellness goals with a licensed provider.',
+      'Wolverine is designed as a single provider-directed pathway for customers discussing recovery and wellness goals with a licensed provider.',
       'The storefront does not publish pharmacy-level formulation details. Eligibility, final preparation, and use instructions are determined through clinical review and pharmacy fulfillment.',
     ].join('\n\n'),
     potentialBenefits: [

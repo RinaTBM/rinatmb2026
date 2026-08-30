@@ -245,7 +245,7 @@ describe('MBM website family → GEN routing build', () => {
   });
 
   it('launch registry marks the verified GEN wrappers; apply is idempotent', () => {
-    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(29);
+    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(34);
     const verifiedVariants = WEBSITE_PRODUCT_FAMILIES.flatMap((f) =>
       f.variants.filter((v) => v.genPairingVerified),
     );

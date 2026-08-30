@@ -35,12 +35,12 @@ describe('resolveGenProductFirstCheckout', () => {
     });
   });
 
-  it('does not route an unverified product', () => {
+  it('routes an owner-verified active workbook product', () => {
     expect(
       resolveGenProductFirstCheckout(
         'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_PRIG7DYPNNgco3lGf1zx',
       ),
-    ).toEqual({ ok: false, code: 'PAIRING_NOT_VERIFIED' });
+    ).toEqual({ ok: true, url: 'https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_PRIG7DYPNNgco3lGf1zx' });
   });
 
   it('rejects a product belonging to another GEN client', () => {

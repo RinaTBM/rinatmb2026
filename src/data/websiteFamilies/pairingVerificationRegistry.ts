@@ -67,6 +67,12 @@ export const OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS: ReadonlySet<string> = new Se
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_YkHkffkLKFz3FjC7Wvno',
   // Wolverine injection and capsule wrappers are separate GEN choices.
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD',
+  // Final MBM active-product workbook (2026-08-30): owner-supplied GEN links.
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_PRIG7DYPNNgco3lGf1zx',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_KXMm9SsbOEYnFy9phmZn',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_yearpPaLo5H0k0FU5Ej8',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_489YrehNXRlL77fYPkOn',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_4ZWsN26iLt5ZpiLS1HCC',
 ]);
 
 export function isOwnerVerifiedGenClientProductId(

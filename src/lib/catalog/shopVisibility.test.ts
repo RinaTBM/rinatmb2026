@@ -5,6 +5,7 @@ import { skuForVariantId } from '@/data/variantSkus';
 import { resolveStorefrontRxAvailability } from '@/lib/commerce/rxCatalogReadiness';
 import { getWebsiteFamilyBySlug, listPatientVisibleVariants } from '@/data/websiteFamilies';
 import { resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
+import { GEN_HOSTED_PRODUCTS } from '@/lib/commerce/genHostedProducts';
 
 const EXPECTED_SHOP_SLUGS = [
   'semaglutide',
@@ -21,13 +22,17 @@ const EXPECTED_SHOP_SLUGS = [
   'minoxidil-topical',
   'recovery-stack',
   'scream-cream',
+  'aod-9604',
+  'metabolic-triple',
+  'bpc-157',
+  'ghk-cu-minoxidil',
 ] as const;
 
 describe('shop visibility vs purchase readiness', () => {
   it('shows the restored public wellness catalog on Shop All', () => {
     const shop = visibleProducts.filter((p) => SHOP_CATEGORY_IDS.has(p.category));
     expect(shop.map((p) => p.slug).sort()).toEqual([...EXPECTED_SHOP_SLUGS].sort());
-    expect(shop).toHaveLength(14);
+    expect(shop).toHaveLength(18);
   });
 
   it('keeps future-hidden products off the storefront', () => {
@@ -51,6 +56,10 @@ describe('shop visibility vs purchase readiness', () => {
           ),
       );
       if (hasVerifiedGenRoute) {
+        purchasable.push(p.slug);
+        continue;
+      }
+      if (GEN_HOSTED_PRODUCTS[p.slug] && resolveGenProductFirstCheckout(GEN_HOSTED_PRODUCTS[p.slug].genClientProductId).ok) {
         purchasable.push(p.slug);
         continue;
       }

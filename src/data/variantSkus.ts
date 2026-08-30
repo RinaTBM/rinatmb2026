@@ -20,6 +20,11 @@ export const VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
   'tirzepatide-v3': 'MBM-WM-TIR-INJ-003',
   'tirzepatide-v4': 'MBM-WM-TIR-INJ-004',
   'fat-burner-v1': 'MBM-WM-FB3-INJ-001',
+  'aod-9604-v1': 'MBM-WM-AOD-INJ-001',
+  'metabolic-triple-v1': 'MBM-WM-MTP-INJ-001',
+  'bpc-157-v1': 'MBM-RP-BPC-INJ-002',
+  'ghk-cu-minoxidil-v1': 'MBM-SH-GHK-CRM-001',
+  'ondansetron-odt-v1': 'MBM-PC-OND-CAP-001',
   'estradiol-patch-v1': 'MBM-HRT-EST-PAT-001',
   'estradiol-patch-v2': 'MBM-HRT-EST-PAT-002',
   'estradiol-patch-v3': 'MBM-HRT-EST-PAT-003',
@@ -70,7 +75,7 @@ export const MEMBERSHIP_PROGRAM_SKU_BY_APP_ID: Readonly<Record<string, string>> 
   m2: 'MBM-MEM-TIR-MEM-001',
 };
 
-export const EXPECTED_RETAIL_SKU_COUNT = 79;
+export const EXPECTED_RETAIL_SKU_COUNT = 84;
 export const EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT = 2;
 export const EXPECTED_TOTAL_SKU_COUNT =
   EXPECTED_RETAIL_SKU_COUNT + EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT;

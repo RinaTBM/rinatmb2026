@@ -27,10 +27,8 @@ import {
   resolveStorefrontRxAvailability,
 } from '@/lib/commerce/rxCatalogReadiness';
 import { RxAvailabilityBanner } from '@/components/RxAvailabilityBanner';
-import {
-  resolveGenProductFirstCheckout,
-  navigateToGenProductFirstCheckout,
-} from '@/lib/commerce/genHostedCheckout';
+import { GEN_HOSTED_PRODUCTS } from '@/lib/commerce/genHostedProducts';
+import { GenHostedProductPage } from '@/components/GenHostedProductPage';
 
 function customerVariantLabel(productSlug: string, fallback: string): string {
   const peptideLabels: Record<string, string> = {
@@ -40,7 +38,6 @@ function customerVariantLabel(productSlug: string, fallback: string): string {
     'selank-semax-nasal-spray': 'Selank + Semax',
     'tesamorelin': 'Tesamorelin',
     'bpc-157-tb-500': 'BPC-157 + TB-500',
-    'recovery-stack': 'Injection · 5mL vial',
   };
   if (productSlug === 'nad-plus') {
     if (/10\s*mL/i.test(fallback)) return 'NAD+ Injection · 10 mL';
@@ -57,7 +54,6 @@ const MAIN_PEPTIDE_LABEL_SLUGS = new Set([
   'selank-semax-nasal-spray',
   'tesamorelin',
   'bpc-157-tb-500',
-  'recovery-stack',
 ]);
 
 /** Router — accessories get a simplified ecommerce page; wellness keeps existing purchase logic. */
@@ -90,166 +86,12 @@ export function ProductPage({ slug }: { slug: string }) {
   if (product.category === 'accessories') {
     return <AccessoryProductPage product={product} />;
   }
+  const hostedRoute = GEN_HOSTED_PRODUCTS[product.slug];
+  if (hostedRoute) return <GenHostedProductPage product={product} route={hostedRoute} />;
   if (isFamilyStorefrontSlug(product.slug)) {
     return <FamilyProductPage product={product} />;
   }
-  if (product.genClientProductId) {
-    return <GenCheckoutProductPage slug={slug} />;
-  }
   return <WellnessProductPage slug={slug} />;
-}
-
-function GenCheckoutProductPage({ slug }: { slug: string }) {
-  const product = getProduct(slug);
-  if (!product) {
-    return (
-      <div className="pt-32 pb-20 text-center">
-        <p className="text-ink-500">Product not found.</p>
-        <Link to="/" className="btn-outline mt-6">Back home</Link>
-      </div>
-    );
-  }
-
-  const section = sections.find(s => s.id === product.category);
-  const related = getRelatedProducts(product);
-  const totalCents = product.genDisplayTotalCents ?? 0;
-  const totalDollars = (totalCents / 100).toFixed(0);
-  const shippingCents = product.genShippingCents ?? 0;
-  const shippingDollars = (shippingCents / 100).toFixed(0);
-  const medicationCents = totalCents - shippingCents;
-  const medicationDollars = (medicationCents / 100).toFixed(0);
-
-  const handleGenCheckout = () => {
-    const resolution = resolveGenProductFirstCheckout(product.genClientProductId);
-    if (!resolution.ok) return;
-    navigateToGenProductFirstCheckout(resolution.url);
-  };
-
-  return (
-    <div className="bg-cream-50 pt-28 md:pt-32">
-      <div className="container-lux py-4">
-        <div className="flex items-center gap-2 text-sm text-ink-400 flex-wrap">
-          <Link to="/" className="hover:text-ink-900">Home</Link>
-          <span>/</span>
-          <Link to={`/section/${product.category}`} className="hover:text-ink-900">{section?.label}</Link>
-          <span>/</span>
-          <span className="text-ink-700">{product.displayName}</span>
-        </div>
-      </div>
-
-      <section className="pb-12 md:pb-16">
-        <div className="container-lux">
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
-            <div className="lg:sticky lg:top-24 lg:self-start">
-              <div className="relative aspect-square overflow-hidden rounded-3xl bg-cream-100">
-                <img
-                  src={product.image}
-                  alt={product.imageAlt}
-                  className="h-full w-full object-cover"
-                />
-                <div className="absolute left-4 top-4 flex flex-col gap-2">
-                  {product.requiresProviderReview && (
-                    <span className="rounded-full bg-cream-50/95 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-ink-900">Provider review required</span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="flex items-center gap-1.5 text-xs uppercase tracking-wider-2 text-gold-600">
-                  <ShieldCheck size={16} /> {section?.label}
-                </span>
-              </div>
-              <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-2 leading-tight">{product.displayName}</h1>
-              <p className="text-xl md:text-2xl text-ink-700 mb-3 leading-snug">{product.benefitHeadline}</p>
-              <p className="text-ink-600 leading-relaxed mb-5">{product.shortDescription}</p>
-              <ProductHighlights highlights={product.highlights} />
-
-              <div className="mb-6 rounded-2xl border border-cream-300 bg-white p-5 space-y-4">
-                <div>
-                  <p className="text-sm font-medium text-ink-900 mb-1">Pricing</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-serif text-4xl text-ink-900">${totalDollars}</span>
-                    <span className="text-sm text-ink-500">due today</span>
-                  </div>
-                  <p className="mt-1 text-sm text-ink-500">
-                    ${medicationDollars} medication + ${shippingDollars} shipping included
-                  </p>
-                </div>
-
-                <div className="rounded-xl bg-gold-50 p-4 space-y-2">
-                  <p className="text-sm font-medium text-ink-900">Secure checkout in GEN Health</p>
-                  <p className="text-sm text-ink-600 leading-relaxed">
-                    Payment, medical intake, and provider review continue securely in GEN Health.
-                    A provider visit is required and will be shown by GEN Health at checkout.
-                  </p>
-                </div>
-
-                <button
-                  onClick={handleGenCheckout}
-                  className="btn-primary w-full text-base py-4"
-                >
-                  Continue to GEN Health — ${totalDollars} due today
-                </button>
-
-                <div className="flex items-start gap-2 rounded-xl bg-gold-50 p-3 text-sm text-gold-800">
-                  <ShieldCheck size={18} className="flex-shrink-0 mt-0.5" />
-                  <p>{product.providerDisclaimer}</p>
-                </div>
-
-                <div className="mt-2 grid grid-cols-3 gap-2 text-center text-xs text-ink-500">
-                  <div className="flex flex-col items-center gap-1"><Truck size={16} className="text-gold-500" /> Discreet shipping</div>
-                  <div className="flex flex-col items-center gap-1"><ShieldCheck size={16} className="text-gold-500" /> Secure checkout</div>
-                  <div className="flex flex-col items-center gap-1"><RefreshCw size={16} className="text-gold-500" /> Provider-reviewed</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-16 border-t border-cream-300">
-        <div className="container-lux max-w-4xl">
-          <ProductDescriptionSections product={product} />
-        </div>
-      </section>
-
-      {product.faqs.length > 0 && (
-        <section className="py-12 md:py-16 border-t border-cream-300">
-          <div className="container-lux max-w-3xl">
-            <h2 className="font-serif text-3xl text-ink-900 mb-6">Product FAQ</h2>
-            <div className="space-y-3">
-              {product.faqs.map((faq, i) => (
-                <details key={i} className="card-lux group p-5">
-                  <summary className="flex cursor-pointer items-center justify-between font-medium text-ink-900 list-none">
-                    {faq.q}
-                    <span className="ml-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-cream-200 text-ink-600 transition-transform group-open:rotate-45">
-                      <span className="text-lg leading-none">+</span>
-                    </span>
-                  </summary>
-                  <p className="mt-3 text-sm text-ink-500 leading-relaxed">{faq.a}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {related.length > 0 && (
-        <section className="py-16 md:py-20 border-t border-cream-300">
-          <div className="container-lux">
-            <h2 className="font-serif text-3xl text-ink-900 mb-8">You may also like</h2>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-              {related.map(p => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-    </div>
-  );
 }
 
 function WellnessProductPage({ slug }: { slug: string }) {

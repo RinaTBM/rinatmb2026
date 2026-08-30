@@ -860,6 +860,125 @@ Deno.serve(async (req) => {
       }
     }
 
+    // MBMTEST90 promo — bind every one-time order item to 10% of full price.
+    // Restricted to info@thebaremethodmn.com. Blocks memberships and prescription subscriptions.
+    if (mbmPromoCode === "MBMTEST90") {
+      if (isMembershipCheckout) {
+        return json({
+          error: "MBMTEST90_EMAIL_NOT_AUTHORIZED",
+          blocker: "MBMTEST90_EMAIL_NOT_AUTHORIZED",
+          message: "MBMTEST90 is not available for membership checkout.",
+          publicOrderNumber,
+        }, 403);
+      }
+      if (isPrescriptionSubscription) {
+        return json({
+          error: "MBMTEST90_EMAIL_NOT_AUTHORIZED",
+          blocker: "MBMTEST90_EMAIL_NOT_AUTHORIZED",
+          message: "MBMTEST90 is not available for prescription subscriptions.",
+          publicOrderNumber,
+        }, 403);
+      }
+      const authorizedEmail = "info@thebaremethodmn.com";
+      const customerEmail = String(order.customer_email || "").trim().toLowerCase();
+      if (customerEmail !== authorizedEmail) {
+        return json({
+          error: "MBMTEST90_EMAIL_NOT_AUTHORIZED",
+          blocker: "MBMTEST90_EMAIL_NOT_AUTHORIZED",
+          message: "MBMTEST90 is restricted to an authorized email address.",
+          publicOrderNumber,
+        }, 403);
+      }
+      const tagadaApiKey = Deno.env.get("TAGADA_API_KEY")?.trim();
+      if (!tagadaApiKey) {
+        return json({
+          error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+          blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+          message: "MBMTEST90 card checkout requires Tagada API access to bind discounted priceIds.",
+        }, 503);
+      }
+      // Bind every one-time order item to 10% of full price (no OGTBM eligibility exclusions).
+      const mbmtest90_discounted_priceIds: { variantId: string; quantity: number; priceId?: string }[] = [];
+      let discountedMerch = 0;
+      for (const line of orderItems) {
+        const sku = line.sku as string | null;
+        const qty = Number(line.quantity) || 1;
+        if (!sku) continue;
+        const mapped = resolveKashuSkuMapRow(sku, bySku.get(sku) ?? null);
+        if (!mapped?.tagada_variant_id || !mapped.tagada_product_id) {
+          return json({
+            error: "Tagada product sync incomplete for MBMTEST90 discount binding.",
+            missingSkus: [sku],
+          }, 409);
+        }
+        const fullUnit = Math.trunc(Number(mapped.tagada_price_cents ?? mapped.mbm_price_cents) || 0);
+        const unit = Math.round(fullUnit * 0.10);
+        const ensured = await ensureTagadaOneTimePrice({
+          apiKey: tagadaApiKey,
+          productId: mapped.tagada_product_id,
+          variantId: mapped.tagada_variant_id,
+          amountCents: unit,
+        });
+        if (!ensured) {
+          return json({
+            error: "Unable to bind MBMTEST90 discounted Tagada priceId.",
+            sku,
+            amountCents: unit,
+          }, 502);
+        }
+        discountedMerch += unit * qty;
+        mbmtest90_discounted_priceIds.push({
+          variantId: mapped.tagada_variant_id,
+          quantity: qty,
+          priceId: ensured,
+        });
+      }
+      // Bind server-authorized shipping to 10% of the selected shipping price.
+      let discountedShippingCents = 0;
+      // Bind shipping to 10% of the original shippingCents value.
+      const shipItems = tagadaItems.slice(orderItems.length);
+      if (shipSku && calculatedShippingCents > 0) {
+        const shipMap = bySku.get(shipSku);
+        if (shipMap?.tagada_variant_id && shipMap.tagada_product_id) {
+          const discountedShipUnit = Math.round(calculatedShippingCents * 0.10);
+          const shipEnsured = await ensureTagadaOneTimePrice({
+            apiKey: tagadaApiKey,
+            productId: shipMap.tagada_product_id,
+            variantId: shipMap.tagada_variant_id,
+            amountCents: discountedShipUnit,
+          });
+          if (shipEnsured) {
+            discountedShippingCents = discountedShipUnit;
+            shipItems.length = 0;
+            shipItems.push({
+              variantId: shipMap.tagada_variant_id,
+              quantity: 1,
+              priceId: shipEnsured,
+            });
+          }
+        }
+      }
+      tagadaItems.length = 0;
+      tagadaItems.push(...mbmtest90_discounted_priceIds, ...shipItems);
+      calculatedTagadaMerchandiseCents = discountedMerch;
+      // Enforce exact parity with TAGADA_CHECKOUT_TOTAL_MISMATCH before redirect.
+      const recalculated =
+        calculatedTagadaMerchandiseCents + discountedShippingCents + mbmTaxCents;
+      if (recalculated !== mbmTotalCents) {
+        return json({
+          error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+          blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+          publicOrderNumber,
+          mbmTotalCents,
+          calculatedTagadaTotalCents: recalculated,
+          calculatedTagadaMerchandiseCents,
+          calculatedShippingCents: discountedShippingCents,
+          mbmDiscountCents,
+          note: "mbmtest90_discounted_priceIds",
+        }, 409);
+      }
+    }
+
     const nameParts = String(order.customer_name || "").trim().split(/\s+/);
     const firstName = nameParts[0] || undefined;
     const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : undefined;

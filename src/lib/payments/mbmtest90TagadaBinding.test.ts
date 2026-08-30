@@ -11,7 +11,7 @@ const source = readFileSync(
 
 // Extract the MBMTEST90 binding block (from the condition to the next top-level statement)
 const mbmtest90Block =
-  source.match(/mbmPromoCode === "MBMTEST90"[\s\S]*?(?=\n    const nameParts)/)?.[0] ?? '';
+  source.match(/mbmPromoCode === "MBMTEST90"[\s\S]*?(?=\n\x20{4}const nameParts)/)?.[0] ?? '';
 
 describe('MBMTEST90 Tagada hosted checkout binding (source contract)', () => {
   it('contains a MBMTEST90 discount binding block', () => {

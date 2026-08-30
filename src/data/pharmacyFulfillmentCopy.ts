@@ -7,11 +7,13 @@ export const PHARMACY_FULFILLMENT_HEADING = 'Prescription Pharmacy Fulfillment';
 
 /** Current GEN Health dispensing-pharmacy network shown in customer disclosures. */
 export const GEN_DISPENSING_PHARMACIES = [
+  'Ageless Pharma Rx',
   'Dirx-Hub',
   'Epiq Scripts',
   'Greenwich Pharmacy',
   'Logos Pharmacy',
   'Optimal Balance Pharmacy',
+  'ProCompounding Pharmacy',
   'St Luke',
   'Valiant',
   'Vios',

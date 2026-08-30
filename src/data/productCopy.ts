@@ -179,9 +179,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'aod-9604': {
-    benefitHeadline: 'Metabolic Balance Support',
+    benefitHeadline: 'Body Composition Support',
     shortDescription:
-      'Metabolic Balance Support is a provider-directed compounded option for customers exploring metabolic and body-composition goals. Availability, formulation, and instructions are determined after intake and licensed-provider review.',
+      'Body Composition Support is a provider-directed compounded option for customers exploring body-composition goals. Availability, formulation, and instructions are determined after intake and licensed-provider review.',
     highlights: [
       'Metabolic Wellness Support',
       'Compounded Peptide',
@@ -251,9 +251,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'bpc-157': {
-    benefitHeadline: 'Recovery Peptide Support',
+    benefitHeadline: 'BPC-157 Recovery',
     shortDescription:
-      'Recovery Peptide Support is a provider-directed compounded option for recovery-oriented wellness discussions. Eligibility, formulation, and instructions are determined after licensed-provider review.',
+      'BPC-157 Recovery is a provider-directed compounded option for recovery-oriented wellness discussions. Eligibility, formulation, and instructions are determined after licensed-provider review.',
     highlights: [
       'Recovery-Oriented Support',
       'Compounded Peptide',
@@ -712,9 +712,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'bpc-157-tb-500': {
-    benefitHeadline: 'Provider-Guided Recovery Support — Capsule or Injection',
+    benefitHeadline: 'Wolverine — Capsule or Injection',
     shortDescription:
-      'Recovery Support is a provider-directed compounded blend available as capsule or injection. These peptides are often discussed in recovery and performance wellness settings — with realistic expectations and no guaranteed injury healing.',
+      'Wolverine is a provider-directed compounded blend available as capsule or injection. It is discussed in recovery and performance wellness settings — with realistic expectations and no guaranteed injury healing.',
     highlights: [
       'Capsule or Injection',
       'Two-Peptide Blend',

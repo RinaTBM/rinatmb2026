@@ -58,6 +58,15 @@ export const OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS: ReadonlySet<string> = new Se
   // Owner-confirmed live wrappers; clinical details remain in GEN.
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Raw7mUkuzzhVdAo88jpL',
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI',
+  // GLP-1 live website programs — owner-supplied GEN checkout wrappers.
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7UMqZumyeXaWMX9zOPP3',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_uM0cXePP8e9c5hiMKcRt',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_1sgLVERqG9oWU9WKht9b',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_mhUSqSGlaFVCghW3V3DD',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_43kVbBgNLBocKyVUhQmG',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_YkHkffkLKFz3FjC7Wvno',
+  // Wolverine injection and capsule wrappers are separate GEN choices.
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD',
 ]);
 
 export function isOwnerVerifiedGenClientProductId(

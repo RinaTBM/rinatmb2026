@@ -8,7 +8,6 @@ import {
 } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductDescriptionSections, ProductHighlights } from '@/components/ProductDescriptionSections';
-import { Glp1FormulationSelector, Glp1PatientDoseSelector } from '@/components/Glp1PatientDoseSelector';
 import {
   getWebsiteFamilyBySlug,
   listPatientVisibleVariants,
@@ -22,16 +21,21 @@ import {
   navigateToGenProductFirstCheckout,
   resolveGenProductFirstCheckout,
 } from '@/lib/commerce/genHostedCheckout';
-import {
-  ONE_TIME_GETTING_STARTED_BLOCKER,
-  isGettingStartedDose,
-  resolveOneTimeVial,
-} from '@/lib/glp1/oneTimeVialMapping';
-import {
-  validateGlp1Formulation,
-  validateRequestedDose,
-  type Glp1FamilyId,
-} from '@/lib/glp1/patientRequestedDose';
+
+const LIVE_GLP1_PROGRAMS = {
+  semaglutide: {
+    low: { label: 'Low Dose', price: 139, id: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7UMqZumyeXaWMX9zOPP3' },
+    high: { label: 'High Dose', price: 149, id: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_uM0cXePP8e9c5hiMKcRt' },
+    monthly: { label: 'Monthly', price: 129, id: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_1sgLVERqG9oWU9WKht9b' },
+  },
+  tirzepatide: {
+    low: { label: 'Low Dose', price: 259, id: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_mhUSqSGlaFVCghW3V3DD' },
+    high: { label: 'High Dose', price: 279, id: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_43kVbBgNLBocKyVUhQmG' },
+    monthly: { label: 'Monthly', price: 249, id: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_YkHkffkLKFz3FjC7Wvno' },
+  },
+} as const;
+
+type Glp1ProgramChoice = 'low' | 'high' | 'monthly';
 
 function unique(values: Array<string | null | undefined>): string[] {
   const out: string[] = [];
@@ -113,23 +117,22 @@ function FamilySelectors({
   );
 
   void initialPurchaseType;
-  const [additive, setAdditive] = useState(additives[0] || 'Vitamin B12');
+  const [additive] = useState(additives[0] || 'Vitamin B12');
   const [form, setForm] = useState(forms[0] || '');
   const [nasalOption, setNasalOption] = useState<'r84' | 'r85'>(
     nasalOptions.includes('nad-nasal-r85') && !nasalOptions.includes('nad-nasal-r84') ? 'r85' : 'r84',
   );
   const [injPackage, setInjPackage] = useState<'5mL' | '10mL'>('5mL');
-  const [requestedDose, setRequestedDose] = useState('');
-  const [doseError, setDoseError] = useState<string | null>(null);
-  const glp1FamilyId: Glp1FamilyId | null =
-    familyId === 'semaglutide' || familyId === 'tirzepatide' ? familyId : null;
+  const [glp1Program, setGlp1Program] = useState<Glp1ProgramChoice>('low');
+  const glp1FamilyId = familyId === 'semaglutide' || familyId === 'tirzepatide' ? familyId : null;
+  const liveGlp1Program = glp1FamilyId ? LIVE_GLP1_PROGRAMS[glp1FamilyId][glp1Program] : null;
 
   const selectors: FamilySelectorState = useMemo(() => {
     if (isWeight) {
       return {
         purchaseType: 'one_time',
         additive,
-        requestedDose: requestedDose || undefined,
+        requestedDose: undefined,
       };
     }
     if (isNad) {
@@ -139,7 +142,7 @@ function FamilySelectors({
       return { form };
     }
     return {};
-  }, [isWeight, isNad, isWolverine, additive, requestedDose, form, nasalOption, injPackage]);
+  }, [isWeight, isNad, isWolverine, additive, form, nasalOption, injPackage]);
 
   const resolution = useMemo(
     () => resolveFamilyVariant(familyId, selectors),
@@ -154,23 +157,8 @@ function FamilySelectors({
   const r85Ready = visible.some((v) => v.websiteVariantId === 'nad-nasal-r85');
 
   const handleGenCheckout = () => {
-    if (glp1FamilyId) {
-      const formulation = validateGlp1Formulation(additive);
-      if (!formulation.ok) {
-        setDoseError(formulation.error);
-        return;
-      }
-      const vial = resolveOneTimeVial({
-        familyId: glp1FamilyId,
-        formulation: formulation.value,
-        requestedDose,
-      });
-      if (!vial.ok) {
-        setDoseError(vial.error);
-        return;
-      }
-      setDoseError(null);
-      const checkout = resolveGenProductFirstCheckout(vial.mapping.genClientProductId);
+    if (liveGlp1Program) {
+      const checkout = resolveGenProductFirstCheckout(liveGlp1Program.id);
       if (!checkout.ok) return;
       navigateToGenProductFirstCheckout(checkout.url);
       return;
@@ -181,39 +169,14 @@ function FamilySelectors({
     navigateToGenProductFirstCheckout(checkout.url);
   };
 
-  const oneTimeVial =
-    glp1FamilyId
-      ? resolveOneTimeVial({
-          familyId: glp1FamilyId,
-          formulation: additive,
-          requestedDose,
-        })
-      : null;
-  const oneTimeGettingStarted = Boolean(
-    glp1FamilyId && isGettingStartedDose(requestedDose),
-  );
-  const glp1Ready =
-    !glp1FamilyId ||
-    (validateGlp1Formulation(additive).ok &&
-      validateRequestedDose({
-        requestedDose,
-        familyId: glp1FamilyId,
-        allowGettingStarted: false,
-      }).ok);
-  const displayPrice = oneTimeVial?.ok
-    ? oneTimeVial.mapping.retailPriceCents / 100
-    : price;
+  const displayPrice = liveGlp1Program?.price ?? price;
   // Recovery Stack has a fixed, separately disclosed $30 shipping charge in
   // GEN. Keep the website total equal to the GEN checkout total.
   const fixedShipping = familyId === 'bpc-advanced-blends' ? 30 : 0;
   const dueToday = displayPrice == null ? null : displayPrice + fixedShipping;
-  const genCheckout = resolveGenProductFirstCheckout(
-    glp1FamilyId && oneTimeVial?.ok
-      ? oneTimeVial.mapping.genClientProductId
-      : variant?.genClientProductId,
-  );
+  const genCheckout = resolveGenProductFirstCheckout(liveGlp1Program?.id ?? variant?.genClientProductId);
   const canPurchase = glp1FamilyId
-    ? Boolean(oneTimeVial?.ok && glp1Ready && genCheckout.ok)
+    ? Boolean(liveGlp1Program && genCheckout.ok)
     : Boolean(variant && price != null && resolution.ok && genCheckout.ok);
 
   return (
@@ -271,30 +234,17 @@ function FamilySelectors({
               <ProductHighlights highlights={product.highlights} />
 
               <div className="mb-6 space-y-5">
-                {isWeight && (
-                  <Glp1FormulationSelector
-                    value={additive}
-                    onChange={opt => {
-                      setAdditive(opt);
-                      setDoseError(null);
-                    }}
-                  />
-                )}
-
                 {glp1FamilyId && (
-                  <Glp1PatientDoseSelector
-                    familyId={glp1FamilyId}
-                    value={requestedDose}
-                    allowGettingStarted={false}
-                    onChange={next => {
-                      setRequestedDose(next);
-                      setDoseError(null);
-                    }}
-                  />
-                )}
-
-                {oneTimeGettingStarted && (
-                  <p className="text-xs text-ink-600 leading-relaxed">{ONE_TIME_GETTING_STARTED_BLOCKER}</p>
+                  <fieldset>
+                    <legend className="text-sm font-medium text-ink-900 mb-2">Program option</legend>
+                    <div className="flex flex-wrap gap-2">
+                      {(Object.keys(LIVE_GLP1_PROGRAMS[glp1FamilyId]) as Glp1ProgramChoice[]).map((choice) => {
+                        const option = LIVE_GLP1_PROGRAMS[glp1FamilyId][choice];
+                        return <SelectorChip key={choice} selected={glp1Program === choice} onClick={() => setGlp1Program(choice)} label={`${option.label} · ${formatPrice(option.price)}${choice === 'monthly' ? '/mo' : ''}`} />;
+                      })}
+                    </div>
+                    <p className="mt-2 text-xs text-ink-500 leading-relaxed">Shipping and provider consultation are included. Your provider determines final clinical eligibility and treatment details.</p>
+                  </fieldset>
                 )}
 
                 {isNad && (
@@ -382,10 +332,6 @@ function FamilySelectors({
                 )}
               </div>
 
-              {doseError ? (
-                <p className="mb-4 text-xs text-red-700">{doseError}</p>
-              ) : null}
-
               <div className="rounded-2xl border border-cream-300 bg-white p-5 mb-6">
                 <div className="flex items-end justify-between gap-4 mb-4">
                   <div>
@@ -394,7 +340,9 @@ function FamilySelectors({
                       {dueToday != null ? formatPrice(dueToday) : '—'}
                     </p>
                     <p className="mt-1 text-xs text-ink-500">
-                      {fixedShipping > 0
+                      {liveGlp1Program
+                        ? `${glp1Program === 'monthly' ? 'Monthly price' : 'One-time price'} shown. Shipping and provider consultation are included by GEN Health.`
+                        : fixedShipping > 0
                         ? `Includes ${formatPrice(fixedShipping)} shipping. Any applicable visit charge is shown by GEN Health before payment.`
                         : 'Final payment total and any applicable visit charge are shown by GEN Health before payment.'}
                     </p>
@@ -406,9 +354,7 @@ function FamilySelectors({
                   disabled={!canPurchase}
                   onClick={handleGenCheckout}
                 >
-                    {oneTimeGettingStarted
-                      ? 'Choose a weekly dose'
-                      : canPurchase
+                    {canPurchase
                         ? 'Continue to Checkout'
                         : 'Temporarily unavailable'}
                 </button>

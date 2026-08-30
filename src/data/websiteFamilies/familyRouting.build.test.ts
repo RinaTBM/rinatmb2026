@@ -243,8 +243,8 @@ describe('MBM website family → GEN routing build', () => {
     expect(nadVisible.some((v) => v.websiteVariantId.includes('r82'))).toBe(false);
   });
 
-  it('launch registry marks 22 compatible CPs verified including the current GEN wrappers; apply is idempotent', () => {
-    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(22);
+  it('launch registry marks the verified GEN wrappers; apply is idempotent', () => {
+    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(29);
     const verifiedVariants = WEBSITE_PRODUCT_FAMILIES.flatMap((f) =>
       f.variants.filter((v) => v.genPairingVerified),
     );

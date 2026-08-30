@@ -5,20 +5,36 @@
 
 export const PHARMACY_FULFILLMENT_HEADING = 'Prescription Pharmacy Fulfillment';
 
+/** Current GEN Health dispensing-pharmacy network shown in customer disclosures. */
+export const GEN_DISPENSING_PHARMACIES = [
+  'Dirx-Hub',
+  'Epiq Scripts',
+  'Greenwich Pharmacy',
+  'Logos Pharmacy',
+  'Optimal Balance Pharmacy',
+  'St Luke',
+  'Valiant',
+  'Vios',
+  'VitaScripts Pharmacy',
+] as const;
+
+export const GEN_DISPENSING_PHARMACIES_TEXT = GEN_DISPENSING_PHARMACIES.join(', ');
+
 export const PHARMACY_FULFILLMENT_COPY = [
-  'When prescribed, applicable compounded prescription therapies offered through My Bare Method are fulfilled through U.S. compounding pharmacy partners, including Ageless Pharma Rx (503A) and ProCompounding Pharmacy (503A), as applicable to the prescription and formulation.',
+  `When prescribed, applicable therapies offered through My Bare Method are fulfilled through eligible U.S. dispensing pharmacy partners available in GEN Health, including ${GEN_DISPENSING_PHARMACIES_TEXT}, as applicable to the prescription, state, and formulation.`,
+  'The final dispensing pharmacy, formulation, and availability are determined during clinical review; the list above does not mean every pharmacy fulfills every product.',
   "These are pharmacy-dispensed prescription products—not unverified 'research lab' products sold directly to consumers online. Provider review and a valid prescription are required where applicable.",
 ].join('\n\n');
 
 /** Short trust line for About / FAQ / similar site-level sections (not homepage clutter). */
 export const PHARMACY_FULFILLMENT_SHORT =
-  'Prescription therapies are fulfilled through U.S. compounding pharmacy partners, including Ageless Pharma Rx (503A) and ProCompounding Pharmacy (503A), as applicable. Provider review and a valid prescription are required.';
+  `Prescription therapies are fulfilled through eligible U.S. dispensing pharmacy partners available in GEN Health, including ${GEN_DISPENSING_PHARMACIES_TEXT}, as applicable. Provider review and a valid prescription are required.`;
 
 export const PHARMACY_503A_FAQ = {
   q: 'What does a 503A pharmacy mean?',
   a: [
     'A 503A compounding pharmacy is a U.S. pharmacy that prepares compounded medications for individual patients based on a valid prescription from a licensed provider. These pharmacies operate under Section 503A of the Federal Food, Drug, and Cosmetic Act and are primarily regulated by state boards of pharmacy, while also being subject to applicable federal requirements.',
-    'For My Bare Method, applicable compounded prescriptions may be fulfilled through pharmacy partners including Ageless Pharma Rx (503A) and ProCompounding Pharmacy (503A), depending on the medication and prescription.',
+    `For My Bare Method, applicable compounded prescriptions may be fulfilled through eligible GEN Health pharmacy partners, including ${GEN_DISPENSING_PHARMACIES_TEXT}, depending on the medication, state, and prescription.`,
     "This is an important distinction from products marketed online as 'research use only' or sold directly by peptide or research-lab websites without an individual prescription. My Bare Method's prescription process includes provider review and pharmacy fulfillment when a prescription is appropriate.",
   ].join(' '),
 } as const;

@@ -72,10 +72,8 @@ export const PROVIDER_REVIEW_TIMELINE: OrderStatus[] = [
 export const PROCESSING_POLICY_COPY =
   'Most eligible orders are processed within 1–3 business days after required review and approval. Shipping transit time begins after processing is complete.';
 
-export const AGELESS_PHARMACY_NAME = 'Ageless Pharma Rx';
-
-export const AGELESS_FULFILLMENT_COPY =
-  'Provider-approved prescriptions are fulfilled through Ageless Pharma Rx.';
+export const PHARMACY_FULFILLMENT_COPY =
+  'Provider-approved prescriptions are fulfilled through the eligible GEN Health dispensing pharmacy selected for the prescription.';
 
 /** Fields that must never appear on order / fulfillment tables. */
 export const FORBIDDEN_ORDER_FIELDS = [

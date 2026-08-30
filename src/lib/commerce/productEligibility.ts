@@ -56,7 +56,11 @@ export interface ProductEligibility {
   customerBlockMessage: string | null;
 }
 
-const SHIP_SKUS = new Set(['MBM-SHIP-TWO-DAY-001', 'MBM-SHIP-NEXT-DAY-001']);
+const SHIP_SKUS = new Set([
+  'MBM-SHIP-ACCESSORY-001',
+  'MBM-SHIP-TWO-DAY-001',
+  'MBM-SHIP-NEXT-DAY-001',
+]);
 const MEM_PREFIX = 'MBM-MEM-';
 const ACC_PREFIX = 'MBM-ACC-';
 const PC_VISIT = new Set(['MBM-PC-IPV-SRV-001', 'MBM-PC-FUV-SRV-001']);

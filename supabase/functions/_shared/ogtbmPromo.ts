@@ -62,7 +62,11 @@ export type OgtbmApplyResult = {
   lines: OgtbmLineResult[];
 };
 
-const SHIPPING_SKUS = new Set(['MBM-SHIP-TWO-DAY-001', 'MBM-SHIP-NEXT-DAY-001']);
+const SHIPPING_SKUS = new Set([
+  'MBM-SHIP-ACCESSORY-001',
+  'MBM-SHIP-TWO-DAY-001',
+  'MBM-SHIP-NEXT-DAY-001',
+]);
 const LAB_PACKAGE_SKUS = new Set(['MBM-PC-LAB-SRV-001', 'MBM-PC-LAB-KIT-001']);
 const LAB_PACKAGE_PRODUCT_IDS = new Set(['pc3', 'pc4']);
 const PROVIDER_CARE_SKUS = new Set([

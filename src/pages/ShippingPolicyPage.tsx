@@ -77,7 +77,7 @@ export function ShippingPolicyPage() {
               </p>
               <p>
                 Certain medications may require temperature-controlled packaging or specific delivery methods.
-                Available shipping options may vary by product, pharmacy, destination, and weather conditions.
+                Accessory-only orders may select $10 Accessory Shipping. Prescription and mixed carts may select Two-Day ($30) or Next-Day ($50) shipping. Available options may vary by product, pharmacy, destination, and weather conditions.
               </p>
             </>
           ),

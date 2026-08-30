@@ -343,10 +343,11 @@ export function buildAuthoritativeOrderLines(input: {
 const TWO_DAY_SHIPPING_CENTS = 3000;
 const NEXT_DAY_SHIPPING_CENTS = 5000;
 const FREE_SHIPPING_THRESHOLD_CENTS = 50000;
+const ACCESSORY_SHIPPING_CENTS = 1000;
 
 /**
  * Server-authoritative shipping for invoice orders.
- * Matches website policy: Two-Day $30, Next-Day $50, free at $500+ eligible merchandise.
+ * Matches website policy: Accessory $10, Two-Day $30, Next-Day $50, free at $500+ eligible merchandise.
  * Membership value does not count toward free shipping.
  */
 export function authorizeInvoiceShippingCents(input: {
@@ -369,6 +370,11 @@ export function authorizeInvoiceShippingCents(input: {
     if (i.section === 'provider-care' || /^pc\d+$/i.test(i.productId)) return false;
     return true;
   });
+  const accessoryOnly = input.items.some((i) => i.section === 'accessories' || /^a\d+$/i.test(i.productId)) &&
+    input.items.every((i) =>
+      i.section === 'provider-care' || /^pc\d+$/i.test(i.productId) ||
+      i.section === 'accessories' || /^a\d+$/i.test(i.productId)
+    );
 
   if (!requiresPhysicalShipping) {
     if (Math.round(input.clientShippingCents) !== 0) {
@@ -393,7 +399,7 @@ export function authorizeInvoiceShippingCents(input: {
     return {
       ok: false,
       error:
-        'Unsupported shipping method: standard. Approved methods are two_day ($30) and next_day ($50).',
+        'Unsupported shipping method: standard. Approved methods are accessory ($10), two_day ($30), and next_day ($50).',
     };
   }
 
@@ -401,18 +407,27 @@ export function authorizeInvoiceShippingCents(input: {
   let method: string;
   if (free) {
     method = 'free_over_500';
+  } else if (methodIn === 'accessory') {
+    if (!accessoryOnly) {
+      return { ok: false, error: 'Accessory shipping is available only for accessory-only orders.' };
+    }
+    method = 'accessory';
   } else if (methodIn === 'next_day') {
     method = 'next_day';
   } else if (methodIn === 'two_day') {
     method = 'two_day';
   } else if (!methodIn || methodIn === 'none') {
-    if (containsMembership) {
+    if (accessoryOnly) {
+      method = 'accessory';
+    } else if (containsMembership) {
       return {
         ok: false,
         error: 'Membership checkout requires a shipping method: two_day ($30) or next_day ($50).',
       };
     }
-    method = 'two_day';
+    } else {
+      method = 'two_day';
+    }
   } else if (methodIn === 'free_over_500') {
     return {
       ok: false,
@@ -429,12 +444,18 @@ export function authorizeInvoiceShippingCents(input: {
     return { ok: false, error: `Unsupported shipping method: ${methodIn}` };
   }
 
-  const authorized = free ? 0 : method === 'next_day' ? NEXT_DAY_SHIPPING_CENTS : TWO_DAY_SHIPPING_CENTS;
+  const authorized = free
+    ? 0
+    : method === 'accessory'
+      ? ACCESSORY_SHIPPING_CENTS
+      : method === 'next_day'
+        ? NEXT_DAY_SHIPPING_CENTS
+        : TWO_DAY_SHIPPING_CENTS;
   // Demo Tagada shipping (1156) and any non-MBM amount must never pass.
   if (Math.round(input.clientShippingCents) === 1156) {
     return {
       ok: false,
-      error: 'Unsupported shipping amount. Only $0, $30 (Two-Day), or $50 (Next-Day) are authorized.',
+      error: 'Unsupported shipping amount. Only $0, $10 (Accessory), $30 (Two-Day), or $50 (Next-Day) are authorized.',
     };
   }
   if (Math.round(input.clientShippingCents) !== authorized) {

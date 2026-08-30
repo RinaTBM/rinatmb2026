@@ -19,6 +19,7 @@ import {
   cartFreeShippingMerchandiseSubtotalCents,
   cartProviderCareSubtotalCents,
   cartRequiresPhysicalShippingFromItems,
+  isAccessoryLine,
 } from '@/lib/checkout/authorizeCheckout';
 import { getMembership } from '@/data/products';
 import {
@@ -415,11 +416,30 @@ export function CheckoutPage() {
     requiresPhysicalShipping &&
     !hasMembership &&
     isFreeShippingEligible(freeShippingMerchandiseSubtotalCents);
+  const hasAccessoryItems = cartItemsForAuth.some(isAccessoryLine);
+  const hasNonAccessoryPhysicalItems = cartItemsForAuth.some(
+    item => !isAccessoryLine(item) && item.section !== 'provider-care',
+  );
+  const accessoryOnlyShipping =
+    requiresPhysicalShipping && hasAccessoryItems && !hasNonAccessoryPhysicalItems;
+  useEffect(() => {
+    if (accessoryOnlyShipping && shippingMethod !== 'accessory') {
+      setShippingMethod('accessory');
+    } else if (!accessoryOnlyShipping && shippingMethod === 'accessory') {
+      setShippingMethod('two_day');
+    }
+  }, [accessoryOnlyShipping, shippingMethod]);
   const resolvedShippingMethod: ShippingMethod = !requiresPhysicalShipping
     ? 'none'
     : freeShippingEligible
       ? 'free_over_500'
-      : shippingMethod;
+      : accessoryOnlyShipping
+        ? shippingMethod === 'next_day' || shippingMethod === 'two_day'
+          ? shippingMethod
+          : 'accessory'
+        : shippingMethod === 'accessory'
+          ? 'two_day'
+          : shippingMethod;
   const shipping = !requiresPhysicalShipping
     ? 0
     : hasMembership
@@ -1040,32 +1060,22 @@ export function CheckoutPage() {
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'two_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
-                          <span className="flex items-center gap-3">
-                            <input
-                              type="radio"
-                              name="shippingMethod"
-                              checked={shippingMethod === 'two_day'}
-                              onChange={() => setShippingMethod('two_day')}
-                            />
-                            Two-Day Shipping
-                          </span>
-                          <span className="font-medium text-ink-900">$30</span>
-                        </label>
-                        <label className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-sm ${shippingMethod === 'next_day' ? 'border-ink-900 bg-white' : 'border-cream-300 bg-white'}`}>
-                          <span className="flex items-center gap-3">
-                            <input
-                              type="radio"
-                              name="shippingMethod"
-                              checked={shippingMethod === 'next_day'}
-                              onChange={() => setShippingMethod('next_day')}
-                            />
-                            Next-Day Shipping
-                          </span>
-                          <span className="font-medium text-ink-900">$50</span>
-                        </label>
+                        <label htmlFor="shipping-method" className="sr-only">Choose shipping method</label>
+                        <select
+                          id="shipping-method"
+                          name="shippingMethod"
+                          value={shippingMethod}
+                          onChange={event => setShippingMethod(event.target.value as SelectableShippingMethod)}
+                          className="w-full rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-900 focus:border-ink-900 focus:outline-none focus:ring-2 focus:ring-gold-300"
+                        >
+                          {accessoryOnlyShipping && <option value="accessory">Accessory Shipping — $10</option>}
+                          <option value="two_day">Two-Day Shipping — $30</option>
+                          <option value="next_day">Next-Day Shipping — $50</option>
+                        </select>
                         <p className="text-xs text-ink-500">
-                          {hasMembership
+                          {accessoryOnlyShipping
+                            ? 'Accessory-only orders use a $10 shipping charge. Choose expedited shipping if preferred.'
+                            : hasMembership
                             ? 'Prescription subscription value is excluded from the $500 free-shipping merchandise threshold. Medication ships after required provider review and approval.'
                             : 'Orders of $500 or more in merchandise are eligible for free shipping. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'}
                         </p>

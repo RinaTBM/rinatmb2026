@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   NEXT_DAY_SHIPPING_CENTS,
+  ACCESSORY_SHIPPING_CENTS,
   SELECTABLE_SHIPPING_METHODS,
   SHIPPING_METHODS,
   TWO_DAY_SHIPPING_CENTS,
@@ -13,7 +14,7 @@ describe('approved checkout shipping methods', () => {
   it('does not accept or list obsolete "standard" in modern checkout methods', () => {
     expect((SHIPPING_METHODS as readonly string[]).includes('standard')).toBe(false);
     expect(isApprovedCheckoutShippingMethod('standard')).toBe(false);
-    expect([...SELECTABLE_SHIPPING_METHODS]).toEqual(['two_day', 'next_day']);
+    expect([...SELECTABLE_SHIPPING_METHODS]).toEqual(['accessory', 'two_day', 'next_day']);
   });
 
   it('two_day resolves to $30 and next_day to $50', () => {
@@ -21,6 +22,19 @@ describe('approved checkout shipping methods', () => {
     expect(shippingCentsForMethod('next_day', 14900)).toBe(NEXT_DAY_SHIPPING_CENTS);
     expect(TWO_DAY_SHIPPING_CENTS).toBe(3000);
     expect(NEXT_DAY_SHIPPING_CENTS).toBe(5000);
+  });
+
+  it('accessory resolves to $10', () => {
+    expect(shippingCentsForMethod('accessory', 14900)).toBe(ACCESSORY_SHIPPING_CENTS);
+    expect(ACCESSORY_SHIPPING_CENTS).toBe(1000);
+    const r = authorizeShippingCents({
+      shippingMethod: 'accessory',
+      clientShippingCents: 1000,
+      shippableSubtotalCents: 14900,
+      requiresPhysicalShipping: true,
+      accessoryOnly: true,
+    });
+    expect('error' in r).toBe(false);
   });
 
   it('rejects arbitrary client shipping amounts', () => {

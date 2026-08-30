@@ -1,11 +1,12 @@
 /**
  * Approved shipping options for order records (Phase 2).
- * Policy: Two-Day $30, Next-Day $50, free shipping at $500+ (eligible merchandise).
+ * Policy: Accessory $10, Two-Day $30, Next-Day $50, free shipping at $500+ (eligible merchandise).
  * Do not use legacy $6.95 / $75 free-shipping threshold or "standard" in new checkout.
  */
 
 /** Methods accepted by modern checkout authorization. */
 export const SHIPPING_METHODS = [
+  'accessory',
   'two_day',
   'next_day',
   'free_over_500',
@@ -15,14 +16,16 @@ export const SHIPPING_METHODS = [
 export type ShippingMethod = (typeof SHIPPING_METHODS)[number];
 
 /** Customer-selectable paid methods (excludes free_over_500 / none). */
-export const SELECTABLE_SHIPPING_METHODS = ['two_day', 'next_day'] as const;
+export const SELECTABLE_SHIPPING_METHODS = ['accessory', 'two_day', 'next_day'] as const;
 export type SelectableShippingMethod = (typeof SELECTABLE_SHIPPING_METHODS)[number];
 
 export const TWO_DAY_SHIPPING_CENTS = 3000;
 export const NEXT_DAY_SHIPPING_CENTS = 5000;
+export const ACCESSORY_SHIPPING_CENTS = 1000;
 export const FREE_SHIPPING_THRESHOLD_CENTS = 50000;
 
 export const SHIPPING_METHOD_LABELS: Record<ShippingMethod, string> = {
+  accessory: 'Accessory Shipping',
   two_day: 'Two-Day Shipping',
   next_day: 'Next-Day Shipping',
   free_over_500: 'Free Shipping',
@@ -59,6 +62,7 @@ export function shippingCentsForMethod(
   subtotalCents: number,
 ): number {
   if (isFreeShippingEligible(subtotalCents) || method === 'free_over_500') return 0;
+  if (method === 'accessory') return ACCESSORY_SHIPPING_CENTS;
   if (method === 'two_day') return TWO_DAY_SHIPPING_CENTS;
   if (method === 'next_day') return NEXT_DAY_SHIPPING_CENTS;
   // Obsolete methods (e.g. "standard") must not silently charge $0 in checkout —

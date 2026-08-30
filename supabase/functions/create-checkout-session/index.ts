@@ -53,6 +53,7 @@ const ACCESSORY_SALES_TAX_RATE_PERCENT = 0;
 
 const TWO_DAY_SHIPPING_CENTS = 3000;
 const NEXT_DAY_SHIPPING_CENTS = 5000;
+const ACCESSORY_SHIPPING_CENTS = 1000;
 const FREE_SHIPPING_THRESHOLD_CENTS = 50000;
 
 const ACCESSORY_BUNDLE_PRODUCT_IDS = new Set(["a1"]);
@@ -70,7 +71,7 @@ const MEMBERSHIP_FIXED_CENTS: Record<string, number> = {
   [TIRZEPATIDE_MEMBERSHIP_APP_ID]: TIRZEPATIDE_MEMBERSHIP_CENTS,
 };
 
-type ShippingMethod = "two_day" | "next_day" | "free_over_500" | "none";
+type ShippingMethod = "accessory" | "two_day" | "next_day" | "free_over_500" | "none";
 
 const GETTING_STARTED_FORMULATION = "getting_started";
 const GETTING_STARTED_LABEL = "Getting Started / Not Sure";
@@ -432,6 +433,7 @@ function authorizeShippingCents(input: {
   shippableSubtotalCents: number;
   requiresPhysicalShipping: boolean;
   containsMembership?: boolean;
+  accessoryOnly?: boolean;
 }): { shippingMethod: ShippingMethod; shippingCents: number; freeShippingEligible: boolean } | { error: string } {
   if (!input.requiresPhysicalShipping) {
     if (
@@ -446,7 +448,7 @@ function authorizeShippingCents(input: {
   if (input.shippingMethod === "standard") {
     return {
       error:
-        "Unsupported shipping method: standard. Approved methods are two_day ($30) and next_day ($50).",
+        "Unsupported shipping method: standard. Approved methods are accessory ($10), two_day ($30), and next_day ($50).",
     };
   }
 
@@ -455,18 +457,26 @@ function authorizeShippingCents(input: {
 
   if (free) {
     method = "free_over_500";
+  } else if (input.shippingMethod === "accessory") {
+    if (!input.accessoryOnly) {
+      return { error: "Accessory shipping is available only for accessory-only orders." };
+    }
+    method = "accessory";
   } else if (input.shippingMethod === "next_day") {
     method = "next_day";
   } else if (input.shippingMethod === "two_day") {
     method = "two_day";
   } else if (!input.shippingMethod || input.shippingMethod === "none") {
-    if (input.containsMembership) {
+    if (input.accessoryOnly) {
+      method = "accessory";
+    } else if (input.containsMembership) {
       return {
         error:
           "Membership checkout requires a shipping method: two_day ($30) or next_day ($50).",
       };
+    } else {
+      method = "two_day";
     }
-    method = "two_day";
   } else if (input.shippingMethod === "free_over_500") {
     return {
       error:
@@ -478,6 +488,8 @@ function authorizeShippingCents(input: {
 
   const authorized = free
     ? 0
+    : method === "accessory"
+    ? ACCESSORY_SHIPPING_CENTS
     : method === "next_day"
     ? NEXT_DAY_SHIPPING_CENTS
     : TWO_DAY_SHIPPING_CENTS;
@@ -498,6 +510,7 @@ function shippingDisplayName(method: ShippingMethod): string {
   if (method === "free_over_500") return "Free Shipping ($500+)";
   if (method === "next_day") return "Next-Day Shipping";
   if (method === "none") return "No shipping";
+  if (method === "accessory") return "Accessory Shipping";
   return "Two-Day Shipping";
 }
 
@@ -678,6 +691,8 @@ Deno.serve(async (req: Request) => {
       authorizedSubtotal - providerCareTaxableSubtotal - membershipSubtotal;
     const containsMembership = membershipSubtotal > 0;
     const requiresPhysicalShipping = resolved.some((line) => !isProviderCareResolvedLine(line));
+    const accessoryOnly = resolved.some(isAccessoryResolvedLine) &&
+      resolved.every((line) => isAccessoryResolvedLine(line) || isProviderCareResolvedLine(line));
 
     const shippingAuth = authorizeShippingCents({
       shippingMethod,
@@ -685,6 +700,7 @@ Deno.serve(async (req: Request) => {
       shippableSubtotalCents: freeShippingMerchandiseSubtotal,
       requiresPhysicalShipping,
       containsMembership,
+      accessoryOnly,
     });
     if ("error" in shippingAuth) return jsonError(shippingAuth.error);
 

@@ -1,4 +1,5 @@
 import { Link } from '@/router';
+import { PHARMACY_FULFILLMENT_SHORT } from '@/data/pharmacyFulfillmentCopy';
 import { Instagram, Mail } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 
@@ -81,7 +82,7 @@ export function Footer() {
             These statements have not been evaluated by the Food and Drug Administration. Products are not intended to diagnose, treat, cure, or prevent any disease. Provider Care and other therapy products require a medical intake and review by a licensed provider; fulfillment occurs only after provider approval and is not a guarantee of prescription. If not approved, a full refund is issued.
           </p>
           <p className="text-xs text-cream-100/50 leading-relaxed mb-4">
-            Telemedicine services available in all 50 states. Appointments conducted via Zoom and booked on our website. Medical Director: Dr. Jerry J. Cattelane Jr., D.O. Prescription therapies are fulfilled through U.S. compounding pharmacy partners, including Ageless Pharma Rx (503A) and ProCompounding Pharmacy (503A), as applicable. Provider review and a valid prescription are required.
+            Telemedicine services available in all 50 states. Appointments conducted via Zoom and booked on our website. Medical Director: Dr. Jerry J. Cattelane Jr., D.O. {PHARMACY_FULFILLMENT_SHORT}
           </p>
           <div className="flex flex-col md:flex-row justify-between gap-4 text-xs text-cream-100/50">
             <p>© {new Date().getFullYear()} My Bare Method. All rights reserved. A brand of The Bare Method.</p>

@@ -6,8 +6,7 @@ import { getCustomerOrderDetail } from '@/lib/orders/orderService';
 import type { OrderWithDetails } from '@/lib/orders/orderTypes';
 import { formatCents } from '@/lib/orders/orderTypes';
 import {
-  AGELESS_FULFILLMENT_COPY,
-  AGELESS_PHARMACY_NAME,
+  PHARMACY_FULFILLMENT_COPY,
   PROCESSING_POLICY_COPY,
   labelOrderStatus,
   labelPaymentStatus,
@@ -336,10 +335,9 @@ export function AccountOrderDetailPage({ orderId }: AccountOrderDetailPageProps)
                   </p>
                 </div>
               ) : null}
-              {order.fulfillment?.pharmacy_name === AGELESS_PHARMACY_NAME ||
-              order.requires_provider_review ? (
+              {order.requires_provider_review ? (
                 <div className="sm:col-span-2">
-                  <p className="text-ink-500 text-xs leading-relaxed">{AGELESS_FULFILLMENT_COPY}</p>
+                  <p className="text-ink-500 text-xs leading-relaxed">{PHARMACY_FULFILLMENT_COPY}</p>
                 </div>
               ) : null}
             </div>

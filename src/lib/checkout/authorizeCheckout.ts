@@ -5,6 +5,7 @@
 import {
   FREE_SHIPPING_THRESHOLD_CENTS,
   NEXT_DAY_SHIPPING_CENTS,
+  ACCESSORY_SHIPPING_CENTS,
   TWO_DAY_SHIPPING_CENTS,
   isFreeShippingEligible,
   type ShippingMethod,
@@ -518,6 +519,8 @@ export function authorizeShippingCents(input: {
   requiresPhysicalShipping: boolean;
   /** When true, membership medication is in the cart (still ships; never free by itself). */
   containsMembership?: boolean;
+  /** True only when every physical line is an accessory. */
+  accessoryOnly?: boolean;
 }): {
   shippingMethod: ShippingMethod;
   shippingCents: number;
@@ -542,7 +545,7 @@ export function authorizeShippingCents(input: {
   if (input.shippingMethod === 'standard') {
     return {
       error:
-        'Unsupported shipping method: standard. Approved methods are two_day ($30) and next_day ($50).',
+        'Unsupported shipping method: standard. Approved methods are accessory ($10), two_day ($30), and next_day ($50).',
     };
   }
 
@@ -552,6 +555,11 @@ export function authorizeShippingCents(input: {
 
   if (free) {
     method = 'free_over_500';
+  } else if (input.shippingMethod === 'accessory') {
+    if (!input.accessoryOnly) {
+      return { error: 'Accessory shipping is available only for accessory-only orders.' };
+    }
+    method = 'accessory';
   } else if (input.shippingMethod === 'next_day') {
     method = 'next_day';
   } else if (input.shippingMethod === 'two_day') {
@@ -560,14 +568,18 @@ export function authorizeShippingCents(input: {
     !input.shippingMethod ||
     input.shippingMethod === 'none'
   ) {
-    // Membership medication carts without free shipping must use paid Two-Day / Next-Day.
-    if (input.containsMembership) {
-      return {
-        error:
-          'Membership checkout requires a shipping method: two_day ($30) or next_day ($50).',
-      };
+    if (input.accessoryOnly) {
+      method = 'accessory';
+    } else {
+      // Membership medication carts without free shipping must use paid Two-Day / Next-Day.
+      if (input.containsMembership) {
+        return {
+          error:
+            'Membership checkout requires a shipping method: two_day ($30) or next_day ($50).',
+        };
+      }
+      method = 'two_day';
     }
-    method = 'two_day';
   } else if (input.shippingMethod === 'free_over_500') {
     return {
       error:
@@ -579,6 +591,8 @@ export function authorizeShippingCents(input: {
 
   const authorized = free
     ? 0
+    : method === 'accessory'
+      ? ACCESSORY_SHIPPING_CENTS
     : method === 'next_day'
       ? NEXT_DAY_SHIPPING_CENTS
       : TWO_DAY_SHIPPING_CENTS;
@@ -603,6 +617,7 @@ export function shippingDisplayName(method: ShippingMethod): string {
   if (method === 'free_over_500') return 'Free Shipping ($500+)';
   if (method === 'next_day') return 'Next-Day Shipping';
   if (method === 'two_day') return 'Two-Day Shipping';
+  if (method === 'accessory') return 'Accessory Shipping';
   if (method === 'none') return 'No shipping';
   return 'Shipping';
 }

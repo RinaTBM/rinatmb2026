@@ -93,7 +93,7 @@ export function AdminOrdersList({ canWrite }: { canWrite: boolean }) {
       <h1 className="font-serif text-3xl text-ink-900 mb-2">Orders</h1>
       <p className="text-sm text-ink-500 mb-6">
         Manage fulfillment and tracking. Mark invoice payments received after bank funds are verified.
-        Provider-directed prescriptions are fulfilled through Ageless Pharma Rx when applicable.
+        Provider-directed prescriptions are fulfilled through the eligible GEN Health dispensing pharmacy selected for the prescription.
       </p>
       <button className="btn-outline mb-4" onClick={() => void load()} disabled={loading}>
         {loading ? 'Loading…' : 'Refresh'}

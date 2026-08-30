@@ -221,6 +221,7 @@ export function navigateToKashuHostedCheckout(
  */
 export const MBM_SHIPPING_SKU_TWO_DAY = 'MBM-SHIP-TWO-DAY-001';
 export const MBM_SHIPPING_SKU_NEXT_DAY = 'MBM-SHIP-NEXT-DAY-001';
+export const MBM_SHIPPING_SKU_ACCESSORY = 'MBM-SHIP-ACCESSORY-001';
 
 export const TAGADA_SHIPPING_PARITY_BLOCKER = 'TAGADA_SHIPPING_PARITY_BLOCKER';
 export const TAGADA_PRICE_PARITY_BLOCKER = 'TAGADA_PRICE_PARITY_BLOCKER';
@@ -230,12 +231,13 @@ export const TAGADA_UNEXPECTED_TAX_AMOUNT = 'TAGADA_UNEXPECTED_TAX_AMOUNT';
 export const TAGADA_CHECKOUT_TOTAL_MISMATCH = 'TAGADA_CHECKOUT_TOTAL_MISMATCH';
 
 /** Allowed MBM shipping cents for card checkout (MBM is source of truth). */
-export const ALLOWED_CARD_SHIPPING_CENTS = [0, 3000, 5000] as const;
+export const ALLOWED_CARD_SHIPPING_CENTS = [0, 1000, 3000, 5000] as const;
 
 export function shippingSkuForMethod(shippingMethod: string): string | null {
   const m = shippingMethod.trim().toLowerCase();
   if (m === 'two_day') return MBM_SHIPPING_SKU_TWO_DAY;
   if (m === 'next_day') return MBM_SHIPPING_SKU_NEXT_DAY;
+  if (m === 'accessory') return MBM_SHIPPING_SKU_ACCESSORY;
   return null;
 }
 
@@ -247,6 +249,7 @@ export function shippingSkuForCents(shippingCents: number): string | null {
   const cents = Math.trunc(shippingCents);
   if (cents === 3000) return MBM_SHIPPING_SKU_TWO_DAY;
   if (cents === 5000) return MBM_SHIPPING_SKU_NEXT_DAY;
+  if (cents === 1000) return MBM_SHIPPING_SKU_ACCESSORY;
   return null;
 }
 

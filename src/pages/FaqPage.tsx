@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
-import { COMPOUNDED_FDA_FAQ, PHARMACY_503A_FAQ } from '@/data/pharmacyFulfillmentCopy';
+import {
+  COMPOUNDED_FDA_FAQ,
+  PHARMACY_503A_FAQ,
+  PHARMACY_FULFILLMENT_SHORT,
+} from '@/data/pharmacyFulfillmentCopy';
 
 const faqCategories = [
   {
@@ -12,7 +16,7 @@ const faqCategories = [
       },
       {
         q: 'How much is shipping?',
-        a: 'For eligible one-time medication/product orders: Two-Day Shipping is $30 and Next-Day Shipping is $50 (fixed fees). For Subscribe & Save, the selected $30 or $50 shipping method renews with each monthly order. Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping; subscription value is excluded from that threshold.',
+          a: 'Accessory-only orders can use Accessory Shipping for $10, with Two-Day Shipping for $30 or Next-Day Shipping for $50 also available. Prescription and mixed carts use the applicable medication shipping option. For Subscribe & Save, the selected $30 or $50 shipping method renews with each monthly order. Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping; subscription value is excluded from that threshold.',
       },
       {
         q: 'When will my order ship?',
@@ -81,7 +85,7 @@ const faqCategories = [
       { q: 'Do you offer telemedicine appointments?', a: 'Yes. We offer telemedicine services via Zoom. Appointments are booked directly on our website by the patient.' },
       { q: 'Which states or jurisdictions do you serve?', a: 'Our Medical Director is a licensed physician in all states, so our telemedicine services are available nationwide.' },
       { q: 'Who is your Medical Director?', a: 'Our Medical Director is Dr. Jerry J. Cattelane Jr., D.O. He provides clinical leadership and supports the provider-directed wellness programs available through My Bare Method. Treatment decisions are made by the licensed provider responsible for your care.' },
-      { q: 'Which pharmacy fulfills your prescriptions?', a: 'Prescription therapies are fulfilled through U.S. compounding pharmacy partners, including Ageless Pharma Rx (503A) and ProCompounding Pharmacy (503A), as applicable. Provider review and a valid prescription are required. Fulfillment begins only after payment has been received and a licensed provider determines treatment is appropriate and any required review is complete.' },
+      { q: 'Which pharmacy fulfills your prescriptions?', a: `${PHARMACY_FULFILLMENT_SHORT} The final pharmacy is selected based on the medication, state, prescription, and clinical workflow. Fulfillment begins only after payment has been received and a licensed provider determines treatment is appropriate and any required review is complete.` },
       { q: PHARMACY_503A_FAQ.q, a: PHARMACY_503A_FAQ.a },
       { q: COMPOUNDED_FDA_FAQ.q, a: COMPOUNDED_FDA_FAQ.a },
     ],

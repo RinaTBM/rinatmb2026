@@ -242,7 +242,7 @@ async function upsertOrderFromCheckoutSession(
     body: JSON.stringify({
       order_id: orderId,
       fulfillment_status: orderStatus,
-      pharmacy_name: requiresReview ? "Ageless Pharma Rx" : null,
+      pharmacy_name: requiresReview ? "GEN Health dispensing pharmacy" : null,
     }),
   });
 

@@ -172,7 +172,7 @@ describe('Phase 2B price drift detection (MBM authoritative)', () => {
   });
 });
 
-describe('Phase 2B shipping line SKUs ($0 / $30 / $50)', () => {
+describe('Phase 2B shipping line SKUs ($0 / $10 / $30 / $50)', () => {
   it('appends Two-Day SKU only for shipping_cents=3000', () => {
     expect(shippingSkuForCents(3000)).toBe(MBM_SHIPPING_SKU_TWO_DAY);
     expect(shippingSkuForMethod('two_day')).toBe(MBM_SHIPPING_SKU_TWO_DAY);

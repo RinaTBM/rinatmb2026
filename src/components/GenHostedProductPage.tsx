@@ -4,11 +4,18 @@ import { Link } from '@/router';
 import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
 import { getRelatedProducts, type Product } from '@/data/products';
 import { navigateToGenProductFirstCheckout, resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
-import { GEN_HOSTED_PRODUCTS } from '@/lib/commerce/genHostedProducts';
+import { GEN_HOSTED_PRODUCTS, type GenHostedProductOption } from '@/lib/commerce/genHostedProducts';
 import { ProductDescriptionSections, ProductHighlights } from '@/components/ProductDescriptionSections';
 
 export function GenHostedProductPage({ product, route }: { product: Product; route: (typeof GEN_HOSTED_PRODUCTS)[string] }) {
-  const checkout = resolveGenProductFirstCheckout(route.genClientProductId);
+  const options: readonly GenHostedProductOption[] = route.options ?? [{
+    label: product.dosageForms[0] || 'Prescription option',
+    price: route.price,
+    genClientProductId: route.genClientProductId,
+  }];
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+  const selectedOption = options[selectedOptionIndex] ?? options[0];
+  const checkout = resolveGenProductFirstCheckout(selectedOption.genClientProductId);
   const { addItem, openBasket, items: prescriptionItems } = usePrescriptionBasket();
   const [recommendationsOpen, setRecommendationsOpen] = useState(false);
   const [recommendationOffset, setRecommendationOffset] = useState(0);
@@ -41,8 +48,8 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
       subtitle: product.subtitle,
       image: product.image,
       imageAlt: product.imageAlt,
-      price: route.price,
-      genClientProductId: route.genClientProductId,
+      price: selectedOption.price,
+      genClientProductId: selectedOption.genClientProductId,
       category: product.category,
     });
     openRecommendations();
@@ -62,9 +69,26 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
           <p className="mt-3 text-xl text-ink-700 leading-snug">{product.benefitHeadline}</p>
           <p className="mt-4 text-ink-600 leading-relaxed">{product.shortDescription}</p>
           <ProductHighlights highlights={product.highlights} />
+          {options.length > 1 && (
+            <div className="mt-6">
+              <p className="mb-2 text-sm font-medium text-ink-900">Delivery method</p>
+              <div className="flex flex-wrap gap-2" role="group" aria-label="Delivery method">
+                {options.map((option, index) => (
+                  <button
+                    key={option.label}
+                    type="button"
+                    onClick={() => setSelectedOptionIndex(index)}
+                    className={index === selectedOptionIndex ? 'rounded-full bg-ink-900 px-4 py-2 text-sm text-white' : 'rounded-full border border-cream-300 bg-white px-4 py-2 text-sm text-ink-700'}
+                  >
+                    {option.label} · ${option.price}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="mt-6 rounded-2xl border border-cream-300 bg-white p-5">
             <p className="text-sm text-ink-500">Due today in GEN Health</p>
-            <p className="font-serif text-3xl text-ink-900">${route.price.toFixed(2)}</p>
+            <p className="font-serif text-3xl text-ink-900">${selectedOption.price.toFixed(2)}</p>
             <p className="mt-2 text-xs text-ink-500">Final payment total and any applicable visit charge are shown by GEN Health before payment.</p>
             <button type="button" className="btn-primary mt-5 w-full" disabled={!checkout.ok} onClick={addCurrentToBasket}>{checkout.ok ? (currentInBasket ? 'Added — review prescription basket' : 'Add to Prescription Basket') : 'Temporarily unavailable'}</button>
             {currentInBasket && <button type="button" onClick={openBasket} className="btn-ghost mt-2 w-full">Open prescription basket</button>}

@@ -191,9 +191,9 @@ export function applyOneTimeVialVariants(families: WebsiteProductFamily[]): Webs
       const recoveryStack = find(family, 'bpc-ghk-kpv-tb-r101');
       return {
         ...family,
-        displayName: 'Recovery Stack',
+        displayName: 'KLOW',
         architectureRule:
-          'One verified Recovery Stack injection routes to the matching GEN Product-first checkout.',
+          'One verified KLOW injection routes to the matching GEN Product-first checkout.',
         availableSelectors: [],
         currentWebsiteSlug: 'recovery-stack',
         startingAtPriceDisplay: '$159',

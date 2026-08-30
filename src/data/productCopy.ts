@@ -179,9 +179,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'aod-9604': {
-    benefitHeadline: 'Provider-Guided Metabolic Wellness Support',
+    benefitHeadline: 'Metabolic Balance Support',
     shortDescription:
-      'AOD-9604 is a provider-directed compounded peptide option for customers exploring metabolic and body-composition goals. Availability, formulation, and instructions are determined after intake and licensed-provider review.',
+      'Metabolic Balance Support is a provider-directed compounded option for customers exploring metabolic and body-composition goals. Availability, formulation, and instructions are determined after intake and licensed-provider review.',
     highlights: [
       'Metabolic Wellness Support',
       'Compounded Peptide',
@@ -189,7 +189,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Provider-Directed Care',
     ],
     about: [
-      'AOD-9604 is offered as a provider-directed compounded peptide option. My Bare Method keeps pharmacy-level formulation details within the clinical workflow so your provider and dispensing pharmacy can determine what is appropriate for you.',
+      'This option is offered through a provider-directed clinical pathway. My Bare Method keeps pharmacy-level formulation details within the clinical workflow so your provider and dispensing pharmacy can determine what is appropriate for you.',
       'This listing is for a supervised clinical conversation, not a promise of weight loss, fat loss, or any particular outcome.',
     ].join('\\n\\n'),
     potentialBenefits: [
@@ -251,9 +251,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'bpc-157': {
-    benefitHeadline: 'Provider-Guided Recovery Support',
+    benefitHeadline: 'Recovery Peptide Support',
     shortDescription:
-      'BPC-157 is a provider-directed compounded peptide option for recovery-oriented wellness discussions. Eligibility, formulation, and instructions are determined after licensed-provider review.',
+      'Recovery Peptide Support is a provider-directed compounded option for recovery-oriented wellness discussions. Eligibility, formulation, and instructions are determined after licensed-provider review.',
     highlights: [
       'Recovery-Oriented Support',
       'Compounded Peptide',
@@ -261,7 +261,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Provider Review Required',
     ],
     about: [
-      'BPC-157 is offered as a compounded peptide option for customers discussing recovery and performance-support goals with a licensed provider.',
+      'This option is offered for customers discussing recovery and performance-support goals with a licensed provider.',
       'Research interest should not be confused with an established treatment or guarantee of injury healing, tissue repair, or performance improvement.',
     ].join('\\n\\n'),
     potentialBenefits: [
@@ -271,7 +271,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Supports realistic expectations around developing evidence',
     ],
     howItWorks:
-      'BPC-157 is discussed in research-oriented wellness settings. This page does not claim a proven mechanism or guaranteed recovery outcome. If approved, your provider and pharmacy provide the final preparation and directions.',
+      'This option is discussed in research-oriented wellness settings. This page does not claim a proven mechanism or guaranteed recovery outcome. If approved, your provider and pharmacy provide the final preparation and directions.',
     whyPeopleChooseIt: [
       'Want a dedicated recovery-oriented peptide option',
       'Prefer provider oversight before using a compounded product',
@@ -288,9 +288,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'ghk-cu-minoxidil': {
-    benefitHeadline: 'Personalized Topical Scalp & Skin Support',
+    benefitHeadline: 'Hair & Skin Renewal Support',
     shortDescription:
-      'A provider-directed topical combination featuring GHK-Cu and minoxidil for scalp and skin-care goals. Your provider and dispensing pharmacy determine the final strength and companion ingredients after review.',
+      'Hair & Skin Renewal Support is a provider-directed topical option for scalp and skin-care goals. Your provider and dispensing pharmacy determine the final strength and companion ingredients after review.',
     highlights: [
       'Topical Combination',
       'Scalp & Skin Support',
@@ -298,7 +298,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Prescription Review Required',
     ],
     about: [
-      'This compounded topical option combines GHK-Cu and minoxidil in a provider-directed preparation for customers discussing scalp and skin-care goals.',
+      'This compounded topical option is prepared for customers discussing scalp and skin-care goals with a provider.',
       'The final strength, vehicle, and any companion ingredients are determined by the prescribing provider and dispensing pharmacy. Results vary and are not guaranteed.',
     ].join('\\n\\n'),
     potentialBenefits: [
@@ -308,7 +308,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Keeps exact formulation details within clinical review',
     ],
     howItWorks:
-      'Minoxidil is commonly used in topical hair-care plans, while GHK-Cu may be discussed in skin and scalp wellness settings. Your provider determines whether this combination is appropriate and explains the final preparation and directions if approved.',
+      'Topical hair and skin-support options may be discussed in provider-directed care. Your provider determines whether this preparation is appropriate and explains the final ingredients and directions if approved.',
     whyPeopleChooseIt: [
       'Prefer a topical scalp-and-skin option',
       'Want one provider-guided combination instead of separate products',
@@ -324,9 +324,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'ondansetron-odt': {
-    benefitHeadline: 'Provider-Guided Support in an Orally Disintegrating Format',
+    benefitHeadline: 'Nausea Support in an Orally Disintegrating Format',
     shortDescription:
-      'Ondansetron ODT is a provider-directed orally disintegrating tablet option that may be considered for supportive care during a weight-management plan. Your provider determines whether it is appropriate after intake.',
+      'Nausea Support is a provider-directed orally disintegrating tablet option that may be considered for supportive care during a weight-management plan. Your provider determines whether it is appropriate after intake.',
     highlights: [
       'Orally Disintegrating Format',
       'Supportive Care Option',
@@ -334,7 +334,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Provider-Reviewed',
     ],
     about: [
-      'Ondansetron ODT is an orally disintegrating tablet option that may be discussed for nausea-related supportive care when clinically appropriate.',
+      'Nausea Support is an orally disintegrating tablet option that may be discussed when clinically appropriate.',
       'It is not a weight-loss medication and does not guarantee that nausea or other symptoms will improve. Your provider reviews your history, current medications, and goals before deciding whether it belongs in your plan.',
     ].join('\\n\\n'),
     potentialBenefits: [
@@ -478,7 +478,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== LONGEVITY & COGNITIVE =====
   'nad-plus': {
-    benefitHeadline: 'Provider-Guided NAD+ Cellular Energy Support',
+    benefitHeadline: 'NAD+ Cellular Energy Support',
     shortDescription:
       'NAD+ is a provider-directed compounded option for customers exploring cellular energy and longevity-focused wellness care. Choose from injection and nasal spray options after eligibility review, with clear expectations and no hype-driven promises.',
     highlights: [
@@ -675,6 +675,42 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   // ===== RECOVERY & PERFORMANCE =====
+  'recovery-stack': {
+    benefitHeadline: 'KLOW Recovery & Wellness Support',
+    shortDescription:
+      'KLOW is a provider-directed compounded recovery and wellness option available after eligibility review. Your provider and dispensing pharmacy determine the final preparation and instructions.',
+    highlights: [
+      'Recovery & Wellness Support',
+      'Compounded Injection',
+      'Provider Review Required',
+      'Pharmacy-Fulfilled',
+    ],
+    about: [
+      'KLOW is designed as a single provider-directed pathway for customers discussing recovery and wellness goals with a licensed provider.',
+      'The storefront does not publish pharmacy-level formulation details. Eligibility, final preparation, and use instructions are determined through clinical review and pharmacy fulfillment.',
+    ].join('\n\n'),
+    potentialBenefits: [
+      'May be considered in a provider-guided recovery or wellness plan',
+      'Keeps formulation and treatment decisions within the clinical workflow',
+      'Provides one coordinated option for provider discussion',
+      'Supports realistic expectations and follow-up care',
+    ],
+    howItWorks:
+      'Complete intake after checkout. A licensed provider reviews your history and goals, and the dispensing pharmacy confirms the final preparation and directions if approved.',
+    whyPeopleChooseIt: [
+      'Want a dedicated recovery and wellness option',
+      'Prefer provider oversight before a compounded product is dispensed',
+      'Value a customer-friendly name without pharmacy-level formulation details',
+    ],
+    whatToExpect:
+      'Complete intake and wait for provider review. Approval, formulation, and instructions are not guaranteed by purchase.',
+    importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
+    regulatoryNotes: [
+      'No guaranteed recovery, performance, or wellness outcomes.',
+      'Do not expose unverified formulation or concentration details.',
+    ],
+  },
+
   'bpc-157-tb-500': {
     benefitHeadline: 'Provider-Guided Recovery Support — Capsule or Injection',
     shortDescription:

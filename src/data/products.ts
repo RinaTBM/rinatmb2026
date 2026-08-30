@@ -605,11 +605,11 @@ export const products: Product[] = [
       'Live GEN product-first wrapper KXMm9SsbOEYnFy9phmZn. The website deliberately excludes pharmacy-level formulation details; the prescribing provider and dispensing pharmacy determine clinical details after intake.',
   }),
 
-  mk({ id: 'p101', slug: 'aod-9604', displayName: 'AOD-9604', shortName: 'AOD-9604', subtitle: 'Provider-directed metabolic support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed metabolic-support peptide option available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed metabolic support injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 179 }] }),
+  mk({ id: 'p101', slug: 'aod-9604', displayName: 'Metabolic Balance Support', shortName: 'Metabolic Balance Support', subtitle: 'Provider-directed metabolic support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed metabolic-support option available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed metabolic support injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 179 }] }),
   mk({ id: 'p102', slug: 'metabolic-triple', displayName: 'Metabolic Triple Protocol', shortName: 'Metabolic Triple', subtitle: 'Provider-directed metabolic support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed metabolic-support protocol available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed metabolic protocol injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 219 }], status: 'future', isVisible: false }),
-  mk({ id: 'p103', slug: 'bpc-157', displayName: 'BPC-157', shortName: 'BPC-157', subtitle: 'Provider-directed recovery support', category: 'recovery-performance', goals: ['recovery', 'performance'], shortDescription: 'A provider-directed recovery peptide option available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed recovery injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 199 }] }),
-  mk({ id: 'p104', slug: 'ghk-cu-minoxidil', displayName: 'GHK-Cu / Minoxidil Topical Combo', shortName: 'GHK-Cu / Minoxidil', subtitle: 'Provider-directed topical care', category: 'prescription-skin-hair', goals: ['beauty'], shortDescription: 'A provider-directed topical option for scalp and skin support, available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CREAM, imageAlt: 'Provider-directed topical care', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Cream', strength: 'Provider-directed', size: 'Monthly supply', price: 69 }] }),
-  mk({ id: 'p105', slug: 'ondansetron-odt', displayName: 'Ondansetron ODT', shortName: 'Ondansetron', subtitle: 'Provider-directed supportive care', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed supportive-care option available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CAPSULE, imageAlt: 'Provider-directed orally disintegrating tablet', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Orally disintegrating tablet', strength: 'Provider-directed', size: 'Monthly supply', price: 59 }] }),
+  mk({ id: 'p103', slug: 'bpc-157', displayName: 'Recovery Peptide Support', shortName: 'Recovery Peptide Support', subtitle: 'Provider-directed recovery support', category: 'recovery-performance', goals: ['recovery', 'performance'], shortDescription: 'A provider-directed recovery-support option available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed recovery injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 199 }] }),
+  mk({ id: 'p104', slug: 'ghk-cu-minoxidil', displayName: 'Hair & Skin Renewal Support', shortName: 'Hair & Skin Renewal Support', subtitle: 'Provider-directed topical care', category: 'prescription-skin-hair', goals: ['beauty'], shortDescription: 'A provider-directed topical option for scalp and skin support, available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CREAM, imageAlt: 'Provider-directed topical care', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Cream', strength: 'Provider-directed', size: 'Monthly supply', price: 69 }] }),
+  mk({ id: 'p105', slug: 'ondansetron-odt', displayName: 'Nausea Support', shortName: 'Nausea Support', subtitle: 'Provider-directed supportive care', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed nausea-support option available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CAPSULE, imageAlt: 'Provider-directed orally disintegrating tablet', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Orally disintegrating tablet', strength: 'Provider-directed', size: 'Monthly supply', price: 59 }] }),
 
   // ===== WOMEN'S HORMONE THERAPY =====
   mk({
@@ -852,8 +852,8 @@ export const products: Product[] = [
   mk({
     id: 'p82',
     slug: 'recovery-stack',
-    displayName: 'Recovery Stack',
-    shortName: 'Recovery Stack',
+    displayName: 'KLOW',
+    shortName: 'KLOW',
     subtitle: 'Provider-directed recovery support',
     category: 'recovery-performance',
     goals: ['recovery', 'performance'],
@@ -861,7 +861,7 @@ export const products: Product[] = [
       'A provider-directed compounded recovery injection, available after eligibility review. Medication price is $159 plus $30 shipping at checkout.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'Amber injection vial for the provider-directed Recovery Stack',
+    imageAlt: 'Amber injection vial for provider-directed KLOW support',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     memberPricingEligible: false,
     autoRefillEligible: false,
@@ -869,7 +869,7 @@ export const products: Product[] = [
       {
         id: 'bpc-ghk-kpv-tb-r101',
         dosageForm: 'Injection',
-        strength: 'Recovery Stack',
+        strength: 'KLOW',
         size: '5 mL vial',
         price: 159,
       },

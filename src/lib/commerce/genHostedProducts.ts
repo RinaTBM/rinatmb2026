@@ -2,6 +2,7 @@ export const GEN_HOSTED_PRODUCTS: Record<string, { price: number; genClientProdu
   'aod-9604': { price: 179, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_PRIG7DYPNNgco3lGf1zx' },
   'fat-burner': { price: 199, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_KXMm9SsbOEYnFy9phmZn' },
   'metabolic-triple': { price: 219, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_yearpPaLo5H0k0FU5Ej8' },
+  'nad-plus': { price: 139, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn' },
   'bpc-157': { price: 199, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI' },
   'estradiol-patch': { price: 129, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR' },
   'tretinoin-cream': { price: 79, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9' },

@@ -171,13 +171,13 @@ export function resolveFamilyVariant(
   if (familyId === 'wolverine-bpc-tb') {
     const form = norm(selectors.form);
     if (form.includes('cap')) {
-      const v = candidates.find((x) => x.websiteVariantId === 'wolverine-capsule');
+      const v = candidates.find((x) => x.websiteVariantId === 'wolverine-capsule-gen-live');
       return v
         ? { ok: true, familyId, variant: v }
         : { ok: false, familyId, variant: null, reason: 'WOLVERINE_CAPSULE_MISSING' };
     }
     if (form.includes('inject')) {
-      const v = candidates.find((x) => x.websiteVariantId === 'wolverine-injection');
+      const v = candidates.find((x) => x.websiteVariantId === 'wolverine-injection-gen-live');
       return v
         ? { ok: true, familyId, variant: v }
         : { ok: false, familyId, variant: null, reason: 'WOLVERINE_INJECTION_MISSING' };

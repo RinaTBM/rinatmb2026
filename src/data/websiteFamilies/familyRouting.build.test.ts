@@ -36,9 +36,9 @@ describe('MBM website family → GEN routing build', () => {
     const total = WEBSITE_PRODUCT_FAMILIES.reduce((n, f) => n + f.variants.length, 0);
     expect(total).toBe(111);
     const counts = countByRoutingStatus();
-    expect(counts.ROUTING_READY).toBe(41);
+    expect(counts.ROUTING_READY).toBe(42);
     expect(counts.FORMULARY_PENDING).toBe(9);
-    expect(counts.GEN_PAIRING_PENDING).toBe(5);
+    expect(counts.GEN_PAIRING_PENDING).toBe(4);
     expect(counts.FUTURE_HIDDEN).toBe(54);
     expect(counts.BLOCKED).toBe(2);
     expect(
@@ -108,14 +108,15 @@ describe('MBM website family → GEN routing build', () => {
     );
   });
 
-  it('launches the verified Wolverine injection and keeps the capsule held', () => {
+  it('launches the verified Wolverine injection and capsule choices', () => {
     const family = WEBSITE_PRODUCT_FAMILIES.find((x) => x.familyId === 'wolverine-bpc-tb')!;
-    const cap = family.variants.find((v) => v.websiteVariantId === 'wolverine-capsule')!;
+    const cap = family.variants.find((v) => v.websiteVariantId === 'wolverine-capsule-gen-live')!;
     const inj = family.variants.find((v) => v.websiteVariantId === 'wolverine-injection-gen-live')!;
-    expect(cap.finalRetailPrice).toBe(29);
-    expect(inj.finalRetailPrice).toBe(159);
+    expect(cap.finalRetailPrice).toBe(189);
+    expect(inj.finalRetailPrice).toBe(169);
     expect(cap.genClientProductId).not.toBe(inj.genClientProductId);
     expect(listPatientVisibleVariants(family).map((v) => v.websiteVariantId)).toEqual([
+      'wolverine-capsule-gen-live',
       'wolverine-injection-gen-live',
     ]);
   });

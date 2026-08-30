@@ -16,6 +16,7 @@ const TRETINOIN_GEN_PRODUCT_ID = 'EeWMcfCJf5EU2LkNQmp9';
 const SELANK_SEMAX_GEN_PRODUCT_ID = 'LWkYtwm66dIeLuDSvSfi';
 const TESAMORELIN_GEN_PRODUCT_ID = '2cYxVfvwpWyyrANZx06G';
 const WOLVERINE_GEN_PRODUCT_ID = 'iJtyig611AZEDBGdvRd9';
+const WOLVERINE_CAPSULE_GEN_PRODUCT_ID = 'omhh3NabouO8AsNR5tkD';
 const SCREAM_CREAM_GEN_PRODUCT_ID = 'llc4XwX8XjHashrkv74r';
 const MINOXIDIL_GEN_PRODUCT_ID = 'Raw7mUkuzzhVdAo88jpL';
 const FAT_BURNER_GEN_PRODUCT_ID = '7Kix55LA15U0lNvY9QXI';
@@ -207,15 +208,24 @@ export function applyCurrentGenLaunchVariants(
     if (family.familyId === 'wolverine-bpc-tb') {
       return {
         ...family,
-        startingAtPriceDisplay: 'Starting at $159',
+        startingAtPriceDisplay: 'Starting at $169',
         variants: family.variants.map((variant) => {
+          if (variant.websiteVariantId === 'wolverine-capsule') {
+            return makeLiveVariant(variant, {
+              websiteVariantId: 'wolverine-capsule-gen-live',
+              displayLabel: 'Capsules',
+              form: 'Capsule',
+              finalRetailPrice: 189,
+              genProductId: WOLVERINE_CAPSULE_GEN_PRODUCT_ID,
+            });
+          }
           if (variant.websiteVariantId !== 'wolverine-injection') return { ...variant };
 
           return makeLiveVariant(variant, {
             websiteVariantId: 'wolverine-injection-gen-live',
             displayLabel: 'Injection',
             form: 'Injection',
-            finalRetailPrice: 159,
+            finalRetailPrice: 169,
             genProductId: WOLVERINE_GEN_PRODUCT_ID,
           });
         }),

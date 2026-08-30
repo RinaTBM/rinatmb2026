@@ -96,9 +96,11 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
           </div>
         </div>
       </div>
-      <section className="container-lux mt-16 max-w-4xl border-t border-cream-300 pt-12">
-        <ProductDescriptionSections product={product} />
-      </section>
+      <div className="container-lux -mt-8 pb-16 lg:-mt-16">
+        <div className="lg:ml-[calc(50%+2rem)] lg:w-[calc(50%-2rem)] border-t border-cream-300 pt-8">
+          <ProductDescriptionSections product={product} />
+        </div>
+      </div>
 
       {recommendationsOpen && (
         <div

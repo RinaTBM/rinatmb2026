@@ -516,11 +516,11 @@ function WellnessProductPage({ slug }: { slug: string }) {
         </div>
       </section>
 
-      <section className="py-12 md:py-16 border-t border-cream-300">
-        <div className="container-lux max-w-4xl">
+      <div className="container-lux -mt-8 pb-16 lg:-mt-16">
+        <div className="lg:ml-[calc(50%+2rem)] lg:w-[calc(50%-2rem)] border-t border-cream-300 pt-8">
           <ProductDescriptionSections product={product} showAbout={false} />
         </div>
-      </section>
+      </div>
 
       {product.faqs.length > 0 && (
         <section className="py-12 md:py-16 border-t border-cream-300">

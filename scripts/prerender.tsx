@@ -4,11 +4,13 @@ import { writeFileSync, readFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 
 import { CartProvider } from '@/context/CartContext';
+import { PrescriptionBasketProvider } from '@/context/PrescriptionBasketContext';
 import { MemberProvider } from '@/context/MemberContext';
 import { CustomerAuthProvider } from '@/context/CustomerAuthContext';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CartDrawer } from '@/components/CartDrawer';
+import { PrescriptionBasketDrawer } from '@/components/PrescriptionBasketDrawer';
 import { HomePage } from '@/pages/HomePage';
 import { GoalsPage } from '@/pages/GoalsPage';
 import { ShopAllPage } from '@/pages/ShopAllPage';
@@ -39,12 +41,15 @@ function renderPage(component: React.ReactElement) {
   return renderToString(
     createElement(CustomerAuthProvider, null,
       createElement(MemberProvider, null,
-        createElement(CartProvider, null,
-          createElement('div', { className: 'min-h-screen bg-cream-50' },
-            createElement(Header),
-            createElement('main', null, component),
-            createElement(Footer),
-            createElement(CartDrawer),
+        createElement(PrescriptionBasketProvider, null,
+          createElement(CartProvider, null,
+            createElement('div', { className: 'min-h-screen bg-cream-50' },
+              createElement(Header),
+              createElement('main', null, component),
+              createElement(Footer),
+              createElement(CartDrawer),
+              createElement(PrescriptionBasketDrawer),
+            ),
           ),
         ),
       ),

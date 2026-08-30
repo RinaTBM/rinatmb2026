@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { CartProvider } from '@/context/CartContext';
+import { PrescriptionBasketProvider } from '@/context/PrescriptionBasketContext';
 import { MemberProvider } from '@/context/MemberContext';
 import { CustomerAuthProvider } from '@/context/CustomerAuthContext';
 import { useRouter } from '@/router';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CartDrawer } from '@/components/CartDrawer';
+import { PrescriptionBasketDrawer } from '@/components/PrescriptionBasketDrawer';
 import { HomePage } from '@/pages/HomePage';
 import { GoalsPage } from '@/pages/GoalsPage';
 import { GoalPage } from '@/pages/GoalPage';
@@ -204,16 +206,19 @@ function App() {
   return (
     <CustomerAuthProvider>
       <MemberProvider>
-        <CartProvider>
-          <div className="min-h-screen bg-cream-50">
-            <Header />
-            <main>{renderPage()}</main>
-            <Footer />
-            <CartDrawer />
-            {/* Financing discovery only — does not replace Tagada card checkout */}
-            <CherryFinancingWidget />
-          </div>
-        </CartProvider>
+        <PrescriptionBasketProvider>
+          <CartProvider>
+            <div className="min-h-screen bg-cream-50">
+              <Header />
+              <main>{renderPage()}</main>
+              <Footer />
+              <CartDrawer />
+              <PrescriptionBasketDrawer />
+              {/* Financing discovery only — does not replace Tagada card checkout */}
+              <CherryFinancingWidget />
+            </div>
+          </CartProvider>
+        </PrescriptionBasketProvider>
       </MemberProvider>
     </CustomerAuthProvider>
   );

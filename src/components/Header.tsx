@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Search, ShoppingBag, Menu, X, ChevronDown, ChevronRight, UserRound } from 'lucide-react';
+import { Search, ShoppingBag, Plus, Menu, X, ChevronDown, ChevronRight, UserRound } from 'lucide-react';
 import { Link, navigate } from '@/router';
 import { useCart } from '@/context/CartContext';
+import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
 import { useCustomerAuth } from '@/context/CustomerAuthContext';
 import { visibleProducts } from '@/data/products';
 import { BrandLogo } from '@/components/BrandLogo';
@@ -14,6 +15,7 @@ const categoryItems = SHOP_CATEGORIES.map(c => ({
 
 export function Header() {
   const { itemCount, openCart } = useCart();
+  const { itemCount: prescriptionItemCount, openBasket: openPrescriptionBasket } = usePrescriptionBasket();
   const { authenticated } = useCustomerAuth();
   const accountHref = authenticated ? '/account' : '/account/login';
   const [scrolled, setScrolled] = useState(false);
@@ -169,12 +171,31 @@ export function Header() {
               <button
                 onClick={openCart}
                 className="relative text-ink-800 hover:text-gold-600 transition-colors p-1"
-                aria-label="Cart"
+                aria-label="Accessories cart"
+                title="Accessories cart"
               >
                 <ShoppingBag size={20} />
                 {itemCount > 0 && (
                   <span className="absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full bg-gold-400 text-[10px] font-semibold text-ink-900" style={{ height: 18, width: 18 }}>
                     {itemCount}
+                  </span>
+                  )}
+              </button>
+              <button
+                onClick={openPrescriptionBasket}
+                className="relative text-ink-800 hover:text-gold-600 transition-colors p-1"
+                aria-label="Open prescription care basket"
+                title="Prescription care basket — purchased separately through GEN Health"
+              >
+                <span className="relative inline-flex">
+                  <ShoppingBag size={20} />
+                  <span className="absolute -bottom-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gold-400 text-ink-900">
+                    <Plus size={10} strokeWidth={3} />
+                  </span>
+                </span>
+                {prescriptionItemCount > 0 && (
+                  <span className="absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full bg-gold-400 text-[10px] font-semibold text-ink-900" style={{ height: 18, width: 18 }}>
+                    {prescriptionItemCount}
                   </span>
                 )}
               </button>

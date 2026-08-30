@@ -601,14 +601,14 @@ export const products: Product[] = [
     ],
     needsDedicatedImage: true,
     internalNotes:
-      'Live GEN product-first wrapper 7Kix55LA15U0lNvY9QXI. The website deliberately excludes pharmacy-level formulation details; the prescribing provider and dispensing pharmacy determine clinical details after intake.',
+      'Live GEN product-first wrapper KXMm9SsbOEYnFy9phmZn. The website deliberately excludes pharmacy-level formulation details; the prescribing provider and dispensing pharmacy determine clinical details after intake.',
   }),
 
   mk({ id: 'p101', slug: 'aod-9604', displayName: 'AOD-9604', shortName: 'AOD-9604', subtitle: 'Provider-directed metabolic support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed metabolic-support peptide option available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed metabolic support injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 179 }] }),
   mk({ id: 'p102', slug: 'metabolic-triple', displayName: 'Metabolic Triple Protocol', shortName: 'Metabolic Triple', subtitle: 'Provider-directed metabolic support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed metabolic-support protocol available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed metabolic protocol injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 219 }] }),
   mk({ id: 'p103', slug: 'bpc-157', displayName: 'BPC-157', shortName: 'BPC-157', subtitle: 'Provider-directed recovery support', category: 'recovery-performance', goals: ['recovery', 'performance'], shortDescription: 'A provider-directed recovery peptide option available after eligibility review.', longDescription: COMPOUNDED_DISCLAIMER, image: IMG_INJECTION, imageAlt: 'Provider-directed recovery injection', providerDisclaimer: COMPOUNDED_DISCLAIMER, variants: [{ dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 199 }] }),
   mk({ id: 'p104', slug: 'ghk-cu-minoxidil', displayName: 'GHK-Cu / Minoxidil Topical Combo', shortName: 'GHK-Cu / Minoxidil', subtitle: 'Provider-directed topical care', category: 'prescription-skin-hair', goals: ['beauty'], shortDescription: 'A provider-directed topical option for scalp and skin support, available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CREAM, imageAlt: 'Provider-directed topical care', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Cream', strength: 'Provider-directed', size: 'Monthly supply', price: 69 }] }),
-  mk({ id: 'p105', slug: 'ondansetron-odt', displayName: 'Ondansetron ODT', shortName: 'Ondansetron', subtitle: 'Provider-directed supportive care', category: 'provider-care', goals: ['daily-wellness'], shortDescription: 'A provider-directed supportive-care option available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CAPSULE, imageAlt: 'Provider-directed supportive care tablets', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Capsule', strength: 'Provider-directed', size: 'Monthly supply', price: 60 }] }),
+  mk({ id: 'p105', slug: 'ondansetron-odt', displayName: 'Ondansetron ODT', shortName: 'Ondansetron', subtitle: 'Provider-directed weight-management support', category: 'weight-management', goals: ['weight-management'], shortDescription: 'A provider-directed supportive-care option available after eligibility review.', longDescription: RX_DISCLAIMER, image: IMG_CAPSULE, imageAlt: 'Provider-directed supportive care tablets', providerDisclaimer: RX_DISCLAIMER, variants: [{ dosageForm: 'Capsule', strength: 'Provider-directed', size: 'Monthly supply', price: 59 }] }),
 
   // ===== WOMEN'S HORMONE THERAPY =====
   mk({
@@ -898,7 +898,7 @@ export const products: Product[] = [
         dosageForm: 'Cream',
         strength: 'Provider-directed',
         size: 'Monthly supply',
-        price: 80,
+        price: 79,
       },
     ],
   }),

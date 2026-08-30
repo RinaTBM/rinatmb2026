@@ -26,13 +26,14 @@ const EXPECTED_SHOP_SLUGS = [
   'metabolic-triple',
   'bpc-157',
   'ghk-cu-minoxidil',
+  'ondansetron-odt',
 ] as const;
 
 describe('shop visibility vs purchase readiness', () => {
   it('shows the restored public wellness catalog on Shop All', () => {
     const shop = visibleProducts.filter((p) => SHOP_CATEGORY_IDS.has(p.category));
     expect(shop.map((p) => p.slug).sort()).toEqual([...EXPECTED_SHOP_SLUGS].sort());
-    expect(shop).toHaveLength(18);
+    expect(shop).toHaveLength(19);
   });
 
   it('keeps future-hidden products off the storefront', () => {

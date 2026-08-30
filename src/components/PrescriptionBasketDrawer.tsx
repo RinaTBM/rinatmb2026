@@ -20,7 +20,12 @@ export function PrescriptionBasketDrawer() {
   const { items, isOpen, itemCount, medicationSubtotal, closeBasket, removeItem } = usePrescriptionBasket();
   const [labOption, setLabOption] = useState<HrtLabOption>('full_package');
   const [shippingOption, setShippingOption] = useState<ShippingOption>('two_day');
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const hasHrt = items.some(item => item.category === HRT_CATEGORY);
+  const selectedItem = items.find(item => item.slug === selectedSlug) ?? items[0] ?? null;
+  const selectedItemAvailable = selectedItem
+    ? resolveGenProductFirstCheckout(selectedItem.genClientProductId).ok
+    : false;
   const labCents = hasHrt ? (labOption === 'full_package' ? FULL_HRT_LAB_PACKAGE_CENTS : OWN_LABS_REVIEW_CENTS) : 0;
   const shippingCents = shippingOption === 'two_day' ? TWO_DAY_SHIPPING_CENTS : NEXT_DAY_SHIPPING_CENTS;
   const estimatedTotalCents = Math.round(medicationSubtotal * 100) + labCents + shippingCents + INITIAL_VISIT_CENTS;
@@ -67,7 +72,12 @@ export function PrescriptionBasketDrawer() {
                 {items.map(item => {
                   const available = resolveGenProductFirstCheckout(item.genClientProductId).ok;
                   return (
-                    <div key={item.slug} className="rounded-2xl border border-cream-300 bg-white p-3">
+                    <div
+                      key={item.slug}
+                      className={`rounded-2xl border bg-white p-3 transition-colors ${
+                        selectedItem?.slug === item.slug ? 'border-gold-400 ring-1 ring-gold-300' : 'border-cream-300'
+                      }`}
+                    >
                       <div className="flex gap-3">
                         <img src={item.image} alt={item.imageAlt} className="h-20 w-20 rounded-xl bg-cream-100 object-cover" />
                         <div className="min-w-0 flex-1">
@@ -76,19 +86,26 @@ export function PrescriptionBasketDrawer() {
                               <p className="text-[10px] uppercase tracking-wider text-gold-600">{item.subtitle}</p>
                               <h3 className="font-serif text-lg leading-tight text-ink-900">{item.displayName}</h3>
                             </div>
-                            <button type="button" onClick={() => removeItem(item.slug)} aria-label={`Remove ${item.displayName}`} className="p-1 text-ink-400 hover:text-ink-900"><X size={16} /></button>
+                            <div className="flex items-center gap-1">
+                              <label className="flex items-center gap-1.5 text-[11px] text-ink-500">
+                                <input
+                                  type="radio"
+                                  name="selected-prescription"
+                                  checked={selectedItem?.slug === item.slug}
+                                  onChange={() => setSelectedSlug(item.slug)}
+                                  aria-label={`Select ${item.displayName} for GEN checkout`}
+                                  className="accent-gold-500"
+                                />
+                                Select
+                              </label>
+                              <button type="button" onClick={() => removeItem(item.slug)} aria-label={`Remove ${item.displayName}`} className="p-1 text-ink-400 hover:text-ink-900"><X size={16} /></button>
+                            </div>
                           </div>
                           <p className="mt-1 text-sm font-medium text-ink-900">{money(Math.round(item.price * 100))}</p>
                           <p className="mt-1 flex items-center gap-1 text-[11px] text-ink-500"><ShieldCheck size={12} className="text-gold-600" /> Provider review required · prescription not guaranteed</p>
                         </div>
                       </div>
-                      {available ? (
-                        <button type="button" onClick={() => beginGenCheckout(item.genClientProductId)} className="btn-primary mt-3 w-full text-sm">
-                          Continue with {item.displayName} in GEN Health <ExternalLink size={14} />
-                        </button>
-                      ) : (
-                        <p className="mt-3 rounded-lg bg-cream-100 px-3 py-2 text-xs text-ink-600">Temporarily unavailable for secure GEN checkout.</p>
-                      )}
+                      {!available && <p className="mt-3 rounded-lg bg-cream-100 px-3 py-2 text-xs text-ink-600">Temporarily unavailable for secure GEN checkout.</p>}
                     </div>
                   );
                 })}
@@ -151,6 +168,19 @@ export function PrescriptionBasketDrawer() {
 
             <div className="border-t border-cream-300 px-5 py-4">
               <p className="mb-3 text-xs leading-relaxed text-ink-500">GEN Health currently starts one prescription checkout at a time. Your other selections stay saved here while you complete each secure review.</p>
+              {selectedItem && (
+                <div className="mb-3 rounded-xl border border-gold-200 bg-gold-50 p-3">
+                  <p className="text-xs text-gold-900">Selected for next checkout: <span className="font-semibold">{selectedItem.displayName}</span></p>
+                  <button
+                    type="button"
+                    onClick={() => beginGenCheckout(selectedItem.genClientProductId)}
+                    disabled={!selectedItemAvailable}
+                    className="btn-primary mt-2 w-full text-sm"
+                  >
+                    {selectedItemAvailable ? <>Continue to GEN Health <ExternalLink size={14} /></> : 'Temporarily unavailable'}
+                  </button>
+                </div>
+              )}
               <button type="button" onClick={closeBasket} className="btn-ghost w-full">Keep shopping</button>
             </div>
           </>

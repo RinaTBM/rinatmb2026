@@ -714,7 +714,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
   },
   {
     "familyId": "wolverine-bpc-tb",
-    "displayName": "Recovery Support",
+    "displayName": "KLOW",
     "category": "Recovery & Performance",
     "architectureRule": "ONE website product. Selector: Delivery Method (Capsules|Injection). Separate price, formulation, GEN mapping per variant. Do not count as two patient-facing products.",
     "availableSelectors": [
@@ -773,7 +773,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
   },
   {
     "familyId": "minoxidil",
-    "displayName": "KLOW",
+    "displayName": "Hair Renewal Support",
     "category": "Prescription Skin & Hair",
     "architectureRule": "ONE current website product (combination topical). Locked formulation Fin/Minox 0.1%/5% Vios $79.",
     "availableSelectors": [
@@ -1492,7 +1492,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
   },
   {
     "familyId": "fat-burner",
-    "displayName": "Fat Burner",
+    "displayName": "Metabolic Balance Support",
     "category": "Weight Management",
     "architectureRule": "ONE website product family. Do not force near matches. Keep on website this phase.",
     "availableSelectors": [

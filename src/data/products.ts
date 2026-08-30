@@ -132,12 +132,6 @@ export interface Product {
   /** Internal only — must never be rendered to customers. */
   internalNotes?: string;
   needsDedicatedImage?: boolean;
-  /** Owner-verified GEN client product ID for Product-first hosted checkout (GEN Health). */
-  genClientProductId?: string;
-  /** Flat total price including shipping, shown as "$X due today" for GEN-routed products. */
-  genDisplayTotalCents?: number;
-  /** Shipping amount included in genDisplayTotalCents. */
-  genShippingCents?: number;
 
   // --- Backward-compatible fields consumed by existing pages/components ---
   name: string;               // === displayName
@@ -401,9 +395,6 @@ interface ProductSeed {
   autoRefillEligible?: boolean;
   memberPricingEligible?: boolean;
   excludedFromDiscounts?: boolean;
-  genClientProductId?: string;
-  genDisplayTotalCents?: number;
-  genShippingCents?: number;
 }
 
 const DISCOUNT_EXCLUDED_CATEGORIES: ReadonlySet<Category> = new Set(['provider-care', 'accessories']);
@@ -482,9 +473,6 @@ function mk(seed: ProductSeed): Product {
     providerDisclaimer: seed.providerDisclaimer,
     internalNotes: seed.internalNotes,
     needsDedicatedImage: seed.needsDedicatedImage,
-    genClientProductId: seed.genClientProductId,
-    genDisplayTotalCents: seed.genDisplayTotalCents,
-    genShippingCents: seed.genShippingCents,
 
     // Backward-compatible / derived
     name: seed.displayName,
@@ -602,18 +590,18 @@ export const products: Product[] = [
     // Visible for browse; checkout remains unavailable until routing/payment is ready.
     status: 'active',
     isVisible: true,
-    // Owner-approved retail $259.00 (at-cost $150.00). SKU MBM-WM-FB3-INJ-001.
     variants: [
       {
+        id: 'fat-burner-gen-live',
         dosageForm: 'Injection',
-        strength: 'AOD-9604 6mg (1.2mg/mL) / MOTS-C 10mg (2mg/mL) / Tesamorelin 15mg (3mg/mL)',
-        size: '5mL vial',
-        price: 259,
+        strength: 'Provider-directed',
+        size: 'Monthly supply',
+        price: 199,
       },
     ],
     needsDedicatedImage: true,
     internalNotes:
-      'Medical-director copy approved. Owner-approved retail $259.00 (at-cost $150.00). Not SLU-PP-332. Formulation: AOD-9604 6mg / MOTS-C 10mg / Tesamorelin 15mg in 5mL (1.2 / 2 / 3 mg/mL). SKU MBM-WM-FB3-INJ-001.',
+      'Live GEN product-first wrapper 7Kix55LA15U0lNvY9QXI. The website deliberately excludes pharmacy-level formulation details; the prescribing provider and dispensing pharmacy determine clinical details after intake.',
   }),
 
   // ===== WOMEN'S HORMONE THERAPY =====
@@ -650,26 +638,63 @@ export const products: Product[] = [
     imageAlt: 'Progesterone capsules bottle, a provider-directed hormone therapy option',
     providerDisclaimer: RX_DISCLAIMER,
     variants: [
-      { dosageForm: 'Capsule', strength: '100mg', size: '30 capsules', price: 39 },
-      { dosageForm: 'Capsule', strength: '200mg', size: '30 capsules', price: 59 },
+      {
+        id: 'progesterone-gen-live',
+        dosageForm: 'Capsule',
+        strength: 'Provider-directed',
+        size: 'Monthly supply',
+        price: 59,
+      },
     ],
   }),
   mk({
     id: 'p27', // preserves previous Testosterone Cream app_product_id
     slug: 'testosterone-cream',
-    displayName: 'Testosterone Cream',
-    shortName: 'Testosterone Cream',
+    displayName: 'Hormone Therapy Cream',
+    shortName: 'Hormone Therapy Cream',
     subtitle: 'Provider-directed hormone therapy',
     category: 'womens-hormone-therapy',
     goals: ['hrt-women'],
-    shortDescription: 'A topical testosterone cream prescribed as part of provider-directed hormone therapy.',
+    shortDescription: 'A provider-directed topical hormone-therapy option, available after eligibility review.',
     longDescription: RX_DISCLAIMER,
     image: IMG_CREAM,
-    imageAlt: 'Testosterone cream, a provider-directed hormone therapy option',
+    imageAlt: 'Hormone therapy cream, a provider-directed treatment option',
     providerDisclaimer: RX_DISCLAIMER,
     variants: [
-      { dosageForm: 'Cream', strength: '5mg/g', size: '30g', price: 79 },
+      {
+        id: 'hormone-therapy-cream-gen-live',
+        dosageForm: 'Cream',
+        strength: 'Provider-directed',
+        size: 'Monthly supply',
+        price: 89,
+      },
     ],
+  }),
+  mk({
+    id: 'p83',
+    slug: 'scream-cream',
+    displayName: 'Scream Cream',
+    shortName: 'Scream Cream',
+    subtitle: 'Provider-directed women\'s hormone therapy',
+    category: 'womens-hormone-therapy',
+    goals: ['hrt-women'],
+    shortDescription:
+      'A provider-directed topical women\'s hormone-therapy option, available after eligibility review.',
+    longDescription: RX_DISCLAIMER,
+    image: IMG_CREAM,
+    imageAlt: 'Provider-directed women\'s hormone therapy cream',
+    providerDisclaimer: RX_DISCLAIMER,
+    variants: [
+      {
+        id: 'scream-cream-gen-live',
+        dosageForm: 'Cream',
+        strength: 'Provider-directed',
+        size: 'Monthly supply',
+        price: 129,
+      },
+    ],
+    internalNotes:
+      'Live GEN product-first wrapper llc4XwX8XjHashrkv74r. Website intentionally excludes the underlying formulation and strength; provider and dispensing pharmacy determine clinical details after intake.',
   }),
 
   // ===== LONGEVITY & COGNITIVE HEALTH =====
@@ -705,8 +730,10 @@ export const products: Product[] = [
     imageAlt: 'Selank injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     variants: [
-      { dosageForm: 'Injection', strength: '5mg/mL', size: '2mL', price: 129 },
+      { dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 129 },
     ],
+    status: 'active',
+    isVisible: false,
   }),
   mk({
     id: 'p47', // preserves the previous Semax app_product_id
@@ -722,8 +749,10 @@ export const products: Product[] = [
     imageAlt: 'Semax injection, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     variants: [
-      { dosageForm: 'Injection', strength: '5mg/mL', size: '2mL', price: 129 },
+      { dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 129 },
     ],
+    status: 'active',
+    isVisible: false,
   }),
   mk({
     id: 'p68',
@@ -739,7 +768,13 @@ export const products: Product[] = [
     imageAlt: 'Selank and Semax blend nasal spray, a provider-directed compounded formulation',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     variants: [
-      { dosageForm: 'Nasal Spray', strength: '50mcg/50mcg per spray', size: '10mL', price: 169 },
+      {
+        id: 'selank-semax-gen-live',
+        dosageForm: 'Nasal Spray',
+        strength: 'Provider-directed',
+        size: 'Monthly supply',
+        price: 149,
+      },
     ],
   }),
   mk({
@@ -759,18 +794,19 @@ export const products: Product[] = [
     // Visible for browse; checkout remains unavailable until routing/payment is ready.
     status: 'active',
     isVisible: true,
-    // Owner-approved retail $149.00 (at-cost $83.33). SKU MBM-LON-TESA-INJ-001.
+    // Live GEN wrapper price; clinical details are selected after intake.
     variants: [
       {
+        id: 'tesamorelin-gen-live',
         dosageForm: 'Injection',
-        strength: '10mg total · 5mg/mL',
-        size: '2mL vial',
-        price: 149,
+        strength: 'Provider-directed',
+        size: 'Monthly supply',
+        price: 269,
       },
     ],
     needsDedicatedImage: true,
     internalNotes:
-      'Medical-director copy approved. Owner-approved retail $149.00 (at-cost $83.33). Lyophilized Tesamorelin 10mg / 2mL (5mg/mL). SKU MBM-LON-TESA-INJ-001.',
+      'Live GEN product-first wrapper. The prescribing provider and dispensing pharmacy determine final clinical details after intake.',
   }),
 
   // ===== RECOVERY & PERFORMANCE =====
@@ -782,44 +818,48 @@ export const products: Product[] = [
     subtitle: 'BPC-157/TB-500 Blend',
     category: 'recovery-performance',
     goals: ['recovery', 'performance'],
-    shortDescription: 'A provider-directed compounded BPC-157/TB-500 blend, available in capsules and injection.',
+    shortDescription: 'A provider-directed compounded recovery injection, available after eligibility review.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'Wolverine BPC-157/TB-500 blend, a provider-directed compounded formulation in capsule and injection forms',
+    imageAlt: 'Wolverine provider-directed compounded recovery injection',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     variants: [
-      { dosageForm: 'Capsule', strength: 'Blend', size: 'Capsule', price: 99 },
-      { dosageForm: 'Injection', strength: 'Blend', size: 'Injection', price: 199 },
+      {
+        id: 'wolverine-injection-gen-live',
+        dosageForm: 'Injection',
+        strength: 'Provider-directed',
+        size: 'Monthly supply',
+        price: 159,
+      },
     ],
   }),
   mk({
-    id: 'p75',
+    id: 'p82',
     slug: 'recovery-stack',
     displayName: 'Recovery Stack',
     shortName: 'Recovery Stack',
-    subtitle: 'Provider-directed compounded recovery injection',
+    subtitle: 'Provider-directed recovery support',
     category: 'recovery-performance',
     goals: ['recovery', 'performance'],
     shortDescription:
-      'A provider-directed compounded recovery injection, available after eligibility review.',
+      'A provider-directed compounded recovery injection, available after eligibility review. Medication price is $159 plus $30 shipping at checkout.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'Recovery Stack, a provider-directed compounded recovery injection in a 5mL vial',
+    imageAlt: 'Amber injection vial for the provider-directed Recovery Stack',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
-    status: 'active',
-    isVisible: true,
-    autoRefillEligible: false,
     memberPricingEligible: false,
-    genClientProductId:
-      'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p',
-    genDisplayTotalCents: 18900,
-    genShippingCents: 3000,
+    autoRefillEligible: false,
     variants: [
-      { dosageForm: 'Injection', strength: 'Compounded blend', size: '5mL vial', price: 159 },
+      {
+        id: 'bpc-ghk-kpv-tb-r101',
+        dosageForm: 'Injection',
+        strength: 'Recovery Stack',
+        size: '5 mL vial',
+        price: 159,
+      },
     ],
-    needsDedicatedImage: true,
     internalNotes:
-      'GEN Health Product-first checkout. $159 medication + $30 shipping = $189 due today. Provider visit shown by GEN at checkout. No subscription/auto-refill. Do not display formulation names or concentrations.',
+      'GEN Product-first client product MXsSZY2GpiCByJUQer1p. Exact paired formulary: BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL (5 mL), Greenwich Pharmacy. Retail medication price $159 under owner formula: ($77 medication cost × 1.75) + $25 pharmacy shipping = $159.75, rounded to $159. Website must route only through the verified GEN checkout.',
   }),
 
   // ===== PRESCRIPTION SKIN & HAIR =====
@@ -840,29 +880,39 @@ export const products: Product[] = [
     providerDisclaimer: RX_DISCLAIMER,
     bestSeller: true,
     variants: [
-      { dosageForm: 'Cream', strength: '0.025%', size: '20g', price: 79 },
-      { dosageForm: 'Cream', strength: '0.05%', size: '20g', price: 89 },
-      { dosageForm: 'Cream', strength: '0.1%', size: '20g', price: 109 },
+      {
+        id: 'tretinoin-gen-live',
+        dosageForm: 'Cream',
+        strength: 'Provider-directed',
+        size: 'Monthly supply',
+        price: 80,
+      },
     ],
   }),
   mk({
     id: 'p70',
     slug: 'minoxidil-topical',
-    displayName: 'Minoxidil Combination Topical Formula',
+    displayName: 'Minoxidil Topical',
     shortName: 'Minoxidil Topical',
     subtitle: 'Prescription hair care',
     category: 'prescription-skin-hair',
     goals: ['beauty'],
-    shortDescription: 'A compounded topical formula featuring minoxidil, personalized by the prescribing provider and dispensing pharmacy.',
+    shortDescription: 'A provider-directed topical hair-care option, available after eligibility review.',
     longDescription:
-      'Prescription hair-care option available following licensed-provider review. Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
+      'Prescription hair-care option available following licensed-provider review. Your prescribing provider and dispensing pharmacy determine the clinical details after intake.',
     image: IMG_GEL,
-    imageAlt: 'Minoxidil combination topical formula, a prescription hair-care treatment',
+    imageAlt: 'Minoxidil topical, a provider-directed prescription hair-care option',
     providerDisclaimer:
-      'Exact compounded formulation is determined by the prescribing provider and dispensing pharmacy.',
+      'The prescribing provider and dispensing pharmacy determine the final clinical details after intake.',
     needsDedicatedImage: true,
     variants: [
-      { dosageForm: 'Topical Solution', strength: 'Combination formula', size: 'Bottle', price: 129 },
+      {
+        id: 'minoxidil-gen-live',
+        dosageForm: 'Topical Solution',
+        strength: 'Provider-directed',
+        size: 'Monthly supply',
+        price: 79,
+      },
     ],
   }),
   // Active on storefront historically, but NOT on the approved wellness sync list.
@@ -881,13 +931,15 @@ export const products: Product[] = [
     imageAlt: 'Lash/Brow Growth Serum — prescription bimatoprost solution',
     providerDisclaimer: RX_DISCLAIMER,
     needsDedicatedImage: true,
-    status: 'future',
-    isVisible: false,
     internalNotes:
       'Customer-facing display name is Lash/Brow Growth Serum. Underlying formulation remains Bimatoprost Solution. Slug/SKU/IDs unchanged (bimatoprost-solution / MBM-SH-BIM-SOL-001 / p71).',
     variants: [
       { dosageForm: 'Solution', strength: '0.03%', size: '2.5mL', price: 89 },
     ],
+    // Retired from the customer storefront. Keep the historical record for
+    // order/account compatibility, but do not offer or route it for purchase.
+    status: 'future',
+    isVisible: false,
   }),
 
   // =========================================================================

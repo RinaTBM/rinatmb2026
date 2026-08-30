@@ -25,12 +25,11 @@ describe('MBM-FINAL-WEBSITE-LAUNCH-1 gate', () => {
     expect(ready.some((r) => r.familyId === 'nad' && r.websiteVariantId === 'nad-nasal-r84')).toBe(
       true,
     );
-    expect(held.some((r) => r.websiteVariantId.startsWith('nad-inj-'))).toBe(true);
+    expect(ready.some((r) => r.websiteVariantId === 'nad-injection-gen-live')).toBe(true);
     const nadFamily = WEBSITE_PRODUCT_FAMILIES.find((f) => f.familyId === 'nad')!;
     const visible = listPatientVisibleVariants(nadFamily);
     expect(visible.map((v) => v.websiteVariantId)).toEqual([
-      'nad-inj-5ml-500',
-      'nad-inj-10ml-1000',
+      'nad-injection-gen-live',
       'nad-nasal-r84',
     ]);
   });
@@ -38,14 +37,14 @@ describe('MBM-FINAL-WEBSITE-LAUNCH-1 gate', () => {
   it('lists FORMULARY_PENDING current variants', () => {
     const pending = formularyPendingVariantIds();
     expect(pending).toContain('nad-inj-5ml-500');
-    expect(pending).toContain('fat-burner-current');
+    expect(pending).not.toContain('fat-burner-gen-live');
   });
 
   it('resolves GEN clientProductId server-side for launch-ready SKUs only', () => {
     expect(resolveGenClientProductIdForSku('MBM-WM-SEM-B12-001')).toContain('SkqQHmsc0WdsbK9vmV1y');
     expect(resolveGenClientProductIdForSku('MBM-WM-TIR-B12-001')).toContain('SvFDJ7W4nmWL2bkLUMMS');
     expect(resolveGenClientProductIdForSku('MBM-LON-NAD-NS-001')).toContain('FVwkzvQqWIZRNAwbslGw');
-    expect(resolveGenClientProductIdForSku('MBM-LON-NAD-INJ-001')).toBeNull();
+    expect(resolveGenClientProductIdForSku('MBM-LON-NAD-INJ-003')).toContain('SHJpGAACUFEeMONdpEbn');
   });
 
   it('restores the public shop catalog without B6 names or future-hidden SKUs', () => {

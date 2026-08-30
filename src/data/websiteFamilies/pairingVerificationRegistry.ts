@@ -38,10 +38,26 @@ export const OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS: ReadonlySet<string> = new Se
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_wQK2JsFnh7oFBf3Lag4n',
   // NAD+ Nasal r84 (St Luke NAD+ multi options)
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw',
+  // NAD+ Injectable — MBM live generic injection wrapper
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn',
+  // Estradiol Patch — MBM live generic patch wrapper
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR',
   // TIR Any Dose B12/Glycine — owner-approved single backend
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SvFDJ7W4nmWL2bkLUMMS',
-  // Recovery Stack — owner-provided GEN Product-first checkout
+  // Recovery Stack / KLOW — exact BPC-157 + GHK-Cu + KPV + TB-500 pairing
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p',
+  // Owner-supplied live MBM wrappers verified in GEN checkout.
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_AVNvVWBE98DfINxyz5Dm',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_LWkYtwm66dIeLuDSvSfi',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_2cYxVfvwpWyyrANZx06G',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9',
+  // Scream Cream — owner-updated MBM Women's Hormone Therapy wrapper.
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_llc4XwX8XjHashrkv74r',
+  // Owner-confirmed live wrappers; clinical details remain in GEN.
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_Raw7mUkuzzhVdAo88jpL',
+  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI',
 ]);
 
 export function isOwnerVerifiedGenClientProductId(

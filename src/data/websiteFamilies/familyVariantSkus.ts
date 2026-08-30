@@ -32,6 +32,7 @@ export const FAMILY_VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
   'tir-glycine-20mg-ml': 'MBM-WM-TIR-GLY-006',
   'tir-glycine-30mg-ml': 'MBM-WM-TIR-GLY-007',
   'nad-nasal-r84': 'MBM-LON-NAD-NS-001',
+  'nad-injection-gen-live': 'MBM-LON-NAD-INJ-003',
 };
 
 const PAYMENT_ONLY_VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {

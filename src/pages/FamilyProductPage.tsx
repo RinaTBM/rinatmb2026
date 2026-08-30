@@ -203,6 +203,10 @@ function FamilySelectors({
   const displayPrice = oneTimeVial?.ok
     ? oneTimeVial.mapping.retailPriceCents / 100
     : price;
+  // Recovery Stack has a fixed, separately disclosed $30 shipping charge in
+  // GEN. Keep the website total equal to the GEN checkout total.
+  const fixedShipping = familyId === 'bpc-advanced-blends' ? 30 : 0;
+  const dueToday = displayPrice == null ? null : displayPrice + fixedShipping;
   const genCheckout = resolveGenProductFirstCheckout(
     glp1FamilyId && oneTimeVial?.ok
       ? oneTimeVial.mapping.genClientProductId
@@ -387,10 +391,12 @@ function FamilySelectors({
                   <div>
                     <p className="text-sm text-ink-500">Due today in GEN Health</p>
                     <p className="font-serif text-3xl text-ink-900">
-                      {displayPrice != null ? formatPrice(displayPrice) : '—'}
+                      {dueToday != null ? formatPrice(dueToday) : '—'}
                     </p>
                     <p className="mt-1 text-xs text-ink-500">
-                      Final payment total and any applicable visit charge are shown by GEN Health before payment.
+                      {fixedShipping > 0
+                        ? `Includes ${formatPrice(fixedShipping)} shipping. Any applicable visit charge is shown by GEN Health before payment.`
+                        : 'Final payment total and any applicable visit charge are shown by GEN Health before payment.'}
                     </p>
                   </div>
                 </div>
@@ -400,10 +406,10 @@ function FamilySelectors({
                   disabled={!canPurchase}
                   onClick={handleGenCheckout}
                 >
-                  {oneTimeGettingStarted
+                    {oneTimeGettingStarted
                       ? 'Choose a weekly dose'
                       : canPurchase
-                        ? 'Continue to Secure Payment & Intake'
+                        ? 'Continue to Checkout'
                         : 'Temporarily unavailable'}
                 </button>
                 <p className="mt-3 text-xs text-ink-500 leading-relaxed">

@@ -82,10 +82,13 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
     }
   });
 
-  it('inventories live-verified Tagada maps for every family SKU', () => {
+  it('inventories live-verified Tagada maps for every Tagada-routed family SKU', () => {
     expect(LAUNCH_READY_ONE_TIME_SKUS.length).toBeGreaterThanOrEqual(27);
     expect(new Set(LAUNCH_READY_ONE_TIME_SKUS).size).toBe(LAUNCH_READY_ONE_TIME_SKUS.length);
-    for (const sku of Object.values(FAMILY_VARIANT_SKU_BY_ID)) {
+    const tagadaRoutedFamilySkus = Object.entries(FAMILY_VARIANT_SKU_BY_ID)
+      .filter(([variantId]) => variantId !== 'nad-injection-gen-live')
+      .map(([, sku]) => sku);
+    for (const sku of tagadaRoutedFamilySkus) {
       expect(LAUNCH_READY_KASHU_MAP[sku]).toBeTruthy();
       expect(LAUNCH_READY_KASHU_MAP[sku].mbm_sku).toBe(sku);
       expect(LAUNCH_READY_KASHU_MAP[sku].tagada_product_id).toMatch(/^product_/);
@@ -102,6 +105,8 @@ describe('MBM-FINAL-CHECKOUT-LAUNCH-1 non-destructive QA', () => {
       for (const variant of family.variants) {
         if (classifyVariant(variant).classification !== 'LAUNCH_READY') continue;
         if (variant.purchaseType === 'membership') continue;
+        // Product-first GEN routes are intentionally not represented in Tagada.
+        if (variant.checkoutStatus === 'GEN_PRODUCT_FIRST') continue;
         const sku = skuForFamilyVariantId(variant.websiteVariantId);
         expect(sku).toBeTruthy();
         const map = LAUNCH_READY_KASHU_MAP[sku!];

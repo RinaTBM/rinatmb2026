@@ -187,6 +187,34 @@ export function applyOneTimeVialVariants(families: WebsiteProductFamily[]): Webs
         ],
       };
     }
+    if (family.familyId === 'bpc-advanced-blends') {
+      const recoveryStack = find(family, 'bpc-ghk-kpv-tb-r101');
+      return {
+        ...family,
+        displayName: 'Recovery Stack',
+        architectureRule:
+          'One verified Recovery Stack injection routes to the matching GEN Product-first checkout.',
+        availableSelectors: [],
+        currentWebsiteSlug: 'recovery-stack',
+        startingAtPriceDisplay: '$159',
+        variants: [
+          {
+            ...recoveryStack,
+            displayLabel: null,
+            finalRetailPrice: 159,
+            startingPrice: 159,
+            genProductId: 'MXsSZY2GpiCByJUQer1p',
+            genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_MXsSZY2GpiCByJUQer1p',
+            genPairingVerified: true,
+            routingStatus: 'ROUTING_READY',
+            launchState: 'LAUNCH_READY',
+            checkoutStatus: 'GEN_PRODUCT_FIRST',
+            availabilityStatus: 'storefront',
+            exactFormularyRows: [101],
+          },
+        ],
+      };
+    }
     return family;
   });
 }

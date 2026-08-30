@@ -42,14 +42,8 @@ export const WEBSITE_FAMILY_CUTOVER_ENABLED = true;
 /** Real GEN order submission stays OFF until API Orders / external-paid is enabled. */
 export const REAL_GEN_ORDER_SUBMISSION_ENABLED = false;
 
-/**
- * Exact-price Tagada variants that may be sold while fulfillment stays in the
- * admin-controlled clinical/GEN queue. They do not imply GEN API readiness.
- */
-const PAYMENT_ONLY_STOREFRONT_VARIANT_IDS = new Set([
-  'nad-inj-5ml-500',
-  'nad-inj-10ml-1000',
-]);
+/** Payment-only exceptions are intentionally empty for the GEN launch path. */
+const PAYMENT_ONLY_STOREFRONT_VARIANT_IDS = new Set<string>();
 
 export function getWebsiteFamily(familyId: string): WebsiteProductFamily | undefined {
   return WEBSITE_PRODUCT_FAMILIES.find((f) => f.familyId === familyId);
@@ -166,17 +160,10 @@ export function resolveFamilyVariant(
         : { ok: false, familyId, variant: null, reason: 'NAD_NASAL_R84_MISSING' };
     }
     if (norm(form).includes('inject')) {
-      const pkg = selectors.package || selectors.strength || '';
-      if (String(pkg).includes('10') || norm(pkg).includes('1000')) {
-        const v = candidates.find((x) => x.websiteVariantId === 'nad-inj-10ml-1000');
-        return v
-          ? { ok: true, familyId, variant: v }
-          : { ok: false, familyId, variant: null, reason: 'NAD_INJ_10_MISSING' };
-      }
-      const v = candidates.find((x) => x.websiteVariantId === 'nad-inj-5ml-500');
+      const v = candidates.find((x) => x.websiteVariantId === 'nad-injection-gen-live');
       return v
         ? { ok: true, familyId, variant: v }
-        : { ok: false, familyId, variant: null, reason: 'NAD_INJ_5_MISSING' };
+        : { ok: false, familyId, variant: null, reason: 'NAD_INJECTION_MISSING' };
     }
     return { ok: false, familyId, variant: null, reason: 'NAD_FORM_REQUIRED' };
   }
@@ -199,25 +186,14 @@ export function resolveFamilyVariant(
   }
 
   if (familyId === 'estradiol') {
-    const strength = selectors.strength || '';
-    const map: Record<string, string> = {
-      '0.025': 'estradiol-patch-r26',
-      '0.0375': 'estradiol-patch-r27',
-      '0.05': 'estradiol-patch-r28',
-      '0.1': 'estradiol-patch-r29',
-    };
-    const key = Object.keys(map).find((k) => strength.includes(k));
-    if (!key) {
-      return { ok: false, familyId, variant: null, reason: 'ESTRADIOL_STRENGTH_REQUIRED' };
-    }
-    const v = candidates.find((x) => x.websiteVariantId === map[key]);
+    const v = candidates.find((x) => x.websiteVariantId === 'estradiol-patch-gen-live');
     return v
       ? { ok: true, familyId, variant: v }
-      : { ok: false, familyId, variant: null, reason: 'ESTRADIOL_VARIANT_MISSING' };
+      : { ok: false, familyId, variant: null, reason: 'ESTRADIOL_PATCH_MISSING' };
   }
 
   if (familyId === 'minoxidil') {
-    const v = candidates.find((x) => x.websiteVariantId === 'minoxidil-fin-minox-0.1-5');
+    const v = candidates.find((x) => x.websiteVariantId === 'minoxidil-gen-live');
     return v
       ? { ok: true, familyId, variant: v }
       : { ok: false, familyId, variant: null, reason: 'MINOXIDIL_LOCKED_VARIANT_MISSING' };

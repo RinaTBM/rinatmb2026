@@ -31,15 +31,15 @@ describe('MBM website family → GEN routing build', () => {
     }
   });
 
-  it('covers 30 families / 113 variants with amended pairing status buckets', () => {
+  it('covers 30 families / 111 variants with amended pairing status buckets', () => {
     expect(WEBSITE_PRODUCT_FAMILIES).toHaveLength(30);
     const total = WEBSITE_PRODUCT_FAMILIES.reduce((n, f) => n + f.variants.length, 0);
-    expect(total).toBe(113);
+    expect(total).toBe(111);
     const counts = countByRoutingStatus();
-    expect(counts.ROUTING_READY).toBe(29);
-    expect(counts.FORMULARY_PENDING).toBe(14);
-    expect(counts.GEN_PAIRING_PENDING).toBe(17);
-    expect(counts.FUTURE_HIDDEN).toBe(51);
+    expect(counts.ROUTING_READY).toBe(41);
+    expect(counts.FORMULARY_PENDING).toBe(9);
+    expect(counts.GEN_PAIRING_PENDING).toBe(5);
+    expect(counts.FUTURE_HIDDEN).toBe(54);
     expect(counts.BLOCKED).toBe(2);
     expect(
       counts.FUTURE_HIDDEN +
@@ -47,7 +47,7 @@ describe('MBM website family → GEN routing build', () => {
         counts.GEN_PAIRING_PENDING +
         counts.FORMULARY_PENDING +
         counts.ROUTING_READY,
-    ).toBe(113);
+    ).toBe(111);
   });
 
   it('SEM B12 vs Glycine and membership resolve to distinct GEN routes', () => {
@@ -87,53 +87,61 @@ describe('MBM website family → GEN routing build', () => {
     expect(tier.variant?.routingStatus).toBe('ROUTING_READY');
   });
 
-  it('NAD selectors expose Tagada-ready injections and nasal r84; r85 stays held', () => {
+  it('NAD selectors expose verified GEN injection and nasal r84; r85 stays held', () => {
     const inj = resolveFamilyVariant('nad', { form: 'Injection', package: '5mL' });
     const nasalA = resolveFamilyVariant('nad', { form: 'Nasal Spray', nasalOption: 'r84' });
     const nasalB = resolveFamilyVariant('nad', { form: 'Nasal Spray', nasalOption: 'r85' });
     expect(inj.ok).toBe(true);
-    expect(inj.variant?.websiteVariantId).toBe('nad-inj-5ml-500');
-    expect(inj.variant?.finalRetailPrice).toBe(199);
+    expect(inj.variant?.websiteVariantId).toBe('nad-injection-gen-live');
+    expect(inj.variant?.finalRetailPrice).toBe(139);
+    expect(inj.variant?.genClientProductId).toContain('SHJpGAACUFEeMONdpEbn');
     expect(nasalA.variant?.websiteVariantId).toBe('nad-nasal-r84');
     expect(nasalA.variant?.finalRetailPrice).toBe(79);
     expect(nasalA.variant?.genClientProductId).toContain('FVwkzvQqWIZRNAwbslGw');
     expect(nasalB.ok).toBe(false);
     const nad = WEBSITE_PRODUCT_FAMILIES.find((x) => x.familyId === 'nad')!;
-    expect(nad.variants.find((v) => v.websiteVariantId === 'nad-inj-5ml-500')?.routingStatus).toBe(
-      'FORMULARY_PENDING',
+    expect(nad.variants.find((v) => v.websiteVariantId === 'nad-injection-gen-live')?.routingStatus).toBe(
+      'ROUTING_READY',
     );
     expect(nad.variants.find((v) => v.websiteVariantId === 'nad-nasal-r85')?.genPairingVerified).toBe(
       false,
     );
   });
 
-  it('Wolverine capsule vs injection stay on separate GEN CPs and are held from launch', () => {
+  it('launches the verified Wolverine injection and keeps the capsule held', () => {
     const family = WEBSITE_PRODUCT_FAMILIES.find((x) => x.familyId === 'wolverine-bpc-tb')!;
     const cap = family.variants.find((v) => v.websiteVariantId === 'wolverine-capsule')!;
-    const inj = family.variants.find((v) => v.websiteVariantId === 'wolverine-injection')!;
+    const inj = family.variants.find((v) => v.websiteVariantId === 'wolverine-injection-gen-live')!;
     expect(cap.finalRetailPrice).toBe(29);
     expect(inj.finalRetailPrice).toBe(159);
     expect(cap.genClientProductId).not.toBe(inj.genClientProductId);
-    expect(listPatientVisibleVariants(family)).toHaveLength(0);
+    expect(listPatientVisibleVariants(family).map((v) => v.websiteVariantId)).toEqual([
+      'wolverine-injection-gen-live',
+    ]);
   });
 
-  it('Estradiol patch strengths exist as held backends (not on storefront yet)', () => {
+  it('Estradiol Patch uses the owner-approved generic GEN wrapper', () => {
     const family = WEBSITE_PRODUCT_FAMILIES.find((x) => x.familyId === 'estradiol')!;
     const a = family.variants.find((v) => v.websiteVariantId === 'estradiol-patch-r26')!;
-    const b = family.variants.find((v) => v.websiteVariantId === 'estradiol-patch-r29')!;
+    const live = family.variants.find((v) => v.websiteVariantId === 'estradiol-patch-gen-live')!;
     expect(a.genProductId).toBe('rziDZ07sJzDMXpdTvPcL');
-    expect(b.genProductId).toBe('T4kMQnbixxDm7f0Ptjtq');
     expect(a.genPairingVerified).toBe(false);
-    expect(b.finalRetailPrice).toBe(149);
-    expect(listPatientVisibleVariants(family)).toHaveLength(0);
+    expect(live.genProductId).toBe('o7dNtf9QsnEqPCrLr2tR');
+    expect(live.finalRetailPrice).toBe(129);
+    expect(live.routingStatus).toBe('ROUTING_READY');
+    expect(listPatientVisibleVariants(family).map((v) => v.websiteVariantId)).toEqual([
+      'estradiol-patch-gen-live',
+    ]);
   });
 
-  it('Minoxidil Dual Combo remains held until formulary is attached', () => {
+  it('Minoxidil uses the owner-confirmed generic GEN wrapper', () => {
     const family = WEBSITE_PRODUCT_FAMILIES.find((x) => x.familyId === 'minoxidil')!;
-    const m = family.variants.find((v) => v.websiteVariantId === 'minoxidil-fin-minox-0.1-5')!;
+    const m = family.variants.find((v) => v.websiteVariantId === 'minoxidil-gen-live')!;
     expect(m.finalRetailPrice).toBe(79);
-    expect(m.genClientProductId).toContain('BboYS4a2Uj7APetrFo6W');
-    expect(listPatientVisibleVariants(family)).toHaveLength(0);
+    expect(m.genClientProductId).toContain('Raw7mUkuzzhVdAo88jpL');
+    expect(listPatientVisibleVariants(family).map((v) => v.websiteVariantId)).toEqual([
+      'minoxidil-gen-live',
+    ]);
   });
 
   it('GEN order gate requires pairing verified + ROUTING_READY + real GEN orders', () => {
@@ -219,13 +227,13 @@ describe('MBM website family → GEN routing build', () => {
   });
 
   it('keeps FUTURE_HIDDEN out of patient-visible catalog options', () => {
-    const hiddenFamilies = ['pt-141', 'scream-cream', 'selank', 'semax'];
+    const hiddenFamilies = ['pt-141', 'selank', 'semax'];
     for (const id of hiddenFamilies) {
       const f = WEBSITE_PRODUCT_FAMILIES.find((x) => x.familyId === id);
       expect(f).toBeTruthy();
       const visible = listPatientVisibleVariants(f!);
       expect(visible.every((v) => v.routingStatus !== 'FUTURE_HIDDEN')).toBe(true);
-      if (id === 'pt-141' || id === 'scream-cream') {
+      if (id === 'pt-141') {
         expect(visible).toHaveLength(0);
       }
     }
@@ -235,8 +243,8 @@ describe('MBM website family → GEN routing build', () => {
     expect(nadVisible.some((v) => v.websiteVariantId.includes('r82'))).toBe(false);
   });
 
-  it('launch registry marks 10 compatible CPs verified including TIR SvFDJ7; apply is idempotent', () => {
-    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(11);
+  it('launch registry marks 22 compatible CPs verified including the current GEN wrappers; apply is idempotent', () => {
+    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(22);
     const verifiedVariants = WEBSITE_PRODUCT_FAMILIES.flatMap((f) =>
       f.variants.filter((v) => v.genPairingVerified),
     );
@@ -259,7 +267,7 @@ describe('MBM website family → GEN routing build', () => {
       doseTier: 'Mid',
     });
     expect(midGly.variant?.genPairingVerified).toBe(true);
-    // SEM Any Dose B12 + NAD nasal r84 verified; Wolverine injection not (capsule still attached)
+    // SEM Any Dose B12 + NAD nasal r84 verified; the mapped Wolverine injection is live.
     const anyB12 = resolveFamilyVariant('semaglutide', {
       purchaseType: 'one_time',
       additive: 'Vitamin B12',
@@ -271,9 +279,9 @@ describe('MBM website family → GEN routing build', () => {
     );
     expect(nadR84?.genPairingVerified).toBe(true);
     const wolInj = WEBSITE_PRODUCT_FAMILIES.flatMap((f) => f.variants).find(
-      (v) => v.websiteVariantId === 'wolverine-injection',
+      (v) => v.websiteVariantId === 'wolverine-injection-gen-live',
     );
-    expect(wolInj?.genPairingVerified).toBe(false);
+    expect(wolInj?.genPairingVerified).toBe(true);
     // TIR single backend mapped but not verified until 3-PACK removed
     const tirAny = resolveFamilyVariant('tirzepatide', {
       purchaseType: 'one_time',

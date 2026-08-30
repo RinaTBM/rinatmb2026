@@ -34,7 +34,6 @@ export const VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
   'tesamorelin-v1': 'MBM-LON-TESA-INJ-001',
   'bpc-157-tb-500-v1': 'MBM-RP-BPC-CAP-001',
   'bpc-157-tb-500-v2': 'MBM-RP-BPC-INJ-001',
-  'recovery-stack-v1': 'MBM-RP-RSC-INJ-001',
   'tretinoin-cream-v1': 'MBM-SH-TRE-CRM-001',
   'tretinoin-cream-v2': 'MBM-SH-TRE-CRM-002',
   'tretinoin-cream-v3': 'MBM-SH-TRE-CRM-003',

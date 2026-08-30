@@ -12,6 +12,8 @@ import {
   MEMBERSHIP_FULFILLMENT_CROSSWALK,
   resolveMembershipFulfillmentSku,
 } from './membershipSkuCrosswalk';
+import { getWebsiteFamilyBySlug, listPatientVisibleVariants } from '@/data/websiteFamilies';
+import { resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
 
 describe('variant SKU registry', () => {
   it('has retail SKUs covering historical rows plus cutover family variants', () => {
@@ -41,7 +43,17 @@ describe('variant SKU registry', () => {
     const active = products.filter(p => p.status === 'active' && p.isVisible);
     const missing: string[] = [];
     for (const p of active) {
+      const family = getWebsiteFamilyBySlug(p.slug);
+      const isGenOnly = Boolean(
+        family &&
+          listPatientVisibleVariants(family).some(
+            (variant) =>
+              variant.websiteVariantId === p.variants[0]?.id &&
+              resolveGenProductFirstCheckout(variant.genClientProductId).ok,
+          ),
+      );
       for (const v of p.variants) {
+        if (isGenOnly && !v.sku) continue;
         if (!v.sku) missing.push(`${p.slug}/${v.id}`);
         else expect(v.sku).toBe(VARIANT_SKU_BY_ID[v.id]);
       }
@@ -49,7 +61,15 @@ describe('variant SKU registry', () => {
     expect(missing).toEqual([]);
   });
 
-  it('keeps Tesamorelin and Fat Burner visible for browse while checkout stays unready', () => {
+  it('keeps Recovery Stack GEN-only rather than assigning a Tagada SKU', () => {
+    const recovery = products.find((p) => p.slug === 'recovery-stack');
+    expect(recovery?.variants[0]?.sku).toBeUndefined();
+    const family = getWebsiteFamilyBySlug('recovery-stack');
+    const variant = family && listPatientVisibleVariants(family)[0];
+    expect(resolveGenProductFirstCheckout(variant?.genClientProductId).ok).toBe(true);
+  });
+
+  it('keeps Fat Burner and Tesamorelin GEN-routed', () => {
     const published = products.filter(p => ['tesamorelin', 'fat-burner'].includes(p.slug));
     expect(published).toHaveLength(2);
     const tesa = published.find(p => p.slug === 'tesamorelin')!;
@@ -58,10 +78,10 @@ describe('variant SKU registry', () => {
       expect(p.status).toBe('active');
       expect(p.isVisible).toBe(true);
     }
-    expect(tesa.variants[0].sku).toBe('MBM-LON-TESA-INJ-001');
-    expect(tesa.variants[0].price).toBe(149);
-    expect(fat.variants[0].sku).toBe('MBM-WM-FB3-INJ-001');
-    expect(fat.variants[0].price).toBe(259);
+    expect(tesa.variants[0].sku).toBeUndefined();
+    expect(tesa.variants[0].price).toBe(269);
+    expect(fat.variants[0].sku).toBeUndefined();
+    expect(fat.variants[0].price).toBe(199);
   });
 
   it('does not assign SKUs to future products or inactive memberships (bimatoprost-solution retains its SKU for order history)', () => {

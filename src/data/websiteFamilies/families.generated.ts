@@ -714,7 +714,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
   },
   {
     "familyId": "wolverine-bpc-tb",
-    "displayName": "Wolverine / BPC-TB",
+    "displayName": "Recovery Support",
     "category": "Recovery & Performance",
     "architectureRule": "ONE website product. Selector: Delivery Method (Capsules|Injection). Separate price, formulation, GEN mapping per variant. Do not count as two patient-facing products.",
     "availableSelectors": [
@@ -773,7 +773,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
   },
   {
     "familyId": "minoxidil",
-    "displayName": "Minoxidil",
+    "displayName": "KLOW",
     "category": "Prescription Skin & Hair",
     "architectureRule": "ONE current website product (combination topical). Locked formulation Fin/Minox 0.1%/5% Vios $79.",
     "availableSelectors": [
@@ -785,7 +785,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
       {
         "websiteVariantId": "minoxidil-fin-minox-0.1-5",
         "familyId": "minoxidil",
-        "displayLabel": "Finasteride/Minoxidil 0.1%/5%",
+        "displayLabel": "Topical Hair Support",
         "form": "Topical",
         "additive": "Finasteride/Minoxidil 0.1%/5%",
         "doseTier": null,
@@ -1504,7 +1504,7 @@ export const WEBSITE_PRODUCT_FAMILIES: WebsiteProductFamily[] =
       {
         "websiteVariantId": "fat-burner-current",
         "familyId": "fat-burner",
-        "displayLabel": "AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
+        "displayLabel": "Metabolic Support Injection",
         "form": "Injection",
         "additive": "AOD-9604 + MOTS-c + Tesamorelin (no Ipamorelin)",
         "doseTier": null,

@@ -702,9 +702,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== RECOVERY & PERFORMANCE =====
   'recovery-stack': {
-    benefitHeadline: 'Wolverine Four-Peptide Recovery & Tissue Repair Blend',
+    benefitHeadline: 'Recovery Stack — Four-Peptide Tissue Repair & Recovery Blend',
     shortDescription:
-      'Wolverine is a provider-directed compounded four-peptide recovery injection (BPC-157, GHK-Cu, KPV, TB-500), potentially used to support musculoskeletal recovery, tissue repair, inflammation modulation, wound healing, and athletic performance wellness. Your provider and dispensing pharmacy determine the final preparation and instructions.',
+      'Recovery Stack is a provider-directed compounded four-peptide recovery injection (BPC-157, GHK-Cu, KPV, TB-500), potentially used to support musculoskeletal recovery, tissue repair, inflammation modulation, wound healing, and athletic performance wellness. Your provider and dispensing pharmacy determine the final preparation and instructions.',
     highlights: [
       'Four-Peptide Recovery Blend',
       'Tissue Repair Support',
@@ -713,7 +713,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Provider Review Required',
     ],
     about: [
-      'Wolverine is designed as a single provider-directed pathway for customers discussing recovery and wellness goals with a licensed provider.',
+      'Recovery Stack is designed as a single provider-directed pathway for customers discussing recovery and wellness goals with a licensed provider.',
       'The storefront does not publish pharmacy-level formulation details. Eligibility, final preparation, and use instructions are determined through clinical review and pharmacy fulfillment.',
     ].join('\n\n'),
     potentialBenefits: [

@@ -133,11 +133,11 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'fat-burner': {
-    benefitHeadline: 'Three-Peptide Metabolic & Body-Composition Support',
+    benefitHeadline: 'Three-Peptide Metabolic & Body-Composition Support (AOD-9604, MOT-C, Tesamorelin)',
     shortDescription:
-      'Fat Burner is a provider-directed compounded three-peptide injection blend potentially used to support fat metabolism, lean body composition, and metabolic wellness goals. Your licensed clinician decides whether it belongs in your plan after reviewing your history and goals.',
+      'Fat Burner is a provider-directed compounded three-peptide injection blend (AOD-9604, MOT-C, Tesamorelin) potentially used to support fat metabolism, lean body composition, and metabolic wellness goals. Your licensed clinician decides whether it belongs in your plan after reviewing your history and goals.',
     highlights: [
-      'Three-Peptide Blend',
+      'AOD-9604 + MOT-C + Tesamorelin',
       'Fat Metabolism Support',
       'Body-Composition Focus',
       'Compounded Injection',
@@ -150,7 +150,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     ].join('\n\n'),
     potentialBenefits: [
       'May be considered in provider-guided body-composition programs to support fat oxidation and metabolic rate',
-      'Three-peptide compounded blend designed for lipotropic and metabolic wellness support',
+      'Three-peptide compounded blend (AOD-9604, MOT-C, Tesamorelin) designed for lipotropic and metabolic wellness support',
       'May help preserve lean muscle mass during weight-management programs under clinical supervision',
       'Keeps pharmacy-level formulation details within the clinical review process for individualized care',
       'Supports an individualized plan — responses vary and are not guaranteed',

@@ -579,11 +579,11 @@ export const products: Product[] = [
     slug: 'fat-burner',
     displayName: 'Fat Burner: Metabolic Body-Composition Peptide Blend',
     shortName: 'Fat Burner',
-    subtitle: 'Provider-directed compounded three-peptide blend for metabolic and body-composition support',
+    subtitle: 'Provider-directed compounded three-peptide blend (AOD-9604, MOT-C, Tesamorelin) for metabolic and body-composition support',
     category: 'weight-management',
     goals: ['weight-management'],
     shortDescription:
-      'A provider-directed compounded three-peptide injection blend potentially used to support fat metabolism, lean body composition, and metabolic wellness programs under clinical supervision.',
+      'A provider-directed compounded three-peptide injection blend (AOD-9604, MOT-C, Tesamorelin) potentially used to support fat metabolism, lean body composition, and metabolic wellness programs under clinical supervision.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
     imageAlt: 'Fat Burner three-peptide metabolic body-composition injection',

@@ -125,7 +125,7 @@ describe('checkout webhook order creation', () => {
       item_snapshots: JSON.stringify([
         {
           productId: 'p1',
-          productName: 'Semaglutide Membership',
+          productName: 'Semaglutide Membership: Flat-Rate GLP-1 Weight Management Program',
           variantLabel: 'Monthly',
           quantity: 1,
           unitPriceCents: 19900,
@@ -134,7 +134,7 @@ describe('checkout webhook order creation', () => {
         },
       ]),
     });
-    expect(snaps?.[0]?.productName).toBe('Semaglutide Membership');
+    expect(snaps?.[0]?.productName).toBe('Semaglutide Membership: Flat-Rate GLP-1 Weight Management Program');
     expect(snaps?.[0]?.unitPriceCents).toBe(19900);
   });
 

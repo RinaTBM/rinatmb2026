@@ -139,7 +139,7 @@ describe('tax-inclusive checkout model', () => {
         },
         {
           productId: 'p1',
-          productName: 'Semaglutide',
+          productName: 'Semaglutide: GLP-1 Weight Management Injection',
           sku: 'MBM-WM-SEM-INJ-001',
           slug: 'semaglutide',
           quantity: 1,

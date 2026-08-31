@@ -62,7 +62,7 @@ const semaMembership: CatalogMembershipRow = {
   slug: 'semaglutide-membership',
   stripe_price_id_test: 'price_test_sema_199',
   monthly_price_cents: SEMAGLUTIDE_MEMBERSHIP_CENTS,
-  display_name: 'Semaglutide Membership',
+  display_name: 'Semaglutide Membership: Flat-Rate GLP-1 Weight Management Program',
   included_formulations: ['Vitamin B12', 'Glycine'],
 };
 
@@ -71,7 +71,7 @@ const tirzMembership: CatalogMembershipRow = {
   slug: 'tirzepatide-membership',
   stripe_price_id_test: 'price_test_tirz_249',
   monthly_price_cents: TIRZEPATIDE_MEMBERSHIP_CENTS,
-  display_name: 'Tirzepatide Membership',
+  display_name: 'Tirzepatide Membership: Flat-Rate Dual GLP-1/GIP Weight Management Program',
   included_formulations: ['Vitamin B12', 'Glycine'],
 };
 

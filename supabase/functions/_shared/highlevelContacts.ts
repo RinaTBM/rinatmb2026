@@ -15,8 +15,9 @@
  *   HIGHLEVEL_API_KEY      — LeadConnector API key (Bearer token)
  *   HIGHLEVEL_LOCATION_ID  — Sub-account location ID
  *
- * Optional kill switch:
- *   HIGHLEVEL_ENABLED=false  — disables all HighLevel calls (defaults ON)
+ * Opt-in toggle (safe default OFF):
+ *   HIGHLEVEL_ENABLED=true   — enables HighLevel calls
+ *   Unset / any other value  — HighLevel calls are skipped (default)
  */
 
 const HIGHLEVEL_API_BASE = "https://services.leadconnectorhq.com";
@@ -45,7 +46,7 @@ export interface HighLevelEventContext {
 
 function isHighLevelEnabled(): boolean {
   const flag = Deno.env.get("HIGHLEVEL_ENABLED")?.trim().toLowerCase();
-  return flag !== "false";
+  return flag === "true";
 }
 
 function getCredentials(): { apiKey: string; locationId: string } | null {

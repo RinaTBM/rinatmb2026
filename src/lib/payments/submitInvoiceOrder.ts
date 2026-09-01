@@ -39,6 +39,10 @@ export interface SubmitInvoiceOrderRequest {
   customerUserId?: string;
   customerEmail: string;
   customerName: string;
+  /** Customer phone — only sent to HighLevel when smsConsent is true. */
+  customerPhone?: string;
+  /** SMS marketing consent — gates whether phone is shared with HighLevel. */
+  smsConsent?: boolean;
   subtotalCents: number;
   discountCents: number;
   /** Optional promo code (e.g. OGTBM). Server re-authorizes discount. */

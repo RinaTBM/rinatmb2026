@@ -125,6 +125,7 @@ export function CheckoutPage() {
   }>({ terms: false, privacy: false, refund: false, address: false, membershipTerms: false });
   const [form, setForm] = useState({
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
+    smsConsent: false,
   });
   const [shippingMethod, setShippingMethod] = useState<SelectableShippingMethod>('two_day');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('kashu_card');
@@ -788,6 +789,8 @@ export function CheckoutPage() {
           customerUserId: user?.id,
           customerEmail: form.email || user?.email || '',
           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || '',
+          customerPhone: form.phone || undefined,
+          smsConsent: form.smsConsent || false,
           subtotalCents,
           discountCents:
             hasMembership || isOgtbmPromoCode(appliedPromoCode) || isMbmtest90PromoCode(appliedPromoCode)
@@ -985,6 +988,17 @@ export function CheckoutPage() {
                     <input required placeholder="ZIP" value={form.zip} onChange={e => update('zip', e.target.value)} className="input-lux" />
                     <input placeholder="Phone" value={form.phone} onChange={e => update('phone', e.target.value)} className="input-lux" />
                   </div>
+                  <label className="mt-3 flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.smsConsent}
+                      onChange={e => setForm(prev => ({ ...prev, smsConsent: e.target.checked }))}
+                      className="mt-0.5 h-4 w-4 flex-shrink-0 accent-gold-500"
+                    />
+                    <span className="text-xs text-ink-600">
+                      Yes, I consent to receive order updates and offers from My Bare Method via SMS at the phone number above. Message rates may apply. Reply STOP to opt out at any time.
+                    </span>
+                  </label>
                 </div>
                 {(membershipDoseBlocking || glp1OneTimeDoseIssues.length > 0) && (
                   <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">

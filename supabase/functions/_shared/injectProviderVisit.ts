@@ -424,7 +424,6 @@ export function authorizeInvoiceShippingCents(input: {
         ok: false,
         error: 'Membership checkout requires a shipping method: two_day ($30) or next_day ($50).',
       };
-    }
     } else {
       method = 'two_day';
     }

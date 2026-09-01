@@ -119,15 +119,26 @@ async function upsertContact(
     body.phone = contact.phone;
   }
 
-  const res = await fetch(`${HIGHLEVEL_API_BASE}/v1/contacts/upsert`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${creds.apiKey}`,
-      "Content-Type": "application/json",
-      Version: "2021-07-28",
-    },
-    body: JSON.stringify(body),
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  let res: Response;
+  try {
+    res = await fetch(`${HIGHLEVEL_API_BASE}/v1/contacts/upsert`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${creds.apiKey}`,
+        "Content-Type": "application/json",
+        Version: "2021-07-28",
+      },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+  } catch (fetchErr) {
+    clearTimeout(timeout);
+    console.error("HighLevel upsertContact fetch error", fetchErr instanceof Error ? fetchErr.message : String(fetchErr));
+    return null;
+  }
+  clearTimeout(timeout);
 
   if (!res.ok) {
     const text = await res.text();

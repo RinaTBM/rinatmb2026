@@ -9,6 +9,7 @@ let initialized = false;
 
 export function initMetaPixel() {
   if (typeof window === 'undefined' || initialized) return;
+  if (typeof document === 'undefined' || !document.head) return;
 
   const pixelId = import.meta.env.VITE_META_PIXEL_ID as string | undefined;
   if (!pixelId) return;

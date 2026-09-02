@@ -6,13 +6,25 @@ import { captureMarketingAttribution } from './lib/marketingAttribution';
 import { initMetaPixel } from './lib/metaPixel';
 import './index.css';
 
-captureMarketingAttribution();
-initMetaPixel();
+try {
+  captureMarketingAttribution();
+} catch {
+  // Attribution is helpful, not required — never block app startup.
+}
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </StrictMode>
-);
+try {
+  initMetaPixel();
+} catch {
+  // Pixel is helpful, not required — never block app startup.
+}
+
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </StrictMode>
+  );
+}

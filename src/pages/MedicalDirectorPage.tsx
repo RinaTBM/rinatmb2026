@@ -92,7 +92,7 @@ export function MedicalDirectorPage() {
                       <UserRound size={28} strokeWidth={1.5} aria-hidden />
                     </div>
                     <p className="font-serif text-xl text-ink-900 mb-1">Jerry J. Cattelane Jr., D.O.</p>
-                    <p className="text-xs uppercase tracking-wider text-ink-400">Approved headshot pending</p>
+                    <p className="text-xs uppercase tracking-wider text-ink-400">Medical Director</p>
                   </div>
                 )}
               </div>

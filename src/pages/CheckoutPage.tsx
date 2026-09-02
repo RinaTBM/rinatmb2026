@@ -494,9 +494,7 @@ export function CheckoutPage() {
     : freeShippingEligible
       ? 'free_over_500'
       : accessoryOnlyShipping
-        ? shippingMethod === 'next_day' || shippingMethod === 'two_day'
-          ? shippingMethod
-          : 'accessory'
+        ? 'accessory'
         : shippingMethod === 'accessory'
           ? 'two_day'
           : shippingMethod;
@@ -1219,13 +1217,18 @@ export function CheckoutPage() {
                           onChange={event => setShippingMethod(event.target.value as SelectableShippingMethod)}
                           className="w-full rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-900 focus:border-ink-900 focus:outline-none focus:ring-2 focus:ring-gold-300"
                         >
-                          {accessoryOnlyShipping && <option value="accessory">Accessory Shipping — $10</option>}
-                          <option value="two_day">Two-Day Shipping — $30</option>
-                          <option value="next_day">Next-Day Shipping — $50</option>
+                          {accessoryOnlyShipping ? (
+                            <option value="accessory">Accessory Shipping — $10</option>
+                          ) : (
+                            <>
+                              <option value="two_day">Two-Day Shipping — $30</option>
+                              <option value="next_day">Next-Day Shipping — $50</option>
+                            </>
+                          )}
                         </select>
                         <p className="text-xs text-ink-500">
                           {accessoryOnlyShipping
-                            ? 'Accessory-only orders use a $10 shipping charge. Choose expedited shipping if preferred.'
+                            ? 'Accessory-only orders use a $10 shipping charge.'
                             : hasMembership
                             ? 'Prescription subscription value is excluded from the $500 free-shipping merchandise threshold. Medication ships after required provider review and approval.'
                             : 'Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'}

@@ -56,6 +56,10 @@ declare global {
 
 let cherryInitStarted = false;
 
+export function isCherryFloatingEstimatorEnabled(): boolean {
+  return import.meta.env.VITE_CHERRY_FLOATING_ESTIMATOR_ENABLED === 'true';
+}
+
 export function getCherryInitConfig() {
   return {
     debug: false,
@@ -84,6 +88,7 @@ export function getCherryInitConfig() {
  */
 export function ensureCherryFloatingEstimator(): void {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (!isCherryFloatingEstimatorEnabled()) return;
   if (cherryInitStarted) return;
   cherryInitStarted = true;
 

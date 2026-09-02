@@ -77,11 +77,21 @@ describe('ensureCherryFloatingEstimator', () => {
 
   afterEach(() => {
     __resetCherryWidgetForTests();
+    vi.unstubAllEnvs();
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
 
-  it('injects script once and queues init without throwing', () => {
+  it('does not inject the widget unless explicitly enabled', () => {
+    ensureCherryFloatingEstimator();
+
+    expect(scripts.length).toBe(0);
+    expect(fakeWindow._hw).toBeUndefined();
+  });
+
+  it('injects script once and queues init without throwing when enabled', () => {
+    vi.stubEnv('VITE_CHERRY_FLOATING_ESTIMATOR_ENABLED', 'true');
+
     ensureCherryFloatingEstimator();
     ensureCherryFloatingEstimator();
 

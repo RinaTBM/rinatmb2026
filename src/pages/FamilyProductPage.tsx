@@ -200,8 +200,7 @@ function FamilySelectors({
       genClientProductId: selectedGenClientProductId,
       category: product.category,
     });
-    setRecommendationOffset(0);
-    setRecommendationsOpen(true);
+    openBasket();
   };
 
   const continueToGen = () => {
@@ -364,16 +363,16 @@ function FamilySelectors({
               <div className="rounded-2xl border border-cream-300 bg-white p-5 mb-6">
                 <div className="flex items-end justify-between gap-4 mb-4">
                   <div>
-                    <p className="text-sm text-ink-500">Due today in GEN Health</p>
+                    <p className="text-sm text-ink-500">Estimated prescription total</p>
                     <p className="font-serif text-3xl text-ink-900">
                       {dueToday != null ? formatPrice(dueToday) : '—'}
                     </p>
                     <p className="mt-1 text-xs text-ink-500">
                       {liveGlp1Program
-                        ? `${glp1Program === 'monthly' ? 'Monthly price' : 'One-time price'} shown. Shipping and provider consultation are included by GEN Health.`
+                        ? `${glp1Program === 'monthly' ? 'Monthly price' : 'One-time price'} shown. Shipping and provider consultation are included.`
                         : fixedShipping > 0
-                        ? `Includes ${formatPrice(fixedShipping)} shipping. Any applicable visit charge is shown by GEN Health before payment.`
-                        : 'Final payment total and any applicable visit charge are shown by GEN Health before payment.'}
+                        ? `Includes ${formatPrice(fixedShipping)} shipping. Any applicable visit charge is shown before payment.`
+                        : 'Review this in your Care Basket before continuing securely for intake, provider review, and payment.'}
                     </p>
                   </div>
                 </div>
@@ -395,7 +394,7 @@ function FamilySelectors({
                   </button>
                 )}
                 <p className="mt-3 text-xs text-ink-500 leading-relaxed">
-                  Add prescriptions to your bag while you shop. GEN Health handles payment, intake, assessment, and provider review separately for each prescription.
+                  Add prescriptions to your Care Basket while you shop, then continue securely for payment, intake, assessment, and provider review.
                   Purchasing does not guarantee that a prescription will be issued.
                 </p>
               </div>

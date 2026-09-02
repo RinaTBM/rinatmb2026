@@ -91,23 +91,23 @@ const faqCategories = [
     ],
   },
   {
-    title: 'HRT Lab Package',
+    title: 'HRT Lab Options',
     faqs: [
       {
         q: 'Do I need labs for HRT?',
-        a: 'For applicable initial Women’s Hormone Therapy orders, a Required HRT Lab Package is added once so a licensed provider can review laboratory results before treatment decisions. Established HRT customers with approved therapy history may not be charged the package again under current history rules.',
+        a: 'For applicable initial Women’s Hormone Therapy orders, a required lab option may be presented so a licensed provider can review laboratory results before treatment decisions. Established HRT customers with approved therapy history may not need another lab option under current history rules.',
       },
       {
-        q: 'What does the $260 HRT Lab Package include?',
-        a: 'Required HRT Lab Package — $260. Breakdown: Lab Kit — $200 (includes Lab Kit shipping) and Lab Review — $60.',
+        q: 'How do I choose a lab option?',
+        a: 'When an applicable HRT product enters checkout, you will see a selection of in-home and walk-in lab options. Choose the one that fits your needs and add it to your Care Basket to proceed with checkout.',
       },
       {
-        q: 'Is Lab Kit shipping included?',
-        a: 'Yes. Lab Kit shipping is included in the $200 Lab Kit price. That does not include medication shipping, which remains separate where applicable.',
+        q: 'Where are lab orders and results handled?',
+        a: 'Lab orders, payment, intake, and results are handled through GEN Health. Medication shipping remains separate where applicable.',
       },
       {
-        q: 'Will I be charged the HRT Lab Package more than once in one order?',
-        a: 'No. For an applicable initial HRT order, the required lab package is added once. Multiple HRT products in the same applicable initial order do not multiply the lab-package charge.',
+        q: 'Will I be charged for a lab option more than once in one order?',
+        a: 'No. For an applicable initial HRT order, the required lab option is added once. Multiple HRT products in the same applicable initial order do not multiply the lab charge.',
       },
     ],
   },

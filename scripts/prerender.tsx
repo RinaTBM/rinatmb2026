@@ -33,6 +33,7 @@ import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { TermsPage } from '@/pages/TermsPage';
+import { OrderLabsPage } from '@/pages/OrderLabsPage';
 import { visibleProducts as products, sections, concerns, goals, type Product } from '@/data/products';
 
 const BASE_URL = 'https://mybaremethod.com';
@@ -193,6 +194,12 @@ function buildRoutes() {
       component: createElement(TermsPage),
       title: 'Terms & Conditions — My Bare Method',
       description: 'Terms and conditions for using My Bare Method.',
+    },
+    {
+      path: '/order-labs',
+      component: createElement(OrderLabsPage),
+      title: 'Order Labs — My Bare Method',
+      description: 'Browse in-home and walk-in lab options for hormone therapy and wellness. Lab orders, payment, intake, and results are handled through GEN Health.',
     },
   ];
 

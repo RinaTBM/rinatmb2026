@@ -385,7 +385,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     about: [
       'Estradiol is a form of estrogen your body already recognizes. A transdermal patch is designed to release hormone across the wear period your provider recommends.',
       'Clinicians may discuss estrogen therapy when evaluating menopause-related changes or other hormone concerns. Whether a patch is right for you depends on your history, goals, and — when needed — labs. Hormone therapy is not one-size-fits-all.',
-      'Initial HRT orders require the Required HRT Lab Package ($260 total: Lab Kit $200 with Lab Kit shipping included, plus Lab Review $60). Medication shipping remains separate where applicable.',
+      'Initial HRT orders may require a lab option when applicable. Medication shipping remains separate where applicable.',
     ].join('\n\n'),
     potentialBenefits: [
       'May help relieve hot flashes, night sweats, and vasomotor symptoms associated with menopause',
@@ -404,7 +404,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Easy to discuss alongside progesterone or other complementary options',
     ],
     whatToExpect:
-      'Select a patch strength and pack size, then complete intake for provider review. Initial HRT orders include the Required HRT Lab Package once when applicable. If approved, apply only as directed — including site rotation and change timing. Do not share patches or adjust strength without guidance.',
+      'Select a patch strength and pack size, then complete intake for provider review. Initial HRT orders may require a lab option when applicable. If approved, apply only as directed — including site rotation and change timing. Do not share patches or adjust strength without guidance.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Hormone therapy is not appropriate for everyone.',
@@ -426,7 +426,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     about: [
       'Progesterone is a hormone involved in the menstrual cycle and is frequently part of menopause and hormone-therapy conversations. Capsules make dosing straightforward once a clinician has chosen a plan.',
       'Your provider may recommend progesterone for specific clinical reasons. Capsule strength and timing are individualized — never copy someone else’s regimen.',
-      'Initial HRT orders require the Required HRT Lab Package ($260 total: Lab Kit $200 with Lab Kit shipping included, plus Lab Review $60). Medication shipping remains separate where applicable.',
+      'Initial HRT orders may require a lab option when applicable. Medication shipping remains separate where applicable.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support sleep quality and help with insomnia related to hormone changes under clinical supervision',
@@ -444,7 +444,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Easy to coordinate with estradiol or other therapies when indicated',
     ],
     whatToExpect:
-      'Choose a capsule strength, complete intake, and await provider review. Initial HRT orders include the Required HRT Lab Package once when applicable. Take only as directed on your prescription label if approved. Report new or concerning symptoms to your care team promptly.',
+      'Choose a capsule strength, complete intake, and await provider review. Initial HRT orders may require a lab option when applicable. Take only as directed on your prescription label if approved. Report new or concerning symptoms to your care team promptly.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Distinguish from estradiol and testosterone.',
@@ -466,7 +466,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     about: [
       'Testosterone is a hormone involved in energy, libido, muscle, and other body functions. While it is often associated with men’s health, clinicians may also discuss carefully dosed topical testosterone in select women’s care plans.',
       'Because hormones affect many systems, this option requires individualized review. It is not a casual wellness cream for unsupervised use.',
-      'Initial HRT orders require the Required HRT Lab Package ($260 total: Lab Kit $200 with Lab Kit shipping included, plus Lab Review $60). Medication shipping remains separate where applicable.',
+      'Initial HRT orders may require a lab option when applicable. Medication shipping remains separate where applicable.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support libido and sexual wellness when testosterone is clinically indicated in a women\'s hormone plan',
@@ -484,7 +484,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Pairs with ongoing provider follow-up rather than one-size-fits-all use',
     ],
     whatToExpect:
-      'Initial HRT orders include the Required HRT Lab Package once when applicable. After approval, apply only to areas and schedules your provider specifies. Wash hands after use and follow any transfer-prevention guidance included with your prescription.',
+      'Initial HRT orders may require a lab option when applicable. After approval, apply only to areas and schedules your provider specifies. Wash hands after use and follow any transfer-prevention guidance included with your prescription.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Avoid implying testosterone cream is routine for all women.',
@@ -1013,18 +1013,18 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'lab-kit': {
-    benefitHeadline: 'Specimen Collection Kit for Initial Hormone Therapy',
+    benefitHeadline: 'Lab Option for Initial Hormone Therapy',
     shortDescription:
-      'The Lab Kit is the required specimen collection kit for initial Women’s Hormone Therapy orders. Lab Kit shipping is included in the $200 kit price. This is not a medication.',
+      'A lab option may be required for initial Women’s Hormone Therapy orders. This is not a medication.',
     highlights: [
       'Required for Initial HRT',
-      'Lab Kit Shipping Included',
+      'Lab shipping included',
       'Not a Medication',
       'Pairs with Laboratory Review',
     ],
     about: [
-      'Initial Women’s Hormone Therapy orders include the Required HRT Lab Package when applicable: Lab Kit ($200) plus Laboratory Review ($60) for $260 total, added once per applicable initial order.',
-      'Lab Kit shipping is included in the $200 Lab Kit price. That does not include medication shipping, which remains separate where applicable. Established HRT customers with approved therapy history are not charged the package again under current history rules.',
+      'Initial Women’s Hormone Therapy orders may require a lab option when applicable, added once per applicable initial order.',
+      'Medication shipping remains separate where applicable. Established HRT customers with approved therapy history are not charged the lab option again under current history rules.',
     ].join('\n\n'),
     potentialBenefits: [
       'Removes guesswork about which labs are needed to start',
@@ -1032,16 +1032,16 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Clear separation from medication pricing and medication shipping',
     ],
     howItWorks:
-      'When an applicable HRT product enters checkout for a new HRT customer, Lab Kit ($200) and Laboratory Review ($60) are added once as the Required HRT Lab Package.',
+      'When an applicable HRT product enters checkout for a new HRT customer, a required lab option is presented for selection.',
     whyPeopleChooseIt: [
       'Required package for first HRT order',
-      'Transparent $260 combined pricing',
-      'Lab Kit shipping included',
+      'Transparent lab option pricing',
+      'Lab shipping included',
     ],
     whatToExpect:
-      'You receive the specimen collection kit with Lab Kit shipping included. Laboratory Review is a separate provider interpretation service — not a medication. Medication shipping is separate where applicable.',
+      'Lab orders, payment, intake, and results are handled through GEN Health. Medication shipping is separate where applicable.',
     importantInformation:
-      'Lab Kit and Laboratory Review are provider-care services, not medications. They are not discounted by OGTBM.',
+      'Lab options and laboratory reviews are provider-care services, not medications. They are not discounted by OGTBM.',
   },
 
   // ===== ACCESSORIES =====

@@ -148,9 +148,8 @@ export function TermsPage() {
                 in accordance with our Refund Policy.
               </p>
               <p>
-                For applicable initial Women’s Hormone Therapy orders, a Required HRT Lab Package ($260) may be added
-                once (Lab Kit $200 with Lab Kit shipping included; Lab Review $60). Medication shipping remains
-                separate where applicable.
+                For applicable initial Women’s Hormone Therapy orders, a required lab option may be added once.
+                Medication shipping remains separate where applicable.
               </p>
             </>
           ),

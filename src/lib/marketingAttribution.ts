@@ -32,7 +32,7 @@ function clean(value: string | null, max = 300) {
 function readStoredAttribution(): MarketingAttribution {
   if (typeof window === 'undefined') return {};
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = window.localStorage?.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as MarketingAttribution) : {};
   } catch {
     return {};
@@ -62,7 +62,7 @@ export function captureMarketingAttribution() {
   };
 
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(attribution));
+    window.localStorage?.setItem(STORAGE_KEY, JSON.stringify(attribution));
   } catch {
     // Attribution is helpful, not required for checkout or lead capture.
   }

@@ -16,6 +16,7 @@
 
 | SKU | Product | Variant | Price | Amount |
 |-----|---------|---------|-------|--------|
+| `MBM-SHIP-ACCESSORY-001` | `product_94e5e1cda1ac` | `variant_4b7853bf87dd` | `price_c2f2a57f7f9d` | $10 |
 | `MBM-SHIP-TWO-DAY-001` | `product_ae81dcd65373` | `variant_18c3ab5eadee` | `price_c65bb478d609` | $30 |
 | `MBM-SHIP-NEXT-DAY-001` | `product_68cc1b3bf2a0` | `variant_6817c3c6e31a` | `price_53861f3e4cad` | $50 |
 

@@ -87,12 +87,92 @@ export function ProductPage({ slug }: { slug: string }) {
   if (product.category === 'accessories') {
     return <AccessoryProductPage product={product} />;
   }
+  if (product.category === 'provider-care') {
+    return <ProviderCareProductPage product={product} />;
+  }
   const hostedRoute = GEN_HOSTED_PRODUCTS[product.slug];
   if (hostedRoute) return <GenHostedProductPage product={product} route={hostedRoute} />;
   if (isFamilyStorefrontSlug(product.slug)) {
     return <FamilyProductPage product={product} />;
   }
   return <WellnessProductPage slug={slug} />;
+}
+
+function ProviderCareProductPage({ product }: { product: NonNullable<ReturnType<typeof getProduct>> }) {
+  const section = sections.find(s => s.id === product.category);
+  const variant = product.variants[0];
+
+  return (
+    <div className="bg-cream-50 pt-28 md:pt-32">
+      <div className="container-lux py-4">
+        <div className="flex items-center gap-2 text-sm text-ink-400 flex-wrap">
+          <Link to="/" className="hover:text-ink-900">Home</Link>
+          <span>/</span>
+          <Link to="/section/provider-care" className="hover:text-ink-900">{section?.label}</Link>
+          <span>/</span>
+          <span className="text-ink-700">{product.displayName}</span>
+        </div>
+      </div>
+
+      <section className="pb-12 md:pb-16">
+        <div className="container-lux">
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
+            <div className="lg:sticky lg:top-24 lg:self-start">
+              <div className="relative aspect-square overflow-hidden rounded-3xl bg-cream-100">
+                <img
+                  src={product.image}
+                  alt={product.imageAlt}
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute left-4 top-4">
+                  <span className="rounded-full bg-cream-50/95 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-ink-900">
+                    GEN Health checkout
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="flex items-center gap-1.5 text-xs uppercase tracking-wider-2 text-gold-600">
+                  <ShieldCheck size={16} /> {section?.label}
+                </span>
+              </div>
+              <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-2 leading-tight">{product.displayName}</h1>
+              <p className="text-xl md:text-2xl text-ink-700 mb-3 leading-snug">{product.benefitHeadline}</p>
+              <p className="text-ink-600 leading-relaxed mb-5">{product.shortDescription}</p>
+              <ProductHighlights highlights={product.highlights} />
+
+              <div className="mb-6 rounded-xl border border-gold-200 bg-gold-50 p-4">
+                <p className="text-sm font-medium text-ink-900">Handled in GEN Health</p>
+                <p className="mt-1 text-sm leading-relaxed text-ink-600">
+                  Provider Care checkout, scheduling, intake, and payment are handled through GEN Health.
+                  These services are not purchased through the My Bare Method cart.
+                </p>
+              </div>
+
+              {variant && (
+                <div className="mb-6 rounded-xl border border-cream-300 bg-white p-4">
+                  <p className="text-sm text-ink-500">Due in GEN Health</p>
+                  <p className="font-serif text-3xl text-ink-900">${variant.price}</p>
+                  <p className="mt-1 text-xs text-ink-500">Final amount and required steps are confirmed in GEN Health.</p>
+                </div>
+              )}
+
+              <a
+                href="mailto:info@thebaremethodmn.com?subject=Provider%20Care%20GEN%20Health%20checkout"
+                className="btn-primary w-full justify-center"
+              >
+                Contact Us to Continue in GEN Health
+              </a>
+
+              <ProductDescriptionSections product={product} />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 }
 
 function WellnessProductPage({ slug }: { slug: string }) {
@@ -516,11 +596,11 @@ function WellnessProductPage({ slug }: { slug: string }) {
         </div>
       </section>
 
-      <section className="py-12 md:py-16 border-t border-cream-300">
-        <div className="container-lux max-w-4xl">
+      <div className="container-lux -mt-8 pb-16 lg:-mt-16">
+        <div className="lg:ml-[calc(50%+2rem)] lg:w-[calc(50%-2rem)] border-t border-cream-300 pt-8">
           <ProductDescriptionSections product={product} showAbout={false} />
         </div>
-      </section>
+      </div>
 
       {product.faqs.length > 0 && (
         <section className="py-12 md:py-16 border-t border-cream-300">

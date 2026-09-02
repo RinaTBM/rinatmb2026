@@ -7,6 +7,7 @@ import { useCustomerAuth } from '@/context/CustomerAuthContext';
 import { visibleProducts } from '@/data/products';
 import { BrandLogo } from '@/components/BrandLogo';
 import { SHOP_CATEGORIES } from '@/lib/browse/productBrowse';
+import { GEN_HEALTH_ICON_URL, GEN_HEALTH_PORTAL_URL } from '@/lib/genHealth/portalLinks';
 
 const categoryItems = SHOP_CATEGORIES.map(c => ({
   label: c.label,
@@ -142,6 +143,9 @@ export function Header() {
               <Link to="/section/provider-care" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 Provider Care
               </Link>
+              <Link to="/order-labs" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                Order Labs
+              </Link>
               <Link to="/section/accessories" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 Accessories
               </Link>
@@ -165,9 +169,20 @@ export function Header() {
                 to={accountHref}
                 className="text-ink-800 hover:text-gold-600 transition-colors p-1"
                 aria-label={authenticated ? 'My account' : 'Sign in'}
+                title={authenticated ? 'My Bare Method account' : 'My Bare Method sign in'}
               >
                 <UserRound size={20} />
               </Link>
+              <a
+                href={GEN_HEALTH_PORTAL_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-ink-200 bg-white p-1 transition-colors hover:border-gold-300"
+                aria-label="GEN Health portal"
+                title="GEN Health portal"
+              >
+                <img src={GEN_HEALTH_ICON_URL} alt="" className="h-full w-full rounded-full object-contain" />
+              </a>
               <button
                 onClick={openCart}
                 className="relative text-ink-800 hover:text-gold-600 transition-colors p-1"
@@ -314,6 +329,13 @@ export function Header() {
                 Provider Care
               </Link>
               <Link
+                to="/order-labs"
+                onClick={closeAll}
+                className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
+              >
+                Order Labs
+              </Link>
+              <Link
                 to="/section/accessories"
                 onClick={closeAll}
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
@@ -354,6 +376,15 @@ export function Header() {
                 <Link to={accountHref} onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
                   Account
                 </Link>
+                <a
+                  href={GEN_HEALTH_PORTAL_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={closeAll}
+                  className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors"
+                >
+                  GEN Health Portal
+                </a>
               </div>
             </nav>
           </div>

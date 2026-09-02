@@ -50,12 +50,12 @@ const faqCategories = [
         a: 'No. Purchase and payment do not guarantee a prescription or treatment approval. A licensed provider may require additional information, consultation, labs, or other steps. Fulfillment and shipping occur only when applicable requirements are satisfied.',
       },
       {
-        q: 'Can I use OGTBM?',
-        a: 'Yes, when the promotion is available. Enter OGTBM at checkout. It provides $50 off each eligible item (not $50 off the entire order). Quantity applies per eligible item/unit where supported. A promo cannot reduce an item below $0. Promotions are generally non-stackable. OGTBM does not change recurring subscription renewal amounts.',
+        q: 'Which promo codes can I use?',
+        a: 'When available, FIRSTTIME provides $25 off, OGTBM provides 25% off, and TEST provides 100% off eligible one-time purchases. Enter one code at checkout. Promotions do not change recurring subscription renewal amounts.',
       },
       {
-        q: 'What does OGTBM exclude?',
-        a: 'OGTBM excludes accessories; dermatology / prescription skin & hair; Initial Provider Visit; Follow-Up Visit; Lab Review; Lab Kit; other provider services; and shipping.',
+        q: 'What do promo codes exclude?',
+        a: 'Promo codes apply to one-time purchases, including eligible accessory purchases, but exclude membership enrollment, Subscribe & Save, Auto-Refill, and recurring renewals. Shipping is not discounted. FIRSTTIME requires a signed-in customer account.',
       },
       {
         q: 'Can I pay over time with Cherry?',

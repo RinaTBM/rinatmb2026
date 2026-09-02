@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from '@/router';
+import { ArrowUpRight } from 'lucide-react';
 import { useCustomerAuth } from '@/context/CustomerAuthContext';
 import { supabase } from '@/lib/supabaseClient';
 import { listCustomerOrders } from '@/lib/orders/orderService';
 import { labelOrderStatus } from '@/lib/orders/orderStatus';
+import { GEN_HEALTH_ICON_URL, GEN_HEALTH_PORTAL_URL } from '@/lib/genHealth/portalLinks';
 import { AccountShell } from './AccountShell';
 import { useAccountNoIndex } from './useAccountNoIndex';
 
@@ -92,6 +94,24 @@ export function AccountOverviewPage() {
             Update your name, phone, and account contact details.
           </p>
         </Link>
+
+        <a
+          href={GEN_HEALTH_PORTAL_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="group rounded-2xl border border-cream-300 bg-white p-6 shadow-sm hover:border-gold-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
+        >
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-ink-200 bg-cream-50 p-1">
+              <img src={GEN_HEALTH_ICON_URL} alt="" className="h-full w-full rounded-full object-contain" />
+            </div>
+            <ArrowUpRight size={17} className="text-ink-400 transition-colors group-hover:text-gold-700" />
+          </div>
+          <h2 className="font-serif text-xl text-ink-900 mb-3">GEN Health Portal</h2>
+          <p className="text-sm text-ink-500 leading-relaxed">
+            Sign in for lab orders, prescription intake, provider steps, and clinical updates.
+          </p>
+        </a>
       </div>
     </AccountShell>
   );

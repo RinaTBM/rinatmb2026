@@ -85,16 +85,16 @@ import {
 } from '@/lib/provider/providerVisits';
 import { isProviderGuidedPrescriptionLine } from '@/lib/provider/therapyFamilies';
 import {
-  applyOgtbmPromo,
-  isOgtbmPromoCode,
-  OGTBM_PROMO_CODE,
-} from '@/lib/promo/ogtbmPromo';
-import {
   applyMbmtest90Promo,
   isMbmtest90PromoCode,
   isMbmtest90EmailAuthorized,
   MBMTEST90_PROMO_CODE,
 } from '@/lib/promo/mbmtest90Promo';
+import {
+  applyGenPromo,
+  isGenPromoCode,
+  isTestPromoEmailAuthorized,
+} from '@/lib/promo/genPromo';
 import {
   buildHrtLabPackageLines,
   HRT_LAB_PACKAGE_HEADING,
@@ -503,14 +503,15 @@ export function CheckoutPage() {
         unitAmountCents: l.unitAmountCents,
       })),
     ];
-    if (isOgtbmPromoCode(appliedPromoCode)) {
-      const applied = applyOgtbmPromo({ code: appliedPromoCode, lines });
+    if (isGenPromoCode(appliedPromoCode)) {
+      const applied = applyGenPromo({
+        code: appliedPromoCode,
+        isAuthenticated: Boolean(user?.id),
+        customerEmail: form.email || user?.email || '',
+        lines,
+      });
       if (!applied.ok) return { discountCents: 0, eligibleUnitCount: 0, code: null };
-      return {
-        discountCents: applied.discountCents,
-        eligibleUnitCount: applied.eligibleUnitCount,
-        code: applied.code,
-      };
+      return { discountCents: applied.discountCents, eligibleUnitCount: 1, code: applied.code };
     }
     if (isMbmtest90PromoCode(appliedPromoCode)) {
       const customerEmail = form.email || user?.email || '';
@@ -683,6 +684,12 @@ export function CheckoutPage() {
       );
       return;
     }
+    if (hasProviderCare) {
+      setError(
+        'Provider Care checkout is handled through GEN Health. Please return to the Provider Care page and continue there.',
+      );
+      return;
+    }
     if (isStripeCheckoutEnabled()) {
       setError(PAYMENTS_UNAVAILABLE_MESSAGE);
       return;
@@ -793,7 +800,7 @@ export function CheckoutPage() {
           smsConsent: form.smsConsent || false,
           subtotalCents,
           discountCents:
-            hasMembership || isOgtbmPromoCode(appliedPromoCode) || isMbmtest90PromoCode(appliedPromoCode)
+            hasMembership || isGenPromoCode(appliedPromoCode) || isMbmtest90PromoCode(appliedPromoCode)
               ? 0
               : Math.round(totalSavings * 100),
           promoCode: hasMembership ? null : appliedPromoCode,
@@ -1518,8 +1525,8 @@ export function CheckoutPage() {
                       className="rounded-md bg-ink-900 px-3 py-2 text-sm text-cream-50"
                       onClick={() => {
                         const code = promoInput.trim().toUpperCase();
-                        if (isOgtbmPromoCode(code)) {
-                          setAppliedPromoCode(OGTBM_PROMO_CODE);
+                        if (isGenPromoCode(code)) {
+                          setAppliedPromoCode(code);
                           setError(null);
                         } else if (isMbmtest90PromoCode(code)) {
                           setAppliedPromoCode(MBMTEST90_PROMO_CODE);
@@ -1540,6 +1547,10 @@ export function CheckoutPage() {
                       {appliedPromoCode} applied
                       {promoPreview.eligibleUnitCount > 0
                         ? ` — ${(promoDiscountCents / 100).toFixed(2)} off (${promoPreview.eligibleUnitCount} eligible item${promoPreview.eligibleUnitCount === 1 ? '' : 's'})`
+                        : appliedPromoCode === 'FIRSTTIME' && !user?.id
+                          ? ' — sign in required'
+                        : appliedPromoCode === 'TEST' && !isTestPromoEmailAuthorized(form.email || user?.email || '')
+                          ? ' — authorized email required'
                         : isMbmtest90PromoCode(appliedPromoCode) && !isMbmtest90EmailAuthorized(form.email || user?.email || '')
                           ? ' — authorized email required'
                           : ' — no eligible items in this cart'}

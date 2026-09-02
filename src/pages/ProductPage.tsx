@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from '@/router';
-import { Minus, Plus, ShieldCheck, RefreshCw, Truck, Check } from 'lucide-react';
+import { Minus, Plus, ShieldCheck, RefreshCw, Truck, Check, ExternalLink } from 'lucide-react';
 import { getMembership, getProduct, getRelatedProducts, sections } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useMember } from '@/context/MemberContext';
@@ -30,6 +30,7 @@ import {
 import { RxAvailabilityBanner } from '@/components/RxAvailabilityBanner';
 import { GEN_HOSTED_PRODUCTS } from '@/lib/commerce/genHostedProducts';
 import { GenHostedProductPage } from '@/components/GenHostedProductPage';
+import { getProviderCareGenAction } from '@/lib/genHealth/providerCareLinks';
 
 function customerVariantLabel(productSlug: string, fallback: string): string {
   const peptideLabels: Record<string, string> = {
@@ -101,6 +102,8 @@ export function ProductPage({ slug }: { slug: string }) {
 function ProviderCareProductPage({ product }: { product: NonNullable<ReturnType<typeof getProduct>> }) {
   const section = sections.find(s => s.id === product.category);
   const variant = product.variants[0];
+  const genAction = getProviderCareGenAction(product.slug);
+  const labKitAction = product.slug === 'lab-kit';
 
   return (
     <div className="bg-cream-50 pt-28 md:pt-32">
@@ -149,6 +152,13 @@ function ProviderCareProductPage({ product }: { product: NonNullable<ReturnType<
                   Provider Care checkout, scheduling, intake, and payment are handled through GEN Health.
                   These services are not purchased through the My Bare Method cart.
                 </p>
+                <p className="mt-3 text-xs font-medium uppercase tracking-[0.16em] text-gold-700">
+                  Trigger action
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-ink-600">
+                  {genAction?.triggerLabel ??
+                    'Initial HRT lab collection when required before provider review.'}
+                </p>
               </div>
 
               {variant && (
@@ -159,12 +169,27 @@ function ProviderCareProductPage({ product }: { product: NonNullable<ReturnType<
                 </div>
               )}
 
-              <a
-                href="mailto:info@thebaremethodmn.com?subject=Provider%20Care%20GEN%20Health%20checkout"
-                className="btn-primary w-full justify-center"
-              >
-                Contact Us to Continue in GEN Health
-              </a>
+              {genAction?.checkoutUrl ? (
+                <a
+                  href={genAction.checkoutUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-primary w-full justify-center gap-2"
+                >
+                  Pay in GEN Health <ExternalLink size={16} aria-hidden />
+                </a>
+              ) : labKitAction ? (
+                <Link to="/order-labs" className="btn-primary w-full justify-center">
+                  View Order Labs
+                </Link>
+              ) : (
+                <a
+                  href="mailto:info@thebaremethodmn.com?subject=Provider%20Care%20GEN%20Health%20checkout"
+                  className="btn-primary w-full justify-center"
+                >
+                  Contact Us to Continue in GEN Health
+                </a>
+              )}
 
               <ProductDescriptionSections product={product} />
             </div>

@@ -1,6 +1,7 @@
 import { Link } from '@/router';
-import { ArrowLeft, ArrowRight, ClipboardList, FlaskConical, Package, UserRound } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ClipboardList, ExternalLink, FlaskConical, Package, UserRound } from 'lucide-react';
 import type { Product } from '@/data/products';
+import { getProviderCareGenAction } from '@/lib/genHealth/providerCareLinks';
 
 const ICONS = {
   'initial-provider-consultation': UserRound,
@@ -46,6 +47,8 @@ export function ProviderCareSection({ products }: { products: Product[] }) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
             {cards.map(product => {
               const Icon = ICONS[product.slug as keyof typeof ICONS] ?? UserRound;
+              const genAction = getProviderCareGenAction(product.slug);
+              const labKitAction = product.slug === 'lab-kit';
               return (
                 <article
                   key={product.id}
@@ -82,14 +85,39 @@ export function ProviderCareSection({ products }: { products: Product[] }) {
                       {product.shortDescription}
                     </p>
 
+                    <div className="mb-5 rounded-xl border border-cream-200 bg-cream-50 px-4 py-3">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-gold-700">
+                        Trigger action
+                      </p>
+                      <p className="mt-1 text-xs leading-relaxed text-ink-600">
+                        {genAction?.triggerLabel ??
+                          'Initial HRT lab collection when required before provider review.'}
+                      </p>
+                      <p className="mt-2 text-xs leading-relaxed text-ink-500">
+                        {genAction?.nextStepLabel ??
+                          'Choose the matching GEN lab option from Order Labs. Lab shipping is included.'}
+                      </p>
+                    </div>
+
                     <div className="mt-auto flex items-center justify-between gap-3 pt-2 border-t border-cream-200">
                       <p className="font-serif text-xl text-ink-900">${product.startingPrice}</p>
-                      <Link
-                        to={`/product/${product.slug}`}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-cream-50 transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
-                      >
-                        Book visit <ArrowRight size={14} aria-hidden />
-                      </Link>
+                      {genAction?.checkoutUrl ? (
+                        <a
+                          href={genAction.checkoutUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-cream-50 transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
+                        >
+                          Pay in GEN <ExternalLink size={14} aria-hidden />
+                        </a>
+                      ) : (
+                        <Link
+                          to={labKitAction ? '/order-labs' : `/product/${product.slug}`}
+                          className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-cream-50 transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
+                        >
+                          {labKitAction ? 'Order labs' : 'View details'} <ArrowRight size={14} aria-hidden />
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </article>
@@ -98,8 +126,8 @@ export function ProviderCareSection({ products }: { products: Product[] }) {
           </div>
 
           <p className="mt-12 max-w-3xl mx-auto text-center text-xs md:text-sm text-ink-400 leading-relaxed">
-            Provider Care services require scheduling and may involve a medical intake. Fulfillment
-            occurs only after provider approval when applicable.
+            Provider Care payments, scheduling, intake, and clinical follow-up continue inside GEN Health.
+            Completing payment does not guarantee that a prescription will be issued.
           </p>
 
           <div className="mt-10 max-w-xl mx-auto text-center rounded-2xl border border-cream-300 bg-white px-6 py-7">

@@ -33,6 +33,8 @@ import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { TermsPage } from '@/pages/TermsPage';
+import { LabDetailPage, OrderLabsPage } from '@/pages/OrderLabsPage';
+import { labOptions, labSlug, getLabDisplayPriceCents } from '@/data/labs';
 import { visibleProducts as products, sections, concerns, goals, type Product } from '@/data/products';
 
 const BASE_URL = 'https://mybaremethod.com';
@@ -194,7 +196,26 @@ function buildRoutes() {
       title: 'Terms & Conditions — My Bare Method',
       description: 'Terms and conditions for using My Bare Method.',
     },
+    {
+      path: '/order-labs',
+      component: createElement(OrderLabsPage),
+      title: 'Order Labs — My Bare Method',
+      description: 'Browse in-home and walk-in lab options for hormone therapy and wellness. Lab orders, payment, intake, and results are handled through GEN Health.',
+    },
   ];
+
+  const seenLabSlugs = new Set<string>();
+  for (const lab of labOptions) {
+    const slug = labSlug(lab.displayName);
+    if (seenLabSlugs.has(slug)) continue;
+    seenLabSlugs.add(slug);
+    routes.push({
+      path: `/order-labs/${slug}`,
+      component: createElement(LabDetailPage, { slug }),
+      title: `${lab.displayName} — My Bare Method`,
+      description: `${lab.displayName} lab option. ${lab.markerCount > 0 ? `${lab.markerCount} markers.` : ''} Add to your Care Basket and complete checkout through GEN Health.`,
+    });
+  }
 
   for (const s of sections) {
     routes.push({

@@ -104,21 +104,16 @@ export function ShippingPolicyPage() {
           ),
         },
         {
-          id: 'hrt-lab-kit-shipping',
-          title: 'HRT Lab Kit Shipping',
+          id: 'hrt-lab-shipping',
+          title: 'HRT Lab Options',
           body: (
             <>
               <p>
-                For applicable initial Women’s Hormone Therapy orders, the Required HRT Lab Package is $260 and
-                includes:
+                For applicable initial Women's Hormone Therapy orders, a required lab option may be presented.
+                Lab orders, payment, intake, and results are handled through GEN Health.
               </p>
-              <LegalBulletList items={[
-                'Lab Kit — $200 (Lab Kit shipping included in the $200 price)',
-                'Lab Review — $60',
-              ]} />
               <p>
-                Lab Kit shipping being included does not mean medication shipping is included. Medication and product
-                shipping remain separate where applicable.
+                Medication and product shipping remain separate where applicable.
               </p>
             </>
           ),

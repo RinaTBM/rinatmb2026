@@ -2,15 +2,12 @@ import { useState } from 'react';
 import { ArrowRight, ChevronDown, ExternalLink, ShieldCheck, ShoppingBag, X } from 'lucide-react';
 import { navigate } from '@/router';
 import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
-import { navigateToGenProductFirstCheckout, resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
+import { resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
 
-type HrtLabOption = 'full_package' | 'own_labs';
 type ShippingOption = 'two_day' | 'next_day';
 
 const HRT_CATEGORY = 'womens-hormone-therapy';
 const INITIAL_VISIT_CENTS = 7500;
-const FULL_HRT_LAB_PACKAGE_CENTS = 26000;
-const OWN_LABS_REVIEW_CENTS = 6000;
 const TWO_DAY_SHIPPING_CENTS = 3000;
 const NEXT_DAY_SHIPPING_CENTS = 5000;
 
@@ -18,24 +15,25 @@ const money = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
 export function PrescriptionBasketDrawer() {
   const { items, isOpen, itemCount, medicationSubtotal, closeBasket, removeItem } = usePrescriptionBasket();
-  const [labOption, setLabOption] = useState<HrtLabOption>('full_package');
   const [shippingOption, setShippingOption] = useState<ShippingOption>('two_day');
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const hasHrt = items.some(item => item.category === HRT_CATEGORY);
+  const hasLabItems = items.some(item => item.category === 'labs');
   const selectedItem = items.find(item => item.slug === selectedSlug) ?? items[0] ?? null;
   const selectedItemAvailable = selectedItem
-    ? resolveGenProductFirstCheckout(selectedItem.genClientProductId).ok
+    ? Boolean(selectedItem.checkoutUrl) || resolveGenProductFirstCheckout(selectedItem.genClientProductId).ok
     : false;
-  const labCents = hasHrt ? (labOption === 'full_package' ? FULL_HRT_LAB_PACKAGE_CENTS : OWN_LABS_REVIEW_CENTS) : 0;
   const shippingCents = shippingOption === 'two_day' ? TWO_DAY_SHIPPING_CENTS : NEXT_DAY_SHIPPING_CENTS;
-  const estimatedTotalCents = Math.round(medicationSubtotal * 100) + labCents + shippingCents + INITIAL_VISIT_CENTS;
-  const labDescription = labOption === 'full_package'
-    ? 'Lab Kit + Lab Review · $260 total · Lab Kit shipping included'
-    : 'Upload your own recent labs in GEN Health · Lab Review $60';
+  const estimatedTotalCents = Math.round(medicationSubtotal * 100) + shippingCents + INITIAL_VISIT_CENTS;
 
-  const beginGenCheckout = (genClientProductId: string) => {
-    const checkout = resolveGenProductFirstCheckout(genClientProductId);
-    if (checkout.ok) navigateToGenProductFirstCheckout(checkout.url);
+  const beginCheckout = (item: typeof selectedItem) => {
+    if (!item) return;
+    if (item.checkoutUrl) {
+      window.open(item.checkoutUrl, '_top', 'noopener,noreferrer');
+      return;
+    }
+    const checkout = resolveGenProductFirstCheckout(item.genClientProductId);
+    if (checkout.ok) window.open(checkout.url, '_top', 'noopener,noreferrer');
   };
 
   if (!isOpen) return null;
@@ -70,7 +68,8 @@ export function PrescriptionBasketDrawer() {
             <div className="flex-1 overflow-y-auto px-5 py-5">
               <div className="space-y-3">
                 {items.map(item => {
-                  const available = resolveGenProductFirstCheckout(item.genClientProductId).ok;
+                  const available = Boolean(item.checkoutUrl) || resolveGenProductFirstCheckout(item.genClientProductId).ok;
+                  const isLab = item.category === 'labs';
                   return (
                     <div
                       key={item.slug}
@@ -93,7 +92,7 @@ export function PrescriptionBasketDrawer() {
                                   name="selected-prescription"
                                   checked={selectedItem?.slug === item.slug}
                                   onChange={() => setSelectedSlug(item.slug)}
-                                  aria-label={`Select ${item.displayName} for GEN checkout`}
+                                  aria-label={`Select ${item.displayName} for checkout`}
                                   className="accent-gold-500"
                                 />
                                 Select
@@ -102,10 +101,12 @@ export function PrescriptionBasketDrawer() {
                             </div>
                           </div>
                           <p className="mt-1 text-sm font-medium text-ink-900">{money(Math.round(item.price * 100))}</p>
-                          <p className="mt-1 flex items-center gap-1 text-[11px] text-ink-500"><ShieldCheck size={12} className="text-gold-600" /> Provider review required · prescription not guaranteed</p>
+                          {isLab
+                            ? <p className="mt-1 flex items-center gap-1 text-[11px] text-ink-500"><ShieldCheck size={12} className="text-gold-600" /> Lab order opens securely for payment and intake</p>
+                            : <p className="mt-1 flex items-center gap-1 text-[11px] text-ink-500"><ShieldCheck size={12} className="text-gold-600" /> Provider review required · prescription not guaranteed</p>}
                         </div>
                       </div>
-                      {!available && <p className="mt-3 rounded-lg bg-cream-100 px-3 py-2 text-xs text-ink-600">Temporarily unavailable for secure GEN checkout.</p>}
+                      {!available && <p className="mt-3 rounded-lg bg-cream-100 px-3 py-2 text-xs text-ink-600">Temporarily unavailable for secure checkout.</p>}
                     </div>
                   );
                 })}
@@ -114,26 +115,18 @@ export function PrescriptionBasketDrawer() {
               <div className="mt-6 rounded-2xl border border-cream-300 bg-white p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm font-medium text-ink-900">HRT lab option</p>
-                    <p className="mt-1 text-xs leading-relaxed text-ink-500">Only applies when a Women’s Hormone Therapy product is selected.</p>
+                    <p className="text-sm font-medium text-ink-900">Choose a lab option</p>
+                    <p className="mt-1 text-xs leading-relaxed text-ink-500">If labs are required, select an in-home or walk-in lab option and add it to your Care Basket before completing your hormone therapy purchase.</p>
                   </div>
                   <ChevronDown size={16} className="text-ink-400" />
                 </div>
                 {hasHrt && (
-                  <div className="mt-3 grid gap-2">
-                    <label className={`cursor-pointer rounded-xl border px-3 py-3 ${labOption === 'full_package' ? 'border-gold-400 bg-gold-50' : 'border-cream-300'}`}>
-                      <input type="radio" name="hrt-lab-option" checked={labOption === 'full_package'} onChange={() => setLabOption('full_package')} className="mr-2" />
-                      <span className="text-sm font-medium text-ink-900">Full HRT Lab Package · $260</span>
-                      <span className="mt-1 block pl-6 text-xs text-ink-500">Lab Kit $200 + Lab Review $60; Lab Kit shipping included. This is the first-time HRT option when required.</span>
-                    </label>
-                    <label className={`cursor-pointer rounded-xl border px-3 py-3 ${labOption === 'own_labs' ? 'border-gold-400 bg-gold-50' : 'border-cream-300'}`}>
-                      <input type="radio" name="hrt-lab-option" checked={labOption === 'own_labs'} onChange={() => setLabOption('own_labs')} className="mr-2" />
-                      <span className="text-sm font-medium text-ink-900">Upload my own labs · $60 Lab Review</span>
-                      <span className="mt-1 block pl-6 text-xs leading-relaxed text-ink-500">Upload recent labs in GEN Health and pay the $60 review fee with the initial visit. The provider must receive and approve them before prescribing, even if payment is made first.</span>
-                    </label>
+                  <div className="mt-3 rounded-xl border border-cream-300 bg-cream-50 px-3 py-3">
+                    <p className="text-xs leading-relaxed text-ink-500">Browse available lab options on the Order Labs page and add the right one to your Care Basket.</p>
+                    <button type="button" onClick={() => { closeBasket(); navigate('/order-labs'); }} className="mt-2 text-xs font-medium text-gold-700 underline">View lab options</button>
                   </div>
                 )}
-                <p className="mt-3 text-xs leading-relaxed text-ink-500">{hasHrt ? labDescription : 'No HRT lab package is added for the current selections.'}</p>
+                <p className="mt-3 text-xs leading-relaxed text-ink-500">{hasLabItems ? 'Selected lab options are included in the care selections estimate above.' : 'No lab has been added yet.'}</p>
                 {hasHrt && <p className="mt-2 text-[11px] leading-relaxed text-ink-500">When GEN Health opens, select the matching lab path there. Uploads and final charges are handled by GEN Health; do not pay until the option shown matches your choice.</p>}
               </div>
 
@@ -158,7 +151,7 @@ export function PrescriptionBasketDrawer() {
                 <div className="mt-3 space-y-2 text-sm">
                   <div className="flex justify-between gap-3"><span className="text-ink-600">Medication selections</span><span className="font-medium text-ink-900">{money(Math.round(medicationSubtotal * 100))}</span></div>
                   <div className="flex justify-between gap-3"><span className="text-ink-600">Initial provider visit, if required</span><span className="font-medium text-ink-900">{money(INITIAL_VISIT_CENTS)}</span></div>
-                  {hasHrt && <div className="flex justify-between gap-3"><span className="text-ink-600">{labOption === 'full_package' ? 'Full HRT lab package' : 'Lab review with own labs'}</span><span className="font-medium text-ink-900">{money(labCents)}</span></div>}
+                  {hasHrt && <div className="flex justify-between gap-3"><span className="text-ink-600">Hormone therapy labs</span><span className="font-medium text-ink-900">{hasLabItems ? 'Included above' : 'Choose option'}</span></div>}
                   <div className="flex justify-between gap-3"><span className="text-ink-600">{shippingOption === 'two_day' ? 'Two-Day shipping' : 'Next-Day shipping'}</span><span className="font-medium text-ink-900">{money(shippingCents)}</span></div>
                   <div className="flex justify-between gap-3 border-t border-gold-200 pt-2"><span className="font-medium text-ink-900">Estimated total before GEN confirmation</span><span className="font-medium text-ink-900">{money(estimatedTotalCents)}</span></div>
                 </div>
@@ -173,7 +166,7 @@ export function PrescriptionBasketDrawer() {
                   <p className="text-xs text-gold-900">Selected for next checkout: <span className="font-semibold">{selectedItem.displayName}</span></p>
                   <button
                     type="button"
-                    onClick={() => beginGenCheckout(selectedItem.genClientProductId)}
+                    onClick={() => beginCheckout(selectedItem)}
                     disabled={!selectedItemAvailable}
                     className="btn-primary mt-2 w-full text-sm"
                   >

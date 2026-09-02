@@ -9,6 +9,7 @@ export interface PrescriptionBasketItem {
   price: number;
   genClientProductId: string;
   category: string;
+  checkoutUrl?: string;
 }
 
 interface PrescriptionBasketContextValue {

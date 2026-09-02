@@ -1,12 +1,26 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, MessageCircle, Send, Check } from 'lucide-react';
+import { captureHighLevelLead, LEAD_CAPTURE_SOURCE } from '@/lib/highlevelLeadCapture';
 
 export function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+    try {
+      await captureHighLevelLead({
+        name: form.name,
+        email: form.email,
+        message: `${form.subject ? `[${form.subject}] ` : ''}${form.message}`,
+        source: LEAD_CAPTURE_SOURCE,
+      });
+    } catch {
+      /* Lead capture is best-effort; still show confirmation to the user. */
+    }
+    setSubmitting(false);
     setSubmitted(true);
   };
 
@@ -134,8 +148,8 @@ export function ContactPage() {
                       placeholder="How can we help?"
                     />
                   </div>
-                  <button type="submit" className="btn-primary w-full">
-                    Send Message <Send size={16} />
+                  <button type="submit" disabled={submitting} className="btn-primary w-full">
+                    {submitting ? 'Sending…' : <>Send Message <Send size={16} /></>}
                   </button>
                 </form>
               )}

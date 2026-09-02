@@ -22,6 +22,7 @@ import {
   extractExternalIdsFromTagadaPayload,
   extractOrderNumberFromTagadaPayload,
 } from "../_shared/tagadaWebhookCorrelation.ts";
+import { firePurchaseCompleted } from "../_shared/highlevelContacts.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -745,6 +746,32 @@ Deno.serve(async (req) => {
           }),
         });
       }
+    }
+
+    // Fire HighLevel purchase_completed (non-blocking, best-effort, dedup by order ID).
+    // Only sends: email, first name, phone (when SMS consent), event ID, source,
+    // payment status, order total. No medical/product/prescription data.
+    try {
+      const hlEmail = typeof order.customer_email === "string" ? order.customer_email : "";
+      const hlName = typeof order.customer_name === "string" ? order.customer_name : "";
+      const hlTotalCents = typeof order.total_cents === "number" ? order.total_cents : 0;
+      if (hlEmail) {
+        await firePurchaseCompleted({
+          supabaseUrl,
+          serviceKey,
+          contact: {
+            email: hlEmail,
+            firstName: hlName.split(" ")[0] || hlName,
+          },
+          event: {
+            eventId: String(order.id),
+            status: "paid",
+            totalCents: hlTotalCents,
+          },
+        });
+      }
+    } catch (hlErr) {
+      console.error("HighLevel purchase_completed error (non-blocking)", hlErr);
     }
   } else {
     await fetch(`${supabaseUrl}/rest/v1/orders?id=eq.${order.id}`, {

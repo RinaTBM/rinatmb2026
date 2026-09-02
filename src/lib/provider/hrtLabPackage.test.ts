@@ -20,7 +20,7 @@ import { OGTBM_PROMO_CODE } from '@/lib/promo/ogtbmPromo';
 
 const estradiolLine = {
   productId: 'p16',
-  productName: 'Estrogen Support Patch',
+  productName: 'Estradiol: Transdermal Estrogen Support Patch',
   sku: 'MBM-HRT-EST-PTC-001',
   slug: 'estradiol-patch',
   quantity: 1,
@@ -30,7 +30,7 @@ const estradiolLine = {
 
 const progesteroneLine = {
   productId: 'p23',
-  productName: 'Progesterone Capsules',
+  productName: 'Progesterone: Oral Hormone Balance Capsules',
   sku: 'MBM-HRT-PRG-CAP-001',
   slug: 'progesterone-capsules',
   quantity: 1,
@@ -266,7 +266,7 @@ describe('HRT lab package auto-add', () => {
 describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Day', () => {
   const testosteroneLine = {
     productId: 'p27',
-    productName: 'Testosterone Cream',
+    productName: 'Testosterone: Topical Hormone Support Cream',
     sku: 'MBM-HRT-TST-CRM-001',
     slug: 'testosterone-cream',
     quantity: 1,
@@ -276,7 +276,7 @@ describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Da
 
   const estradiol129 = {
     productId: 'p16',
-    productName: 'Estrogen Support Patch',
+    productName: 'Estradiol: Transdermal Estrogen Support Patch',
     sku: 'MBM-HRT-EST-PAT-001',
     slug: 'estradiol-patch',
     quantity: 1,
@@ -340,7 +340,7 @@ describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Da
       [
         {
           productId: 'p23',
-          productName: 'Progesterone Capsules',
+          productName: 'Progesterone: Oral Hormone Balance Capsules',
           sku: 'MBM-HRT-PRG-CAP-001',
           slug: 'progesterone-capsules',
           quantity: 1,
@@ -357,7 +357,7 @@ describe('screenshot cart: Estradiol + Testosterone + IPV + Lab package + Two-Da
         testosteroneLine,
         {
           productId: 'p23',
-          productName: 'Progesterone Capsules',
+          productName: 'Progesterone: Oral Hormone Balance Capsules',
           sku: 'MBM-HRT-PRG-CAP-001',
           slug: 'progesterone-capsules',
           quantity: 1,

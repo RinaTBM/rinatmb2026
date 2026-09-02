@@ -85,7 +85,7 @@ describe('resolveStorefrontDetail — membership and product routes', () => {
     };
     expect(cartLine.purchaseType).toBe('membership_program');
     expect(cartLine.price).toBe(125);
-    expect(cartLine.name).toBe('Semaglutide Membership');
+    expect(cartLine.name).toBe('Semaglutide Membership: Flat-Rate GLP-1 Weight Management Program');
     expect(resolveStorefrontDetail(cartLine.slug).kind).toBe('membership');
   });
 });

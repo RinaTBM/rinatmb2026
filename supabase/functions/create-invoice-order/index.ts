@@ -39,6 +39,7 @@ import {
   formatOneTimeProviderSnapshot,
 } from "../_shared/oneTimeVialMapping.ts";
 import { LAUNCH_READY_KASHU_MAP } from "../_shared/launchReadyKashuMap.ts";
+import { fireCheckoutStarted } from "../_shared/highlevelContacts.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -337,6 +338,8 @@ Deno.serve(async (req) => {
 
     const customerEmail = String(body.customerEmail ?? "").trim();
     const customerName = String(body.customerName ?? "").trim();
+    const customerPhone = typeof body.customerPhone === "string" ? body.customerPhone.trim() : "";
+    const smsConsent = Boolean(body.smsConsent);
     if (!customerEmail.includes("@")) return json({ error: "A valid email is required." }, 400);
     if (!customerName) return json({ error: "Customer name is required." }, 400);
 
@@ -654,7 +657,7 @@ Deno.serve(async (req) => {
     const paymentReference = publicOrderNumber;
     const invoiceNumber = `INV-${publicOrderNumber}`;
 
-    return await finalizeOrderResponse({
+    const orderResult = await finalizeOrderResponse({
       supabaseUrl,
       serviceKey,
       orderId,
@@ -676,6 +679,31 @@ Deno.serve(async (req) => {
       visitSku: items.find((i) => i.requiredProviderVisit)?.sku ?? null,
       patchProviderVisitItemId: !usedLegacyInsert,
     });
+
+    // Fire HighLevel checkout_started (non-blocking, best-effort, dedup by order ID).
+    // Never sends medical/product/prescription data — only email, first name,
+    // phone (when SMS consent), event ID, source, status, order total.
+    try {
+      await fireCheckoutStarted({
+        supabaseUrl,
+        serviceKey,
+        contact: {
+          email: customerEmail,
+          firstName: customerName.split(" ")[0] || customerName,
+          phone: customerPhone || null,
+          smsConsent,
+        },
+        event: {
+          eventId: orderId,
+          status: "checkout_started",
+          totalCents,
+        },
+      });
+    } catch (hlErr) {
+      console.error("HighLevel checkout_started error (non-blocking)", hlErr);
+    }
+
+    return orderResult;
   } catch (err) {
     console.error("create-invoice-order unexpected", err);
     return json({

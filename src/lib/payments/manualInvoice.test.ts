@@ -121,7 +121,7 @@ describe('manual invoice order creation', () => {
       paymentStatus: 'awaiting_payment',
       items: [
         {
-          productName: 'Semaglutide Membership',
+          productName: 'Semaglutide Membership: Flat-Rate GLP-1 Weight Management Program',
           quantity: 1,
           unitPriceCents: SEMAGLUTIDE_MEMBERSHIP_CENTS,
           lineTotalCents: SEMAGLUTIDE_MEMBERSHIP_CENTS,

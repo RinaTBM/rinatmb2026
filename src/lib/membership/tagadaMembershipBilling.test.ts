@@ -449,11 +449,11 @@ describe('Tagada membership recurring billing', () => {
       kind: 'price_data' as const,
       unitAmountCents: 12500,
       quantity: 1,
-      name: 'Semaglutide Membership',
+      name: 'Semaglutide Membership: Flat-Rate GLP-1 Weight Management Program',
       recurring: true,
       reason: 'wellness_member_discount' as const,
       productId: 'm1',
-      productName: 'Semaglutide Membership',
+      productName: 'Semaglutide Membership: Flat-Rate GLP-1 Weight Management Program',
       variantLabel: null,
     };
     expect(isFreeShippingEligibleMerchandiseLine(membershipLine)).toBe(false);

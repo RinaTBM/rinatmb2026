@@ -68,9 +68,7 @@ export function HomePage() {
 
   const heroRef = useRef<HTMLDivElement>(null);
   const [parallaxOffset, setParallaxOffset] = useState(0);
-  const [heroImage] = useState(
-    'https://images.pexels.com/photos/3765034/pexels-photo-3765034.jpeg?auto=compress&cs=tinysrgb&w=1200'
-  );
+  const [heroImage] = useState('/images/homepage-hero-women-wellness.jpg');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -170,13 +168,13 @@ export function HomePage() {
 
             {/* RIGHT: Premium lifestyle image + floating glass card */}
             <div className="order-1 lg:order-2 relative hero-image-fade">
-              <div className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.18)]">
+              <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.18)]">
                 <img
                   src={heroImage}
-                  alt="Woman smiling with arms raised, enjoying natural light indoors"
+                  alt="Diverse group of women smiling together in a warm wellness studio."
                   className="absolute inset-0 h-full w-full object-cover"
                   style={{
-                    transform: `translateY(${parallaxOffset}px) scale(1.08)`,
+                    transform: `translateY(${parallaxOffset}px)`, 
                     transition: 'transform 0.1s linear',
                   }}
                   loading="eager"

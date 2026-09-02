@@ -107,8 +107,9 @@ export function ShippingPolicyPage() {
           body: (
             <>
               <p>
-                For applicable Women’s Hormone Therapy orders, customers choose from the available GEN Health lab
-                options when labs are required. Lab orders, payment, intake, and results stay inside GEN Health.
+                For applicable Women’s Hormone Therapy orders, customers choose from the current lab options when labs
+                are required. Lab ordering, intake, payment, and results are handled through the secure clinical lab
+                workflow.
               </p>
               <LegalBulletList items={[
                 'No separate storefront shipping charge is added for lab orders',

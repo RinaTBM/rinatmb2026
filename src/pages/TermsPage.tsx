@@ -150,9 +150,9 @@ export function TermsPage() {
               </p>
               <p>
                 For applicable Women’s Hormone Therapy orders, updated labs may be required before a provider can make
-                treatment decisions. When labs are required, customers choose from the available GEN Health lab options
-                and add the selected lab option before continuing. Lab ordering, payment, intake, and results stay
-                inside GEN Health.
+                treatment decisions. When labs are required, customers choose from the current lab options and add the
+                selected lab before continuing. Lab ordering, intake, payment, and results are handled through the
+                secure clinical lab workflow.
               </p>
             </>
           ),
@@ -163,10 +163,11 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                When offered, FIRSTTIME provides $25 off, OGTBM provides 25% off, and TEST provides 100% off eligible
-                one-time purchases. Only one code may be applied at a time. Shipping is not discounted. FIRSTTIME
-                requires a signed-in customer account. Membership enrollment, Subscribe &amp; Save, Auto-Refill, and
-                recurring renewals are excluded.
+                When offered, FIRSTTIME provides $25 off eligible purchases and OGTBM provides $50 off each eligible
+                unit. TEST and MBMTEST90 are limited internal/testing codes and may be restricted to authorized
+                checkout emails. Only one code may be applied at a time. Shipping is not discounted. FIRSTTIME requires
+                a signed-in customer account. Membership enrollment, Subscribe &amp; Save, Auto-Refill, and recurring
+                renewals are excluded.
               </p>
             </>
           ),

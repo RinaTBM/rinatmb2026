@@ -51,7 +51,7 @@ const faqCategories = [
       },
       {
         q: 'Which promo codes can I use?',
-        a: 'When available, FIRSTTIME provides $25 off, OGTBM provides 25% off, and TEST provides 100% off eligible one-time purchases. Enter one code at checkout. Promotions do not change recurring subscription renewal amounts.',
+        a: 'When available, FIRSTTIME provides $25 off eligible purchases and OGTBM provides $50 off each eligible unit. Internal testing codes may be restricted to authorized checkout emails. Enter one code at checkout. Promotions do not change recurring subscription renewal amounts.',
       },
       {
         q: 'What do promo codes exclude?',
@@ -68,7 +68,7 @@ const faqCategories = [
     faqs: [
       {
         q: 'What purchasing options do you offer?',
-        a: 'Eligible prescription products offer One-Time Purchase or Subscribe & Save. Subscribe & Save applies 15% medication savings and renews monthly with the selected $30 or $50 shipping method. Provider care, labs, services, and accessories remain one-time purchases.',
+        a: 'Eligible prescription products may offer One-Time Purchase or Subscribe & Save when available. Subscribe & Save pricing and renewal details are shown before enrollment. Provider care, labs, services, and accessories remain one-time purchases unless a specific offer says otherwise.',
       },
       {
         q: 'Can I change my medication myself?',
@@ -95,15 +95,15 @@ const faqCategories = [
     faqs: [
       {
         q: 'Do I need labs for hormone therapy?',
-        a: 'Some Women’s Hormone Therapy orders require labs before a licensed provider can make treatment decisions. When labs are needed, checkout prompts you to choose one of the available GEN Health lab options.',
+        a: 'Some Women’s Hormone Therapy orders require labs before a licensed provider can make treatment decisions. When labs are needed, checkout prompts you to choose from the current lab options.',
       },
       {
         q: 'How do I choose hormone therapy labs?',
-        a: 'You can choose from available in-home or walk-in lab options. Lab ordering, payment, intake, and results stay inside GEN Health so your provider can review the correct information.',
+        a: 'You can choose from available in-home or walk-in lab options when more than one option is available. Lab ordering, intake, payment, and results are handled through the secure clinical lab workflow so your provider can review the correct information.',
       },
       {
         q: 'Is lab shipping included?',
-        a: 'Yes. Lab shipping is included for lab orders. Accessories are the only storefront items with a separate $10 shipping charge.',
+        a: 'Lab pricing is shown before you order. Accessories are the only storefront items with a separate $10 shipping charge.',
       },
       {
         q: 'Will hormone therapy labs be chosen automatically?',
@@ -178,7 +178,7 @@ const faqCategories = [
   {
     title: 'Products & Quality',
     faqs: [
-      { q: 'Are your products third-party tested?', a: 'Yes. All applicable products undergo third-party testing for purity, potency, and contaminants.' },
+      { q: 'Are your products third-party tested?', a: 'Testing and quality documentation vary by product, pharmacy, and fulfillment partner. Prescription therapies are dispensed only after provider review and through eligible U.S. pharmacy partners when approved.' },
       { q: 'Are your products vegan?', a: 'Product formulations vary. Check each product page for specific ingredient information.' },
       { q: 'Can I take these with my medications?', a: 'Always consult your healthcare provider before starting or changing any therapy, especially if you take prescription medications.' },
     ],

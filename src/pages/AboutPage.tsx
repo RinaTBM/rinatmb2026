@@ -111,9 +111,9 @@ export function AboutPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
               { icon: Activity, title: 'Weight Management', description: 'Semaglutide and Tirzepatide options, provider-guided and personalized.', to: '/section/weight-management' },
-              { icon: Sparkles, title: 'Longevity & Cognitive', description: 'NAD+ and cognitive wellness options available after licensed-provider review.', to: '/section/longevity' },
-              { icon: HeartPulse, title: 'HRT for Women', description: 'Estrogen, progesterone, and testosterone options personalized after clinical review.', to: '/section/hrt-women' },
-              { icon: Stethoscope, title: 'Provider Care', description: 'Consultations, lab kits, and laboratory reviews when required for care.', to: '/section/provider-care' },
+              { icon: Sparkles, title: 'Longevity & Energy', description: 'NAD+ and cognitive wellness options available after licensed-provider review.', to: '/section/longevity-cognitive' },
+              { icon: HeartPulse, title: 'Hormone Support', description: 'Estrogen, progesterone, and testosterone options personalized after clinical review.', to: '/section/womens-hormone-therapy' },
+              { icon: Stethoscope, title: 'Provider Care', description: 'Consultations, follow-up visits, and laboratory reviews when required for care.', to: '/section/provider-care' },
               { icon: FlaskConical, title: 'Recovery & Performance', description: 'Provider-directed recovery and performance support after eligibility review.', to: '/section/recovery-performance' },
             ].map((col, i) => (
               <Link key={i} to={col.to} className="card-lux p-8 hover:shadow-lg transition-all hover:-translate-y-1">

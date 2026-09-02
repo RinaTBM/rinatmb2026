@@ -981,31 +981,31 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   'lab-kit': {
     benefitHeadline: 'Choose Labs for Hormone Therapy Review',
     shortDescription:
-      'When labs are required for Women’s Hormone Therapy, choose the in-home or walk-in GEN Health lab option that fits you. This is not a medication.',
+      'When labs are required for Women’s Hormone Therapy, choose the current in-home or walk-in lab option that fits you. This is not a medication.',
     highlights: [
       'Hormone Therapy Lab Choices',
-      'Lab Shipping Included',
+      'Current Lab Options',
       'Not a Medication',
-      'Completed in GEN Health',
+      'Secure Clinical Workflow',
     ],
     about: [
-      'When Women’s Hormone Therapy labs are required, customers choose from the available GEN Health lab options.',
-      'Lab shipping is included for lab orders. Accessories are the only storefront items with a separate $10 shipping charge.',
+      'When Women’s Hormone Therapy labs are required, customers choose from the current lab options.',
+      'Lab pricing is shown before ordering. Accessories are the only storefront items with a separate $10 shipping charge.',
     ].join('\n\n'),
     potentialBenefits: [
       'Lets customers choose the lab option that fits their needs',
-      'Keeps lab orders, intake, payment, and results inside GEN Health',
+      'Keeps lab orders, intake, payment, and results in the secure clinical workflow',
       'Clear separation from medication pricing and accessory shipping',
     ],
     howItWorks:
-      'When an applicable hormone therapy product needs labs, checkout opens a lab-choice menu. Customers choose and complete the matching lab order in GEN Health.',
+      'When an applicable hormone therapy product needs labs, checkout opens a lab-choice menu. Customers choose and complete the matching lab order through the secure clinical lab workflow.',
     whyPeopleChooseIt: [
       'Choice of in-home or walk-in lab options',
-      'Transparent GEN Health lab pricing',
-      'Lab shipping included',
+      'Transparent lab pricing',
+      'Clear separation from accessory shipping',
     ],
     whatToExpect:
-      'Choose the appropriate lab option in GEN Health. Lab orders, payment, intake, and results stay there, and lab shipping is included where applicable.',
+      'Choose the appropriate lab option. Lab ordering, intake, payment, and results continue through the secure clinical lab workflow.',
     importantInformation:
       'Lab services are provider-care services, not medications. They are not discounted by storefront promo codes.',
   },

@@ -39,8 +39,8 @@ export function Footer() {
               <li><Link to="/section/accessories" className="hover:text-gold-300 transition-colors">Accessories</Link></li>
               <li><Link to="/best-sellers" className="hover:text-gold-300 transition-colors">Best Sellers</Link></li>
               <li><Link to="/section/weight-management" className="hover:text-gold-300 transition-colors">Weight Management</Link></li>
-              <li><Link to="/section/longevity" className="hover:text-gold-300 transition-colors">Longevity</Link></li>
-              <li><Link to="/section/hrt-women" className="hover:text-gold-300 transition-colors">HRT for Women</Link></li>
+              <li><Link to="/section/longevity-cognitive" className="hover:text-gold-300 transition-colors">Longevity &amp; Energy</Link></li>
+              <li><Link to="/section/womens-hormone-therapy" className="hover:text-gold-300 transition-colors">Hormone Support</Link></li>
             </ul>
           </div>
 
@@ -79,10 +79,10 @@ export function Footer() {
         {/* Disclosures */}
         <div className="mt-12 border-t border-cream-100/10 pt-8">
           <p className="text-xs text-cream-100/50 leading-relaxed mb-4">
-            These statements have not been evaluated by the Food and Drug Administration. Products are not intended to diagnose, treat, cure, or prevent any disease. Provider Care and other therapy products require a medical intake and review by a licensed provider; fulfillment occurs only after provider approval and is not a guarantee of prescription. If not approved, a full refund is issued.
+            These statements have not been evaluated by the Food and Drug Administration. Products are not intended to diagnose, treat, cure, or prevent any disease. Provider Care and prescription therapies require a medical intake and review by a licensed provider; fulfillment occurs only after provider approval and is not a guarantee of prescription. If a requested prescription therapy is not approved after payment, eligible paid amounts are refunded under our Refund &amp; Replacement Policy.
           </p>
           <p className="text-xs text-cream-100/50 leading-relaxed mb-4">
-            Telemedicine services available in all 50 states. Appointments conducted via Zoom and booked on our website. Medical Director: Dr. Jerry J. Cattelane Jr., D.O. {PHARMACY_FULFILLMENT_SHORT}
+            Telemedicine and pharmacy fulfillment availability vary by service, product, provider licensure, pharmacy, laboratory, and state requirements. Medical Director: Dr. Jerry J. Cattelane Jr., D.O. {PHARMACY_FULFILLMENT_SHORT}
           </p>
           <div className="flex flex-col md:flex-row justify-between gap-4 text-xs text-cream-100/50">
             <p>© {new Date().getFullYear()} My Bare Method. All rights reserved. A brand of The Bare Method.</p>

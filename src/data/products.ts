@@ -1018,14 +1018,14 @@ export const products: Product[] = [
     category: 'provider-care',
     goals: ['hrt-women'],
     shortDescription:
-      'Choose an in-home or walk-in lab option in GEN Health when labs are required for Women’s Hormone Therapy review. Lab shipping is included.',
+      'Choose a current in-home or walk-in lab option when labs are required for Women’s Hormone Therapy review.',
     longDescription:
-      'Choose an in-home or walk-in lab option in GEN Health when labs are required for Women’s Hormone Therapy review. Lab orders, payment, intake, and results stay inside GEN Health. This is not a medication.',
+      'Choose a current in-home or walk-in lab option when labs are required for Women’s Hormone Therapy review. Lab ordering, intake, payment, and results are handled through the secure clinical lab workflow. This is not a medication.',
     image: 'https://images.pexels.com/photos/6129507/pexels-photo-6129507.jpeg?auto=compress&cs=tinysrgb&w=1200',
     imageAlt: 'Laboratory specimen collection kit for hormone therapy intake',
     variants: [{ dosageForm: 'Service', strength: 'Choose in GEN', size: 'Labs', price: 0 }],
     providerDisclaimer:
-      'Hormone therapy labs are selected and paid in GEN Health when required. Lab shipping is included.',
+      'Hormone therapy labs are selected and paid through the secure clinical lab workflow when required.',
   }),
 
   // ===== ACCESSORIES (preserved from website-improvements) =====

@@ -161,12 +161,10 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                When offered, promotional codes such as OGTBM provide $50 off each eligible item (not a flat $50 off
-                the entire order). Quantity applies per eligible item/unit where supported. A promo cannot reduce an
-                eligible item below $0. Promotions are generally non-stackable. Exclusions typically include
-                accessories, dermatology / prescription skin &amp; hair, Initial Provider Visit, Follow-Up Visit, Lab
-                Review, Lab Kit, other provider services, and shipping. Promotional discounts do not change ongoing
-                recurring membership renewal amounts.
+                When offered, FIRSTTIME provides $25 off, OGTBM provides 25% off, and TEST provides 100% off eligible
+                one-time purchases. Only one code may be applied at a time. Shipping is not discounted. FIRSTTIME
+                requires a signed-in customer account. Membership enrollment, Subscribe &amp; Save, Auto-Refill, and
+                recurring renewals are excluded.
               </p>
             </>
           ),

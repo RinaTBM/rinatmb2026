@@ -134,6 +134,7 @@ export function normalizeCartItemAwayFromAutoRefill(item: CartItem): CartItem {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [hasLoadedStoredCart, setHasLoadedStoredCart] = useState(false);
 
   useEffect(() => {
     try {
@@ -167,16 +168,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
     } catch {
       /* ignore */
+    } finally {
+      setHasLoadedStoredCart(true);
     }
   }, []);
 
   useEffect(() => {
+    if (!hasLoadedStoredCart) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch {
       /* ignore */
     }
-  }, [items]);
+  }, [hasLoadedStoredCart, items]);
 
   const addItem: CartContextValue['addItem'] = (item, quantity = 1) => {
     const purchaseType: CartPurchaseType =

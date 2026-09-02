@@ -84,8 +84,7 @@ function extractToken(redirectUrl: string): string | null {
   }
 }
 
-/** MBM shipping SKUs — used for ONE-TIME product carts only (not membership enrollment).
- * MBM-SHIP-ACCESSORY-001 must be mapped to a live $10 Tagada variant before launch. */
+/** MBM shipping SKUs — used for ONE-TIME product carts only (not membership enrollment). */
 const SHIP_SKU_TWO_DAY = "MBM-SHIP-TWO-DAY-001";
 const SHIP_SKU_NEXT_DAY = "MBM-SHIP-NEXT-DAY-001";
 const SHIP_SKU_ACCESSORY = "MBM-SHIP-ACCESSORY-001";
@@ -95,13 +94,6 @@ function shippingSkuForCents(shippingCents: number): string | null {
   if (shippingCents === 5000) return SHIP_SKU_NEXT_DAY;
   if (shippingCents === 1000) return SHIP_SKU_ACCESSORY;
   return null;
-}
-
-const OGTBM_EXCLUDED_SKU_PREFIXES = ["MBM-ACC-", "MBM-SH-", "MBM-PC-", "MBM-MEM-", "MBM-SHIP-"];
-
-function isOgtbmEligibleSku(sku: string): boolean {
-  const s = sku.toUpperCase();
-  return !OGTBM_EXCLUDED_SKU_PREFIXES.some((p) => s.startsWith(p));
 }
 
 async function ensureTagadaOneTimePrice(input: {
@@ -784,20 +776,21 @@ Deno.serve(async (req) => {
       }, 409);
     }
 
-    // When OGTBM applies, swap eligible Tagada lines to discounted one-time priceIds
-    // so hosted charge equals MBM total (full map cents − $50/eligible unit).
-    if (mbmPromoCode === "OGTBM" && mbmDiscountCents > 0 && !isMembershipCheckout) {
+    // GEN Health one-time promos are mirrored with exact Tagada priceIds.
+    // Discounts apply to merchandise only; shipping remains full price.
+    if (["FIRSTTIME", "OGTBM", "TEST"].includes(mbmPromoCode) && mbmDiscountCents > 0 && !isMembershipCheckout) {
       const tagadaApiKey = Deno.env.get("TAGADA_API_KEY")?.trim();
       if (!tagadaApiKey) {
         return json({
           error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
           blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
-          message: "OGTBM card checkout requires Tagada API access to bind discounted priceIds.",
+          message: "Promo checkout requires Tagada API access to bind discounted priceIds.",
         }, 503);
       }
-      // Rebuild items with discounted prices for eligible SKUs.
+      // Allocate the server-authorized merchandise discount across one-time lines.
       const discountedItems: { variantId: string; quantity: number; priceId?: string }[] = [];
       let discountedMerch = 0;
+      let remainingDiscount = mbmDiscountCents;
       for (const line of orderItems) {
         const sku = line.sku as string | null;
         const qty = Number(line.quantity) || 1;
@@ -805,16 +798,18 @@ Deno.serve(async (req) => {
         const mapped = resolveKashuSkuMapRow(sku, bySku.get(sku) ?? null);
         if (!mapped?.tagada_variant_id || !mapped.tagada_product_id) {
           return json({
-            error: "Tagada product sync incomplete for OGTBM discount binding.",
+            error: "Tagada product sync incomplete for promo discount binding.",
             missingSkus: [sku],
           }, 409);
         }
         const fullUnit = Math.trunc(Number(mapped.tagada_price_cents ?? mapped.mbm_price_cents) || 0);
-        let unit = fullUnit;
+        const lineFull = fullUnit * qty;
+        const lineDiscount = Math.min(remainingDiscount, lineFull);
+        const discountedLineTotal = lineFull - lineDiscount;
+        const unit = qty > 0 ? Math.floor(discountedLineTotal / qty) : fullUnit;
+        const remainder = qty > 0 ? discountedLineTotal - unit * qty : 0;
         let priceId = mapped.tagada_price_id || undefined;
-        if (isOgtbmEligibleSku(sku) && fullUnit > 0) {
-          const discountPer = Math.min(5000, fullUnit);
-          unit = fullUnit - discountPer;
+        if (lineDiscount > 0 && fullUnit > 0 && remainder === 0) {
           const ensured = await ensureTagadaOneTimePrice({
             apiKey: tagadaApiKey,
             productId: mapped.tagada_product_id,
@@ -823,19 +818,29 @@ Deno.serve(async (req) => {
           });
           if (!ensured) {
             return json({
-              error: "Unable to bind OGTBM discounted Tagada priceId.",
+              error: "Unable to bind promo discounted Tagada priceId.",
               sku,
               amountCents: unit,
             }, 502);
           }
           priceId = ensured;
+        } else if (lineDiscount > 0 && remainder !== 0) {
+          return json({
+            error: "Promo discount cannot be represented by an exact Tagada unit price.",
+            sku,
+            amountCents: discountedLineTotal,
+          }, 409);
         }
+        remainingDiscount -= lineDiscount;
         discountedMerch += unit * qty;
         discountedItems.push({
           variantId: mapped.tagada_variant_id,
           quantity: qty,
           ...(priceId ? { priceId } : {}),
         });
+      }
+      if (remainingDiscount !== 0) {
+        return json({ error: "Promo discount could not be bound to mapped Tagada lines." }, 409);
       }
       // Keep shipping lines already appended in tagadaItems after merchandise.
       const shipItems = tagadaItems.slice(orderItems.length);
@@ -855,7 +860,7 @@ Deno.serve(async (req) => {
           calculatedTagadaMerchandiseCents,
           calculatedShippingCents,
           mbmDiscountCents,
-          note: "ogtbm_discounted_priceIds",
+          note: "gen_promo_discounted_priceIds",
         }, 409);
       }
     }

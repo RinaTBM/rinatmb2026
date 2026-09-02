@@ -21,8 +21,8 @@ import {
   isLabPackageLine,
   shouldAutoAddHrtLabPackage,
 } from './hrtLabPackage.ts';
-import { applyOgtbmPromo, isOgtbmPromoCode } from './ogtbmPromo.ts';
 import { applyMbmtest90Promo, isMbmtest90PromoCode } from './mbmtest90Promo.ts';
+import { applyGenPromo, isGenPromoCode } from './genPromo.ts';
 const PROVIDER_CARE_FIXED_CENTS: Record<string, number> = {
   pc1: 7500,
   pc2: 5500,
@@ -234,7 +234,7 @@ export function buildAuthoritativeOrderLines(input: {
     0,
   );
 
-  // OGTBM and MBMTEST90 are server-authoritative when code is present. Otherwise clamp client discount
+  // GEN Health promos and MBMTEST90 are server-authoritative when code is present. Otherwise clamp client discount
   // (member/auto-refill savings already baked into unit prices — typically 0 here).
   let discountCents = 0;
   let promoCode: string | null = null;
@@ -245,8 +245,10 @@ export function buildAuthoritativeOrderLines(input: {
     isMembership: Boolean(i.isMembership) || i.purchaseType === 'membership_program',
     subscription: i.subscription === true,
   }));
-  const ogtbm = applyOgtbmPromo({
+  const genPromo = applyGenPromo({
     code: input.promoCode,
+    isAuthenticated: Boolean(input.customerUserId),
+    customerEmail: input.customerEmail,
     lines: items.map(i => ({
       productId: i.productId,
       sku: i.sku,
@@ -292,9 +294,9 @@ export function buildAuthoritativeOrderLines(input: {
     shippingCents,
     items: promoItems,
   });
-  if (ogtbm.ok) {
-    promoCode = ogtbm.code;
-    discountCents = Math.min(ogtbm.discountCents, subtotalCents);
+  if (genPromo.ok) {
+    promoCode = genPromo.code;
+    discountCents = Math.min(genPromo.discountCents, subtotalCents);
   } else if (mbmtest90.ok) {
     promoCode = mbmtest90.code;
     discountCents = mbmtest90.discountCents;
@@ -304,7 +306,7 @@ export function buildAuthoritativeOrderLines(input: {
       Math.min(Number(input.discountCents) || 0, subtotalCents),
     );
     // Never trust a client-claimed promo amount without the code path above.
-    if (isOgtbmPromoCode(input.promoCode) || isMbmtest90PromoCode(input.promoCode)) {
+    if (isGenPromoCode(input.promoCode) || isMbmtest90PromoCode(input.promoCode)) {
       discountCents = 0;
     }
   }

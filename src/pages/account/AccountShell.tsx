@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, navigate } from '@/router';
-import { ChevronDown, LogOut, UserRound } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, LogOut, UserRound } from 'lucide-react';
 import { useCustomerAuth } from '@/context/CustomerAuthContext';
+import { GEN_HEALTH_ICON_URL, GEN_HEALTH_PORTAL_URL } from '@/lib/genHealth/portalLinks';
 
 const NAV = [
   { id: 'overview', label: 'Overview', path: '/account' },
@@ -68,6 +69,16 @@ export function AccountShell({
                   {item.label}
                 </button>
               ))}
+              <a
+                href={GEN_HEALTH_PORTAL_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-1 flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm text-ink-600 hover:bg-cream-100 hover:text-ink-900"
+                onClick={() => setMobileOpen(false)}
+              >
+                GEN Health Portal
+                <ArrowUpRight size={14} aria-hidden />
+              </a>
             </div>
           )}
         </div>
@@ -89,6 +100,20 @@ export function AccountShell({
                   {item.label}
                 </Link>
               ))}
+              <a
+                href={GEN_HEALTH_PORTAL_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 flex items-center justify-between gap-2 rounded-xl border border-cream-300 bg-white px-3 py-2.5 text-sm text-ink-700 transition-colors hover:border-gold-300 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-ink-200 bg-white p-0.5">
+                    <img src={GEN_HEALTH_ICON_URL} alt="" className="h-full w-full rounded-full object-contain" />
+                  </span>
+                  GEN Health Portal
+                </span>
+                <ArrowUpRight size={14} aria-hidden />
+              </a>
             </nav>
           </aside>
           <div>{children}</div>

@@ -30,7 +30,7 @@ GEN API Orders / external-paid remains **BLOCKED**. GEN handoff automation remai
 | TIR | tir-glycine-any-dose | MBM-WM-TIR-GLY-004 | $119 | product_861e0edd8ab2 | variant_6c383930239c | price_cb4042a35b42 | MAP_CREATE_REQUIRED → created |
 | NAD | nad-nasal-r84 | MBM-LON-NAD-NS-001 | $79 | product_9dd959e8b3b2 | variant_c41bb700e856 | price_79f07341d00a | MAP_CREATE_REQUIRED → created |
 
-All 17 Tagada products: `isTaxable=false`, `isShippable=false`, one-time USD. Medication retail already includes pharmacy shipping. Checkout still appends `MBM-SHIP-TWO-DAY-001` ($30) or `MBM-SHIP-NEXT-DAY-001` ($50) for one-time carts. `tax_cents = 0`.
+All 17 Tagada products: `isTaxable=false`, `isShippable=false`, one-time USD. Medication retail already includes pharmacy shipping. Checkout appends `MBM-SHIP-ACCESSORY-001` ($10), `MBM-SHIP-TWO-DAY-001` ($30), or `MBM-SHIP-NEXT-DAY-001` ($50) for one-time carts when shipping applies. `tax_cents = 0`.
 
 FORMULARY_PENDING / FUTURE_HIDDEN / NAD injection / Wolverine were not created or mapped.
 

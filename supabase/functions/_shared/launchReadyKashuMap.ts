@@ -7,7 +7,7 @@
  * Do not invent IDs.
  *
  * One-time family products are isTaxable=false, isShippable=false, one-time USD.
- * Ordinary one-time carts still append MBM-SHIP-TWO-DAY-001 / MBM-SHIP-NEXT-DAY-001.
+ * Ordinary one-time carts still append MBM-SHIP-ACCESSORY-001 / MBM-SHIP-TWO-DAY-001 / MBM-SHIP-NEXT-DAY-001.
  * Membership enrollment does NOT append MBM-SHIP — shipping is inside the combo priceId.
  *
  * Historical SEM $149 / $179 / $199 and TIR $249 / $275 / $299 / $305 / $325 prices remain for old subscriptions.

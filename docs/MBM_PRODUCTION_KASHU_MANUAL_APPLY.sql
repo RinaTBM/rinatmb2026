@@ -53,7 +53,8 @@ insert into public.kashu_sku_map (
   ('MBM-WM-TIR-GLY-003', 'p5', 'tir-glycine-high', 'product_861e0edd8ab2', 'variant_121e6d8cd921', 'price_9803c9a96da8', 16900, 16900, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now()),
   ('MBM-WM-TIR-GLY-004', 'p5', 'tir-glycine-any-dose', 'product_861e0edd8ab2', 'variant_6c383930239c', 'price_cb4042a35b42', 11900, 11900, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now()),
   ('MBM-LON-NAD-NS-001', 'p9', 'nad-nasal-r84', 'product_9dd959e8b3b2', 'variant_c41bb700e856', 'price_79f07341d00a', 7900, 7900, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now()),
-  ('MBM-MEM-TIR-MEM-001', 'm2', 'm2', 'product_8b3bfb6614c4', 'variant_b3890c799e09', 'price_2d2dd07b2f73', 27500, 27500, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now())
+  ('MBM-MEM-TIR-MEM-001', 'm2', 'm2', 'product_8b3bfb6614c4', 'variant_b3890c799e09', 'price_2d2dd07b2f73', 27500, 27500, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now()),
+  ('MBM-SHIP-ACCESSORY-001', 'shipping', 'accessory', 'product_94e5e1cda1ac', 'variant_4b7853bf87dd', 'price_c2f2a57f7f9d', 1000, 1000, true, 'Accessory Shipping $10 live-created 2026-09-01', now())
 on conflict (mbm_sku) do update set
   mbm_product_id = excluded.mbm_product_id,
   mbm_variant_id = excluded.mbm_variant_id,

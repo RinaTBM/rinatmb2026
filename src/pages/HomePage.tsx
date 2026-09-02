@@ -54,44 +54,6 @@ const howItWorksSteps = [
 
 
 
-const pathCards = [
-  {
-    title: 'Weight Management',
-    description: 'Explore provider-guided options for steady, personalized support.',
-    to: '/section/weight-management',
-  },
-  {
-    title: 'Hormone Support',
-    description: 'Review Women\u2019s Hormone Therapy options, with labs and provider review when needed.',
-    to: '/section/womens-hormone-therapy',
-  },
-  {
-    title: 'Longevity & Energy',
-    description: 'Browse options that support cellular health, focus, and everyday vitality.',
-    to: '/section/longevity-cognitive',
-  },
-  {
-    title: 'Recovery & Performance',
-    description: 'Explore provider-guided support for recovery, resilience, and active routines.',
-    to: '/section/recovery-performance',
-  },
-  {
-    title: 'Skin & Hair',
-    description: 'See prescription skin and hair options available after provider review.',
-    to: '/section/prescription-skin-hair',
-  },
-  {
-    title: 'Lab Options',
-    description: 'Choose in-home or walk-in labs through GEN Health when your care path calls for them.',
-    to: '/order-labs',
-  },
-  {
-    title: 'Client Portal',
-    description: 'Return to your account for orders, care steps, and easy access to GEN Health.',
-    to: '/account/login',
-  },
-];
-
 const faqs = [
   { q: 'Do I need a subscription to purchase?', a: 'No. Every eligible prescription can be purchased once. Subscribe & Save is optional and takes 15% off the prescription medication only.' },
   { q: 'Is provider approval guaranteed?', a: 'No. Provider review and approval are required for certain products. Payment and order submission do not guarantee approval. If not approved after payment has been received, eligible paid amounts for the unapproved product are refunded in accordance with our Refund Policy.' },
@@ -175,10 +137,10 @@ export function HomePage() {
               </p>
               <div className="hero-cta">
                 <Link
-                  to="/section/weight-management"
+                  to="/shop-all"
                   className="hero-cta-btn"
                 >
-                  Explore Weight Management <ArrowRight size={18} />
+                  Explore Wellness <ArrowRight size={18} />
                 </Link>
               </div>
 
@@ -247,34 +209,6 @@ export function HomePage() {
               {/* Decorative soft glow */}
               <div className="absolute -top-6 -right-6 h-32 w-32 rounded-full bg-[#C9A86A]/15 blur-2xl pointer-events-none" />
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== PATH CARDS ===== */}
-      <section className="py-20 md:py-28">
-        <div className="container-lux">
-          <div className="text-center mb-12">
-            <p className="eyebrow mb-3">A clearer way forward</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-ink-900 mb-4">Find the support that fits.</h2>
-            <p className="text-lg text-ink-500 max-w-2xl mx-auto">
-              Whether you are exploring care, ordering labs, or returning as a client, these links help you move at your own pace.
-            </p>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {pathCards.map(({ title, description, to }) => (
-              <Link
-                key={title}
-                to={to}
-                className="group card-lux p-6 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col"
-              >
-                <h3 className="font-serif text-2xl text-ink-900 mb-2">{title}</h3>
-                <p className="text-sm text-ink-500 mb-4 flex-1 leading-relaxed">{description}</p>
-                <span className="text-sm text-gold-600 flex items-center gap-1">
-                  View options <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                </span>
-              </Link>
-            ))}
           </div>
         </div>
       </section>

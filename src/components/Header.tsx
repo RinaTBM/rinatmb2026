@@ -140,17 +140,17 @@ export function Header() {
                 )}
               </div>
 
-              <Link to="/section/weight-management" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
-                Weight Management
-              </Link>
-              <Link to="/section/womens-hormone-therapy" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
-                Hormone Support
+              <Link to="/section/provider-care" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                Provider Care
               </Link>
               <Link to="/order-labs" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
-                Lab Options
+                Order Labs
               </Link>
-              <Link to={accountHref} className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
-                Client Portal
+              <Link to="/section/accessories" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                Accessories
+              </Link>
+              <Link to="/contact" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                Contact
               </Link>
               <Link to="/faq" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 FAQs
@@ -322,32 +322,32 @@ export function Header() {
               </div>
 
               <Link
-                to="/section/weight-management"
+                to="/section/provider-care"
                 onClick={closeAll}
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
               >
-                Weight Management
-              </Link>
-              <Link
-                to="/section/womens-hormone-therapy"
-                onClick={closeAll}
-                className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
-              >
-                Hormone Support
+                Provider Care
               </Link>
               <Link
                 to="/order-labs"
                 onClick={closeAll}
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
               >
-                Lab Options
+                Order Labs
               </Link>
               <Link
-                to={accountHref}
+                to="/section/accessories"
                 onClick={closeAll}
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
               >
-                Client Portal
+                Accessories
+              </Link>
+              <Link
+                to="/contact"
+                onClick={closeAll}
+                className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
+              >
+                Contact
               </Link>
               <Link
                 to="/faq"
@@ -358,14 +358,11 @@ export function Header() {
               </Link>
 
               <div className="space-y-1 border-t border-cream-300 pt-4 mt-4">
-                <Link to="/section/provider-care" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
-                  Provider Care
+                <Link to="/best-sellers" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
+                  Best Sellers
                 </Link>
-                <Link to="/section/accessories" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
-                  Accessories
-                </Link>
-                <Link to="/track" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
-                  Track Order
+                <Link to="/alacarte" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
+                  One-Time Purchase
                 </Link>
                 <Link to="/about" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
                   About
@@ -373,11 +370,11 @@ export function Header() {
                 <Link to="/refund-policy" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
                   Refund Policy
                 </Link>
-                <Link to="/best-sellers" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
-                  Best Sellers
+                <Link to="/track" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
+                  Track Order
                 </Link>
-                <Link to="/alacarte" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
-                  One-Time Purchase
+                <Link to={accountHref} onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
+                  Account
                 </Link>
                 <a
                   href={GEN_HEALTH_PORTAL_URL}

@@ -30,6 +30,3 @@ verify_jwt = false
 
 [functions.get-order-clinical-status]
 verify_jwt = true
-
-[functions.highlevel-lead-capture]
-verify_jwt = true

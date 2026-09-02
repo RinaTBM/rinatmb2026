@@ -120,9 +120,14 @@ const MEMBERSHIP_CARD_SHIPPING_NOTE =
 const MEMBERSHIP_TERMS_ACCEPTANCE_LABEL =
   'I authorize monthly card billing for my prescription subscription and selected recurring shipping until canceled.';
 
-const REQUIRED_HRT_LAB_OPTIONS = [...labOptions].sort(
-  (a, b) => getLabDisplayPriceCents(a) - getLabDisplayPriceCents(b),
-);
+const REQUIRED_HRT_LAB_NAMES = new Set([
+  'In-Home LabCorp Female HRT Comprehensive Panel',
+  'In-Home Quest Female HRT Comprehensive Panel',
+  'Walk-In LabCorp Female HRT Comprehensive Panel',
+  'Walk-In Quest Female HRT Comprehensive Panel',
+]);
+
+const REQUIRED_HRT_LAB_OPTIONS = labOptions.filter(lab => REQUIRED_HRT_LAB_NAMES.has(lab.name));
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
@@ -989,8 +994,8 @@ export function CheckoutPage() {
                 You're ordering HRT products.
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-ink-600">
-                Please select one of the following labs to complete this purchase. The selected lab
-                will be added to your Care Basket so it can move forward with your checkout.
+                Please select one of the following labs to complete this purchase. Lab orders,
+                payment, intake, and results stay inside GEN Health.
               </p>
             </div>
 
@@ -1009,13 +1014,11 @@ export function CheckoutPage() {
                     </span>
                     <ExternalLink size={14} className="shrink-0 text-ink-400 transition-colors group-hover:text-gold-700" aria-hidden />
                   </div>
-                  <p className="font-medium leading-snug text-ink-900">{lab.displayName}</p>
-                  <p className="mt-1 text-xs text-ink-500">
-                    {lab.collection === 'in-home' ? 'In-Home' : 'Walk-In'} · {lab.vendor === 'labcorp' ? 'LabCorp' : 'Quest'}
-                  </p>
+                  <p className="font-medium leading-snug text-ink-900">{lab.name}</p>
                   <p className="mt-2 text-sm text-ink-700">
                     ${(getLabDisplayPriceCents(lab) / 100).toFixed(0)}
                   </p>
+                  <p className="mt-1 text-xs text-ink-500">Shipping included</p>
                 </a>
               ))}
             </div>

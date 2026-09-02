@@ -49,6 +49,3 @@ function roundToNearestNiceDollarCents(cents: number) {
 
   return niceDollar * 100;
 }
-
-
-export { getLabDisplayPriceCents, labOptions }

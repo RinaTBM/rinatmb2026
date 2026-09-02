@@ -1,13 +1,33 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Mail, Phone, MapPin, MessageCircle, Send, Check } from 'lucide-react';
+import { captureLead } from '@/lib/highlevelLeadCapture';
 
 export function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setError('');
+    setIsSubmitting(true);
+
+    const result = await captureLead({
+      email: form.email,
+      firstName: form.name,
+      subject: form.subject,
+      message: form.message,
+      formType: 'contact',
+      pagePath: window.location.pathname,
+    });
+
+    setIsSubmitting(false);
+    if (result.ok) {
+      setSubmitted(true);
+    } else {
+      setError(result.error ?? 'We could not send your message. Please try again.');
+    }
   };
 
   return (
@@ -78,12 +98,12 @@ export function ContactPage() {
                   <p className="text-ink-500 max-w-sm">
                     Thank you for reaching out. Our care team will respond within one business day.
                   </p>
-                  <button onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: '', message: '' }); }} className="btn-outline mt-6">
+                  <button onClick={() => { setSubmitted(false); setError(''); setForm({ name: '', email: '', subject: '', message: '' }); }} className="btn-outline mt-6">
                     Send Another Message
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-5" noValidate={false}>
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div>
                       <label className="block text-sm font-medium text-ink-800 mb-1.5">Name</label>
@@ -134,8 +154,9 @@ export function ContactPage() {
                       placeholder="How can we help?"
                     />
                   </div>
-                  <button type="submit" className="btn-primary w-full">
-                    Send Message <Send size={16} />
+                  {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+                  <button type="submit" disabled={isSubmitting} className="btn-primary w-full disabled:opacity-60">
+                    {isSubmitting ? 'Sending…' : 'Send Message'} <Send size={16} />
                   </button>
                 </form>
               )}

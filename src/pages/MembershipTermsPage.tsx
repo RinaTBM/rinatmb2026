@@ -19,20 +19,9 @@ export function MembershipTermsPage() {
                 'Tirzepatide Membership — $179 per month',
               ]} />
               <p>
-                Selected shipping is billed with each monthly membership renewal and is not included in the base
-                $125 / $179 membership price:
+                Your monthly card charge is the recurring membership amount shown before enrollment. Any applicable
+                fulfillment details are disclosed in the checkout or patient-care flow whenever reasonably possible.
               </p>
-              <LegalBulletList items={[
-                'Two-Day Shipping — +$30 per month',
-                'Next-Day Shipping — +$50 per month',
-              ]} />
-              <p>Therefore, your monthly card charge (membership + selected shipping) is:</p>
-              <LegalBulletList items={[
-                'Semaglutide + Two-Day — $155/month',
-                'Semaglutide + Next-Day — $175/month',
-                'Tirzepatide + Two-Day — $209/month',
-                'Tirzepatide + Next-Day — $229/month',
-              ]} />
               <p>
                 Membership availability, pricing, inclusions, and treatment eligibility may change. Membership does
                 not guarantee that a particular medication or prescription will be approved.
@@ -49,16 +38,9 @@ export function MembershipTermsPage() {
                 Your first charge may be higher than the ongoing monthly renewal when a required one-time Initial
                 Provider Visit ($75) is added. The Initial Provider Visit does not recur.
               </p>
-              <p>Examples (when the Initial Provider Visit is required):</p>
-              <LegalBulletList items={[
-                'Semaglutide + Two-Day — Due today $230; renews $155/month',
-                'Semaglutide + Next-Day — Due today $250; renews $175/month',
-                'Tirzepatide + Two-Day — Due today $284; renews $209/month',
-                'Tirzepatide + Next-Day — Due today $304; renews $229/month',
-              ]} />
               <p>
-                Do not treat due-today totals ($230 / $250 / $284 / $304) as the ongoing monthly rate. Monthly renewal
-                is membership base plus your selected shipping only.
+                Do not treat a due-today total as the ongoing monthly rate. The monthly renewal amount is shown before
+                enrollment.
               </p>
             </>
           ),
@@ -73,8 +55,8 @@ export function MembershipTermsPage() {
                 to month until a valid cancellation becomes effective.
               </p>
               <p>
-                Your monthly membership rate (including the selected recurring shipping amount) remains locked while
-                your membership stays continuously active and in good standing.
+                Your monthly membership rate remains locked while your membership stays continuously active and in good
+                standing, unless these terms or applicable law allow a change with notice.
               </p>
               <p>
                 If your membership is canceled or lapses beyond the permitted payment grace period, future enrollment
@@ -109,7 +91,7 @@ export function MembershipTermsPage() {
               </p>
               <p>
                 By enrolling, you agree to the three-month minimum term and to monthly card billing for membership
-                plus your selected recurring shipping. Normal self-service cancellation is not available before the
+                amount shown before enrollment. Normal self-service cancellation is not available before the
                 minimum term ends, unless enrollment is canceled by My Bare Method because treatment is unavailable,
                 medically inappropriate, legally restricted, or otherwise cannot be provided.
               </p>
@@ -145,8 +127,8 @@ export function MembershipTermsPage() {
               <p>Unless expressly stated, the base membership price ($125 / $179) does not automatically include:</p>
               <LegalBulletList items={[
                 'The $75 Initial Provider Visit (one-time when required; does not recur)',
-                'Laboratory testing or the Required HRT Lab Package',
-                'Shipping (selected shipping is billed separately and recurs monthly with membership)',
+                'Laboratory testing selected in GEN Health when required',
+                'Accessory purchases and accessory shipping',
                 'Supplies',
                 'Additional provider visits',
                 'Treatments outside the selected membership',
@@ -163,8 +145,7 @@ export function MembershipTermsPage() {
             <>
               <p>
                 Memberships are paid by Credit / Debit Card through secure hosted card checkout. Your card is billed
-                monthly while your membership remains active. Selected shipping is included in each recurring monthly
-                card charge as described above.
+                monthly while your membership remains active at the recurring amount shown before enrollment.
               </p>
               <p>
                 Recurring billing continues until a valid cancellation becomes effective after the initial commitment,
@@ -195,8 +176,8 @@ export function MembershipTermsPage() {
               <p>
                 Submitting a cancellation request does not reverse a payment that has already been received, or stop
                 an order that has already entered provider, pharmacy, or fulfillment processing. Cancellation does not
-                retroactively refund prior membership or recurring shipping charges except where required by law or
-                expressly approved under our Refund Policy.
+                retroactively refund prior membership charges except where required by law or expressly approved under
+                our Refund Policy.
               </p>
             </>
           ),
@@ -280,8 +261,8 @@ export function MembershipTermsPage() {
           body: (
             <>
               <p>
-                Membership fees and recurring shipping charges are generally nonrefundable once the applicable billing
-                period begins and payment has been received.
+                Membership fees are generally nonrefundable once the applicable billing period begins and payment has
+                been received.
               </p>
               <p>
                 Refunds may be issued when required by law or approved because of a verified billing error or service

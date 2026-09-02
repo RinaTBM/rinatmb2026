@@ -167,7 +167,7 @@ export function RefundPolicyPage() {
         </div>
       </section>
 
-      {/* Replacement guarantee */}
+      {/* Replacement support */}
       <section className="pb-16">
         <div className="container-lux max-w-3xl">
           <div className="card-lux p-8">
@@ -176,7 +176,7 @@ export function RefundPolicyPage() {
                 <RefreshCw size={22} className="text-green-600" />
               </div>
               <div>
-                <h2 className="font-serif text-2xl text-ink-900 mb-2">Replacement Guarantee</h2>
+                <h2 className="font-serif text-2xl text-ink-900 mb-2">Replacement Support</h2>
                 <p className="text-sm text-ink-500">
                   If your order arrives damaged, is lost in transit, or arrives after the expected delivery window due
                   to carrier delays that make the product unusable, My Bare Method will replace the item at no

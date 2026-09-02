@@ -72,10 +72,11 @@ export function PrivacyPolicyPage() {
                 Portability and Accountability Act (HIPAA) and the HIPAA Privacy and Security Rules.
               </p>
               <p>
-                We handle PHI in accordance with HIPAA requirements. Access to PHI is limited to the minimum necessary
-                workforce members and contracted providers involved in your care. We do not disclose PHI for marketing
-                purposes without your written authorization. You may request access to, or an accounting of disclosures
-                of, your PHI by contacting us using the information in the Contact section below.
+                When HIPAA applies, PHI is handled in accordance with applicable HIPAA requirements. Access to PHI is
+                limited to the minimum necessary workforce members and contracted providers involved in your care. We do
+                not disclose PHI for marketing purposes without your written authorization when authorization is legally
+                required. You may request access to, or an accounting of disclosures of, your PHI by contacting us using
+                the information in the Contact section below.
               </p>
               <p>
                 If a provider determines that a requested therapy is not appropriate for you, your PHI is retained only

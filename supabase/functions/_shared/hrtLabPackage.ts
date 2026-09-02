@@ -1,13 +1,9 @@
 /**
- * HRT initial lab package: Lab Kit ($200) + Lab Review ($60) = $260 once per order.
+ * Legacy hormone-therapy lab package helpers.
  *
- * Lab Kit shipping is included in the $200 price — do not add Two-Day/Next-Day
- * for the Lab Kit itself. Medication shipping still follows normal MBM rules.
- *
- * Returning-customer rule: no separate lab-validity table exists.
- * Auto-add only when the cart contains HRT product(s) AND the customer has
- * zero APPROVED history in any HRT therapy family. Established HRT customers
- * (any approved HRT family) are not charged the $260 package on refill.
+ * Fixed lab-package auto-add is retired for the storefront. Checkout should
+ * prompt customers to choose from current lab options instead of silently
+ * adding the old provider-care lab kit/review bundle.
  */
 
 import type { ApprovedTherapyHistoryRow } from './determineProviderRequirement.ts';
@@ -59,9 +55,9 @@ export const LAB_PACKAGE_PRODUCT_IDS: ReadonlySet<string> = new Set([
   LAB_REVIEW.productId,
 ]);
 
-export const HRT_LAB_REQUIRED_COPY = 'Required for initial HRT order';
-export const HRT_LAB_PACKAGE_HEADING = 'Required HRT Lab Package';
-export const LAB_KIT_SHIPPING_INCLUDED_COPY = 'Lab Kit shipping included.';
+export const HRT_LAB_REQUIRED_COPY = 'Hormone therapy labs may be required before purchase completion';
+export const HRT_LAB_PACKAGE_HEADING = 'Hormone Therapy Lab Options';
+export const LAB_KIT_SHIPPING_INCLUDED_COPY = 'No separate storefront shipping charge for labs.';
 /** Preferred checkout line under Lab Kit. */
 export const LAB_KIT_INCLUDES_SHIPPING_COPY = 'Includes kit shipping';
 
@@ -244,4 +240,4 @@ export const RETURNING_HRT_LAB_STATUS_SOURCE =
   'customer_therapy_history (APPROVED rows for estradiol-patch / progesterone-capsules / testosterone-cream). No dedicated lab-completion or lab-validity table exists.';
 
 export const REPEAT_ORDER_LAB_BEHAVIOR =
-  'Auto-add Lab Kit + Lab Review only when the cart has HRT and the customer has zero APPROVED HRT therapy history. Refills / established HRT customers are not charged $260 again. No invented lab-expiration window.';
+  'Fixed hormone lab-package auto-add is retired. When labs are required, checkout prompts the customer to choose from current lab options.';

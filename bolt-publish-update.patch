@@ -1,0 +1,1398 @@
+diff --git a/docs/MBM_FINAL_CHECKOUT_LAUNCH_1.md b/docs/MBM_FINAL_CHECKOUT_LAUNCH_1.md
+index 8ddfa45..26b745c 100644
+--- a/docs/MBM_FINAL_CHECKOUT_LAUNCH_1.md
++++ b/docs/MBM_FINAL_CHECKOUT_LAUNCH_1.md
+@@ -30,7 +30,7 @@ GEN API Orders / external-paid remains **BLOCKED**. GEN handoff automation remai
+ | TIR | tir-glycine-any-dose | MBM-WM-TIR-GLY-004 | $119 | product_861e0edd8ab2 | variant_6c383930239c | price_cb4042a35b42 | MAP_CREATE_REQUIRED → created |
+ | NAD | nad-nasal-r84 | MBM-LON-NAD-NS-001 | $79 | product_9dd959e8b3b2 | variant_c41bb700e856 | price_79f07341d00a | MAP_CREATE_REQUIRED → created |
+ 
+-All 17 Tagada products: `isTaxable=false`, `isShippable=false`, one-time USD. Medication retail already includes pharmacy shipping. Checkout still appends `MBM-SHIP-TWO-DAY-001` ($30) or `MBM-SHIP-NEXT-DAY-001` ($50) for one-time carts. `tax_cents = 0`.
++All 17 Tagada products: `isTaxable=false`, `isShippable=false`, one-time USD. Medication retail already includes pharmacy shipping. Checkout appends `MBM-SHIP-ACCESSORY-001` ($10), `MBM-SHIP-TWO-DAY-001` ($30), or `MBM-SHIP-NEXT-DAY-001` ($50) for one-time carts when shipping applies. `tax_cents = 0`.
+ 
+ FORMULARY_PENDING / FUTURE_HIDDEN / NAD injection / Wolverine were not created or mapped.
+ 
+diff --git a/docs/MBM_PRODUCTION_KASHU_MANUAL_APPLY.sql b/docs/MBM_PRODUCTION_KASHU_MANUAL_APPLY.sql
+index d15e97d..c939a83 100644
+--- a/docs/MBM_PRODUCTION_KASHU_MANUAL_APPLY.sql
++++ b/docs/MBM_PRODUCTION_KASHU_MANUAL_APPLY.sql
+@@ -53,7 +53,8 @@ insert into public.kashu_sku_map (
+   ('MBM-WM-TIR-GLY-003', 'p5', 'tir-glycine-high', 'product_861e0edd8ab2', 'variant_121e6d8cd921', 'price_9803c9a96da8', 16900, 16900, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now()),
+   ('MBM-WM-TIR-GLY-004', 'p5', 'tir-glycine-any-dose', 'product_861e0edd8ab2', 'variant_6c383930239c', 'price_cb4042a35b42', 11900, 11900, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now()),
+   ('MBM-LON-NAD-NS-001', 'p9', 'nad-nasal-r84', 'product_9dd959e8b3b2', 'variant_c41bb700e856', 'price_79f07341d00a', 7900, 7900, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now()),
+-  ('MBM-MEM-TIR-MEM-001', 'm2', 'm2', 'product_8b3bfb6614c4', 'variant_b3890c799e09', 'price_2d2dd07b2f73', 27500, 27500, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now())
++  ('MBM-MEM-TIR-MEM-001', 'm2', 'm2', 'product_8b3bfb6614c4', 'variant_b3890c799e09', 'price_2d2dd07b2f73', 27500, 27500, true, 'MBM-FINAL-CHECKOUT-LAUNCH-1 live-verified', now()),
++  ('MBM-SHIP-ACCESSORY-001', 'shipping', 'accessory', 'product_94e5e1cda1ac', 'variant_4b7853bf87dd', 'price_c2f2a57f7f9d', 1000, 1000, true, 'Accessory Shipping $10 live-created 2026-09-01', now())
+ on conflict (mbm_sku) do update set
+   mbm_product_id = excluded.mbm_product_id,
+   mbm_variant_id = excluded.mbm_variant_id,
+diff --git a/docs/tagadapay-phase2c-v4-validation.md b/docs/tagadapay-phase2c-v4-validation.md
+index 960a8f5..c1df583 100644
+--- a/docs/tagadapay-phase2c-v4-validation.md
++++ b/docs/tagadapay-phase2c-v4-validation.md
+@@ -16,6 +16,7 @@
+ 
+ | SKU | Product | Variant | Price | Amount |
+ |-----|---------|---------|-------|--------|
++| `MBM-SHIP-ACCESSORY-001` | `product_94e5e1cda1ac` | `variant_4b7853bf87dd` | `price_c2f2a57f7f9d` | $10 |
+ | `MBM-SHIP-TWO-DAY-001` | `product_ae81dcd65373` | `variant_18c3ab5eadee` | `price_c65bb478d609` | $30 |
+ | `MBM-SHIP-NEXT-DAY-001` | `product_68cc1b3bf2a0` | `variant_6817c3c6e31a` | `price_53861f3e4cad` | $50 |
+ 
+diff --git a/src/App.tsx b/src/App.tsx
+index 93ee652..c92d33d 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -40,6 +40,7 @@ import { AccessibilityPage } from '@/pages/AccessibilityPage';
+ import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
+ import { SubscriptionTermsPage } from '@/pages/SubscriptionTermsPage';
+ import { MedicalDirectorPage } from '@/pages/MedicalDirectorPage';
++import { OrderLabsPage } from '@/pages/OrderLabsPage';
+ import { AdminApp } from '@/admin/AdminApp';
+ import { AccountGate } from '@/pages/account/AccountGate';
+ import { AccountLoginPage } from '@/pages/account/AccountLoginPage';
+@@ -181,6 +182,7 @@ function App() {
+     if (path === '/track') return <TrackPage />;
+     if (path === '/about') return <AboutPage />;
+     if (path === '/medical-director') return <MedicalDirectorPage />;
++    if (path === '/order-labs') return <OrderLabsPage />;
+     if (path === '/faq') return <FaqPage />;
+     if (path === '/memberships' || path === '/subscriptions') return <SubscriptionsPage />;
+     if (path === '/alacarte') return <AlaCartePage />;
+diff --git a/src/components/AccessoryProductPage.tsx b/src/components/AccessoryProductPage.tsx
+index 3c4bcf1..009a0bc 100644
+--- a/src/components/AccessoryProductPage.tsx
++++ b/src/components/AccessoryProductPage.tsx
+@@ -262,11 +262,11 @@ export function AccessoryProductPage({ product }: { product: Product }) {
+         </div>
+       </section>
+ 
+-      <section className="py-12 md:py-16 border-t border-cream-300">
+-        <div className="container-lux max-w-4xl">
++      <div className="container-lux -mt-8 pb-16 lg:-mt-16">
++        <div className="lg:ml-[calc(50%+2rem)] lg:w-[calc(50%-2rem)] border-t border-cream-300 pt-8">
+           <ProductDescriptionSections product={product} showEligibility={false} />
+         </div>
+-      </section>
++      </div>
+ 
+       {related.length > 0 && (
+         <section className="py-16 md:py-20 border-t border-cream-300">
+diff --git a/src/components/GenHostedProductPage.tsx b/src/components/GenHostedProductPage.tsx
+index e4aec1b..2b7900b 100644
+--- a/src/components/GenHostedProductPage.tsx
++++ b/src/components/GenHostedProductPage.tsx
+@@ -96,9 +96,11 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
+           </div>
+         </div>
+       </div>
+-      <section className="container-lux mt-16 max-w-4xl border-t border-cream-300 pt-12">
+-        <ProductDescriptionSections product={product} />
+-      </section>
++      <div className="container-lux -mt-8 pb-16 lg:-mt-16">
++        <div className="lg:ml-[calc(50%+2rem)] lg:w-[calc(50%-2rem)] border-t border-cream-300 pt-8">
++          <ProductDescriptionSections product={product} />
++        </div>
++      </div>
+ 
+       {recommendationsOpen && (
+         <div
+diff --git a/src/components/Header.tsx b/src/components/Header.tsx
+index 792d30e..1ad6701 100644
+--- a/src/components/Header.tsx
++++ b/src/components/Header.tsx
+@@ -7,6 +7,7 @@ import { useCustomerAuth } from '@/context/CustomerAuthContext';
+ import { visibleProducts } from '@/data/products';
+ import { BrandLogo } from '@/components/BrandLogo';
+ import { SHOP_CATEGORIES } from '@/lib/browse/productBrowse';
++import { GEN_HEALTH_ICON_URL, GEN_HEALTH_PORTAL_URL } from '@/lib/genHealth/portalLinks';
+ 
+ const categoryItems = SHOP_CATEGORIES.map(c => ({
+   label: c.label,
+@@ -142,6 +143,9 @@ export function Header() {
+               <Link to="/section/provider-care" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                 Provider Care
+               </Link>
++              <Link to="/order-labs" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
++                Order Labs
++              </Link>
+               <Link to="/section/accessories" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                 Accessories
+               </Link>
+@@ -165,9 +169,20 @@ export function Header() {
+                 to={accountHref}
+                 className="text-ink-800 hover:text-gold-600 transition-colors p-1"
+                 aria-label={authenticated ? 'My account' : 'Sign in'}
++                title={authenticated ? 'My Bare Method account' : 'My Bare Method sign in'}
+               >
+                 <UserRound size={20} />
+               </Link>
++              <a
++                href={GEN_HEALTH_PORTAL_URL}
++                target="_blank"
++                rel="noreferrer"
++                className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-ink-200 bg-white p-1 transition-colors hover:border-gold-300"
++                aria-label="GEN Health portal"
++                title="GEN Health portal"
++              >
++                <img src={GEN_HEALTH_ICON_URL} alt="" className="h-full w-full rounded-full object-contain" />
++              </a>
+               <button
+                 onClick={openCart}
+                 className="relative text-ink-800 hover:text-gold-600 transition-colors p-1"
+@@ -313,6 +328,13 @@ export function Header() {
+               >
+                 Provider Care
+               </Link>
++              <Link
++                to="/order-labs"
++                onClick={closeAll}
++                className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
++              >
++                Order Labs
++              </Link>
+               <Link
+                 to="/section/accessories"
+                 onClick={closeAll}
+@@ -354,6 +376,15 @@ export function Header() {
+                 <Link to={accountHref} onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
+                   Account
+                 </Link>
++                <a
++                  href={GEN_HEALTH_PORTAL_URL}
++                  target="_blank"
++                  rel="noreferrer"
++                  onClick={closeAll}
++                  className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors"
++                >
++                  GEN Health Portal
++                </a>
+               </div>
+             </nav>
+           </div>
+diff --git a/src/context/CartContext.tsx b/src/context/CartContext.tsx
+index 5b9de8e..4f72f6f 100644
+--- a/src/context/CartContext.tsx
++++ b/src/context/CartContext.tsx
+@@ -134,6 +134,7 @@ export function normalizeCartItemAwayFromAutoRefill(item: CartItem): CartItem {
+ export function CartProvider({ children }: { children: ReactNode }) {
+   const [items, setItems] = useState<CartItem[]>([]);
+   const [isOpen, setIsOpen] = useState(false);
++  const [hasLoadedStoredCart, setHasLoadedStoredCart] = useState(false);
+ 
+   useEffect(() => {
+     try {
+@@ -167,16 +168,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
+       }
+     } catch {
+       /* ignore */
++    } finally {
++      setHasLoadedStoredCart(true);
+     }
+   }, []);
+ 
+   useEffect(() => {
++    if (!hasLoadedStoredCart) return;
+     try {
+       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+     } catch {
+       /* ignore */
+     }
+-  }, [items]);
++  }, [hasLoadedStoredCart, items]);
+ 
+   const addItem: CartContextValue['addItem'] = (item, quantity = 1) => {
+     const purchaseType: CartPurchaseType =
+diff --git a/src/data/labs.test.ts b/src/data/labs.test.ts
+new file mode 100644
+index 0000000..8589b89
+--- /dev/null
++++ b/src/data/labs.test.ts
+@@ -0,0 +1,11 @@
++import { describe, expect, it } from 'vitest';
++import { getLabDisplayPriceCents, labOptions } from './labs';
++
++describe('lab display pricing', () => {
++  it('rounds cost x 1.75 to the nearest nice dollar ending in 9', () => {
++    const lab = labOptions.find(option => option.name === 'In-Home LabCorp Female HRT Comprehensive Panel');
++
++    expect(lab).toBeDefined();
++    expect(getLabDisplayPriceCents(lab!)).toBe(26900);
++  });
++});
+diff --git a/src/data/labs.ts b/src/data/labs.ts
+new file mode 100644
+index 0000000..42a9436
+--- /dev/null
++++ b/src/data/labs.ts
+@@ -0,0 +1,65 @@
++export type LabCollection = 'in-home' | 'walk-in';
++export type LabVendor = 'labcorp' | 'quest';
++
++export interface LabOption {
++  name: string;
++  collection: LabCollection;
++  vendor: LabVendor;
++  targetAudience: string;
++  markerCount: number;
++  costCents: number;
++  productId: string;
++}
++
++export const GEN_LABS_CLIENT_ID = 'f5e0mdyBYnDh7HGvek0C';
++export const GEN_LABS_BASE_URL = `https://app.genhealthehr.com/${GEN_LABS_CLIENT_ID}/product`;
++
++export const labOptions: LabOption[] = [
++  { name: 'In-Home LabCorp Female HRT Comprehensive Panel', collection: 'in-home', vendor: 'labcorp', targetAudience: 'Female', markerCount: 11, costCents: 15649, productId: 'lab-junction-a530dda9-at-home-labcorp-female-hrt-comprehensive-panel' },
++  { name: 'In-Home LabCorp Initial TRT Panel (Male)', collection: 'in-home', vendor: 'labcorp', targetAudience: 'Male', markerCount: 10, costCents: 16257, productId: 'lab-junction-a530dda9-at-home-initial-trt-panel-male-labcorp' },
++  { name: 'In-Home LabCorp TRT Follow-Up Panel (Male)', collection: 'in-home', vendor: 'labcorp', targetAudience: 'Male', markerCount: 4, costCents: 8525, productId: 'lab-junction-a530dda9-at-home-trt-follow-up-panel-male-labcorp' },
++  { name: 'In-Home Quest Female HRT Comprehensive Panel', collection: 'in-home', vendor: 'quest', targetAudience: 'Any', markerCount: 14, costCents: 6975, productId: 'lab-junction-a530dda9-at-home-quest-female-hrt-comprehensive-panel' },
++  { name: 'In-Home Quest Female HRT Follow-Up Panel', collection: 'in-home', vendor: 'quest', targetAudience: 'Any', markerCount: 6, costCents: 5038, productId: 'lab-junction-a530dda9-at-home-quest-female-hrt-follow-up' },
++  { name: 'In-Home Quest Initial TRT Panel (Male)', collection: 'in-home', vendor: 'quest', targetAudience: 'Any', markerCount: 11, costCents: 8486, productId: 'lab-junction-a530dda9-at-home-initial-trt-panel-male' },
++  { name: 'In-Home Quest Thyroid Panel', collection: 'in-home', vendor: 'quest', targetAudience: 'Any', markerCount: 9, costCents: 4242, productId: 'lab-junction-a530dda9-at-home-quest-thyroid-panel' },
++  { name: 'In-Home Quest TRT 1st Follow-Up Panel (Male)', collection: 'in-home', vendor: 'quest', targetAudience: 'Male', markerCount: 4, costCents: 4739, productId: 'lab-junction-a530dda9-at-home-trt-1st-follow-up-panel-male' },
++  { name: 'In-Home Quest TRT Baseline Panel (Male)', collection: 'in-home', vendor: 'quest', targetAudience: 'Male', markerCount: 8, costCents: 8131, productId: 'lab-junction-a530dda9-at-home-trt-baseline-panel-male-q' },
++  { name: 'Walk-In LabCorp Comprehensive Metabolic Panel', collection: 'walk-in', vendor: 'labcorp', targetAudience: 'Any', markerCount: 0, costCents: 6500, productId: 'lab-junction-comprehensive-metabolic-panel' },
++  { name: 'Walk-In LabCorp Comprehensive TRT Panel (Male)', collection: 'walk-in', vendor: 'labcorp', targetAudience: 'Any', markerCount: 10, costCents: 16257, productId: 'lab-junction-a530dda9-initial-trt-panel-male-labcorp' },
++  { name: 'Walk-In LabCorp Female HRT Comprehensive Panel', collection: 'walk-in', vendor: 'labcorp', targetAudience: 'Any', markerCount: 11, costCents: 15649, productId: 'lab-junction-a530dda9-labcorp-female-hrt-comprehensive-panel' },
++  { name: 'Walk-In LabCorp TRT Follow-Up Panel (Male)', collection: 'walk-in', vendor: 'labcorp', targetAudience: 'Any', markerCount: 4, costCents: 8525, productId: 'lab-junction-a530dda9-trt-follow-up-panel-male-labcorp' },
++  { name: 'Walk-In Quest Comprehensive TRT Panel (Male)', collection: 'walk-in', vendor: 'quest', targetAudience: 'Any', markerCount: 11, costCents: 8486, productId: 'lab-junction-a530dda9-initial-trt-panel-male' },
++  { name: 'Walk-In Quest TRT Baseline Panel (Male)', collection: 'walk-in', vendor: 'quest', targetAudience: 'Male', markerCount: 8, costCents: 8131, productId: 'lab-junction-a530dda9-trt-baseline-panel-male' },
++  { name: 'Walk-In Quest Female HRT Comprehensive Panel', collection: 'walk-in', vendor: 'quest', targetAudience: 'Female', markerCount: 15, costCents: 7465, productId: 'lab-junction-a530dda9-quest-female-hrt-comprehensive-panel' },
++  { name: 'Walk-In Quest Female HRT Follow-Up Panel', collection: 'walk-in', vendor: 'quest', targetAudience: 'Female', markerCount: 6, costCents: 5038, productId: 'lab-junction-a530dda9-quest-female-hrt-follow-up' },
++  { name: 'Walk-In Quest TRT 1st Follow-Up Panel (Male)', collection: 'walk-in', vendor: 'quest', targetAudience: 'Any', markerCount: 4, costCents: 4739, productId: 'lab-junction-a530dda9-trt-1st-follow-up-panel-male' },
++  { name: 'Advanced Panel - Mktg (Men)', collection: 'walk-in', vendor: 'quest', targetAudience: 'Any', markerCount: 35, costCents: 25001, productId: 'lab-junction-a530dda9-advanced-panel-mktg-men' },
++  { name: 'Advanced Panel - Mktg (Women)', collection: 'walk-in', vendor: 'quest', targetAudience: 'Any', markerCount: 36, costCents: 25212, productId: 'lab-junction-a530dda9-advanced-panel-mktg-women' },
++  { name: 'Complete Panel - Mktg (Men)', collection: 'walk-in', vendor: 'quest', targetAudience: 'Any', markerCount: 19, costCents: 12634, productId: 'lab-junction-a530dda9-complete-panel-mktg-men' },
++  { name: 'Complete Panel - Mktg (Women)', collection: 'walk-in', vendor: 'quest', targetAudience: 'Any', markerCount: 20, costCents: 13344, productId: 'lab-junction-a530dda9-complete-panel-mktg-women' },
++  { name: 'Limitless Male | LabCorp | Walk-In', collection: 'walk-in', vendor: 'labcorp', targetAudience: 'Any', markerCount: 12, costCents: 21353, productId: 'lab-junction-a530dda9-limitless-male-labcorp-walk-in' },
++  { name: 'LT-Quest Female HRT', collection: 'walk-in', vendor: 'quest', targetAudience: 'Any', markerCount: 14, costCents: 8628, productId: 'lab-junction-a530dda9-lt-quest-female-hrt' },
++  { name: 'LT-Quest Initial', collection: 'walk-in', vendor: 'quest', targetAudience: 'Any', markerCount: 10, costCents: 7100, productId: 'lab-junction-a530dda9-lt-quest-initial' },
++  { name: 'LT-Quest Mens TRT (Follow-Up)', collection: 'walk-in', vendor: 'quest', targetAudience: 'Any', markerCount: 6, costCents: 5002, productId: 'lab-junction-a530dda9-lt-quest-mens-trt-follow-up' },
++];
++
++export function getLabDisplayPriceCents(lab: LabOption) {
++  return roundToNearestNiceDollarCents(lab.costCents * 1.75);
++}
++
++export function getLabCheckoutUrl(lab: LabOption) {
++  return `${GEN_LABS_BASE_URL}/${lab.productId}`;
++}
++
++function roundToNearestNiceDollarCents(cents: number) {
++  const dollars = cents / 100;
++  const lower = Math.floor(dollars / 10) * 10 - 1;
++  const candidates = [lower, lower + 10, lower + 20].filter(value => value > 0);
++  const niceDollar = candidates.reduce((best, candidate) => {
++    const candidateDistance = Math.abs(candidate - dollars);
++    const bestDistance = Math.abs(best - dollars);
++    return candidateDistance < bestDistance ? candidate : best;
++  });
++
++  return niceDollar * 100;
++}
+diff --git a/src/lib/genHealth/portalLinks.ts b/src/lib/genHealth/portalLinks.ts
+new file mode 100644
+index 0000000..dda1ac4
+--- /dev/null
++++ b/src/lib/genHealth/portalLinks.ts
+@@ -0,0 +1,2 @@
++export const GEN_HEALTH_PORTAL_URL = 'https://app.genhealthehr.com/';
++export const GEN_HEALTH_ICON_URL = 'https://app.genhealthehr.com/gen-icon-square-color.png';
+diff --git a/src/lib/payments/launchReadyKashuMap.ts b/src/lib/payments/launchReadyKashuMap.ts
+index 3011b6c..2568a52 100644
+--- a/src/lib/payments/launchReadyKashuMap.ts
++++ b/src/lib/payments/launchReadyKashuMap.ts
+@@ -7,7 +7,7 @@
+  * Do not invent IDs.
+  *
+  * One-time family products are isTaxable=false, isShippable=false, one-time USD.
+- * Ordinary one-time carts still append MBM-SHIP-TWO-DAY-001 / MBM-SHIP-NEXT-DAY-001.
++ * Ordinary one-time carts still append MBM-SHIP-ACCESSORY-001 / MBM-SHIP-TWO-DAY-001 / MBM-SHIP-NEXT-DAY-001.
+  * Membership enrollment does NOT append MBM-SHIP — shipping is inside the combo priceId.
+  *
+  * Historical SEM $149 / $179 / $199 and TIR $249 / $275 / $299 / $305 / $325 prices remain for old subscriptions.
+diff --git a/src/lib/promo/genPromo.test.ts b/src/lib/promo/genPromo.test.ts
+new file mode 100644
+index 0000000..309acce
+--- /dev/null
++++ b/src/lib/promo/genPromo.test.ts
+@@ -0,0 +1,87 @@
++import { describe, expect, it } from 'vitest';
++import { applyGenPromo, isGenPromoCode, TEST_PROMO_RESTRICTED_EMAIL } from './genPromo';
++
++const accessory = {
++  productId: 'a1',
++  sku: 'MBM-ACC-TEST-001',
++  section: 'accessories',
++  category: 'accessories',
++  quantity: 1,
++  unitAmountCents: 10000,
++};
++
++const wellness = {
++  productId: 'p74',
++  sku: 'MBM-WM-FB-INJ-001',
++  section: 'weight-management',
++  category: 'weight-management',
++  quantity: 1,
++  unitAmountCents: 10000,
++};
++
++describe('GEN Health promo mapping', () => {
++  it('recognizes the three configured codes', () => {
++    expect(isGenPromoCode(' firsttime ')).toBe(true);
++    expect(isGenPromoCode('OGTBM')).toBe(true);
++    expect(isGenPromoCode('test')).toBe(true);
++  });
++
++  it('applies $25 FIRSTTIME to a signed-in eligible checkout', () => {
++    expect(applyGenPromo({ code: 'FIRSTTIME', isAuthenticated: true, lines: [wellness] })).toMatchObject({
++      ok: true,
++      discountCents: 2500,
++    });
++  });
++
++  it('requires sign-in for FIRSTTIME', () => {
++    expect(applyGenPromo({ code: 'FIRSTTIME', lines: [wellness] })).toEqual({
++      ok: false,
++      reason: 'sign_in_required',
++    });
++  });
++
++  it('applies 25% OGTBM to eligible wellness lines', () => {
++    expect(applyGenPromo({ code: 'OGTBM', lines: [wellness] })).toMatchObject({ ok: true, discountCents: 2500 });
++  });
++
++  it('applies 100% TEST only for the authorized owner email', () => {
++    expect(
++      applyGenPromo({
++        code: 'TEST',
++        customerEmail: TEST_PROMO_RESTRICTED_EMAIL,
++        lines: [accessory],
++      }),
++    ).toMatchObject({ ok: true, discountCents: 10000 });
++    expect(
++      applyGenPromo({
++        code: 'TEST',
++        customerEmail: 'customer@example.com',
++        lines: [accessory],
++      }),
++    ).toEqual({
++      ok: false,
++      reason: 'email_not_authorized',
++    });
++  });
++
++  it('blocks accessories and provider care checkout', () => {
++    expect(applyGenPromo({ code: 'OGTBM', lines: [accessory] })).toEqual({
++      ok: false,
++      reason: 'cart_ineligible',
++    });
++    expect(
++      applyGenPromo({
++        code: 'OGTBM',
++        lines: [{ ...wellness, productId: 'pc1', sku: 'MBM-PC-IPV-SRV-001', section: 'provider-care' }],
++      }),
++    ).toEqual({
++      ok: false,
++      reason: 'cart_ineligible',
++    });
++  });
++
++  it('blocks recurring and membership checkout', () => {
++    expect(applyGenPromo({ code: 'TEST', customerEmail: TEST_PROMO_RESTRICTED_EMAIL, lines: [{ ...accessory, subscription: true }] })).toMatchObject({ ok: false });
++    expect(applyGenPromo({ code: 'TEST', customerEmail: TEST_PROMO_RESTRICTED_EMAIL, lines: [{ ...accessory, productId: 'm1', isMembership: true }] })).toMatchObject({ ok: false });
++  });
++});
+diff --git a/src/lib/promo/genPromo.ts b/src/lib/promo/genPromo.ts
+new file mode 100644
+index 0000000..8140d4f
+--- /dev/null
++++ b/src/lib/promo/genPromo.ts
+@@ -0,0 +1,95 @@
++/** GEN Health promo rules mirrored into MBM's authoritative one-time checkout. */
++
++export const FIRSTTIME_PROMO_CODE = 'FIRSTTIME' as const;
++export const OGTBM_PROMO_CODE = 'OGTBM' as const;
++export const TEST_PROMO_CODE = 'TEST' as const;
++export const TEST_PROMO_RESTRICTED_EMAIL = 'info@thebaremethodmn.com' as const;
++
++export type GenPromoCode =
++  | typeof FIRSTTIME_PROMO_CODE
++  | typeof OGTBM_PROMO_CODE
++  | typeof TEST_PROMO_CODE;
++
++export type GenPromoLine = {
++  productId?: string | null;
++  sku?: string | null;
++  section?: string | null;
++  category?: string | null;
++  purchaseType?: string | null;
++  isMembership?: boolean;
++  subscription?: boolean;
++  quantity: number;
++  unitAmountCents: number;
++};
++
++export function normalizeGenPromoCode(code: string | null | undefined): string {
++  return String(code || '').trim().toUpperCase();
++}
++
++export function isGenPromoCode(code: string | null | undefined): code is GenPromoCode {
++  const normalized = normalizeGenPromoCode(code);
++  return normalized === FIRSTTIME_PROMO_CODE || normalized === OGTBM_PROMO_CODE || normalized === TEST_PROMO_CODE;
++}
++
++export function isTestPromoEmailAuthorized(email: string | null | undefined): boolean {
++  return String(email || '').trim().toLowerCase() === TEST_PROMO_RESTRICTED_EMAIL;
++}
++
++export function isGenPromoCartEligible(lines: GenPromoLine[], code?: string | null): boolean {
++  const normalizedCode = normalizeGenPromoCode(code);
++  return lines.every(line => {
++    const productId = String(line.productId || '').trim();
++    const sku = String(line.sku || '').trim().toUpperCase();
++    const section = String(line.section || '').trim().toLowerCase();
++    const category = String(line.category || '').trim().toLowerCase();
++    const isMembershipOrSubscription =
++      Boolean(line.isMembership) ||
++      line.purchaseType === 'membership_program' ||
++      productId === 'm1' ||
++      productId === 'm2' ||
++      sku.startsWith('MBM-MEM-') ||
++      line.subscription === true ||
++      line.purchaseType === 'auto_refill';
++    if (isMembershipOrSubscription) return false;
++    if (normalizedCode === TEST_PROMO_CODE) return true;
++    return (
++      !sku.startsWith('MBM-ACC-') &&
++      !sku.startsWith('MBM-PC-') &&
++      !sku.startsWith('MBM-SHIP-') &&
++      !/^a\d+$/i.test(productId) &&
++      !/^pc\d+$/i.test(productId) &&
++      section !== 'accessories' &&
++      section !== 'provider-care' &&
++      category !== 'accessories' &&
++      category !== 'provider-care'
++    );
++  });
++}
++
++export function applyGenPromo(input: {
++  code?: string | null;
++  isAuthenticated?: boolean;
++  customerEmail?: string | null;
++  lines: GenPromoLine[];
++}): { ok: true; code: GenPromoCode; discountCents: number } | { ok: false; reason: string } {
++  const code = normalizeGenPromoCode(input.code);
++  if (!isGenPromoCode(code)) return { ok: false, reason: 'unknown_code' };
++  if (code === FIRSTTIME_PROMO_CODE && !input.isAuthenticated) {
++    return { ok: false, reason: 'sign_in_required' };
++  }
++  if (code === TEST_PROMO_CODE && !isTestPromoEmailAuthorized(input.customerEmail)) {
++    return { ok: false, reason: 'email_not_authorized' };
++  }
++  if (!isGenPromoCartEligible(input.lines, code)) return { ok: false, reason: 'cart_ineligible' };
++
++  const subtotalCents = input.lines.reduce(
++    (sum, line) => sum + Math.max(0, Math.trunc(Number(line.unitAmountCents) || 0)) * Math.max(1, Math.trunc(Number(line.quantity) || 0)),
++    0,
++  );
++  const discountCents = code === FIRSTTIME_PROMO_CODE
++    ? Math.min(2500, subtotalCents)
++    : code === OGTBM_PROMO_CODE
++      ? Math.round(subtotalCents * 0.25)
++      : subtotalCents;
++  return { ok: true, code, discountCents };
++}
+diff --git a/src/lib/provider/injectProviderVisit.ts b/src/lib/provider/injectProviderVisit.ts
+index b486d49..d597d28 100644
+--- a/src/lib/provider/injectProviderVisit.ts
++++ b/src/lib/provider/injectProviderVisit.ts
+@@ -21,8 +21,8 @@ import {
+   isLabPackageLine,
+   shouldAutoAddHrtLabPackage,
+ } from './hrtLabPackage';
+-import { applyOgtbmPromo, isOgtbmPromoCode } from '@/lib/promo/ogtbmPromo';
+ import { applyMbmtest90Promo, isMbmtest90PromoCode } from '@/lib/promo/mbmtest90Promo';
++import { applyGenPromo, isGenPromoCode } from '@/lib/promo/genPromo';
+ import { PROVIDER_CARE_FIXED_CENTS } from '@/lib/checkout/checkoutConstants';
+ 
+ export interface RawOrderLine {
+@@ -225,7 +225,7 @@ export function buildAuthoritativeOrderLines(input: {
+     0,
+   );
+ 
+-  // OGTBM and MBMTEST90 are server-authoritative when code is present. Otherwise clamp client discount
++  // GEN Health promos and MBMTEST90 are server-authoritative when code is present. Otherwise clamp client discount
+   // (member/auto-refill savings already baked into unit prices — typically 0 here).
+   let discountCents = 0;
+   let promoCode: string | null = null;
+@@ -236,8 +236,10 @@ export function buildAuthoritativeOrderLines(input: {
+     isMembership: Boolean(i.isMembership) || i.purchaseType === 'membership_program',
+     subscription: i.subscription === true,
+   }));
+-  const ogtbm = applyOgtbmPromo({
++  const genPromo = applyGenPromo({
+     code: input.promoCode,
++    isAuthenticated: Boolean(input.customerUserId),
++    customerEmail: input.customerEmail,
+     lines: items.map(i => ({
+       productId: i.productId,
+       sku: i.sku,
+@@ -260,9 +262,9 @@ export function buildAuthoritativeOrderLines(input: {
+     shippingCents,
+     items: promoItems,
+   });
+-  if (ogtbm.ok) {
+-    promoCode = ogtbm.code;
+-    discountCents = Math.min(ogtbm.discountCents, subtotalCents);
++  if (genPromo.ok) {
++    promoCode = genPromo.code;
++    discountCents = Math.min(genPromo.discountCents, subtotalCents);
+   } else if (mbmtest90.ok) {
+     promoCode = mbmtest90.code;
+     discountCents = mbmtest90.discountCents;
+@@ -272,7 +274,7 @@ export function buildAuthoritativeOrderLines(input: {
+       Math.min(Number(input.discountCents) || 0, subtotalCents),
+     );
+     // Never trust a client-claimed promo amount without the code path above.
+-    if (isOgtbmPromoCode(input.promoCode) || isMbmtest90PromoCode(input.promoCode)) {
++    if (isGenPromoCode(input.promoCode) || isMbmtest90PromoCode(input.promoCode)) {
+       discountCents = 0;
+     }
+   }
+diff --git a/src/pages/CheckoutPage.tsx b/src/pages/CheckoutPage.tsx
+index e0dfac3..261950c 100644
+--- a/src/pages/CheckoutPage.tsx
++++ b/src/pages/CheckoutPage.tsx
+@@ -84,17 +84,17 @@ import {
+   isProviderVisitLine,
+ } from '@/lib/provider/providerVisits';
+ import { isProviderGuidedPrescriptionLine } from '@/lib/provider/therapyFamilies';
+-import {
+-  applyOgtbmPromo,
+-  isOgtbmPromoCode,
+-  OGTBM_PROMO_CODE,
+-} from '@/lib/promo/ogtbmPromo';
+ import {
+   applyMbmtest90Promo,
+   isMbmtest90PromoCode,
+   isMbmtest90EmailAuthorized,
+   MBMTEST90_PROMO_CODE,
+ } from '@/lib/promo/mbmtest90Promo';
++import {
++  applyGenPromo,
++  isGenPromoCode,
++  isTestPromoEmailAuthorized,
++} from '@/lib/promo/genPromo';
+ import {
+   buildHrtLabPackageLines,
+   HRT_LAB_PACKAGE_HEADING,
+@@ -502,14 +502,15 @@ export function CheckoutPage() {
+         unitAmountCents: l.unitAmountCents,
+       })),
+     ];
+-    if (isOgtbmPromoCode(appliedPromoCode)) {
+-      const applied = applyOgtbmPromo({ code: appliedPromoCode, lines });
++    if (isGenPromoCode(appliedPromoCode)) {
++      const applied = applyGenPromo({
++        code: appliedPromoCode,
++        isAuthenticated: Boolean(user?.id),
++        customerEmail: form.email || user?.email || '',
++        lines,
++      });
+       if (!applied.ok) return { discountCents: 0, eligibleUnitCount: 0, code: null };
+-      return {
+-        discountCents: applied.discountCents,
+-        eligibleUnitCount: applied.eligibleUnitCount,
+-        code: applied.code,
+-      };
++      return { discountCents: applied.discountCents, eligibleUnitCount: 1, code: applied.code };
+     }
+     if (isMbmtest90PromoCode(appliedPromoCode)) {
+       const customerEmail = form.email || user?.email || '';
+@@ -682,6 +683,12 @@ export function CheckoutPage() {
+       );
+       return;
+     }
++    if (hasProviderCare) {
++      setError(
++        'Provider Care checkout is handled through GEN Health. Please return to the Provider Care page and continue there.',
++      );
++      return;
++    }
+     if (isStripeCheckoutEnabled()) {
+       setError(PAYMENTS_UNAVAILABLE_MESSAGE);
+       return;
+@@ -790,7 +797,7 @@ export function CheckoutPage() {
+           customerName: [form.firstName, form.lastName].filter(Boolean).join(' ') || '',
+           subtotalCents,
+           discountCents:
+-            hasMembership || isOgtbmPromoCode(appliedPromoCode) || isMbmtest90PromoCode(appliedPromoCode)
++            hasMembership || isGenPromoCode(appliedPromoCode) || isMbmtest90PromoCode(appliedPromoCode)
+               ? 0
+               : Math.round(totalSavings * 100),
+           promoCode: hasMembership ? null : appliedPromoCode,
+@@ -1504,8 +1511,8 @@ export function CheckoutPage() {
+                       className="rounded-md bg-ink-900 px-3 py-2 text-sm text-cream-50"
+                       onClick={() => {
+                         const code = promoInput.trim().toUpperCase();
+-                        if (isOgtbmPromoCode(code)) {
+-                          setAppliedPromoCode(OGTBM_PROMO_CODE);
++                        if (isGenPromoCode(code)) {
++                          setAppliedPromoCode(code);
+                           setError(null);
+                         } else if (isMbmtest90PromoCode(code)) {
+                           setAppliedPromoCode(MBMTEST90_PROMO_CODE);
+@@ -1526,6 +1533,10 @@ export function CheckoutPage() {
+                       {appliedPromoCode} applied
+                       {promoPreview.eligibleUnitCount > 0
+                         ? ` — ${(promoDiscountCents / 100).toFixed(2)} off (${promoPreview.eligibleUnitCount} eligible item${promoPreview.eligibleUnitCount === 1 ? '' : 's'})`
++                        : appliedPromoCode === 'FIRSTTIME' && !user?.id
++                          ? ' — sign in required'
++                        : appliedPromoCode === 'TEST' && !isTestPromoEmailAuthorized(form.email || user?.email || '')
++                          ? ' — authorized email required'
+                         : isMbmtest90PromoCode(appliedPromoCode) && !isMbmtest90EmailAuthorized(form.email || user?.email || '')
+                           ? ' — authorized email required'
+                           : ' — no eligible items in this cart'}
+diff --git a/src/pages/FamilyProductPage.tsx b/src/pages/FamilyProductPage.tsx
+index 197c552..3ae5926 100644
+--- a/src/pages/FamilyProductPage.tsx
++++ b/src/pages/FamilyProductPage.tsx
+@@ -404,11 +404,11 @@ function FamilySelectors({
+         </div>
+       </section>
+ 
+-      <section className="py-12 md:py-16 border-t border-cream-300">
+-        <div className="container-lux max-w-4xl">
++      <div className="container-lux -mt-8 pb-16 lg:-mt-16">
++        <div className="lg:ml-[calc(50%+2rem)] lg:w-[calc(50%-2rem)] border-t border-cream-300 pt-8">
+           <ProductDescriptionSections product={product} />
+         </div>
+-      </section>
++      </div>
+ 
+       {related.length > 0 && (
+         <section className="pb-24">
+diff --git a/src/pages/FaqPage.tsx b/src/pages/FaqPage.tsx
+index fa506c8..186badb 100644
+--- a/src/pages/FaqPage.tsx
++++ b/src/pages/FaqPage.tsx
+@@ -50,12 +50,12 @@ const faqCategories = [
+         a: 'No. Purchase and payment do not guarantee a prescription or treatment approval. A licensed provider may require additional information, consultation, labs, or other steps. Fulfillment and shipping occur only when applicable requirements are satisfied.',
+       },
+       {
+-        q: 'Can I use OGTBM?',
+-        a: 'Yes, when the promotion is available. Enter OGTBM at checkout. It provides $50 off each eligible item (not $50 off the entire order). Quantity applies per eligible item/unit where supported. A promo cannot reduce an item below $0. Promotions are generally non-stackable. OGTBM does not change recurring subscription renewal amounts.',
++        q: 'Which promo codes can I use?',
++        a: 'When available, FIRSTTIME provides $25 off, OGTBM provides 25% off, and TEST provides 100% off eligible one-time purchases. Enter one code at checkout. Promotions do not change recurring subscription renewal amounts.',
+       },
+       {
+-        q: 'What does OGTBM exclude?',
+-        a: 'OGTBM excludes accessories; dermatology / prescription skin & hair; Initial Provider Visit; Follow-Up Visit; Lab Review; Lab Kit; other provider services; and shipping.',
++        q: 'What do promo codes exclude?',
++        a: 'Promo codes apply to one-time purchases, including eligible accessory purchases, but exclude membership enrollment, Subscribe & Save, Auto-Refill, and recurring renewals. Shipping is not discounted. FIRSTTIME requires a signed-in customer account.',
+       },
+       {
+         q: 'Can I pay over time with Cherry?',
+diff --git a/src/pages/OrderLabsPage.tsx b/src/pages/OrderLabsPage.tsx
+new file mode 100644
+index 0000000..cf10b07
+--- /dev/null
++++ b/src/pages/OrderLabsPage.tsx
+@@ -0,0 +1,149 @@
++import { useMemo, useState } from 'react';
++import { ArrowUpRight, Beaker, Home, MapPin } from 'lucide-react';
++import {
++  getLabCheckoutUrl,
++  getLabDisplayPriceCents,
++  labOptions,
++  type LabCollection,
++  type LabVendor,
++} from '@/data/labs';
++
++type CollectionFilter = 'all' | LabCollection;
++type VendorFilter = 'all' | LabVendor;
++
++const collectionLabels: Record<LabCollection, string> = {
++  'in-home': 'In-Home',
++  'walk-in': 'Walk-In',
++};
++
++const vendorLabels: Record<LabVendor, string> = {
++  labcorp: 'LabCorp',
++  quest: 'Quest',
++};
++
++function formatMoney(cents: number) {
++  return (cents / 100).toLocaleString('en-US', {
++    style: 'currency',
++    currency: 'USD',
++  });
++}
++
++export function OrderLabsPage() {
++  const [collection, setCollection] = useState<CollectionFilter>('all');
++  const [vendor, setVendor] = useState<VendorFilter>('all');
++
++  const filteredLabs = useMemo(
++    () => labOptions.filter(lab =>
++      (collection === 'all' || lab.collection === collection) &&
++      (vendor === 'all' || lab.vendor === vendor)
++    ),
++    [collection, vendor],
++  );
++
++  return (
++    <div className="bg-cream-50 pt-28 md:pt-32">
++      <section className="py-16 md:py-20">
++        <div className="container-lux">
++          <div>
++            <p className="eyebrow mb-3">GEN Health labs</p>
++            <h1 className="font-serif text-5xl text-ink-900 md:text-6xl">Order Labs</h1>
++            <p className="mt-5 max-w-2xl text-ink-600 leading-relaxed">
++              Choose an in-home or walk-in lab option. Lab orders, payment, intake, and results stay inside GEN Health. Lab shipping is free.
++            </p>
++          </div>
++        </div>
++      </section>
++
++      <section className="pb-24 md:pb-32">
++        <div className="container-lux">
++          <div className="mb-8 flex flex-col gap-4 rounded-lg border border-cream-300 bg-white/80 p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
++            <div className="flex flex-wrap gap-2">
++              {([
++                ['all', 'All labs'],
++                ['in-home', 'In-Home'],
++                ['walk-in', 'Walk-In'],
++              ] as const).map(([value, label]) => (
++                <button
++                  key={value}
++                  type="button"
++                  onClick={() => setCollection(value)}
++                  className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
++                    collection === value
++                      ? 'border-gold-500 bg-gold-100 text-ink-900'
++                      : 'border-cream-300 bg-white text-ink-600 hover:border-gold-300 hover:text-ink-900'
++                  }`}
++                >
++                  {label}
++                </button>
++              ))}
++            </div>
++            <div className="flex flex-wrap gap-2">
++              {([
++                ['all', 'All vendors'],
++                ['labcorp', 'LabCorp'],
++                ['quest', 'Quest'],
++              ] as const).map(([value, label]) => (
++                <button
++                  key={value}
++                  type="button"
++                  onClick={() => setVendor(value)}
++                  className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
++                    vendor === value
++                      ? 'border-ink-800 bg-ink-900 text-white'
++                      : 'border-cream-300 bg-white text-ink-600 hover:border-ink-300 hover:text-ink-900'
++                  }`}
++                >
++                  {label}
++                </button>
++              ))}
++            </div>
++          </div>
++
++          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
++            {filteredLabs.map(lab => {
++              const Icon = lab.collection === 'in-home' ? Home : MapPin;
++
++              return (
++                <article key={`${lab.productId}-${lab.costCents}`} className="rounded-lg border border-cream-300 bg-white p-5 shadow-sm">
++                  <div className="mb-4 flex items-start justify-between gap-4">
++                    <div className="flex gap-2">
++                      <span className="inline-flex items-center gap-1 rounded-full bg-cream-100 px-2.5 py-1 text-xs font-medium text-ink-700">
++                        <Icon size={13} />
++                        {collectionLabels[lab.collection]}
++                      </span>
++                      <span className="rounded-full bg-gold-50 px-2.5 py-1 text-xs font-medium text-gold-700">
++                        {vendorLabels[lab.vendor]}
++                      </span>
++                    </div>
++                    <Beaker size={18} className="shrink-0 text-gold-600" />
++                  </div>
++                  <h2 className="min-h-14 font-serif text-2xl leading-tight text-ink-900">{lab.name}</h2>
++                  <div className="mt-5 flex items-end justify-between gap-4">
++                    <div>
++                      <p className="text-xs uppercase tracking-[0.14em] text-ink-400">Due in GEN Health</p>
++                      <p className="mt-1 text-2xl font-semibold text-ink-900">{formatMoney(getLabDisplayPriceCents(lab))}</p>
++                    </div>
++                    <div className="text-right text-sm text-ink-500">
++                      <p>{lab.markerCount > 0 ? `${lab.markerCount} markers` : 'Panel'}</p>
++                      <p>{lab.targetAudience}</p>
++                    </div>
++                  </div>
++                  <p className="mt-4 text-sm text-ink-500">Free shipping for labs. Accessories are the only items with a separate $10 shipping charge.</p>
++                  <a
++                    href={getLabCheckoutUrl(lab)}
++                    target="_blank"
++                    rel="noreferrer"
++                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-ink-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-gold-700"
++                  >
++                    Order in GEN Health
++                    <ArrowUpRight size={16} />
++                  </a>
++                </article>
++              );
++            })}
++          </div>
++        </div>
++      </section>
++    </div>
++  );
++}
+diff --git a/src/pages/ProductPage.tsx b/src/pages/ProductPage.tsx
+index a9f2dc4..0a648d2 100644
+--- a/src/pages/ProductPage.tsx
++++ b/src/pages/ProductPage.tsx
+@@ -87,6 +87,9 @@ export function ProductPage({ slug }: { slug: string }) {
+   if (product.category === 'accessories') {
+     return <AccessoryProductPage product={product} />;
+   }
++  if (product.category === 'provider-care') {
++    return <ProviderCareProductPage product={product} />;
++  }
+   const hostedRoute = GEN_HOSTED_PRODUCTS[product.slug];
+   if (hostedRoute) return <GenHostedProductPage product={product} route={hostedRoute} />;
+   if (isFamilyStorefrontSlug(product.slug)) {
+@@ -95,6 +98,83 @@ export function ProductPage({ slug }: { slug: string }) {
+   return <WellnessProductPage slug={slug} />;
+ }
+ 
++function ProviderCareProductPage({ product }: { product: NonNullable<ReturnType<typeof getProduct>> }) {
++  const section = sections.find(s => s.id === product.category);
++  const variant = product.variants[0];
++
++  return (
++    <div className="bg-cream-50 pt-28 md:pt-32">
++      <div className="container-lux py-4">
++        <div className="flex items-center gap-2 text-sm text-ink-400 flex-wrap">
++          <Link to="/" className="hover:text-ink-900">Home</Link>
++          <span>/</span>
++          <Link to="/section/provider-care" className="hover:text-ink-900">{section?.label}</Link>
++          <span>/</span>
++          <span className="text-ink-700">{product.displayName}</span>
++        </div>
++      </div>
++
++      <section className="pb-12 md:pb-16">
++        <div className="container-lux">
++          <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
++            <div className="lg:sticky lg:top-24 lg:self-start">
++              <div className="relative aspect-square overflow-hidden rounded-3xl bg-cream-100">
++                <img
++                  src={product.image}
++                  alt={product.imageAlt}
++                  className="h-full w-full object-cover"
++                />
++                <div className="absolute left-4 top-4">
++                  <span className="rounded-full bg-cream-50/95 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-ink-900">
++                    GEN Health checkout
++                  </span>
++                </div>
++              </div>
++            </div>
++
++            <div>
++              <div className="flex items-center gap-2 mb-3">
++                <span className="flex items-center gap-1.5 text-xs uppercase tracking-wider-2 text-gold-600">
++                  <ShieldCheck size={16} /> {section?.label}
++                </span>
++              </div>
++              <h1 className="font-serif text-4xl md:text-5xl text-ink-900 mb-2 leading-tight">{product.displayName}</h1>
++              <p className="text-xl md:text-2xl text-ink-700 mb-3 leading-snug">{product.benefitHeadline}</p>
++              <p className="text-ink-600 leading-relaxed mb-5">{product.shortDescription}</p>
++              <ProductHighlights highlights={product.highlights} />
++
++              <div className="mb-6 rounded-xl border border-gold-200 bg-gold-50 p-4">
++                <p className="text-sm font-medium text-ink-900">Handled in GEN Health</p>
++                <p className="mt-1 text-sm leading-relaxed text-ink-600">
++                  Provider Care checkout, scheduling, intake, and payment are handled through GEN Health.
++                  These services are not purchased through the My Bare Method cart.
++                </p>
++              </div>
++
++              {variant && (
++                <div className="mb-6 rounded-xl border border-cream-300 bg-white p-4">
++                  <p className="text-sm text-ink-500">Due in GEN Health</p>
++                  <p className="font-serif text-3xl text-ink-900">${variant.price}</p>
++                  <p className="mt-1 text-xs text-ink-500">Final amount and required steps are confirmed in GEN Health.</p>
++                </div>
++              )}
++
++              <a
++                href="mailto:info@thebaremethodmn.com?subject=Provider%20Care%20GEN%20Health%20checkout"
++                className="btn-primary w-full justify-center"
++              >
++                Contact Us to Continue in GEN Health
++              </a>
++
++              <ProductDescriptionSections product={product} />
++            </div>
++          </div>
++        </div>
++      </section>
++    </div>
++  );
++}
++
+ function WellnessProductPage({ slug }: { slug: string }) {
+   const product = getProduct(slug);
+   const { addItem } = useCart();
+@@ -516,11 +596,11 @@ function WellnessProductPage({ slug }: { slug: string }) {
+         </div>
+       </section>
+ 
+-      <section className="py-12 md:py-16 border-t border-cream-300">
+-        <div className="container-lux max-w-4xl">
++      <div className="container-lux -mt-8 pb-16 lg:-mt-16">
++        <div className="lg:ml-[calc(50%+2rem)] lg:w-[calc(50%-2rem)] border-t border-cream-300 pt-8">
+           <ProductDescriptionSections product={product} showAbout={false} />
+         </div>
+-      </section>
++      </div>
+ 
+       {product.faqs.length > 0 && (
+         <section className="py-12 md:py-16 border-t border-cream-300">
+diff --git a/src/pages/TermsPage.tsx b/src/pages/TermsPage.tsx
+index 7466eb7..2ba4eec 100644
+--- a/src/pages/TermsPage.tsx
++++ b/src/pages/TermsPage.tsx
+@@ -161,12 +161,10 @@ export function TermsPage() {
+           body: (
+             <>
+               <p>
+-                When offered, promotional codes such as OGTBM provide $50 off each eligible item (not a flat $50 off
+-                the entire order). Quantity applies per eligible item/unit where supported. A promo cannot reduce an
+-                eligible item below $0. Promotions are generally non-stackable. Exclusions typically include
+-                accessories, dermatology / prescription skin &amp; hair, Initial Provider Visit, Follow-Up Visit, Lab
+-                Review, Lab Kit, other provider services, and shipping. Promotional discounts do not change ongoing
+-                recurring membership renewal amounts.
++                When offered, FIRSTTIME provides $25 off, OGTBM provides 25% off, and TEST provides 100% off eligible
++                one-time purchases. Only one code may be applied at a time. Shipping is not discounted. FIRSTTIME
++                requires a signed-in customer account. Membership enrollment, Subscribe &amp; Save, Auto-Refill, and
++                recurring renewals are excluded.
+               </p>
+             </>
+           ),
+diff --git a/src/pages/account/AccountOverviewPage.tsx b/src/pages/account/AccountOverviewPage.tsx
+index 78bfa65..ce5e308 100644
+--- a/src/pages/account/AccountOverviewPage.tsx
++++ b/src/pages/account/AccountOverviewPage.tsx
+@@ -1,9 +1,11 @@
+ import { useEffect, useState } from 'react';
+ import { Link } from '@/router';
++import { ArrowUpRight } from 'lucide-react';
+ import { useCustomerAuth } from '@/context/CustomerAuthContext';
+ import { supabase } from '@/lib/supabaseClient';
+ import { listCustomerOrders } from '@/lib/orders/orderService';
+ import { labelOrderStatus } from '@/lib/orders/orderStatus';
++import { GEN_HEALTH_ICON_URL, GEN_HEALTH_PORTAL_URL } from '@/lib/genHealth/portalLinks';
+ import { AccountShell } from './AccountShell';
+ import { useAccountNoIndex } from './useAccountNoIndex';
+ 
+@@ -92,6 +94,24 @@ export function AccountOverviewPage() {
+             Update your name, phone, and account contact details.
+           </p>
+         </Link>
++
++        <a
++          href={GEN_HEALTH_PORTAL_URL}
++          target="_blank"
++          rel="noreferrer"
++          className="group rounded-2xl border border-cream-300 bg-white p-6 shadow-sm hover:border-gold-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
++        >
++          <div className="flex items-start justify-between gap-3 mb-3">
++            <div className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-ink-200 bg-cream-50 p-1">
++              <img src={GEN_HEALTH_ICON_URL} alt="" className="h-full w-full rounded-full object-contain" />
++            </div>
++            <ArrowUpRight size={17} className="text-ink-400 transition-colors group-hover:text-gold-700" />
++          </div>
++          <h2 className="font-serif text-xl text-ink-900 mb-3">GEN Health Portal</h2>
++          <p className="text-sm text-ink-500 leading-relaxed">
++            Sign in for lab orders, prescription intake, provider steps, and clinical updates.
++          </p>
++        </a>
+       </div>
+     </AccountShell>
+   );
+diff --git a/src/pages/account/AccountShell.tsx b/src/pages/account/AccountShell.tsx
+index 0a0d7fb..5140adb 100644
+--- a/src/pages/account/AccountShell.tsx
++++ b/src/pages/account/AccountShell.tsx
+@@ -1,7 +1,8 @@
+ import { useState } from 'react';
+ import { Link, navigate } from '@/router';
+-import { ChevronDown, LogOut, UserRound } from 'lucide-react';
++import { ArrowUpRight, ChevronDown, LogOut, UserRound } from 'lucide-react';
+ import { useCustomerAuth } from '@/context/CustomerAuthContext';
++import { GEN_HEALTH_ICON_URL, GEN_HEALTH_PORTAL_URL } from '@/lib/genHealth/portalLinks';
+ 
+ const NAV = [
+   { id: 'overview', label: 'Overview', path: '/account' },
+@@ -68,6 +69,16 @@ export function AccountShell({
+                   {item.label}
+                 </button>
+               ))}
++              <a
++                href={GEN_HEALTH_PORTAL_URL}
++                target="_blank"
++                rel="noreferrer"
++                className="mt-1 flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm text-ink-600 hover:bg-cream-100 hover:text-ink-900"
++                onClick={() => setMobileOpen(false)}
++              >
++                GEN Health Portal
++                <ArrowUpRight size={14} aria-hidden />
++              </a>
+             </div>
+           )}
+         </div>
+@@ -89,6 +100,20 @@ export function AccountShell({
+                   {item.label}
+                 </Link>
+               ))}
++              <a
++                href={GEN_HEALTH_PORTAL_URL}
++                target="_blank"
++                rel="noreferrer"
++                className="mt-3 flex items-center justify-between gap-2 rounded-xl border border-cream-300 bg-white px-3 py-2.5 text-sm text-ink-700 transition-colors hover:border-gold-300 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
++              >
++                <span className="inline-flex items-center gap-2">
++                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-ink-200 bg-white p-0.5">
++                    <img src={GEN_HEALTH_ICON_URL} alt="" className="h-full w-full rounded-full object-contain" />
++                  </span>
++                  GEN Health Portal
++                </span>
++                <ArrowUpRight size={14} aria-hidden />
++              </a>
+             </nav>
+           </aside>
+           <div>{children}</div>
+diff --git a/supabase/functions/_shared/genPromo.ts b/supabase/functions/_shared/genPromo.ts
+new file mode 100644
+index 0000000..0879b27
+--- /dev/null
++++ b/supabase/functions/_shared/genPromo.ts
+@@ -0,0 +1,77 @@
++/** GEN Health promo rules mirrored into MBM's authoritative one-time checkout. */
++
++export const FIRSTTIME_PROMO_CODE = 'FIRSTTIME' as const;
++export const OGTBM_PROMO_CODE = 'OGTBM' as const;
++export const TEST_PROMO_CODE = 'TEST' as const;
++export const TEST_PROMO_RESTRICTED_EMAIL = 'info@thebaremethodmn.com' as const;
++
++export type GenPromoCode = typeof FIRSTTIME_PROMO_CODE | typeof OGTBM_PROMO_CODE | typeof TEST_PROMO_CODE;
++export type GenPromoLine = {
++  productId?: string | null;
++  sku?: string | null;
++  section?: string | null;
++  category?: string | null;
++  purchaseType?: string | null;
++  isMembership?: boolean;
++  subscription?: boolean;
++  quantity: number;
++  unitAmountCents: number;
++};
++
++export function normalizeGenPromoCode(code: string | null | undefined): string {
++  return String(code || '').trim().toUpperCase();
++}
++
++export function isGenPromoCode(code: string | null | undefined): code is GenPromoCode {
++  const normalized = normalizeGenPromoCode(code);
++  return normalized === FIRSTTIME_PROMO_CODE || normalized === OGTBM_PROMO_CODE || normalized === TEST_PROMO_CODE;
++}
++
++export function isTestPromoEmailAuthorized(email: string | null | undefined): boolean {
++  return String(email || '').trim().toLowerCase() === TEST_PROMO_RESTRICTED_EMAIL;
++}
++
++export function isGenPromoCartEligible(lines: GenPromoLine[], code?: string | null): boolean {
++  const normalizedCode = normalizeGenPromoCode(code);
++  return lines.every(line => {
++    const productId = String(line.productId || '').trim();
++    const sku = String(line.sku || '').trim().toUpperCase();
++    const section = String(line.section || '').trim().toLowerCase();
++    const category = String(line.category || '').trim().toLowerCase();
++    const isMembershipOrSubscription =
++      Boolean(line.isMembership) ||
++      line.purchaseType === 'membership_program' ||
++      productId === 'm1' ||
++      productId === 'm2' ||
++      sku.startsWith('MBM-MEM-') ||
++      line.subscription === true ||
++      line.purchaseType === 'auto_refill';
++    if (isMembershipOrSubscription) return false;
++    if (normalizedCode === TEST_PROMO_CODE) return true;
++    return (
++      !sku.startsWith('MBM-ACC-') && !sku.startsWith('MBM-PC-') && !sku.startsWith('MBM-SHIP-') &&
++      !/^a\d+$/i.test(productId) && !/^pc\d+$/i.test(productId) &&
++      section !== 'accessories' && section !== 'provider-care' &&
++      category !== 'accessories' && category !== 'provider-care'
++    );
++  });
++}
++
++export function applyGenPromo(input: {
++  code?: string | null;
++  isAuthenticated?: boolean;
++  customerEmail?: string | null;
++  lines: GenPromoLine[];
++}): { ok: true; code: GenPromoCode; discountCents: number } | { ok: false; reason: string } {
++  const code = normalizeGenPromoCode(input.code);
++  if (!isGenPromoCode(code)) return { ok: false, reason: 'unknown_code' };
++  if (code === FIRSTTIME_PROMO_CODE && !input.isAuthenticated) return { ok: false, reason: 'sign_in_required' };
++  if (code === TEST_PROMO_CODE && !isTestPromoEmailAuthorized(input.customerEmail)) return { ok: false, reason: 'email_not_authorized' };
++  if (!isGenPromoCartEligible(input.lines, code)) return { ok: false, reason: 'cart_ineligible' };
++  const subtotalCents = input.lines.reduce(
++    (sum, line) => sum + Math.max(0, Math.trunc(Number(line.unitAmountCents) || 0)) * Math.max(1, Math.trunc(Number(line.quantity) || 0)),
++    0,
++  );
++  const discountCents = code === FIRSTTIME_PROMO_CODE ? Math.min(2500, subtotalCents) : code === OGTBM_PROMO_CODE ? Math.round(subtotalCents * 0.25) : subtotalCents;
++  return { ok: true, code, discountCents };
++}
+diff --git a/supabase/functions/_shared/injectProviderVisit.ts b/supabase/functions/_shared/injectProviderVisit.ts
+index 078d004..6e8d60c 100644
+--- a/supabase/functions/_shared/injectProviderVisit.ts
++++ b/supabase/functions/_shared/injectProviderVisit.ts
+@@ -21,8 +21,8 @@ import {
+   isLabPackageLine,
+   shouldAutoAddHrtLabPackage,
+ } from './hrtLabPackage.ts';
+-import { applyOgtbmPromo, isOgtbmPromoCode } from './ogtbmPromo.ts';
+ import { applyMbmtest90Promo, isMbmtest90PromoCode } from './mbmtest90Promo.ts';
++import { applyGenPromo, isGenPromoCode } from './genPromo.ts';
+ const PROVIDER_CARE_FIXED_CENTS: Record<string, number> = {
+   pc1: 7500,
+   pc2: 5500,
+@@ -234,7 +234,7 @@ export function buildAuthoritativeOrderLines(input: {
+     0,
+   );
+ 
+-  // OGTBM and MBMTEST90 are server-authoritative when code is present. Otherwise clamp client discount
++  // GEN Health promos and MBMTEST90 are server-authoritative when code is present. Otherwise clamp client discount
+   // (member/auto-refill savings already baked into unit prices — typically 0 here).
+   let discountCents = 0;
+   let promoCode: string | null = null;
+@@ -245,8 +245,10 @@ export function buildAuthoritativeOrderLines(input: {
+     isMembership: Boolean(i.isMembership) || i.purchaseType === 'membership_program',
+     subscription: i.subscription === true,
+   }));
+-  const ogtbm = applyOgtbmPromo({
++  const genPromo = applyGenPromo({
+     code: input.promoCode,
++    isAuthenticated: Boolean(input.customerUserId),
++    customerEmail: input.customerEmail,
+     lines: items.map(i => ({
+       productId: i.productId,
+       sku: i.sku,
+@@ -292,9 +294,9 @@ export function buildAuthoritativeOrderLines(input: {
+     shippingCents,
+     items: promoItems,
+   });
+-  if (ogtbm.ok) {
+-    promoCode = ogtbm.code;
+-    discountCents = Math.min(ogtbm.discountCents, subtotalCents);
++  if (genPromo.ok) {
++    promoCode = genPromo.code;
++    discountCents = Math.min(genPromo.discountCents, subtotalCents);
+   } else if (mbmtest90.ok) {
+     promoCode = mbmtest90.code;
+     discountCents = mbmtest90.discountCents;
+@@ -304,7 +306,7 @@ export function buildAuthoritativeOrderLines(input: {
+       Math.min(Number(input.discountCents) || 0, subtotalCents),
+     );
+     // Never trust a client-claimed promo amount without the code path above.
+-    if (isOgtbmPromoCode(input.promoCode) || isMbmtest90PromoCode(input.promoCode)) {
++    if (isGenPromoCode(input.promoCode) || isMbmtest90PromoCode(input.promoCode)) {
+       discountCents = 0;
+     }
+   }
+diff --git a/supabase/functions/_shared/launchReadyKashuMap.ts b/supabase/functions/_shared/launchReadyKashuMap.ts
+index 7b8f86c..1723d9c 100644
+--- a/supabase/functions/_shared/launchReadyKashuMap.ts
++++ b/supabase/functions/_shared/launchReadyKashuMap.ts
+@@ -7,7 +7,7 @@
+  * Do not invent IDs.
+  *
+  * One-time family products are isTaxable=false, isShippable=false, one-time USD.
+- * Ordinary one-time carts still append MBM-SHIP-TWO-DAY-001 / MBM-SHIP-NEXT-DAY-001.
++ * Ordinary one-time carts still append MBM-SHIP-ACCESSORY-001 / MBM-SHIP-TWO-DAY-001 / MBM-SHIP-NEXT-DAY-001.
+  * Membership enrollment does NOT append MBM-SHIP — shipping is inside the combo priceId.
+  *
+  * Historical SEM $149 / $179 / $199 and TIR $249 / $275 / $299 / $305 / $325 prices remain for old subscriptions.
+diff --git a/supabase/functions/create-kashu-checkout-session/index.ts b/supabase/functions/create-kashu-checkout-session/index.ts
+index c6bf385..68b34b4 100644
+--- a/supabase/functions/create-kashu-checkout-session/index.ts
++++ b/supabase/functions/create-kashu-checkout-session/index.ts
+@@ -84,8 +84,7 @@ function extractToken(redirectUrl: string): string | null {
+   }
+ }
+ 
+-/** MBM shipping SKUs — used for ONE-TIME product carts only (not membership enrollment).
+- * MBM-SHIP-ACCESSORY-001 must be mapped to a live $10 Tagada variant before launch. */
++/** MBM shipping SKUs — used for ONE-TIME product carts only (not membership enrollment). */
+ const SHIP_SKU_TWO_DAY = "MBM-SHIP-TWO-DAY-001";
+ const SHIP_SKU_NEXT_DAY = "MBM-SHIP-NEXT-DAY-001";
+ const SHIP_SKU_ACCESSORY = "MBM-SHIP-ACCESSORY-001";
+@@ -97,13 +96,6 @@ function shippingSkuForCents(shippingCents: number): string | null {
+   return null;
+ }
+ 
+-const OGTBM_EXCLUDED_SKU_PREFIXES = ["MBM-ACC-", "MBM-SH-", "MBM-PC-", "MBM-MEM-", "MBM-SHIP-"];
+-
+-function isOgtbmEligibleSku(sku: string): boolean {
+-  const s = sku.toUpperCase();
+-  return !OGTBM_EXCLUDED_SKU_PREFIXES.some((p) => s.startsWith(p));
+-}
+-
+ async function ensureTagadaOneTimePrice(input: {
+   apiKey: string;
+   productId: string;
+@@ -784,20 +776,21 @@ Deno.serve(async (req) => {
+       }, 409);
+     }
+ 
+-    // When OGTBM applies, swap eligible Tagada lines to discounted one-time priceIds
+-    // so hosted charge equals MBM total (full map cents − $50/eligible unit).
+-    if (mbmPromoCode === "OGTBM" && mbmDiscountCents > 0 && !isMembershipCheckout) {
++    // GEN Health one-time promos are mirrored with exact Tagada priceIds.
++    // Discounts apply to merchandise only; shipping remains full price.
++    if (["FIRSTTIME", "OGTBM", "TEST"].includes(mbmPromoCode) && mbmDiscountCents > 0 && !isMembershipCheckout) {
+       const tagadaApiKey = Deno.env.get("TAGADA_API_KEY")?.trim();
+       if (!tagadaApiKey) {
+         return json({
+           error: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+           blocker: "TAGADA_CHECKOUT_TOTAL_MISMATCH",
+-          message: "OGTBM card checkout requires Tagada API access to bind discounted priceIds.",
++          message: "Promo checkout requires Tagada API access to bind discounted priceIds.",
+         }, 503);
+       }
+-      // Rebuild items with discounted prices for eligible SKUs.
++      // Allocate the server-authorized merchandise discount across one-time lines.
+       const discountedItems: { variantId: string; quantity: number; priceId?: string }[] = [];
+       let discountedMerch = 0;
++      let remainingDiscount = mbmDiscountCents;
+       for (const line of orderItems) {
+         const sku = line.sku as string | null;
+         const qty = Number(line.quantity) || 1;
+@@ -805,16 +798,18 @@ Deno.serve(async (req) => {
+         const mapped = resolveKashuSkuMapRow(sku, bySku.get(sku) ?? null);
+         if (!mapped?.tagada_variant_id || !mapped.tagada_product_id) {
+           return json({
+-            error: "Tagada product sync incomplete for OGTBM discount binding.",
++            error: "Tagada product sync incomplete for promo discount binding.",
+             missingSkus: [sku],
+           }, 409);
+         }
+         const fullUnit = Math.trunc(Number(mapped.tagada_price_cents ?? mapped.mbm_price_cents) || 0);
+-        let unit = fullUnit;
++        const lineFull = fullUnit * qty;
++        const lineDiscount = Math.min(remainingDiscount, lineFull);
++        const discountedLineTotal = lineFull - lineDiscount;
++        const unit = qty > 0 ? Math.floor(discountedLineTotal / qty) : fullUnit;
++        const remainder = qty > 0 ? discountedLineTotal - unit * qty : 0;
+         let priceId = mapped.tagada_price_id || undefined;
+-        if (isOgtbmEligibleSku(sku) && fullUnit > 0) {
+-          const discountPer = Math.min(5000, fullUnit);
+-          unit = fullUnit - discountPer;
++        if (lineDiscount > 0 && fullUnit > 0 && remainder === 0) {
+           const ensured = await ensureTagadaOneTimePrice({
+             apiKey: tagadaApiKey,
+             productId: mapped.tagada_product_id,
+@@ -823,13 +818,20 @@ Deno.serve(async (req) => {
+           });
+           if (!ensured) {
+             return json({
+-              error: "Unable to bind OGTBM discounted Tagada priceId.",
++              error: "Unable to bind promo discounted Tagada priceId.",
+               sku,
+               amountCents: unit,
+             }, 502);
+           }
+           priceId = ensured;
++        } else if (lineDiscount > 0 && remainder !== 0) {
++          return json({
++            error: "Promo discount cannot be represented by an exact Tagada unit price.",
++            sku,
++            amountCents: discountedLineTotal,
++          }, 409);
+         }
++        remainingDiscount -= lineDiscount;
+         discountedMerch += unit * qty;
+         discountedItems.push({
+           variantId: mapped.tagada_variant_id,
+@@ -837,6 +839,9 @@ Deno.serve(async (req) => {
+           ...(priceId ? { priceId } : {}),
+         });
+       }
++      if (remainingDiscount !== 0) {
++        return json({ error: "Promo discount could not be bound to mapped Tagada lines." }, 409);
++      }
+       // Keep shipping lines already appended in tagadaItems after merchandise.
+       const shipItems = tagadaItems.slice(orderItems.length);
+       tagadaItems.length = 0;
+@@ -855,7 +860,7 @@ Deno.serve(async (req) => {
+           calculatedTagadaMerchandiseCents,
+           calculatedShippingCents,
+           mbmDiscountCents,
+-          note: "ogtbm_discounted_priceIds",
++          note: "gen_promo_discounted_priceIds",
+         }, 409);
+       }
+     }
+diff --git a/supabase/migrations/20260901232000_kashu_accessory_shipping_map.sql b/supabase/migrations/20260901232000_kashu_accessory_shipping_map.sql
+new file mode 100644
+index 0000000..fb24f7b
+--- /dev/null
++++ b/supabase/migrations/20260901232000_kashu_accessory_shipping_map.sql
+@@ -0,0 +1,40 @@
++-- Additive kashu_sku_map upsert for $10 accessory-only shipping.
++-- Live-created in Tagada via Edge tagada-product-sync on 2026-09-01.
++-- Product is one-time, non-taxable, non-shippable.
++
++insert into public.kashu_sku_map (
++  mbm_sku,
++  mbm_product_id,
++  mbm_variant_id,
++  tagada_product_id,
++  tagada_variant_id,
++  tagada_price_id,
++  mbm_price_cents,
++  tagada_price_cents,
++  is_active,
++  notes,
++  updated_at
++) values (
++  'MBM-SHIP-ACCESSORY-001',
++  'shipping',
++  'accessory',
++  'product_94e5e1cda1ac',
++  'variant_4b7853bf87dd',
++  'price_c2f2a57f7f9d',
++  1000,
++  1000,
++  true,
++  'Accessory Shipping $10 live-created 2026-09-01',
++  now()
++)
++on conflict (mbm_sku) do update set
++  mbm_product_id = excluded.mbm_product_id,
++  mbm_variant_id = excluded.mbm_variant_id,
++  tagada_product_id = excluded.tagada_product_id,
++  tagada_variant_id = excluded.tagada_variant_id,
++  tagada_price_id = excluded.tagada_price_id,
++  mbm_price_cents = excluded.mbm_price_cents,
++  tagada_price_cents = excluded.tagada_price_cents,
++  is_active = true,
++  notes = excluded.notes,
++  updated_at = now();

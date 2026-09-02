@@ -40,7 +40,7 @@ import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { SubscriptionTermsPage } from '@/pages/SubscriptionTermsPage';
 import { MedicalDirectorPage } from '@/pages/MedicalDirectorPage';
-import { OrderLabsPage } from '@/pages/OrderLabsPage';
+import { LabDetailPage, OrderLabsPage } from '@/pages/OrderLabsPage';
 import { AdminApp } from '@/admin/AdminApp';
 import { AccountGate } from '@/pages/account/AccountGate';
 import { AccountLoginPage } from '@/pages/account/AccountLoginPage';
@@ -162,7 +162,7 @@ function App() {
           <AccountComingSoonPage
             active="membership"
             title="Subscriptions"
-            description="Recurring prescription subscription details will appear here in a future update."
+            description="Prescription renewals and subscription-related care steps are handled securely in GEN Health."
           />
         </AccountGate>
       );
@@ -173,7 +173,7 @@ function App() {
           <AccountComingSoonPage
             active="requests"
             title="Requests"
-            description="Refill, pause, and cancellation requests will appear here in a future update."
+            description="Prescription requests, refill questions, follow-ups, and lab review steps continue in GEN Health."
           />
         </AccountGate>
       );
@@ -182,6 +182,7 @@ function App() {
     if (path === '/track') return <TrackPage />;
     if (path === '/about') return <AboutPage />;
     if (path === '/medical-director') return <MedicalDirectorPage />;
+    if (path.startsWith('/order-labs/')) return <LabDetailPage slug={path.replace('/order-labs/', '').split('/')[0]} />;
     if (path === '/order-labs') return <OrderLabsPage />;
     if (path === '/faq') return <FaqPage />;
     if (path === '/memberships' || path === '/subscriptions') return <SubscriptionsPage />;

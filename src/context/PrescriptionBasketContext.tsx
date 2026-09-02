@@ -8,6 +8,7 @@ export interface PrescriptionBasketItem {
   imageAlt: string;
   price: number;
   genClientProductId: string;
+  checkoutUrl?: string;
   category: string;
 }
 

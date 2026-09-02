@@ -14,6 +14,7 @@ import {
   X,
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
 import { useMember } from '@/context/MemberContext';
 import { useCustomerAuth } from '@/context/CustomerAuthContext';
 import { upsertManagedSubscription } from '@/lib/account/subscriptions';
@@ -113,24 +114,35 @@ import {
 } from '@/lib/provider/hrtLabPackage';
 import { getLabCheckoutUrl, getLabDisplayPriceCents, labOptions } from '@/data/labs';
 
+const LAB_IMAGE = 'https://images.pexels.com/photos/6129507/pexels-photo-6129507.jpeg?auto=compress&cs=tinysrgb&w=1200';
+
 const MEMBERSHIP_CARD_RECURRING_DISCLOSURE =
-  'Your card will be charged monthly for the selected prescription at 15% off plus your selected recurring shipping.';
+  'Your card will be charged monthly for the recurring amount shown before enrollment.';
 const MEMBERSHIP_CARD_SHIPPING_NOTE =
-  'Your selected Two-Day ($30) or Next-Day ($50) shipping method is included with every monthly renewal. Provider visits, labs, and services are one-time charges.';
+  'Provider visits, labs, and services are one-time charges unless a specific offer says otherwise.';
 const MEMBERSHIP_TERMS_ACCEPTANCE_LABEL =
-  'I authorize monthly card billing for my prescription subscription and selected recurring shipping until canceled.';
+  'I authorize monthly card billing for my prescription subscription until canceled.';
 
-const REQUIRED_HRT_LAB_NAMES = new Set([
-  'In-Home LabCorp Female HRT Comprehensive Panel',
-  'In-Home Quest Female HRT Comprehensive Panel',
-  'Walk-In LabCorp Female HRT Comprehensive Panel',
-  'Walk-In Quest Female HRT Comprehensive Panel',
-]);
+const REQUIRED_HRT_LAB_OPTIONS = [...labOptions].sort(
+  (a, b) => getLabDisplayPriceCents(a) - getLabDisplayPriceCents(b),
+);
 
-const REQUIRED_HRT_LAB_OPTIONS = labOptions.filter(lab => REQUIRED_HRT_LAB_NAMES.has(lab.name));
+function formatLabPrice(cents: number) {
+  return (cents / 100).toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+}
+
+function labChoiceLabel(lab: (typeof labOptions)[number]) {
+  const collection = lab.collection === 'in-home' ? 'In-Home' : 'Walk-In';
+  const vendor = lab.vendor === 'labcorp' ? 'LabCorp' : 'Quest';
+  return `${collection} / ${vendor} - ${formatLabPrice(getLabDisplayPriceCents(lab))}`;
+}
 
 export function CheckoutPage() {
   const { items, subtotal, standardSubtotal, totalSavings, clearCart } = useCart();
+  const { addItem: addCareItem, openBasket: openCareBasket } = usePrescriptionBasket();
   const { isActiveMember, activateMembership } = useMember();
   const { user, session } = useCustomerAuth();
   const [step, setStep] = useState<'info' | 'payment' | 'complete'>('info');
@@ -157,6 +169,7 @@ export function CheckoutPage() {
   const [appliedPromoCode, setAppliedPromoCode] = useState<string | null>(null);
   const [showHrtLabModal, setShowHrtLabModal] = useState(false);
   const [dismissedHrtLabModal, setDismissedHrtLabModal] = useState(false);
+  const [selectedRequiredLabId, setSelectedRequiredLabId] = useState(REQUIRED_HRT_LAB_OPTIONS[0]?.productId ?? '');
   const checkoutEnabled = isManualCheckoutEnabled();
 
   const hasProviderCare = items.some(i => i.section === 'provider-care' || /^pc\d+$/i.test(i.productId));
@@ -404,6 +417,26 @@ export function CheckoutPage() {
   const dismissHrtLabModal = () => {
     setShowHrtLabModal(false);
     setDismissedHrtLabModal(true);
+  };
+  const selectedRequiredLab =
+    REQUIRED_HRT_LAB_OPTIONS.find(lab => lab.productId === selectedRequiredLabId) ??
+    REQUIRED_HRT_LAB_OPTIONS[0];
+
+  const addSelectedRequiredLabToBasket = () => {
+    if (!selectedRequiredLab) return;
+    addCareItem({
+      slug: `lab-${selectedRequiredLab.productId}`,
+      displayName: selectedRequiredLab.displayName,
+      subtitle: labChoiceLabel(selectedRequiredLab).replace(/ - .+$/, ''),
+      image: LAB_IMAGE,
+      imageAlt: `${selectedRequiredLab.displayName} lab review`,
+      price: getLabDisplayPriceCents(selectedRequiredLab) / 100,
+      genClientProductId: selectedRequiredLab.productId,
+      checkoutUrl: getLabCheckoutUrl(selectedRequiredLab),
+      category: 'labs',
+    });
+    dismissHrtLabModal();
+    openCareBasket();
   };
 
   const displaySubtotalCents =
@@ -978,7 +1011,7 @@ export function CheckoutPage() {
               type="button"
               onClick={dismissHrtLabModal}
               className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-cream-300 text-ink-500 transition-colors hover:bg-cream-100 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
-              aria-label="Close HRT lab notice"
+              aria-label="Close hormone therapy lab notice"
             >
               <X size={16} aria-hidden />
             </button>
@@ -986,46 +1019,56 @@ export function CheckoutPage() {
               <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-gold-50 text-gold-700">
                 <FlaskConical size={20} aria-hidden />
               </div>
-              <p className="eyebrow mb-2">Required before HRT purchase completion</p>
+              <p className="eyebrow mb-2">Required before hormone therapy purchase completion</p>
               <h2 id="hrt-lab-modal-title" className="font-serif text-3xl text-ink-900">
-                You’re ordering HRT products.
+                You’re ordering hormone therapy products.
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-ink-600">
-                Please select one of the following labs to complete this purchase. Lab orders,
-                payment, intake, and results stay inside GEN Health.
+                Please select one of the following labs to complete this purchase. The selected
+                lab will be added to your Care Basket so it can move forward with your checkout.
               </p>
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {REQUIRED_HRT_LAB_OPTIONS.map(lab => (
-                <a
-                  key={lab.productId}
-                  href={getLabCheckoutUrl(lab)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group rounded-xl border border-cream-300 bg-cream-50 p-4 transition-colors hover:border-gold-300 hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
-                >
-                  <div className="mb-2 flex items-center justify-between gap-3">
-                    <span className="rounded-full bg-white px-2 py-1 text-[10px] font-medium uppercase tracking-wide text-ink-600">
-                      {lab.collection === 'in-home' ? 'In-home' : 'Walk-in'} · {lab.vendor === 'labcorp' ? 'LabCorp' : 'Quest'}
-                    </span>
-                    <ExternalLink size={14} className="shrink-0 text-ink-400 transition-colors group-hover:text-gold-700" aria-hidden />
+            {selectedRequiredLab && (
+              <div className="mt-5 space-y-4">
+                <label className="block">
+                  <span className="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-ink-400">
+                    Select lab option
+                  </span>
+                  <select
+                    value={selectedRequiredLab.productId}
+                    onChange={event => setSelectedRequiredLabId(event.target.value)}
+                    className="w-full rounded-lg border border-cream-300 bg-white px-4 py-3 text-sm text-ink-900 focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-100"
+                  >
+                    {REQUIRED_HRT_LAB_OPTIONS.map(lab => (
+                      <option key={lab.productId} value={lab.productId}>
+                        {lab.displayName} - {labChoiceLabel(lab)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <div className="rounded-xl border border-gold-300 bg-gold-50 p-4 ring-1 ring-gold-100">
+                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-gold-800">Selected lab</p>
+                  <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <p className="font-medium text-ink-900">{selectedRequiredLab.displayName}</p>
+                      <p className="mt-1 text-sm text-ink-600">{labChoiceLabel(selectedRequiredLab).replace(/ - .+$/, '')}</p>
+                    </div>
+                    <p className="font-serif text-3xl text-ink-900">
+                      {formatLabPrice(getLabDisplayPriceCents(selectedRequiredLab))}
+                    </p>
                   </div>
-                  <p className="font-medium leading-snug text-ink-900">{lab.name}</p>
-                  <p className="mt-2 text-sm text-ink-700">
-                    ${(getLabDisplayPriceCents(lab) / 100).toFixed(0)}
-                  </p>
-                  <p className="mt-1 text-xs text-ink-500">Shipping included</p>
-                </a>
-              ))}
-            </div>
+                </div>
+              </div>
+            )}
 
             <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Link to="/order-labs" className="text-sm font-medium text-gold-700 underline">
                 View all lab options
               </Link>
-              <button type="button" onClick={dismissHrtLabModal} className="btn-outline justify-center">
-                I’ll select labs separately
+              <button type="button" onClick={addSelectedRequiredLabToBasket} className="btn-primary justify-center">
+                Add selected lab to Care Basket
               </button>
             </div>
           </div>
@@ -1111,9 +1154,9 @@ export function CheckoutPage() {
                     <div className="flex items-start gap-3">
                       <FlaskConical size={18} className="mt-0.5 shrink-0" aria-hidden />
                       <div className="min-w-0">
-                        <p className="font-medium text-ink-900">HRT labs required</p>
+                        <p className="font-medium text-ink-900">Hormone therapy labs required</p>
                         <p className="mt-1 text-xs leading-relaxed">
-                          You’re ordering HRT products. Select one of the required lab options to
+                          You’re ordering hormone therapy products. Select one of the required lab options to
                           complete this purchase.
                         </p>
                         <button
@@ -1164,8 +1207,7 @@ export function CheckoutPage() {
                     )}
                     {freeShippingEligible ? (
                       <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                        Orders of $500 or more in eligible ordinary merchandise qualify for free shipping.
-                        Prescription subscription value does not count toward this threshold.
+                        This order has no separate storefront shipping charge.
                       </div>
                     ) : (
                       <div className="space-y-2">
@@ -1186,7 +1228,7 @@ export function CheckoutPage() {
                             ? 'Accessory-only orders use a $10 shipping charge. Choose expedited shipping if preferred.'
                             : hasMembership
                             ? 'Prescription subscription value is excluded from the $500 free-shipping merchandise threshold. Medication ships after required provider review and approval.'
-                            : 'Orders of $500 or more in merchandise are eligible for free shipping. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'}
+                            : 'Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed.'}
                         </p>
                       </div>
                     )}
@@ -1572,15 +1614,14 @@ export function CheckoutPage() {
                       Required lab selection
                     </p>
                     <p className="text-[11px] leading-relaxed text-ink-600">
-                      {HRT_LAB_REQUIRED_COPY}. Choose and purchase your lab directly in GEN Health.
-                      This lab is not automatically added to your My Bare Method checkout total.
+                      {HRT_LAB_REQUIRED_COPY}. Choose from the current lab options and add the selected lab to your Care Basket before continuing.
                     </p>
                     <button
                       type="button"
                       onClick={() => setShowHrtLabModal(true)}
                       className="text-xs font-medium text-gold-800 underline"
                     >
-                      Choose required labs
+                      Choose lab option
                     </button>
                   </div>
                 ) : null}

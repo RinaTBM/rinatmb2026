@@ -1,148 +1,135 @@
+import { ArrowLeft, ArrowRight, ClipboardList, ExternalLink, FlaskConical, HeartPulse, UserRound } from 'lucide-react';
 import { Link } from '@/router';
-import { ArrowLeft, ArrowRight, ClipboardList, ExternalLink, FlaskConical, Package, UserRound } from 'lucide-react';
-import type { Product } from '@/data/products';
+import { GEN_HEALTH_PORTAL_URL } from '@/lib/genHealth/portalLinks';
 import { getProviderCareGenAction } from '@/lib/genHealth/providerCareLinks';
 
-const ICONS = {
-  'initial-provider-consultation': UserRound,
-  'follow-up-appointment': ClipboardList,
-  'laboratory-review': FlaskConical,
-  'lab-kit': Package,
-} as const;
+const followUpAction = getProviderCareGenAction('follow-up-appointment');
 
-/** Luxury concierge layout for /section/provider-care only. */
-export function ProviderCareSection({ products }: { products: Product[] }) {
-  // Preserve catalog order: Initial → Follow-Up → Laboratory Review → Lab Kit
-  const order = [
-    'initial-provider-consultation',
-    'follow-up-appointment',
-    'laboratory-review',
-    'lab-kit',
-  ];
-  const cards = order
-    .map(slug => products.find(p => p.slug === slug))
-    .filter((p): p is Product => Boolean(p));
+const carePaths = [
+  {
+    icon: HeartPulse,
+    title: 'Weight or Hormone Support',
+    description:
+      'Explore the care area that fits what you are looking for. GEN Health will guide intake, payment, assessment, and provider review when those steps are needed.',
+    label: 'Explore Weight Management',
+    to: '/section/weight-management',
+  },
+  {
+    icon: ClipboardList,
+    title: 'Follow-Up or Lab Review',
+    description:
+      'For established clients who need a provider check-in, medication-change review, or help reviewing completed labs.',
+    label: 'Open GEN Health',
+    href: followUpAction?.checkoutUrl ?? GEN_HEALTH_PORTAL_URL,
+  },
+  {
+    icon: FlaskConical,
+    title: 'Lab Options',
+    description:
+      'Choose an in-home or walk-in lab option when your care plan calls for updated labs.',
+    label: 'View Labs',
+    to: '/order-labs',
+  },
+  {
+    icon: UserRound,
+    title: 'Client Portal',
+    description:
+      'Return to your account for order details, support, and an easy way back into GEN Health.',
+    label: 'Sign In',
+    to: '/account/login',
+  },
+];
 
+const whatHappensNext = [
+  'Begin with the care area that feels closest to what you need.',
+  'GEN Health will guide any payment, intake, assessment, or lab steps that apply.',
+  'A licensed provider reviews clinical information before any prescription is approved.',
+  'If a paid prescription request is not approved, eligible amounts are refunded according to the Refund Policy.',
+];
+
+export function ProviderCareSection() {
   return (
     <div className="bg-cream-50 pt-28 md:pt-32">
       <section className="py-16 md:py-24">
         <div className="container-lux">
           <Link
             to="/"
-            className="inline-flex items-center gap-1 text-sm text-ink-500 hover:text-ink-900 mb-10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded-sm"
+            className="mb-10 inline-flex items-center gap-1 rounded-sm text-sm text-ink-500 transition-colors hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
           >
             <ArrowLeft size={14} aria-hidden /> Home
           </Link>
 
-          <div className="max-w-2xl mx-auto text-center mb-14 md:mb-16">
-            <p className="eyebrow mb-4">Care, guided by licensed providers</p>
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-[3.5rem] text-ink-900 mb-5 tracking-tight">
-              Provider Care
-            </h1>
-            <p className="text-base md:text-lg text-ink-500 leading-relaxed">
-              Personalized care, expert guidance, and ongoing support — every step of the way.
-            </p>
+          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+            <div>
+              <p className="eyebrow mb-4">Provider-guided care</p>
+              <h1 className="mb-5 font-serif text-4xl tracking-tight text-ink-900 md:text-5xl lg:text-[3.5rem]">
+                Care Guidance
+              </h1>
+              <p className="max-w-2xl text-base leading-relaxed text-ink-500 md:text-lg">
+                Provider Care is here to make the next step easier to understand. When prescriptions, labs, visits, follow-ups, payment, intake, or clinical review are needed, those steps continue securely through GEN Health.
+              </p>
+            </div>
+
+            <div className="border-y border-cream-300 py-6">
+              <div className="grid gap-4 sm:grid-cols-2">
+                {whatHappensNext.map(item => (
+                  <div key={item} className="flex gap-3">
+                    <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-gold-500" aria-hidden />
+                    <p className="text-sm leading-relaxed text-ink-600">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
-            {cards.map(product => {
-              const Icon = ICONS[product.slug as keyof typeof ICONS] ?? UserRound;
-              const genAction = getProviderCareGenAction(product.slug);
-              const labKitAction = product.slug === 'lab-kit';
-              return (
-                <article
-                  key={product.id}
-                  className="flex flex-col h-full overflow-hidden rounded-[20px] border border-cream-300 bg-white shadow-[0_8px_28px_-12px_rgba(26,26,26,0.12)]"
-                >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream-100">
-                    <img
-                      src={product.image}
-                      alt={product.imageAlt}
-                      width={800}
-                      height={600}
-                      loading="lazy"
-                      className="h-full w-full object-cover object-center"
-                    />
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-6 md:p-7">
-                    <div className="mb-4 flex items-start gap-3">
-                      <span
-                        className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream-300 bg-cream-50 text-gold-600"
-                        aria-hidden
-                      >
-                        <Icon size={18} strokeWidth={1.5} />
-                      </span>
-                      <div className="min-w-0">
-                        <h2 className="font-serif text-2xl text-ink-900 leading-snug">
-                          {product.displayName}
-                        </h2>
-                        <p className="mt-1 text-sm italic text-ink-500">{product.subtitle}</p>
-                      </div>
-                    </div>
-
-                    <p className="text-sm text-ink-600 leading-relaxed mb-6 flex-1">
-                      {product.shortDescription}
-                    </p>
-
-                    <div className="mb-5 rounded-xl border border-cream-200 bg-cream-50 px-4 py-3">
-                      <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-gold-700">
-                        Trigger action
-                      </p>
-                      <p className="mt-1 text-xs leading-relaxed text-ink-600">
-                        {genAction?.triggerLabel ??
-                          'Initial HRT lab collection when required before provider review.'}
-                      </p>
-                      <p className="mt-2 text-xs leading-relaxed text-ink-500">
-                        {genAction?.nextStepLabel ??
-                          'Choose the matching GEN lab option from Order Labs. Lab shipping is included.'}
-                      </p>
-                    </div>
-
-                    <div className="mt-auto flex items-center justify-between gap-3 pt-2 border-t border-cream-200">
-                      <p className="font-serif text-xl text-ink-900">${product.startingPrice}</p>
-                      {genAction?.checkoutUrl ? (
-                        <a
-                          href={genAction.checkoutUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-cream-50 transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
-                        >
-                          Pay in GEN <ExternalLink size={14} aria-hidden />
-                        </a>
-                      ) : (
-                        <Link
-                          to={labKitAction ? '/order-labs' : `/product/${product.slug}`}
-                          className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-cream-50 transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
-                        >
-                          {labKitAction ? 'Order labs' : 'View details'} <ArrowRight size={14} aria-hidden />
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
+          <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {carePaths.map(({ icon: Icon, title, description, label, to, href }) => (
+              <article key={title} className="card-lux flex min-h-[280px] flex-col p-6 md:p-7">
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-cream-200 text-gold-600">
+                  <Icon size={22} strokeWidth={1.6} />
+                </div>
+                <h2 className="font-serif text-2xl leading-snug text-ink-900">{title}</h2>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-500">{description}</p>
+                {href ? (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-6 inline-flex items-center justify-center gap-1.5 rounded-full bg-ink-900 px-5 py-3 text-sm font-medium text-cream-50 transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
+                  >
+                    {label} <ExternalLink size={14} aria-hidden />
+                  </a>
+                ) : (
+                  <Link
+                    to={to}
+                    className="mt-6 inline-flex items-center justify-center gap-1.5 rounded-full bg-ink-900 px-5 py-3 text-sm font-medium text-cream-50 transition-colors hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
+                  >
+                    {label} <ArrowRight size={14} aria-hidden />
+                  </Link>
+                )}
+              </article>
+            ))}
           </div>
 
-          <p className="mt-12 max-w-3xl mx-auto text-center text-xs md:text-sm text-ink-400 leading-relaxed">
-            Provider Care payments, scheduling, intake, and clinical follow-up continue inside GEN Health.
-            Completing payment does not guarantee that a prescription will be issued.
-          </p>
-
-          <div className="mt-10 max-w-xl mx-auto text-center rounded-2xl border border-cream-300 bg-white px-6 py-7">
-            <p className="eyebrow mb-2">Clinical leadership</p>
-            <p className="font-serif text-xl text-ink-900 mb-2">Meet Our Medical Director</p>
-            <p className="text-sm text-ink-500 mb-5 leading-relaxed">
-              Learn about the medical leadership supporting safe, personalized, provider-directed wellness.
-            </p>
+          <div className="mt-12 grid gap-6 rounded-2xl border border-cream-300 bg-white p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+            <div>
+              <p className="eyebrow mb-2">Clinical leadership</p>
+              <h2 className="font-serif text-2xl text-ink-900">Meet Our Medical Director</h2>
+              <p className="mt-2 text-sm leading-relaxed text-ink-500">
+                Learn about the medical leadership supporting safe, personalized, provider-directed wellness.
+              </p>
+            </div>
             <Link
               to="/medical-director"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-gold-700 hover:text-gold-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded-sm"
+              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-gold-300 px-5 py-3 text-sm font-medium text-gold-700 transition-colors hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
             >
-              Meet Dr. Jerry J. Cattelane Jr., D.O. <ArrowRight size={14} aria-hidden />
+              Medical Director <ArrowRight size={14} aria-hidden />
             </Link>
           </div>
+
+          <p className="mx-auto mt-10 max-w-3xl text-center text-xs leading-relaxed text-ink-400 md:text-sm">
+            Payment does not guarantee a prescription. Provider review and approval are required when applicable.
+          </p>
         </div>
       </section>
     </div>

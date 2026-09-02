@@ -13,12 +13,10 @@ import {
   Lock,
 } from 'lucide-react';
 import {
-  concerns,
-  sections,
   getBestSellers,
-  getProductsBySection,
 } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
+import { sendHighLevelLead } from '@/lib/highlevelLeadCapture';
 
 const featureCards = [
   {
@@ -45,11 +43,63 @@ const featureCards = [
 
 const howItWorksSteps = [
   { icon: Activity, title: 'Choose Your Product', description: 'Browse wellness products and services by what matters to you — weight, longevity, hormones, energy, and more.' },
-  { icon: PackageCheck, title: 'Review Your Order', description: 'Confirm your cart, shipping option, and totals before checkout.' },
+  { icon: PackageCheck, title: 'Review Your Order', description: 'Confirm your cart, care steps, and totals before checkout.' },
   { icon: Lock, title: 'Pay Securely by Card', description: 'Complete payment by Credit / Debit Card through our secure hosted checkout. Your order remains unpaid until payment is confirmed.' },
   { icon: Stethoscope, title: 'Intake & Provider Review', description: 'When applicable, complete intake so a licensed provider can review your personalized plan. Payment does not guarantee approval.' },
   { icon: Truck, title: 'Processing After Approval', description: 'Processing and shipping timelines begin after payment is received and any required provider review/approval is complete.' },
   { icon: HeartPulse, title: 'Fulfillment & Shipping', description: 'Approved, paid orders move to fulfillment and ship in plain, temperature-controlled packaging when required.' },
+];
+
+const customerPaths = [
+  {
+    title: 'Weight Management',
+    tagline: 'Provider-guided progress',
+    description: 'Explore provider-guided options for steady, personalized support.',
+    image: 'https://images.pexels.com/photos/8846593/pexels-photo-8846593.jpeg?auto=compress&cs=tinysrgb&w=900',
+    to: '/section/weight-management',
+  },
+  {
+    title: 'Hormone Support',
+    tagline: 'Hormone balance, personal',
+    description: 'Review Women’s Hormone Therapy options, with labs and provider review when needed.',
+    image: 'https://images.pexels.com/photos/8551982/pexels-photo-8551982.jpeg?auto=compress&cs=tinysrgb&w=900',
+    to: '/section/womens-hormone-therapy',
+  },
+  {
+    title: 'Longevity & Energy',
+    tagline: 'Cellular and cognitive support',
+    description: 'Browse options that support cellular health, focus, and everyday vitality.',
+    image: 'https://images.pexels.com/photos/8939921/pexels-photo-8939921.jpeg?auto=compress&cs=tinysrgb&w=900',
+    to: '/section/longevity-cognitive',
+  },
+  {
+    title: 'Recovery & Performance',
+    tagline: 'Recovery and performance support',
+    description: 'Explore provider-guided support for recovery, resilience, and active routines.',
+    image: 'https://images.pexels.com/photos/4970983/pexels-photo-4970983.jpeg?auto=compress&cs=tinysrgb&w=900',
+    to: '/section/recovery-performance',
+  },
+  {
+    title: 'Skin & Hair',
+    tagline: 'Prescription skin and hair',
+    description: 'See prescription skin and hair options available after provider review.',
+    image: 'https://images.pexels.com/photos/6417964/pexels-photo-6417964.jpeg?auto=compress&cs=tinysrgb&w=900',
+    to: '/section/prescription-skin-hair',
+  },
+  {
+    title: 'Lab Options',
+    tagline: 'In-home and walk-in labs',
+    description: 'Choose in-home or walk-in labs through GEN Health when your care path calls for them.',
+    image: 'https://images.pexels.com/photos/6129507/pexels-photo-6129507.jpeg?auto=compress&cs=tinysrgb&w=900',
+    to: '/order-labs',
+  },
+  {
+    title: 'Client Portal',
+    tagline: 'Returning client access',
+    description: 'Return to your account for orders, care steps, and easy access to GEN Health.',
+    image: 'https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg?auto=compress&cs=tinysrgb&w=900',
+    to: '/account/login',
+  },
 ];
 
 
@@ -57,20 +107,33 @@ const howItWorksSteps = [
 const faqs = [
   { q: 'Do I need a subscription to purchase?', a: 'No. Every eligible prescription can be purchased once. Subscribe & Save is optional and takes 15% off the prescription medication only.' },
   { q: 'Is provider approval guaranteed?', a: 'No. Provider review and approval are required for certain products. Payment and order submission do not guarantee approval. If not approved after payment has been received, eligible paid amounts for the unapproved product are refunded in accordance with our Refund Policy.' },
-  { q: 'What renews with a subscription?', a: 'The selected prescription medication and your selected Two-Day ($30) or Next-Day ($50) shipping renew monthly. Provider visits, labs, services, and accessories remain one-time purchases.' },
+  { q: 'What renews with a subscription?', a: 'The subscription item shown at enrollment renews monthly. Provider visits, labs, services, and accessories remain one-time purchases unless a specific offer says otherwise.' },
   { q: 'How do I pay?', a: 'Public checkout uses Credit / Debit Card through our secure hosted card checkout. Applicable taxes are included in displayed prices where required.' },
-  { q: 'How is shipping handled?', a: 'Choose Two-Day ($30) or Next-Day ($50). For Subscribe & Save, that selected shipping charge recurs with each monthly medication renewal. Processing starts only after payment and required provider approval.' },
+  { q: 'How is shipping handled?', a: 'Accessories are the only storefront items with a separate $10 shipping charge. Prescription, provider, and lab workflows show any applicable fulfillment details before payment whenever reasonably possible.' },
 ];
 
 export function HomePage() {
   const bestSellers = getBestSellers().slice(0, 4);
-  const accessories = getProductsBySection('accessories').filter(p => !p.featured).slice(0, 4);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const [parallaxOffset, setParallaxOffset] = useState(0);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [heroImage] = useState(
     '/images/homepage-hero-women-wellness.jpg'
   );
+
+  const handleNewsletterSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!newsletterEmail.includes('@')) return;
+    setNewsletterStatus('sending');
+    const result = await sendHighLevelLead({
+      event: 'newsletter_signup',
+      email: newsletterEmail,
+    });
+    setNewsletterStatus(result.ok ? 'sent' : 'error');
+    if (result.ok) setNewsletterEmail('');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -139,10 +202,10 @@ export function HomePage() {
               </p>
               <div className="hero-cta">
                 <Link
-                  to="/shop-all"
+                  to="/section/weight-management"
                   className="hero-cta-btn"
                 >
-                  Explore Wellness <ArrowRight size={18} />
+                  Explore Weight Management <ArrowRight size={18} />
                 </Link>
               </div>
 
@@ -215,67 +278,41 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ===== SHOP BY CONCERN ===== */}
-      <section className="py-20 md:py-28">
+      {/* ===== CUSTOMER PATHS ===== */}
+      <section className="py-14 md:py-20 bg-cream-50">
         <div className="container-lux">
-          <div className="text-center mb-12">
-            <p className="eyebrow mb-3">Personalized wellness</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-ink-900 mb-4">Shop by Concern</h2>
-            <p className="text-lg text-ink-500 max-w-xl mx-auto">
-              Whatever you're working toward, we've curated the right products, subscription options, and accessories for your journey.
+          <div className="mx-auto mb-8 max-w-2xl text-center">
+            <p className="eyebrow mb-3">A clearer way forward</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink-900 mb-3">Find the support that fits</h2>
+            <p className="text-base md:text-lg text-ink-500 leading-relaxed">
+              Whether you are exploring care, ordering labs, or returning as a client, these links help you move at your own pace.
+            </p>
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-ink-500">
+              Pricing is chosen with access in mind, balancing high-quality care with options that feel more approachable.
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {concerns.map(concern => (
+          <div className="flex flex-wrap justify-center gap-4">
+            {customerPaths.map(({ title, tagline, description, image, to }) => (
               <Link
-                key={concern.id}
-                to={`/concern/${concern.id}`}
-                className="group relative aspect-[4/5] overflow-hidden rounded-2xl"
+                key={title}
+                to={to}
+                className="group relative flex min-h-[300px] w-full overflow-hidden rounded-lg bg-ink-900 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)]"
               >
                 <img
-                  src={concern.image}
-                  alt={concern.label}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  src={image}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/30 to-transparent" />
-                <div className="absolute inset-0 flex flex-col justify-end p-6">
-                  <p className="text-xs text-gold-300 mb-1 tracking-wider uppercase">{concern.tagline}</p>
-                  <h3 className="font-serif text-2xl text-cream-50 mb-2">{concern.label}</h3>
-                  <p className="text-sm text-cream-100/80 mb-3 line-clamp-2">{concern.description}</p>
-                  <span className="text-sm text-gold-300 flex items-center gap-1">
-                    Explore <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/35 to-transparent" />
+                <div className="relative z-10 mt-auto flex min-h-[190px] flex-col justify-end p-6 text-cream-50">
+                  <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.16em] text-gold-200">{tagline}</p>
+                  <h3 className="font-serif text-2xl leading-tight">{title}</h3>
+                  <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-cream-50/85">{description}</p>
+                  <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-gold-200 group-hover:text-gold-100">
+                    View options <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                   </span>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== SHOP BY CATEGORY ===== */}
-      <section className="py-20 md:py-28 bg-cream-100/50">
-        <div className="container-lux">
-          <div className="text-center mb-12">
-            <p className="eyebrow mb-3">Know what you need?</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-ink-900 mb-4">Shop by Category</h2>
-            <p className="text-lg text-ink-500 max-w-xl mx-auto">
-              Browse our catalog by product type — from weight management to longevity, recovery, and accessories.
-            </p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {sections.map(s => (
-              <Link
-                key={s.id}
-                to={`/section/${s.id}`}
-                className="group card-lux p-6 hover:shadow-lg hover:-translate-y-1 transition-all"
-              >
-                <p className="eyebrow text-gold-600 mb-2">{s.tagline}</p>
-                <h3 className="font-serif text-2xl text-ink-900 mb-2">{s.label}</h3>
-                <p className="text-sm text-ink-500 mb-4 line-clamp-2">{s.description}</p>
-                <span className="text-sm text-gold-600 flex items-center gap-1">
-                  Browse {s.label} <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                </span>
               </Link>
             ))}
           </div>
@@ -303,66 +340,8 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ===== PURCHASING OPTIONS ===== */}
-      <section className="py-20 md:py-28 bg-ink-900 text-cream-50">
-        <div className="container-lux">
-          <div className="text-center mb-12">
-            <p className="eyebrow text-gold-300 mb-3">Ways to shop</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-cream-50 mb-4">Subscribe &amp; Save 15%</h2>
-            <p className="text-lg text-cream-100/70 max-w-2xl mx-auto">
-              Choose monthly renewal on any eligible prescription and keep your selected shipping method with every order.
-            </p>
-          </div>
-          <div className="grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
-            <div className="relative rounded-2xl border border-gold-400/40 bg-ink-800/50 p-8">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold-400 px-4 py-1 text-xs font-semibold text-ink-900 whitespace-nowrap">
-                BEST VALUE
-              </span>
-              <h3 className="font-serif text-2xl text-cream-50 mb-2">Prescription Subscription</h3>
-              <p className="text-sm text-gold-300 mb-4 font-medium">Save 15% on medication</p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Save 15% on the selected prescription',
-                  'Monthly medication renewal',
-                  '$30 or $50 shipping renews with every order',
-                  'Visits, labs, services, and accessories stay one-time',
-                  'Provider-guided care',
-                ].map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-cream-100/80">
-                    <Check size={16} className="flex-shrink-0 mt-0.5 text-gold-400" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link to="/subscriptions" className="btn-primary w-full">Choose a Prescription <ArrowRight size={16} /></Link>
-            </div>
-
-            <div className="rounded-2xl border border-cream-100/20 bg-ink-800/30 p-8">
-              <h3 className="font-serif text-2xl text-cream-50 mb-2">One-Time Purchase</h3>
-              <p className="text-sm text-cream-100/60 mb-4">Buy once · standard pricing</p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'No recurring commitment',
-                  'Order or reorder anytime',
-                  'Standard pricing',
-                  'Provider approval when applicable',
-                ].map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-cream-100/80">
-                    <Check size={16} className="flex-shrink-0 mt-0.5 text-cream-100/60" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link to="/shop-all" className="btn-outline w-full border-cream-100/30 text-cream-50 hover:bg-cream-50 hover:text-ink-900">
-                Buy Once <ArrowRight size={16} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ===== HOW IT WORKS ===== */}
-      <section className="py-20 md:py-28">
+      <section className="py-20 md:py-28 bg-cream-100/50">
         <div className="container-lux">
           <div className="text-center mb-12">
             <p className="eyebrow mb-3">Simple, guided, personal</p>
@@ -379,27 +358,6 @@ export function HomePage() {
                 <p className="text-sm text-ink-500 leading-relaxed">{description}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== ACCESSORIES ===== */}
-      <section className="py-20 md:py-28 bg-cream-100/50">
-        <div className="container-lux">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <p className="eyebrow mb-3">Complete your kit</p>
-              <h2 className="font-serif text-4xl md:text-5xl text-ink-900">Accessories</h2>
-            </div>
-            <Link to="/section/accessories" className="hidden sm:flex items-center gap-1 text-sm text-gold-600 hover:text-gold-700">
-              View all <ArrowRight size={14} />
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {accessories.map(p => <ProductCard key={p.id} product={p} />)}
-          </div>
-          <div className="mt-8 text-center sm:hidden">
-            <Link to="/section/accessories" className="btn-outline">View all accessories</Link>
           </div>
         </div>
       </section>
@@ -470,17 +428,28 @@ export function HomePage() {
           <p className="text-lg text-cream-100/70 mb-8">
             Get wellness tips, exclusive offers, and early access to new products — delivered with discretion.
           </p>
-          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={(e) => e.preventDefault()}>
+          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={handleNewsletterSubmit}>
             <input
               type="email"
               placeholder="Your email address"
+              value={newsletterEmail}
+              onChange={event => {
+                setNewsletterEmail(event.target.value);
+                if (newsletterStatus !== 'idle') setNewsletterStatus('idle');
+              }}
               className="flex-1 rounded-full border border-cream-100/20 bg-ink-800/50 px-6 py-3.5 text-sm text-cream-50 placeholder-cream-100/40 focus:border-gold-400 focus:outline-none"
             />
-            <button type="submit" className="btn-primary whitespace-nowrap">
-              Subscribe <ArrowRight size={16} />
+            <button type="submit" className="btn-primary whitespace-nowrap" disabled={newsletterStatus === 'sending'}>
+              {newsletterStatus === 'sending' ? 'Joining...' : 'Subscribe'} <ArrowRight size={16} />
             </button>
           </form>
-          <p className="mt-4 text-xs text-cream-100/40">We respect your privacy. Unsubscribe anytime.</p>
+          {newsletterStatus === 'sent' ? (
+            <p className="mt-4 text-xs text-gold-200">You are on the list.</p>
+          ) : newsletterStatus === 'error' ? (
+            <p className="mt-4 text-xs text-red-200">We could not add you right now. Please try again soon.</p>
+          ) : (
+            <p className="mt-4 text-xs text-cream-100/40">We respect your privacy. Unsubscribe anytime.</p>
+          )}
         </div>
       </section>
     </div>

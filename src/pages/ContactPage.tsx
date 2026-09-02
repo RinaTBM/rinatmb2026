@@ -1,12 +1,29 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, MessageCircle, Send, Check } from 'lucide-react';
+import { sendHighLevelLead } from '@/lib/highlevelLeadCapture';
 
 export function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+    setError('');
+    const result = await sendHighLevelLead({
+      event: 'contact_form',
+      name: form.name,
+      email: form.email,
+      subject: form.subject,
+      message: form.message,
+    });
+    setSubmitting(false);
+    if (!result.ok) {
+      setError('We could not send your message right now. Please email us directly at info@thebaremethodmn.com.');
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -134,8 +151,13 @@ export function ContactPage() {
                       placeholder="How can we help?"
                     />
                   </div>
-                  <button type="submit" className="btn-primary w-full">
-                    Send Message <Send size={16} />
+                  {error && (
+                    <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                      {error}
+                    </p>
+                  )}
+                  <button type="submit" className="btn-primary w-full" disabled={submitting}>
+                    {submitting ? 'Sending...' : 'Send Message'} <Send size={16} />
                   </button>
                 </form>
               )}

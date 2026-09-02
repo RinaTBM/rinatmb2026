@@ -57,10 +57,10 @@ export const MEMBERSHIP_MINIMUM_CANCEL_BLOCK_MESSAGE =
   'Your membership has a 3-month minimum commitment. Cancellation will be available after your initial term.';
 
 export const MEMBERSHIP_CARD_RECURRING_DISCLOSURE =
-  'Your card will be charged monthly while your membership is active, including your selected shipping. A 3-month minimum commitment applies.';
+  'Your card will be charged monthly while your membership is active. A 3-month minimum commitment applies.';
 
 export const MEMBERSHIP_CARD_SHIPPING_NOTE =
-  'Your selected shipping method is included with each monthly membership renewal (+$30 Two-Day or +$50 Next-Day). Shipping is not included in the base membership price. Medication fulfillment remains subject to required provider review and approval.';
+  'Your recurring membership amount is shown before enrollment. Medication fulfillment remains subject to required provider review and approval.';
 
 /** Allowed enrollment shipping amounts (included in combo recurring price). */
 export const MEMBERSHIP_ENROLLMENT_SHIPPING_CENTS = [3000, 5000] as const;
@@ -189,7 +189,7 @@ export function evaluateMembershipEnrollmentShipping(shippingCents: number):
       ok: false,
       reason: 'missing_shipping',
       message:
-        'Select Two-Day ($30) or Next-Day ($50) shipping for membership enrollment. Your selected shipping method is included with each monthly membership renewal.',
+        'Select the available membership fulfillment option before enrollment. Your recurring amount is shown before payment.',
     };
   }
   const sku = membershipEnrollmentShippingSkuForCents(c);
@@ -199,14 +199,14 @@ export function evaluateMembershipEnrollmentShipping(shippingCents: number):
       ok: false,
       reason: 'invalid_shipping',
       message:
-        'Membership enrollment supports only Two-Day ($30) or Next-Day ($50) shipping.',
+        'Membership enrollment supports only the available fulfillment options shown at checkout.',
     };
   }
   return { ok: true, shippingCents: c, shippingSku: sku, selectedShippingMethod: method };
 }
 
 export const MEMBERSHIP_TERMS_ACCEPTANCE_LABEL =
-  'I agree to the Membership & Cancellation Terms, including the 3-month minimum commitment, monthly card billing, and selected recurring shipping.';
+  'I agree to the Membership & Cancellation Terms, including the 3-month minimum commitment and monthly card billing.';
 
 /** Official Tagada subscription webhook event types (docs). */
 export const TAGADA_SUBSCRIPTION_WEBHOOK_EVENTS = [

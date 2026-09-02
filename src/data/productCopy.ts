@@ -373,7 +373,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     about: [
       'Estradiol is a form of estrogen your body already recognizes. A transdermal patch is designed to release hormone across the wear period your provider recommends.',
       'Clinicians may discuss estrogen therapy when evaluating menopause-related changes or other hormone concerns. Whether a patch is right for you depends on your history, goals, and — when needed — labs. Hormone therapy is not one-size-fits-all.',
-      'Initial HRT orders require the Required HRT Lab Package ($260 total: Lab Kit $200 with Lab Kit shipping included, plus Lab Review $60). Medication shipping remains separate where applicable.',
+      'Initial hormone therapy orders may require updated labs before a provider can make treatment decisions. When labs are needed, checkout prompts you to choose from the current lab options.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support estrogen-related goals defined with your provider',
@@ -391,7 +391,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Easy to discuss alongside progesterone or other complementary options',
     ],
     whatToExpect:
-      'Select a patch strength and pack size, then complete intake for provider review. Initial HRT orders include the Required HRT Lab Package once when applicable. If approved, apply only as directed — including site rotation and change timing. Do not share patches or adjust strength without guidance.',
+      'Select a patch strength and pack size, then complete intake for provider review. If hormone therapy labs are required, choose the lab option that fits you in GEN Health before purchase completion. If approved, apply only as directed — including site rotation and change timing. Do not share patches or adjust strength without guidance.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Hormone therapy is not appropriate for everyone.',
@@ -412,7 +412,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     about: [
       'Progesterone is a hormone involved in the menstrual cycle and is frequently part of menopause and hormone-therapy conversations. Capsules make dosing straightforward once a clinician has chosen a plan.',
       'Your provider may recommend progesterone for specific clinical reasons. Capsule strength and timing are individualized — never copy someone else’s regimen.',
-      'Initial HRT orders require the Required HRT Lab Package ($260 total: Lab Kit $200 with Lab Kit shipping included, plus Lab Review $60). Medication shipping remains separate where applicable.',
+      'Initial hormone therapy orders may require updated labs before a provider can make treatment decisions. When labs are needed, checkout prompts you to choose from the current lab options.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support hormone-therapy goals defined with your clinician',
@@ -430,7 +430,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Easy to coordinate with estradiol or other therapies when indicated',
     ],
     whatToExpect:
-      'Choose a capsule strength, complete intake, and await provider review. Initial HRT orders include the Required HRT Lab Package once when applicable. Take only as directed on your prescription label if approved. Report new or concerning symptoms to your care team promptly.',
+      'Choose a capsule strength, complete intake, and await provider review. If hormone therapy labs are required, choose the lab option that fits you in GEN Health before purchase completion. Take only as directed on your prescription label if approved. Report new or concerning symptoms to your care team promptly.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Distinguish from estradiol and testosterone.',
@@ -451,7 +451,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
     about: [
       'Testosterone is a hormone involved in energy, libido, muscle, and other body functions. While it is often associated with men’s health, clinicians may also discuss carefully dosed topical testosterone in select women’s care plans.',
       'Because hormones affect many systems, this option requires individualized review. It is not a casual wellness cream for unsupervised use.',
-      'Initial HRT orders require the Required HRT Lab Package ($260 total: Lab Kit $200 with Lab Kit shipping included, plus Lab Review $60). Medication shipping remains separate where applicable.',
+      'Initial hormone therapy orders may require updated labs before a provider can make treatment decisions. When labs are needed, checkout prompts you to choose from the current lab options.',
     ].join('\n\n'),
     potentialBenefits: [
       'May support hormone-related goals identified with your provider',
@@ -468,7 +468,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Pairs with ongoing provider follow-up rather than one-size-fits-all use',
     ],
     whatToExpect:
-      'Initial HRT orders include the Required HRT Lab Package once when applicable. After approval, apply only to areas and schedules your provider specifies. Wash hands after use and follow any transfer-prevention guidance included with your prescription.',
+      'If hormone therapy labs are required, choose the lab option that fits you in GEN Health before purchase completion. After approval, apply only to areas and schedules your provider specifies. Wash hands after use and follow any transfer-prevention guidance included with your prescription.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Avoid implying testosterone cream is routine for all women.',
@@ -979,35 +979,35 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'lab-kit': {
-    benefitHeadline: 'Specimen Collection Kit for Initial Hormone Therapy',
+    benefitHeadline: 'Choose Labs for Hormone Therapy Review',
     shortDescription:
-      'The Lab Kit is the required specimen collection kit for initial Women’s Hormone Therapy orders. Lab Kit shipping is included in the $200 kit price. This is not a medication.',
+      'When labs are required for Women’s Hormone Therapy, choose the in-home or walk-in GEN Health lab option that fits you. This is not a medication.',
     highlights: [
-      'Required for Initial HRT',
-      'Lab Kit Shipping Included',
+      'Hormone Therapy Lab Choices',
+      'Lab Shipping Included',
       'Not a Medication',
-      'Pairs with Laboratory Review',
+      'Completed in GEN Health',
     ],
     about: [
-      'Initial Women’s Hormone Therapy orders include the Required HRT Lab Package when applicable: Lab Kit ($200) plus Laboratory Review ($60) for $260 total, added once per applicable initial order.',
-      'Lab Kit shipping is included in the $200 Lab Kit price. That does not include medication shipping, which remains separate where applicable. Established HRT customers with approved therapy history are not charged the package again under current history rules.',
+      'When Women’s Hormone Therapy labs are required, customers choose from the available GEN Health lab options.',
+      'Lab shipping is included for lab orders. Accessories are the only storefront items with a separate $10 shipping charge.',
     ].join('\n\n'),
     potentialBenefits: [
-      'Removes guesswork about which labs are needed to start',
-      'Keeps initial HRT checkout complete in one step',
-      'Clear separation from medication pricing and medication shipping',
+      'Lets customers choose the lab option that fits their needs',
+      'Keeps lab orders, intake, payment, and results inside GEN Health',
+      'Clear separation from medication pricing and accessory shipping',
     ],
     howItWorks:
-      'When an applicable HRT product enters checkout for a new HRT customer, Lab Kit ($200) and Laboratory Review ($60) are added once as the Required HRT Lab Package.',
+      'When an applicable hormone therapy product needs labs, checkout opens a lab-choice menu. Customers choose and complete the matching lab order in GEN Health.',
     whyPeopleChooseIt: [
-      'Required package for first HRT order',
-      'Transparent $260 combined pricing',
-      'Lab Kit shipping included',
+      'Choice of in-home or walk-in lab options',
+      'Transparent GEN Health lab pricing',
+      'Lab shipping included',
     ],
     whatToExpect:
-      'You receive the specimen collection kit with Lab Kit shipping included. Laboratory Review is a separate provider interpretation service — not a medication. Medication shipping is separate where applicable.',
+      'Choose the appropriate lab option in GEN Health. Lab orders, payment, intake, and results stay there, and lab shipping is included where applicable.',
     importantInformation:
-      'Lab Kit and Laboratory Review are provider-care services, not medications. They are not discounted by OGTBM.',
+      'Lab services are provider-care services, not medications. They are not discounted by storefront promo codes.',
   },
 
   // ===== ACCESSORIES =====
@@ -1340,7 +1340,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'You enroll in the membership PROGRAM, select a requested dose, and choose Two-Day or Next-Day shipping. Your card is charged monthly for the $125 membership plus selected shipping ($155 or $175/month). A one-time Initial Provider Visit ($75) may apply when required. After provider review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU. Payment does not guarantee a prescription.',
+      'You enroll in the membership PROGRAM and select requested care details. Your card is charged monthly for the recurring amount shown before enrollment. A one-time Initial Provider Visit ($75) may apply when required. After provider review, approved medication is fulfilled using the corresponding retail Semaglutide vial SKU. Payment does not guarantee a prescription.',
     whyPeopleChooseIt: [
       'Prefer flat monthly budgeting over paying per retail vial strength',
       'Want ongoing provider-guided Semaglutide care with a clear program maximum',
@@ -1348,7 +1348,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
       'Like clear due-today versus monthly renewal totals at checkout',
     ],
     whatToExpect:
-      'Initial term is 3 months, then month to month. Complete secure card checkout, complete intake, and await provider review. Requested dose is not automatically the approved dose. Selected shipping renews monthly with your card. Payment does not guarantee a prescription.',
+      'Initial term is 3 months, then month to month. Complete secure card checkout, complete intake, and await provider review. Requested dose is not automatically the approved dose. Payment does not guarantee a prescription.',
     importantInformation:
       'Membership enrollment and payment do not guarantee a prescription. Availability depends on provider judgment, pharmacy fulfillment, and applicable requirements.',
     benefits: [
@@ -1390,7 +1390,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
       'Priority access to new wellness products',
     ],
     howItWorks:
-      'Enrollment purchases the membership PROGRAM. You select a requested formulation and shipping. Your card is charged monthly for the $179 membership plus selected shipping. A one-time Initial Provider Visit ($75) may apply when required. Requested formulation informs intake; approved treatment drives fulfillment. Payment does not guarantee a prescription.',
+      'Enrollment purchases the membership PROGRAM. You select requested care details. Your card is charged monthly for the recurring amount shown before enrollment. A one-time Initial Provider Visit ($75) may apply when required. Requested formulation informs intake; approved treatment drives fulfillment. Payment does not guarantee a prescription.',
     whyPeopleChooseIt: [
       'Want Tirzepatide’s dual-pathway option with flat monthly budgeting',
       'Prefer a clear included maximum through 15mg',
@@ -1398,7 +1398,7 @@ export const MEMBERSHIP_COPY: Record<string, MembershipCopy> = {
       'Prefer secure monthly card billing with clear shipping renewal amounts',
     ],
     whatToExpect:
-      'Initial term is 3 months, then month to month. Complete secure card checkout, complete intake, and complete provider review. Selected shipping renews monthly with your card. Payment does not guarantee a prescription.',
+      'Initial term is 3 months, then month to month. Complete secure card checkout, complete intake, and complete provider review. Payment does not guarantee a prescription.',
     importantInformation:
       'Payment and enrollment do not guarantee a prescription. Tirzepatide Membership is not interchangeable with Semaglutide Membership. 30mg is not included.',
     benefits: [

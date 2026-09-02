@@ -33,6 +33,8 @@ import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { TermsPage } from '@/pages/TermsPage';
+import { LabDetailPage, OrderLabsPage } from '@/pages/OrderLabsPage';
+import { labOptions } from '@/data/labs';
 import { visibleProducts as products, sections, concerns, goals, type Product } from '@/data/products';
 
 const BASE_URL = 'https://mybaremethod.com';
@@ -153,6 +155,12 @@ function buildRoutes() {
       description: 'Browse wellness products by your health and wellness goals.',
     },
     {
+      path: '/order-labs',
+      component: createElement(OrderLabsPage),
+      title: 'Order Labs — My Bare Method',
+      description: 'Choose in-home and walk-in lab options for provider-guided care.',
+    },
+    {
       path: '/refund-policy',
       component: createElement(RefundPolicyPage),
       title: 'Refund & Replacement Policy — My Bare Method',
@@ -230,6 +238,25 @@ function buildRoutes() {
       title: `${p.displayName} — My Bare Method`,
       description: p.shortDescription,
       jsonLd: buildProductJsonLd(p),
+    });
+  }
+
+  const labSlugs = new Set(
+    labOptions.map(lab =>
+      lab.displayName
+        .toLowerCase()
+        .replace(/&/g, 'and')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, ''),
+    ),
+  );
+
+  for (const slug of labSlugs) {
+    routes.push({
+      path: `/order-labs/${slug}`,
+      component: createElement(LabDetailPage, { slug }),
+      title: 'Lab Options — My Bare Method',
+      description: 'Select your collection style and lab network before ordering labs.',
     });
   }
 

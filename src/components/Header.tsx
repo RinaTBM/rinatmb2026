@@ -85,7 +85,7 @@ export function Header() {
               />
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-7">
+            <nav className="hidden lg:flex items-center gap-5">
               <div
                 className="relative"
                 onMouseEnter={() => setShopOpen(true)}
@@ -140,17 +140,17 @@ export function Header() {
                 )}
               </div>
 
-              <Link to="/section/provider-care" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
-                Provider Care
+              <Link to="/section/weight-management" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                Weight Management
+              </Link>
+              <Link to="/section/womens-hormone-therapy" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                Hormone Support
               </Link>
               <Link to="/order-labs" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
-                Order Labs
+                Lab Options
               </Link>
-              <Link to="/section/accessories" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
-                Accessories
-              </Link>
-              <Link to="/contact" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
-                Contact
+              <Link to={accountHref} className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                Client Portal
               </Link>
               <Link to="/faq" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 FAQs
@@ -322,25 +322,32 @@ export function Header() {
               </div>
 
               <Link
-                to="/section/provider-care"
+                to="/section/weight-management"
                 onClick={closeAll}
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
               >
-                Provider Care
+                Weight Management
+              </Link>
+              <Link
+                to="/section/womens-hormone-therapy"
+                onClick={closeAll}
+                className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
+              >
+                Hormone Support
               </Link>
               <Link
                 to="/order-labs"
                 onClick={closeAll}
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
               >
-                Order Labs
+                Lab Options
               </Link>
               <Link
-                to="/section/accessories"
+                to={accountHref}
                 onClick={closeAll}
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
               >
-                Accessories
+                Client Portal
               </Link>
               <Link
                 to="/contact"
@@ -373,8 +380,11 @@ export function Header() {
                 <Link to="/track" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
                   Track Order
                 </Link>
-                <Link to={accountHref} onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
-                  Account
+                <Link to="/section/provider-care" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
+                  Provider Care
+                </Link>
+                <Link to="/section/accessories" onClick={closeAll} className="block rounded-lg px-4 py-3 text-sm text-ink-600 hover:bg-cream-200 transition-colors">
+                  Accessories
                 </Link>
                 <a
                   href={GEN_HEALTH_PORTAL_URL}

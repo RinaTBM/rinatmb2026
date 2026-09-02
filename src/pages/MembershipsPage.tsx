@@ -10,9 +10,9 @@ import { glp1FamilyIdFromSlug } from '@/lib/glp1/patientRequestedDose';
 import { MEMBERSHIP_ENROLLMENT_ENABLED } from '@/lib/commerce/controlledLaunch';
 
 const howItWorks = [
-  { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($125/month) or Tirzepatide ($179/month) membership, your requested dose, and shipping (Two-Day or Next-Day).' },
-  { icon: PackageCheck, title: 'Review due today vs monthly', description: 'Confirm membership, selected shipping, and any one-time Initial Provider Visit ($75 when required). Due-today totals are not the ongoing monthly rate.' },
-  { icon: Lock, title: 'Pay by Credit / Debit Card', description: 'Complete enrollment through secure hosted card checkout. Your card is charged monthly for membership plus selected shipping while active.' },
+  { icon: ClipboardList, title: 'Choose your program', description: 'Select the Semaglutide ($125/month) or Tirzepatide ($179/month) membership and your requested care details.' },
+  { icon: PackageCheck, title: 'Review due today vs monthly', description: 'Confirm membership and any one-time Initial Provider Visit ($75 when required). Due-today totals are not the ongoing monthly rate.' },
+  { icon: Lock, title: 'Pay by Credit / Debit Card', description: 'Complete enrollment through secure hosted card checkout. Your card is charged monthly for the recurring amount shown while active.' },
   { icon: ClipboardList, title: 'Complete intake', description: 'After payment is confirmed, complete a secure medical intake so a licensed provider can review your information.' },
   { icon: Stethoscope, title: 'Provider review', description: 'A licensed provider reviews your eligibility and determines the appropriate formulation, strength, and treatment plan. Payment does not guarantee approval.' },
   { icon: ShieldCheck, title: 'Fulfillment when approved', description: 'When payment is confirmed and treatment is approved, your prescription is sent to the dispensing pharmacy and fulfilled according to the existing workflow.' },
@@ -26,8 +26,8 @@ const faqs = [
   { q: 'Can I switch programs?', a: 'Yes, when clinically appropriate. Switching programs requires enrollment at the current price for the new membership.' },
   { q: 'Is the highest Tirzepatide formulation included?', a: 'The $179 membership includes eligible provider-selected formulations through 15mg.' },
   { q: 'Are labs included?', a: 'Laboratory testing is not included unless the current workflow specifically states otherwise. A provider may request labs before or during treatment.' },
-  { q: 'Is shipping included?', a: 'Two-Day Shipping ($30) and Next-Day Shipping ($50) are selected at checkout and included with each monthly membership renewal. Medication fulfillment remains subject to required provider review and approval. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Certain medications may require temperature-controlled packaging.' },
-  { q: 'How do I pay for my membership?', a: 'Join with Credit / Debit Card. Your card is charged monthly while your membership stays active. A 3-month minimum commitment applies. Your selected shipping method is included with each monthly membership renewal.' },
+  { q: 'How is fulfillment handled?', a: 'Medication fulfillment remains subject to required provider review and approval. Processing and shipping timelines begin only after payment has been received and verified and any required provider review/approval has been completed. Certain medications may require temperature-controlled packaging.' },
+  { q: 'How do I pay for my membership?', a: 'Join with Credit / Debit Card. Your card is charged monthly while your membership stays active. A 3-month minimum commitment applies.' },
   { q: 'Can I use Cherry financing with a membership?', a: 'Cherry financing availability and terms are determined by Cherry. Recurring membership billing remains subject to My Bare Method membership terms and is charged to your card monthly while active.' },
 ];
 
@@ -210,7 +210,7 @@ export function MembershipsPage() {
                 <p className="mb-2 flex items-center gap-1.5 text-xs text-gold-700">
                   <ShieldCheck size={14} /> Licensed-provider review required · enrollment does not guarantee a prescription
                 </p>
-                <p className="mb-4 text-xs text-ink-500">Selected shipping renews monthly with your card charge (+$30 Two-Day or +$50 Next-Day). Initial term: 3 months, then month to month.</p>
+                <p className="mb-4 text-xs text-ink-500">Your recurring amount is shown before enrollment. Initial term: 3 months, then month to month.</p>
 
                 <div className="mb-4 space-y-4 rounded-xl border border-cream-300 bg-cream-50/80 p-3">
                   {glp1FamilyIdFromSlug(m.slug) && (

@@ -118,7 +118,7 @@ export function ConsumerDataPage() {
           title: 'Cookies, Analytics, and Advertising',
           body: (
             <>
-              <p>Do not configure advertising pixels, session-replay tools, or analytics to receive:</p>
+              <p>We do not intentionally configure advertising pixels, session-replay tools, or analytics to receive:</p>
               <LegalBulletList items={[
                 'Selected medication names',
                 'Peptide interests',
@@ -128,8 +128,8 @@ export function ConsumerDataPage() {
                 'Medical conditions',
                 'Sensitive form contents',
               ]} />
-              <p>Use only necessary or appropriately configured privacy-conscious analytics.</p>
-              <p>Do not place sensitive health interests in URLs, page titles transmitted to advertisers, analytics event labels, email subject lines, or text-message previews.</p>
+              <p>We aim to use only necessary or appropriately configured privacy-conscious analytics.</p>
+              <p>We also work to avoid placing sensitive health interests in URLs, page titles transmitted to advertisers, analytics event labels, email subject lines, or text-message previews.</p>
             </>
           ),
         },
@@ -216,7 +216,7 @@ export function ConsumerDataPage() {
           body: (
             <>
               <p>The public Wellness Request service is intended for adults unless a specific service expressly permits participation by a minor with appropriate parent or legal-guardian involvement.</p>
-              <p>Do not knowingly collect consumer health data from children through the public request process without legally required authorization.</p>
+              <p>We do not knowingly collect consumer health data from children through the public request process without legally required authorization.</p>
             </>
           ),
         },
@@ -226,7 +226,7 @@ export function ConsumerDataPage() {
           body: (
             <>
               <p>We may update this notice to reflect changes in services, technologies, legal requirements, or data practices.</p>
-              <p>Post the revised effective date at the top of the page. Obtain additional consent when legally required for material changes.</p>
+              <p>We post the revised effective date at the top of the page and obtain additional consent when legally required for material changes.</p>
             </>
           ),
         },

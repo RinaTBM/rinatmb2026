@@ -1,6 +1,6 @@
 /**
- * Server-side required provider-visit + HRT lab package injection / dedupe helpers.
- * Client cannot omit, remove, or reprice required visit / lab package lines.
+ * Server-side required provider-visit helpers.
+ * Client cannot omit, remove, or reprice required visit lines.
  * OGTBM discount is computed server-side when promo code is present.
  */
 
@@ -16,11 +16,7 @@ import {
   type ProviderRequirementKind,
 } from './providerVisits.ts';
 import { isProviderGuidedPrescriptionLine } from './therapyFamilies.ts';
-import {
-  buildHrtLabPackageLines,
-  isLabPackageLine,
-  shouldAutoAddHrtLabPackage,
-} from './hrtLabPackage.ts';
+import { isLabPackageLine } from './hrtLabPackage.ts';
 import { applyMbmtest90Promo, isMbmtest90PromoCode } from './mbmtest90Promo.ts';
 import { applyGenPromo, isGenPromoCode } from './genPromo.ts';
 const PROVIDER_CARE_FIXED_CENTS: Record<string, number> = {
@@ -168,8 +164,8 @@ export interface AuthoritativeOrderBuildResult {
 }
 
 /**
- * Strip client visit/lab lines, evaluate requirement, inject authoritative visit + HRT lab
- * package (once), apply OGTBM when code present, recalculate totals.
+ * Strip client visit/lab lines, evaluate requirement, inject authoritative visit,
+ * apply OGTBM when code present, recalculate totals.
  */
 export function buildAuthoritativeOrderLines(input: {
   customerUserId: string | null | undefined;
@@ -216,18 +212,8 @@ export function buildAuthoritativeOrderLines(input: {
   let items: InjectedOrderLine[] = visitLine ? [...baseLines, visitLine] : [...baseLines];
 
   let hrtLabPackageAdded = false;
-  if (
-    shouldAutoAddHrtLabPackage({
-      items,
-      approvedTherapyHistory: input.approvedTherapyHistory,
-    })
-  ) {
-    const labLines = buildHrtLabPackageLines({ items });
-    if (labLines.length) {
-      items = [...items, ...labLines];
-      hrtLabPackageAdded = true;
-    }
-  }
+  // Fixed hormone lab-package auto-add is retired. The checkout now prompts customers
+  // to choose from current lab options instead of adding the old $200/$260 package.
 
   const subtotalCents = items.reduce(
     (sum, i) => sum + i.unitAmountCents * Math.max(1, i.quantity),

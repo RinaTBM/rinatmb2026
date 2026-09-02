@@ -32,9 +32,9 @@ export function SectionPage({ sectionId }: { sectionId: string; subFilter?: stri
     [allProducts, filters],
   );
 
-  // Dedicated luxury concierge layout — Provider Care only (unchanged).
+  // Dedicated guide layout — Provider Care only.
   if (section?.id === 'provider-care') {
-    return <ProviderCareSection products={allProducts} />;
+    return <ProviderCareSection />;
   }
 
   if (!section) {
@@ -116,15 +116,6 @@ export function SectionPage({ sectionId }: { sectionId: string; subFilter?: stri
           <p className="text-lg text-ink-500 max-w-2xl leading-relaxed">{section.description}</p>
         </div>
       </section>
-
-      <div className="container-lux">
-        <div className="rounded-xl px-5 py-4 mb-10 text-sm bg-gold-50 text-gold-800">
-          <div className="flex items-start gap-2">
-            <ShieldCheck size={18} className="flex-shrink-0 mt-0.5" />
-            <p>{section.disclosure}</p>
-          </div>
-        </div>
-      </div>
 
       <section className="pb-24 md:pb-32">
         <div className="container-lux">

@@ -45,7 +45,7 @@ export function AccountProfilePage() {
       <div className="max-w-xl">
         <h2 className="font-serif text-2xl md:text-3xl text-ink-900 mb-3">Profile</h2>
         <p className="text-ink-500 mb-8">
-          Update your basic account information. Medical and subscription details are not managed here.
+          Update your basic account information. Prescription requests, renewals, follow-ups, and lab review steps continue in GEN Health.
         </p>
 
         <form

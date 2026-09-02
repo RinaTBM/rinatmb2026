@@ -98,9 +98,9 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                Eligible prescription products are available through Subscribe &amp; Save. Subscriptions are billed
-                monthly to your card while active. The selected $30 or $50 shipping method is included in each
-                monthly charge.
+                Eligible prescription products may be available through Subscribe &amp; Save. Subscriptions are billed
+                monthly to your card while active. The recurring amount and any applicable fulfillment details are
+                shown before enrollment whenever reasonably possible.
               </p>
               <LegalBulletList items={[
                 'You may submit a cancellation request from your account or by contacting support. Requests do not reverse a payment already received or stop an order already in provider, pharmacy, or fulfillment processing.',
@@ -117,8 +117,8 @@ export function TermsPage() {
             <>
               <p>
                 Eligible prescription subscriptions receive 15% off the authoritative one-time medication price.
-                Selected shipping recurs monthly (Two-Day +$30/month or Next-Day +$50/month). Provider visits,
-                labs, services, and accessories are separate one-time purchases.
+                Provider visits, labs, services, and accessories are separate one-time purchases unless a specific
+                offer says otherwise.
               </p>
               <p>
                 Subscriptions continue month-to-month until a valid cancellation becomes effective. Medication
@@ -137,9 +137,10 @@ export function TermsPage() {
             <>
               <p>
                 Processing and shipping timelines begin only after payment has been received and any required provider
-                review/approval has been completed. For eligible one-time orders, Two-Day Shipping is $30 and Next-Day
-                Shipping is $50 (fixed fees). Carrier transit times vary by destination; delivery dates are not
-                guaranteed. We are not liable for carrier delays beyond our control.
+                review/approval has been completed. Accessories are the only storefront items with a separate $10
+                shipping charge. Prescription, provider, and laboratory workflows may use GEN Health or a dispensing
+                partner checkout path where applicable. Carrier transit times vary by destination; delivery dates are
+                not guaranteed. We are not liable for carrier delays beyond our control.
               </p>
               <p>
                 Provider Care and therapy products require medical intake and provider approval before fulfillment.
@@ -148,9 +149,10 @@ export function TermsPage() {
                 in accordance with our Refund Policy.
               </p>
               <p>
-                For applicable initial Women’s Hormone Therapy orders, a Required HRT Lab Package ($260) may be added
-                once (Lab Kit $200 with Lab Kit shipping included; Lab Review $60). Medication shipping remains
-                separate where applicable.
+                For applicable Women’s Hormone Therapy orders, updated labs may be required before a provider can make
+                treatment decisions. When labs are required, customers choose from the available GEN Health lab options
+                and add the selected lab option before continuing. Lab ordering, payment, intake, and results stay
+                inside GEN Health.
               </p>
             </>
           ),

@@ -55,35 +55,35 @@ export function AccountOverviewPage() {
           </span>
         </Link>
 
-        <Link
-          to="/account/subscriptions"
+        <a
+          href={GEN_HEALTH_PORTAL_URL}
+          target="_blank"
+          rel="noreferrer"
           className="group rounded-2xl border border-cream-300 bg-white p-6 shadow-sm hover:border-gold-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
         >
           <div className="flex items-start justify-between gap-3 mb-3">
             <h2 className="font-serif text-xl text-ink-900">Subscriptions</h2>
-            <span className="shrink-0 text-[10px] uppercase tracking-[0.16em] text-gold-700 border border-gold-300 rounded-full px-2.5 py-1">
-              Coming Soon
-            </span>
+            <ArrowUpRight size={17} className="text-ink-400 transition-colors group-hover:text-gold-700" />
           </div>
           <p className="text-sm text-ink-500 leading-relaxed">
-            Review recurring prescription orders and subscription details.
+            Renewals and subscription-related prescription steps are managed securely in GEN Health.
           </p>
-        </Link>
+        </a>
 
-        <Link
-          to="/account/requests"
+        <a
+          href={GEN_HEALTH_PORTAL_URL}
+          target="_blank"
+          rel="noreferrer"
           className="group rounded-2xl border border-cream-300 bg-white p-6 shadow-sm hover:border-gold-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2"
         >
           <div className="flex items-start justify-between gap-3 mb-3">
             <h2 className="font-serif text-xl text-ink-900">Requests</h2>
-            <span className="shrink-0 text-[10px] uppercase tracking-[0.16em] text-gold-700 border border-gold-300 rounded-full px-2.5 py-1">
-              Coming Soon
-            </span>
+            <ArrowUpRight size={17} className="text-ink-400 transition-colors group-hover:text-gold-700" />
           </div>
           <p className="text-sm text-ink-500 leading-relaxed">
-            Submit refill, pause, or cancellation requests later.
+            Prescription requests, refill questions, follow-ups, and lab review steps continue in GEN Health.
           </p>
-        </Link>
+        </a>
 
         <Link
           to="/account/profile"
@@ -109,7 +109,7 @@ export function AccountOverviewPage() {
           </div>
           <h2 className="font-serif text-xl text-ink-900 mb-3">GEN Health Portal</h2>
           <p className="text-sm text-ink-500 leading-relaxed">
-            Sign in for lab orders, prescription intake, provider steps, and clinical updates.
+            Sign in for lab orders, prescription intake, renewal steps, provider follow-ups, and clinical updates.
           </p>
         </a>
       </div>

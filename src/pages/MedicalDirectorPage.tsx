@@ -107,9 +107,9 @@ export function MedicalDirectorPage() {
               </p>
 
               <p className="text-lg text-ink-600 leading-relaxed mb-5">
-                Dr. Cattelane is a licensed physician in all states with expertise in Emergency Medicine, Medical
-                Genetics, and Family Medicine. Since graduating from NYIT College of Osteopathic Medicine in 1997, he
-                has brought decades of experience to patient care and clinical leadership.
+                Dr. Cattelane supports clinical leadership for My Bare Method with expertise in Emergency Medicine,
+                Medical Genetics, and Family Medicine. Since graduating from NYIT College of Osteopathic Medicine in
+                1997, he has brought decades of experience to patient care and clinical leadership.
               </p>
 
               <div className="space-y-4 text-ink-600 leading-relaxed">

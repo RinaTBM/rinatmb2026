@@ -16,18 +16,18 @@ const faqCategories = [
       },
       {
         q: 'How much is shipping?',
-          a: 'Accessory-only orders can use Accessory Shipping for $10, with Two-Day Shipping for $30 or Next-Day Shipping for $50 also available. Prescription and mixed carts use the applicable medication shipping option. For Subscribe & Save, the selected $30 or $50 shipping method renews with each monthly order. Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping; subscription value is excluded from that threshold.',
+        a: 'Accessories are the only storefront items with a separate $10 shipping charge. Lab orders, provider-directed products, and prescription workflows may use GEN Health or the applicable dispensing partner path, with any required charges shown before payment whenever reasonably possible.',
       },
       {
         q: 'When will my order ship?',
         a: 'Processing and shipping timelines begin only after payment has been received and any required provider review/approval has been completed. Most eligible orders are then processed within 1–3 business days. Carrier transit begins after processing. You will receive tracking by email once your order ships. Payment does not guarantee treatment approval or shipment.',
       },
       {
-        q: 'Do you offer free shipping?',
-        a: 'Orders of $500 or more in eligible ordinary merchandise are eligible for free shipping. Prescription subscription value is excluded from the $500 free-shipping threshold. Standard Shipping is not offered.',
+        q: 'Which items have a separate shipping charge?',
+        a: 'Labs and provider-directed prescription workflows do not add storefront accessory shipping. Accessories remain the storefront items with a separate $10 shipping charge.',
       },
       { q: 'Can I track my order?', a: 'Yes. Track from the Track Order page using your order number, or from your account dashboard.' },
-      { q: 'Do you ship internationally?', a: 'We currently ship within the United States. International shipping is coming soon.' },
+      { q: 'Do you ship internationally?', a: 'We currently serve clients and ship eligible items within the United States only.' },
       {
         q: 'What happens if my shipment is lost, damaged, or delayed?',
         a: 'Eligible damaged, lost, or delayed-and-unusable shipments may be replaced at no additional product cost after verification. Notify us within 48 hours of delivery (or the expected delivery date for lost shipments) with photos when applicable. Refunds are not automatic for carrier delays or incorrect addresses — see our Refund & Replacement Policy and Shipping Policy.',
@@ -83,7 +83,7 @@ const faqCategories = [
       { q: 'What happens after I order a Provider Care product?', a: 'After payment has been received, you will receive an email link to complete a secure medical intake when required. A licensed provider reviews your case within 2 business days.' },
       { q: 'What if I am not approved?', a: 'If a licensed provider determines that a requested treatment is not medically appropriate, the provider-directed product will not be fulfilled. If payment for that product has already been received, eligible charges will be refunded in accordance with our refund policy.' },
       { q: 'Do you offer telemedicine appointments?', a: 'Yes. We offer telemedicine services via Zoom. Appointments are booked directly on our website by the patient.' },
-      { q: 'Which states or jurisdictions do you serve?', a: 'Our Medical Director is a licensed physician in all states, so our telemedicine services are available nationwide.' },
+      { q: 'Which states or jurisdictions do you serve?', a: 'Availability may vary by service, product, provider licensure, pharmacy, laboratory, and state requirements. We confirm eligibility during the applicable intake and review process.' },
       { q: 'Who is your Medical Director?', a: 'Our Medical Director is Dr. Jerry J. Cattelane Jr., D.O. He provides clinical leadership and supports the provider-directed wellness programs available through My Bare Method. Treatment decisions are made by the licensed provider responsible for your care.' },
       { q: 'Which pharmacy fulfills your prescriptions?', a: `${PHARMACY_FULFILLMENT_SHORT} The final pharmacy is selected based on the medication, state, prescription, and clinical workflow. Fulfillment begins only after payment has been received and a licensed provider determines treatment is appropriate and any required review is complete.` },
       { q: PHARMACY_503A_FAQ.q, a: PHARMACY_503A_FAQ.a },
@@ -91,23 +91,23 @@ const faqCategories = [
     ],
   },
   {
-    title: 'HRT Lab Package',
+    title: 'Hormone Therapy Labs',
     faqs: [
       {
-        q: 'Do I need labs for HRT?',
-        a: 'For applicable initial Women’s Hormone Therapy orders, a Required HRT Lab Package is added once so a licensed provider can review laboratory results before treatment decisions. Established HRT customers with approved therapy history may not be charged the package again under current history rules.',
+        q: 'Do I need labs for hormone therapy?',
+        a: 'Some Women’s Hormone Therapy orders require labs before a licensed provider can make treatment decisions. When labs are needed, checkout prompts you to choose one of the available GEN Health lab options.',
       },
       {
-        q: 'What does the $260 HRT Lab Package include?',
-        a: 'Required HRT Lab Package — $260. Breakdown: Lab Kit — $200 (includes Lab Kit shipping) and Lab Review — $60.',
+        q: 'How do I choose hormone therapy labs?',
+        a: 'You can choose from available in-home or walk-in lab options. Lab ordering, payment, intake, and results stay inside GEN Health so your provider can review the correct information.',
       },
       {
-        q: 'Is Lab Kit shipping included?',
-        a: 'Yes. Lab Kit shipping is included in the $200 Lab Kit price. That does not include medication shipping, which remains separate where applicable.',
+        q: 'Is lab shipping included?',
+        a: 'Yes. Lab shipping is included for lab orders. Accessories are the only storefront items with a separate $10 shipping charge.',
       },
       {
-        q: 'Will I be charged the HRT Lab Package more than once in one order?',
-        a: 'No. For an applicable initial HRT order, the required lab package is added once. Multiple HRT products in the same applicable initial order do not multiply the lab-package charge.',
+        q: 'Will hormone therapy labs be chosen automatically?',
+        a: 'No. If labs are required, checkout prompts you to choose the current lab option that fits your care path before you continue.',
       },
     ],
   },
@@ -127,23 +127,23 @@ const faqCategories = [
     faqs: [
       {
         q: 'How does Subscribe & Save work?',
-        a: 'Choose Subscribe & Save on an eligible prescription product to receive 15% off its authoritative one-time medication price. Your selected $30 Two-Day or $50 Next-Day shipping method is included in every monthly renewal. Provider review is required; payment does not guarantee a prescription.',
+        a: 'Choose Subscribe & Save on an eligible prescription product to receive the recurring price shown before enrollment. Provider review is required; payment does not guarantee a prescription.',
       },
       {
         q: 'What receives the 15% savings?',
-        a: 'The 15% savings applies to the eligible prescription medication price. Shipping, provider visits, labs, services, and accessories are not discounted.',
+        a: 'The savings apply only to the eligible subscription item shown at enrollment. Provider visits, labs, services, and accessories are not discounted unless a specific offer says otherwise.',
       },
       {
         q: 'What is charged when I subscribe?',
-        a: 'The monthly total is the eligible prescription price after the 15% savings plus the selected $30 or $50 shipping method. Any required provider service is charged separately and does not renew.',
+        a: 'The monthly total is shown before enrollment. Any required provider service is charged separately and does not renew unless a specific offer says otherwise.',
       },
       {
         q: 'What is charged every month?',
-        a: 'Each monthly renewal is the discounted prescription medication amount plus your selected $30 or $50 shipping method. Provider visits, labs, services, and accessories do not recur.',
+        a: 'Each monthly renewal is the recurring amount shown for that subscription. Provider visits, labs, services, and accessories do not recur unless a specific offer says otherwise.',
       },
       {
-        q: 'Does shipping renew?',
-        a: 'Yes. The shipping method selected at enrollment is billed with every monthly medication renewal.',
+        q: 'Does accessory shipping renew?',
+        a: 'No. Accessories are one-time storefront purchases. Any subscription fulfillment details are shown in the applicable enrollment flow.',
       },
       {
         q: 'Can accessories be subscribed to?',

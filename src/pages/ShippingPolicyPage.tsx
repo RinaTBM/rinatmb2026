@@ -60,15 +60,17 @@ export function ShippingPolicyPage() {
           body: (
             <>
               <p>
-                For eligible one-time medication and product orders, shipping fees are fixed (not estimates):
+                Shipping charges are shown before payment whenever they apply:
               </p>
               <LegalBulletList items={[
-                'Two-Day Shipping — $30',
-                'Next-Day Shipping — $50',
+                'Accessory-only storefront orders use $10 Accessory Shipping',
+                'Lab orders are completed through the applicable GEN Health lab path',
+                'Prescription and provider-directed order shipping is shown in the applicable checkout or patient-care flow',
               ]} />
               <p>
-                Orders of $500 or more in eligible ordinary merchandise may qualify for free shipping. Prescription
-                subscription value is excluded from the $500 free-shipping threshold. Standard Shipping is not offered.
+                Accessories are the only storefront items with a separate $10 shipping charge. Prescription, provider,
+                and laboratory workflows may be handled through GEN Health or the dispensing partner, depending on the
+                item and required care steps.
               </p>
               <p>
                 Carrier transit times begin after payment has been received, any required provider review/approval has
@@ -77,7 +79,7 @@ export function ShippingPolicyPage() {
               </p>
               <p>
                 Certain medications may require temperature-controlled packaging or specific delivery methods.
-                Accessory-only orders may select $10 Accessory Shipping. Prescription and mixed carts may select Two-Day ($30) or Next-Day ($50) shipping. Available options may vary by product, pharmacy, destination, and weather conditions.
+                Available fulfillment options may vary by product, pharmacy, destination, and weather conditions.
               </p>
             </>
           ),
@@ -88,15 +90,11 @@ export function ShippingPolicyPage() {
           body: (
             <>
               <p>
-                When you choose Subscribe &amp; Save, you select Two-Day or Next-Day shipping at enrollment. That
-                selected shipping method is billed with every monthly renewal:
+                When you choose Subscribe &amp; Save, recurring billing covers the subscription items shown at enrollment.
+                Any applicable fulfillment or shipping details are disclosed in the checkout or patient-care flow before
+                payment whenever reasonably possible.
               </p>
-              <LegalBulletList items={[
-                'Two-Day Shipping — +$30 per month',
-                'Next-Day Shipping — +$50 per month',
-              ]} />
               <p>
-                The prescription medication receives the 15% subscription savings; shipping is not discounted.
                 Payment may be collected at enrollment and on each renewal, but medication fulfillment and shipment
                 still depend on applicable provider review and approval.
               </p>
@@ -104,21 +102,22 @@ export function ShippingPolicyPage() {
           ),
         },
         {
-          id: 'hrt-lab-kit-shipping',
-          title: 'HRT Lab Kit Shipping',
+          id: 'hrt-lab-shipping',
+          title: 'Hormone Therapy Lab Shipping',
           body: (
             <>
               <p>
-                For applicable initial Women’s Hormone Therapy orders, the Required HRT Lab Package is $260 and
-                includes:
+                For applicable Women’s Hormone Therapy orders, customers choose from the available GEN Health lab
+                options when labs are required. Lab orders, payment, intake, and results stay inside GEN Health.
               </p>
               <LegalBulletList items={[
-                'Lab Kit — $200 (Lab Kit shipping included in the $200 price)',
-                'Lab Review — $60',
+                'No separate storefront shipping charge is added for lab orders',
+                'Medication shipping follows the applicable pharmacy or GEN Health checkout path',
+                'Accessories remain the only storefront items with a separate $10 shipping charge',
               ]} />
               <p>
-                Lab Kit shipping being included does not mean medication shipping is included. Medication and product
-                shipping remain separate where applicable.
+                Accessories are shipped by My Bare Method and may carry the separate accessory shipping charge shown at
+                checkout.
               </p>
             </>
           ),

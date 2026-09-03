@@ -6,7 +6,7 @@ import { navigate } from '@/router';
 
 const DISMISS_KEY = 'mbm_welcome_popup_dismissed';
 const SIGNED_KEY = 'mbm_welcome_popup_signed_up';
-const SHOW_DELAY_MS = 12_000;
+const SHOW_DELAY_MS = 5_000;
 
 type Stage = 'form' | 'success';
 

@@ -54,6 +54,7 @@ import { AccountOrdersPage } from '@/pages/account/AccountOrdersPage';
 import { AccountOrderDetailPage } from '@/pages/account/AccountOrderDetailPage';
 import { CherryFinancingWidget } from '@/components/CherryFinancingWidget';
 import { WelcomePopup } from '@/components/WelcomePopup';
+import { FeelingPopup } from '@/components/FeelingPopup';
 
 function App() {
   const route = useRouter();
@@ -219,6 +220,7 @@ function App() {
               <CartDrawer />
               <PrescriptionBasketDrawer />
               <WelcomePopup />
+              <FeelingPopup />
               {/* Financing discovery only — does not replace Tagada card checkout */}
               <CherryFinancingWidget />
             </div>

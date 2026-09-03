@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Sparkles, X } from 'lucide-react';
+import { rememberGuidedPopupInterest } from '@/lib/highlevelPopupContext';
 import { navigate } from '@/router';
 
 const DISMISS_KEY = 'mbm_feeling_popup_dismissed';
@@ -169,15 +170,18 @@ export function FeelingPopup() {
 
   const handleSeeResults = () => {
     if (selected.length === 0) return;
+    rememberGuidedPopupInterest();
     setStage('results');
   };
 
   const handleViewProduct = (slug: string) => {
+    rememberGuidedPopupInterest();
     setVisible(false);
     navigate(`/product/${slug}`);
   };
 
   const handleBrowseAll = () => {
+    rememberGuidedPopupInterest();
     setVisible(false);
     navigate('/shop-all');
   };

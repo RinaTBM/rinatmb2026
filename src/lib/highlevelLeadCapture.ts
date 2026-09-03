@@ -1,5 +1,6 @@
 import { getMarketingAttribution, type MarketingAttribution } from './marketingAttribution';
 import { trackMetaLead } from './metaPixel';
+import { getGuidedPopupInterest } from './highlevelPopupContext';
 
 export type HighLevelLeadEvent =
   | 'contact_form'
@@ -35,6 +36,7 @@ export async function sendHighLevelLead(payload: HighLevelLeadPayload): Promise<
   }
 
   try {
+    const guidedPopupInterest = getGuidedPopupInterest();
     const res = await fetch(`${supabaseUrl}/functions/v1/highlevel-lead-capture`, {
       method: 'POST',
       headers: {
@@ -44,6 +46,8 @@ export async function sendHighLevelLead(payload: HighLevelLeadPayload): Promise<
       },
       body: JSON.stringify({
         ...payload,
+        interestCategory: payload.interestCategory || guidedPopupInterest?.interestCategory,
+        interestLabel: payload.interestLabel || guidedPopupInterest?.interestLabel,
         attribution: payload.attribution || getMarketingAttribution(),
         sourcePage:
           payload.sourcePage ||

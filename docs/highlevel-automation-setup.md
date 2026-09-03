@@ -176,6 +176,24 @@ Suggested branches by subject:
 - `Subscription`
 - `Other`
 
+### First-Time Visitor Welcome Popup
+
+Branch/filter: `lead_type = new_client_welcome`.
+
+Suggested actions:
+
+- Create or update contact by email.
+- Add tags: `MBM Website`, `New Client`, `Welcome Offer`.
+- Map UTM and click-ID fields from the webhook payload.
+- Send the soft welcome/account-created message when consent allows.
+- Start a light nurture path that points to the client portal, shopping, and support.
+
+Suggested first message:
+
+```text
+Welcome to My Bare Method. Your account is ready, and your welcome offer is available for your first order. You can return to your client portal anytime for orders, subscriptions, and care next steps.
+```
+
 ### Newsletter Signup
 
 Branch/filter: `lead_type = newsletter_signup`.
@@ -224,6 +242,19 @@ Hi {{contact.first_name}}, it looks like your My Bare Method checkout may not ha
 
 Do not reference specific prescription names, lab panels, diagnoses, or medical details in the automation message.
 
+### Hormone Lab Choice Popup
+
+Current status: tied to checkout, not a separate anonymous lead workflow.
+
+Why: the popup appears when someone is already checking out with hormone support products. It is most useful as checkout context, because HighLevel needs an email or contact record before it can safely automate follow-up.
+
+Suggested handling:
+
+- Keep the popup on-site only until the shopper enters checkout contact information.
+- Use `mybaremethod-checkout-started` for reminder timing.
+- Use broad internal notes/tags only, such as `lab choice required`, when supported by the checkout payload.
+- Do not send the selected lab name, prescription name, diagnosis, or clinical details into general marketing messages.
+
 ### Purchase Completed
 
 Current status: wired server-side through `tagada-webhook` after confirmed payment.
@@ -257,13 +288,19 @@ Welcome to My Bare Method. Your order is in progress. If your care path includes
 
 Current status: supported by the website event handler, but should only be used when the visitor has identified themselves by email, such as newsletter signup, contact form, or a future guided quiz.
 
+For the on-site wellness check-in popup, the website stores only a broad privacy-safe context. The next email-bearing website lead can include:
+
+- `interest_category = guided_popup`
+- `interest_label = Wellness check-in completed`
+
 Suggested tags:
 
 - `product interest`
 - `category interest`
+- `guided popup`
 - Broad category only, such as `weight management interest`, `hormone support interest`, `lab interest`, `skin hair interest`.
 
-Privacy guardrail: do not send medication names, lab-result behavior, diagnoses, or intake answers into general marketing automations.
+Privacy guardrail: do not send feeling selections, symptoms, medication names, lab-result behavior, diagnoses, or intake answers into general marketing automations.
 
 ## Older next automation candidates
 

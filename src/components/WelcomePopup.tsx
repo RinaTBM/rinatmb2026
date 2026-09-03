@@ -66,7 +66,7 @@ export function WelcomePopup() {
     }
 
     void sendHighLevelLead({
-      event: 'newsletter_signup',
+      event: 'new_client_welcome',
       name: `${firstName.trim()} ${lastName.trim()}`.trim(),
       email: email.trim(),
       phone: phone.trim() || undefined,

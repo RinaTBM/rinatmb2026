@@ -146,6 +146,9 @@ export function Header() {
               <Link to="/section/womens-hormone-therapy" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 Hormone Support
               </Link>
+              <Link to="/section/accessories" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                Accessories
+              </Link>
               <Link to="/order-labs" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 Lab Options
               </Link>

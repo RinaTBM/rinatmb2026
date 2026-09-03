@@ -212,7 +212,7 @@ export function FeelingPopup() {
 
   const handleAddAllToBasket = () => {
     for (const rec of recs) {
-      if (!rec.genClientProductId || basketItems.some(item => item.slug === rec.slug) || addedSlugs.has(rec.slug)) continue;
+      if (basketItems.some(item => item.slug === rec.slug) || addedSlugs.has(rec.slug)) continue;
       const product = getProduct(rec.slug);
       addItem({
         slug: rec.slug,

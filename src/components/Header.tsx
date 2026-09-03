@@ -339,6 +339,13 @@ export function Header() {
                 Hormone Support
               </Link>
               <Link
+                to="/section/accessories"
+                onClick={closeAll}
+                className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
+              >
+                Accessories
+              </Link>
+              <Link
                 to="/order-labs"
                 onClick={closeAll}
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"

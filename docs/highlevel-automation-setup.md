@@ -47,6 +47,49 @@ When this is present, the site sends standard `PageView` and broad `Lead` events
 
 It is okay if the current Meta Business setup is named `The Bare Method`. For cleaner reporting, use a Meta dataset/pixel named `My Bare Method` when it is available, then connect that pixel to the ads account. HighLevel attribution fields will still capture campaign source details from links even before a separate My Bare Method Meta account is created.
 
+## Marketing readiness recommendation
+
+Use the existing `The Bare Method` Meta Business setup only as the temporary account container if that is what is already connected and approved. The customer-facing ad assets, dataset/pixel naming, campaign names, UTMs, and reporting should all use `My Bare Method` so launch data does not get mixed with the older brand.
+
+Recommended setup:
+
+- Meta Business / ad account: keep `The Bare Method` only if it is already verified, funded, and easier to use now.
+- Pixel/dataset: create or rename a dedicated dataset to `My Bare Method`.
+- Domain: verify `mybaremethod.com` in the Meta business account before scaling ads.
+- Site secret: set `VITE_META_PIXEL_ID` in Bolt only after the correct pixel/dataset is selected.
+- Events: keep the site limited to `PageView` and broad `Lead`. Do not send product names, medication names, lab choices, diagnoses, intake answers, or condition-specific labels to Meta.
+
+Use this link format for ads:
+
+```text
+https://mybaremethod.com/?utm_source=fb_ad&utm_medium={{adset.name}}&utm_campaign={{campaign.name}}&utm_content={{ad.name}}
+```
+
+HighLevel currently classifies paid social most cleanly when `utm_source` contains `fb_ad`. Keep campaign, ad set, and ad names simple, unique, and free of special characters.
+
+## Starter ad audiences
+
+Start broad and privacy-safe. Do not build audiences around sensitive health conditions, diagnoses, medication names, or lab-result behavior.
+
+- Warm website visitors: all site visitors from the last 30, 60, and 180 days.
+- Engaged social audience: people who engaged with the Instagram/Facebook account in the last 365 days.
+- Lead list: newsletter and contact-form leads only when consent and privacy policy language support marketing follow-up.
+- Purchasers/clients: use only for retention or exclusion audiences if consent and platform rules allow it.
+- Broad prospecting: adults in the serviceable geography with general wellness positioning, not condition-specific targeting.
+- Lookalike audience: wait until there is enough clean lead or purchaser volume, then use a consented list or broad lead event source.
+
+## First soft-launch ads
+
+Start with a small learning set so you can see what message resonates before spending heavily.
+
+- Brand trust ad: introduce My Bare Method as provider-guided wellness with discreet, thoughtful care.
+- Weight Management ad: use softer language such as `support for your metabolic goals` instead of aggressive before/after or quick-loss claims.
+- Hormone Support ad: speak to guided care and lab-informed next steps, not personal-attribute claims like `Are you struggling with menopause?`.
+- Labs ad: position Order Labs as an easier way to choose current lab options that support care decisions.
+- Existing client ad/email: direct returning clients to the client portal and GEN Health access, primarily through owned channels and retargeting.
+
+Do not use before/after body imagery, guaranteed outcomes, or copy that implies the viewer has a medical condition. Keep ads calm, supportive, and access-focused.
+
 ## HighLevel custom fields to map
 
 Create matching custom fields in HighLevel so ad leads stay reportable:
@@ -61,6 +104,9 @@ Create matching custom fields in HighLevel so ad leads stay reportable:
 - Microsoft Click ID
 - Landing Page
 - Referrer
+- Attribution Captured At
+- Lead Type
+- Source Page
 
 ## HighLevel workflows to create
 
@@ -76,6 +122,22 @@ Suggested actions:
 - Map name, phone, lead type, subject, message, UTM fields, click IDs, landing page, and referrer.
 - Add tags: `MBM Website`, `Website Lead`.
 - Branch by `lead_type`.
+
+Suggested field mapping from the website webhook:
+
+- `lead_type` -> Lead Type
+- `source_page` -> Source Page
+- `utm_source` -> UTM Source
+- `utm_medium` -> UTM Medium
+- `utm_campaign` -> UTM Campaign
+- `utm_content` -> UTM Content
+- `utm_term` -> UTM Term
+- `fbclid` -> Facebook Click ID
+- `gclid` -> Google Click ID
+- `msclkid` -> Microsoft Click ID
+- `landing_page` -> Landing Page
+- `referrer` -> Referrer
+- `attribution_captured_at` -> Attribution Captured At
 
 ### Contact Form Intake
 
@@ -121,6 +183,17 @@ These are not wired yet and should be added only after the corresponding product
 - Provider-care inquiry
 - Abandoned cart
 - Client portal signup
+
+## Minimum launch checklist
+
+- Confirm `HIGHLEVEL_WEBSITE_LEAD_WEBHOOK_URL` is set in Bolt/Supabase Edge secrets.
+- Submit one test contact form with `?utm_source=fb_ad&utm_medium=test_adset&utm_campaign=test_campaign&utm_content=test_ad`.
+- Confirm the HighLevel contact has the mapped UTM fields and tags.
+- Submit one newsletter signup with the same test URL.
+- Confirm the contact branches into the newsletter path.
+- Add `VITE_META_PIXEL_ID` only after the Meta dataset/pixel is chosen.
+- Verify Meta Pixel sees `PageView` and `Lead`, with no health/product-specific custom event names.
+- Keep Premium HighLevel workflow usage lean: one inbound webhook workflow, one branch by `lead_type`, and no duplicate workflows unless a specific conversion event needs its own path.
 
 ## Compliance guardrails
 

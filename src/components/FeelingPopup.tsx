@@ -44,6 +44,28 @@ type Recommendation = {
   emoji: string;
 };
 
+const SUPPORT_POINTS: Record<string, [string, string, string]> = {
+  'nad-plus': ['Cellular energy support', 'Focus and vitality support', 'Provider-guided wellness option'],
+  'bpc-157': ['Recovery support', 'Tissue and connective-tissue support', 'Provider-guided wellness option'],
+  'initial-provider-consultation': ['Personalized goal review', 'Licensed provider guidance', 'A plan matched to your needs'],
+  semax: ['Focus support', 'Memory support', 'Provider-guided cognitive wellness'],
+  selank: ['Calm-focus support', 'Stress-balance support', 'Provider-guided wellness option'],
+  semaglutide: ['Appetite-regulation support', 'Weight-management support', 'Provider-guided care pathway'],
+  tirzepatide: ['Dual-pathway support', 'Weight-management support', 'Provider-guided care pathway'],
+  tesamorelin: ['Metabolic support', 'Body-composition support', 'Provider-guided care pathway'],
+  'fat-burner': ['Fat-metabolism support', 'Body-composition support', 'Provider-guided wellness option'],
+  'aod-9604': ['Lipotropic support', 'Fat-metabolism support', 'Provider-guided care pathway'],
+  'testosterone-cream': ['Hormone-support option', 'Vitality support', 'Provider-guided care pathway'],
+  'scream-cream': ['Sexual-wellness support', 'Topical application', 'Provider-guided option'],
+  'estradiol-patch': ['Hormone-support option', 'Transdermal delivery', 'Provider-guided care pathway'],
+  'selank-semax-nasal-spray': ['Calm-focus support', 'Cognitive support', 'Nasal delivery option'],
+  'bpc-157-tb-500': ['Recovery support', 'Tissue-repair support', 'Provider-guided care pathway'],
+  'recovery-stack': ['Multi-peptide recovery support', 'Tissue and mobility support', 'Provider-guided care pathway'],
+  'tretinoin-cream': ['Skin-renewal support', 'Topical application', 'Prescription provider review'],
+  'minoxidil-topical': ['Scalp-health support', 'Topical application', 'Prescription provider review'],
+  'bimatoprost-solution': ['Lash and brow support', 'Targeted topical application', 'Prescription provider review'],
+};
+
 const FEELING_TO_RECS: Record<FeelingId, Recommendation[]> = {
   tired: [
     { slug: 'nad-plus', title: 'NAD+ Cellular Energy', blurb: 'Supports cellular energy production and overall vitality.', emoji: '\u{1F50B}' },
@@ -87,8 +109,8 @@ const FEELING_TO_RECS: Record<FeelingId, Recommendation[]> = {
   ],
   'slow-recovery': [
     { slug: 'bpc-157-tb-500', title: 'BPC-157 + TB-500 Recovery Blend', blurb: 'Supports tissue repair and musculoskeletal recovery.', emoji: '\u{1F489}' },
-    { slug: 'bpc-157', title: 'BPC-157 Recovery Peptide', blurb: 'Supports tendon, ligament, and connective-tissue wellness.', emoji: '\u{1F489}' },
     { slug: 'recovery-stack', title: 'KLOW Recovery Blend', blurb: 'Four-peptide protocol for comprehensive recovery support.', emoji: '\u{1F489}' },
+    { slug: 'nad-plus', title: 'NAD+ Cellular Energy', blurb: 'Supports cellular energy and overall vitality during recovery.', emoji: '\u{1F50B}' },
   ],
   'skin-hair': [
     { slug: 'tretinoin-cream', title: 'Tretinoin Skin Renewal', blurb: 'Prescription-strength skin renewal and collagen support.', emoji: '\u{1F9F4}' },
@@ -259,6 +281,13 @@ export function FeelingPopup() {
                   <div className="flex-1">
                     <p className="font-serif text-base font-semibold text-ink-900">{rec.title}</p>
                     <p className="mt-0.5 text-xs leading-relaxed text-ink-500">{rec.blurb}</p>
+                    <div className="mt-2 space-y-1">
+                      {SUPPORT_POINTS[rec.slug].map(point => (
+                        <p key={point} className="text-[11px] leading-tight text-ink-500">
+                          <span className="mr-1 text-gold-600">•</span>{point}
+                        </p>
+                      ))}
+                    </div>
                   </div>
                   <ArrowRight size={18} className="mt-1 shrink-0 text-ink-300" />
                 </button>

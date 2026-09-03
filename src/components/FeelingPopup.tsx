@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Check, Plus, Sparkles, X } from 'lucide-react';
+import { ArrowRight, Check, Plus, Sparkles, X } from 'lucide-react';
 import { rememberGuidedPopupInterest } from '@/lib/highlevelPopupContext';
 import { navigate } from '@/router';
 import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';

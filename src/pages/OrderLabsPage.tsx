@@ -252,6 +252,30 @@ export function LabDetailPage({ slug }: { slug: string }) {
                   <p className="text-sm font-medium leading-snug text-ink-700">Order securely through your lab checkout</p>
                 </div>
               </div>
+
+              <div className="mt-10 rounded-lg border border-cream-300 bg-white p-6">
+                <p className="eyebrow mb-3 text-[10px]">What this panel helps review</p>
+                <p className="max-w-3xl text-base leading-7 text-ink-600">{selectedLab.detailDescription}</p>
+
+                <div className="mt-6 grid gap-6 md:grid-cols-[0.9fr_1.1fr]">
+                  <div className="rounded-lg bg-cream-50 p-4">
+                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-gold-700">Best for</p>
+                    <p className="mt-2 text-sm leading-6 text-ink-600">{selectedLab.bestFor}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-gold-700">Includes</p>
+                    <ul className="mt-3 space-y-2">
+                      {selectedLab.highlights.map(highlight => (
+                        <li key={highlight} className="flex gap-2 text-sm leading-6 text-ink-600">
+                          <Check className="mt-1 h-4 w-4 flex-none text-gold-700" />
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <aside className="rounded-lg border border-cream-300 bg-white p-5 shadow-sm md:p-6 lg:sticky lg:top-32 lg:self-start">

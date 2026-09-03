@@ -5,6 +5,7 @@ import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
 import {
   getLabCheckoutUrl,
   getLabDisplayPriceCents,
+  getLabMarkers,
   labOptions,
   type LabCollection,
   type LabOption,
@@ -191,6 +192,7 @@ export function LabDetailPage({ slug }: { slug: string }) {
   }
 
   const selectedLab = resolveSelectedLab(group.options, collection, vendor);
+  const selectedMarkers = getLabMarkers(selectedLab);
   const availableCollections = [...new Set(group.options.map(option => option.collection))];
   const availableVendors = [...new Set(group.options.map(option => option.vendor))];
   const canChooseCollection = availableCollections.length > 1;
@@ -275,6 +277,22 @@ export function LabDetailPage({ slug }: { slug: string }) {
                     </ul>
                   </div>
                 </div>
+
+                {selectedMarkers.length > 0 ? (
+                  <div className="mt-7 border-t border-cream-200 pt-6">
+                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-gold-700">Specific markers</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {selectedMarkers.map(marker => (
+                        <span
+                          key={marker}
+                          className="rounded-full border border-cream-300 bg-cream-50 px-3 py-1.5 text-xs font-medium text-ink-600"
+                        >
+                          {marker}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
 

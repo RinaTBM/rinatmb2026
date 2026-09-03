@@ -35,7 +35,7 @@ export function ShopAllPage() {
           <p className="eyebrow mb-3">Provider-guided wellness</p>
           <h1 className="font-serif text-5xl md:text-6xl text-ink-900 mb-5">Shop All</h1>
           <p className="text-ink-500 leading-relaxed">
-            Our primary catalog of provider-directed wellness products. Accessories are available separately as optional add-ons.
+            Browse provider-directed wellness products and supportive accessories in one place.
           </p>
         </div>
       </section>

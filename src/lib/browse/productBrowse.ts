@@ -4,9 +4,8 @@ export type SortId = 'featured' | 'newest' | 'price-low' | 'price-high' | 'alpha
 export type PriceBand = 'any' | 'under-100' | '100-199' | '200-299' | '300-plus';
 
 /**
- * Wellness categories used in Shop navigation and filters.
- * Accessories and Provider Care are intentionally excluded — they remain
- * top-level destinations outside the Shop catalog experience.
+ * Customer-facing categories used in Shop navigation and filters.
+ * Provider Care remains a guide page, while accessories stay shop-visible.
  */
 export const SHOP_CATEGORIES: { id: string; label: string }[] = [
   { id: 'weight-management', label: 'Weight Management' },
@@ -14,6 +13,7 @@ export const SHOP_CATEGORIES: { id: string; label: string }[] = [
   { id: 'longevity-cognitive', label: 'Longevity & Cognitive Health' },
   { id: 'recovery-performance', label: 'Recovery & Performance' },
   { id: 'prescription-skin-hair', label: 'Prescription Skin & Hair' },
+  { id: 'accessories', label: 'Accessories' },
 ];
 
 export const SHOP_CATEGORY_IDS = new Set(SHOP_CATEGORIES.map(c => c.id));
@@ -27,6 +27,7 @@ export const FORM_FILTER_OPTIONS: DosageForm[] = [
   'Patch',
   'Nasal Spray',
   'Topical Solution',
+  'Accessory',
 ];
 
 export const PRICE_FILTER_OPTIONS: { id: PriceBand; label: string }[] = [

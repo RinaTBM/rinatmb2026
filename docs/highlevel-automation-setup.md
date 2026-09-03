@@ -8,6 +8,15 @@ The storefront can send these events to Supabase Edge Function `highlevel-lead-c
 
 - `contact_form`
 - `newsletter_signup`
+- `product_interest`
+- `category_interest`
+- `abandoned_cart`
+- `new_client_welcome`
+
+Payment-backed events also run server-side through the HighLevel Contacts API when enabled:
+
+- `checkout_started`
+- `purchase_completed`
 
 The Edge Function forwards each event to a matching HighLevel inbound webhook URL stored as a secret.
 
@@ -34,6 +43,10 @@ Optional split setup, if you later want separate workflows:
 
 - `HIGHLEVEL_CONTACT_FORM_WEBHOOK_URL`
 - `HIGHLEVEL_NEWSLETTER_WEBHOOK_URL`
+- `HIGHLEVEL_PRODUCT_INTEREST_WEBHOOK_URL`
+- `HIGHLEVEL_CATEGORY_INTEREST_WEBHOOK_URL`
+- `HIGHLEVEL_ABANDONED_CART_WEBHOOK_URL`
+- `HIGHLEVEL_NEW_CLIENT_WEBHOOK_URL`
 
 Do not put HighLevel webhook URLs directly in frontend source.
 
@@ -107,6 +120,9 @@ Create matching custom fields in HighLevel so ad leads stay reportable:
 - Attribution Captured At
 - Lead Type
 - Source Page
+- Interest Category
+- Interest Label
+- Cart Value
 
 ## HighLevel workflows to create
 
@@ -172,7 +188,84 @@ Suggested actions:
 - Add to nurture sequence.
 - Do not send health-condition-specific marketing based only on sensitive browsing behavior.
 
-## Next automation candidates
+## Conversion workflows to build next
+
+### Checkout Started
+
+Current status: wired server-side through `create-invoice-order` when HighLevel Contacts API secrets are enabled.
+
+Trigger: tag added `mybaremethod-checkout-started`.
+
+Suggested actions:
+
+- Add broad tag: `checkout started`.
+- Wait 30-60 minutes.
+- If contact still has `mybaremethod-checkout-started` and does not have `mybaremethod-purchase-completed`, send a gentle reminder.
+- Create an internal task only for higher-intent carts or carts over an owner-selected value.
+
+Premium-usage note: use one workflow with one delay and one condition. Avoid multiple reminders until the first recovery test is proven.
+
+### Abandoned Cart
+
+Current status: no separate website event is required for first launch. Use the existing checkout-started tag as the abandoned-cart signal after a delay.
+
+Trigger: tag `mybaremethod-checkout-started` remains after the delay.
+
+Suggested tags:
+
+- `abandoned cart`
+- `checkout follow-up needed`
+
+Suggested first message:
+
+```text
+Hi {{contact.first_name}}, it looks like your My Bare Method checkout may not have been completed. If you had trouble checking out or have a question before moving forward, reply here and we can help.
+```
+
+Do not reference specific prescription names, lab panels, diagnoses, or medical details in the automation message.
+
+### Purchase Completed
+
+Current status: wired server-side through `tagada-webhook` after confirmed payment.
+
+Trigger: tag added `mybaremethod-purchase-completed`.
+
+Suggested actions:
+
+- Remove `abandoned cart` and `checkout follow-up needed` if present.
+- Add `customer`.
+- Add `new client` only if this is their first purchase or if no prior customer tag exists.
+- Start the new-client welcome flow.
+
+### New Client Welcome
+
+Trigger: tag added `new client` or `mybaremethod-customer`.
+
+Suggested actions:
+
+- Send a soft welcome message with next steps.
+- Point prescription/lab/client care actions back to GEN Health or the client portal.
+- Create a manual task if the order requires provider review and no GEN action is visible after the expected time window.
+
+Suggested first message:
+
+```text
+Welcome to My Bare Method. Your order is in progress. If your care path includes intake, labs, or provider review, please watch for the next secure step in GEN Health or your client portal.
+```
+
+### Product / Category Interest
+
+Current status: supported by the website event handler, but should only be used when the visitor has identified themselves by email, such as newsletter signup, contact form, or a future guided quiz.
+
+Suggested tags:
+
+- `product interest`
+- `category interest`
+- Broad category only, such as `weight management interest`, `hormone support interest`, `lab interest`, `skin hair interest`.
+
+Privacy guardrail: do not send medication names, lab-result behavior, diagnoses, or intake answers into general marketing automations.
+
+## Older next automation candidates
 
 These are not wired yet and should be added only after the corresponding production event is confirmed:
 

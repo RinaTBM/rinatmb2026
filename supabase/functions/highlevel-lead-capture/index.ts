@@ -11,7 +11,13 @@ function json(body: unknown, status = 200) {
   });
 }
 
-type LeadEvent = "contact_form" | "newsletter_signup";
+type LeadEvent =
+  | "contact_form"
+  | "newsletter_signup"
+  | "product_interest"
+  | "category_interest"
+  | "abandoned_cart"
+  | "new_client_welcome";
 
 type LeadPayload = {
   event?: LeadEvent;
@@ -21,6 +27,9 @@ type LeadPayload = {
   subject?: string;
   message?: string;
   sourcePage?: string;
+  interestCategory?: string;
+  interestLabel?: string;
+  cartValueCents?: number;
   attribution?: {
     utmSource?: string;
     utmMedium?: string;
@@ -39,6 +48,10 @@ type LeadPayload = {
 const EVENT_TO_ENV: Record<LeadEvent, string> = {
   contact_form: "HIGHLEVEL_CONTACT_FORM_WEBHOOK_URL",
   newsletter_signup: "HIGHLEVEL_NEWSLETTER_WEBHOOK_URL",
+  product_interest: "HIGHLEVEL_PRODUCT_INTEREST_WEBHOOK_URL",
+  category_interest: "HIGHLEVEL_CATEGORY_INTEREST_WEBHOOK_URL",
+  abandoned_cart: "HIGHLEVEL_ABANDONED_CART_WEBHOOK_URL",
+  new_client_welcome: "HIGHLEVEL_NEW_CLIENT_WEBHOOK_URL",
 };
 
 function clean(value: unknown, max = 1000): string {
@@ -57,7 +70,14 @@ Deno.serve(async (req) => {
   }
 
   const event = body.event;
-  if (event !== "contact_form" && event !== "newsletter_signup") {
+  if (
+    event !== "contact_form" &&
+    event !== "newsletter_signup" &&
+    event !== "product_interest" &&
+    event !== "category_interest" &&
+    event !== "abandoned_cart" &&
+    event !== "new_client_welcome"
+  ) {
     return json({ error: "unsupported_event" }, 400);
   }
 
@@ -94,11 +114,11 @@ Deno.serve(async (req) => {
     phone: clean(body.phone, 80),
     subject: clean(body.subject, 160),
     message: clean(body.message, 3000),
+    interest_category: clean(body.interestCategory, 160),
+    interest_label: clean(body.interestLabel, 220),
+    cart_value_cents: Number.isFinite(body.cartValueCents) ? Math.max(0, Math.round(Number(body.cartValueCents))) : 0,
     submitted_at: new Date().toISOString(),
-    tags:
-      event === "newsletter_signup"
-        ? ["MBM Website", "Newsletter Signup"]
-        : ["MBM Website", "Contact Form"],
+    tags: eventTags(event),
   };
 
   const res = await fetch(webhookUrl, {
@@ -113,3 +133,12 @@ Deno.serve(async (req) => {
 
   return json({ ok: true });
 });
+
+function eventTags(event: LeadEvent): string[] {
+  if (event === "newsletter_signup") return ["MBM Website", "Newsletter Signup"];
+  if (event === "product_interest") return ["MBM Website", "Product Interest"];
+  if (event === "category_interest") return ["MBM Website", "Category Interest"];
+  if (event === "abandoned_cart") return ["MBM Website", "Abandoned Cart"];
+  if (event === "new_client_welcome") return ["MBM Website", "New Client"];
+  return ["MBM Website", "Contact Form"];
+}

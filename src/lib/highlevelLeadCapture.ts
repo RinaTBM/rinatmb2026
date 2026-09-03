@@ -1,7 +1,13 @@
 import { getMarketingAttribution, type MarketingAttribution } from './marketingAttribution';
 import { trackMetaLead } from './metaPixel';
 
-export type HighLevelLeadEvent = 'contact_form' | 'newsletter_signup';
+export type HighLevelLeadEvent =
+  | 'contact_form'
+  | 'newsletter_signup'
+  | 'product_interest'
+  | 'category_interest'
+  | 'abandoned_cart'
+  | 'new_client_welcome';
 
 export type HighLevelLeadPayload = {
   event: HighLevelLeadEvent;
@@ -11,6 +17,9 @@ export type HighLevelLeadPayload = {
   subject?: string;
   message?: string;
   sourcePage?: string;
+  interestCategory?: string;
+  interestLabel?: string;
+  cartValueCents?: number;
   attribution?: MarketingAttribution;
 };
 

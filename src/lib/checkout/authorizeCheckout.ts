@@ -4,9 +4,7 @@
  */
 import {
   FREE_SHIPPING_THRESHOLD_CENTS,
-  NEXT_DAY_SHIPPING_CENTS,
   ACCESSORY_SHIPPING_CENTS,
-  TWO_DAY_SHIPPING_CENTS,
   isFreeShippingEligible,
   type ShippingMethod,
 } from '../orders/shipping';
@@ -560,8 +558,6 @@ export function authorizeShippingCents(input: {
       return { error: 'Accessory shipping is available only for accessory-only orders.' };
     }
     method = 'accessory';
-  } else if (input.shippingMethod === 'next_day' || input.shippingMethod === 'two_day') {
-    method = 'none';
   } else if (
     !input.shippingMethod ||
     input.shippingMethod === 'none'
@@ -601,8 +597,6 @@ export function authorizeShippingCents(input: {
 
 export function shippingDisplayName(method: ShippingMethod): string {
   if (method === 'free_over_500') return 'Free Shipping ($500+)';
-  if (method === 'next_day') return 'Next-Day Shipping';
-  if (method === 'two_day') return 'Two-Day Shipping';
   if (method === 'accessory') return 'Accessory Shipping';
   if (method === 'none') return 'No shipping';
   return 'Shipping';
@@ -673,4 +667,4 @@ export function cartRequiresPhysicalShippingFromItems(
 }
 
 // Re-export shipping constants used by checkout tests/callers.
-export { FREE_SHIPPING_THRESHOLD_CENTS, TWO_DAY_SHIPPING_CENTS, NEXT_DAY_SHIPPING_CENTS };
+export { FREE_SHIPPING_THRESHOLD_CENTS };

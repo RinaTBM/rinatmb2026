@@ -9,8 +9,6 @@
 /** Methods accepted by modern checkout authorization. */
 export const SHIPPING_METHODS = [
   'accessory',
-  'two_day',
-  'next_day',
   'free_over_500',
   'none',
 ] as const;
@@ -21,15 +19,11 @@ export type ShippingMethod = (typeof SHIPPING_METHODS)[number];
 export const SELECTABLE_SHIPPING_METHODS = ['accessory'] as const;
 export type SelectableShippingMethod = (typeof SELECTABLE_SHIPPING_METHODS)[number];
 
-export const TWO_DAY_SHIPPING_CENTS = 3000;
-export const NEXT_DAY_SHIPPING_CENTS = 5000;
 export const ACCESSORY_SHIPPING_CENTS = 1000;
 export const FREE_SHIPPING_THRESHOLD_CENTS = 50000;
 
 export const SHIPPING_METHOD_LABELS: Record<ShippingMethod, string> = {
   accessory: 'Accessory Shipping',
-  two_day: 'Two-Day Shipping',
-  next_day: 'Next-Day Shipping',
   free_over_500: 'Free Shipping',
   none: 'Shipping',
 };
@@ -65,7 +59,6 @@ export function shippingCentsForMethod(
 ): number {
   if (isFreeShippingEligible(subtotalCents) || method === 'free_over_500') return 0;
   if (method === 'accessory') return ACCESSORY_SHIPPING_CENTS;
-  if (method === 'two_day' || method === 'next_day') return 0;
   // Obsolete methods (e.g. "standard") must not silently charge $0 in checkout —
   // callers should reject them via authorizeShippingCents before charging.
   return 0;

@@ -495,7 +495,7 @@ export function CheckoutPage() {
       : accessoryOnlyShipping
         ? 'accessory'
         : shippingMethod === 'accessory'
-          ? 'two_day'
+          ? 'none'
           : shippingMethod;
   const shipping = !requiresPhysicalShipping
     ? 0
@@ -1719,7 +1719,7 @@ export function CheckoutPage() {
                     ) : null}
                     {shippingCents > 0 && (
                       <div className="flex justify-between text-ink-600">
-                        <span>{labelShippingMethod(resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day')}</span>
+                        <span>{labelShippingMethod(resolvedShippingMethod)}</span>
                         <span>${(shippingCents / 100).toFixed(2)}</span>
                       </div>
                     )}
@@ -1746,9 +1746,7 @@ export function CheckoutPage() {
                       {shippingCents > 0 && (
                         <div className="flex justify-between text-sm text-ink-700">
                           <span>
-                            {labelShippingMethod(
-                              resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day',
-                            )}
+                            {labelShippingMethod(resolvedShippingMethod)}
                           </span>
                           <span>${(shippingCents / 100).toFixed(2)}</span>
                         </div>

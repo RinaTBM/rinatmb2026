@@ -14,8 +14,7 @@ import {
 } from './checkoutConstants';
 import {
   FREE_SHIPPING_THRESHOLD_CENTS,
-  NEXT_DAY_SHIPPING_CENTS,
-  TWO_DAY_SHIPPING_CENTS,
+  ACCESSORY_SHIPPING_CENTS,
 } from '../orders/shipping';
 import {
   authorizeAccessorySalesTax,
@@ -346,14 +345,15 @@ describe('Provider Care (tax-inclusive; no separate tax add-on)', () => {
 
     // Shipping is outside Provider Care taxable base by construction.
     const ship = authorizeShippingCents({
-      shippingMethod: 'two_day',
-      clientShippingCents: TWO_DAY_SHIPPING_CENTS,
+      shippingMethod: 'accessory',
+      clientShippingCents: ACCESSORY_SHIPPING_CENTS,
       shippableSubtotalCents: 19900,
       requiresPhysicalShipping: true,
+      accessoryOnly: true,
     });
     expect('error' in ship).toBe(false);
     if ('error' in ship) return;
-    expect(ship.shippingCents).toBe(3000);
+    expect(ship.shippingCents).toBe(1000);
     expect(
       authorizeProviderCareTax({
         providerCareTaxableSubtotalCents: 10000,
@@ -447,32 +447,26 @@ describe('shipping authorization', () => {
     expect(r.shippingMethod).toBe('free_over_500');
   });
 
-  it('Two-Day charges $30 and Next-Day charges $50', () => {
-    const two = authorizeShippingCents({
-      shippingMethod: 'two_day',
-      clientShippingCents: TWO_DAY_SHIPPING_CENTS,
+  it('Accessory shipping charges $10', () => {
+    const acc = authorizeShippingCents({
+      shippingMethod: 'accessory',
+      clientShippingCents: ACCESSORY_SHIPPING_CENTS,
       shippableSubtotalCents: 19900,
       requiresPhysicalShipping: true,
+      accessoryOnly: true,
     });
-    const next = authorizeShippingCents({
-      shippingMethod: 'next_day',
-      clientShippingCents: NEXT_DAY_SHIPPING_CENTS,
-      shippableSubtotalCents: 19900,
-      requiresPhysicalShipping: true,
-    });
-    expect('error' in two).toBe(false);
-    expect('error' in next).toBe(false);
-    if ('error' in two || 'error' in next) return;
-    expect(two.shippingCents).toBe(3000);
-    expect(next.shippingCents).toBe(5000);
+    expect('error' in acc).toBe(false);
+    if ('error' in acc) return;
+    expect(acc.shippingCents).toBe(1000);
   });
 
   it('browser cannot submit an arbitrary shipping charge', () => {
     const r = authorizeShippingCents({
-      shippingMethod: 'two_day',
+      shippingMethod: 'accessory',
       clientShippingCents: 695,
       shippableSubtotalCents: 19900,
       requiresPhysicalShipping: true,
+      accessoryOnly: true,
     });
     expect('error' in r).toBe(true);
   });
@@ -484,7 +478,7 @@ describe('shipping authorization', () => {
     expect(cartRequiresPhysicalShipping([pc])).toBe(false);
     expect(shippableMerchandiseSubtotalCents([pc])).toBe(0);
     const r = authorizeShippingCents({
-      shippingMethod: 'two_day',
+      shippingMethod: 'none',
       clientShippingCents: 0,
       shippableSubtotalCents: 0,
       requiresPhysicalShipping: false,
@@ -523,7 +517,7 @@ describe('shipping authorization', () => {
     expect(shippableMerchandiseSubtotalCents(lines)).toBe(50000);
     expect(cartRequiresPhysicalShipping(lines)).toBe(true);
     const r = authorizeShippingCents({
-      shippingMethod: 'two_day',
+      shippingMethod: 'none',
       clientShippingCents: 0,
       shippableSubtotalCents: shippableMerchandiseSubtotalCents(lines),
       requiresPhysicalShipping: true,
@@ -535,11 +529,10 @@ describe('shipping authorization', () => {
   });
 
   it('old $6.95/$75/$20 rules are gone', () => {
-    expect(TWO_DAY_SHIPPING_CENTS).not.toBe(695);
-    expect(TWO_DAY_SHIPPING_CENTS).not.toBe(2000);
+    expect(ACCESSORY_SHIPPING_CENTS).not.toBe(695);
+    expect(ACCESSORY_SHIPPING_CENTS).not.toBe(2000);
     expect(FREE_SHIPPING_THRESHOLD_CENTS).not.toBe(7500);
-    expect(TWO_DAY_SHIPPING_CENTS).toBe(3000);
-    expect(NEXT_DAY_SHIPPING_CENTS).toBe(5000);
+    expect(ACCESSORY_SHIPPING_CENTS).toBe(1000);
     expect(FREE_SHIPPING_THRESHOLD_CENTS).toBe(50000);
   });
 
@@ -555,10 +548,10 @@ describe('shipping authorization', () => {
     expect(r.error).toMatch(/standard/i);
   });
 
-  it('membership-only carts under $500 still charge Two-Day / Next-Day (no silent free shipping)', () => {
+  it('membership-only carts under $500 do not receive free shipping', () => {
     const r = authorizeShippingCents({
-      shippingMethod: 'two_day',
-      clientShippingCents: 3000,
+      shippingMethod: 'none',
+      clientShippingCents: 0,
       // Ordinary merchandise subtotal for free-shipping threshold (membership excluded).
       shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
@@ -566,7 +559,7 @@ describe('shipping authorization', () => {
     });
     expect('error' in r).toBe(false);
     if ('error' in r) return;
-    expect(r.shippingCents).toBe(3000);
+    expect(r.shippingCents).toBe(0);
     expect(r.freeShippingEligible).toBe(false);
   });
 });
@@ -574,8 +567,8 @@ describe('shipping authorization', () => {
 describe('membership shipping vs $500 free-shipping threshold', () => {
   it('$125 Semaglutide membership does not receive free shipping', () => {
     const r = authorizeShippingCents({
-      shippingMethod: 'two_day',
-      clientShippingCents: TWO_DAY_SHIPPING_CENTS,
+      shippingMethod: 'none',
+      clientShippingCents: 0,
       shippableSubtotalCents: 0, // membership excluded from threshold
       requiresPhysicalShipping: true,
       containsMembership: true,
@@ -583,15 +576,15 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     expect('error' in r).toBe(false);
     if ('error' in r) return;
     expect(r.freeShippingEligible).toBe(false);
-    expect(r.shippingMethod).toBe('two_day');
-    expect(r.shippingCents).toBe(3000);
+    expect(r.shippingMethod).toBe('none');
+    expect(r.shippingCents).toBe(0);
     expect(SEMAGLUTIDE_MEMBERSHIP_CENTS).toBe(12500);
   });
 
   it('$179 Tirzepatide membership does not receive free shipping', () => {
     const r = authorizeShippingCents({
-      shippingMethod: 'next_day',
-      clientShippingCents: NEXT_DAY_SHIPPING_CENTS,
+      shippingMethod: 'none',
+      clientShippingCents: 0,
       shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
       containsMembership: true,
@@ -599,8 +592,8 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     expect('error' in r).toBe(false);
     if ('error' in r) return;
     expect(r.freeShippingEligible).toBe(false);
-    expect(r.shippingMethod).toBe('next_day');
-    expect(r.shippingCents).toBe(5000);
+    expect(r.shippingMethod).toBe('none');
+    expect(r.shippingCents).toBe(0);
     expect(TIRZEPATIDE_MEMBERSHIP_CENTS).toBe(17900);
   });
 
@@ -633,47 +626,26 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     ).toBe(0);
   });
 
-  it('membership checkout requires two_day or next_day', () => {
-    const missing = authorizeShippingCents({
-      shippingMethod: undefined,
-      clientShippingCents: 3000,
+  it('membership checkout uses none shipping method', () => {
+    const r = authorizeShippingCents({
+      shippingMethod: 'none',
+      clientShippingCents: 0,
       shippableSubtotalCents: 0,
       requiresPhysicalShipping: true,
       containsMembership: true,
     });
-    expect('error' in missing).toBe(true);
-    if (!('error' in missing)) return;
-    expect(missing.error).toMatch(/two_day|next_day/i);
-
-    const two = authorizeShippingCents({
-      shippingMethod: 'two_day',
-      clientShippingCents: 3000,
-      shippableSubtotalCents: 0,
-      requiresPhysicalShipping: true,
-      containsMembership: true,
-    });
-    const next = authorizeShippingCents({
-      shippingMethod: 'next_day',
-      clientShippingCents: 5000,
-      shippableSubtotalCents: 0,
-      requiresPhysicalShipping: true,
-      containsMembership: true,
-    });
-    expect('error' in two).toBe(false);
-    expect('error' in next).toBe(false);
-    if ('error' in two || 'error' in next) return;
-    expect(two.shippingCents).toBe(3000);
-    expect(next.shippingCents).toBe(5000);
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(r.shippingCents).toBe(0);
   });
 
-  it('two_day = $30 and next_day = $50 for memberships', () => {
-    expect(TWO_DAY_SHIPPING_CENTS).toBe(3000);
-    expect(NEXT_DAY_SHIPPING_CENTS).toBe(5000);
+  it('accessory shipping = $10', () => {
+    expect(ACCESSORY_SHIPPING_CENTS).toBe(1000);
   });
 
   it('$500+ eligible ordinary merchandise can still receive free shipping', () => {
     const r = authorizeShippingCents({
-      shippingMethod: 'two_day',
+      shippingMethod: 'none',
       clientShippingCents: 0,
       shippableSubtotalCents: FREE_SHIPPING_THRESHOLD_CENTS,
       requiresPhysicalShipping: true,
@@ -714,8 +686,8 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     expect(freeShippingEligibleMerchandiseSubtotalCents([ordinary, membership])).toBe(40000);
 
     const r = authorizeShippingCents({
-      shippingMethod: 'two_day',
-      clientShippingCents: TWO_DAY_SHIPPING_CENTS,
+      shippingMethod: 'none',
+      clientShippingCents: 0,
       shippableSubtotalCents: freeShippingEligibleMerchandiseSubtotalCents([ordinary, membership]),
       requiresPhysicalShipping: true,
       containsMembership: true,
@@ -723,12 +695,12 @@ describe('membership shipping vs $500 free-shipping threshold', () => {
     expect('error' in r).toBe(false);
     if ('error' in r) return;
     expect(r.freeShippingEligible).toBe(false);
-    expect(r.shippingCents).toBe(3000);
+    expect(r.shippingCents).toBe(0);
 
     // With $500 ordinary + membership, free shipping remains available from ordinary alone.
     const ordinary500: LineResolution = { ...ordinary, unitAmountCents: 50000 };
     const free = authorizeShippingCents({
-      shippingMethod: 'two_day',
+      shippingMethod: 'none',
       clientShippingCents: 0,
       shippableSubtotalCents: freeShippingEligibleMerchandiseSubtotalCents([
         ordinary500,
@@ -824,21 +796,22 @@ describe('order / webhook contract', () => {
   });
 
   it('customer charge reconciles as subtotal + shipping with tax_cents = 0', () => {
-    // $100 PC + $200 wellness + Two-Day shipping when merchandise < $500
+    // $100 PC + $200 wellness + accessory shipping when merchandise < $500
     const pcTaxable = 10000;
     const wellness = 20000;
     const pcTax = authorizeProviderCareTax({ providerCareTaxableSubtotalCents: pcTaxable }).providerCareTaxCents;
     const shipping = authorizeShippingCents({
-      shippingMethod: 'two_day',
-      clientShippingCents: 3000,
+      shippingMethod: 'accessory',
+      clientShippingCents: ACCESSORY_SHIPPING_CENTS,
       shippableSubtotalCents: wellness,
       requiresPhysicalShipping: true,
+      accessoryOnly: true,
     });
     expect('error' in shipping).toBe(false);
     if ('error' in shipping) return;
     expect(pcTax).toBe(0);
-    expect(shipping.shippingCents).toBe(3000);
+    expect(shipping.shippingCents).toBe(1000);
     const displayedTotal = pcTaxable + wellness + shipping.shippingCents + pcTax;
-    expect(displayedTotal).toBe(10000 + 20000 + 3000);
+    expect(displayedTotal).toBe(10000 + 20000 + 1000);
   });
 });

@@ -12,16 +12,14 @@ import {
 } from './index';
 import { buildAuthoritativeOrderLines } from '@/lib/provider/injectProviderVisit';
 import {
-  TWO_DAY_SHIPPING_CENTS,
-  NEXT_DAY_SHIPPING_CENTS,
+  ACCESSORY_SHIPPING_CENTS,
 } from '@/lib/orders/shipping';
 import {
   evaluateKashuCardCartEligibility,
   assertKashuPaidAmountMatchesOrder,
   assertTagadaCheckoutTotalParity,
   TAGADA_UNEXPECTED_TAX_AMOUNT,
-  MBM_SHIPPING_SKU_TWO_DAY,
-  MBM_SHIPPING_SKU_NEXT_DAY,
+  MBM_SHIPPING_SKU_ACCESSORY,
   shippingSkuForCents,
 } from '@/lib/payments/kashuTagada';
 import {
@@ -75,7 +73,7 @@ describe('tax-inclusive checkout model', () => {
     expect(subtotal + shipping + taxCents).toBe(7500);
   });
 
-  it('$29 + Two-Day = $59.00', () => {
+  it('$29 + Accessory shipping = $39.00', () => {
     const built = buildAuthoritativeOrderLines({
       customerUserId: null,
       approvedTherapyHistory: [],
@@ -89,32 +87,11 @@ describe('tax-inclusive checkout model', () => {
           section: 'accessories',
         },
       ],
-      shippingCents: TWO_DAY_SHIPPING_CENTS,
+      shippingCents: ACCESSORY_SHIPPING_CENTS,
     });
     expect(built.taxCents).toBe(0);
-    expect(built.shippingCents).toBe(3000);
-    expect(built.totalCents).toBe(5900);
-  });
-
-  it('$29 + Next-Day = $79.00', () => {
-    const built = buildAuthoritativeOrderLines({
-      customerUserId: null,
-      approvedTherapyHistory: [],
-      items: [
-        {
-          productId: 'a2',
-          productName: 'Planner',
-          sku: 'MBM-ACC-PLN-ACC-001',
-          quantity: 1,
-          unitAmountCents: 2900,
-          section: 'accessories',
-        },
-      ],
-      shippingCents: NEXT_DAY_SHIPPING_CENTS,
-    });
-    expect(built.taxCents).toBe(0);
-    expect(built.shippingCents).toBe(5000);
-    expect(built.totalCents).toBe(7900);
+    expect(built.shippingCents).toBe(1000);
+    expect(built.totalCents).toBe(3900);
   });
 
   it('$75 service-only total = $75.00', () => {
@@ -147,7 +124,7 @@ describe('tax-inclusive checkout model', () => {
           section: 'weight-management',
         },
       ],
-      shippingCents: TWO_DAY_SHIPPING_CENTS,
+      shippingCents: ACCESSORY_SHIPPING_CENTS,
     });
     expect(built.taxCents).toBe(0);
     expect(built.items.some(i => i.sku === 'MBM-PC-IPV-SRV-001' || i.productId === 'pc1')).toBe(true);
@@ -161,18 +138,18 @@ describe('tax-inclusive checkout model', () => {
 });
 
 describe('Tagada hosted total parity under tax-inclusive model', () => {
-  it('Tagada hosted total equals MBM total ($59 planner + Two-Day)', () => {
-    const mbmTotal = 5900;
+  it('Tagada hosted total equals MBM total ($39 planner + Accessory shipping)', () => {
+    const mbmTotal = 3900;
     expect(
       assertTagadaCheckoutTotalParity({
-        publicOrderNumber: 'MBM-TEST-059',
+        publicOrderNumber: 'MBM-TEST-039',
         mbmTotalCents: mbmTotal,
         mappedMerchandiseCents: 2900,
-        mappedShippingCents: 3000,
+        mappedShippingCents: 1000,
         mbmTaxCents: 0,
-        skuList: ['MBM-ACC-PLN-ACC-001', MBM_SHIPPING_SKU_TWO_DAY],
+        skuList: ['MBM-ACC-PLN-ACC-001', MBM_SHIPPING_SKU_ACCESSORY],
       }),
-    ).toEqual({ ok: true, calculatedTagadaTotalCents: 5900 });
+    ).toEqual({ ok: true, calculatedTagadaTotalCents: 3900 });
     expect(
       assertKashuPaidAmountMatchesOrder({ orderTotalCents: mbmTotal, paidAmountCents: mbmTotal }),
     ).toEqual({ ok: true });
@@ -181,10 +158,10 @@ describe('Tagada hosted total parity under tax-inclusive model', () => {
   it('rejects Tagada total mismatch (no tolerance)', () => {
     expect(
       assertTagadaCheckoutTotalParity({
-        publicOrderNumber: 'MBM-TEST-059',
-        mbmTotalCents: 5900,
+        publicOrderNumber: 'MBM-TEST-039',
+        mbmTotalCents: 3900,
         mappedMerchandiseCents: 2900,
-        mappedShippingCents: 3000,
+        mappedShippingCents: 1000,
         mbmTaxCents: 232,
         skuList: ['MBM-ACC-PLN-ACC-001'],
       }),
@@ -197,7 +174,7 @@ describe('Tagada hosted total parity under tax-inclusive model', () => {
   it('unexpected tax_cents > 0 fails safely after migration', () => {
     const r = evaluateKashuCardCartEligibility({
       flagEnabled: true,
-      shippingCents: 3000,
+      shippingCents: 1000,
       taxCents: 232,
       items: [{ purchaseType: 'one_time', quantity: 1, sku: 'MBM-ACC-PLN-ACC-001' }],
     });
@@ -264,10 +241,9 @@ describe('card-first public payment selector', () => {
     expect(CARD_CHECKOUT_INIT_FAILED_MESSAGE.toLowerCase()).not.toMatch(/ach|wire|bank transfer/);
   });
 
-  it('shipping $0 / $30 / $50 SKU map', () => {
+  it('shipping $0 / $10 SKU map', () => {
     expect(shippingSkuForCents(0)).toBeNull();
-    expect(shippingSkuForCents(3000)).toBe(MBM_SHIPPING_SKU_TWO_DAY);
-    expect(shippingSkuForCents(5000)).toBe(MBM_SHIPPING_SKU_NEXT_DAY);
+    expect(shippingSkuForCents(1000)).toBe(MBM_SHIPPING_SKU_ACCESSORY);
   });
 
   it('Stripe remains disabled; webhook amount equality preserved; duplicate paid noop shape', () => {

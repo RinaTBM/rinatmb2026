@@ -545,7 +545,7 @@ export function authorizeShippingCents(input: {
   if (input.shippingMethod === 'standard') {
     return {
       error:
-        'Unsupported shipping method: standard. Approved methods are accessory ($10), two_day ($30), and next_day ($50).',
+        'Unsupported shipping method: standard. Accessories use the only separate storefront shipping charge.',
     };
   }
 
@@ -560,10 +560,8 @@ export function authorizeShippingCents(input: {
       return { error: 'Accessory shipping is available only for accessory-only orders.' };
     }
     method = 'accessory';
-  } else if (input.shippingMethod === 'next_day') {
-    method = 'next_day';
-  } else if (input.shippingMethod === 'two_day') {
-    method = 'two_day';
+  } else if (input.shippingMethod === 'next_day' || input.shippingMethod === 'two_day') {
+    method = 'none';
   } else if (
     !input.shippingMethod ||
     input.shippingMethod === 'none'
@@ -571,20 +569,10 @@ export function authorizeShippingCents(input: {
     if (input.accessoryOnly) {
       method = 'accessory';
     } else {
-      // Membership medication carts without free shipping must use paid Two-Day / Next-Day.
-      if (input.containsMembership) {
-        return {
-          error:
-            'Membership checkout requires a shipping method: two_day ($30) or next_day ($50).',
-        };
-      }
-      method = 'two_day';
+      method = 'none';
     }
   } else if (input.shippingMethod === 'free_over_500') {
-    return {
-      error:
-        'Free shipping requires $500 or more in eligible ordinary merchandise (membership value does not count).',
-    };
+    method = 'none';
   } else {
     return { error: `Unsupported shipping method: ${input.shippingMethod}` };
   }
@@ -593,9 +581,7 @@ export function authorizeShippingCents(input: {
     ? 0
     : method === 'accessory'
       ? ACCESSORY_SHIPPING_CENTS
-    : method === 'next_day'
-      ? NEXT_DAY_SHIPPING_CENTS
-      : TWO_DAY_SHIPPING_CENTS;
+      : 0;
 
   if (
     typeof input.clientShippingCents === 'number' &&

@@ -194,7 +194,7 @@ export function buildPurchaseOptions(input: {
       kind: 'auto_refill',
       label: 'Subscribe & Save',
       badge: `Save ${settings.memberDiscountPercent}%`,
-      description: 'Delivered monthly after provider approval. Your selected $30 or $50 shipping method renews with every order.',
+      description: 'Delivered monthly after provider approval. Any required fulfillment details are shown before payment.',
       cta: 'Subscribe',
       standardPrice,
       finalPrice: priced.finalPrice,

@@ -22,7 +22,6 @@ import {
   isFreeShippingEligible,
   labelShippingMethod,
   shippingCentsForMethod,
-  type SelectableShippingMethod,
   type ShippingMethod,
 } from '@/lib/orders/shipping';
 import {
@@ -156,7 +155,7 @@ export function CheckoutPage() {
   const [form, setForm] = useState({
     email: '', firstName: '', lastName: '', address: '', city: '', state: '', zip: '', phone: '',
   });
-  const [shippingMethod, setShippingMethod] = useState<SelectableShippingMethod>('two_day');
+  const [shippingMethod, setShippingMethod] = useState<ShippingMethod>('none');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('kashu_card');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -486,7 +485,7 @@ export function CheckoutPage() {
     if (accessoryOnlyShipping && shippingMethod !== 'accessory') {
       setShippingMethod('accessory');
     } else if (!accessoryOnlyShipping && shippingMethod === 'accessory') {
-      setShippingMethod('two_day');
+      setShippingMethod('none');
     }
   }, [accessoryOnlyShipping, shippingMethod]);
   const resolvedShippingMethod: ShippingMethod = !requiresPhysicalShipping
@@ -501,10 +500,7 @@ export function CheckoutPage() {
   const shipping = !requiresPhysicalShipping
     ? 0
     : hasMembership
-      ? shippingCentsForMethod(
-          resolvedShippingMethod === 'next_day' ? 'next_day' : 'two_day',
-          0,
-        ) / 100
+      ? 0
       : freeShippingEligible
         ? 0
         : shippingCentsForMethod(resolvedShippingMethod, 0) / 100;
@@ -1199,11 +1195,15 @@ export function CheckoutPage() {
                     <h2 className="font-serif text-2xl text-ink-900 mb-4">Shipping Method</h2>
                     {hasMembership && (
                       <div className="mb-3 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm text-gold-800">
-                        <p className="font-medium">Shipping collected today</p>
+                        <p className="font-medium">Shipping note</p>
                         <p className="mt-1 text-xs leading-relaxed">{MEMBERSHIP_CARD_SHIPPING_NOTE}</p>
                       </div>
                     )}
-                    {freeShippingEligible ? (
+                    {!accessoryOnlyShipping ? (
+                      <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
+                        This order has no separate storefront shipping charge.
+                      </div>
+                    ) : freeShippingEligible ? (
                       <div className="rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-sm text-gold-800">
                         This order has no separate storefront shipping charge.
                       </div>
@@ -1214,16 +1214,13 @@ export function CheckoutPage() {
                           id="shipping-method"
                           name="shippingMethod"
                           value={shippingMethod}
-                          onChange={event => setShippingMethod(event.target.value as SelectableShippingMethod)}
+                          onChange={event => setShippingMethod(event.target.value as ShippingMethod)}
                           className="w-full rounded-xl border border-cream-300 bg-white px-4 py-3 text-sm text-ink-900 focus:border-ink-900 focus:outline-none focus:ring-2 focus:ring-gold-300"
                         >
                           {accessoryOnlyShipping ? (
                             <option value="accessory">Accessory Shipping — $10</option>
                           ) : (
-                            <>
-                              <option value="two_day">Two-Day Shipping — $30</option>
-                              <option value="next_day">Next-Day Shipping — $50</option>
-                            </>
+                            <option value="none">No separate storefront shipping charge</option>
                           )}
                         </select>
                         <p className="text-xs text-ink-500">

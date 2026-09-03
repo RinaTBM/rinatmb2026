@@ -4,18 +4,13 @@ import { navigate } from '@/router';
 import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
 import { navigateToGenProductFirstCheckout, resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
 
-type ShippingOption = 'two_day' | 'next_day';
-
 const HRT_CATEGORY = 'womens-hormone-therapy';
 const INITIAL_VISIT_CENTS = 7500;
-const TWO_DAY_SHIPPING_CENTS = 3000;
-const NEXT_DAY_SHIPPING_CENTS = 5000;
 
 const money = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
 export function PrescriptionBasketDrawer() {
   const { items, isOpen, itemCount, medicationSubtotal, closeBasket, removeItem } = usePrescriptionBasket();
-  const [shippingOption, setShippingOption] = useState<ShippingOption>('two_day');
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const hasHrt = items.some(item => item.category === HRT_CATEGORY);
   const hasLabItems = items.some(item => item.category === 'labs');
@@ -24,10 +19,9 @@ export function PrescriptionBasketDrawer() {
   const selectedItemAvailable = selectedItem
     ? Boolean(selectedItem.checkoutUrl) || resolveGenProductFirstCheckout(selectedItem.genClientProductId).ok
     : false;
-  const shippingCents = shippingOption === 'two_day' ? TWO_DAY_SHIPPING_CENTS : NEXT_DAY_SHIPPING_CENTS;
   const estimatedTotalCents =
     Math.round(medicationSubtotal * 100) +
-    (hasPrescriptionItems ? shippingCents + INITIAL_VISIT_CENTS : 0);
+    (hasPrescriptionItems ? INITIAL_VISIT_CENTS : 0);
 
   const beginGenCheckout = (item: NonNullable<typeof selectedItem>) => {
     if (item.checkoutUrl) {
@@ -142,31 +136,13 @@ export function PrescriptionBasketDrawer() {
                 </p>
               </div>
 
-              {hasPrescriptionItems && (
-              <div className="mt-4 rounded-2xl border border-cream-300 bg-white p-4">
-                <p className="text-sm font-medium text-ink-900">Shipping preference</p>
-                <div className="mt-3 grid grid-cols-2 gap-2">
-                  <label className={`cursor-pointer rounded-xl border px-3 py-3 ${shippingOption === 'two_day' ? 'border-gold-400 bg-gold-50' : 'border-cream-300'}`}>
-                    <input type="radio" name="prescription-shipping" checked={shippingOption === 'two_day'} onChange={() => setShippingOption('two_day')} className="mr-2" />
-                    <span className="text-sm font-medium text-ink-900">Two-Day</span>
-                    <span className="mt-1 block pl-6 text-xs text-ink-500">$30</span>
-                  </label>
-                  <label className={`cursor-pointer rounded-xl border px-3 py-3 ${shippingOption === 'next_day' ? 'border-gold-400 bg-gold-50' : 'border-cream-300'}`}>
-                    <input type="radio" name="prescription-shipping" checked={shippingOption === 'next_day'} onChange={() => setShippingOption('next_day')} className="mr-2" />
-                    <span className="text-sm font-medium text-ink-900">Next-Day</span>
-                    <span className="mt-1 block pl-6 text-xs text-ink-500">$50</span>
-                  </label>
-                </div>
-              </div>
-              )}
-
               <div className="mt-4 rounded-2xl border border-gold-200 bg-gold-50 p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-gold-800">Planning estimate</p>
                 <div className="mt-3 space-y-2 text-sm">
                   <div className="flex justify-between gap-3"><span className="text-ink-600">Care selections</span><span className="font-medium text-ink-900">{money(Math.round(medicationSubtotal * 100))}</span></div>
                   {hasPrescriptionItems && <div className="flex justify-between gap-3"><span className="text-ink-600">Initial provider visit, if required</span><span className="font-medium text-ink-900">{money(INITIAL_VISIT_CENTS)}</span></div>}
                   {hasHrt && <div className="flex justify-between gap-3"><span className="text-ink-600">Hormone therapy labs, if required</span><span className="font-medium text-ink-900">{hasLabItems ? 'Included above' : 'Choose option'}</span></div>}
-                  {hasPrescriptionItems && <div className="flex justify-between gap-3"><span className="text-ink-600">{shippingOption === 'two_day' ? 'Two-Day shipping' : 'Next-Day shipping'}</span><span className="font-medium text-ink-900">{money(shippingCents)}</span></div>}
+                  {hasPrescriptionItems && <div className="flex justify-between gap-3"><span className="text-ink-600">Separate storefront shipping</span><span className="font-medium text-ink-900">$0.00</span></div>}
                   <div className="flex justify-between gap-3 border-t border-gold-200 pt-2"><span className="font-medium text-ink-900">Estimated total before GEN confirmation</span><span className="font-medium text-ink-900">{money(estimatedTotalCents)}</span></div>
                 </div>
                 <p className="mt-3 text-[11px] leading-relaxed text-gold-900">GEN Health is authoritative for the final amount, lab option, visit requirement, shipping availability, and clinical approval. This basket does not charge your card.</p>

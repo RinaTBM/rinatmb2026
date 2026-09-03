@@ -162,9 +162,7 @@ function FamilySelectors({
   const r85Ready = visible.some((v) => v.websiteVariantId === 'nad-nasal-r85');
 
   const displayPrice = liveGlp1Program?.price ?? price;
-  // Recovery Stack has a fixed, separately disclosed $30 shipping charge in
-  // GEN. Keep the website total equal to the GEN checkout total.
-  const fixedShipping = familyId === 'bpc-advanced-blends' ? 30 : 0;
+  const fixedShipping = 0;
   const dueToday = displayPrice == null ? null : displayPrice + fixedShipping;
   const genCheckout = resolveGenProductFirstCheckout(liveGlp1Program?.id ?? variant?.genClientProductId);
   const selectedGenClientProductId = liveGlp1Program?.id ?? variant?.genClientProductId;

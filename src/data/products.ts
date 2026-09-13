@@ -742,7 +742,7 @@ export const products: Product[] = [
       { dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 129 },
     ],
     status: 'active',
-    isVisible: false,
+    isVisible: true,
   }),
   mk({
     id: 'p47', // preserves the previous Semax app_product_id
@@ -761,7 +761,7 @@ export const products: Product[] = [
       { dosageForm: 'Injection', strength: 'Provider-directed', size: 'Monthly supply', price: 129 },
     ],
     status: 'active',
-    isVisible: false,
+    isVisible: true,
   }),
   mk({
     id: 'p68',
@@ -848,6 +848,10 @@ export const products: Product[] = [
         price: 189,
       },
     ],
+    // Retired from the customer storefront. Keep the historical record for
+    // order/account compatibility, but do not offer or route it for purchase.
+    status: 'future',
+    isVisible: false,
   }),
   mk({
     id: 'p82',
@@ -876,6 +880,10 @@ export const products: Product[] = [
     ],
     internalNotes:
       'GEN Product-first client product MXsSZY2GpiCByJUQer1p. Exact paired formulary: BPC-157/GHK-CU/KPV/TB500 3mg/10mg/3mg/3mg/mL (5 mL), Greenwich Pharmacy. Retail medication price $159 under owner formula: ($77 medication cost × 1.75) + $25 pharmacy shipping = $159.75, rounded to $159. Website must route only through the verified GEN checkout.',
+    // Retired from the customer storefront. Keep the historical record for
+    // order/account compatibility, but do not offer or route it for purchase.
+    status: 'future',
+    isVisible: false,
   }),
 
   // ===== PRESCRIPTION SKIN & HAIR =====

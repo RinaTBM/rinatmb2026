@@ -822,15 +822,15 @@ export const products: Product[] = [
   mk({
     id: 'p41', // preserves the previous BPC-157/TB-500 Injection app_product_id
     slug: 'bpc-157-tb-500',
-    displayName: 'BPC-157 + TB-500: Wolverine Recovery & Tissue Repair Blend',
-    shortName: 'Wolverine',
+    displayName: 'BPC-157 + TB-500: Quick Recovery & Tissue Repair Blend',
+    shortName: 'Quick Recovery',
     subtitle: 'Provider-directed compounded dual-peptide recovery blend',
     category: 'recovery-performance',
     goals: ['recovery', 'performance'],
     shortDescription: 'A provider-directed compounded BPC-157 and TB-500 dual-peptide blend, potentially used to support musculoskeletal recovery, tissue repair, inflammation modulation, tendon and ligament comfort, and athletic performance wellness under clinical supervision.',
     longDescription: COMPOUNDED_DISCLAIMER,
     image: IMG_INJECTION,
-    imageAlt: 'Wolverine BPC-157 and TB-500 compounded recovery and tissue-repair blend',
+    imageAlt: 'Quick Recovery BPC-157 and TB-500 compounded recovery and tissue-repair blend',
     providerDisclaimer: COMPOUNDED_DISCLAIMER,
     variants: [
       {
@@ -869,7 +869,7 @@ export const products: Product[] = [
       {
         id: 'bpc-ghk-kpv-tb-r101',
         dosageForm: 'Injection',
-        strength: 'Wolverine',
+        strength: 'Quick Recovery',
         size: '5 mL vial',
         price: 159,
       },

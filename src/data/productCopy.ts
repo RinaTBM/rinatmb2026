@@ -676,9 +676,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
 
   // ===== RECOVERY & PERFORMANCE =====
   'recovery-stack': {
-    benefitHeadline: 'Wolverine Recovery & Wellness Support',
+    benefitHeadline: 'Quick Recovery & Wellness Support',
     shortDescription:
-      'Wolverine is a provider-directed compounded recovery and wellness option available after eligibility review. Your provider and dispensing pharmacy determine the final preparation and instructions.',
+      'Quick Recovery is a provider-directed compounded recovery and wellness option available after eligibility review. Your provider and dispensing pharmacy determine the final preparation and instructions.',
     highlights: [
       'Recovery & Wellness Support',
       'Compounded Injection',
@@ -686,7 +686,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Pharmacy-Fulfilled',
     ],
     about: [
-      'Wolverine is designed as a single provider-directed pathway for customers discussing recovery and wellness goals with a licensed provider.',
+      'Quick Recovery is designed as a single provider-directed pathway for customers discussing recovery and wellness goals with a licensed provider.',
       'The storefront does not publish pharmacy-level formulation details. Eligibility, final preparation, and use instructions are determined through clinical review and pharmacy fulfillment.',
     ].join('\n\n'),
     potentialBenefits: [
@@ -712,9 +712,9 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   },
 
   'bpc-157-tb-500': {
-    benefitHeadline: 'Wolverine — Capsule or Injection',
+    benefitHeadline: 'Quick Recovery — Capsule or Injection',
     shortDescription:
-      'Wolverine is a provider-directed compounded blend available as capsule or injection. It is discussed in recovery and performance wellness settings — with realistic expectations and no guaranteed injury healing.',
+      'Quick Recovery is a provider-directed compounded blend available as capsule or injection. It is discussed in recovery and performance wellness settings — with realistic expectations and no guaranteed injury healing.',
     highlights: [
       'Capsule or Injection',
       'Two-Peptide Blend',

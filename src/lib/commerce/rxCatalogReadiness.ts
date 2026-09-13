@@ -238,7 +238,7 @@ export const PROPOSED_REPLACEMENT_SKUS: readonly ProposedReplacementSku[] = Obje
   },
   {
     category: 'recovery-performance',
-    websiteProductName: 'Wolverine: BPC-157/TB-500',
+    websiteProductName: 'Quick Recovery: BPC-157/TB-500',
     internalExactFormulation: 'BPC-157 oral (alone) — TBD owner-approved GEN pairing',
     dosageForm: 'Capsule',
     strength: 'TBD',

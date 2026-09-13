@@ -53,7 +53,7 @@ describe('MBM-FINAL-WEBSITE-LAUNCH-1 gate', () => {
     expect(slugs).toContain('tirzepatide');
     expect(slugs).toContain('nad-plus');
     expect(slugs).toContain('fat-burner');
-    expect(slugs).toContain('bpc-157-tb-500');
+    expect(slugs).toContain('recovery-stack');
     expect(slugs).toContain('estradiol-patch');
     expect(slugs).not.toContain('sermorelin');
     expect(slugs).not.toContain('minoxidil-tablets');

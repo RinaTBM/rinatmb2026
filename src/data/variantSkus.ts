@@ -39,6 +39,7 @@ export const VARIANT_SKU_BY_ID: Readonly<Record<string, string>> = {
   'tesamorelin-v1': 'MBM-LON-TESA-INJ-001',
   'bpc-157-tb-500-v1': 'MBM-RP-BPC-CAP-001',
   'bpc-157-tb-500-v2': 'MBM-RP-BPC-INJ-001',
+  'bpc-ghk-kpv-tb-r101': 'MBM-RP-KLOW-INJ-001',
   'tretinoin-cream-v1': 'MBM-SH-TRE-CRM-001',
   'tretinoin-cream-v2': 'MBM-SH-TRE-CRM-002',
   'tretinoin-cream-v3': 'MBM-SH-TRE-CRM-003',
@@ -75,7 +76,7 @@ export const MEMBERSHIP_PROGRAM_SKU_BY_APP_ID: Readonly<Record<string, string>> 
   m2: 'MBM-MEM-TIR-MEM-001',
 };
 
-export const EXPECTED_RETAIL_SKU_COUNT = 84;
+export const EXPECTED_RETAIL_SKU_COUNT = 85;
 export const EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT = 2;
 export const EXPECTED_TOTAL_SKU_COUNT =
   EXPECTED_RETAIL_SKU_COUNT + EXPECTED_MEMBERSHIP_PROGRAM_SKU_COUNT;

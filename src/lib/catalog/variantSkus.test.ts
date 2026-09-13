@@ -61,12 +61,10 @@ describe('variant SKU registry', () => {
     expect(missing).toEqual([]);
   });
 
-  it('keeps Recovery Stack GEN-only rather than assigning a Tagada SKU', () => {
+  it('assigns Recovery Stack a retail SKU for purchase', () => {
     const recovery = products.find((p) => p.slug === 'recovery-stack');
-    expect(recovery?.variants[0]?.sku).toBeUndefined();
-    const family = getWebsiteFamilyBySlug('recovery-stack');
-    const variant = family && listPatientVisibleVariants(family)[0];
-    expect(resolveGenProductFirstCheckout(variant?.genClientProductId).ok).toBe(true);
+    expect(recovery?.variants[0]?.sku).toBe('MBM-RP-KLOW-INJ-001');
+    expect(VARIANT_SKU_BY_ID[recovery!.variants[0].id]).toBe('MBM-RP-KLOW-INJ-001');
   });
 
   it('keeps Fat Burner and Tesamorelin GEN-routed', () => {

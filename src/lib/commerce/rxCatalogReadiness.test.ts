@@ -21,16 +21,16 @@ import {
 describe('Phase 12I.3 rx catalog readiness', () => {
   it('summary counts match definitive matrix', () => {
     const s = catalogSummaryCounts();
-    expect(s.totalRx).toBe(28);
-    expect(s.catalogReady).toBe(1);
-    expect(s.temporarilyUnavailable).toBe(18);
+    expect(s.totalRx).toBe(29);
+    expect(s.catalogReady).toBe(4);
+    expect(s.temporarilyUnavailable).toBe(16);
     expect(s.newSkuRequired).toBe(9);
-    expect(s.productionRxReady).toBe(28);
+    expect(s.productionRxReady).toBe(29);
     expect(
       CATALOG_READY_RX_SKUS.length +
         TEMPORARILY_UNAVAILABLE_RX_SKUS.length +
         NEW_SKU_REQUIRED_RX_SKUS.length,
-    ).toBe(28);
+    ).toBe(29);
   });
 
   it('launch-ready family SKUs are production-purchasable with GEN API Orders off', () => {

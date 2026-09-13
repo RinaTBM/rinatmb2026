@@ -30,8 +30,13 @@ export type StorefrontRxAvailability = {
   replacesSku: string | null;
 };
 
-/** Exactly one READY catalog SKU from Phase 12I.2. */
-export const CATALOG_READY_RX_SKUS = Object.freeze(['MBM-RP-BPC-INJ-001'] as const);
+/** Catalog-ready SKUs available for purchase. */
+export const CATALOG_READY_RX_SKUS = Object.freeze([
+  'MBM-RP-BPC-INJ-001',
+  'MBM-LON-SEL-INJ-001',
+  'MBM-LON-SMX-INJ-001',
+  'MBM-RP-KLOW-INJ-001',
+] as const);
 
 /** 9 NEW_SKU_REQUIRED rows — old SKUs blocked for new sales until replacements activate. */
 export const NEW_SKU_REQUIRED_RX_SKUS = Object.freeze([
@@ -57,8 +62,6 @@ export const TEMPORARILY_UNAVAILABLE_RX_SKUS = Object.freeze([
   'MBM-HRT-TST-CRM-001',
   'MBM-LON-NAD-INJ-001',
   'MBM-LON-NAD-INJ-002',
-  'MBM-LON-SEL-INJ-001',
-  'MBM-LON-SMX-INJ-001',
   'MBM-LON-SSN-NS-001',
   'MBM-LON-TESA-INJ-001',
   'MBM-SH-TRE-CRM-001',
@@ -331,11 +334,11 @@ export function catalogSummaryCounts(): {
   productionRxReady: number;
 } {
   return {
-    totalRx: 28,
+    totalRx: 29,
     catalogReady: CATALOG_READY_RX_SKUS.length,
     temporarilyUnavailable: TEMPORARILY_UNAVAILABLE_RX_SKUS.length,
     newSkuRequired: NEW_SKU_REQUIRED_RX_SKUS.length,
-    productionRxReady: 28,
+    productionRxReady: 29,
   };
 }
 

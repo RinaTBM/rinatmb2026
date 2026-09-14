@@ -163,11 +163,12 @@ export function TermsPage() {
           body: (
             <>
               <p>
-                When offered, FIRSTTIME provides $25 off eligible purchases and OGTBM provides $50 off each eligible
-                unit. TEST and MBMTEST90 are limited internal/testing codes and may be restricted to authorized
-                checkout emails. Only one code may be applied at a time. Shipping is not discounted. FIRSTTIME requires
-                a signed-in customer account. Membership enrollment, Subscribe &amp; Save, Auto-Refill, and recurring
-                renewals are excluded.
+                When offered, FIRSTTIME provides $25 off an eligible first order and OGTBM provides 25% off eligible
+                products. Enter one code at GEN Health checkout and select Apply before paying. GEN Health confirms
+                product eligibility, usage limits, and the final discount. FIRSTTIME is limited to one use per patient
+                with no prior paid order; eligibility uses the checkout email. GEN codes do not apply to the separate
+                accessories checkout. An initial-purchase discount does not change recurring renewal prices unless
+                the offer explicitly says so.
               </p>
             </>
           ),

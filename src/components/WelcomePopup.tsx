@@ -121,13 +121,14 @@ export function WelcomePopup() {
               Enjoy <span className="text-gold-600">$25 Off</span><br />Your First Order
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-ink-500">
-              Create your client account to unlock this one-time welcome gift. Your portal gives you access to order
-              tracking, prescription management, and exclusive member pricing.
+              When available, use <span className="font-semibold text-gold-700">FIRSTTIME</span> at GEN Health
+              checkout for $25 off an eligible first order. Enter your email and apply the code before paying.
+              One use per new patient; eligibility and limits are confirmed at checkout.
             </p>
 
             {/* Value props */}
             <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-ink-600">
-              <span className="inline-flex items-center gap-1.5"><Check size={14} className="text-gold-500" /> Instant $25 credit</span>
+              <span className="inline-flex items-center gap-1.5"><Check size={14} className="text-gold-500" /> $25 first-order code</span>
               <span className="inline-flex items-center gap-1.5"><Check size={14} className="text-gold-500" /> Secure client portal</span>
               <span className="inline-flex items-center gap-1.5"><Check size={14} className="text-gold-500" /> Priority support</span>
             </div>
@@ -208,7 +209,7 @@ export function WelcomePopup() {
                 disabled={busy}
                 className="w-full rounded-full bg-ink-900 py-3.5 text-sm font-medium tracking-wide text-cream-50 transition-all duration-300 hover:bg-ink-800 hover:shadow-lg disabled:opacity-60"
               >
-                {busy ? 'Creating your account…' : 'Claim My $25 Credit'}
+                {busy ? 'Creating your account…' : 'Create My Account'}
               </button>
             </form>
 
@@ -223,15 +224,16 @@ export function WelcomePopup() {
             </div>
             <h2 className="font-serif text-3xl text-ink-900">Welcome to My Bare Method</h2>
             <p className="mt-3 text-sm leading-relaxed text-ink-500">
-              Your account is ready and your <span className="font-semibold text-gold-700">$25 welcome credit</span> has
-              been applied. Start shopping to use it at checkout.
+              Your account is ready. To request your $25 first-order discount, enter
+              <span className="font-semibold text-gold-700"> FIRSTTIME </span> at GEN Health checkout and select Apply.
+              Check the discounted total before paying; creating an account does not automatically apply the code.
             </p>
             <button
               type="button"
               onClick={handleShopNow}
               className="btn-gold mt-6 w-full text-sm"
             >
-              Shop Now &amp; Use My $25
+              Shop Eligible Products
             </button>
             <button
               type="button"

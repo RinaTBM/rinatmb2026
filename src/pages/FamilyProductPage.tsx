@@ -370,29 +370,31 @@ function FamilySelectors({
                         ? `${glp1Program === 'monthly' ? 'Monthly price' : 'One-time price'} shown. Shipping and provider consultation are included.`
                         : fixedShipping > 0
                         ? `Includes ${formatPrice(fixedShipping)} shipping. Any applicable visit charge is shown before payment.`
-                        : 'Review this in your Care Basket before continuing securely for intake, provider review, and payment.'}
+                        : 'Continue to secure GEN Health checkout for payment, intake, and provider review.'}
                     </p>
                   </div>
                 </div>
-                <button
+                {canPurchase && genCheckout.ok ? (
+                  <a href={genCheckout.url} target="_top" rel="noopener noreferrer" className="btn-primary w-full">
+                    Buy now
+                  </a>
+                ) : (
+                  <button type="button" className="btn-primary w-full" disabled>Temporarily unavailable</button>
+                )}
+                {canPurchase && <button
                   type="button"
-                  className="btn-primary w-full"
-                  disabled={!canPurchase}
+                  className="btn-outline mt-2 w-full"
                   onClick={addCurrentToBasket}
                 >
-                  {canPurchase
-                    ? currentInBasket
-                      ? 'Added — review prescription bag'
-                      : 'Add to Prescription Bag'
-                    : 'Temporarily unavailable'}
-                </button>
+                  {currentInBasket ? 'Review prescription basket' : 'Save to Care Basket'}
+                </button>}
                 {currentInBasket && (
                   <button type="button" onClick={openBasket} className="btn-ghost mt-2 w-full">
                     Open prescription bag
                   </button>
                 )}
                 <p className="mt-3 text-xs text-ink-500 leading-relaxed">
-                  Add prescriptions to your Care Basket while you shop, then continue securely for payment, intake, assessment, and provider review.
+                  Each prescription is purchased separately through secure GEN Health checkout.
                   Purchasing does not guarantee that a prescription will be issued.
                 </p>
               </div>

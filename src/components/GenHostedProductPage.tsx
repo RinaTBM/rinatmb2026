@@ -89,10 +89,15 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
           <div className="mt-6 rounded-2xl border border-cream-300 bg-white p-5">
             <p className="text-sm text-ink-500">Estimated prescription total</p>
             <p className="font-serif text-3xl text-ink-900">${selectedOption.price.toFixed(2)}</p>
-            <p className="mt-2 text-xs text-ink-500">You can review this in your Care Basket before continuing securely to GEN Health for intake, provider review, and payment.</p>
-            <button type="button" className="btn-primary mt-5 w-full" disabled={!checkout.ok} onClick={addCurrentToBasket}>{checkout.ok ? (currentInBasket ? 'Added — review prescription basket' : 'Add to Prescription Basket') : 'Temporarily unavailable'}</button>
+            <p className="mt-2 text-xs text-ink-500">Continue to secure GEN Health checkout for payment, intake, and provider review.</p>
+            {checkout.ok ? (
+              <a href={checkout.url} target="_top" rel="noopener noreferrer" className="btn-primary mt-5 w-full">Buy now</a>
+            ) : (
+              <button type="button" className="btn-primary mt-5 w-full" disabled>Temporarily unavailable</button>
+            )}
+            {checkout.ok && <button type="button" className="btn-outline mt-2 w-full" onClick={addCurrentToBasket}>{currentInBasket ? 'Review prescription basket' : 'Save to Care Basket'}</button>}
             {currentInBasket && <button type="button" onClick={openBasket} className="btn-ghost mt-2 w-full">Open prescription basket</button>}
-            <p className="mt-3 text-xs text-ink-500">Adding an item saves it to your Care Basket; it does not guarantee prescription approval.</p>
+            <p className="mt-3 text-xs text-ink-500">Each prescription is purchased separately. Payment does not guarantee prescription approval.</p>
           </div>
         </div>
       </div>

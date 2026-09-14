@@ -12,7 +12,7 @@ export type GenHostedProductRoute = {
 
 export const GEN_HOSTED_PRODUCTS: Record<string, GenHostedProductRoute> = {
   'aod-9604': { price: 179, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_PRIG7DYPNNgco3lGf1zx' },
-  'fat-burner': { price: 199, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_KXMm9SsbOEYnFy9phmZn' },
+  'fat-burner': { price: 199, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI' },
   'metabolic-triple': { price: 219, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_yearpPaLo5H0k0FU5Ej8' },
   'nad-plus': {
     price: 139,
@@ -30,7 +30,7 @@ export const GEN_HOSTED_PRODUCTS: Record<string, GenHostedProductRoute> = {
       },
     ],
   },
-  'bpc-157': { price: 199, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_7Kix55LA15U0lNvY9QXI' },
+  'bpc-157': { price: 199, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_KXMm9SsbOEYnFy9phmZn' },
   'estradiol-patch': { price: 129, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR' },
   'tretinoin-cream': { price: 79, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9' },
   'ghk-cu-minoxidil': { price: 69, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_489YrehNXRlL77fYPkOn' },

@@ -51,11 +51,11 @@ const faqCategories = [
       },
       {
         q: 'Which promo codes can I use?',
-        a: 'When available, FIRSTTIME provides $25 off eligible purchases and OGTBM provides $50 off each eligible unit. Internal testing codes may be restricted to authorized checkout emails. Enter one code at checkout. Promotions do not change recurring subscription renewal amounts.',
+        a: 'When available, FIRSTTIME provides $25 off an eligible first order and OGTBM provides 25% off eligible products. At GEN Health checkout, enter your email, open “Have a promo code?”, enter one code, and select Apply. Check the discounted total before paying.',
       },
       {
         q: 'What do promo codes exclude?',
-        a: 'Promo codes apply to one-time purchases, including eligible accessory purchases, but exclude membership enrollment, Subscribe & Save, Auto-Refill, and recurring renewals. Shipping is not discounted. FIRSTTIME requires a signed-in customer account.',
+        a: 'GEN Health confirms eligible products, usage limits, and the final discount at checkout. FIRSTTIME is limited to one use per patient with no prior paid order; eligibility uses your checkout email. GEN codes do not apply to the separate accessories checkout. A discount on an initial purchase does not change recurring renewal prices unless the offer explicitly says so.',
       },
       {
         q: 'Can I pay over time with Cherry?',

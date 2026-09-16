@@ -33,6 +33,10 @@ export function AccountOverviewPage() {
   return (
     <AccountShell active="overview">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <Link to="/groupon" className="card-lux p-6 sm:col-span-2">
+          <h2 className="font-serif text-xl">Groupon vouchers</h2>
+          <p className="mt-2 text-sm text-ink-500">Submit a voucher or view its verification status.</p>
+        </Link>
         <Link
           to="/account/orders"
           className="group rounded-2xl border border-cream-300 bg-white p-6 shadow-sm hover:border-gold-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 sm:col-span-2"

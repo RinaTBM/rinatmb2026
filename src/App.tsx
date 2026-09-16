@@ -15,6 +15,7 @@ import { SectionPage } from '@/pages/SectionPage';
 import { BestSellersPage } from '@/pages/BestSellersPage';
 import { ProductPage } from '@/pages/ProductPage';
 import { CheckoutPage } from '@/pages/CheckoutPage';
+import { GrouponPage } from '@/pages/GrouponPage';
 import { OrderPaymentInstructionsPage } from '@/pages/OrderPaymentInstructionsPage';
 import { KashuCardResultPage } from '@/pages/KashuCardResultPage';
 import { SuccessPage } from '@/pages/SuccessPage';
@@ -91,6 +92,7 @@ function App() {
     if (path === '/best-sellers') return <BestSellersPage />;
     if (path.startsWith('/product/')) return <ProductPage slug={path.replace('/product/', '')} />;
     if (path === '/checkout') return <CheckoutPage />;
+    if (path === '/groupon') return <GrouponPage />;
     if (path.startsWith('/order/payment/')) {
       const orderNumber = path.replace('/order/payment/', '').split('/')[0];
       return <OrderPaymentInstructionsPage publicOrderNumber={orderNumber} />;

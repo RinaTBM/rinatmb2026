@@ -1,6 +1,6 @@
 # My Bare Method — Groupon implementation report
 
-Status: draft implementation, NOT published, NOT merged, migration NOT applied.
+Status: merged and published in Bolt on 2026-09-16. Live: https://mybaremethod.com/groupon. Production database migration and Edge function deployed. PR #25 merged as `64b1c0fd6adb6ff73295eab5217ab9de250877af`.
 
 Repository: `RinaTBM/rinatmb2026`. Base: `deploy/ach-launch-clean-2026`, commit `2c69ee8`. Feature branch: `feature/groupon-manual-redemption`.
 
@@ -76,10 +76,10 @@ Duplicate handling:
 | Real PostgreSQL-engine migration/permission tests | PASS using local PGlite with synthetic fixtures: pending retries, different-customer duplicates, verification, redemption confirmation, stale writes, order ownership, immutable linkage, terminal states, timestamps, audit events, unchanged payment totals and denied browser-role access. |
 | Full existing suite comparison | Baseline: 572 pass / 30 fail out of 602. Feature run before the final 6 endpoint tests: 576 pass / the same 30 fail out of 606. No added failures. The 6 endpoint tests then passed separately. |
 | TypeScript comparison | Same existing errors as baseline; no new errors after fixes. Whole-project typecheck is not clean. |
-| Mobile/browser visual checks | NOT completed: the cloud browser blocked the local preview URL (`ERR_BLOCKED_BY_CLIENT`). Responsive classes are implemented, but this is not a visual pass. |
+| Browser checks | Bolt preview and live `/groupon` render the new page with sign-in required. Small-mobile and signed-in form visual checks remain unverified. |
 | Hosted Square checkout/product sync/subscriptions | NOT end-to-end tested. No direct Square implementation or credentials were changed; the external service was not modified. |
-| Deployed Supabase/Auth/admin flow | NOT tested against production; migration and Edge function remain undeployed. |
-| Prepaid Groupon clinical handoff | NOT completed: see launch blocker below. |
+| Deployed Supabase backend | Migration and function deployed to staging and production. Staging SQL transaction passed submit, verify, explicit redemption confirmation, redeem and audit assertions; synthetic records rolled back. Production RLS/grants checked; both endpoints reject unsigned requests with HTTP 401. Real signed-in customer/admin end-to-end journey remains untested. |
+| Prepaid Groupon clinical handoff | Manual staff coordination remains required. No automatic prepaid GEN handoff or covered-service credit is implemented. |
 
 Existing failing suites cover legacy shipping/payment expectations, provider lab expectations, catalog routing and visibility. They are outside this additive feature; this report does not certify the existing checkout as fully healthy.
 
@@ -95,19 +95,15 @@ npm run build
 
 The local database test creates only an isolated in-memory database and never connects to Supabase.
 
-## Remaining steps before production
+## Deployment and operating boundary
 
-**Launch blocker: define and verify the prepaid GEN clinical entry.** The current GEN route is payment-first. Redirecting a verified Groupon customer to it would risk charging the package again. No verified prepaid intake/consultation route or covered-service credit mechanism is available in the inspected source. The draft ends in manual review; it does not claim that the customer has started intake or booked clinical care. Confirm the existing staff process or supported GEN route for a prepaid patient, including how non-covered shipping/services are collected without altering the normal checkout. Do not invent a bypass or mark a GEN order paid from voucher status.
+The user authorized merge and publication. PR #25 is merged to `deploy/ach-launch-clean-2026`; Bolt confirmed publication on 2026-09-16, and the live `/groupon` page was checked afterward.
 
-After that is resolved:
+The additive migration and only the `groupon-redemptions` Edge function were deployed first to MyBareMethod Staging (`mxvaxkkwrbwhqasnsjpm`) and then production (`bsgtuuzwgeetsjjdrtrm`). Production and staging use the same function bundle. Supabase security advisors reported informational RLS-without-policy notices on the new tables: this is intentional, because browser roles have no access and only the authenticated server handler uses the service role. No customer-facing policies should be added to expose full voucher codes.
 
-1. Apply this additive migration and deploy only `groupon-redemptions` to an isolated test environment; verify live Auth/PostgREST permissions and run database advisors there. The local permissions tests are not a substitute for deployed verification.
-2. Test the signed-in customer/admin journey, small mobile widths, keyboard behavior, duplicate submissions, existing promo checkout and hosted Square/GEN checkout without real charges.
-3. Review the known baseline failures relevant to release. Do not treat a successful Vite build as proof of working payments.
-4. Obtain approval for the production migration/deployment. The repository's `AGENTS.md` requires explicit approval for production migrations and a separate publish step.
-5. Deploy the migration and Edge function before exposing the UI; then publish the frontend and verify in production without submitting real vouchers or payments as tests.
+**Manual care coordination is required after voucher verification.** The existing GEN checkout is payment-first. Staff must use their approved prepaid patient process; sending a verified voucher customer through normal paid checkout risks charging for covered services again. The customer page asks customers to wait for staff coordination. Verification does not start clinical care, authorize fulfillment, mark an order paid, or create a financial credit.
 
-No production database, Square setting, GEN setting, credentials, prices, subscription billing, shipping logic, discount logic, payment webhook or clinical gate was modified. No merge or publication was performed.
+No real vouchers or payments were submitted as tests. Existing Square/GEN settings, credentials, prices, subscription billing, shipping logic, promo calculations, payment webhooks and clinical gates were not changed. The scope of deployed verification and remaining test limits is recorded above.
 
 ## Files changed
 

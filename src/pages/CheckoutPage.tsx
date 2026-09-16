@@ -14,6 +14,7 @@ import {
   X,
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { GrouponEntry } from '@/components/GrouponEntry';
 import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
 import { useMember } from '@/context/MemberContext';
 import { useCustomerAuth } from '@/context/CustomerAuthContext';
@@ -1678,6 +1679,7 @@ export function CheckoutPage() {
                   ) : null}
                 </div>
               ) : null}
+              {items.some(i => /estradiol|testosterone|scream/.test(i.slug || '')) && <GrouponEntry />}
               <div className="space-y-2 border-t border-cream-300 pt-4 text-sm">
                 {!hasVariablePricing && standardSubtotal > subtotal && !hasMembershipItems && (
                   <div className="flex justify-between text-ink-500">

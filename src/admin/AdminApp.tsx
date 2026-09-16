@@ -22,6 +22,7 @@ import {
 } from '@/lib/account/subscriptions';
 import { AdminOrderDetail, AdminOrdersList } from '@/admin/AdminOrders';
 import { AdminGenMapping } from '@/admin/AdminGenMapping';
+import { AdminGroupon } from '@/admin/AdminGroupon';
 
 const LOGO = BRAND_LOGO_SRC;
 
@@ -136,6 +137,7 @@ const SECTIONS = [
   { id: 'memberships', label: 'Memberships' },
   { id: 'categories', label: 'Categories' },
   { id: 'orders', label: 'Orders' },
+  { id: 'groupon', label: 'Groupon' },
   { id: 'gen-mapping', label: 'GEN Mapping' },
   { id: 'future', label: 'Future Releases' },
   { id: 'pricing', label: 'Purchase Pricing' },
@@ -652,6 +654,8 @@ export function AdminApp({ route }: { route: Route }) {
           />
         )}
         {section === 'gen-mapping' && <AdminGenMapping />}
+        {section === 'groupon' && <AdminGroupon canWrite={canWrite} />}
+        {section === 'orders' && orderId && <div className="mt-8"><AdminGroupon canWrite={canWrite} orderId={orderId} /></div>}
         {section === 'cancellations' && <CancellationQueue />}
         {section === 'sync' && <StripeSync canWrite={canWrite} accessToken={session.accessToken} />}
         {section === 'sync-history' && <div><h1 className="font-serif text-3xl text-ink-900 mb-6">Sync History</h1><LogTable table="stripe_sync_log" columns={['created_at', 'environment', 'entity_type', 'entity_id', 'operation', 'stripe_object_id', 'status']} canWrite={canWrite} /></div>}

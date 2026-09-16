@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { GrouponEntry } from '@/components/GrouponEntry';
 import { ArrowRight, ExternalLink, ShieldCheck, ShoppingBag, X } from 'lucide-react';
 import { navigate } from '@/router';
 import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
@@ -136,6 +137,7 @@ export function PrescriptionBasketDrawer() {
                 </p>
               </div>
 
+              {hasHrt && <GrouponEntry onOpen={closeBasket} />}
               <div className="mt-4 rounded-2xl border border-gold-200 bg-gold-50 p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-gold-800">Planning estimate</p>
                 <div className="mt-3 space-y-2 text-sm">

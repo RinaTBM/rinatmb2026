@@ -45,7 +45,7 @@ export function GrouponPage({ embedded = false }: { embedded?: boolean }) {
     } catch (e) { setError(e instanceof Error ? e.message : 'Unable to save your voucher. Please try again.'); }
     finally { setBusy(false); }
   }
-  return <div className={embedded ? 'mt-4' : 'mx-auto max-w-3xl px-5 py-12 sm:py-20'} onKeyDown={e => {
+  return <div className={embedded ? 'mt-4' : 'mx-auto max-w-3xl px-5 pb-12 pt-40 md:pt-44 sm:pb-20'} onKeyDown={e => {
     if (e.key === 'Enter' && e.target instanceof HTMLInputElement) { e.preventDefault(); e.stopPropagation(); if (user && open && !busy) void submit(e); }
   }}>
     {!embedded && <><p className="text-xs uppercase tracking-widest text-gold-700">My Bare Method · Groupon</p>

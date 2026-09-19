@@ -50,7 +50,8 @@ export const OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS: ReadonlySet<string> = new Se
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_5dGkjdpLP7DkKKE2iVxh',
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_AVNvVWBE98DfINxyz5Dm',
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9',
-  'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_LWkYtwm66dIeLuDSvSfi',
+  // Selank + Semax nasal is withheld pending corrected GEN pairing:
+  // 2026-09-19 live review found Semax-only nasal + a blend with no confirmed form.
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_2cYxVfvwpWyyrANZx06G',
   'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9',
   // Scream Cream — owner-updated MBM Women's Hormone Therapy wrapper.

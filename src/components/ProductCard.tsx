@@ -6,6 +6,7 @@ import { skuForVariantId } from '@/data/variantSkus';
 import { resolveStorefrontRxAvailability } from '@/lib/commerce/rxCatalogReadiness';
 import { getWebsiteFamilyBySlug, listPatientVisibleVariants } from '@/data/websiteFamilies';
 import { resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
+import { GEN_HOSTED_PRODUCTS } from '@/lib/commerce/genHostedProducts';
 
 export function ProductCard({ product }: { product: Product }) {
   const section = sections.find(s => s.id === product.category);
@@ -13,18 +14,24 @@ export function ProductCard({ product }: { product: Product }) {
   /** All Accessories use contain-fit so product photos are never cropped. */
   const containFit = product.category === 'accessories';
   const family = getWebsiteFamilyBySlug(product.slug);
-  const hasGenHostedRoute = Boolean(
+  const hostedRoute = GEN_HOSTED_PRODUCTS[product.slug];
+  const hostedOptions = hostedRoute?.options ?? (hostedRoute ? [hostedRoute] : []);
+  const hasGenHostedRoute = hostedRoute ? hostedOptions.some(option =>
+    resolveGenProductFirstCheckout(option.genClientProductId).ok,
+  ) : Boolean(
     family &&
       listPatientVisibleVariants(family).some(
         variant => resolveGenProductFirstCheckout(variant.genClientProductId).ok,
       ),
   );
+  const startingPrice = hostedOptions.length
+    ? Math.min(...hostedOptions.map(option => option.price))
+    : product.startingPrice;
   const firstSku = product.variants[0]?.sku || skuForVariantId(product.variants[0]?.id);
   const rxAvailability = resolveStorefrontRxAvailability({ mbmSku: firstSku });
   const browseUnavailable =
     !hasGenHostedRoute &&
-    !!rxAvailability &&
-    !rxAvailability.productionPurchasable &&
+    (Boolean(hostedRoute) || (!!rxAvailability && !rxAvailability.productionPurchasable)) &&
     product.category !== 'accessories' &&
     product.category !== 'provider-care';
 
@@ -76,8 +83,8 @@ export function ProductCard({ product }: { product: Product }) {
             )}
             <span className="font-medium text-ink-900">
               {product.category === 'accessories' && product.startingAt
-                ? `$${product.startingPrice.toFixed(2)}`
-                : `$${product.startingPrice}`}
+                ? `$${startingPrice.toFixed(2)}`
+                : `$${startingPrice}`}
             </span>
           </div>
           {product.requiresProviderReview && (

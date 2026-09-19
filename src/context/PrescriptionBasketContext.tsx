@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { savePrescriptionSelection } from '@/lib/commerce/prescriptionBasket';
 
 export interface PrescriptionBasketItem {
   slug: string;
@@ -10,7 +11,6 @@ export interface PrescriptionBasketItem {
   genClientProductId: string;
   checkoutUrl?: string;
   category: string;
-  checkoutUrl?: string;
 }
 
 interface PrescriptionBasketContextValue {
@@ -59,9 +59,7 @@ export function PrescriptionBasketProvider({ children }: { children: ReactNode }
     medicationSubtotal: items.reduce((sum, item) => sum + item.price, 0),
     openBasket: () => setIsOpen(true),
     closeBasket: () => setIsOpen(false),
-    addItem: item => setItems(previous =>
-      previous.some(existing => existing.slug === item.slug) ? previous : [...previous, item],
-    ),
+    addItem: item => setItems(previous => savePrescriptionSelection(previous, item)),
     removeItem: slug => setItems(previous => previous.filter(item => item.slug !== slug)),
     clearBasket: () => setItems([]),
   }), [items, isOpen]);

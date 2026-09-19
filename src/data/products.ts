@@ -822,8 +822,8 @@ export const products: Product[] = [
   mk({
     id: 'p41', // preserves the previous BPC-157/TB-500 Injection app_product_id
     slug: 'bpc-157-tb-500',
-    displayName: 'BPC-157 + TB-500: Quick Recovery & Tissue Repair Blend',
-    shortName: 'Quick Recovery',
+    displayName: 'Wolverine: BPC-157 + TB-500 Recovery Blend',
+    shortName: 'Wolverine',
     subtitle: 'Provider-directed compounded dual-peptide recovery blend',
     category: 'recovery-performance',
     goals: ['recovery', 'performance'],
@@ -848,10 +848,8 @@ export const products: Product[] = [
         price: 189,
       },
     ],
-    // Retired from the customer storefront. Keep the historical record for
-    // order/account compatibility, but do not offer or route it for purchase.
-    status: 'future',
-    isVisible: false,
+    status: 'active',
+    isVisible: true,
   }),
   mk({
     id: 'p82',

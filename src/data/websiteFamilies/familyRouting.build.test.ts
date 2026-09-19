@@ -36,9 +36,9 @@ describe('MBM website family → GEN routing build', () => {
     const total = WEBSITE_PRODUCT_FAMILIES.reduce((n, f) => n + f.variants.length, 0);
     expect(total).toBe(111);
     const counts = countByRoutingStatus();
-    expect(counts.ROUTING_READY).toBe(42);
+    expect(counts.ROUTING_READY).toBe(41);
     expect(counts.FORMULARY_PENDING).toBe(9);
-    expect(counts.GEN_PAIRING_PENDING).toBe(4);
+    expect(counts.GEN_PAIRING_PENDING).toBe(5);
     expect(counts.FUTURE_HIDDEN).toBe(54);
     expect(counts.BLOCKED).toBe(2);
     expect(
@@ -245,7 +245,7 @@ describe('MBM website family → GEN routing build', () => {
   });
 
   it('launch registry marks the verified GEN wrappers; apply is idempotent', () => {
-    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(34);
+    expect(OWNER_VERIFIED_GEN_CLIENT_PRODUCT_IDS.size).toBe(33);
     const verifiedVariants = WEBSITE_PRODUCT_FAMILIES.flatMap((f) =>
       f.variants.filter((v) => v.genPairingVerified),
     );

@@ -3,6 +3,7 @@ import { getProduct } from '@/data/products';
 import { GEN_HOSTED_PRODUCTS } from './genHostedProducts';
 import { resolveGenProductFirstCheckout } from './genHostedCheckout';
 import { savePrescriptionSelection } from './prescriptionBasket';
+import { WEBSITE_PRODUCT_FAMILIES } from '@/data/websiteFamilies';
 
 describe('separate products and delivery methods', () => {
   it('keeps the combined nasal spray separate from each single-peptide injection', () => {
@@ -38,6 +39,8 @@ describe('separate products and delivery methods', () => {
     expect(resolveGenProductFirstCheckout(
       GEN_HOSTED_PRODUCTS['selank-semax-nasal-spray'].genClientProductId,
     )).toEqual({ ok: false, code: 'PAIRING_NOT_VERIFIED' });
+    const blend = WEBSITE_PRODUCT_FAMILIES.find(family => family.familyId === 'selank-semax-blend')!;
+    expect(blend.variants.every(variant => !variant.genPairingVerified)).toBe(true);
   });
 
   it('preserves delivery method, price, and destination when saving both forms', () => {

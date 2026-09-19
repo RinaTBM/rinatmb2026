@@ -19,7 +19,10 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
   const { addItem, openBasket, items: prescriptionItems } = usePrescriptionBasket();
   const [recommendationsOpen, setRecommendationsOpen] = useState(false);
   const [recommendationOffset, setRecommendationOffset] = useState(0);
-  const currentInBasket = prescriptionItems.some(item => item.slug === product.slug);
+  const basketSlug = `${product.slug}:${selectedOption.genClientProductId}`;
+  const currentInBasket = prescriptionItems.some(item =>
+    item.genClientProductId === selectedOption.genClientProductId,
+  );
   const recommendations = useMemo(
     () =>
       getRelatedProducts(product, 8)
@@ -43,9 +46,9 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
   const addCurrentToBasket = () => {
     if (!checkout.ok) return;
     addItem({
-      slug: product.slug,
-      displayName: product.displayName,
-      subtitle: product.subtitle,
+      slug: basketSlug,
+      displayName: options.length > 1 ? `${product.displayName} - ${selectedOption.label}` : product.displayName,
+      subtitle: options.length > 1 ? selectedOption.label : product.subtitle,
       image: product.image,
       imageAlt: product.imageAlt,
       price: selectedOption.price,
@@ -77,6 +80,7 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
                   <button
                     key={option.label}
                     type="button"
+                    aria-pressed={index === selectedOptionIndex}
                     onClick={() => setSelectedOptionIndex(index)}
                     className={index === selectedOptionIndex ? 'rounded-full bg-ink-900 px-4 py-2 text-sm text-white' : 'rounded-full border border-cream-300 bg-white px-4 py-2 text-sm text-ink-700'}
                   >

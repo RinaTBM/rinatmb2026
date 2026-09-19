@@ -31,6 +31,22 @@ export const GEN_HOSTED_PRODUCTS: Record<string, GenHostedProductRoute> = {
     ],
   },
   'bpc-157': { price: 199, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_KXMm9SsbOEYnFy9phmZn' },
+  'bpc-157-tb-500': {
+    price: 169,
+    genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9',
+    options: [
+      {
+        label: 'Injection',
+        price: 169,
+        genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_iJtyig611AZEDBGdvRd9',
+      },
+      {
+        label: 'Capsules',
+        price: 189,
+        genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_omhh3NabouO8AsNR5tkD',
+      },
+    ],
+  },
   'estradiol-patch': { price: 129, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR' },
   'tretinoin-cream': { price: 79, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_EeWMcfCJf5EU2LkNQmp9' },
   'ghk-cu-minoxidil': { price: 69, genClientProductId: 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_489YrehNXRlL77fYPkOn' },

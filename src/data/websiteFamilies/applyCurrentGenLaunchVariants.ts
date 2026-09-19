@@ -6,6 +6,7 @@
  */
 
 import type { WebsiteProductFamily } from './types';
+import { isOwnerVerifiedGenClientProductId } from './pairingVerificationRegistry';
 
 const GEN_CLIENT_PREFIX = 'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_';
 const NAD_INJECTABLE_GEN_PRODUCT_ID = 'SHJpGAACUFEeMONdpEbn';
@@ -279,6 +280,8 @@ function makeLiveVariant(
     genProductId: string;
   },
 ) {
+  const genClientProductId = `${GEN_CLIENT_PREFIX}${input.genProductId}`;
+  const verified = isOwnerVerifiedGenClientProductId(genClientProductId);
   return {
     ...variant,
     websiteVariantId: input.websiteVariantId,
@@ -290,11 +293,11 @@ function makeLiveVariant(
     finalRetailPrice: input.finalRetailPrice,
     startingPrice: input.finalRetailPrice,
     genProductId: input.genProductId,
-    genClientProductId: `${GEN_CLIENT_PREFIX}${input.genProductId}`,
-    genPairingVerified: true,
-    routingStatus: 'ROUTING_READY' as const,
-    launchState: 'LAUNCH_READY' as const,
-    checkoutStatus: 'GEN_PRODUCT_FIRST' as const,
+    genClientProductId,
+    genPairingVerified: verified,
+    routingStatus: verified ? 'ROUTING_READY' as const : 'GEN_PAIRING_PENDING' as const,
+    launchState: verified ? 'LAUNCH_READY' : 'HOLD_FROM_LAUNCH',
+    checkoutStatus: verified ? 'GEN_PRODUCT_FIRST' : 'UNAVAILABLE',
     availabilityStatus: 'storefront' as const,
     exactFormularyRows: [],
   };

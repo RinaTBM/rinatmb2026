@@ -227,8 +227,8 @@ function App() {
               <PrescriptionBasketDrawer />
               <CareCheckoutReturn />
               <CareSaveProgress />
-              <WelcomePopup />
-              <FeelingPopup />
+              {path !== '/sms-reminders' && <WelcomePopup />}
+              {path !== '/sms-reminders' && <FeelingPopup />}
               {/* Financing discovery only — does not replace Tagada card checkout */}
               <CherryFinancingWidget />
             </div>

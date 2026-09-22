@@ -39,7 +39,9 @@ export function CareProgressForm({ checkoutUrl, onContinue }: { checkoutUrl: str
     <label className="flex items-start gap-3 text-sm"><input type="checkbox" checked={smsConsent} onChange={e => setSmsConsent(e.target.checked)} className="mt-1" />I agree to receive automated text reminders from My Bare Method at the number provided about my unfinished cart, checkout, payment, or intake. Up to 3 texts per unfinished step, at 15 minutes, 1 hour, and 24 hours. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of purchase.</label>
     <p className="text-xs leading-relaxed text-ink-600">Both choices are optional and start unchecked. Contact details and consent are used to manage your reminder preferences and delivery. Mobile information and SMS consent are not sold or shared with third parties or affiliates for their marketing. <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline">Privacy Policy</a> · <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline">Terms &amp; Conditions</a>. For help, email <a href="mailto:info@thebaremethodmn.com" className="underline">info@thebaremethodmn.com</a>.</p>
     {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
-    <button disabled={busy} className="btn-primary w-full" type="submit">{busy ? 'Saving…' : emailConsent || smsConsent ? 'Save my preferences' : 'Continue without reminders'}</button>
+    {emailConsent || smsConsent
+      ? <button disabled={busy} className="btn-primary w-full" type="submit">{busy ? 'Saving…' : 'Save my preferences'}</button>
+      : <button type="button" className="btn-primary w-full" onClick={onContinue}>Continue without reminders</button>}
     {(emailConsent || smsConsent) && <button disabled={busy} type="button" className="w-full text-sm underline" onClick={onContinue}>Continue without reminders</button>}
   </form>;
 }

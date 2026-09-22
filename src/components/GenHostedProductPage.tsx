@@ -19,7 +19,7 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
   const { addItem, openBasket, items: prescriptionItems } = usePrescriptionBasket();
   const [recommendationsOpen, setRecommendationsOpen] = useState(false);
   const [recommendationOffset, setRecommendationOffset] = useState(0);
-  const currentInBasket = prescriptionItems.some(item => item.slug === product.slug);
+  const currentInBasket = prescriptionItems.some(item => item.slug === product.slug && item.genClientProductId === selectedOption.genClientProductId);
   const recommendations = useMemo(
     () =>
       getRelatedProducts(product, 8)
@@ -44,8 +44,8 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
     if (!checkout.ok) return;
     addItem({
       slug: product.slug,
-      displayName: product.displayName,
-      subtitle: product.subtitle,
+      displayName: options.length > 1 ? `${product.shortName} — ${selectedOption.label}` : product.displayName,
+      subtitle: options.length > 1 ? selectedOption.label : product.subtitle,
       image: product.image,
       imageAlt: product.imageAlt,
       price: selectedOption.price,
@@ -78,6 +78,7 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
                     key={option.label}
                     type="button"
                     onClick={() => setSelectedOptionIndex(index)}
+                    aria-pressed={index === selectedOptionIndex}
                     className={index === selectedOptionIndex ? 'rounded-full bg-ink-900 px-4 py-2 text-sm text-white' : 'rounded-full border border-cream-300 bg-white px-4 py-2 text-sm text-ink-700'}
                   >
                     {option.label} · ${option.price}
@@ -89,7 +90,7 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
           <div className="mt-6 rounded-2xl border border-cream-300 bg-white p-5">
             <p className="text-sm text-ink-500">Estimated prescription total</p>
             <p className="font-serif text-3xl text-ink-900">${selectedOption.price.toFixed(2)}</p>
-            <p className="mt-2 text-xs text-ink-500">Continue to secure GEN Health checkout for payment, intake, and provider review.</p>
+            <p className="mt-2 text-xs text-ink-500">Complete your intake in GEN Health before product payment. Provider review is required before dispensing.</p>
             {checkout.ok ? (
               <a href={checkout.url} target="_top" rel="noopener noreferrer" className="btn-primary mt-5 w-full">Buy now</a>
             ) : (

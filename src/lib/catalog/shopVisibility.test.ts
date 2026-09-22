@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getProduct, visibleProducts } from '@/data/products';
 import { SHOP_CATEGORY_IDS } from '@/lib/browse/productBrowse';
-import { skuForVariantId } from '@/data/variantSkus';
-import { resolveStorefrontRxAvailability } from '@/lib/commerce/rxCatalogReadiness';
 import { getWebsiteFamilyBySlug, listPatientVisibleVariants } from '@/data/websiteFamilies';
 import { resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
 import { GEN_HOSTED_PRODUCTS } from '@/lib/commerce/genHostedProducts';
@@ -53,15 +51,23 @@ describe('shop visibility vs purchase readiness', () => {
     expect(getProduct('bimatoprost-solution')).toBeUndefined();
   });
 
-  it('allows purchase for every active storefront product', () => {
-    const shop = visibleProducts.filter((p) => SHOP_CATEGORY_IDS.has(p.category));
+  it('reports prescription routing blockers without treating unknown SKUs as purchasable', () => {
+    const shop = visibleProducts.filter((p) => SHOP_CATEGORY_IDS.has(p.category) && p.category !== 'accessories');
     const purchasable: string[] = [];
     const unavailable: string[] = [];
     for (const p of shop) {
+      const hosted = GEN_HOSTED_PRODUCTS[p.slug];
+      if (hosted) {
+        const options = hosted.options ?? [hosted];
+        if (options.every(option => resolveGenProductFirstCheckout(option.genClientProductId).ok)) purchasable.push(p.slug);
+        else unavailable.push(p.slug);
+        continue;
+      }
       const family = getWebsiteFamilyBySlug(p.slug);
       const hasVerifiedGenRoute = Boolean(
         family &&
-          listPatientVisibleVariants(family).some((variant) =>
+          listPatientVisibleVariants(family).length > 0 &&
+          listPatientVisibleVariants(family).every((variant) =>
             resolveGenProductFirstCheckout(variant.genClientProductId).ok,
           ),
       );
@@ -69,17 +75,11 @@ describe('shop visibility vs purchase readiness', () => {
         purchasable.push(p.slug);
         continue;
       }
-      if (GEN_HOSTED_PRODUCTS[p.slug] && resolveGenProductFirstCheckout(GEN_HOSTED_PRODUCTS[p.slug].genClientProductId).ok) {
-        purchasable.push(p.slug);
-        continue;
-      }
-
-      const sku = p.variants[0]?.sku || skuForVariantId(p.variants[0]?.id);
-      const rx = resolveStorefrontRxAvailability({ mbmSku: sku, genApiOrdersEnabled: false });
-      if (!rx || rx.productionPurchasable) purchasable.push(p.slug);
-      else unavailable.push(p.slug);
+      unavailable.push(p.slug);
     }
-    expect(purchasable.sort()).toEqual([...EXPECTED_SHOP_SLUGS].sort());
-    expect(unavailable).toHaveLength(0);
+    // GEN admin confirms both standalone products still need formulary pairing.
+    // Visibility alone must never be reported as a working purchase path.
+    expect(unavailable.sort()).toEqual(['selank', 'semax']);
+    expect(purchasable).toHaveLength(17);
   });
 });

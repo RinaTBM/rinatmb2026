@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { GEN_HOSTED_PRODUCTS } from '@/lib/commerce/genHostedProducts';
+import { saveCareBasketSelection } from '@/lib/commerce/careBasketSelection';
 import { getLabCheckoutUrl, getLabDisplayPriceCents, labOptions } from '@/data/labs';
 
 export interface PrescriptionBasketItem {
@@ -71,7 +72,7 @@ export function PrescriptionBasketProvider({ children }: { children: ReactNode }
     openBasket: () => setIsOpen(true),
     closeBasket: () => setIsOpen(false),
     addItem: item => setItems(previous =>
-      previous.some(existing => existing.slug === item.slug) ? previous : [...previous, item],
+      saveCareBasketSelection(previous, item),
     ),
     removeItem: slug => setItems(previous => previous.filter(item => item.slug !== slug)),
     clearBasket: () => setItems([]),

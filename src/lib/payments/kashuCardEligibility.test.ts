@@ -265,13 +265,13 @@ describe('Kashu card cart eligibility (memberships + shipping + tax)', () => {
 });
 
 describe('Phase 4 card flag resolveKashuCardEnabledFlag', () => {
-  it('env undefined/empty => card ON (Bolt preview + production; no PROD dependency)', () => {
-    expect(resolveKashuCardEnabledFlag(undefined, true)).toBe(true);
-    expect(resolveKashuCardEnabledFlag(null, true)).toBe(true);
-    expect(resolveKashuCardEnabledFlag('', true)).toBe(true);
-    expect(resolveKashuCardEnabledFlag(undefined, false)).toBe(true);
-    expect(resolveKashuCardEnabledFlag(null, false)).toBe(true);
-    expect(resolveKashuCardEnabledFlag('', false)).toBe(true);
+  it('env undefined/empty => card OFF while processor is paused', () => {
+    expect(resolveKashuCardEnabledFlag(undefined, true)).toBe(false);
+    expect(resolveKashuCardEnabledFlag(null, true)).toBe(false);
+    expect(resolveKashuCardEnabledFlag('', true)).toBe(false);
+    expect(resolveKashuCardEnabledFlag(undefined, false)).toBe(false);
+    expect(resolveKashuCardEnabledFlag(null, false)).toBe(false);
+    expect(resolveKashuCardEnabledFlag('', false)).toBe(false);
   });
 
   it('explicit env false => card disabled (kill switch)', () => {
@@ -286,9 +286,9 @@ describe('Phase 4 card flag resolveKashuCardEnabledFlag', () => {
     expect(resolveKashuCardEnabledFlag(true, false)).toBe(true);
   });
 
-  it('unset flag defaults public methods to Credit/Debit Card only; Stripe stays disabled', () => {
-    // Vitest typically has no VITE_KASHU_CARD_ENABLED → default ON → card only.
-    expect(getActiveCheckoutPaymentMethods()).toEqual(['kashu_card']);
+  it('unset flag defaults public methods to none; Stripe stays disabled', () => {
+    // Vitest typically has no VITE_KASHU_CARD_ENABLED → default OFF during processor pause.
+    expect(getActiveCheckoutPaymentMethods()).toEqual([]);
     expect(isStripeCheckoutEnabled()).toBe(false);
   });
 

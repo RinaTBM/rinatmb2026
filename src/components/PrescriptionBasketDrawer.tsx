@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GrouponEntry } from '@/components/GrouponEntry';
-import { ArrowRight, ExternalLink, ShieldCheck, ShoppingBag, X } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ExternalLink, ShieldCheck, ShoppingBag, X } from 'lucide-react';
 import { navigate } from '@/router';
 import { usePrescriptionBasket } from '@/context/PrescriptionBasketContext';
 import { navigateToGenProductFirstCheckout, resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
@@ -49,8 +49,10 @@ export function PrescriptionBasketDrawer() {
         </div>
 
         <div className="mx-5 mt-4 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3">
-          <p className="text-xs font-semibold text-gold-800">Prescriptions, labs, and accessories are purchased separately.</p>
-          <p className="mt-1 text-xs leading-relaxed text-ink-600">This basket saves care selections while you shop. GEN Health remains the secure source for final payment, intake, assessment, provider review, and approval.</p>
+          <p className="text-xs font-semibold text-gold-800">Care items and accessories stay in separate carts.</p>
+          <p className="mt-1 text-xs leading-relaxed text-ink-600">
+            Prescriptions, labs, and provider visits continue through GEN Health one care item at a time. Accessories stay in the storefront cart with the separate $10 accessory shipping charge.
+          </p>
         </div>
 
         {items.length === 0 ? (
@@ -62,7 +64,46 @@ export function PrescriptionBasketDrawer() {
           </div>
         ) : (
           <>
-            <div className="flex-1 overflow-y-auto px-5 py-5">
+            <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
+              <div className="mb-4 rounded-2xl border border-gold-200 bg-white p-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gold-700">GEN Health checkout steps</p>
+                <p className="mt-1 text-sm leading-relaxed text-ink-600">
+                  Begin prescription intake before payment in GEN Health. Each care item continues separately; your other selections stay saved here.
+                </p>
+                <div className="mt-3 space-y-2">
+                  {items.map((item, index) => {
+                    const available = Boolean(item.checkoutUrl) || resolveGenProductFirstCheckout(item.genClientProductId).ok;
+                    const selected = selectedItem?.slug === item.slug;
+                    return (
+                      <button
+                        key={`step-${item.slug}`}
+                        type="button"
+                        onClick={() => setSelectedSlug(item.slug)}
+                        aria-pressed={selected}
+                        className={`flex w-full items-center gap-3 rounded-xl border px-3 py-3 text-left transition-colors ${
+                          selected ? 'border-gold-400 bg-gold-50 shadow-sm' : 'border-cream-300 bg-cream-50 hover:border-gold-200'
+                        }`}
+                      >
+                        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+                          selected ? 'bg-gold-500 text-white' : 'bg-white text-ink-600'
+                        }`}>
+                          {index + 1}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-medium text-ink-900">{item.displayName}</span>
+                          <span className="block text-xs text-ink-500">{item.category === 'labs' ? 'Lab payment in GEN' : 'Prescription review in GEN'}</span>
+                        </span>
+                        <span className={`rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-wider ${
+                          available ? 'bg-emerald-50 text-emerald-700' : 'bg-cream-200 text-ink-500'
+                        }`}>
+                          {available ? 'Ready' : 'Unavailable'}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <div className="space-y-3">
                 {items.map(item => {
                   const available = Boolean(item.checkoutUrl) || resolveGenProductFirstCheckout(item.genClientProductId).ok;
@@ -97,7 +138,7 @@ export function PrescriptionBasketDrawer() {
                             </div>
                           </div>
                           <p className="mt-1 text-sm font-medium text-ink-900">{money(Math.round(item.price * 100))}</p>
-                          <p className="mt-1 flex items-center gap-1 text-[11px] text-ink-500"><ShieldCheck size={12} className="text-gold-600" /> {item.category === 'labs' ? 'Lab order opens securely for payment and intake' : 'Provider review required · prescription not guaranteed'}</p>
+                          <p className="mt-1 flex items-center gap-1 text-[11px] text-ink-500"><ShieldCheck size={12} className="text-gold-600" /> {item.category === 'labs' ? 'Opens as its own GEN lab checkout' : 'Opens as its own GEN prescription checkout'}</p>
                         </div>
                       </div>
                       {!available && <p className="mt-3 rounded-lg bg-cream-100 px-3 py-2 text-xs text-ink-600">Temporarily unavailable for secure GEN checkout.</p>}
@@ -139,30 +180,42 @@ export function PrescriptionBasketDrawer() {
 
               {hasHrt && <GrouponEntry onOpen={closeBasket} />}
               <div className="mt-4 rounded-2xl border border-gold-200 bg-gold-50 p-4">
-                <p className="text-xs font-semibold uppercase tracking-wider text-gold-800">Planning estimate</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-gold-800">Care estimate</p>
                 <div className="mt-3 space-y-2 text-sm">
                   <div className="flex justify-between gap-3"><span className="text-ink-600">Care selections</span><span className="font-medium text-ink-900">{money(Math.round(medicationSubtotal * 100))}</span></div>
                   {hasPrescriptionItems && <div className="flex justify-between gap-3"><span className="text-ink-600">Initial provider visit, if required</span><span className="font-medium text-ink-900">{money(INITIAL_VISIT_CENTS)}</span></div>}
                   {hasHrt && <div className="flex justify-between gap-3"><span className="text-ink-600">Hormone therapy labs, if required</span><span className="font-medium text-ink-900">{hasLabItems ? 'Included above' : 'Choose option'}</span></div>}
-                  {hasPrescriptionItems && <div className="flex justify-between gap-3"><span className="text-ink-600">Separate storefront shipping</span><span className="font-medium text-ink-900">$0.00</span></div>}
-                  <div className="flex justify-between gap-3 border-t border-gold-200 pt-2"><span className="font-medium text-ink-900">Estimated total before GEN confirmation</span><span className="font-medium text-ink-900">{money(estimatedTotalCents)}</span></div>
+                  {hasPrescriptionItems && <div className="flex justify-between gap-3"><span className="text-ink-600">Care item shipping</span><span className="font-medium text-ink-900">Included when available</span></div>}
+                  <div className="flex justify-between gap-3 border-t border-gold-200 pt-2"><span className="font-medium text-ink-900">Estimated care total</span><span className="font-medium text-ink-900">{money(estimatedTotalCents)}</span></div>
                 </div>
-                <p className="mt-3 text-[11px] leading-relaxed text-gold-900">GEN Health is authoritative for the final amount, lab option, visit requirement, shipping availability, and clinical approval. This basket does not charge your card.</p>
+                <p className="mt-3 text-[11px] leading-relaxed text-gold-900">GEN Health confirms the final amount, any required visits or labs, and shipping availability for each item. Provider review is required; a prescription is not guaranteed. Accessories are not included here.</p>
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-cream-300 bg-white p-4">
+                <div className="flex gap-3">
+                  <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-gold-600" />
+                  <div>
+                    <p className="text-sm font-medium text-ink-900">Storefront cart stays separate</p>
+                    <p className="mt-1 text-xs leading-relaxed text-ink-500">
+                      Accessories use the regular cart icon and checkout on My Bare Method. That is the only place the $10 accessory shipping charge appears.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="border-t border-cream-300 px-5 py-4">
-              <p className="mb-3 text-xs leading-relaxed text-ink-500">GEN Health currently starts one care checkout at a time. Your other selections stay saved here while you complete each secure review.</p>
+            <div className="shrink-0 border-t border-cream-300 px-5 py-4">
+              <p className="mb-3 text-xs leading-relaxed text-ink-500">Start with the selected care item below. Prescriptions begin with intake; labs use their separate lab checkout. External payments require staff verification.</p>
               {selectedItem && (
                 <div className="mb-3 rounded-xl border border-gold-200 bg-gold-50 p-3">
-                  <p className="text-xs text-gold-900">Selected for next checkout: <span className="font-semibold">{selectedItem.displayName}</span></p>
+                  <p className="text-xs text-gold-900">Selected GEN checkout: <span className="font-semibold">{selectedItem.displayName}</span></p>
                   <button
                     type="button"
                     onClick={() => beginGenCheckout(selectedItem)}
                     disabled={!selectedItemAvailable}
                     className="btn-primary mt-2 w-full text-sm"
                   >
-                    {selectedItemAvailable ? <>Continue to GEN Health <ExternalLink size={14} /></> : 'Temporarily unavailable'}
+                    {selectedItemAvailable ? <>{selectedItem.category === 'labs' ? 'Continue to Lab Checkout' : 'Begin Intake in GEN'} <ExternalLink size={14} /></> : 'Temporarily unavailable'}
                   </button>
                 </div>
               )}

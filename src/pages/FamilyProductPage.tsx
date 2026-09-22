@@ -394,7 +394,8 @@ function FamilySelectors({
                   </button>
                 )}
                 <p className="mt-3 text-xs text-ink-500 leading-relaxed">
-                  Each prescription is purchased separately through secure GEN Health checkout.
+                  Add prescriptions to your Care Basket while you shop, then begin intake in GEN Health before product payment. Each prescription continues separately and requires provider review.
+
                   Purchasing does not guarantee that a prescription will be issued.
                 </p>
               </div>

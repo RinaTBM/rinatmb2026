@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { GEN_HOSTED_PRODUCTS } from '@/lib/commerce/genHostedProducts';
+import { getLabCheckoutUrl, getLabDisplayPriceCents, labOptions } from '@/data/labs';
 
 export interface PrescriptionBasketItem {
   slug: string;
@@ -10,7 +12,6 @@ export interface PrescriptionBasketItem {
   genClientProductId: string;
   checkoutUrl?: string;
   category: string;
-  checkoutUrl?: string;
 }
 
 interface PrescriptionBasketContextValue {
@@ -34,7 +35,17 @@ function readStoredItems(): PrescriptionBasketItem[] {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (!stored) return [];
     const parsed = JSON.parse(stored) as PrescriptionBasketItem[];
-    return Array.isArray(parsed) ? parsed.filter(item => item && typeof item.slug === 'string') : [];
+    return Array.isArray(parsed) ? parsed
+      .filter(item => item && typeof item.slug === 'string')
+      .map(item => {
+        if (item.category === 'labs') {
+          const lab = labOptions.find(option => getLabCheckoutUrl(option) === item.checkoutUrl);
+          if (lab) return { ...item, price: getLabDisplayPriceCents(lab) / 100 };
+        }
+        // Repair saved baskets affected by the previous swapped checkout links.
+        if (item.slug !== 'bpc-157' && item.slug !== 'fat-burner') return item;
+        return { ...item, genClientProductId: GEN_HOSTED_PRODUCTS[item.slug].genClientProductId, checkoutUrl: undefined };
+      }) : [];
   } catch {
     return [];
   }

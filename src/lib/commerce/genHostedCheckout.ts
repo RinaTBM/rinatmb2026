@@ -15,10 +15,9 @@ export type GenHostedCheckoutResolution =
     };
 
 /**
- * Resolve an owner-verified GEN client product to its Product-first checkout.
- *
- * GEN's default product URL is Product-first: payment, then onboarding/intake
- * and visit scheduling when required. Do not append intake_first or visit_first.
+ * Resolve an owner-verified GEN product to intake before product payment.
+ * The legacy function name is retained for existing catalog callers.
+ * This remains a single-product flow, not a combined cart or shared intake.
  */
 export function resolveGenProductFirstCheckout(
   genClientProductId: string | null | undefined,
@@ -34,7 +33,7 @@ export function resolveGenProductFirstCheckout(
 
   return {
     ok: true,
-    url: `${GEN_APP_ORIGIN}/${MBM_GEN_CLIENT_ID}/product/${encodeURIComponent(id)}`,
+    url: `${GEN_APP_ORIGIN}/${MBM_GEN_CLIENT_ID}/product/${encodeURIComponent(id)}?checkoutFlow=intake_first`,
   };
 }
 

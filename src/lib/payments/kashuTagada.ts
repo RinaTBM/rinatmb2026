@@ -912,11 +912,10 @@ export function mbmOrderCustomerTag(orderNumber: string): string {
  * Resolve Tagada card top-level gate from Vite env.
  * - explicit "false" / false → OFF (emergency kill switch)
  * - explicit "true" / true → ON
- * - undefined / empty / unset → ON by default
+ * - undefined / empty / unset → OFF by default
  *
- * Do NOT key the default off import.meta.env.PROD: Bolt Preview often runs as a
- * non-production Vite build without reliable VITE_* injection, which previously
- * hid card checkout for eligible carts. Kill switch remains explicit false only.
+ * Keep this fail-closed while the processor relationship is paused. Re-enable
+ * only with an explicit VITE_KASHU_CARD_ENABLED=true deployment decision.
  * Eligibility rules (membership, shipping, unexpected tax, SKU map) still apply.
  *
  * @param _isProd retained for call-site compatibility; unused for the default.
@@ -928,7 +927,7 @@ export function resolveKashuCardEnabledFlag(
   void _isProd;
   if (raw === false || raw === 'false') return false;
   if (raw === true || raw === 'true') return true;
-  return true;
+  return false;
 }
 
 export function isKashuCardEnabled(): boolean {

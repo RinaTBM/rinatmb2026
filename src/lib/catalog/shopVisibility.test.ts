@@ -17,7 +17,8 @@ const EXPECTED_SHOP_SLUGS = [
   'nad-plus',
   'selank-semax-nasal-spray',
   'tesamorelin',
-  'bpc-157-tb-500',
+  'selank',
+  'semax',
   'tretinoin-cream',
   'minoxidil-topical',
   'recovery-stack',
@@ -26,13 +27,22 @@ const EXPECTED_SHOP_SLUGS = [
   'bpc-157',
   'ghk-cu-minoxidil',
   'ondansetron-odt',
+  'alcohol-prep-wipes',
+  'complete-injection-starter-kit',
+  'daily-weekly-wellness-planner',
+  'discreet-travel-bag',
+  'premium-3d-printed-peptide-case',
+  'premium-insulin-syringes',
+  'reusable-ice-pack',
+  'sharps-container',
+  'temperature-controlled-travel-case',
 ] as const;
 
 describe('shop visibility vs purchase readiness', () => {
-  it('shows the restored public wellness catalog on Shop All', () => {
+  it('shows the restored public wellness and accessory catalog on Shop All', () => {
     const shop = visibleProducts.filter((p) => SHOP_CATEGORY_IDS.has(p.category));
     expect(shop.map((p) => p.slug).sort()).toEqual([...EXPECTED_SHOP_SLUGS].sort());
-    expect(shop).toHaveLength(18);
+    expect(shop).toHaveLength(28);
   });
 
   it('keeps future-hidden products off the storefront', () => {

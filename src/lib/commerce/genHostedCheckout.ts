@@ -1,4 +1,5 @@
 import { isOwnerVerifiedGenClientProductId } from '@/data/websiteFamilies';
+import { openCareCheckoutWindow } from './careCheckoutWindow';
 
 const GEN_APP_ORIGIN = 'https://app.genhealthehr.com';
 const MBM_GEN_CLIENT_ID = 'f5e0mdyBYnDh7HGvek0C';
@@ -37,25 +38,7 @@ export function resolveGenProductFirstCheckout(
   };
 }
 
-/** Top-level navigation is required when MBM is rendered inside Bolt Preview. */
+/** Keep MBM open while the customer completes hosted checkout. */
 export function navigateToGenProductFirstCheckout(url: string): void {
-  const parsed = new URL(url);
-  if (parsed.origin !== GEN_APP_ORIGIN || !parsed.pathname.startsWith(`/${MBM_GEN_CLIENT_ID}/product/`)) {
-    throw new Error('GEN_CHECKOUT_URL_NOT_ALLOWED');
-  }
-
-  try {
-    if (window.top && window.top !== window) {
-      window.top.location.href = parsed.toString();
-      return;
-    }
-  } catch {
-    // Cross-origin frame access may be restricted; continue to explicit _top.
-  }
-
-  const link = document.createElement('a');
-  link.href = parsed.toString();
-  link.target = '_top';
-  link.rel = 'noopener noreferrer';
-  link.click();
+  openCareCheckoutWindow(url);
 }

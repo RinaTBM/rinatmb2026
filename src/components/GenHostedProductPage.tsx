@@ -92,7 +92,7 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
             <p className="font-serif text-3xl text-ink-900">${selectedOption.price.toFixed(2)}</p>
             <p className="mt-2 text-xs text-ink-500">Complete your intake in GEN Health before product payment. Provider review is required before dispensing.</p>
             {checkout.ok ? (
-              <a href={checkout.url} target="_top" rel="noopener noreferrer" className="btn-primary mt-5 w-full">Buy now</a>
+              <a href={checkout.url} target="_blank" rel="noopener noreferrer" onClick={event => { if (!event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) { event.preventDefault(); continueToGen(); } }} className="btn-primary mt-5 w-full">Buy now</a>
             ) : (
               <button type="button" className="btn-primary mt-5 w-full" disabled>Temporarily unavailable</button>
             )}

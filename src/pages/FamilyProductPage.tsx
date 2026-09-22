@@ -375,7 +375,7 @@ function FamilySelectors({
                   </div>
                 </div>
                 {canPurchase && genCheckout.ok ? (
-                  <a href={genCheckout.url} target="_top" rel="noopener noreferrer" className="btn-primary w-full">
+                  <a href={genCheckout.url} target="_blank" rel="noopener noreferrer" onClick={event => { if (!event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigateToGenProductFirstCheckout(genCheckout.url); } }} className="btn-primary w-full">
                     Buy now
                   </a>
                 ) : (

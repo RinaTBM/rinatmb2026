@@ -26,7 +26,7 @@ export function PrescriptionBasketDrawer() {
 
   const beginGenCheckout = (item: NonNullable<typeof selectedItem>) => {
     if (item.checkoutUrl) {
-      window.open(item.checkoutUrl, '_top', 'noopener,noreferrer');
+      navigateToGenProductFirstCheckout(item.checkoutUrl);
       return;
     }
     const checkout = resolveGenProductFirstCheckout(item.genClientProductId);

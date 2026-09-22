@@ -6,8 +6,17 @@ export function PrivacyPolicyPage() {
       eyebrow="Privacy"
       title="Privacy Policy"
       intro="Your privacy matters to us. This policy explains what we collect, how we use it, and the rights you have over your data."
-      lastUpdated="August 19, 2026"
+      lastUpdated="September 22, 2026"
       sections={[
+        {
+          id: 'reminder-preferences',
+          title: 'Optional Email and Text Reminders',
+          body: <>
+            <p>When you save reminder preferences, we collect your name, email, optional mobile number, the choices you select, the consent version and timestamp, and the form or checkout reference. Email and SMS consent are separate and optional. We use these records to manage reminders about unfinished carts, checkout, payment, and intake. Saving preferences does not place an order or complete payment or intake.</p>
+            <p>Mobile information, text-message opt-in data, and SMS consent are not sold or shared with third parties or affiliates for marketing or promotional purposes. We may provide this information to service providers solely to operate and deliver the messages you requested. Clinical answers and payment credentials are not included in reminder messages.</p>
+            <p>Reply STOP to opt out of texts or HELP for help. You can also request withdrawal of reminder consent by emailing info@thebaremethodmn.com. Reminder delivery is not currently active; saving preferences does not start a message sequence.</p>
+          </>,
+        },
         {
           id: 'information-we-collect',
           title: 'Information We Collect',

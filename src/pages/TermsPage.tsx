@@ -6,8 +6,18 @@ export function TermsPage() {
       eyebrow="Terms"
       title="Terms & Conditions"
       intro="These terms govern your use of our website and products. Please read them carefully before placing an order."
-      lastUpdated="August 19, 2026"
+      lastUpdated="September 22, 2026"
       sections={[
+        {
+          id: 'reminder-program',
+          title: 'My Bare Method Reminder Program',
+          body: <>
+            <p>You may separately opt in to automated text reminders about unfinished carts, checkout, payment, or intake through our Save your progress form. Consent is optional, is not a condition of purchase, and does not authorize promotional campaigns unrelated to these reminders.</p>
+            <p>When available, the program may send up to 3 texts per unfinished step, at 15 minutes, 1 hour, and 24 hours. Reminders for a step stop after completion is confirmed. Message and data rates may apply. Reply STOP to unsubscribe or HELP for help, or email info@thebaremethodmn.com. Carriers are not liable for delayed or undelivered messages.</p>
+            <p>Reminder delivery is not active yet. Saving preferences records your choices only; it does not place an order, collect payment, complete intake, or start reminders. Please finish any required steps directly rather than relying on a reminder.</p>
+            <p>See our <a href="/privacy-policy" className="underline">Privacy Policy</a> for how we handle mobile information and consent.</p>
+          </>,
+        },
         {
           id: 'agreement',
           title: 'Agreement to Terms',

@@ -30,6 +30,7 @@ import { ContactPage } from '@/pages/ContactPage';
 import { ShopAllPage } from '@/pages/ShopAllPage';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { TermsPage } from '@/pages/TermsPage';
+import { SmsRemindersPage } from '@/pages/SmsRemindersPage';
 import { ConcernPage } from '@/pages/ConcernPage';
 import { ShippingPolicyPage } from '@/pages/ShippingPolicyPage';
 import { BUILD_VERSION } from '@/buildVersion';
@@ -57,6 +58,7 @@ import { CherryFinancingWidget } from '@/components/CherryFinancingWidget';
 import { WelcomePopup } from '@/components/WelcomePopup';
 import { FeelingPopup } from '@/components/FeelingPopup';
 import { CareCheckoutReturn } from '@/components/CareCheckoutReturn';
+import { CareSaveProgress } from '@/components/CareSaveProgress';
 
 function App() {
   const route = useRouter();
@@ -201,6 +203,7 @@ function App() {
     if (path === '/shop' || path === '/shop-all') return <ShopAllPage />;
     if (path === '/privacy-policy') return <PrivacyPolicyPage />;
     if (path === '/terms') return <TermsPage />;
+    if (path === '/sms-reminders') return <SmsRemindersPage />;
 
     return (
       <div className="pt-32 pb-20 text-center">
@@ -223,6 +226,7 @@ function App() {
               <CartDrawer />
               <PrescriptionBasketDrawer />
               <CareCheckoutReturn />
+              <CareSaveProgress />
               <WelcomePopup />
               <FeelingPopup />
               {/* Financing discovery only — does not replace Tagada card checkout */}

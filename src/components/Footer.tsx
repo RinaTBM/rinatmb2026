@@ -62,6 +62,7 @@ export function Footer() {
           <div>
             <p className="eyebrow text-gold-300 mb-4">Legal & Support</p>
             <ul className="space-y-2.5 text-sm text-cream-100/70">
+              <li><Link to="/sms-reminders" className="hover:text-gold-300 transition-colors">Reminder Preferences</Link></li>
               <li><Link to="/privacy-policy" className="hover:text-gold-300 transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="hover:text-gold-300 transition-colors">Terms & Conditions</Link></li>
               <li><Link to="/refund-policy" className="hover:text-gold-300 transition-colors">Refund & Replacement Policy</Link></li>

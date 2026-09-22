@@ -33,6 +33,7 @@ import { AccessibilityPage } from '@/pages/AccessibilityPage';
 import { ConsumerDataPage } from '@/pages/ConsumerDataPage';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { TermsPage } from '@/pages/TermsPage';
+import { SmsRemindersPage } from '@/pages/SmsRemindersPage';
 import { LabDetailPage, OrderLabsPage } from '@/pages/OrderLabsPage';
 import { labOptions } from '@/data/labs';
 import { visibleProducts as products, sections, concerns, goals, type Product } from '@/data/products';
@@ -195,6 +196,12 @@ function buildRoutes() {
       component: createElement(PrivacyPolicyPage),
       title: 'Privacy Policy — My Bare Method',
       description: 'How My Bare Method collects, uses, and protects your personal information.',
+    },
+    {
+      path: '/sms-reminders',
+      component: createElement(SmsRemindersPage),
+      title: 'Reminder Preferences — My Bare Method',
+      description: 'Choose optional My Bare Method email and text reminders.',
     },
     {
       path: '/terms',

@@ -1,4 +1,5 @@
 export const CARE_CHECKOUT_OPENED = 'mbm:care-checkout-opened';
+export const CARE_CHECKOUT_REQUESTED = 'mbm:care-checkout-requested';
 
 export function validatedCareCheckoutUrl(value: string): string {
   const url = new URL(value);
@@ -11,6 +12,16 @@ export function validatedCareCheckoutUrl(value: string): string {
 
 /** Opens only on a user gesture. A closed/blocked window never means completed care. */
 export function openCareCheckoutWindow(value: string): void {
+  const url = validatedCareCheckoutUrl(value);
+  if (import.meta.env.VITE_CARE_PROGRESS_ENABLED === 'true') {
+    const request = new CustomEvent(CARE_CHECKOUT_REQUESTED, { cancelable: true, detail: { url } });
+    if (!window.dispatchEvent(request)) return;
+  }
+  continueCareCheckoutWindow(url);
+}
+
+/** Explicit continuation after the optional progress form; never opens twice. */
+export function continueCareCheckoutWindow(value: string): void {
   const url = validatedCareCheckoutUrl(value);
   try {
     window.open(url, '_blank', 'popup,width=620,height=820,noopener,noreferrer');

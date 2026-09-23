@@ -84,7 +84,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Available as a one-time purchase or eligible prescription subscription',
     ],
     whatToExpect:
-      'Choose a low-dose, high-dose, or monthly option, then complete medical intake in GEN Health before product payment. A licensed provider reviews your information and determines eligibility, dose, and follow-up. Use only as directed if approved. Do not change your dose on your own.',
+      'Choose a low-dose, high-dose, or monthly option, pay in GEN Health, then complete medical intake. A licensed provider reviews your information and determines eligibility, dose, and follow-up. Use only as directed if approved. Do not change your dose on your own.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'No guaranteed weight-loss amount.',
@@ -124,7 +124,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Eligible prescription subscription available with 15% medication savings',
     ],
     whatToExpect:
-      'Select a low-dose, high-dose, or monthly option, complete intake in GEN Health before product payment, and wait for licensed-provider review. Exact dose, schedule, and follow-up are clinical decisions. Storefront selection informs the conversation — it does not override medical judgment.',
+      'Select a low-dose, high-dose, or monthly option, pay in GEN Health, complete intake, and wait for licensed-provider review. Exact dose, schedule, and follow-up are clinical decisions. Storefront selection informs the conversation — it does not override medical judgment.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Distinguish clearly from Semaglutide; not interchangeable.',
@@ -162,7 +162,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Value realistic expectations with licensed-provider oversight',
     ],
     whatToExpect:
-      'After checkout you complete intake. A licensed provider determines eligibility, the final formulation, and instructions. Use only as directed if approved. Do not combine with other peptide products unless your clinician specifically directs you to.',
+      'Pay in GEN Health, then complete intake. A licensed provider determines eligibility, the final formulation, and instructions. Use only as directed if approved. Do not combine with other peptide products unless your clinician specifically directs you to.',
     importantInformation: [
       DEFAULT_COMPOUNDED_IMPORTANT,
       'This compounded blend is not FDA-approved as a weight-loss or fat-loss drug. The name “Fat Burner” does not guarantee fat burning, abdominal fat reduction, weight loss, metabolic improvement, or muscle gain.',
@@ -206,7 +206,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Value a simple storefront choice with details finalized after intake',
     ],
     whatToExpect:
-      'Complete intake in GEN Health before product payment. A licensed provider determines whether this option is appropriate and provides the final clinical instructions if approved.',
+      'Pay in GEN Health, then complete intake. A licensed provider determines whether this option is appropriate and provides the final clinical instructions if approved.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     regulatoryNotes: [
       'No guaranteed weight-loss, fat-loss, or body-composition outcomes.',
@@ -242,7 +242,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Value clear pricing with clinical details finalized after review',
     ],
     whatToExpect:
-      'Complete intake in GEN Health before product payment and wait for licensed-provider review. Approval, formulation, and instructions are not guaranteed by purchase.',
+      'Pay in GEN Health, complete intake, and wait for licensed-provider review. Approval, formulation, and instructions are not guaranteed by purchase.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     regulatoryNotes: [
       'No guaranteed weight-loss or metabolic outcomes.',
@@ -278,7 +278,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Value clear distinction between wellness interest and established treatment',
     ],
     whatToExpect:
-      'Complete intake in GEN Health before product payment. A licensed provider determines eligibility and provides instructions only if the option is approved for you.',
+      'Pay in GEN Health, then complete intake. A licensed provider determines eligibility and provides instructions only if the option is approved for you.',
     importantInformation: DEFAULT_COMPOUNDED_IMPORTANT,
     reviewFlags: [RESEARCH_FLAG],
     regulatoryNotes: [
@@ -351,7 +351,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Value a clear distinction between symptom support and weight-loss treatment',
     ],
     whatToExpect:
-      'Complete intake in GEN Health before product payment. Use only as directed if approved, and contact your care team if symptoms are severe, persistent, or concerning.',
+      'Pay in GEN Health, then complete intake. Use only as directed if approved, and contact your care team if symptoms are severe, persistent, or concerning.',
     importantInformation: DEFAULT_RX_IMPORTANT,
     regulatoryNotes: [
       'Do not market Ondansetron ODT as a weight-loss medication.',
@@ -696,7 +696,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
       'Supports realistic expectations and follow-up care',
     ],
     howItWorks:
-      'Complete intake in GEN Health before product payment. A licensed provider reviews your history and goals, and the dispensing pharmacy confirms the final preparation and directions if approved.',
+      'Pay in GEN Health, then complete intake. A licensed provider reviews your history and goals, and the dispensing pharmacy confirms the final preparation and directions if approved.',
     whyPeopleChooseIt: [
       'Want a dedicated recovery and wellness option',
       'Prefer provider oversight before a compounded product is dispensed',

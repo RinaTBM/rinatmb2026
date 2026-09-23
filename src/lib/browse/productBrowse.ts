@@ -5,7 +5,7 @@ export type PriceBand = 'any' | 'under-100' | '100-199' | '200-299' | '300-plus'
 
 /**
  * Customer-facing categories used in Shop navigation and filters.
- * Provider Care remains a guide page, while accessories stay shop-visible.
+ * Provider Appointments & Lab Reviews shows bookable services directly in GEN Health.
  */
 export const SHOP_CATEGORIES: { id: string; label: string }[] = [
   { id: 'weight-management', label: 'Weight Management' },
@@ -14,6 +14,7 @@ export const SHOP_CATEGORIES: { id: string; label: string }[] = [
   { id: 'recovery-performance', label: 'Recovery & Performance' },
   { id: 'prescription-skin-hair', label: 'Prescription Skin & Hair' },
   { id: 'accessories', label: 'Accessories' },
+  { id: 'provider-appointments', label: 'Provider Appointments & Lab Reviews' },
 ];
 
 export const SHOP_CATEGORY_IDS = new Set(SHOP_CATEGORIES.map(c => c.id));

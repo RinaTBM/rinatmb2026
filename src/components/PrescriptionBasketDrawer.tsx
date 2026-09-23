@@ -68,7 +68,7 @@ export function PrescriptionBasketDrawer() {
               <div className="mb-4 rounded-2xl border border-gold-200 bg-white p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-gold-700">GEN Health checkout steps</p>
                 <p className="mt-1 text-sm leading-relaxed text-ink-600">
-                  Begin prescription intake before payment in GEN Health. Each care item continues separately; your other selections stay saved here.
+                  Pay in GEN Health, then complete intake for each prescription. Each care item continues separately; your other selections stay saved here.
                 </p>
                 <div className="mt-3 space-y-2">
                   {items.map((item, index) => {
@@ -215,7 +215,7 @@ export function PrescriptionBasketDrawer() {
                     disabled={!selectedItemAvailable}
                     className="btn-primary mt-2 w-full text-sm"
                   >
-                    {selectedItemAvailable ? <>{selectedItem.category === 'labs' ? 'Continue to Lab Checkout' : 'Begin Intake in GEN'} <ExternalLink size={14} /></> : 'Temporarily unavailable'}
+                    {selectedItemAvailable ? <>{selectedItem.category === 'labs' ? 'Continue to Lab Checkout' : 'Pay in GEN Health'} <ExternalLink size={14} /></> : 'Temporarily unavailable'}
                   </button>
                 </div>
               )}

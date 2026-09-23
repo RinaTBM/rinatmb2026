@@ -394,7 +394,7 @@ function FamilySelectors({
                   </button>
                 )}
                 <p className="mt-3 text-xs text-ink-500 leading-relaxed">
-                  Add prescriptions to your Care Basket while you shop, then begin intake in GEN Health before product payment. Each prescription continues separately and requires provider review.
+                  Add prescriptions to your Care Basket while you shop, then pay in GEN Health and complete intake. Each prescription continues separately and requires provider review.
 
                   Purchasing does not guarantee that a prescription will be issued.
                 </p>

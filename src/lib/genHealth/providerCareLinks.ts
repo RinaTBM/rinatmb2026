@@ -13,6 +13,7 @@ const genProductUrl = (genProductId: string) =>
 
 export const PROVIDER_CARE_GEN_ACTIONS: Record<string, ProviderCareAction> = {
   'initial-provider-consultation': {
+    checkoutUrl: genProductUrl('g2XPw0AtIk3tFHzmYnMV'),
     triggerLabel: 'New prescription start or first provider-guided care plan',
     nextStepLabel: 'Pay in GEN Health, then complete the required intake and visit steps there.',
   },
@@ -22,9 +23,9 @@ export const PROVIDER_CARE_GEN_ACTIONS: Record<string, ProviderCareAction> = {
     nextStepLabel: 'Pay in GEN Health, then continue with scheduling and follow-up steps there.',
   },
   'laboratory-review': {
-    checkoutUrl: genProductUrl('lFf1pqSIvVe48XgVVu3H'),
+    checkoutUrl: genProductUrl('CNyY5BTfoFxwHujEPjwi'),
     triggerLabel: 'Provider interpretation after labs are completed or uploaded',
-    nextStepLabel: 'Pay through the Follow-Up Clinical Visit checkout in GEN Health, then make sure your lab results are available there.',
+    nextStepLabel: 'Pay in GEN Health, then make sure your lab results are available there for your provider to review.',
   },
 };
 

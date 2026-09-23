@@ -6,11 +6,11 @@ describe('resolveGenProductFirstCheckout', () => {
   it.each([
     ['bpc-157', 'KXMm9SsbOEYnFy9phmZn'],
     ['fat-burner', '7Kix55LA15U0lNvY9QXI'],
-  ])('routes %s to its live-verified GEN assessment', (slug, productId) => {
+  ])('routes %s to its live-verified GEN checkout', (slug, productId) => {
     // Verified against GEN admin checkout links and public assessment titles on 2026-09-22.
     expect(resolveGenProductFirstCheckout(GEN_HOSTED_PRODUCTS[slug].genClientProductId)).toEqual({
       ok: true,
-      url: `https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_${productId}?checkoutFlow=intake_first`,
+      url: `https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_${productId}`,
     });
   });
 
@@ -18,36 +18,36 @@ describe('resolveGenProductFirstCheckout', () => {
     expect(resolveGenProductFirstCheckout(null)).toEqual({ ok: false, code: 'MISSING_PRODUCT_ID' });
     expect(resolveGenProductFirstCheckout('f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_unverified')).toEqual({ ok: false, code: 'PAIRING_NOT_VERIFIED' });
   });
-  it('builds the Intake-first URL for an owner-verified product', () => {
+  it('builds the canonical checkout URL for an owner-verified product', () => {
     expect(
       resolveGenProductFirstCheckout(
         'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw',
       ),
     ).toEqual({
       ok: true,
-      url: 'https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw?checkoutFlow=intake_first',
+      url: 'https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_FVwkzvQqWIZRNAwbslGw',
     });
   });
 
-  it('builds the Intake-first URL for the live NAD+ Injectable wrapper', () => {
+  it('builds the canonical checkout URL for the live NAD+ Injectable wrapper', () => {
     expect(
       resolveGenProductFirstCheckout(
         'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn',
       ),
     ).toEqual({
       ok: true,
-      url: 'https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn?checkoutFlow=intake_first',
+      url: 'https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_SHJpGAACUFEeMONdpEbn',
     });
   });
 
-  it('builds the Intake-first URL for the live Estradiol Patch wrapper', () => {
+  it('builds the canonical checkout URL for the live Estradiol Patch wrapper', () => {
     expect(
       resolveGenProductFirstCheckout(
         'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR',
       ),
     ).toEqual({
       ok: true,
-      url: 'https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR?checkoutFlow=intake_first',
+      url: 'https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_o7dNtf9QsnEqPCrLr2tR',
     });
   });
 
@@ -56,7 +56,7 @@ describe('resolveGenProductFirstCheckout', () => {
       resolveGenProductFirstCheckout(
         'f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_PRIG7DYPNNgco3lGf1zx',
       ),
-    ).toEqual({ ok: true, url: 'https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_PRIG7DYPNNgco3lGf1zx?checkoutFlow=intake_first' });
+    ).toEqual({ ok: true, url: 'https://app.genhealthehr.com/f5e0mdyBYnDh7HGvek0C/product/f5e0mdyBYnDh7HGvek0C_MoDyAcICE5RDa4DfaeBX_PRIG7DYPNNgco3lGf1zx' });
   });
 
   it('rejects a product belonging to another GEN client', () => {

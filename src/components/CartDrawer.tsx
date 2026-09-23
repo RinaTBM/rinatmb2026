@@ -28,7 +28,7 @@ export function CartDrawer() {
 
             <div className="mx-5 mt-4 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3">
               <p className="text-xs font-semibold text-gold-800">Prescriptions and accessories are purchased separately.</p>
-              <p className="mt-1 text-xs leading-relaxed text-ink-600">Website purchases such as accessories use this cart. Prescription products begin intake in GEN Health before product payment, with assessment and provider review required.</p>
+              <p className="mt-1 text-xs leading-relaxed text-ink-600">Website purchases such as accessories use this cart. Prescription products are purchased in GEN Health, followed by intake and provider review before dispensing.</p>
             </div>
 
             {/* Items */}

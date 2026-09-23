@@ -13,7 +13,7 @@ describe('Care Basket delivery selection', () => {
     expect(result[1]).toMatchObject({ price: 79, genClientProductId: nasal.genClientProductId });
     expect(resolveGenProductFirstCheckout(result[1].genClientProductId)).toEqual({
       ok: true,
-      url: expect.stringContaining(`${nasal.genClientProductId}?checkoutFlow=intake_first`),
+      url: expect.stringContaining(`${nasal.genClientProductId}`),
     });
   });
 });

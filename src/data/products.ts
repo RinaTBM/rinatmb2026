@@ -29,6 +29,7 @@ export type Category =
   | 'recovery-performance'
   | 'prescription-skin-hair'
   | 'provider-care'
+  | 'provider-appointments'
   | 'accessories';
 
 // Legacy alias retained so existing components that reference `product.section`
@@ -294,6 +295,14 @@ export const sections: SectionMeta[] = [
     subcategories: [],
   },
   {
+    id: 'provider-appointments',
+    label: 'Provider Appointments & Lab Reviews',
+    tagline: 'Book direct with a licensed provider',
+    description: 'Schedule initial and follow-up provider visits, or a lab review, directly in GEN Health. Payment is completed at booking, followed by intake and provider review.',
+    disclosure: 'These services are booked and paid for in GEN Health. Provider review is required before dispensing. A prescription is not guaranteed. Lab testing itself is separate from the lab review appointment.',
+    subcategories: [],
+  },
+  {
     id: 'provider-care',
     label: 'Provider Care',
     tagline: 'Care, guided by licensed providers',
@@ -328,6 +337,7 @@ export const CATEGORY_ORDER: Category[] = [
   'recovery-performance',
   'prescription-skin-hair',
   'provider-care',
+  'provider-appointments',
   'accessories',
 ];
 
@@ -398,7 +408,7 @@ interface ProductSeed {
   excludedFromDiscounts?: boolean;
 }
 
-const DISCOUNT_EXCLUDED_CATEGORIES: ReadonlySet<Category> = new Set(['provider-care', 'accessories']);
+const DISCOUNT_EXCLUDED_CATEGORIES: ReadonlySet<Category> = new Set(['provider-care', 'provider-appointments', 'accessories']);
 
 function mk(seed: ProductSeed): Product {
   const variants = buildVariants(seed.slug, seed.variants);
@@ -467,10 +477,10 @@ function mk(seed: ProductSeed): Product {
     launchPhase: seed.launchPhase,
     campaignTheme: seed.campaignTheme,
     plannedLaunchDate: seed.plannedLaunchDate,
-    requiresProviderReview: seed.category === 'accessories' ? false : seed.category === 'provider-care' ? true : true,
-    requiresPrescription: seed.category === 'accessories' || seed.category === 'provider-care' ? false : true,
+    requiresProviderReview: seed.category === 'accessories' ? false : seed.category === 'provider-care' || seed.category === 'provider-appointments' ? true : true,
+    requiresPrescription: seed.category === 'accessories' || seed.category === 'provider-care' || seed.category === 'provider-appointments' ? false : true,
     requiresComplianceReview: seed.category === 'accessories' ? false : true,
-    requiresPharmacyVerification: seed.category === 'accessories' || seed.category === 'provider-care' ? false : true,
+    requiresPharmacyVerification: seed.category === 'accessories' || seed.category === 'provider-care' || seed.category === 'provider-appointments' ? false : true,
     providerDisclaimer: seed.providerDisclaimer,
     internalNotes: seed.internalNotes,
     needsDedicatedImage: seed.needsDedicatedImage,
@@ -480,7 +490,7 @@ function mk(seed: ProductSeed): Product {
     tagline: seed.subtitle,
     section: seed.category,
     subcategory:
-      seed.category === 'provider-care'
+      seed.category === 'provider-care' || seed.category === 'provider-appointments'
         ? (seed.slug.includes('laboratory') ? 'lab-review' : 'consultation')
         : seed.category === 'accessories'
           ? (
@@ -970,10 +980,10 @@ export const products: Product[] = [
   mk({
     id: 'pc1',
     slug: 'initial-provider-consultation',
-    displayName: 'Initial Clinical Consultation',
-    shortName: 'Initial Consultation',
+    displayName: 'Initial Provider Visit',
+    shortName: 'Initial Visit',
     subtitle: 'Your first step toward personalized care.',
-    category: 'provider-care',
+    category: 'provider-appointments',
     goals: ['hrt-women', 'weight-management', 'longevity'],
     shortDescription: 'Discuss your goals, review your health history, and create a personalized treatment plan tailored to you.',
     longDescription: 'Discuss your goals, review your health history, and create a personalized treatment plan tailored to you.',
@@ -986,10 +996,10 @@ export const products: Product[] = [
   mk({
     id: 'pc2',
     slug: 'follow-up-appointment',
-    displayName: 'Follow-Up Clinical Visit',
+    displayName: 'Follow-Up Provider Visit',
     shortName: 'Follow-Up Visit',
     subtitle: 'Review progress and adjust your treatment plan.',
-    category: 'provider-care',
+    category: 'provider-appointments',
     goals: ['hrt-women', 'weight-management', 'longevity'],
     shortDescription: 'Monitor progress, answer questions, and optimize your treatment plan.',
     longDescription: 'Monitor progress, answer questions, and optimize your treatment plan.',
@@ -1004,7 +1014,7 @@ export const products: Product[] = [
     displayName: 'Lab Review',
     shortName: 'Lab Review',
     subtitle: 'Provider interpretation of your lab results.',
-    category: 'provider-care',
+    category: 'provider-appointments',
     goals: ['hrt-women', 'longevity', 'weight-management'],
     shortDescription: 'Review laboratory findings and receive personalized recommendations.',
     longDescription: 'Review laboratory findings and receive personalized recommendations.',

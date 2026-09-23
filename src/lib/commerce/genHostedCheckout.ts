@@ -16,9 +16,9 @@ export type GenHostedCheckoutResolution =
     };
 
 /**
- * Resolve an owner-verified GEN product to intake before product payment.
+ * Resolve an owner-verified GEN product to its canonical checkout URL.
+ * Payment is completed first in GEN Health, followed by intake and provider review.
  * The legacy function name is retained for existing catalog callers.
- * This remains a single-product flow, not a combined cart or shared intake.
  */
 export function resolveGenProductFirstCheckout(
   genClientProductId: string | null | undefined,
@@ -34,7 +34,7 @@ export function resolveGenProductFirstCheckout(
 
   return {
     ok: true,
-    url: `${GEN_APP_ORIGIN}/${MBM_GEN_CLIENT_ID}/product/${encodeURIComponent(id)}?checkoutFlow=intake_first`,
+    url: `${GEN_APP_ORIGIN}/${MBM_GEN_CLIENT_ID}/product/${encodeURIComponent(id)}`,
   };
 }
 

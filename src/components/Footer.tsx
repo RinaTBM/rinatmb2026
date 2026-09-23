@@ -41,6 +41,7 @@ export function Footer() {
               <li><Link to="/section/weight-management" className="hover:text-gold-300 transition-colors">Weight Management</Link></li>
               <li><Link to="/section/longevity-cognitive" className="hover:text-gold-300 transition-colors">Longevity &amp; Energy</Link></li>
               <li><Link to="/section/womens-hormone-therapy" className="hover:text-gold-300 transition-colors">Hormone Support</Link></li>
+              <li><Link to="/section/provider-appointments" className="hover:text-gold-300 transition-colors">Provider Appointments &amp; Lab Reviews</Link></li>
             </ul>
           </div>
 

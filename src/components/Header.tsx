@@ -146,6 +146,9 @@ export function Header() {
               <Link to="/section/womens-hormone-therapy" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 Hormone Support
               </Link>
+              <Link to="/section/provider-appointments" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
+                Provider Visits
+              </Link>
               <Link to="/section/accessories" className="text-sm font-medium text-ink-800 hover:text-gold-600 transition-colors">
                 Accessories
               </Link>
@@ -337,6 +340,13 @@ export function Header() {
                 className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
               >
                 Hormone Support
+              </Link>
+              <Link
+                to="/section/provider-appointments"
+                onClick={closeAll}
+                className="block rounded-lg px-4 py-3.5 text-base font-medium text-ink-900 hover:bg-cream-200 transition-colors"
+              >
+                Provider Visits &amp; Lab Reviews
               </Link>
               <Link
                 to="/section/accessories"

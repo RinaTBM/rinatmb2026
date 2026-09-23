@@ -25,6 +25,9 @@ const EXPECTED_SHOP_SLUGS = [
   'bpc-157',
   'ghk-cu-minoxidil',
   'ondansetron-odt',
+  'initial-provider-consultation',
+  'follow-up-appointment',
+  'laboratory-review',
   'alcohol-prep-wipes',
   'complete-injection-starter-kit',
   'daily-weekly-wellness-planner',
@@ -40,7 +43,7 @@ describe('shop visibility vs purchase readiness', () => {
   it('shows the restored public wellness and accessory catalog on Shop All', () => {
     const shop = visibleProducts.filter((p) => SHOP_CATEGORY_IDS.has(p.category));
     expect(shop.map((p) => p.slug).sort()).toEqual([...EXPECTED_SHOP_SLUGS].sort());
-    expect(shop).toHaveLength(28);
+    expect(shop).toHaveLength(31);
   });
 
   it('keeps future-hidden products off the storefront', () => {
@@ -52,7 +55,10 @@ describe('shop visibility vs purchase readiness', () => {
   });
 
   it('reports prescription routing blockers without treating unknown SKUs as purchasable', () => {
-    const shop = visibleProducts.filter((p) => SHOP_CATEGORY_IDS.has(p.category) && p.category !== 'accessories');
+    // Provider appointments use direct GEN booking links, not GEN_HOSTED_PRODUCTS.
+    const shop = visibleProducts.filter(
+      (p) => SHOP_CATEGORY_IDS.has(p.category) && p.category !== 'accessories' && p.category !== 'provider-appointments',
+    );
     const purchasable: string[] = [];
     const unavailable: string[] = [];
     for (const p of shop) {

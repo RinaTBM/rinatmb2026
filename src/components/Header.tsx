@@ -69,22 +69,39 @@ export function Header() {
         }`}
       >
         <div className="container-lux">
-          <div className="flex h-28 items-center justify-between md:h-32">
-            <button
-              className="lg:hidden text-ink-900 p-2 -ml-2"
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open menu"
-            >
-              <Menu size={22} />
-            </button>
+          {/*
+            Mobile (< lg): two rows — compact logo row, then full-width actions row.
+            Desktop (lg+): single row — logo | nav | actions.
+            The flex-col→flex-row switch prevents the old single-row overflow at 320–430px.
+          */}
+          <div className="flex flex-col lg:flex-row lg:h-32 lg:items-center lg:justify-between">
 
-            <Link to="/" className="flex items-center group shrink-0" aria-label="My Bare Method home">
+            {/* ── Mobile top row: hamburger + centered compact logo ── */}
+            <div className="relative flex h-14 items-center justify-center lg:hidden">
+              <button
+                className="absolute left-0 top-1/2 -translate-y-1/2 text-ink-900 p-2 -ml-1"
+                onClick={() => setMobileOpen(true)}
+                aria-label="Open menu"
+              >
+                <Menu size={22} />
+              </button>
+              <Link to="/" className="flex items-center" aria-label="My Bare Method home">
+                <BrandLogo
+                  priority
+                  className="w-auto max-h-11 object-contain"
+                />
+              </Link>
+            </div>
+
+            {/* ── Desktop logo (hidden on mobile) ── */}
+            <Link to="/" className="hidden lg:flex items-center group shrink-0" aria-label="My Bare Method home">
               <BrandLogo
                 priority
-                className="w-auto max-h-24 md:max-h-[120px] object-contain"
+                className="w-auto max-h-[120px] object-contain"
               />
             </Link>
 
+            {/* ── Desktop nav (hidden on mobile) ── */}
             <nav className="hidden lg:flex items-center gap-5">
               <div
                 className="relative"
@@ -163,17 +180,21 @@ export function Header() {
               </Link>
             </nav>
 
-            <div className="flex items-center gap-3 md:gap-4">
+            {/* ── Actions bar ──
+                Mobile: full-width row, evenly distributed, 44px touch targets, tiny labels on cart buttons.
+                Desktop: right-aligned icon row, no labels. */}
+            <div className="flex items-center justify-around border-t border-cream-200/60 px-1 lg:border-0 lg:justify-end lg:gap-4 lg:px-0 lg:py-0">
               <button
                 onClick={() => setSearchOpen(true)}
-                className="text-ink-800 hover:text-gold-600 transition-colors p-1"
-                aria-label="Search"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center text-ink-800 hover:text-gold-600 transition-colors lg:min-h-0 lg:min-w-0 lg:p-1"
+                aria-label="Search products"
+                title="Search"
               >
                 <Search size={20} />
               </button>
               <Link
                 to={accountHref}
-                className="text-ink-800 hover:text-gold-600 transition-colors p-1"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center text-ink-800 hover:text-gold-600 transition-colors lg:min-h-0 lg:min-w-0 lg:p-1"
                 aria-label={authenticated ? 'My account' : 'Sign in'}
                 title={authenticated ? 'My Bare Method account' : 'My Bare Method sign in'}
               >
@@ -183,37 +204,45 @@ export function Header() {
                 href={GEN_HEALTH_PORTAL_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-ink-200 bg-white p-1 transition-colors hover:border-gold-300"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center transition-colors lg:min-h-0 lg:min-w-0"
                 aria-label="GEN Health portal"
                 title="GEN Health portal"
               >
-                <img src={GEN_HEALTH_ICON_URL} alt="" className="h-full w-full rounded-full object-contain" />
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-ink-200 bg-white p-1 transition-colors hover:border-gold-300">
+                  <img src={GEN_HEALTH_ICON_URL} alt="" className="h-full w-full rounded-full object-contain" />
+                </span>
               </a>
               <button
                 onClick={openCart}
-                className="relative text-ink-800 hover:text-gold-600 transition-colors p-1"
+                className="relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center text-ink-800 hover:text-gold-600 transition-colors lg:min-h-0 lg:min-w-0 lg:flex-row lg:p-1"
                 aria-label="Accessories cart"
                 title="Accessories cart"
               >
-                <ShoppingCart size={20} />
-                {itemCount > 0 && (
-                  <span className="absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full bg-gold-400 text-[10px] font-semibold text-ink-900" style={{ height: 18, width: 18 }}>
-                    {itemCount}
-                  </span>
+                <span className="relative">
+                  <ShoppingCart size={20} />
+                  {itemCount > 0 && (
+                    <span className="absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full bg-gold-400 text-[10px] font-semibold text-ink-900" style={{ height: 18, width: 18 }}>
+                      {itemCount}
+                    </span>
                   )}
+                </span>
+                <span className="mt-0.5 text-[9px] font-medium leading-none text-ink-500 lg:hidden">Cart</span>
               </button>
               <button
                 onClick={openPrescriptionBasket}
-                className="relative text-ink-800 hover:text-gold-600 transition-colors p-1"
+                className="relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center text-ink-800 hover:text-gold-600 transition-colors lg:min-h-0 lg:min-w-0 lg:flex-row lg:p-1"
                 aria-label="Open prescription care basket"
                 title="Prescription care basket — purchased separately through GEN Health"
               >
-                <ShoppingBag size={20} />
-                {prescriptionItemCount > 0 && (
-                  <span className="absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full bg-gold-400 text-[10px] font-semibold text-ink-900" style={{ height: 18, width: 18 }}>
-                    {prescriptionItemCount}
-                  </span>
-                )}
+                <span className="relative">
+                  <ShoppingBag size={20} />
+                  {prescriptionItemCount > 0 && (
+                    <span className="absolute -right-1.5 -top-1.5 flex items-center justify-center rounded-full bg-gold-400 text-[10px] font-semibold text-ink-900" style={{ height: 18, width: 18 }}>
+                      {prescriptionItemCount}
+                    </span>
+                  )}
+                </span>
+                <span className="mt-0.5 text-[9px] font-medium leading-none text-ink-500 lg:hidden">Care</span>
               </button>
             </div>
           </div>

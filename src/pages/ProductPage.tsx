@@ -1,3 +1,5 @@
+import { StateSelector, StateUnavailableNotice, useSelectedState } from '@/components/StateSelector';
+import { isUnavailableInState, unavailableStatesFor } from '@/data/treatmentAvailability';
 import { useMemo, useState } from 'react';
 import { Link } from '@/router';
 import { Minus, Plus, ShieldCheck, RefreshCw, Truck, Check, ExternalLink } from 'lucide-react';
@@ -60,6 +62,32 @@ const MAIN_PEPTIDE_LABEL_SLUGS = new Set([
 
 /** Router — accessories get a simplified ecommerce page; wellness keeps existing purchase logic. */
 export function ProductPage({ slug }: { slug: string }) {
+  const state = useSelectedState();
+  const product = getProduct(slug);
+  const membership = getMembership(slug);
+  const displayItem = product ?? membership;
+  const blocked = Boolean(displayItem && isUnavailableInState(unavailableStatesFor(displayItem.slug), state));
+  return <>
+    <div className="bg-cream-50 pt-28 md:pt-32"><div className="container-lux"><StateSelector /></div></div>
+    <div className="[&>div]:!pt-4">
+      {blocked && displayItem ? (
+        <div className="bg-cream-50 pb-16">
+          <div className="container-lux grid gap-8 lg:grid-cols-2 lg:gap-16">
+            <img src={displayItem.image} alt={displayItem.imageAlt} className="aspect-square w-full rounded-3xl object-cover grayscale" />
+            <div>
+              <h1 className="font-serif text-4xl text-ink-900">{displayItem.displayName}</h1>
+              <p className="mt-4 text-ink-600 leading-relaxed">{displayItem.shortDescription}</p>
+              <StateUnavailableNotice state={state} />
+              {product && <ProductDescriptionSections product={product} />}
+            </div>
+          </div>
+        </div>
+      ) : <ProductDetailRouter slug={slug} />}
+    </div>
+  </>;
+}
+
+function ProductDetailRouter({ slug }: { slug: string }) {
   const detail = resolveStorefrontDetail(slug);
   if (detail.kind === 'membership') {
     if (WEBSITE_FAMILY_CUTOVER_ENABLED) {

@@ -1,3 +1,4 @@
+import { StateSelector } from '@/components/StateSelector';
 import type { ReactNode } from 'react';
 import { ChevronDown, Search, SlidersHorizontal } from 'lucide-react';
 import {
@@ -60,6 +61,7 @@ export function ProductBrowseBar({
 
   return (
     <div className="mb-10 space-y-5">
+      <StateSelector />
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
         <div className="relative flex-1">
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" />

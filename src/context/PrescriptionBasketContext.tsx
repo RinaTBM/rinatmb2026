@@ -5,6 +5,7 @@ import { getLabCheckoutUrl, getLabDisplayPriceCents, labOptions } from '@/data/l
 
 export interface PrescriptionBasketItem {
   slug: string;
+  availabilityKey?: string;
   displayName: string;
   subtitle: string;
   image: string;

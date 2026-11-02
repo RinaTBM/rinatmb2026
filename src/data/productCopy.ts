@@ -362,8 +362,7 @@ export const PRODUCT_COPY: Record<string, ProductCopy> = {
   // ===== WOMEN'S HORMONE THERAPY =====
   'estradiol-patch': {
     benefitHeadline: 'Steady Estrogen Support Through a Simple Skin Patch',
-    shortDescription:
-      'The Estrogen Support Patch delivers estradiol — a primary form of estrogen — through the skin as part of provider-directed hormone therapy. Many women explore this option when they want steady support without an oral tablet, personalized after clinical review.',
+    shortDescription: 'Estradiol transdermal patch (0.025–0.1 mg/hr, 8 patches) for menopause and perimenopause hormone support. Provider-directed; available after eligibility review and labs.',
     highlights: [
       'Through-the-Skin Delivery',
       'Steady Hormone Support',

@@ -1,3 +1,5 @@
+import { useSelectedState } from '@/components/StateSelector';
+import { STATES, isUnavailableInState } from '@/data/treatmentAvailability';
 import { Link } from '@/router';
 import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import type { Product } from '@/data/products';
@@ -8,6 +10,8 @@ import { getWebsiteFamilyBySlug, listPatientVisibleVariants } from '@/data/websi
 import { resolveGenProductFirstCheckout } from '@/lib/commerce/genHostedCheckout';
 
 export function ProductCard({ product }: { product: Product }) {
+  const state = useSelectedState();
+  const stateUnavailable = isUnavailableInState(product.unavailableStates, state);
   const section = sections.find(s => s.id === product.category);
   const primaryForm = product.dosageForms[0];
   /** All Accessories use contain-fit so product photos are never cropped. */
@@ -29,8 +33,9 @@ export function ProductCard({ product }: { product: Product }) {
     product.category !== 'provider-care';
 
   return (
-    <Link to={`/product/${product.slug}`} className="group block">
-      <div className="card-lux overflow-hidden hover:shadow-xl hover:-translate-y-1">
+    <div className="group">
+    <Link to={`/product/${product.slug}`} className="block">
+      <div className={`card-lux overflow-hidden hover:shadow-xl hover:-translate-y-1 ${stateUnavailable ? 'grayscale opacity-60' : ''}`}>
         <div className={`relative aspect-square overflow-hidden bg-cream-100 ${containFit ? 'p-5 md:p-6' : ''}`}>
           <img
             src={product.image}
@@ -43,7 +48,9 @@ export function ProductCard({ product }: { product: Product }) {
             loading="lazy"
           />
           <div className="absolute left-3 top-3 flex flex-col gap-1.5">
-            {browseUnavailable ? (
+            {stateUnavailable ? (
+              <span className="rounded-full bg-cream-200 px-2.5 py-1 text-xs font-medium text-ink-700">Not available in {STATES[state]}</span>
+            ) : browseUnavailable ? (
               <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-amber-900">
                 {rxAvailability?.customerFacingStatus === 'COMING_SOON'
                   ? 'Coming soon'
@@ -88,5 +95,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
     </Link>
+    {stateUnavailable && <button type="button" disabled className="btn-outline mt-2 w-full cursor-not-allowed opacity-60">Not available in {STATES[state]}</button>}
+    </div>
   );
 }

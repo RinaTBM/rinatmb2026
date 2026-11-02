@@ -1,3 +1,5 @@
+import { StateUnavailableNotice, useSelectedState } from '@/components/StateSelector';
+import { isUnavailableInState, unavailableStatesFor } from '@/data/treatmentAvailability';
 import { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, ShieldCheck, X } from 'lucide-react';
 import { Link } from '@/router';
@@ -15,6 +17,8 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
   }];
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
   const selectedOption = options[selectedOptionIndex] ?? options[0];
+  const state = useSelectedState();
+  const stateUnavailable = isUnavailableInState(unavailableStatesFor(product.slug, selectedOption.label), state);
   const checkout = resolveGenProductFirstCheckout(selectedOption.genClientProductId);
   const { addItem, openBasket, items: prescriptionItems } = usePrescriptionBasket();
   const [recommendationsOpen, setRecommendationsOpen] = useState(false);
@@ -41,9 +45,10 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
   };
 
   const addCurrentToBasket = () => {
-    if (!checkout.ok) return;
+    if (!checkout.ok || stateUnavailable) return;
     addItem({
       slug: product.slug,
+      availabilityKey: `${product.slug}:${selectedOption.label}`,
       displayName: options.length > 1 ? `${product.shortName} — ${selectedOption.label}` : product.displayName,
       subtitle: options.length > 1 ? selectedOption.label : product.subtitle,
       image: product.image,
@@ -56,7 +61,7 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
   };
 
   const continueToGen = () => {
-    if (checkout.ok) navigateToGenProductFirstCheckout(checkout.url);
+    if (checkout.ok && !stateUnavailable) navigateToGenProductFirstCheckout(checkout.url);
   };
 
   return (
@@ -91,12 +96,12 @@ export function GenHostedProductPage({ product, route }: { product: Product; rou
             <p className="text-sm text-ink-500">Estimated prescription total</p>
             <p className="font-serif text-3xl text-ink-900">${selectedOption.price.toFixed(2)}</p>
             <p className="mt-2 text-xs text-ink-500">Pay in GEN Health, then complete your intake for provider review. Provider review is required before dispensing.</p>
-            {checkout.ok ? (
+            {stateUnavailable ? <StateUnavailableNotice state={state} /> : checkout.ok ? (
               <a href={checkout.url} target="_blank" rel="noopener noreferrer" onClick={event => { if (!event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) { event.preventDefault(); continueToGen(); } }} className="btn-primary mt-5 w-full">Buy now</a>
             ) : (
               <button type="button" className="btn-primary mt-5 w-full" disabled>Temporarily unavailable</button>
             )}
-            {checkout.ok && <button type="button" className="btn-outline mt-2 w-full" onClick={addCurrentToBasket}>{currentInBasket ? 'Review prescription basket' : 'Save to Care Basket'}</button>}
+            {checkout.ok && !stateUnavailable && <button type="button" className="btn-outline mt-2 w-full" onClick={addCurrentToBasket}>{currentInBasket ? 'Review prescription basket' : 'Save to Care Basket'}</button>}
             {currentInBasket && <button type="button" onClick={openBasket} className="btn-ghost mt-2 w-full">Open prescription basket</button>}
             <p className="mt-3 text-xs text-ink-500">Each prescription is purchased separately. Payment does not guarantee prescription approval.</p>
           </div>

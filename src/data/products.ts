@@ -12,6 +12,8 @@
 // `internalNotes` is NEVER rendered to customers.
 // =============================================================================
 
+import { unavailableStatesFor } from './treatmentAvailability';
+
 import {
   MEMBERSHIP_PROGRAM_SKU_BY_APP_ID,
   VARIANT_SKU_BY_ID,
@@ -63,6 +65,7 @@ export type DosageForm =
   | 'Kit';
 
 export interface ProductVariant {
+  unavailableStates: string[];
   id: string;
   dosageForm: DosageForm;
   strength: string;
@@ -75,6 +78,7 @@ export interface ProductVariant {
 }
 
 export interface Product {
+  unavailableStates: string[];
   // --- Identity ---
   id: string;
   slug: string;
@@ -369,6 +373,7 @@ function buildVariants(slug: string, seeds: VariantSeed[]): ProductVariant[] {
     const id = s.id ?? `${slug}-v${i + 1}`;
     const sku = VARIANT_SKU_BY_ID[id];
     return {
+      unavailableStates: unavailableStatesFor(slug, s.dosageForm),
       id,
       dosageForm: s.dosageForm,
       strength: s.strength,
@@ -448,6 +453,7 @@ function mk(seed: ProductSeed): Product {
     copy?.importantInformation ??
     seed.providerDisclaimer;
   return {
+    unavailableStates: unavailableStatesFor(seed.slug),
     id: seed.id,
     slug: seed.slug,
     displayName: seed.displayName,
@@ -690,7 +696,7 @@ export const products: Product[] = [
   mk({
     id: 'p83',
     slug: 'scream-cream',
-    displayName: 'Scream Cream: Women\'s Sexual Wellness Topical',
+    displayName: 'Scream Cream: Sildenafil / Arginine / Testosterone',
     shortName: 'Scream Cream',
     subtitle: 'Provider-directed compounded women\'s sexual wellness topical',
     category: 'womens-hormone-therapy',

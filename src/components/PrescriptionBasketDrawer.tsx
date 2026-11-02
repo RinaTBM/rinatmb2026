@@ -1,3 +1,5 @@
+import { StateSelector, useSelectedState } from '@/components/StateSelector';
+import { STATES, basketUnavailableStates, isUnavailableInState } from '@/data/treatmentAvailability';
 import { useState } from 'react';
 import { GrouponEntry } from '@/components/GrouponEntry';
 import { ArrowRight, CheckCircle2, ExternalLink, ShieldCheck, ShoppingBag, X } from 'lucide-react';
@@ -11,6 +13,8 @@ const INITIAL_VISIT_CENTS = 7500;
 const money = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
 export function PrescriptionBasketDrawer() {
+  const state = useSelectedState();
+  const stateBlocks = (item: { slug: string; genClientProductId: string; availabilityKey?: string }) => isUnavailableInState(basketUnavailableStates(item), state);
   const { items, isOpen, itemCount, medicationSubtotal, closeBasket, removeItem } = usePrescriptionBasket();
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const hasHrt = items.some(item => item.category === HRT_CATEGORY);
@@ -18,13 +22,14 @@ export function PrescriptionBasketDrawer() {
   const hasPrescriptionItems = items.some(item => item.category !== 'labs');
   const selectedItem = items.find(item => item.slug === selectedSlug) ?? items[0] ?? null;
   const selectedItemAvailable = selectedItem
-    ? Boolean(selectedItem.checkoutUrl) || resolveGenProductFirstCheckout(selectedItem.genClientProductId).ok
+    ? !stateBlocks(selectedItem) && (Boolean(selectedItem.checkoutUrl) || resolveGenProductFirstCheckout(selectedItem.genClientProductId).ok)
     : false;
   const estimatedTotalCents =
     Math.round(medicationSubtotal * 100) +
     (hasPrescriptionItems ? INITIAL_VISIT_CENTS : 0);
 
   const beginGenCheckout = (item: NonNullable<typeof selectedItem>) => {
+    if (stateBlocks(item)) return;
     if (item.checkoutUrl) {
       navigateToGenProductFirstCheckout(item.checkoutUrl);
       return;
@@ -65,6 +70,7 @@ export function PrescriptionBasketDrawer() {
         ) : (
           <>
             <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
+              <StateSelector />
               <div className="mb-4 rounded-2xl border border-gold-200 bg-white p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-gold-700">GEN Health checkout steps</p>
                 <p className="mt-1 text-sm leading-relaxed text-ink-600">
@@ -72,7 +78,7 @@ export function PrescriptionBasketDrawer() {
                 </p>
                 <div className="mt-3 space-y-2">
                   {items.map((item, index) => {
-                    const available = Boolean(item.checkoutUrl) || resolveGenProductFirstCheckout(item.genClientProductId).ok;
+                    const available = !stateBlocks(item) && (Boolean(item.checkoutUrl) || resolveGenProductFirstCheckout(item.genClientProductId).ok);
                     const selected = selectedItem?.slug === item.slug;
                     return (
                       <button
@@ -106,7 +112,7 @@ export function PrescriptionBasketDrawer() {
 
               <div className="space-y-3">
                 {items.map(item => {
-                  const available = Boolean(item.checkoutUrl) || resolveGenProductFirstCheckout(item.genClientProductId).ok;
+                  const available = !stateBlocks(item) && (Boolean(item.checkoutUrl) || resolveGenProductFirstCheckout(item.genClientProductId).ok);
                   return (
                     <div
                       key={item.slug}
@@ -141,7 +147,7 @@ export function PrescriptionBasketDrawer() {
                           <p className="mt-1 flex items-center gap-1 text-[11px] text-ink-500"><ShieldCheck size={12} className="text-gold-600" /> {item.category === 'labs' ? 'Opens as its own GEN lab checkout' : 'Opens as its own GEN prescription checkout'}</p>
                         </div>
                       </div>
-                      {!available && <p className="mt-3 rounded-lg bg-cream-100 px-3 py-2 text-xs text-ink-600">Temporarily unavailable for secure GEN checkout.</p>}
+                      {!available && <p className="mt-3 rounded-lg bg-cream-100 px-3 py-2 text-xs text-ink-600">{stateBlocks(item) ? `Not available in ${STATES[state]}` : 'Temporarily unavailable for secure GEN checkout.'}</p>}
                     </div>
                   );
                 })}
@@ -215,7 +221,7 @@ export function PrescriptionBasketDrawer() {
                     disabled={!selectedItemAvailable}
                     className="btn-primary mt-2 w-full text-sm"
                   >
-                    {selectedItemAvailable ? <>{selectedItem.category === 'labs' ? 'Continue to Lab Checkout' : 'Pay in GEN Health'} <ExternalLink size={14} /></> : 'Temporarily unavailable'}
+                    {selectedItemAvailable ? <>{selectedItem.category === 'labs' ? 'Continue to Lab Checkout' : 'Pay in GEN Health'} <ExternalLink size={14} /></> : stateBlocks(selectedItem) ? `Not available in ${STATES[state]}` : 'Temporarily unavailable'}
                   </button>
                 </div>
               )}

@@ -1,3 +1,5 @@
+import { StateUnavailableNotice, useSelectedState } from '@/components/StateSelector';
+import { isUnavailableInState, unavailableStatesFor } from '@/data/treatmentAvailability';
 import { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, ShieldCheck, X } from 'lucide-react';
 import { Link } from '@/router';
@@ -105,6 +107,7 @@ function FamilySelectors({
   sectionLabel?: string;
   initialPurchaseType?: 'one_time' | 'membership';
 }) {
+  const state = useSelectedState();
   const visible = listPatientVisibleVariants(family);
   const familyId = family.familyId;
   const isWeight = familyId === 'semaglutide' || familyId === 'tirzepatide';
@@ -182,14 +185,16 @@ function FamilySelectors({
   const orderedRecommendations = recommendations.length
     ? recommendations.map((_, index) => recommendations[(index + recommendationOffset) % recommendations.length])
     : [];
-  const canPurchase = glp1FamilyId
+  const stateUnavailable = isUnavailableInState(unavailableStatesFor(product.slug, form), state);
+  const canPurchase = !stateUnavailable && (glp1FamilyId
     ? Boolean(liveGlp1Program && genCheckout.ok)
-    : Boolean(variant && price != null && resolution.ok && genCheckout.ok);
+    : Boolean(variant && price != null && resolution.ok && genCheckout.ok));
 
   const addCurrentToBasket = () => {
-    if (!genCheckout.ok || displayPrice == null || !selectedGenClientProductId) return;
+    if (!genCheckout.ok || stateUnavailable || displayPrice == null || !selectedGenClientProductId) return;
     addItem({
       slug: basketSlug,
+      availabilityKey: `${product.slug}:${form}`,
       displayName: family.displayName,
       subtitle: liveGlp1Program?.label ?? variant?.displayLabel ?? product.subtitle,
       image: product.image,
@@ -202,7 +207,7 @@ function FamilySelectors({
   };
 
   const continueToGen = () => {
-    if (genCheckout.ok) navigateToGenProductFirstCheckout(genCheckout.url);
+    if (genCheckout.ok && !stateUnavailable) navigateToGenProductFirstCheckout(genCheckout.url);
   };
 
   return (
@@ -374,7 +379,7 @@ function FamilySelectors({
                     </p>
                   </div>
                 </div>
-                {canPurchase && genCheckout.ok ? (
+                {stateUnavailable ? <StateUnavailableNotice state={state} /> : canPurchase && genCheckout.ok ? (
                   <a href={genCheckout.url} target="_blank" rel="noopener noreferrer" onClick={event => { if (!event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigateToGenProductFirstCheckout(genCheckout.url); } }} className="btn-primary w-full">
                     Buy now
                   </a>

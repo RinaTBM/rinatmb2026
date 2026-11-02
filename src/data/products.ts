@@ -17,6 +17,7 @@ import {
   VARIANT_SKU_BY_ID,
 } from './variantSkus';
 import { MEMBERSHIP_COPY, PRODUCT_COPY } from './productCopy';
+import { getLiveGlp1StartingPrice } from './liveGlp1Programs';
 import { COMPOUNDED_FDA_FAQ, PHARMACY_503A_FAQ } from './pharmacyFulfillmentCopy';
 
 // ---------------------------------------------------------------------------
@@ -415,7 +416,9 @@ function mk(seed: ProductSeed): Product {
   // Internal `*-any-dose` variants support membership fulfillment crosswalks only.
   // They are never patient dose choices and must not lower customer-facing starting prices.
   const customerPricedVariants = variants.filter(v => !v.id.endsWith('-any-dose'));
-  const startingPrice = customerPricedVariants.reduce((min, v) => Math.min(min, v.price), Infinity);
+  // Family product pages use the live program options, not the legacy dose catalog.
+  const startingPrice = getLiveGlp1StartingPrice(seed.slug)
+    ?? customerPricedVariants.reduce((min, v) => Math.min(min, v.price), Infinity);
   const forms = Array.from(new Set(variants.map(v => v.dosageForm))) as DosageForm[];
   const status = seed.status ?? 'active';
   const isVisible = seed.isVisible ?? (status === 'active');
